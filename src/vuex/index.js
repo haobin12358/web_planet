@@ -9,33 +9,50 @@ let store= new Vuex.Store({
     route: null,
     now:null,
     token:'',
-    tabbar:[{
-      name:'首页',
-      icon:'',
-      active_icon:'',
-      url:'index'
+    tabbar_store:[{
+      name:'素材',
+      icon:'/static/images/footer/icon-material.png',
+      active_icon:'/static/images/footer/icon-material-active.png',
+      url:'material'
     },{
-      name:'客服',
-      icon:'',
-      active_icon:'',
-      url:'service'
+      name:'会员',
+      icon:'/static/images/footer/icon-member.png',
+      active_icon:'/static/images/footer/icon-member-active.png',
+      url:'member'
     },{
-      name:'发现',
-      icon:'',
-      active_icon:'',
-      url:'discover'
+      name:'店主',
+      icon:'/static/images/footer/icon-storekeeper.png',
+      active_icon:'/static/images/footer/icon-storekeeper-active.png',
+      url:'storekeeper'
+    }],
+    tabbar_buyer:[{
+      name:'精选',
+      icon:'/static/images/footer/icon-material.png',
+      active_icon:'/static/images/footer/icon-material-active.png',
+      url:'selected'
+    },{
+      name:'圈子',
+      icon:'/static/images/footer/icon-circle.png',
+      active_icon:'/static/images/footer/icon-circle-active.png',
+      url:'circle'
+    },{
+      name:'装备',
+      icon:'/static/images/footer/icon-equipment.png',
+      active_icon:'/static/images/footer/icon-equipment-active.png',
+      url:'equipment'
     },{
       name:'购物车',
-      icon:'',
-      active_icon:'',
-      url:'shopping'
+      icon:'/static/images/footer/icon-member.png',
+      active_icon:'/static/images/footer/icon-member-active.png',
+      url:'shop'
     },{
       name:'我的',
-      icon:'',
-      active_icon:'',
+      icon:'/static/images/footer/icon-storekeeper.png',
+      active_icon:'/static/images/footer/icon-storekeeper-active.png',
       url:'personal'
-    }],
-    tabbar_select:'首页'
+    }
+    ],
+    tabbar_select:'精选'
   },
   mutations: {
     add(state,route) {

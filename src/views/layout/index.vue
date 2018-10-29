@@ -30,5 +30,5 @@
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
-
+@import "../../common/css/index";
 </style>

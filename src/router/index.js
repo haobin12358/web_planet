@@ -9,11 +9,61 @@ export const constantRouterMap = [
   { path: '/login', component: () => import('../views/login/login'), hidden: true },
   {path: '/register', component: () => import('../views/login/register'),hidden: true  },
   {path: '/forget', component: () => import('../views/login/forget'),hidden: true  },
+  { path: '/first', component: () => import('../views/login/first'), hidden: true },
   {
     path: '/',
     component: Layout,
-    redirect: 'login',
-    children: [{ path: '/login', component: () => import('../views/login/login'), hidden: true }
+    redirect: 'material',
+    children: [{ path: '/material', component: () => import('../views/store/material/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/member',
+    component: Layout,
+    redirect: 'member',
+    children: [{ path: '/member', component: () => import('../views/store/member/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/storekeeper',
+    component: Layout,
+    redirect: 'storekeeper',
+    children: [{ path: '/storekeeper', component: () => import('../views/store/storekeeper/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/selected',
+    component: Layout,
+    redirect: 'selected',
+    children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/circle',
+    component: Layout,
+    redirect: 'circle',
+    children: [{ path: '/circle', component: () => import('../views/buyer/circle/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/equipment',
+    component: Layout,
+    redirect: 'equipment',
+    children: [{ path: '/equipment', component: () => import('../views/buyer/equipment/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/shop',
+    component: Layout,
+    redirect: 'shop',
+    children: [{ path: '/shop', component: () => import('../views/buyer/shop/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/personal',
+    component: Layout,
+    redirect: 'personal',
+    children: [{ path: '/personal', component: () => import('../views/buyer/personal/index'), hidden: true }
     ],
   },
 

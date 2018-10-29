@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="m-forget-btn">
-        <span>确认</span>
+        <span>确  认</span>
       </div>
     </div>
 </template>
@@ -75,9 +75,11 @@
         line-height: 40px;
         background-color: #fcd316;
         color: #fff;
+        font-family: ComicSansMS;
         font-size: 21px;
         border-radius: 10px;
         box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+        padding: 5px 15px;
       }
     }
   }
@@ -90,6 +92,7 @@
     background-color: #fcd316;
     font-size: 38px;
     margin-top: 500px;
+    font-weight: bold;
   }
 }
 </style>

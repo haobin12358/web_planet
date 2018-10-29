@@ -2,7 +2,7 @@
 
     <mt-tabbar v-model="selected" :fixed="true">
       <template v-for="(item,index) in tabbar" >
-        <mt-tab-item :id="item.name" @click.stop="tabbarClick(item)">
+        <mt-tab-item :id="item.name" >
           <img slot="icon" :src="item.active_icon" v-if="item.name == selected">
           <img slot="icon" :src="item.icon" v-else>
           {{item.name}}
@@ -20,24 +20,22 @@
             return {
                 name: '',
               selected:this.$store.state.tabbar_select,
-              tabbar:this.$store.state.tabbar
+              tabbar:this.$store.state.tabbar_buyer
             }
         },
         components: {},
         methods: {
-          tabbarClick(v){
 
-          }
         },
       mounted(){
-        console.log(this.$store.state.tabbar,'asdasdasd');
+
       },
       computed:{
         select(){
           return this.$store.state.tabbar_select
         },
         tabbars(){
-          return this.$store.state.tabbar;
+          return this.$store.state.tabbar_store;
         }
       },
       watch: {
@@ -45,22 +43,26 @@
           this.$store.state.tabbar_select = val;
           common.changeTitle(val);
           switch(val){
-            case '首页':
-              this.$router.push('/index');
+            case '素材':
+              this.$router.push('/material');
               break;
-            case '客服':
-              this.$router.push('/service');
+            case '会员':
+              this.$router.push('/member');
               break;
-            case '发现':
-              if(this.$route.path == '/discover/index'){
-
-                } else{
-                this.$router.push('/discover');
-              }
-
+            case '店主':
+              this.$router.push('/storekeeper');
+              break;
+            case '精选':
+              this.$router.push('/selected');
+              break;
+            case '圈子':
+              this.$router.push('/circle');
+              break;
+            case '装备':
+              this.$router.push('/equipment');
               break;
             case '购物车':
-              this.$router.push('/shopping');
+              this.$router.push('/shop');
               break;
             case '我的':
               this.$router.push('/personal');
@@ -73,19 +75,27 @@
         $route: {
           handler: function(val, oldVal){
             switch (val.name){
-              case 'index':
-                this.selected = '首页';
-                common.changeTitle('首页');
+              case 'material':
+                this.selected = '精选';
+                common.changeTitle('精选');
                 break;
-              case 'discover':
-                this.selected = '发现';
-                common.changeTitle('发现');
+              case 'member':
+                this.selected = '会员';
+                common.changeTitle('会员');
                 break;
-              case 'service':
-                this.selected = '客服';
-                common.changeTitle('客服');
+              case 'storekeeper':
+                this.selected = '店主';
+                common.changeTitle('店主');
                 break;
-              case 'shopping':
+              case 'selected':
+                this.selected = '精选';
+                common.changeTitle('精选');
+                break;
+              case 'circle':
+                this.selected = '圈子';
+                common.changeTitle('圈子');
+                break;
+              case 'shop':
                 this.selected = '购物车';
                 common.changeTitle('购物车');
                 break;
