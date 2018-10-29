@@ -51,7 +51,7 @@
       </div>
       <!--场景推荐-->
       <div class="m-selected-one">
-        <h3 class="m-selected-title m-flex-between">
+        <h3 class="m-selected-title m-flex-between" @click="changeRoute('scene')">
           <span>场景推荐</span>
           <span class="m-selected-title-more">
             <span>查看更多</span>
@@ -259,58 +259,30 @@
             <span class="m-icon-more"></span>
           </span>
         </h3>
-        <ul class="m-recommend">
-          <li>
-            <img src="" class="m-one-product-img" alt="">
-            <div class="m-one-product-text">
-              <h3>【北面】THE NORTH d </h3>
-              <p class="m-flex-between">
-                <span >￥950.00</span>
-                <s class="m-grey">￥950.00</s></p>
-            </div>
-          </li>
-          <li>
-            <img src="" class="m-one-product-img" alt="">
-            <div class="m-one-product-text">
-              <h3>【北面】THE NORTH d </h3>
-              <p class="m-flex-between">
-                <span >￥950.00</span>
-                <s class="m-grey">￥950.00</s></p>
-            </div>
-          </li>
-          <li>
-            <img src="" class="m-one-product-img" alt="">
-            <div class="m-one-product-text">
-              <h3>【北面】THE NORTH d </h3>
-              <p class="m-flex-between">
-                <span >￥950.00</span>
-                <s class="m-grey">￥950.00</s></p>
-            </div>
-          </li>
-          <li>
-            <img src="" class="m-one-product-img" alt="">
-            <div class="m-one-product-text">
-              <h3>【北面】THE NORTH d </h3>
-              <p class="m-flex-between">
-                <span >￥950.00</span>
-                <s class="m-grey">￥950.00</s></p>
-            </div>
-          </li>
-        </ul>
+        <product></product>
       </div>
     </div>
 
 </template>
 
 <script type="text/ecmascript-6">
+  import product from '../components/product';
+
     export default {
         data() {
             return {
                 name: ''
             }
         },
-        components: {},
-        methods: {},
+        components: {
+          product
+        },
+        methods: {
+          /*查看更多*/
+          changeRoute(v){
+            this.$router.push(v)
+          }
+        },
         created() {
 
         }
@@ -318,6 +290,7 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
+  @import "../../../common/css/scroll";
 .m-selected{
   width: 100%;
   overflow-x: hidden;
@@ -433,82 +406,6 @@
     }
   }
   .m-selected-one{
-    .m-scroll{
-      margin: 30px 0 30px 33px ;
-      width: 717px;
-      overflow-x: auto;
-      &.m-center-scroll{
-        margin: 0 0 0 33px ;
-      }
-      ul{
-        width: 101%;
-        /*height: 150px;*/
-        padding: 2px 0;
-        white-space: nowrap;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        text-align: left;
-        li{
-          display: inline-block;
-          margin-right: 15px;
-          width: 150px;
-          height: 150px;
-          border-radius: 10px;
-          box-shadow: 2px 3px 6px 0 rgba(0, 0, 0, 0.16);
-          img{
-            display: block;
-            width: 150px;
-            height: 150px;
-            border-radius: 10px;
-            background-color: #edb3b1;
-          }
-        }
-      }
-      .m-selected-scene-ul{
-        height: 150px;
-        li{
-          width: 150px;
-          height: 150px;
-          .m-selected-scene-img{
-            width: 150px;
-            height: 150px;
-          }
-        }
-      }
-      .m-selected-brand-ul{
-        height: 100px;
-        li{
-          width: 100px;
-          height: 100px;
-          .m-selected-brand-img{
-            width: 100px;
-            height: 100px;
-          }
-        }
-      }
-      .m-selected-brand-product-ul{
-        height: auto ;
-        padding: 2px 0;
-        li{
-          display: inline-block;
-          width: 210px;
-          height: auto;
-          .m-selected-brand-product-img{
-            width: 210px;
-            height: 210px;
-          }
-          h3{
-            width: 210px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-top: 38px;
-            font-size: 21px;
-
-          }
-        }
-      }
-    }
     .m-one-activity{
       padding: 0 33px ;
       &.m-top{
@@ -542,40 +439,6 @@
               white-space: nowrap;
             }
           }
-        }
-      }
-    }
-    .m-recommend{
-      .flex-row(flex-start);
-      flex-wrap: wrap;
-      padding: 30px 33px ;
-      li{
-        width: 325px;
-        height: auto;
-        border-radius: 10px;
-        box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
-        background-color: #ffffff;
-        margin-bottom: 30px;
-        &:nth-child(odd){
-          margin-right: 30px;
-        }
-        .m-one-product-img{
-          display: block;
-          width: 325px;
-          height: 325px;
-          background-color: #edb3b1;
-        }
-        .m-one-product-text{
-          padding: 15px;
-        }
-        h3{
-          width: 325px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          margin-top: 38px;
-          font-size: 21px;
-          text-align: left;
         }
       }
     }
@@ -660,23 +523,6 @@
     border-radius: 10px;
     background: #FDEAEC;
   }
-  /*滚动条样式*/
-  .m-scroll::-webkit-scrollbar { /*滚动条整体样式*/
-    width: 1px; /*高宽分别对应横竖滚动条的尺寸*/
-    height: 1px;
-    border-radius: 10px;
-  }
 
-  .m-scroll::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 5px #fcd316;
-    background: #fcd316;
-  }
-
-  .m-scroll::-webkit-scrollbar-track { /*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px #fbea7d;
-    border-radius: 10px;
-    background: #fbea7d;
-  }
 
 </style>
