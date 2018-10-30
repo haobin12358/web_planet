@@ -36,6 +36,24 @@
           <s class="m-grey">￥950.00</s></p>
       </div>
     </li>
+    <li>
+      <img src="" class="m-one-product-img" alt="">
+      <div class="m-one-product-text">
+        <h3>【北面】THE NORTH d </h3>
+        <p class="m-flex-between">
+          <span >￥950.00</span>
+          <s class="m-grey">￥950.00</s></p>
+      </div>
+    </li>
+    <li>
+      <img src="" class="m-one-product-img" alt="">
+      <div class="m-one-product-text">
+        <h3>【北面】THE NORTH d </h3>
+        <p class="m-flex-between">
+          <span >￥950.00</span>
+          <s class="m-grey">￥950.00</s></p>
+      </div>
+    </li>
   </ul>
 
 </template>
@@ -78,6 +96,7 @@
         width: 325px;
         height: 325px;
         background-color: #edb3b1;
+        border-radius: 10px;
       }
       .m-one-product-text{
         padding: 15px;

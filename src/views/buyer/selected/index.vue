@@ -267,7 +267,7 @@
 
 <script type="text/ecmascript-6">
   import product from '../components/product';
-
+  import common from '../../../common/js/common'
     export default {
         data() {
             return {
@@ -277,6 +277,9 @@
         components: {
           product
         },
+      mounted(){
+        common.changeTitle('精选');
+      },
         methods: {
           /*查看更多*/
           changeRoute(v){
