@@ -297,35 +297,6 @@
 .m-selected{
   width: 100%;
   overflow-x: hidden;
-  .m-selected-search{
-    .flex-row(space-between);
-    padding: 20px 33px;
-    .m-icon-home{
-      display: block;
-      width: 50px;
-      height: 50px;
-      background: url("/static/images/icon-home.png") no-repeat;
-      background-size: 100% 100%;
-    }
-    .m-search-input-box{
-      width: 618px;
-      height:50px;
-      line-height: 50px;
-      background-color: #e9e9e9;
-      border-radius: 50px;
-      font-size: 21px;
-      color: #999999;
-      letter-spacing: -0.4px;
-      .m-icon-search{
-        display: inline-block;
-        width: 30px;
-        height: 30px;
-        background: url("/static/images/icon-search.png") no-repeat;
-        background-size: 100% 100%;
-        vertical-align: text-bottom;
-      }
-    }
-  }
   .m-selected-swipe{
     padding: 0 33px;
     /*margin: auto;*/
