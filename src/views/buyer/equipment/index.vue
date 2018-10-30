@@ -15,7 +15,7 @@
       <!--图标按钮-->
       <div class="m-equipment-icon-box">
         <ul class="m-equipment-icon-ul">
-          <li v-for="(item,index) in icon_list">
+          <li v-for="(item,index) in icon_list" @click="changeRoute(item)">
             <img :src="item.src" alt="">
             <span class="m-name">{{item.name}}</span>
           </li>
@@ -95,7 +95,11 @@
             }
         },
         components: {},
-        methods: {},
+        methods: {
+          changeRoute(v){
+            this.$router.push({path:'/equipment/detail',query:{head:v.src,name:v.name}});
+          }
+        },
         created() {
 
         }

@@ -54,6 +54,7 @@ export const constantRouterMap = [
     children: [{ path: '/equipment', component: () => import('../views/buyer/equipment/index'), hidden: true }
     ],
   },
+  { path: '/equipment/detail', component: () => import('../views/buyer/equipment/detail'), hidden: true },
   {
     path: '/shop',
     component: Layout,
