@@ -38,7 +38,7 @@
             </li>
           </ul>
         </div>
-        <div class="m-video-one">
+        <div class="m-video-one" @click="changeRoute">
           <span class="m-video-label">【运动健身】</span>
           <video src="" class="m-video"></video>
           <span class="m-icon-video"></span>
@@ -71,7 +71,11 @@
             }
         },
         components: {},
-        methods: {},
+        methods: {
+          changeRoute(){
+            this.$router.push('/circle/detail')
+          }
+        },
         created() {
 
         }
