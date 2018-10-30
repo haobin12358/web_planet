@@ -2,7 +2,7 @@
     <div class="m-circle-detail">
       <!--搜索-->
       <div class="m-selected-search">
-        <span class="m-icon-back"></span>
+        <span class="m-icon-back" @click="changeRoute"></span>
         <div class="m-search-input-box">
           <span class="m-icon-search"></span>
           <span>搜索圈子关键词</span>
@@ -35,7 +35,17 @@
 
 <script>
     export default {
-        name: "detail"
+        name: "detail",
+      data(){
+          return{
+
+          }
+      },
+      methods:{
+        changeRoute(){
+          this.$router.push('/circle')
+        }
+      }
     }
 </script>
 
