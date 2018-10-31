@@ -34,7 +34,7 @@
           <span class="m-more"></span>
         </div>
       </div>
-      <div class="m-product-detail-more">
+      <div class="m-product-detail-more" @click="changeRoute">
         <div>
           <span class="m-label">评价</span>
           <span class="m-start active"></span>
@@ -138,7 +138,10 @@
            }else{
              scroll.beforeClose();
            }
-         }
+         },
+        changeRoute(){
+           this.$router.push('/evaluate');
+        }
       }
     }
 </script>
