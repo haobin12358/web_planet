@@ -2,8 +2,8 @@
     <div class="m-equipment-detail">
       <!--搜索-->
       <div class="m-selected-search">
-        <span class="m-icon-back" @click="changeRoute"></span>
-        <div class="m-search-input-box">
+        <span class="m-icon-back" @click="changeRoute('equipment')"></span>
+        <div class="m-search-input-box" @click="changeRoute('product')">
           <span class="m-icon-search"></span>
           <span>搜索品牌/分类</span>
         </div>
@@ -86,8 +86,8 @@
         this.head_name = this.$route.query.name;
       },
       methods:{
-        changeRoute(){
-          this.$router.push('/equipment')
+        changeRoute(v){
+          this.$router.push('/' + v)
         }
       }
     }
