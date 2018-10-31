@@ -1,6 +1,6 @@
 <template>
   <ul class="m-recommend">
-    <li>
+    <li @click="changeRoute">
       <img src="" class="m-one-product-img" alt="">
       <div class="m-one-product-text">
         <h3>【北面】THE NORTH d </h3>
@@ -66,7 +66,11 @@
             }
         },
         components: {},
-        methods: {},
+        methods: {
+          changeRoute(){
+            this.$router.push('/product/detail')
+          }
+        },
         created() {
 
         }

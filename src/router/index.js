@@ -56,6 +56,7 @@ export const constantRouterMap = [
   },
   { path: '/equipment/detail', component: () => import('../views/buyer/equipment/detail'), hidden: true },
   { path: '/product', component: () => import('../views/buyer/equipment/product'), hidden: true },
+  { path: '/product/detail', component: () => import('../views/buyer/equipment/productDetail'), hidden: true },
   {
     path: '/shop',
     component: Layout,
