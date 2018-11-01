@@ -62,6 +62,7 @@
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../../common/css/index";
   .m-sku{
     position: fixed;
     top: 0;
@@ -138,36 +139,6 @@
                   color: #333333;
                 }
               }
-            }
-          }
-          .m-sku-num{
-            display: flex;
-            flex-flow: row;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            .m-icon-add{
-              display: inline-block;
-              width: 42px;
-              height: 42px;
-              background: url("/static/images/icon-add.png") no-repeat;
-              background-size: 100% 100%;
-              vertical-align: middle;
-            }
-            .m-icon-cut{
-              display: inline-block;
-              width: 42px;
-              height: 42px;
-              background: url("/static/images/icon-cut.png") no-repeat;
-              background-size: 100% 100%;
-              vertical-align: middle;
-            }
-            .m-num-input{
-              display: inline-block;
-              width: 87px;
-              padding: 5px  0;
-              border: none;
-              text-align: center;
             }
           }
         }

@@ -11,6 +11,88 @@
         <p class="m-p">共58件商品</p>
 
         <div class="m-shop-one">
+          <div class="m-shop-store-name">
+            <span class="m-icon-radio"></span>
+            <span>背面</span>
+            <span class="m-icon-more"></span>
+          </div>
+          <div class="m-shop-product ">
+            <span class="m-icon-radio"></span>
+            <div class="m-product-info">
+              <img src="" class="m-product-img" alt="">
+              <div>
+                <h3>北面防雨防风软壳衣北面防雨防风软壳衣</h3>
+                <p class="m-product-sku-select-p">
+                  <span class="m-product-sku-select">
+                     <span>绿色；XL</span>
+                    <span class="m-sku-more"></span>
+                  </span>
+                </p>
+                <div class="m-sku-num">
+                  <span class="m-red">￥899</span>
+                  <div class="m-num">
+                    <span class="m-icon-cut"></span>
+                    <input type="text" class="m-num-input" placeholder="0">
+                    <span class="m-icon-add"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="m-shop-one">
+          <div class="m-shop-store-name">
+            <span class="m-icon-radio"></span>
+            <span>背面</span>
+            <span class="m-icon-more"></span>
+          </div>
+          <div class="m-shop-product ">
+            <span class="m-icon-radio"></span>
+            <div class="m-product-info">
+              <img src="" class="m-product-img" alt="">
+              <div>
+                <h3>北面防雨防风软壳衣北面防雨防风软壳衣</h3>
+                <p class="m-product-sku-select-p">
+                  <span class="m-product-sku-select">
+                     <span>绿色；XL</span>
+                    <span class="m-sku-more"></span>
+                  </span>
+                </p>
+                <div class="m-sku-num">
+                  <span class="m-red">￥899</span>
+                  <div class="m-num">
+                    <span class="m-icon-cut"></span>
+                    <input type="text" class="m-num-input" placeholder="0">
+                    <span class="m-icon-add"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="m-shop-product ">
+            <span class="m-icon-radio"></span>
+            <div class="m-product-info">
+              <img src="" class="m-product-img" alt="">
+              <div>
+                <h3>北面防雨防风软壳衣北面防雨防风软壳衣</h3>
+                <p class="m-product-sku-select-p">
+                  <span class="m-product-sku-select">
+                     <span>绿色；XL</span>
+                    <span class="m-sku-more"></span>
+                  </span>
+                </p>
+                <div class="m-sku-num">
+                  <span class="m-red">￥899</span>
+                  <div class="m-num">
+                    <span class="m-icon-cut"></span>
+                    <input type="text" class="m-num-input" placeholder="0">
+                    <span class="m-icon-add"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="m-shop-foot">
@@ -85,6 +167,63 @@
       padding: 23px;
       border-radius: 10px;
       box-shadow:0 5px 6px rgba(0,0,0,0.16);
+      color: #333;
+      margin-bottom: 20px;
+      .m-icon-radio{
+        margin-right: 35px;
+      }
+      .m-icon-more{
+        display: inline-block;
+        width: 23px;
+        height: 23px;
+        background: url("/static/images/icon-more.png") no-repeat;
+        background-size: 100% 100%;
+        margin-left: 25px;
+        vertical-align: text-top;
+      }
+      .m-shop-store-name{
+        font-weight: 400;
+      }
+      .m-shop-product{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 30px 0;
+        .m-product-info{
+          display: flex;
+          flex-flow: row;
+          align-items: center;
+          justify-content: flex-start;
+          .m-product-img{
+            display: block ;
+            width: 153px;
+            height: 153px;
+            background-color: #edb3b1;
+            margin-right: 30px;
+          }
+          h3{
+            font-weight: 400;
+          }
+          .m-product-sku-select-p{
+            margin: 30px 0 30px;
+            .m-product-sku-select{
+              padding: 8px 20px;
+              background-color: #E9E9E9;
+              border-radius: 10px;
+              .m-sku-more{
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                background: url("/static/images/icon-down.png") no-repeat;
+                background-size: 100% 100%;
+                margin-left: 23px;
+              }
+            }
+          }
+
+        }
+      }
     }
   }
   .m-shop-foot{
@@ -99,17 +238,6 @@
     .flex-row(space-between);
     color: #999999;
     line-height: 60px;
-    .m-icon-radio{
-      display: block;
-      width: 24px;
-      height: 24px;
-      background: url("/static/images/icon-radio.png") no-repeat;
-      background-size: 100% 100%;
-      &.active{
-        background: url("/static/images/icon-radio-active.png") no-repeat;
-        background-size: 100% 100%;
-      }
-    }
     .m-red{
       color: @mainColor;
       font-size: 30px;
@@ -123,6 +251,18 @@
       border-radius: 30px;
       font-size: 30px;
       color: #333;
+    }
+  }
+  .m-icon-radio{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url("/static/images/icon-radio.png") no-repeat;
+    background-size: 100% 100%;
+    vertical-align: text-top;
+    &.active{
+      background: url("/static/images/icon-radio-active.png") no-repeat;
+      background-size: 100% 100%;
     }
   }
 }

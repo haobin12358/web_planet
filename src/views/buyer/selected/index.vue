@@ -479,24 +479,6 @@
     }
   }
 }
-  /*滚动条样式*/
-  ul::-webkit-scrollbar { /*滚动条整体样式*/
-    width: 1px; /*高宽分别对应横竖滚动条的尺寸*/
-    height: 1px;
-    border-radius: 10px;
-  }
-
-  ul::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 5px #FBC6CC;
-    background: #FBC6CC;
-  }
-
-  ul::-webkit-scrollbar-track { /*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px #FDEAEC;
-    border-radius: 10px;
-    background: #FDEAEC;
-  }
 
 
 </style>
