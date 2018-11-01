@@ -14,7 +14,7 @@
                 <span class="m-personal-identity">行装会员</span>
               </p>
             </div>
-            <div>
+            <div @click="changeRoute('/personal/personalInfo')">
               <span>个人资料</span>
               <span class="m-icon-more"></span>
             </div>
