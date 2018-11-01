@@ -46,6 +46,7 @@
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../../common/css/index";
 .m-product{
   .m-product-title{
     position: relative;
@@ -62,40 +63,7 @@
     }
   }
   .m-nav-list{
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    li{
-      display: inline-block;
-      list-style: none;
-      margin-right: 124px;
-      padding: 10px 0;
-      &:last-child{
-        margin-right: 0;
-      }
-      &.active{
-        border-bottom: 3px solid #FCD316;
-      }
-      .m-icon-box{
-        display: inline-block;
-        height: 22px;
-        vertical-align: text-bottom;
-        .m-icon-up{
-          display: block;
-          width: 11px;
-          height: 11px;
-          background: url("/static/images/icon-up.png") no-repeat;
-          background-size: 100% 100%;
-        }
-        .m-icon-down{
-          display: block;
-          width: 11px;
-          height: 11px;
-          background: url("/static/images/icon-down.png") no-repeat;
-          background-size: 100% 100%;
-        }
-      }
-    }
+    padding: 0 64px;
   }
 }
 </style>
