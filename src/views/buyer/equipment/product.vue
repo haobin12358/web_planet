@@ -1,9 +1,9 @@
 <template>
     <div class="m-product">
-      <div class="m-product-title">
-        <span class="m-icon-back" @click="changeRoute"></span>
-        <h3>商品列表</h3>
-      </div>
+      <!--<div class="m-product-title">-->
+        <!--<span class="m-icon-back" @click="changeRoute"></span>-->
+        <!--<h3>商品列表</h3>-->
+      <!--</div>-->
       <ul class="m-nav-list">
         <li class="active">
           <span>销量</span>

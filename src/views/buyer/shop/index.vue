@@ -228,7 +228,7 @@
   }
   .m-shop-foot{
     position: fixed;
-    bottom: 109px;
+    bottom: 99px;
     left: 0;
     height: 90px;
     padding: 0 50px;

@@ -1,9 +1,9 @@
 <template>
     <div class="m-evaluate">
-      <div class="m-product-title">
-        <span class="m-icon-back" @click="changeRoute"></span>
-        <h3>商品列表</h3>
-      </div>
+      <!--<div class="m-product-title">-->
+        <!--<span class="m-icon-back" @click="changeRoute"></span>-->
+        <!--<h3>商品列表</h3>-->
+      <!--</div>-->
       <div class="m-evaluate-content">
         <div class="m-evaluate-one">
           <img src="" class="m-evaluate-portrait" alt="">
