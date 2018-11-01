@@ -126,7 +126,7 @@
       }
       .mm-equipment-bg{
         position: absolute;
-        bottom: -1px;
+        bottom: -3px;
         left: 0;
         width: 100%;
         height: 67px;

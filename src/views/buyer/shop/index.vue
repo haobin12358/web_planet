@@ -1,5 +1,5 @@
 <template>
-    <div class="m-shop">
+    <div class="m-shop" >
      <div class="m-shop-bg">
        <span class="m-icon-bg"></span>
      </div>
@@ -100,7 +100,7 @@
          <div>
            <span>合计</span>
            <span class="m-red">￥18.0</span>
-           <span class="m-shop-btn">结算</span>
+           <span class="m-shop-btn" @click.stop="payOrder">结算</span>
          </div>
       </div>
     </div>
@@ -115,7 +115,12 @@
             }
         },
         components: {},
-        methods: {},
+        methods: {
+          payOrder(e){
+            console.log(e)
+            this.$router.push('/submitOrder');
+          }
+        },
         created() {
 
         }
@@ -139,7 +144,7 @@
     z-index: -1;
     .m-icon-bg{
       position: absolute;
-      bottom: -1px;
+      bottom: -3px;
       left: 0;
       width: 100%;
       height: 67px;

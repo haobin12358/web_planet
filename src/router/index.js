@@ -13,6 +13,13 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
+    redirect: 'selected',
+    children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
+    ],
+  },
+  {
+    path: '/material',
+    component: Layout,
     redirect: 'material',
     children: [{ path: '/material', component: () => import('../views/store/material/index'), hidden: true }
     ],
@@ -55,9 +62,9 @@ export const constantRouterMap = [
     ],
   },
   { path: '/equipment/detail', component: () => import('../views/buyer/equipment/detail'), hidden: true },
-  { path: '/product', component: () => import('../views/buyer/equipment/product'), hidden: true },
-  { path: '/product/detail', component: () => import('../views/buyer/equipment/productDetail'), hidden: true },
-  { path: '/evaluate', component: () => import('../views/buyer/equipment/evaluate'), hidden: true },
+  { path: '/product', component: () => import('../views/buyer/product/product'), hidden: true },
+  { path: '/product/detail', component: () => import('../views/buyer/product/productDetail'), hidden: true },
+  { path: '/evaluate', component: () => import('../views/buyer/product/evaluate'), hidden: true },
   {
     path: '/shop',
     component: Layout,
@@ -65,6 +72,7 @@ export const constantRouterMap = [
     children: [{ path: '/shop', component: () => import('../views/buyer/shop/index'), hidden: true }
     ],
   },
+  { path: '/submitOrder', component: () => import('../views/buyer/shop/submitOrder'), hidden: true },
   {
     path: '/personal',
     component: Layout,
