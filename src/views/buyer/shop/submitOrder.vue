@@ -29,32 +29,44 @@
           </div>
         </div>
       </div>
-      <div class="m-sku-num m-one-part">
-        <span>购买数量</span>
-        <div class="m-num">
-          <span class="m-icon-cut"></span>
-          <input type="text" class="m-num-input" placeholder="0">
-          <span class="m-icon-add"></span>
-        </div>
+      <div class="m-one-part">
+        <ul class="m-order-ul">
+          <li class="m-sku-num">
+            <span>购买数量</span>
+            <div class="m-num">
+              <span class="m-icon-cut"></span>
+              <input type="text" class="m-num-input" placeholder="0">
+              <span class="m-icon-add"></span>
+            </div>
+          </li>
+          <li class="m-flex-between">
+            <span>配送方式</span>
+            <div>
+              <span>快递:￥10.00</span>
+              <span class="m-icon-more"></span>
+            </div>
+          </li>
+          <li class="m-message">
+            <span>买家留言：</span>
+            <textarea name="" id=""  placeholder="选填"></textarea>
+          </li>
+          <li class="m-flex-between">
+            <span>优惠方式</span>
+            <div>
+              <span class="m-grey">无优惠</span>
+              <span class="m-icon-more"></span>
+            </div>
+          </li>
+          <li class="m-flex-between">
+            <span>付款方式</span>
+            <div>
+              <span>支付宝</span>
+              <span class="m-icon-more"></span>
+            </div>
+          </li>
+        </ul>
       </div>
-      <div class="m-one-part m-pr-s m-flex-between">
-        <span>配送方式</span>
-        <div>
-          <span>快递:￥10.00</span>
-          <span class="m-icon-more"></span>
-        </div>
-      </div>
-      <div class="m-one-part m-message">
-        <span>买家留言：</span>
-        <textarea name="" id=""  placeholder="选填"></textarea>
-      </div>
-      <div class="m-one-part m-pr-s m-flex-between">
-        <span>付款方式</span>
-        <div>
-          <span>支付宝</span>
-          <span class="m-icon-more"></span>
-        </div>
-      </div>
+
       <div class="m-order-btn">
         <span>支付订单</span>
       </div>
@@ -178,7 +190,16 @@
         }
       }
     }
-    &.m-message{
+    .m-order-ul{
+      li{
+        border-bottom: 1px solid #ccc;
+        padding: 28px 0;
+        &:last-child{
+          border-bottom: none;
+        }
+      }
+    }
+    .m-message{
       display: flex;
       flex-flow: row;
       textarea{
