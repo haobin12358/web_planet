@@ -81,6 +81,7 @@ export const constantRouterMap = [
     ],
   },
   { path: '/personal/code', component: () => import('../views/buyer/personal/code'), hidden: true },
+  { path: '/personal/setUp', component: () => import('../views/buyer/personal/setUp'), hidden: true },
 ];
 
 export default new Router({
