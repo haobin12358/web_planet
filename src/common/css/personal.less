@@ -104,7 +104,7 @@
       }
     }
     &.m-setUp{
-      padding: 0 0 0 25px ;
+      padding: 80px 0 0 25px ;
       .m-set-box{
         padding: 20px 25px 0 0;
       }
@@ -120,6 +120,14 @@
         }
       }
 
+    }
+    &.m-address{
+      padding: 0 0 350px 25px;
+    }
+    &.m-addAddress{
+     .m-one-part{
+       height: 750px;
+     }
     }
     .m-personal-body{
       .m-one-part {
@@ -170,7 +178,11 @@
             .flex-row(space-between);
             font-size: 30px;
             padding: 20px ;
+            line-height: 50px;
             border-bottom: 1px solid #ccc;
+              &.m-no-border{
+                  border-bottom: none;
+              }
             .m-grey{
               color: #999;
             }
@@ -222,14 +234,6 @@
                 height: 50px;
                 line-height: 50px;
                 color: #666;
-                .m-border {
-                  display: inline-block;
-                  width: 5px;
-                  height: 50px;
-                  background: linear-gradient(180deg, rgba(255, 251, 223, 1) 0%, rgba(252, 211, 22, 1) 100%);
-                  vertical-align: middle;
-                  margin-right: 15px;
-                }
               }
               .m-address-p{
                 text-align: left;
@@ -248,6 +252,40 @@
                   margin-right: 40px;
                 }
               }
+            }
+          }
+          &.m-addAddress-ul{
+            li{
+              justify-content: flex-start;
+                &.m-default-address{
+                   justify-content: space-between;
+                }
+            }
+
+          }
+          .m-must{
+            color: #FF0000;
+            font-size: 30px;
+          }
+          .m-label{
+            display: inline-block;
+            width: 150px;
+          }
+          .m-addAddress-input{
+            width: 380px;
+            text-align: left;
+            font-size: 30px;
+          }
+          .m-icon-default{
+            display: inline-block;
+            width: 90px;
+            height: 45px;
+            background: url("/static/images/icon-default.png");
+            background-size: 100% 100%;
+            vertical-align: middle;
+            &.active{
+              background: url("/static/images/icon-default-active.png");
+              background-size: 100% 100%;
             }
           }
         }
@@ -290,5 +328,13 @@
       background: url("/static/images/icon-radio-active.png");
       background-size: 100% 100%;
     }
+  }
+  .m-border {
+    display: inline-block;
+    width: 5px;
+    height: 50px;
+    background: linear-gradient(180deg, rgba(255, 251, 223, 1) 0%, rgba(252, 211, 22, 1) 100%);
+    vertical-align: middle;
+    margin-right: 15px;
   }
 }

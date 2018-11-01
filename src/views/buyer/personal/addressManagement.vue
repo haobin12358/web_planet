@@ -1,9 +1,9 @@
 <template>
-  <div class="m-personal m-address" >
+  <div class="m-personal " >
     <div class="m-personal-bg">
       <span class="m-icon-bg"></span>
     </div>
-    <div class="m-personal-content m-setUp">
+    <div class="m-personal-content m-setUp m-address">
       <p class="m-set-box">
         <span class="m-right">管理</span>
       </p>
@@ -134,8 +134,8 @@
         </div>
       </div>
     </div>
-    <div class="m-address-btn">
-      <span>确  认</span>
+    <div class="m-address-btn" @click="changeRoute('/personal/addAddress')">
+      <span>新增地址</span>
     </div>
   </div>
 
