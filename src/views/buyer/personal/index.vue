@@ -17,7 +17,7 @@
                 <span class="m-personal-identity">行装会员</span>
               </p>
             </div>
-            <img src="" class="m-code-img" alt="">
+            <img src="" class="m-code-img" alt="" @click="changeRoute('/personal/code')">
           </div>
           <ul class="m-personal-ul">
             <li>
@@ -95,9 +95,8 @@
     },
     components: {},
     methods: {
-      payOrder(e){
-        console.log(e)
-        this.$router.push('/submitOrder');
+      changeRoute(v){
+        this.$router.push(v)
       }
     },
     created() {
@@ -109,7 +108,7 @@
   @import "../../../common/css/index";
   .m-personal{
     width: 100%;
-    min-height: 1334px;
+    min-height: 100%;
     background-color: #EEEEEE;
     position: relative;
     z-index: -2;

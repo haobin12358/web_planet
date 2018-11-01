@@ -80,7 +80,7 @@ export const constantRouterMap = [
     children: [{ path: '/personal', component: () => import('../views/buyer/personal/index'), hidden: true }
     ],
   },
-
+  { path: '/personal/code', component: () => import('../views/buyer/personal/code'), hidden: true },
 ];
 
 export default new Router({
