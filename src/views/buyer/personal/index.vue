@@ -37,7 +37,7 @@
         <div class="m-one-part">
           <p class="m-one-part-title">
             <span class="m-name">我的订单</span>
-            <span>
+            <span @click="changeRoute('/orderList')">
               <span>全部订单</span>
               <span class="m-icon-more"></span>
             </span>
