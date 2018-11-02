@@ -20,7 +20,36 @@
           </li>
         </ul>
 
-
+       <ul class="m-integral-detail-ul">
+         <li>
+           <p class="m-integral-detail-p">
+             <span>签到积分</span>
+             <span>+1</span>
+           </p>
+           <p class="m-grey">2018-0-20  14:12:31</p>
+         </li>
+         <li>
+           <p class="m-integral-detail-p">
+             <span>签到积分</span>
+             <span>+1</span>
+           </p>
+           <p class="m-grey">2018-0-20  14:12:31</p>
+         </li>
+         <li>
+           <p class="m-integral-detail-p">
+             <span>签到积分</span>
+             <span>+1</span>
+           </p>
+           <p class="m-grey">2018-0-20  14:12:31</p>
+         </li>
+         <li>
+           <p class="m-integral-detail-p">
+             <span>签到积分</span>
+             <span>+1</span>
+           </p>
+           <p class="m-grey">2018-0-20  14:12:31</p>
+         </li>
+       </ul>
       </div>
     </div>
 
@@ -71,6 +100,17 @@
   }
   .m-integral-content{
     padding: 30px 80px 0;
+    .m-integral-detail-ul{
+      li{
+        padding: 25px 0;
+        text-align: left;
+        border-bottom: 1px solid #CCCCCC;
+        .m-integral-detail-p{
+          .flex-row(space-between);
+          padding: 10px 0;
+        }
+      }
+    }
   }
 }
 
