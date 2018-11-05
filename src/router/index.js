@@ -75,6 +75,7 @@ export const constantRouterMap = [
   { path: '/submitOrder', component: () => import('../views/buyer/shop/submitOrder'), hidden: true },
   { path: '/orderList', component: () => import('../views/buyer/shop/orderList'), hidden: true },
   { path: '/addComment', component: () => import('../views/buyer/product/addComment'), hidden: true },
+  { path: '/logisticsInformation', component: () => import('../views/buyer/shop/logisticsInformation'), hidden: true },
   {
     path: '/personal',
     component: Layout,
@@ -89,6 +90,8 @@ export const constantRouterMap = [
   { path: '/personal/addAddress', component: () => import('../views/buyer/personal/addAddress'), hidden: true },
   { path: '/personal/coupon', component: () => import('../views/buyer/personal/coupon'), hidden: true },
   { path: '/personal/integral', component: () => import('../views/buyer/personal/integral'), hidden: true },
+  { path: '/personal/serviceCenter', component: () => import('../views/buyer/personal/serviceCenter'), hidden: true },
+
 ];
 
 export default new Router({

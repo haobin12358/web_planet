@@ -66,7 +66,7 @@
             <span class="m-name">常用工具</span>
           </p>
           <ul class="m-part-icon-ul m-use">
-            <li>
+            <li @click="changeRoute('personal/serviceCenter')">
               <img src="/static/images/icon-personal-service.png" alt="">
               <span>客服中心</span>
             </li>

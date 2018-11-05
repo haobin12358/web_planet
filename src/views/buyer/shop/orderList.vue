@@ -57,7 +57,7 @@
               </div>
             </div>
             <ul class="m-order-btn-ul">
-              <li>
+              <li @click.stop="changeRoute('/logisticsInformation')">
                 查看物流
               </li>
               <li>
