@@ -91,6 +91,8 @@ export const constantRouterMap = [
   { path: '/personal/coupon', component: () => import('../views/buyer/personal/coupon'), hidden: true },
   { path: '/personal/integral', component: () => import('../views/buyer/personal/integral'), hidden: true },
   { path: '/personal/serviceCenter', component: () => import('../views/buyer/personal/serviceCenter'), hidden: true },
+  { path: '/personal/serviceCenterDetail', component: () => import('../views/buyer/personal/serviceCenterDetail'), hidden: true },
+
 
 ];
 

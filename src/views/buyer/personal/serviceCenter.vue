@@ -6,63 +6,18 @@
     <div class="m-personal-content m-serviceCenter ">
       <div class="m-personal-body">
         <div class="m-one-part">
+
           <div class="m-serviceCenter-ul">
-            <div >
+            <div v-for="(item,index) in ul_list" @click="changeRoute(item)">
               <div class="m-serviceCenter-li">
                 <div>
-                  <span class="m-icon-order"></span>
-                  <span>订单问题</span>
+                  <span :class="item.icon"></span>
+                  <span>{{item.name}}</span>
                 </div>
-               <span class="m-icon-more m-icon-unfold"></span>
+                <span class="m-icon-more " :class="item.child.length >0?'m-icon-unfold':''"></span>
               </div>
-              <div class="m-serviceCenter-li-ul">
-                <p>如何修改订单</p>
-                <p>如何取消订单</p>
-              </div>
-            </div>
-            <div >
-              <div class="m-serviceCenter-li">
-                <div>
-                  <span class="m-icon-after"></span>
-                  <span>售后问题</span>
-                </div>
-                <span class="m-icon-more"></span>
-              </div>
-            </div>
-            <div >
-              <div class="m-serviceCenter-li">
-                <div>
-                  <span class="m-icon-pay"></span>
-                  <span>支付问题</span>
-                </div>
-                <span class="m-icon-more"></span>
-              </div>
-            </div>
-            <div >
-              <div class="m-serviceCenter-li">
-                <div>
-                  <span class="m-icon-logs"></span>
-                  <span>物流问题</span>
-                </div>
-                <span class="m-icon-more"></span>
-              </div>
-            </div>
-            <div >
-              <div class="m-serviceCenter-li">
-                <div>
-                  <span class="m-icon-coupon"></span>
-                  <span>优惠券</span>
-                </div>
-                <span class="m-icon-more"></span>
-              </div>
-            </div>
-            <div >
-              <div class="m-serviceCenter-li">
-                <div>
-                  <span class="m-icon-integral"></span>
-                  <span>大行星积分</span>
-                </div>
-                <span class="m-icon-more"></span>
+              <div class="m-serviceCenter-li-ul" v-if="item.child.length > 0">
+                <p v-for="i in item.child">{{i.name}}</p>
               </div>
             </div>
           </div>
@@ -79,7 +34,7 @@
           <div class="m-serviceCenter-btn">
             <span class="m-icon-tell"></span>
             <div>
-              <p>在线客服</p>
+              <p>客服电话</p>
               <p>（8:30-24:00)</p>
             </div>
           </div>
@@ -94,13 +49,69 @@
   export default {
     data() {
       return {
-        name: ''
+        ul_list:[
+          {
+            name:'订单问题',
+            icon:'m-icon-order',
+            url:'',
+            params:'',
+            child:[
+              {
+                name:'如何修改订单',
+                icon:'',
+                url:'',
+                params:''
+              },
+              {
+                name:'如何取消订单',
+                icon:'',
+                url:'',
+                params:''
+              }
+            ]
+          },
+          {
+            name:'售后问题',
+            icon:'m-icon-after',
+            url:'',
+            params:'',
+            child:[]
+          },
+          {
+            name:'支付问题',
+            icon:'m-icon-pay',
+            url:'',
+            params:'',
+            child:[]
+          },
+          {
+            name:'物流问题',
+            icon:'m-icon-logs',
+            url:'',
+            params:'',
+            child:[]
+          },
+          {
+            name:'优惠券',
+            icon:'m-icon-coupon',
+            url:'',
+            params:'',
+            child:[]
+          },
+          {
+            name:'大行星积分',
+            icon:'m-icon-integral',
+            url:'',
+            params:'',
+            child:[]
+          }
+        ]
       }
     },
     components: {},
     methods: {
       changeRoute(v){
-        this.$router.push(v)
+        this.$router.push('/personal/serviceCenterDetail');
       }
     },
     created() {
