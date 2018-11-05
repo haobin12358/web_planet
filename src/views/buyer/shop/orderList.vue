@@ -1,22 +1,6 @@
 <template>
     <div class="m-orderList">
-      <ul class="m-nav-list">
-        <li class="active">
-          <span>全部</span>
-        </li>
-        <li>
-          <span>待付款</span>
-        </li>
-        <li>
-          <span>待发货</span>
-        </li>
-        <li>
-          <span>待收货</span>
-        </li>
-        <li>
-          <span>已完成</span>
-        </li>
-      </ul>
+      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       <div class="m-orderList-content">
         <div class="m-one-part">
          <div class="m-order-store-tile">
@@ -111,20 +95,58 @@
 </template>
 
 <script>
-  import common from '../../../common/js/common'
+  import common from '../../../common/js/common';
+  import navList from '../../../components/common/navlist';
     export default {
         data(){
           return{
-
+            nav_list:[
+              {
+                name:'全部',
+                params:'',
+                active:true
+              },
+              {
+                name:'待付款',
+                params:'',
+                active:false
+              },
+              {
+                name:'待发货',
+                params:'',
+                active:false
+              },
+              {
+                name:'待收货',
+                params:'',
+                active:false
+              },
+              {
+                name:'已完成',
+                params:'',
+                active:false
+              }
+            ]
           }
         },
+      components: {
+        navList
+      },
       mounted(){
           common.changeTitle('订单列表');
       },
       methods:{
-          changeRoute(v){
-            this.$router.push(v)
+        changeRoute(v){
+          this.$router.push(v)
+        },
+        navClick(index){
+          let arr = [].concat(this.nav_list);
+          for(let i=0;i<arr.length;i++){
+            arr[i].active = false;
           }
+          arr[index].active = true;
+          this.nav_list = [].concat(arr)
+        }
       }
     }
 </script>

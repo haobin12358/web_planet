@@ -8,18 +8,7 @@
         </div>
       </div>
       <div class="m-integral-content">
-        <ul class="m-nav-list">
-          <li class="active">
-            <span>全部</span>
-          </li>
-          <li>
-            <span>收入</span>
-          </li>
-          <li>
-            <span>支出</span>
-          </li>
-        </ul>
-
+        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
        <ul class="m-integral-detail-ul">
          <li>
            <p class="m-integral-detail-p">
@@ -56,14 +45,42 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import navList from '../../../components/common/navlist';
     export default {
         data() {
             return {
-                name: ''
+              nav_list:[
+                {
+                  name:'全部',
+                  params:'',
+                  active:true
+                },
+                {
+                  name:'收入',
+                  params:'',
+                  active:false
+                },
+                {
+                  name:'支出',
+                  params:'',
+                  active:false
+                }
+              ]
             }
         },
-        components: {},
-        methods: {},
+        components: {
+          navList
+        },
+        methods: {
+          navClick(index){
+            let arr = [].concat(this.nav_list);
+            for(let i=0;i<arr.length;i++){
+              arr[i].active = false;
+            }
+            arr[index].active = true;
+            this.nav_list = [].concat(arr)
+          }
+        },
         created() {
 
         }

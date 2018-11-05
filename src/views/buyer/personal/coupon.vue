@@ -1,16 +1,6 @@
 <template>
     <div class="m-coupon">
-      <ul class="m-nav-list">
-        <li class="active">
-          <span>未使用</span>
-        </li>
-        <li>
-          <span>已使用</span>
-        </li>
-        <li>
-          <span>已过期</span>
-        </li>
-      </ul>
+      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       <div class="m-coupon-content">
           <coupon-card></coupon-card>
         <coupon-card></coupon-card>
@@ -21,17 +11,44 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import couponCard from '../components/couponCard'
+  import couponCard from '../components/couponCard';
+  import navList from '../../../components/common/navlist';
     export default {
         data() {
             return {
-                name: ''
+              nav_list:[
+                {
+                  name:'未使用',
+                  params:'',
+                  active:true
+                },
+                {
+                  name:'已使用',
+                  params:'',
+                  active:false
+                },
+                {
+                  name:'已过期',
+                  params:'',
+                  active:false
+                }
+              ]
             }
         },
         components: {
-          couponCard
+          couponCard,
+          navList
         },
-        methods: {},
+        methods: {
+          navClick(index){
+            let arr = [].concat(this.nav_list);
+            for(let i=0;i<arr.length;i++){
+              arr[i].active = false;
+            }
+            arr[index].active = true;
+            this.nav_list = [].concat(arr)
+          }
+        },
         created() {
 
         }
