@@ -100,7 +100,7 @@
               <li>
                 删除订单
               </li>
-              <li class="active">
+              <li class="active" @click.stop="changeRoute('/addComment')">
                 评价
               </li>
             </ul>
@@ -111,8 +111,21 @@
 </template>
 
 <script>
+  import common from '../../../common/js/common'
     export default {
-        name: "order-list"
+        data(){
+          return{
+
+          }
+        },
+      mounted(){
+          common.changeTitle('订单列表');
+      },
+      methods:{
+          changeRoute(v){
+            this.$router.push(v)
+          }
+      }
     }
 </script>
 

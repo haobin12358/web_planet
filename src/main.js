@@ -37,7 +37,6 @@ promise.polyfill();
 // localStorage.setItem('token', token);
 
 
-
 Vue.prototype.$http = axios;
 //拦截器、
 // import { Loading, Message, MessageBox  } from 'element-ui'

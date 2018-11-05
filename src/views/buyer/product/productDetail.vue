@@ -107,18 +107,13 @@
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../../common/css/index";
 .m-product-detail{
   padding-bottom: 200px;
   .m-product-swipe{
     position: relative;
     width: 100%;
     height: 784px;
-    img{
-      display: block;
-      width: 100%;
-      height: 100%;
-      background-color: #9fd0bf;
-    }
     .m-icon-back{
       position: absolute;
       top: 20px;
@@ -175,18 +170,6 @@
       background: url("/static/images/icon-right.png") no-repeat;
       background-size: 100% 100%;
       margin-left: 20px;
-    }
-    .m-start{
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      background: url("/static/images/icon-start-half.png") no-repeat;
-      background-size: 100% 100%;
-      margin-right: 10px;
-      &.active{
-        background: url("/static/images/icon-start-active.png") no-repeat;
-        background-size: 100% 100%;
-      }
     }
   }
   .m-product-detail-img-box{

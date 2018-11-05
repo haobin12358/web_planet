@@ -20,12 +20,12 @@
             <img src="" class="m-code-img" alt="" @click="changeRoute('/personal/code')">
           </div>
           <ul class="m-personal-ul">
-            <li>
+            <li @click="changeRoute('/personal/coupon')">
               <span class="m-icon-gift"></span>
               <span class="m-name">优惠券</span>
               <span>0</span>
             </li>
-            <li>
+            <li @click="changeRoute('/personal/integral')">
               <span class="m-icon-integral"></span>
               <span class="m-name">可用积分</span>
               <span>520</span>

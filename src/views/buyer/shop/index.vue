@@ -133,7 +133,7 @@
   min-height: 1334px;
   background-color: #EEEEEE;
   position: relative;
-  z-index: -2;
+  /*z-index: -2;*/
   .m-shop-bg{
     width: 100%;
     height: 450px;
@@ -141,7 +141,7 @@
     position: absolute;
     top:0;
     left: 0;
-    z-index: -1;
+    /*z-index: -1;*/
     .m-icon-bg{
       position: absolute;
       bottom: -3px;
@@ -155,6 +155,9 @@
   .m-shop-content{
     padding: 0 25px;
     text-align: left;
+    position: absolute;
+    top:0;
+    left: 0;
     .m-shop-title{
       .flex-row(space-between);
       padding: 20px 0;
@@ -233,7 +236,7 @@
   }
   .m-shop-foot{
     position: fixed;
-    bottom: 99px;
+    bottom: 103px;
     left: 0;
     height: 90px;
     padding: 0 50px;
