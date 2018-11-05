@@ -45,7 +45,7 @@
                 <span class="m-icon-more"></span>
               </div>
             </li>
-            <li>
+            <li @click="changeRoute('/personal/editInput')">
               <div>
                 <span>支付密码</span>
               </div>

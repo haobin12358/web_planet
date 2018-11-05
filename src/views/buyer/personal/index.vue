@@ -74,7 +74,7 @@
               <img src="/static/images/icon-personal-security-center.png"  alt="">
               <span>安全中心</span>
             </li>
-            <li>
+            <li @click="changeRoute('/personal/couponCenter')">
               <img src="/static/images/icon-personal-discount.png"  alt="">
               <span>优惠中心</span>
             </li>

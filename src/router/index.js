@@ -94,6 +94,8 @@ export const constantRouterMap = [
   { path: '/personal/serviceCenterDetail', component: () => import('../views/buyer/personal/serviceCenterDetail'), hidden: true },
   { path: '/personal/safeCenter', component: () => import('../views/buyer/personal/safeCenter'), hidden: true },
   { path: '/personal/editInput', component: () => import('../views/buyer/personal/editInput'), hidden: true },
+  { path: '/personal/couponCenter', component: () => import('../views/buyer/personal/couponCenter'), hidden: true },
+
 
 ];
 

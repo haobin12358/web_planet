@@ -293,6 +293,31 @@ body{
     }
   }
 }
+.m-scroll{
+  width: 700px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 20px 0 46px;
+  .m-nav-list{
+    width: 101%;
+    overflow-y: hidden;
+    text-align: left;
+    display: inline;
+    white-space: nowrap;
+    overflow-x: scroll;
+    li{
+      display: inline-block;
+      padding: 5px;
+      /*width: 150px!important;*/
+      height: 34px;
+      line-height: 34px;
+      margin-right: 62px;
+      &.active{
+        border-bottom: 3px solid @mainColor;
+      }
+    }
+  }
+}
 
 //星星样式
 .m-start{
