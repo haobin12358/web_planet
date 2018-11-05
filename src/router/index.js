@@ -92,7 +92,8 @@ export const constantRouterMap = [
   { path: '/personal/integral', component: () => import('../views/buyer/personal/integral'), hidden: true },
   { path: '/personal/serviceCenter', component: () => import('../views/buyer/personal/serviceCenter'), hidden: true },
   { path: '/personal/serviceCenterDetail', component: () => import('../views/buyer/personal/serviceCenterDetail'), hidden: true },
-
+  { path: '/personal/safeCenter', component: () => import('../views/buyer/personal/safeCenter'), hidden: true },
+  { path: '/personal/editInput', component: () => import('../views/buyer/personal/editInput'), hidden: true },
 
 ];
 

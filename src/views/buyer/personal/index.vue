@@ -70,7 +70,7 @@
               <img src="/static/images/icon-personal-service.png" alt="">
               <span>客服中心</span>
             </li>
-            <li>
+            <li @click="changeRoute('personal/safeCenter')">
               <img src="/static/images/icon-personal-security-center.png"  alt="">
               <span>安全中心</span>
             </li>
