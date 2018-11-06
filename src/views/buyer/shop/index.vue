@@ -10,6 +10,10 @@
         </h3>
         <p class="m-p">共58件商品</p>
 
+        <!--<div class="m-no-coupon">-->
+          <!--<span class="m-no-img m-shop-no-img"></span>-->
+          <!--<p>购物车空空如也,<span class="m-red">去下单</span>吧~</p>-->
+        <!--</div>-->
         <div class="m-shop-one">
           <div class="m-shop-store-name">
             <span class="m-icon-radio"></span>
@@ -158,6 +162,9 @@
     position: absolute;
     top:0;
     left: 0;
+    .m-no-coupon{
+      margin-top: 200px;
+    }
     .m-shop-title{
       .flex-row(space-between);
       padding: 20px 0;

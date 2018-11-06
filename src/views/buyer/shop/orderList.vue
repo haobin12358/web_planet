@@ -1,6 +1,11 @@
 <template>
     <div class="m-orderList">
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+
+      <!--<div class="m-no-coupon">-->
+        <!--<span class="m-no-img m-order-no-img"></span>-->
+        <!--<p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>-->
+      <!--</div>-->
       <div class="m-orderList-content">
         <div class="m-one-part" @click="changeRoute('/orderDetail')">
          <div class="m-order-store-tile">
@@ -158,6 +163,9 @@
     min-height: 100%;
     .m-nav-list{
       padding: 0 26px ;
+    }
+    .m-no-coupon{
+      margin-top: 300px;
     }
     .m-orderList-content{
       padding: 26px;

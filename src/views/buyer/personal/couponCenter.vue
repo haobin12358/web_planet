@@ -38,8 +38,12 @@
         <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       </div>
       <div class="m-couponCenter-content-ul">
-        <coupon-card></coupon-card>
-        <coupon-card></coupon-card>
+        <!--<coupon-card></coupon-card>-->
+        <!--<coupon-card></coupon-card>-->
+        <div class="m-no-coupon">
+          <span></span>
+          <p>还没有获得优惠券哦~</p>
+        </div>
       </div>
     </div>
   </div>

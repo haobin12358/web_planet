@@ -336,3 +336,31 @@ body{
     background-size: 100% 100%;
   }
 }
+
+//空
+.m-no-coupon{
+  text-align: center;
+  .m-no-img{
+    display: inline-block;
+    width: 516px;
+    height: 516px;
+    background: url("/static/images/icon-no-coupon.png") no-repeat;
+    background-size: 100% 100%;
+    &.m-shop-no-img{
+      background: url("/static/images/icon-no-shop.png") no-repeat;
+      background-size: 100% 100%;
+    }
+    &.m-order-no-img{
+      background: url("/static/images/icon-no-order.png") no-repeat;
+      background-size: 100% 100%;
+    }
+    &.m-address-no-img{
+      background: url("/static/images/icon-no-address.png") no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+  p{
+    font-size: 28px;
+    font-weight: bold;
+  }
+}

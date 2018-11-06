@@ -3,7 +3,12 @@
     <div class="m-personal-bg">
       <span class="m-icon-bg"></span>
     </div>
+
     <div class="m-personal-content m-setUp m-address">
+      <!--<div class="m-no-coupon">-->
+        <!--<span class="m-no-img m-address-no-img"></span>-->
+        <!--<p>暂无地址哦,<span class="m-red">去新增地址</span>吧~</p>-->
+      <!--</div>-->
       <p class="m-set-box">
         <span class="m-right">管理</span>
       </p>
@@ -58,85 +63,14 @@
                 </div>
               </div>
             </li>
-            <li>
-              <div class="m-left">
-                <div class="m-address-name">
-                  <div>
-                    <span class="m-border"></span>
-                    <span>收货人：居居女孩</span>
-                  </div>
-                  <span>15700000000</span>
-                </div>
-                <p class="m-address-p">
-                  杭州市-西湖区-浙江工业大学（屏峰校区）家和西苑14幢112
-                </p>
-              </div>
-              <div class="m-address-edit-box">
-                <div>
-                  <span class="m-icon-radio"></span>
-                  <span>默认地址</span>
-                </div>
-                <div>
-                  <span class="m-mr-40">编辑</span>
-                  <span>删除</span>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="m-left">
-                <div class="m-address-name">
-                  <div>
-                    <span class="m-border"></span>
-                    <span>收货人：居居女孩</span>
-                  </div>
-                  <span>15700000000</span>
-                </div>
-                <p class="m-address-p">
-                  杭州市-西湖区-浙江工业大学（屏峰校区）家和西苑14幢112
-                </p>
-              </div>
-              <div class="m-address-edit-box">
-                <div>
-                  <span class="m-icon-radio"></span>
-                  <span>默认地址</span>
-                </div>
-                <div>
-                  <span class="m-mr-40">编辑</span>
-                  <span>删除</span>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="m-left">
-                <div class="m-address-name">
-                  <div>
-                    <span class="m-border"></span>
-                    <span>收货人：居居女孩</span>
-                  </div>
-                  <span>15700000000</span>
-                </div>
-                <p class="m-address-p">
-                  杭州市-西湖区-浙江工业大学（屏峰校区）家和西苑14幢112
-                </p>
-              </div>
-              <div class="m-address-edit-box">
-                <div>
-                  <span class="m-icon-radio"></span>
-                  <span>默认地址</span>
-                </div>
-                <div>
-                  <span class="m-mr-40">编辑</span>
-                  <span>删除</span>
-                </div>
-              </div>
-            </li>
           </ul>
         </div>
       </div>
+      <div class="m-address-btn" @click="changeRoute('/personal/addAddress')">
+        <span>新增地址</span>
+      </div>
     </div>
-    <div class="m-address-btn" @click="changeRoute('/personal/addAddress')">
-      <span>新增地址</span>
-    </div>
+
   </div>
 
 </template>
@@ -162,12 +96,14 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/personal";
   .m-address{
-    padding-bottom: 350px;
+    /*padding-bottom: 350px;*/
+    .m-no-coupon{
+      margin-top: 350px;
+    }
   }
   .m-address-btn{
-    position: absolute;
-    bottom: 140px;
-    left: 25px;
+    text-align: center;
+    margin-top: 153px;
     span{
       display: inline-block;
       width: 700px;
