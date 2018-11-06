@@ -18,7 +18,7 @@
               </div>
               <div>
                 <input type="text" class="m-edit-input-s" >
-                <span>获取验证码</span>
+                <span class="m-get-code active">获取验证码</span>
               </div>
             </li>
             <li>
@@ -91,6 +91,18 @@
       padding: 33px 55px;
       color: #999999;
       font-size: 30px;
+    }
+    .m-get-code{
+      display: inline-block;
+      padding: 4px 35px;
+      border-radius: 10px;
+      background-color: #CCCCCC;
+      color: #fff;
+      box-shadow:0 3px 6px rgba(0,0,0,0.16);
+      font-size: 21px;
+      &.active{
+        background-color: @mainColor;
+      }
     }
   }
 </style>
