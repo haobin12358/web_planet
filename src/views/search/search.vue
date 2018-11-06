@@ -5,7 +5,7 @@
           <input type="text" placeholder="请输入搜索内容">
           <span class="m-icon-close"></span>
         </div>
-        <span>取消</span>
+        <span @click="returnBack">取消</span>
       </div>
       <div class="m-search-content">
         <!--<div class="m-search-one">-->
@@ -52,7 +52,16 @@
 
 <script>
     export default {
-        name: "search"
+        data(){
+          return{
+
+          }
+        },
+      methods:{
+        returnBack(){
+          this.$router.go(-1)
+        }
+      }
     }
 </script>
 
