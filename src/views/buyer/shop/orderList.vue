@@ -2,7 +2,7 @@
     <div class="m-orderList">
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       <div class="m-orderList-content">
-        <div class="m-one-part">
+        <div class="m-one-part" @click="changeRoute('/orderDetail')">
          <div class="m-order-store-tile">
            <div>
              <span class="m-icon-store"></span>

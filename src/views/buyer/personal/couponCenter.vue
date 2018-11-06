@@ -116,9 +116,9 @@
       .m-couponCenter-rule{
          position: absolute;
         right: 0;
-        top: 110px;
+        top: 90px;
         width: 36px;
-        height: 133px;
+        padding: 20px 0;
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
         background-color: #fff;
@@ -177,6 +177,7 @@
           &.active{
             width: 30px;
             height: 30px;
+            line-height: 30px;
             background-color: @mainColor;
             color: #333;
           }
@@ -186,7 +187,7 @@
           width: 50px;
           height: 4px;
           background-color: #fff;
-          margin-bottom: 10px;
+          margin-bottom: 6px;
           margin-left: -8px;
           margin-right: -8px;
           box-shadow:0 3px 6px rgba(0,0,0,0.16);
