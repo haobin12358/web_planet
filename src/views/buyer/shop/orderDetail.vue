@@ -62,7 +62,7 @@
           <span class="m-price">￥899.00</span>
         </p>
         <p class="m-back-btn">
-          <span>退款</span>
+          <span @click="changeRoute('/selectBack')">退款</span>
         </p>
       </div>
       <div class="m-order-one-part m-box-shadow">
@@ -107,7 +107,9 @@
         common.changeTitle('订单列表');
       },
       methods:{
-
+        changeRoute(v){
+          this.$router.push(v);
+        }
       }
     }
 </script>
