@@ -10,6 +10,7 @@ export const constantRouterMap = [
   {path: '/register', component: () => import('../views/login/register'),hidden: true  },
   {path: '/forget', component: () => import('../views/login/forget'),hidden: true  },
   { path: '/first', component: () => import('../views/login/first'), hidden: true },
+  { path: '/search', component: () => import('../views/search/search'), hidden: true },
   {
     path: '/',
     component: Layout,

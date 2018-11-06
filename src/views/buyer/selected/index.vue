@@ -3,7 +3,7 @@
       <!--搜索-->
       <div class="m-selected-search">
         <span class="m-icon-home"></span>
-        <div class="m-search-input-box">
+        <div class="m-search-input-box" @click="changeRoute('/search')">
           <span class="m-icon-search"></span>
           <span>搜索品牌/商品</span>
         </div>
