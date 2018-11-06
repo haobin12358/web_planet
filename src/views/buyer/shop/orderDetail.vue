@@ -2,11 +2,11 @@
     <div class="m-orderDetail">
        <div class="m-orderDetail-status">
          <span>买家已付款</span>
-         <span class="m-icon-order-status"></span>
+         <span class="m-icon-order-status "></span>
        </div>
       <div class="m-order-one-part">
         <div class="m-user-text">
-          <span class="m-icon-wuliu"></span>
+          <span class="m-icon-wuliu m-done"></span>
           <div class="m-flex-between">
             <div>
               <p class="m-wuliu-text">您的包裹已出库</p>
@@ -37,33 +37,65 @@
           </div>
           <span class="m-red">待发货</span>
         </div>
-        <div class="m-order-product-ul">
-          <div class="m-product-info">
-            <img src="" class="m-product-img" alt="">
-            <div>
-              <p class="m-flex-between">
+        <div>
+          <div class="m-order-product-ul">
+            <div class="m-product-info">
+              <img src="" class="m-product-img" alt="">
+              <div>
+                <p class="m-flex-between">
                 <span class="m-product-name">南面防雨防风软壳衣
                 南面防雨防风软壳衣</span>
-                <span>￥899</span>
-              </p>
-              <p class="m-flex-between m-sku-text m-ft-22">
-                <span class="m-product-label">绿色；XL</span>
-                <span >x1</span>
-              </p>
+                  <span>￥899</span>
+                </p>
+                <p class="m-flex-between m-sku-text m-ft-22">
+                  <span class="m-product-label">绿色；XL</span>
+                  <span >x1</span>
+                </p>
+              </div>
             </div>
           </div>
+          <p class="m-flex-between m-ft-22">
+            <span>运费</span>
+            <span>￥0.00</span>
+          </p>
+          <p class="m-flex-between m-ft-22">
+            <span>实付款（含运费）</span>
+            <span class="m-price">￥899.00</span>
+          </p>
+          <p class="m-back-btn">
+            <span @click="changeRoute('/selectBack')">退款</span>
+          </p>
         </div>
-        <p class="m-flex-between m-ft-22">
-          <span>运费</span>
-          <span>￥0.00</span>
-        </p>
-        <p class="m-flex-between m-ft-22">
-          <span>实付款（含运费）</span>
-          <span class="m-price">￥899.00</span>
-        </p>
-        <p class="m-back-btn">
-          <span @click="changeRoute('/selectBack')">退款</span>
-        </p>
+        <div>
+          <div class="m-order-product-ul">
+            <div class="m-product-info">
+              <img src="" class="m-product-img" alt="">
+              <div>
+                <p class="m-flex-between">
+                <span class="m-product-name">南面防雨防风软壳衣
+                南面防雨防风软壳衣</span>
+                  <span>￥899</span>
+                </p>
+                <p class="m-flex-between m-sku-text m-ft-22">
+                  <span class="m-product-label">绿色；XL</span>
+                  <span >x1</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p class="m-flex-between m-ft-22">
+            <span>运费</span>
+            <span>￥0.00</span>
+          </p>
+          <p class="m-flex-between m-ft-22">
+            <span>实付款（含运费）</span>
+            <span class="m-price">￥899.00</span>
+          </p>
+          <p class="m-back-btn">
+            <span @click="changeRoute('/selectBack')">退款</span>
+          </p>
+        </div>
+
       </div>
       <div class="m-order-one-part m-box-shadow">
         <p>
@@ -129,12 +161,20 @@
       display: block;
       width: 288px;
       height: 147px;
-      background: url("/static/images/icon-order-status-pay.png") no-repeat;
+      background: url("/static/images/icon-order-status-wait.png") no-repeat;
       background-size: 100% 100%;
       margin-left: 136px;
       margin-right: 65px;
       &.m-send{
         background: url("/static/images/icon-order-status-send.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.m-pay{
+        background: url("/static/images/icon-order-status-pay.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.m-done{
+        background: url("/static/images/icon-order-status-done.png") no-repeat;
         background-size: 100% 100%;
       }
     }
@@ -163,6 +203,10 @@
       background: url("/static/images/icon-order-wuliu.png") no-repeat;
       background-size: 100% 100%;
       margin-right: 30px;
+      &.m-done{
+        background: url("/static/images/icon-wuliu-done.png") no-repeat;
+        background-size: 100% 100%;
+      }
     }
     .m-wuliu-text{
       width: 540px;
@@ -246,7 +290,8 @@
         width: 129px;
         height: 41px;
         border-radius: 30px;
-        background-color: @mainColor;
+        border: 1px solid #999;
+        color: #999;
         text-align: center;
         line-height: 41px;
         font-weight: 400;

@@ -1,33 +1,66 @@
 <template>
     <div class="m-addComment">
-      <div class="m-addComment-top">
-        <div>
-          <span class="m-label">描述相符</span>
-          <span class="m-start active"></span>
-          <span class="m-start active"></span>
-          <span class="m-start active"></span>
-          <span class="m-start active"></span>
-          <span class="m-start "></span>
+      <div>
+        <div class="m-addComment-top">
+          <div>
+            <img src="" class="m-product-img" alt="">
+            <span class="m-label">描述相符</span>
+            <span class="m-start active"></span>
+            <span class="m-start active"></span>
+            <span class="m-start active"></span>
+            <span class="m-start active"></span>
+            <span class="m-start "></span>
+          </div>
+          <span>比较好</span>
         </div>
-        <span>比较好</span>
-      </div>
-      <div class="m-addComment-content">
-        <div class="m-addComment-content-edit">
-          <p>填写商品评价</p>
-          <textarea name="" id="" ></textarea>
-          <div class="m-addComment-img-box">
-            <div class="m-addComment-upload">
-              <p>
-                <span class="m-icon-camera"></span>
-              </p>
-              <p>
-                <span>添加照片</span>
-              </p>
+        <div class="m-addComment-content">
+          <div class="m-addComment-content-edit">
+            <!--<p>填写商品评价</p>-->
+            <textarea name=""  placeholder="填写商品评价"></textarea>
+            <div class="m-addComment-img-box">
+              <div class="m-addComment-upload">
+                <p>
+                  <span class="m-icon-camera"></span>
+                </p>
+                <p>
+                  <span>添加照片</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="m-bottom-btn">
+      <div>
+        <div class="m-addComment-top">
+          <div>
+            <img src="" class="m-product-img" alt="">
+            <span class="m-label">描述相符</span>
+            <span class="m-start active"></span>
+            <span class="m-start active"></span>
+            <span class="m-start active"></span>
+            <span class="m-start active"></span>
+            <span class="m-start "></span>
+          </div>
+          <span>比较好</span>
+        </div>
+        <div class="m-addComment-content">
+          <div class="m-addComment-content-edit">
+            <!--<p>填写商品评价</p>-->
+            <textarea name=""  placeholder="填写商品评价"></textarea>
+            <div class="m-addComment-img-box">
+              <div class="m-addComment-upload">
+                <p>
+                  <span class="m-icon-camera"></span>
+                </p>
+                <p>
+                  <span>添加照片</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-foot-btn">
         <span>发 布</span>
       </div>
     </div>
@@ -63,28 +96,38 @@
      .flex-row(space-between);
       padding: 15px 36px;
       background-color: #fff;
+      .m-product-img{
+        display: inline-block;
+        width: 84px;
+        height: 84px;
+        background-color: #9fd0bf;
+        vertical-align: middle;
+      }
       .m-label{
         display: inline-block;
         padding: 0 53px 0 36px;
+        vertical-align: middle;
       }
       .m-start{
         width: 26px;
         height: 26px;
+        vertical-align: middle;
       }
     }
     .m-addComment-content{
-      padding: 25px;
+      padding: 25px 0;
       .m-addComment-content-edit{
-        padding: 28px 41px;
+        padding: 20px 41px;
         background-color: #fff;
-        border-radius: 10px;
         box-shadow:0 5px 6px rgba(0,0,0,0.16);
         text-align: left;
+        color: #999;
         textarea{
           display: block;
           width: 100%;
-          min-height: 160px;
+          min-height: 100px;
           padding: 20px;
+          font-size: 24px;
         }
         .m-addComment-img-box{
           .flex-row(flex-start);
@@ -112,6 +155,20 @@
             margin-right: 20px;
           }
         }
+      }
+    }
+    .m-foot-btn{
+      span{
+        display: inline-block;
+        width: 700px;
+        height: 106px;
+        line-height: 106px;
+        background-color: @mainColor;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 38px;
+        box-shadow:0px 5px 6px rgba(0,0,0,0.16);
+        margin: 93px 0 140px;
       }
     }
   }
