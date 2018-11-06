@@ -1,15 +1,23 @@
 <template>
     <div class="m-login">
-      <p>登录</p>
+      <!--<p>登录</p>-->
       <img src="" class="m-login-logo" alt="">
       <div type="text" class="m-login-input m-login-bottom" >
-        <input type="text" placeholder="用户名">
+        <input type="text" placeholder="请输入手机号码">
+        <span class="m-code">发送验证码</span>
       </div>
       <div type="text" class="m-login-input" >
-        <input type="text" placeholder="密 码">
+        <input type="text" placeholder="请输入验证码">
       </div>
-      <p class="m-login-forget" @click="forgetClick">忘记密码？</p>
+      <!--<p class="m-login-forget" @click="forgetClick">忘记密码？</p>-->
       <div class="m-login-btn">登  录</div>
+
+      <div class="m-wei-box">
+        <p>
+          <span class="m-icon-wei"></span>
+        </p>
+        <p>微信快速登录</p>
+      </div>
     </div>
 
 
@@ -126,24 +134,39 @@
     border-radius: 50%;
     background-color: #a4a4a4;
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.16);
-    margin: 71px 0 157px;
+    margin: 71px 0 127px;
   }
   .m-login-input{
     width: 600px;
     height: 100px;
     border-radius: 10px;
     box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #fff;
-    &.m-login-bottom{
+    background-color: rgba(255,255,255,0.2);
+    color: #333;
+    text-align: left;
+    /*&.m-login-bottom{*/
       margin-bottom: 45px;
+    /*}*/
+    .m-code{
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 10px;
+      background-color: #FCD316;
+      font-size: 21px;
+      color: #fff;
+      box-shadow:0px 3px 6px rgba(0,0,0,0.16);
     }
     input{
-      width: 600px;
+      display: inline-block;
+      width: 358px;
+      padding-left: 52px;
       height: 100px;
       border-radius: 10px;
       border: none;
-      text-align: center;
-      font-size: 36px;
+      text-align: left;
+      font-size: 28px;
+      background-color: transparent;
+      color: #333;
     }
   }
   .m-login-forget{
@@ -160,14 +183,26 @@
     box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
     background-color: #fcd316;
   }
+  .m-wei-box{
+    margin-top: 158px;
+    color: #fff;
+    font-size: 18px;
+    .m-icon-wei{
+      display: inline-block;
+      width: 65px;
+      height: 65px;
+      background: url("/static/images/icon-wei.png") no-repeat;
+      background-size: 100% 100%;
+    }
+  }
 }
 input::-webkit-input-placeholder{
-  color: #ccc;
+  color: #333;
 }
 input::-moz-placeholder{  //不知道为何火狐的placeholder的颜色是粉红色，怎么改都不行，希望有大牛路过帮忙指点
-  color: #ccc;
+  color: #333;
 }
 input:-ms-input-placeholder{  //由于我的IE刚好是IE9，支持不了placeholder，所以也测试不了(⊙﹏⊙)，有IE10以上的娃可以帮我试试
-  color: #ccc;
+  color: #333;
 }
 </style>
