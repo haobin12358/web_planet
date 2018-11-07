@@ -34,7 +34,43 @@
       </div>
       <div class="m-map"></div>
       <div class="m-logisticsInformation-text">
-
+        <p>物流信息：</p>
+        <ul class="m-logisticsInformation-ul">
+          <li>
+            <div class="m-time">
+              <p>09-21</p>
+              <p class="m-ft-22">09:19</p>
+            </div>
+            <div class="m-logisticsInformation-info">
+              <span class="m-circle active"></span>
+              <span class="m-top"></span>
+              <p>已揽件</p>
+              <p class="m-ft-22">【杭州市】包裹由物流公司揽收</p>
+            </div>
+          </li>
+          <li>
+            <div class="m-time">
+              <p>09-21</p>
+              <p class="m-ft-22">09:19</p>
+            </div>
+            <div class="m-logisticsInformation-info">
+              <span class="m-circle"></span>
+              <p class="m-ft-22">【杭州市】包裹由物流公司揽收</p>
+            </div>
+          </li>
+          <li>
+            <div class="m-time">
+              <p>09-21</p>
+              <p class="m-ft-22">09:19</p>
+            </div>
+            <div class="m-logisticsInformation-info">
+              <span class="m-circle active"></span>
+              <span class="m-bottom"></span>
+              <p>已揽件</p>
+              <p class="m-ft-22">【杭州市】包裹由物流公司揽收</p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -95,6 +131,58 @@
     height: 614px;
     box-shadow:0 5px 5px rgba(0,0,0,0.16);
     border-radius: 10px;
+  }
+  .m-logisticsInformation-text{
+    padding: 18px 0;
+    .m-logisticsInformation-ul{
+      margin-top: 20px;
+      li{
+        .flex-row(flex-start);
+        align-items: flex-start;
+        /*padding: 25px 0;*/
+        .m-time{
+          width: 80px;
+          text-align: right;
+        }
+        .m-logisticsInformation-info{
+          position: relative;
+          padding: 0 35px 0;
+          height: 120px;
+          border-left: 1px dashed @mainColor;
+          margin-left: 40px;
+          .m-top{
+            position: absolute;
+            top: 0;
+            left: -4px;
+            width: 8px;
+            height: 10px;
+            background-color: #eee;
+          }
+          .m-bottom{
+            position: absolute;
+            top: 40px;
+            left: -4px;
+            width: 8px;
+            height: 80px;
+            background-color: #eee;
+          }
+          .m-circle{
+            position: absolute;
+            left: -7.5px;
+            top: 10px;
+            width: 15px;
+            height: 15px;
+            background-color: @mainColor;
+            border-radius: 50%;
+            &.active{
+              width: 30px;
+              height: 30px;
+              left: -15px;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>
