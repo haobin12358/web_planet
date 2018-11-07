@@ -8,43 +8,44 @@
         <span @click="returnBack">取消</span>
       </div>
       <div class="m-search-content">
-        <!--<div class="m-search-one">-->
-          <!--<p class="m-ft-22 m-flex-between">-->
-            <!--<span>历史记录</span>-->
-            <!--<span>清除</span>-->
-          <!--</p>-->
-          <!--<ul class="m-tab-ul">-->
-            <!--<li>北山</li>-->
-            <!--<li>南山</li>-->
-            <!--<li>登山服</li>-->
-            <!--<li>登山服</li>-->
-          <!--</ul>-->
-        <!--</div>-->
-        <!--<div class="m-search-one">-->
-          <!--<p class="m-ft-22 m-flex-between">-->
-            <!--<span>推荐商品</span>-->
-          <!--</p>-->
-          <!--<ul class="m-tab-ul">-->
-            <!--<li>北山</li>-->
-            <!--<li>南山</li>-->
-            <!--<li>登山服</li>-->
-            <!--<li>登山服</li>-->
-          <!--</ul>-->
-        <!--</div>-->
-        <ul class="m-search-result-ul">
-          <li>
-            <span>北山</span>
-            <span class="m-icon-go"></span>
-          </li>
-          <li>
-            <span>北山</span>
-            <span class="m-icon-go"></span>
-          </li>
-          <li>
-            <span>北山</span>
-            <span class="m-icon-go"></span>
-          </li>
-        </ul>
+        <div class="m-search-one">
+          <p class="m-ft-22 m-flex-between">
+            <span>历史记录</span>
+            <span>清除</span>
+          </p>
+          <ul class="m-tab-ul">
+            <li>北山</li>
+            <li>南山</li>
+            <li>登山服</li>
+            <li>登山服</li>
+          </ul>
+        </div>
+        <div class="m-search-one">
+          <p class="m-ft-22 m-flex-between">
+            <span>推荐商品</span>
+            <span class="m-icon-delete"></span>
+          </p>
+          <ul class="m-tab-ul">
+            <li>北山</li>
+            <li>南山</li>
+            <li>登山服</li>
+            <li>登山服</li>
+          </ul>
+        </div>
+        <!--<ul class="m-search-result-ul">-->
+          <!--<li>-->
+            <!--<span>北山</span>-->
+            <!--<span class="m-icon-go"></span>-->
+          <!--</li>-->
+          <!--<li>-->
+            <!--<span>北山</span>-->
+            <!--<span class="m-icon-go"></span>-->
+          <!--</li>-->
+          <!--<li>-->
+            <!--<span>北山</span>-->
+            <!--<span class="m-icon-go"></span>-->
+          <!--</li>-->
+        <!--</ul>-->
       </div>
 
     </div>
@@ -103,6 +104,20 @@
   }
   .m-search-content{
     padding: 13px 33px;
+    .m-icon-delete{
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background: url("/static/images/icon-search-delete.png") no-repeat;
+      background-size: 100% 100%;
+    }
+    .m-icon-history{
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background: url("/static/images/icon-history.png") no-repeat;
+      background-size: 100% 100%;
+    }
     .m-tab-ul{
       .flex-row(flex-start);
       flex-wrap: wrap;
