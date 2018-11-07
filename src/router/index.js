@@ -58,6 +58,8 @@ export const constantRouterMap = [
     ],
   },
   { path: '/circle/detail', component: () => import('../views/buyer/circle/detail'), hidden: true },
+  { path: '/circle/editCircle', component: () => import('../views/buyer/circle/editCircle'), hidden: true },
+
   {
     path: '/equipment',
     component: Layout,
