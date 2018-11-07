@@ -18,14 +18,7 @@
             <!--<p>填写商品评价</p>-->
             <textarea name=""  placeholder="填写商品评价"></textarea>
             <div class="m-addComment-img-box">
-              <div class="m-addComment-upload">
-                <p>
-                  <span class="m-icon-camera"></span>
-                </p>
-                <p>
-                  <span>添加照片</span>
-                </p>
-              </div>
+              <span class="m-addComment-upload"></span>
             </div>
           </div>
         </div>
@@ -48,14 +41,7 @@
             <!--<p>填写商品评价</p>-->
             <textarea name=""  placeholder="填写商品评价"></textarea>
             <div class="m-addComment-img-box">
-              <div class="m-addComment-upload">
-                <p>
-                  <span class="m-icon-camera"></span>
-                </p>
-                <p>
-                  <span>添加照片</span>
-                </p>
-              </div>
+              <span class="m-addComment-upload"></span>
             </div>
           </div>
         </div>
@@ -133,26 +119,22 @@
           .flex-row(flex-start);
           flex-wrap: wrap;
           .m-addComment-upload{
+            display: inline-block;
             width:220px;
             height:220px;
-            border:2px dashed #CCCCCC;
             text-align: center;
             color: #ccc;
             margin-right: 20px;
-            .m-icon-camera{
-              display: inline-block;
-              width: 62px;
-              height: 52px;
-              background: url("/static/images/icon-camera.png") no-repeat;
-              background-size: 100% 100%;
-              margin-top: 83px;
-            }
+            margin-bottom: 20px;
+            background: url("/static/images/icon-upload-img.png") no-repeat;
+            background-size: 100% 100%;
           }
           img{
             display: block;
             width: 220px;
             height: 220px;
             margin-right: 20px;
+            margin-bottom: 20px;
           }
         }
       }
