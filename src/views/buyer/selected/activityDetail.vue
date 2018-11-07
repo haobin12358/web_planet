@@ -5,8 +5,7 @@
       <span class="m-icon-bg"></span>
     </div>
     <div class="m-activity-text">
-      <p>TAWA是一个源于德国的家庭车生活服务商品牌，致力于为家庭用
-        户提供与自驾游相关所需装备的一站式解决方案。</p>
+      <p>“带上ME一起出行吧”时光不再，年少时曾有过许多的梦想，趁时光未泯之时，一起带上GOPRO的配件，去追寻自己的梦想吧。“带上ME一起出行吧”时光不再，年少时曾有过许多的梦想，趁时光...</p>
       <p class="m-up-fold">
         <span>点击展开 <span class="m-icon-unfold"></span></span>
         <span>点击收起 <span class="m-icon-packup"></span></span>
