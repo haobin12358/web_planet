@@ -49,7 +49,7 @@ export const constantRouterMap = [
   { path: '/scene', component: () => import('../views/buyer/selected/scene'), hidden: true },
   { path: '/brandList', component: () => import('../views/buyer/selected/brandList'), hidden: true },
   { path: '/brandDetail', component: () => import('../views/buyer/selected/brandDetail'), hidden: true },
-
+  { path: '/activityDetail', component: () => import('../views/buyer/selected/activityDetail'), hidden: true },
   {
     path: '/circle',
     component: Layout,

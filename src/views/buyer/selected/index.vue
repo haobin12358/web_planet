@@ -186,7 +186,7 @@
           <span>场景推荐</span>
         </h3>
         <div class="m-one-activity m-top">
-          <img src="" class="m-activity-img" alt="">
+          <img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">
           <ul class="m-activity-ul">
             <li>
               <img src="" class="m-one-activity-img" alt="">
