@@ -43,6 +43,9 @@
           </div>
         </div>
       </div>
+      <div class="m-foot-btn">
+        <span @click="changeRoute('/backDetail')">提交</span>
+      </div>
     </div>
 
   </div>
@@ -158,6 +161,20 @@
       }
 
     }
-
+    .m-foot-btn{
+      text-align: center;
+      margin-top: 250px;
+      span{
+        display: inline-block;
+        width: 700px;
+        height: 106px;
+        border-radius: 10px;
+        background-color: #FCD316;
+        line-height: 106px;
+        font-size: 38px;
+        font-weight: bold;
+        color: #333;
+      }
+    }
   }
 </style>

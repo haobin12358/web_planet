@@ -85,6 +85,7 @@ export const constantRouterMap = [
   { path: '/orderDetail', component: () => import('../views/buyer/shop/orderDetail'), hidden: true },
   { path: '/selectBack', component: () => import('../views/buyer/shop/selectBack'), hidden: true },
   { path: '/editBack', component: () => import('../views/buyer/shop/editBack'), hidden: true },
+  { path: '/backDetail', component: () => import('../views/buyer/shop/backDetail'), hidden: true },
   {
     path: '/personal',
     component: Layout,

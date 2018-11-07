@@ -114,27 +114,22 @@
         <span class="active">确认收货</span>
       </div>
 
-      <div class="m-orderDetail-foot">
-        <div class="m-foot-btn">
-          <span class="m-icon-service"></span>
-          <span>联系卖家</span>
-        </div>
-        <div class="m-foot-btn">
-          <span class="m-icon-tell"></span>
-          <span>拨打电话</span>
-        </div>
-      </div>
+      <bottom></bottom>
     </div>
 </template>
 
 <script>
-  import common from '../../../common/js/common'
+  import common from '../../../common/js/common';
+  import bottom from '../components/bottomService';
     export default {
        data(){
          return{
 
          }
        },
+      components:{
+        bottom
+      },
       mounted(){
         common.changeTitle('订单列表');
       },
@@ -312,41 +307,7 @@
       }
     }
   }
-  .m-orderDetail-foot{
-    width: 700px;
-    border-radius: 10px;
-    background-color: @mainColor;
-    height: 86px;
-    line-height: 86px;
-    margin: 200px 25px 50px;
-    padding: 10px 0;
-    .m-foot-btn{
-      display: inline-block;
-      width: 49%;
-      border-left: 1px solid #fff;
-      &:first-child{
-        border-left: none;
-      }
-      .m-icon-service{
-        display: inline-block;
-        width: 59px;
-        height: 60px;
-        background: url("/static/images/m-serviceCenter-kefu.png") no-repeat;
-        background-size: 100% 100%;
-        vertical-align: middle;
-        margin-right: 43px;
-      }
-      .m-icon-tell{
-        display: inline-block;
-        width: 61px;
-        height: 60px;
-        background: url("/static/images/m-serviceCenter-tell.png") no-repeat;
-        background-size: 100% 100%;
-        vertical-align: middle;
-        margin-right: 36px;
-      }
-    }
-  }
+
   .m-align-right{
     text-align: right;
     background-color: #fff;
