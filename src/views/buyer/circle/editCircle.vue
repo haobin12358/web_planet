@@ -117,11 +117,12 @@
       color: #333;
     }
   }
+  input::-webkit-input-placeholder{
+    color: #999;
+  }
+  textarea::-webkit-input-placeholder{
+    color: #999;
+  }
 }
-input::-webkit-input-placeholder{
-  color: #999;
-}
-textarea::-webkit-input-placeholder{
-  color: #999;
-}
+
 </style>

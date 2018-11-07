@@ -211,7 +211,6 @@
       display: inline-block;
       height: 62px;
       line-height: 62px;
-
       span{
         display: inline-block;
         width: 271px;
