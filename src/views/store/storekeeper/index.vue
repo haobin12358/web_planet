@@ -28,7 +28,7 @@
       </div>
       <!--商品展示-->
       <div class="m-most-product">最新发布</div>
-      <div class="m-product-part">
+      <!--<div class="m-product-part">
         <div class="m-part-left">
           <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
         </div>
@@ -41,7 +41,9 @@
             <div class="m-share-text">分享</div>
           </div>
         </div>
-      </div>
+      </div>-->
+      <img class="m-no-order-img" src="/static/images/icon-no-order.png" alt="">
+      <div class="m-no-order-text">暂无最新发布商品</div>
       <!--商品展示-->
       <div class="m-most-product">最热商品</div>
       <div class="m-product-part">
@@ -138,6 +140,14 @@
         font-size: 24px;
         text-align: left;
         margin: 0 0 20px 42px;
+      }
+      .m-no-order-img {
+        width: 200px;
+        height: 200px;
+      }
+      .m-no-order-text {
+        font-size: 18px;
+        padding-bottom: 40px;
       }
       .m-product-part {
         display: flex;
