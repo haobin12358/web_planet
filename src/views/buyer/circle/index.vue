@@ -114,8 +114,8 @@
 @import "../../../common/css/index";
   .m-circle{
     min-height: 100vh;
+    overflow-x: hidden;
     .m-circle-content{
-
       .m-scroll-l{
         width: 700px;
         overflow-x: auto;
