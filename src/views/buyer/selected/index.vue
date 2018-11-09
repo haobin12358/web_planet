@@ -110,41 +110,41 @@
           <ul class="m-selected-brand-product-ul">
             <li>
               <img src="" class="m-selected-brand-product-img" alt="">
-              <div clas="m-selected-brand-product-text">
+              <div class="m-selected-brand-product-text">
                 <h3>【北面】THE NORTH FA1212</h3>
-                <p class="m-flex-between">
+                <p class="m-flex-between m-ft-18">
                   <span>￥850.00</span>
-                  <s class="m-grey">￥850.00</s>
+                  <s class="m-grey m-ft-18">￥850.00</s>
                 </p>
               </div>
             </li>
             <li>
               <img src="" class="m-selected-brand-product-img" alt="">
-              <div clas="m-selected-brand-product-text">
+              <div class="m-selected-brand-product-text">
                 <h3>【北面】THE NORTH FA1212</h3>
                 <p class="m-flex-between">
                   <span>￥850.00</span>
-                  <s class="m-grey">￥850.00</s>
+                  <s class="m-grey m-ft-18">￥850.00</s>
                 </p>
               </div>
             </li>
             <li>
               <img src="" class="m-selected-brand-product-img" alt="">
-              <div clas="m-selected-brand-product-text">
+              <div class="m-selected-brand-product-text">
                 <h3>【北面】THE NORTH FA1212</h3>
                 <p class="m-flex-between">
                   <span>￥850.00</span>
-                  <s class="m-grey">￥850.00</s>
+                  <s class="m-grey m-ft-18">￥850.00</s>
                 </p>
               </div>
             </li>
             <li>
               <img src="" class="m-selected-brand-product-img" alt="">
-              <div clas="m-selected-brand-product-text">
+              <div class="m-selected-brand-product-text">
                 <h3>【北面】THE NORTH FA1212</h3>
-                <p class="m-flex-between">
+                <p class="m-flex-between ">
                   <span>￥850.00</span>
-                  <s class="m-grey">￥850.00</s>
+                  <s class="m-grey m-ft-18">￥850.00</s>
                 </p>
               </div>
             </li>
@@ -183,7 +183,7 @@
       <!--活动专题-->
       <div class="m-selected-one">
         <h3 class="m-selected-title m-flex-start">
-          <span>场景推荐</span>
+          <span>活动专题</span>
         </h3>
         <div class="m-one-activity m-top">
           <img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">
@@ -192,16 +192,7 @@
               <img src="" class="m-one-activity-img" alt="">
               <div class="m-one-activity-text">
                 <h3>【北面】THE NORTH d </h3>
-                <p>
-                  <span >￥950.00</span>
-                <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p>
+                <p class="m-flex-between">
                   <span >￥950.00</span>
                   <s class="m-grey">￥950.00</s></p>
               </div>
@@ -210,7 +201,16 @@
               <img src="" class="m-one-activity-img" alt="">
               <div class="m-one-activity-text">
                 <h3>【北面】THE NORTH d </h3>
-                <p>
+                <p class="m-flex-between">
+                  <span >￥950.00</span>
+                  <s class="m-grey">￥950.00</s></p>
+              </div>
+            </li>
+            <li>
+              <img src="" class="m-one-activity-img" alt="">
+              <div class="m-one-activity-text">
+                <h3>【北面】THE NORTH d </h3>
+                <p class="m-flex-between">
                   <span >￥950.00</span>
                   <s class="m-grey">￥950.00</s></p>
               </div>
@@ -224,7 +224,7 @@
               <img src="" class="m-one-activity-img" alt="">
               <div class="m-one-activity-text">
                 <h3>【北面】THE NORTH d </h3>
-                <p>
+                <p class="m-flex-between">
                   <span >￥950.00</span>
                   <s class="m-grey">￥950.00</s></p>
               </div>
@@ -233,7 +233,7 @@
               <img src="" class="m-one-activity-img" alt="">
               <div class="m-one-activity-text">
                 <h3>【北面】THE NORTH d </h3>
-                <p>
+                <p class="m-flex-between">
                   <span >￥950.00</span>
                   <s class="m-grey">￥950.00</s></p>
               </div>
@@ -242,7 +242,7 @@
               <img src="" class="m-one-activity-img" alt="">
               <div class="m-one-activity-text">
                 <h3>【北面】THE NORTH d </h3>
-                <p>
+                <p class="m-flex-between">
                   <span >￥950.00</span>
                   <s class="m-grey">￥950.00</s></p>
               </div>
@@ -416,6 +416,7 @@
           .m-one-activity-text{
             width: 200px;
             font-size: 19px;
+            margin-top: 10px;
             h3{
               width: 200px;
               overflow: hidden;
