@@ -1,6 +1,9 @@
 <template>
     <div class="m-orderList">
-      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+      <div class="m-nav">
+        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+      </div>
+
 
       <!--<div class="m-no-coupon">-->
         <!--<span class="m-no-img m-order-no-img"></span>-->
@@ -161,6 +164,9 @@
   .m-orderList{
     background-color: #eee;
     min-height: 100%;
+    .m-nav{
+      background-color: #fff;
+    }
     .m-nav-list{
       padding: 0 26px ;
     }
