@@ -33,6 +33,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   height: 100%;
+  background-color: #fff;
 }
 .m-return{
   position: fixed;
