@@ -23,10 +23,12 @@
         </mt-swipe-item>
       </mt-swipe>
     </div>
+    <!--nav滑动选项-->
+    <div class="m-nav">
+      <navList :navlist="navList" :isScroll="true" @navClick="navClick"></navList>
+    </div>
     <!--内容-->
     <div class="m-material-content">
-      <!--nav滑动选项-->
-      <navList :navList="navList" @navClick="navClick"></navList>
       <!--素材body-->
       <div class="m-material-body">
         <div class="m-material-part">
@@ -79,7 +81,7 @@
         name: '',
         navList: [
           { name: "全 部", active: true }, { name: "专题活动", active: false }, { name: "大牌推荐", active: false },
-          { name: "新 品", active: false }, { name: "动 态", active: false }, { name: "动 态", active: false }, { name: "动 态", active: false }
+          { name: "新 品", active: false }, { name: "动 态", active: false }, { name: "动 态", active: false }
         ]
       }
     },
@@ -115,6 +117,12 @@
       padding: 0 33px;
       /*margin: auto;*/
     }
+    .m-nav{
+      width: 690px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin: 45px 0 45px 30px;
+    }
     .m-material-content {
       padding: 0 33px;
       .m-material-body {
@@ -124,11 +132,10 @@
             width: 90px;
             height: 90px;
             border-radius: 10px;
-            margin-right: 30px;
           }
           .m-part-right {
             text-align: left;
-            margin-bottom: 45px;
+            margin: 0 0 45px 30px;
             border-bottom: 1px #cccccc solid;
             .m-user-name {
               font-size: 28px;
