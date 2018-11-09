@@ -85,6 +85,7 @@
   @import "../../../common/css/index";
 
   .m-member {
+    min-height: 100%;
     .m-search-input-box {
       width: 680px !important;
     }
@@ -135,6 +136,7 @@
           .m-product-name {
             font-size: 28px;
             font-weight: bold;
+            margin-bottom: 15px;
           }
           .m-product-description {
             flex: 1;

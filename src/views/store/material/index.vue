@@ -111,6 +111,7 @@
   @import "../../../common/css/index";
 
   .m-material {
+    min-height: 100%;
     .m-search-input-box {
       width: 555px !important;
     }
