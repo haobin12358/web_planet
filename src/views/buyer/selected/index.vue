@@ -267,7 +267,9 @@
 
 <script type="text/ecmascript-6">
   import product from '../components/product';
-  import common from '../../../common/js/common'
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api'
     export default {
         data() {
             return {
@@ -281,6 +283,14 @@
         common.changeTitle('精选');
       },
         methods: {
+          /*获取品牌推荐*/
+          getBrand(){
+            axios.get(api.brand_list,{
+              params:{
+
+              }
+            })
+          },
           /*查看更多*/
           changeRoute(v){
             this.$router.push(v)
