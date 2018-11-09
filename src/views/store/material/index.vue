@@ -121,13 +121,14 @@
       width: 690px;
       overflow-x: auto;
       overflow-y: hidden;
-      margin: 45px 0 45px 30px;
+      margin: 30px 0 45px 30px;
     }
     .m-material-content {
       padding: 0 33px;
       .m-material-body {
         .m-material-part {
           display: flex;
+          box-sizing: border-box;
           .m-part-left {
             width: 90px;
             height: 90px;
