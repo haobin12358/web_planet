@@ -9,7 +9,7 @@
         </div>
       </div>
       <!--轮播图-->
-      <div class="m-selected-swipe">
+      <div class="m-swipe">
         <mt-swipe :auto="3000" >
           <mt-swipe-item>
             <img src="" class="img" alt="">
@@ -297,7 +297,7 @@
 .m-selected{
   width: 100%;
   overflow-x: hidden;
-  .m-selected-swipe{
+  .m-swipe{
     padding: 0 33px;
     /*margin: auto;*/
   }
