@@ -32,7 +32,9 @@
       <!--素材body-->
       <div class="m-material-body">
         <div class="m-material-part">
-          <img class="m-part-left" src="http://dummyimage.com/90x90" alt="">
+          <div class="m-part-left">
+            <img class="m-left-img" src="http://dummyimage.com/90x90" alt="">
+          </div>
           <div class="m-part-right">
             <div class="m-user-name">大虾</div>
             <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
@@ -50,7 +52,9 @@
           </div>
         </div>
         <div class="m-material-part">
-          <img class="m-part-left" src="http://dummyimage.com/90x90" alt="">
+          <div class="m-part-left">
+            <img class="m-left-img" src="http://dummyimage.com/90x90" alt="">
+          </div>
           <div class="m-part-right">
             <div class="m-user-name">大虾</div>
             <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
@@ -128,11 +132,12 @@
       .m-material-body {
         .m-material-part {
           display: flex;
-          box-sizing: border-box;
           .m-part-left {
-            width: 90px;
-            height: 90px;
-            border-radius: 10px;
+            .m-left-img {
+              width: 90px;
+              height: 90px;
+              border-radius: 10px;
+            }
           }
           .m-part-right {
             text-align: left;
@@ -150,6 +155,7 @@
               .m-material-img {
                 width: 200px;
                 height: 200px;
+                margin: 0 10px 10px 0;
               }
             }
             .m-release-time {
