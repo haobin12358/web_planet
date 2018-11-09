@@ -1,14 +1,17 @@
 <template>
-  <ul class="m-nav-list">
-    <template v-for="(item,index) in navlist">
-      <li :class="item.active?'active':''" @click="navClick(index)">{{item.name}}
-        <span class="m-icon-box" v-if="item.icon">
+  <div :class="isScroll ? 'm-scroll-nav':''">
+    <ul class="m-nav-list">
+      <template v-for="(item,index) in navlist">
+        <li :class="item.active?'active':''" @click="navClick(index)">{{item.name}}
+          <span class="m-icon-box" v-if="item.icon">
             <span class="m-icon-up"></span>
              <span class="m-icon-down"></span>
           </span>
-      </li>
-    </template>
-  </ul>
+        </li>
+      </template>
+    </ul>
+  </div>
+
 
 </template>
 
@@ -23,6 +26,10 @@
           navlist:{
             type:Array,
             default:null
+          },
+          isScroll:{
+            type:Boolean,
+            default:false
           }
         },
         methods: {

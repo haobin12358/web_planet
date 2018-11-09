@@ -9,15 +9,7 @@
         <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
       </div>
       <div class="m-circle-content">
-         <div class="m-scroll-l">
-           <ul class="m-circle-nav">
-             <li class="active">全部</li>
-             <li>运动健身</li>
-             <li>户外徒步</li>
-             <li>露营体验</li>
-             <li>潜水滑雪</li>
-           </ul>
-         </div>
+        <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
         <div class="m-circle-body">
           <div class="m-video-one">
             <!--<span class="m-video-label">【运动健身】</span>-->
@@ -93,16 +85,54 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import navList from '../../../components/common/navlist'
     export default {
         data() {
             return {
-                name: ''
+                name: '',
+              nav_list:[
+                {
+                  name:'全部',
+                  params:'',
+                  active:true
+                },
+                {
+                  name:'运动健身',
+                  params:'',
+                  active:false
+                },
+                {
+                  name:'户外徒步',
+                  params:'',
+                  active:false
+                },
+                {
+                  name:'露营体验',
+                  params:'',
+                  active:false
+                },
+                {
+                  name:'潜水滑雪',
+                  params:'',
+                  active:false
+                }
+              ]
             }
         },
-        components: {},
+        components: {
+          navList
+        },
         methods: {
           changeRoute(v){
             this.$router.push(v)
+          },
+          navClick(index){
+            let arr = [].concat(this.nav_list);
+            for(let i=0;i<arr.length;i++){
+              arr[i].active = false;
+            }
+            arr[index].active = true;
+            this.nav_list = [].concat(arr)
           }
         },
         created() {

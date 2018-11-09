@@ -34,16 +34,16 @@
       </div>
     </div>
     <div class="m-couponCenter-content">
-      <div class="m-scroll">
-        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+      <div class="m-nav">
+        <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-couponCenter-content-ul">
         <!--<coupon-card></coupon-card>-->
-        <!--<coupon-card></coupon-card>-->
-        <div class="m-no-coupon">
-          <span></span>
-          <p>还没有获得优惠券哦~</p>
-        </div>
+        <coupon-card></coupon-card>
+        <!--<div class="m-no-coupon">-->
+          <!--<span></span>-->
+          <!--<p>还没有获得优惠券哦~</p>-->
+        <!--</div>-->
       </div>
     </div>
   </div>
@@ -211,11 +211,11 @@
       }
     }
     .m-couponCenter-content{
-      .m-scroll{
+      .m-nav{
         width: 700px;
         overflow-x: auto;
         overflow-y: hidden;
-        margin: 20px 0 46px 50px;
+        margin: 20px 0 46px 30px;
       }
       .m-couponCenter-content-ul{
         padding: 20px 72px;
