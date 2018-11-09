@@ -7,6 +7,7 @@
         <span class="m-icon-search"></span>
         <span>搜索品牌/商品</span>
       </div>
+      <span class="m-icon-upload"></span>
     </div>
     <!--轮播图-->
     <div class="m-swipe">
@@ -25,41 +26,64 @@
     <!--内容-->
     <div class="m-material-content">
       <!--nav滑动选项-->
-      <navListScroll :navList="navList" @navClick="navClick"></navListScroll>
-      <!--<div class="m-scroll-l">
-        <ul class="m-material-nav">
-          <li class="active">全部</li>
-          <li>运动健身</li>
-          <li>户外徒步</li>
-          <li>露营体验</li>
-          <li>潜水滑雪</li>
-          <li>潜水滑雪</li>
-          <li>潜水滑雪</li>
-          <li>潜水滑雪</li>
-        </ul>
-      </div>-->
+      <navList :navList="navList" @navClick="navClick"></navList>
       <!--素材body-->
       <div class="m-material-body">
-
+        <div class="m-material-part">
+          <img class="m-part-left" src="http://dummyimage.com/90x90" alt="">
+          <div class="m-part-right">
+            <div class="m-user-name">大虾</div>
+            <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
+            <div class="m-img-box">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            </div>
+            <div class="m-release-time">今日发布</div>
+            <div class="m-material-share">
+              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
+              <div class="m-share-text">分享</div>
+            </div>
+          </div>
+        </div>
+        <div class="m-material-part">
+          <img class="m-part-left" src="http://dummyimage.com/90x90" alt="">
+          <div class="m-part-right">
+            <div class="m-user-name">大虾</div>
+            <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
+            <div class="m-img-box">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            </div>
+            <div class="m-release-time">今日发布</div>
+            <div class="m-material-share">
+              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
+              <div class="m-share-text">分享</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import navListScroll from '../../../components/common/navListScroll';
+  import navList from '../../../components/common/navlist';
 
   export default {
     data() {
       return {
         name: '',
         navList: [
-          { name: "全部", active: true }, { name: "专题活动", active: false }, { name: "大牌推荐", active: false },
-          { name: "新品", active: false }, { name: "动态", active: false }
+          { name: "全 部", active: true }, { name: "专题活动", active: false }, { name: "大牌推荐", active: false },
+          { name: "新 品", active: false }, { name: "动 态", active: false }, { name: "动 态", active: false }, { name: "动 态", active: false }
         ]
       }
     },
-    components: { navListScroll },
+    components: { navList },
     methods: {
       // 跳转其他页面的方法
       changeRoute(v){
@@ -84,39 +108,62 @@
   @import "../../../common/css/index";
 
   .m-material {
+    .m-search-input-box {
+      width: 555px !important;
+    }
     .m-swipe{
       padding: 0 33px;
       /*margin: auto;*/
     }
     .m-material-content {
-      .m-scroll-l{
-        width: 700px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        margin: 20px 0 0;
-        padding: 0 28px;
-        .m-material-nav{
-          width: 101%;
-          overflow-y: hidden;
-          text-align: left;
-          display: inline;
-          white-space: nowrap;
-          overflow-x: scroll;
-          li{
-            display: inline-block;
-            padding: 5px;
-            /*width: 150px!important;*/
-            height: 34px;
-            line-height: 34px;
-            margin-right: 62px;
-            &.active{
-              border-bottom: 3px solid @mainColor;
+      padding: 0 33px;
+      .m-material-body {
+        .m-material-part {
+          display: flex;
+          .m-part-left {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            margin-right: 30px;
+          }
+          .m-part-right {
+            text-align: left;
+            margin-bottom: 45px;
+            border-bottom: 1px #cccccc solid;
+            .m-user-name {
+              font-size: 28px;
+              font-weight: bold;
+            }
+            .m-material-description {
+              font-size: 24px;
+              padding: 10px 0;
+            }
+            .m-img-box {
+              .m-material-img {
+                width: 200px;
+                height: 200px;
+              }
+            }
+            .m-release-time {
+              color: #999999;
+              font-size: 25px;
+            }
+            .m-material-share {
+              display: flex;
+              margin-bottom: 45px;
+              justify-content: flex-end;
+              .m-share-img {
+                width: 25px;
+                height: 30px;
+              }
+              .m-share-text {
+                color: #999999;
+                font-size: 25px;
+                margin: -2px 0 0 10px;
+              }
             }
           }
         }
-      }
-      .m-material-body {
-
       }
     }
   }
