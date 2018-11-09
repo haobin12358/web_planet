@@ -1,7 +1,7 @@
 <template>
     <div class="m-brandList">
-      <div class="m-scroll">
-        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+      <div class="m-nav">
+        <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-bandList-content">
         <div class="m-one-brand-part">
@@ -102,12 +102,12 @@
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../../common/css/index";
   .m-brandList{
-    .m-scroll{
+    .m-nav{
       padding-left: 35px;
       width: 715px;
       box-shadow:0 3px 6px rgba(0,0,0,0.16);
       padding-bottom: 10px;
-      /*margin-bottom: 0;*/
+      margin: 28px 0 48px;
     }
     .m-bandList-content{
       text-align: left;
