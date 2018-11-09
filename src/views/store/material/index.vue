@@ -29,46 +29,43 @@
     </div>
     <!--内容-->
     <div class="m-material-content">
-      <!--素材body-->
-      <div class="m-material-body">
-        <div class="m-material-part">
-          <div class="m-part-left">
-            <img class="m-left-img" src="http://dummyimage.com/90x90" alt="">
+      <div class="m-material-part">
+        <div class="m-part-left">
+          <img class="m-left-img" src="http://dummyimage.com/90x90" alt="">
+        </div>
+        <div class="m-part-right">
+          <div class="m-user-name">大虾</div>
+          <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
+          <div class="m-img-box">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
           </div>
-          <div class="m-part-right">
-            <div class="m-user-name">大虾</div>
-            <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
-            <div class="m-img-box">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-            </div>
-            <div class="m-release-time">今日发布</div>
-            <div class="m-material-share">
-              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-              <div class="m-share-text">分享</div>
-            </div>
+          <div class="m-release-time">今日发布</div>
+          <div class="m-material-share">
+            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
+            <div class="m-share-text">分享</div>
           </div>
         </div>
-        <div class="m-material-part">
-          <div class="m-part-left">
-            <img class="m-left-img" src="http://dummyimage.com/90x90" alt="">
+      </div>
+      <div class="m-material-part">
+        <div class="m-part-left">
+          <img class="m-left-img" src="http://dummyimage.com/90x90" alt="">
+        </div>
+        <div class="m-part-right">
+          <div class="m-user-name">大虾</div>
+          <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
+          <div class="m-img-box">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
+            <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
           </div>
-          <div class="m-part-right">
-            <div class="m-user-name">大虾</div>
-            <div class="m-material-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述</div>
-            <div class="m-img-box">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-              <img class="m-material-img" src="http://dummyimage.com/200x200" alt="">
-            </div>
-            <div class="m-release-time">今日发布</div>
-            <div class="m-material-share">
-              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-              <div class="m-share-text">分享</div>
-            </div>
+          <div class="m-release-time">今日发布</div>
+          <div class="m-material-share">
+            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
+            <div class="m-share-text">分享</div>
           </div>
         </div>
       </div>
@@ -129,52 +126,50 @@
     }
     .m-material-content {
       padding: 0 33px;
-      .m-material-body {
-        .m-material-part {
-          display: flex;
-          .m-part-left {
-            .m-left-img {
-              width: 90px;
-              height: 90px;
-              border-radius: 10px;
+      .m-material-part {
+        display: flex;
+        .m-part-left {
+          .m-left-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+          }
+        }
+        .m-part-right {
+          text-align: left;
+          margin: 0 0 45px 30px;
+          border-bottom: 1px #cccccc solid;
+          .m-user-name {
+            font-size: 28px;
+            font-weight: bold;
+          }
+          .m-material-description {
+            font-size: 24px;
+            padding: 10px 0;
+          }
+          .m-img-box {
+            .m-material-img {
+              width: 200px;
+              height: 200px;
+              margin: 0 10px 10px 0;
             }
           }
-          .m-part-right {
-            text-align: left;
-            margin: 0 0 45px 30px;
-            border-bottom: 1px #cccccc solid;
-            .m-user-name {
-              font-size: 28px;
-              font-weight: bold;
+          .m-release-time {
+            color: #999999;
+            font-size: 25px;
+          }
+          .m-material-share {
+            display: flex;
+            margin-bottom: 45px;
+            justify-content: flex-end;
+            .m-share-img {
+              width: 25px;
+              height: 30px;
             }
-            .m-material-description {
-              font-size: 24px;
-              padding: 10px 0;
-            }
-            .m-img-box {
-              .m-material-img {
-                width: 200px;
-                height: 200px;
-                margin: 0 10px 10px 0;
-              }
-            }
-            .m-release-time {
+            .m-share-text {
               color: #999999;
               font-size: 25px;
-            }
-            .m-material-share {
-              display: flex;
-              margin-bottom: 45px;
-              justify-content: flex-end;
-              .m-share-img {
-                width: 25px;
-                height: 30px;
-              }
-              .m-share-text {
-                color: #999999;
-                font-size: 25px;
-                margin: -2px 0 0 10px;
-              }
+              margin: -2px 0 0 10px;
             }
           }
         }
