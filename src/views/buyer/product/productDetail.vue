@@ -1,28 +1,24 @@
 <template>
-    <div class="m-product-detail">
+    <div class="m-product-detail" v-if="product_info">
       <div class="m-product-swipe">
         <mt-swipe :auto="2000" >
-          <mt-swipe-item>
-            <img src="" class="m-swipe-img" alt="">
-          </mt-swipe-item>
-          <mt-swipe-item>
-            <img src="" class="m-swipe-img" alt="">
-          </mt-swipe-item>
-          <mt-swipe-item>
-            <img src="" class="m-swipe-img" alt="">
+          <mt-swipe-item v-for="item in product_info.images" v-bind:key="item">
+            <img :src="item.pipic" class="m-swipe-img" alt="">
           </mt-swipe-item>
         </mt-swipe>
         <span class="m-icon-back"></span>
       </div>
       <div class="m-product-detail-info">
         <h3>
-          <span>登山服</span>
+          <span class="m-product-title">{{product_info.prtitle}}</span>
           <span class="m-red">￥1668.0</span>
         </h3>
         <div class="m-info-list">
-          <span>快递：0.00</span>
-          <span>快递：0.00</span>
-          <span>快递：0.00</span>
+          <span>快递：{{product_info.prfreight}}</span>
+          <span>月销：0.00</span>
+          <span>
+            {{product_info.brand.pbname}}
+          </span>
         </div>
       </div>
       <div class="m-product-detail-more" @click="changeModal('show_sku',true)">
@@ -49,7 +45,7 @@
         </div>
       </div>
       <div class="m-product-detail-img-box">
-        <img src=""  alt="">
+        <img :src="product_info.prdesc"  alt="">
       </div>
       <div class="m-product-detail-foot">
         <span class="m-icon-car"></span>
@@ -65,7 +61,10 @@
 </template>
 
 <script>
-  import sku from '../components/sku'
+  import sku from '../components/sku';
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api'
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -84,13 +83,19 @@
     export default {
         data(){
           return{
-            show_sku:false
+            show_sku:false,
+            product_info:null
           }
         },
       components:{
           sku
       },
+      mounted(){
+        common.changeTitle('商品详情');
+        this.getInfo();
+      },
       methods:{
+         // 改变模态框
          changeModal(v,bool) {
            this[v] = bool;
            if(bool){
@@ -99,8 +104,21 @@
              scroll.beforeClose();
            }
          },
+        //改变路由
         changeRoute(){
            this.$router.push('/evaluate');
+        },
+        getInfo(){
+           axios.get(api.product_get,{
+             params:{
+               prid:this.$route.query.prid
+             }
+           }).then(res => {
+             if(res.data.status == 200){
+               this.product_info = res.data.data
+             }
+
+           })
         }
       }
     }
@@ -130,12 +148,19 @@
     h3{
       display: flex;
       flex-flow: row;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       font-size: 30px;
       font-weight: bold;
       color: #666666;
       margin-bottom: 40px;
+      .m-product-title{
+        /*width: 625px;*/
+        /*overflow: hidden;*/
+        /*text-overflow: ellipsis;*/
+        /*white-space: nowrap;*/
+        text-align: left;
+      }
       .m-red{
         color: #EF9B2D;
       }
@@ -177,8 +202,8 @@
     img{
       display: block;
       width: 100%;
-      height: 600px;
-      background-color: #9fd0bf;
+      /*height: 600px;*/
+      /*background-color: #9fd0bf;*/
     }
   }
   .m-product-detail-foot{

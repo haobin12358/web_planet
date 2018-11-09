@@ -16,8 +16,8 @@
       <div class="m-equipment-icon-box">
         <ul class="m-equipment-icon-ul">
           <li v-for="(item,index) in icon_list" @click="changeRoute(item)">
-            <img :src="item.src" alt="">
-            <span class="m-name">{{item.name}}</span>
+            <img :src="item.pcpic" alt="">
+            <span class="m-name">{{item.pcname}}</span>
           </li>
         </ul>
       </div>
@@ -26,6 +26,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api'
     export default {
         data() {
             return {
@@ -91,14 +94,30 @@
                    src:'/static/images/equipment/equipment-dive.png',
                    url:''
                  }
-               ]
+               ],
             }
         },
-        components: {},
+        components: {
+
+        },
+        mounted(){
+          common.changeTitle('装备');
+          this.getCategory();
+        },
         methods: {
+          //跳转路由
           changeRoute(v){
-            this.$router.push({path:'/equipment/detail',query:{head:v.src,name:v.name}});
+            this.$router.push({path:'/equipment/detail',query:{head:v.pcpic,name:v.pcname,pcid:v.pcid}});
+          },
+          //获取装备信息
+          getCategory(){
+            axios.get(api.category_list).then(res => {
+                if(res.data.status == 200){
+                  this.icon_list = [].concat(res.data.data);
+                }
+            })
           }
+
         },
         created() {
 

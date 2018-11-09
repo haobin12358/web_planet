@@ -1,51 +1,15 @@
 <template>
   <ul class="m-recommend">
+    <li @click="changeRoute(item)" v-for="(item,index) in list">
+      <img :src="item.prmainpic" class="m-one-product-img" alt="">
+      <div class="m-one-product-text">
+        <h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>
+        <p class="m-flex-between">
+          <span >￥{{item.prprice}}</span>
+          <s class="m-grey">￥{{item.prprice}}</s></p>
+      </div>
+    </li>
     <li @click="changeRoute">
-      <img src="" class="m-one-product-img" alt="">
-      <div class="m-one-product-text">
-        <h3>【北面】THE NORTH d </h3>
-        <p class="m-flex-between">
-          <span >￥950.00</span>
-          <s class="m-grey">￥950.00</s></p>
-      </div>
-    </li>
-    <li>
-      <img src="" class="m-one-product-img" alt="">
-      <div class="m-one-product-text">
-        <h3>【北面】THE NORTH d </h3>
-        <p class="m-flex-between">
-          <span >￥950.00</span>
-          <s class="m-grey">￥950.00</s></p>
-      </div>
-    </li>
-    <li>
-      <img src="" class="m-one-product-img" alt="">
-      <div class="m-one-product-text">
-        <h3>【北面】THE NORTH d </h3>
-        <p class="m-flex-between">
-          <span >￥950.00</span>
-          <s class="m-grey">￥950.00</s></p>
-      </div>
-    </li>
-    <li>
-      <img src="" class="m-one-product-img" alt="">
-      <div class="m-one-product-text">
-        <h3>【北面】THE NORTH d </h3>
-        <p class="m-flex-between">
-          <span >￥950.00</span>
-          <s class="m-grey">￥950.00</s></p>
-      </div>
-    </li>
-    <li>
-      <img src="" class="m-one-product-img" alt="">
-      <div class="m-one-product-text">
-        <h3>【北面】THE NORTH d </h3>
-        <p class="m-flex-between">
-          <span >￥950.00</span>
-          <s class="m-grey">￥950.00</s></p>
-      </div>
-    </li>
-    <li>
       <img src="" class="m-one-product-img" alt="">
       <div class="m-one-product-text">
         <h3>【北面】THE NORTH d </h3>
@@ -65,10 +29,18 @@
                 name: ''
             }
         },
-        components: {},
+        props: {
+          list:{
+            type:Array,
+            default:null
+          }
+        },
         methods: {
-          changeRoute(){
-            this.$router.push('/product/detail')
+          changeRoute(item){
+            this.$router.push({path:'/product/detail',query:{
+                prid:item.prid
+            }
+            })
           }
         },
         created() {
@@ -99,7 +71,7 @@
         display: block;
         width: 325px;
         height: 325px;
-        background-color: #edb3b1;
+        /*background-color: #edb3b1;*/
         border-radius: 10px;
       }
       .m-one-product-text{
