@@ -2,8 +2,8 @@
     <div class="m-equipment-detail">
       <!--搜索-->
       <div class="m-selected-search">
-        <span class="m-icon-back" @click="changeRoute('equipment')"></span>
-        <div class="m-search-input-box" @click="changeRoute('search')">
+        <span class="m-icon-back" @click="changeRoute('/equipment')"></span>
+        <div class="m-search-input-box" @click="changeRoute('/search')">
           <span class="m-icon-search"></span>
           <span>搜索品牌/分类</span>
         </div>
@@ -18,53 +18,16 @@
         </div>
       </div>
       <div class="m-equipment-detail-content">
-        <div>
+        <div v-if="category_list" v-for="(item,index) in category_list">
           <div class="m-line">
             <p class="m-line-name">
-              <span >户外上装</span>
+              <span >{{item.pcname}}</span>
             </p>
           </div>
-          <ul class="m-equipment-detail-product">
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <div class="m-line">
-            <p class="m-line-name">
-              <span >户外上装</span>
-            </p>
-          </div>
-          <ul class="m-equipment-detail-product">
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-            <li>
-              <img src="" alt="">
-              <span>name</span>
-            </li>
-            <li>
-              <img src="" alt="">
-              <span>name</span>
+          <ul class="m-equipment-detail-product" v-if="item.subs">
+            <li  v-for="(v,i) in item.subs" @click="changeRoute('/product',item)">
+              <img :src="v.pcpic" alt="">
+              <span>{{v.pcname}}</span>
             </li>
           </ul>
         </div>
@@ -73,21 +36,41 @@
 </template>
 
 <script>
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api'
     export default {
         name: "detail",
       data(){
           return{
             head_src:null,
-            head_name:''
+            head_name:'',
+            category_list:[]
         }
       },
       mounted(){
-          this.head_src = this.$route.query.head;
+        common.changeTitle('装备单类');
+        this.head_src = this.$route.query.head;
         this.head_name = this.$route.query.name;
+        this.getCategoryList();
       },
       methods:{
-        changeRoute(v){
-          this.$router.push('/' + v)
+        changeRoute(v,item){
+          this.$router.push({path: v,query:{
+            pcid:item.pcid
+            }})
+        },
+        getCategoryList(){
+          axios.get(api.category_list,{
+            params:{
+              up:this.$route.query.pcid,
+              deep:1
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.category_list = [].concat(res.data.data)
+            }
+          })
         }
       }
     }

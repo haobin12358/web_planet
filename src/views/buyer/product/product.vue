@@ -4,23 +4,23 @@
         <!--<span class="m-icon-back" @click="changeRoute"></span>-->
         <!--<h3>商品列表</h3>-->
       <!--</div>-->
-      <div class="m-product-brand">
-        <img src="" class="m-brand-img" alt="">
-        <span class="m-icon-bg"></span>
-        <div class="m-flex-between m-brand-info">
-          <div class="m-flex-start">
-            <span class="m-brand-logo"></span>
-            <div>
-              <p class="m-brand-name">TAWA</p>
-              <p><span class="m-brand-country"></span><span class="m-ft-22">德国</span></p>
-            </div>
-          </div>
-          <span class="m-brand-btn">进店</span>
-        </div>
-        <div></div>
-      </div>
+      <!--<div class="m-product-brand" v-if="brand_info">-->
+        <!--<img src="" class="m-brand-img" alt="">-->
+        <!--<span class="m-icon-bg"></span>-->
+        <!--<div class="m-flex-between m-brand-info">-->
+          <!--<div class="m-flex-start">-->
+            <!--<span class="m-brand-logo"></span>-->
+            <!--<div>-->
+              <!--<p class="m-brand-name">TAWA</p>-->
+              <!--<p><span class="m-brand-country"></span><span class="m-ft-22">德国</span></p>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<span class="m-brand-btn">进店</span>-->
+        <!--</div>-->
+        <!--<div></div>-->
+      <!--</div>-->
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
-      <product></product>
+      <product :list="product_list"></product>
 
       <div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">
         <div class="m-modal-state">
@@ -58,6 +58,9 @@
 <script>
   import product from '../components/product';
   import navList from '../../../components/common/navlist';
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api'
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -99,17 +102,29 @@
               active:false
             }
           ],
-          show_modal:false
+          show_modal:false,
+          // brand_info:null,
+          product_list:[],
+          page_info:{
+            page_num:1,
+            page_size:10
+          }
         }
       },
       components:{
         product,
         navList
       },
+      mounted(){
+        common.changeTitle('装备');
+        this.getProduct();
+      },
      methods:{
+       // 页面跳转
        changeRoute(){
          this.$router.push('/equipment/detail')
        },
+       //导航切换
        navClick(index){
          let arr = [].concat(this.nav_list);
          for(let i=0;i<arr.length;i++){
@@ -121,6 +136,7 @@
            this.changeModal('show_modal',true);
          }
        },
+       //显示隐藏模态框
        changeModal(v,bool) {
          this[v] = bool;
          if(bool){
@@ -129,6 +145,19 @@
            scroll.beforeClose();
          }
        },
+       //获取商品列表
+       getProduct(){
+         axios.get(api.product_list,{
+           params:{
+             pcid:this.$route.query.pcid,
+             page_size:this.page_info.page_size
+           }
+         }).then(res => {
+           if(res.data.status == 200){
+              this.product_list = [].concat(res.data.data);
+           }
+         })
+       }
      }
     }
 </script>
