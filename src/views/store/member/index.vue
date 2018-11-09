@@ -16,7 +16,7 @@
     </div>
     <!--内容-->
     <div class="m-member-content">
-      <div class="m-member-part">
+      <div class="m-member-part" @click="productDetail">
         <div class="m-part-left">
           <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
         </div>
@@ -25,36 +25,8 @@
           <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
           <div class="m-price-share">
             <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-            <div class="m-share-text">分享</div>
-          </div>
-        </div>
-      </div>
-      <div class="m-member-part">
-        <div class="m-part-left">
-          <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
-        </div>
-        <div class="m-part-right">
-          <div class="m-product-name">哑铃</div>
-          <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
-          <div class="m-price-share">
-            <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-            <div class="m-share-text">分享</div>
-          </div>
-        </div>
-      </div>
-      <div class="m-member-part">
-        <div class="m-part-left">
-          <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
-        </div>
-        <div class="m-part-right">
-          <div class="m-product-name">哑铃</div>
-          <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
-          <div class="m-price-share">
-            <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-            <div class="m-share-text">分享</div>
+            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare">
+            <div class="m-share-text" @click="productShare">分享</div>
           </div>
         </div>
       </div>
@@ -75,6 +47,14 @@
       changeRoute(v){
         this.$router.push(v)
       },
+      // 商品详情
+      productDetail() {
+        this.$router.push('/member/detail');
+      },
+      // 商品分享按钮
+      productShare() {
+        console.log("share");
+      }
     },
     created() {
 

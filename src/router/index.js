@@ -29,9 +29,12 @@ export const constantRouterMap = [
     path: '/member',
     component: Layout,
     redirect: 'member',
-    children: [{ path: '/member', component: () => import('../views/store/member/index'), hidden: true }
+    children: [
+      { path: '/member', component: () => import('../views/store/member/index'), hidden: true }
     ],
   },
+  // 会员 - 详情
+  { path: '/member/detail', component: () => import('../views/store/member/detail'), hidden: true },
   {
     path: '/storekeeper',
     component: Layout,
