@@ -47,7 +47,7 @@
                 <input type="text" class="m-edit-input" placeholder="18356543566">
               </div>
             </li>
-            <li>
+            <li @click="changeRoute('/storekeeper/IDCardApprove')">
               <div>
                 <span>身份证认证</span>
               </div>

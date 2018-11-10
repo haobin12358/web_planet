@@ -49,6 +49,8 @@ export const constantRouterMap = [
   },
   // 店主版 - 申请成为店主
   { path: '/storekeeper/applyOwner', component: () => import('../views/store/storekeeper/applyOwner'), hidden: true },
+  // 店主版 - 申请成为店主 - 身份证认证
+  { path: '/storekeeper/IDCardApprove', component: () => import('../views/store/storekeeper/IDCardApprove'), hidden: true },
 
 
   {
