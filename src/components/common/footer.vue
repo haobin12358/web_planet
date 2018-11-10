@@ -21,6 +21,7 @@
                 name: '',
               selected:this.$store.state.tabbar_select,
               tabbar:this.$store.state.tabbar_buyer
+              // tabbar:this.$store.state.tabbar_store
             }
         },
         components: {},
@@ -76,8 +77,8 @@
           handler: function(val, oldVal){
             switch (val.name){
               case 'material':
-                this.selected = '精选';
-                common.changeTitle('精选');
+                this.selected = '素材';
+                common.changeTitle('素材');
                 break;
               case 'member':
                 this.selected = '会员';

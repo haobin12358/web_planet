@@ -52,7 +52,8 @@ let store= new Vuex.Store({
       url:'personal'
     }
     ],
-    tabbar_select:'精选'
+    tabbar_select:'素材'
+    // tabbar_select:'精选'
   },
   mutations: {
     add(state,route) {
