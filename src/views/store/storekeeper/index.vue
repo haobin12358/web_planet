@@ -21,9 +21,9 @@
     </div>
     <!--我的商品-->
     <div class="m-border-radius">
-      <div class="m-total-jump-box">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/productManagement')">
         <div class="m-jump-title">我的商品</div>
-        <div class="m-jump-text" @click="changeRoute('/storekeeper/productManagement')">商品管理</div>
+        <div class="m-jump-text">商品管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
       <!--商品展示-->
