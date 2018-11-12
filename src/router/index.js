@@ -53,6 +53,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/IDCardApprove', component: () => import('../views/store/storekeeper/IDCardApprove'), hidden: true },
   // 店主版 - 店主 - 商品管理
   { path: '/storekeeper/productManagement', component: () => import('../views/store/storekeeper/productManagement'), hidden: true },
+  // 店主版 - 店主 - 活动管理
+  { path: '/storekeeper/activityManagement', component: () => import('../views/store/storekeeper/activityManagement'), hidden: true },
 
 
   {
