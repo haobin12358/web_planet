@@ -1,16 +1,21 @@
+
 <template>
   <div class="m-income-detail">
     <div class="m-detail-top">
       <!--年月选择器-->
       <div class="m-time-box" @click="openPicker">
         <div class="m-time-text">{{now}}</div>
-        <img class="m-time-img" v-if="!pickerOpen" src="/static/images/icon-down-close.png" alt="">
-        <img class="m-time-img" v-if="pickerOpen" src="/static/images/icon-down-open.png" alt="">
+        <img class="m-time-img" v-if="!popupVisible" src="/static/images/icon-down-close.png" alt="">
+        <img class="m-time-img" v-if="popupVisible" src="/static/images/icon-down-open.png" alt="">
       </div>
-      <div class="m-date-picker">
-        <mt-datetime-picker v-model="month" ref="picker" type="date" @confirm="monthDone"
-                            year-format="{value} 年" month-format="{value} 月" date-format="{value} 日">
-        </mt-datetime-picker>
+      <div class="m-date-popup-box">
+        <mt-popup class="m-date-popup" v-model="popupVisible" position="bottom">
+          <div class="m-popup-btn">
+            <div @click="popupVisible = false">取消</div>
+            <div @click="timeDone">确认</div>
+          </div>
+          <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+        </mt-popup>
       </div>
       <!--本月总计-->
       <div class="m-total-text-box">
@@ -36,7 +41,6 @@
 </template>
 
 <script>
-  import { DatetimePicker } from 'mint-ui';
   import common from '../../../common/js/common';
   import navList from '../../../components/common/navlist';
 
@@ -45,8 +49,6 @@
     data() {
       return {
         now: "",                  // 当前时间 - 年月
-        pickerOpen: false,        // 是否正在打开时间picker
-        month: null,              // 选择的时间
         navList: [
           { name: "普 通", active: true }, { name: "爆 款", active: false }
         ],
@@ -82,25 +84,48 @@
           { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
           { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
           { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-        ]
+        ],
+        popupVisible: false,
+        slots: [
+          {
+            flex: 1,
+            values: ['2018', '2019', '2020'],
+            className: 'slot1',
+            textAlign: 'right'
+          }, {
+            divider: true,
+            content: ' - ',
+            className: 'slot2'
+          }, {
+            flex: 1,
+            defaultIndex: 0,
+            values: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+            className: 'slot3',
+            textAlign: 'left'
+          }
+        ],
+        timeValue: []
       }
     },
     components: { navList },
     methods: {
-      // 打开时间选择器
+      // 打开 - 关闭时间选择器
       openPicker() {
-        this.$refs.picker.open();
-        if(this.pickerOpen) {
-          this.pickerOpen = false;
+        if(this.popupVisible) {
+          this.popupVisible = false;
         }else {
-          this.pickerOpen = true;
+          this.popupVisible = true;
         }
       },
-      // 选择时间后确认
-      monthDone (d) {
-
-        let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-        console.log(date);
+      // 监听时间选择器
+      onValuesChange(picker, values) {
+        this.timeValue = values;
+      },
+      // 时间选择器的确认按钮
+      timeDone() {
+        this.now = this.timeValue[0] + "年" + this.timeValue[1] + "月";
+        console.log(this.now);
+        this.popupVisible = false;
       },
       // navList的点击事件
       navClick(index){
@@ -118,6 +143,8 @@
       // 设置当前时间 - 年月
       let now = new Date();
       this.now = now.getFullYear() + "年" + (now.getMonth() + 1) + "月";
+      console.log(this.now);
+      this.slots[2].defaultIndex = now.getMonth();          // 默认当前月份
     }
   }
 </script>
@@ -152,8 +179,16 @@
           height: 15px;
         }
       }
-      .m-date-picker {
-
+      .m-date-popup-box {
+        .m-date-popup {
+          width: 750px;
+          .m-popup-btn {
+            display: flex;
+            justify-content: space-between;
+            font-size: 28px;
+            padding: 20px 40px 0 40px;
+          }
+        }
       }
       .m-total-text-box {
         display: flex;
