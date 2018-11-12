@@ -30,7 +30,7 @@
     <!--选择sku-->
     <div class="m-text-row m-sku-row">
       <div class="m-text-courier">规格</div>
-      <div class="m-text-description">选择    颜色分类 重量</div>
+      <div class="m-text-description">选择 颜色分类 重量</div>
       <img class="m-right-img" src="/static/images/icon-right.png" alt="">
     </div>
     <div class="m-detail-img-box">
