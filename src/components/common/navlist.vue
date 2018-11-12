@@ -34,8 +34,6 @@
         },
         methods: {
           navClick(i){
-            if(this.navlist[i].active)
-              return false;
             this.$emit('navClick',i);
           }
         },

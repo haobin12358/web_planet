@@ -2,11 +2,11 @@
     <div class="m-product-detail" v-if="product_info">
       <div class="m-product-swipe">
         <mt-swipe :auto="2000" >
-          <mt-swipe-item v-for="item in product_info.images" v-bind:key="item">
+          <mt-swipe-item v-for="item in product_info.images" v-bind:key="item.piid">
             <img :src="item.pipic" class="m-swipe-img" alt="">
           </mt-swipe-item>
         </mt-swipe>
-        <span class="m-icon-back"></span>
+        <span class="m-icon-back" @click="changeBack"></span>
       </div>
       <div class="m-product-detail-info">
         <h3>
@@ -64,7 +64,8 @@
   import sku from '../components/sku';
   import common from '../../../common/js/common';
   import axios from 'axios';
-  import api from '../../../api/api'
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui'
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -108,6 +109,11 @@
         changeRoute(){
            this.$router.push('/evaluate');
         },
+        //返回{
+        changeBack(){
+          this.$router.go(-1);
+        },
+        //获取商品信息
         getInfo(){
            axios.get(api.product_get,{
              params:{
@@ -115,9 +121,13 @@
              }
            }).then(res => {
              if(res.data.status == 200){
-               this.product_info = res.data.data
+               this.product_info = res.data.data;
              }
-
+              else{
+               Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
+             }
+           },error => {
+             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
            })
         }
       }

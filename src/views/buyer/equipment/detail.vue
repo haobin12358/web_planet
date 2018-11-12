@@ -56,9 +56,14 @@
       },
       methods:{
         changeRoute(v,item){
-          this.$router.push({path: v,query:{
-            pcid:item.pcid
-            }})
+          if(item){
+            this.$router.push({path: v,query:{
+                pcid:item.pcid
+              }})
+          }else{
+            this.$router.push({path: v})
+          }
+
         },
         getCategoryList(){
           axios.get(api.category_list,{
