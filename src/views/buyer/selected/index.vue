@@ -5,7 +5,7 @@
         <span class="m-icon-home"></span>
         <div class="m-search-input-box" @click="changeRoute('/search')">
           <span class="m-icon-search"></span>
-          <span>搜索品牌/商品</span>
+          <span>搜索商品</span>
         </div>
       </div>
       <!--轮播图-->

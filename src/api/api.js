@@ -14,6 +14,8 @@ const api={
   product_get: title +'/product/get',//获取单条商品-商品详情
   product_list: title +'/product/list',//获取商品列表
   brand_list: title +'/brand/list',//获取商品列表
+  search_history: title + '/product/search_history',//用户搜索记录
+  guess_search: title + '/product/guess_search',//推荐
 
   cart_create: title + '/cart/create',//添加购物车
   cart_update: title +'/cart/update',//更新购物车

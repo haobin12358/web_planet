@@ -25,16 +25,14 @@
       <div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">
         <div class="m-modal-state">
           <div class="m-state-content">
-            <div class="m-one-select">
-              <p>防风衣/运动外套</p>
-              <div class="m-sku-list">
-                <span class="m-one-sku">运动衣</span>
-                <span class="m-one-sku">运动衣</span>
-                <span class="m-one-sku">运动衣</span>
-                <span class="m-one-sku">运动衣</span>
-                <span class="m-one-sku">运动衣</span>
+            <template v-for="(items,index) in category_list">
+              <div class="m-one-select" v-if="items.subs">
+                <p >{{items.pcname}}</p>
+                <div class="m-sku-list" v-if="items.subs">
+                  <span class="m-one-sku" v-for="(item,i) in items.subs" @click.stop="categoryClick(index,i)">{{item.pcname}}</span>
+                </div>
               </div>
-            </div>
+            </template>
             <!--<div class="m-one-select">-->
               <!--<p>防风衣/运动外套</p>-->
               <!--<div class="m-sku-list">-->
@@ -42,7 +40,8 @@
                 <!--<span class="m-grey">——</span>-->
                 <!--<input type="text" placeholder="最低价">-->
               <!--</div>-->
-            </div>
+            <!--</div>-->
+
           </div>
           <div class="m-state-foot">
             <div class="m-product-detail-btn">
@@ -51,6 +50,7 @@
             </div>
           </div>
         </div>
+      </div>
     </div>
 </template>
 
@@ -85,6 +85,7 @@
               name:'销量',
               params:'sale_value',
               active:true,
+              icon:true,
               desc_asc:true
             },
             {
@@ -164,16 +165,17 @@
          arr[index].active = true;
          arr[index].desc_asc = !arr[index].desc_asc;
          this.nav_list = [].concat(arr);
-         if(arr[index].desc_asc){
-           this.getProduct(1,arr[index].params +'|asc')
-         }else{
-           this.getProduct(1,arr[index].params +'|desc')
-         }
          this.page_info.page_num = 1;
          this.bottom_show = false;
          if(index == 3){
            this.changeModal('show_modal',true);
            this.getCategory();
+         }else{
+           if(arr[index].desc_asc){
+             this.getProduct(1,arr[index].params +'|asc')
+           }else{
+             this.getProduct(1,arr[index].params +'|desc')
+           }
          }
        },
        //显示隐藏模态框
@@ -187,12 +189,15 @@
        },
        //获取商品列表
        getProduct(start,desc_asc){
+         let _pcid = this.$route.query.pcid || '';
+         let _kw = this.$route.query.kw || '';
          axios.get(api.product_list,{
            params:{
-             pcid:this.$route.query.pcid,
+             pcid:_pcid,
              page_size:this.page_info.page_size,
              order_type:desc_asc,
-             page_num:start
+             page_num:start,
+             kw:_kw
            }
          }).then(res => {
            if(res.data.status == 200){
@@ -221,9 +226,13 @@
            deep:2
            }}).then(res => {
            if(res.data.status == 200){
-
+             this.category_list = res.data.data;
            }
          })
+       },
+     //  筛选点击
+       categoryClick(index,i){
+
        }
      }
     }
