@@ -12,7 +12,7 @@
 
     <!--我的订单-->
     <div class="m-border-radius m-my-order">
-      <div class="m-total-jump-box">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/orderManagement')">
         <div class="m-jump-title">我的订单</div>
         <div class="m-jump-text">订单管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
