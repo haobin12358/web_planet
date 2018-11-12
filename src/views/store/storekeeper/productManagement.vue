@@ -6,7 +6,7 @@
         <span class="m-icon-search"></span>
         <span>搜索商品/活动关键词</span>
       </div>
-      <span class="m-icon-add"></span>
+      <span class="m-icon-add" @click="changeRoute('/storekeeper/addProduct')"></span>
     </div>
     <!--nav滑动选项-->
     <div class="m-nav">
