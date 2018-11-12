@@ -36,8 +36,8 @@ export const constantRouterMap = [
       { path: '/member', component: () => import('../views/store/member/index'), hidden: true }
     ],
   },
-  // 店主版 - 会员 - 详情
-  { path: '/member/detail', component: () => import('../views/store/member/detail'), hidden: true },
+  // 店主版 - 会员 - 商品详情
+  { path: '/member/productDetail', component: () => import('../views/store/member/productDetail'), hidden: true },
   // 店主版 - 店主
   {
     path: '/storekeeper',
@@ -51,6 +51,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/applyOwner', component: () => import('../views/store/storekeeper/applyOwner'), hidden: true },
   // 店主版 - 申请成为店主 - 身份证认证
   { path: '/storekeeper/IDCardApprove', component: () => import('../views/store/storekeeper/IDCardApprove'), hidden: true },
+  // 店主版 - 店主 - 商品管理
+  { path: '/storekeeper/productManagement', component: () => import('../views/store/storekeeper/productManagement'), hidden: true },
 
 
   {
