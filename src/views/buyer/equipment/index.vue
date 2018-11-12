@@ -2,9 +2,9 @@
     <div class="m-equipment">
       <!--搜索-->
       <div class="m-selected-search">
-        <div class="m-search-input-box">
+        <div class="m-search-input-box"  @click="changeRoute('/search','top')">
           <span class="m-icon-search"></span>
-          <span>搜索品牌/商品</span>
+          <span>搜索商品</span>
         </div>
       </div>
       <!--//图片-->
@@ -106,8 +106,13 @@
         },
         methods: {
           //跳转路由
-          changeRoute(v){
-            this.$router.push({path:'/equipment/detail',query:{head:v.pcpic,name:v.pcname,pcid:v.pcid}});
+          changeRoute(v,name){
+            if(name){
+              this.$router.push({path: v});
+            }else{
+              this.$router.push({path:'/equipment/detail',query:{head:v.pcpic,name:v.pcname,pcid:v.pcid}});
+            }
+
           },
           //获取装备信息
           getCategory(){

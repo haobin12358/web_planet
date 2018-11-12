@@ -5,7 +5,7 @@
         <span class="m-icon-back" @click="changeRoute('/equipment')"></span>
         <div class="m-search-input-box" @click="changeRoute('/search')">
           <span class="m-icon-search"></span>
-          <span>搜索品牌/分类</span>
+          <span>搜索商品/分类</span>
         </div>
       </div>
 
