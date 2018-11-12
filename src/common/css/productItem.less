@@ -1,0 +1,49 @@
+@import "../../common/css/index";
+.m-product-part {
+  display: flex;
+  padding-bottom: 50px;
+  .m-part-left {
+    .m-product-img {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+    }
+  }
+  .m-part-right {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 0 0 0 20px;
+    .m-right-row {
+      .m-product-name {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+    }
+    .m-product-description {
+      flex: 1;
+      font-size: 24px;
+    }
+    .m-price-share {
+      display: flex;
+      .m-product-price {
+        flex: 1;
+        color: #999999;
+        font-size: 25px;
+        .m-price-time {
+          color: #C70000;
+        }
+      }
+      .m-share-img {
+        width: 25px;
+        height: 30px;
+      }
+      .m-share-text {
+        color: #999999;
+        font-size: 25px;
+        margin: -2px 0 0 10px;
+      }
+    }
+  }
+}

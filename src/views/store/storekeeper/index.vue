@@ -23,40 +23,49 @@
     <div class="m-border-radius">
       <div class="m-total-jump-box">
         <div class="m-jump-title">我的商品</div>
-        <div class="m-jump-text">商品管理</div>
+        <div class="m-jump-text" @click="changeRoute('/storekeeper/productManagement')">商品管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
       <!--商品展示-->
       <div class="m-most-product">最新发布</div>
-      <!--<div class="m-product-part">
-        <div class="m-part-left">
-          <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
-        </div>
-        <div class="m-part-right">
-          <div class="m-product-name">哑铃</div>
-          <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
-          <div class="m-price-share">
-            <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-            <div class="m-share-text">分享</div>
+      <div class="m-product-box">
+        <div class="m-product-part" @click="changeRoute('/member/productDetail')">
+          <div class="m-part-left">
+            <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
+          </div>
+          <div class="m-part-right">
+            <div class="m-right-row">
+              <div class="m-product-name">哑铃</div>
+            </div>
+            <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
+            <div class="m-price-share">
+              <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
+              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
+              <div class="m-share-text">分享</div>
+            </div>
           </div>
         </div>
-      </div>-->
-      <img class="m-no-order-img" src="/static/images/icon-no-order.png" alt="">
-      <div class="m-no-order-text">暂无最新发布商品</div>
+        <!--暂无最新发布商品-->
+        <!--<img class="m-no-order-img" src="/static/images/icon-no-order.png" alt="">
+        <div class="m-no-order-text">暂无最新发布商品</div>-->
+      </div>
       <!--商品展示-->
       <div class="m-most-product">最热商品</div>
-      <div class="m-product-part">
-        <div class="m-part-left">
-          <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
-        </div>
-        <div class="m-part-right">
-          <div class="m-product-name">哑铃</div>
-          <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
-          <div class="m-price-share">
-            <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-            <div class="m-share-text">分享</div>
+      <div class="m-product-box">
+        <div class="m-product-part" @click="changeRoute('/member/productDetail')">
+          <div class="m-part-left">
+            <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
+          </div>
+          <div class="m-part-right">
+            <div class="m-right-row">
+              <div class="m-product-name">哑铃</div>
+            </div>
+            <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
+            <div class="m-price-share">
+              <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
+              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
+              <div class="m-share-text">分享</div>
+            </div>
           </div>
         </div>
       </div>
@@ -97,9 +106,11 @@
         }
       },
       components: {},
-      methods: {},
-      created() {
-
+      methods: {
+        // 跳转其他页面的方法
+        changeRoute(v) {
+          this.$router.push(v)
+        },
       }
     }
 </script>
@@ -141,6 +152,9 @@
         text-align: left;
         margin: 0 0 20px 42px;
       }
+      .m-product-box {
+        padding: 0 24px 0 42px;
+      }
       .m-no-order-img {
         width: 200px;
         height: 200px;
@@ -148,52 +162,6 @@
       .m-no-order-text {
         font-size: 18px;
         padding-bottom: 40px;
-      }
-      .m-product-part {
-        display: flex;
-        padding: 0 24px 30px 42px;
-        .m-part-left {
-          .m-product-img {
-            width: 200px;
-            height: 200px;
-            border-radius: 10px;
-          }
-        }
-        .m-part-right {
-          display: flex;
-          flex-direction: column;
-          text-align: left;
-          margin: 0 0 10px 20px;
-          .m-product-name {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-          }
-          .m-product-description {
-            flex: 1;
-            font-size: 24px;
-          }
-          .m-price-share {
-            display: flex;
-            .m-product-price {
-              flex: 1;
-              color: #999999;
-              font-size: 25px;
-              .m-price-time {
-                color: #C70000;
-              }
-            }
-            .m-share-img {
-              width: 25px;
-              height: 30px;
-            }
-            .m-share-text {
-              color: #999999;
-              font-size: 25px;
-              margin: -2px 0 0 10px;
-            }
-          }
-        }
       }
     }
     .m-total-jump-box {

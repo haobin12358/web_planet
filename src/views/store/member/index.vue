@@ -15,13 +15,15 @@
       </div>
     </div>
     <!--内容-->
-    <div class="m-member-content">
-      <div class="m-member-part" @click="productDetail">
+    <div class="m-product-content">
+      <div class="m-product-part" @click="changeRoute('/member/productDetail')">
         <div class="m-part-left">
           <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
         </div>
         <div class="m-part-right">
-          <div class="m-product-name">哑铃</div>
+          <div class="m-right-row">
+            <div class="m-product-name">哑铃</div>
+          </div>
           <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
           <div class="m-price-share">
             <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
@@ -44,12 +46,8 @@
     components: {},
     methods: {
       // 跳转其他页面的方法
-      changeRoute(v){
+      changeRoute(v) {
         this.$router.push(v)
-      },
-      // 商品详情
-      productDetail() {
-        this.$router.push('/member/detail');
       },
       // 商品分享按钮
       productShare() {
@@ -93,57 +91,8 @@
         }
       }
     }
-    .m-member-content {
-      padding: 0 55px;
-      .m-member-part {
-        display: flex;
-        margin-bottom: 100px;
-        &:first-child {
-          margin-top: 70px;
-        }
-        .m-part-left {
-          .m-product-img {
-            width: 200px;
-            height: 200px;
-            border-radius: 10px;
-          }
-        }
-        .m-part-right {
-          display: flex;
-          flex-direction: column;
-          text-align: left;
-          margin: 0 0 10px 20px;
-          .m-product-name {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-          }
-          .m-product-description {
-            flex: 1;
-            font-size: 24px;
-          }
-          .m-price-share {
-            display: flex;
-            .m-product-price {
-              flex: 1;
-              color: #999999;
-              font-size: 25px;
-              .m-price-time {
-                color: #C70000;
-              }
-            }
-            .m-share-img {
-              width: 25px;
-              height: 30px;
-            }
-            .m-share-text {
-              color: #999999;
-              font-size: 25px;
-              margin: -2px 0 0 10px;
-            }
-          }
-        }
-      }
+    .m-product-content {
+      padding: 70px 50px 0 50px;
     }
   }
 </style>
