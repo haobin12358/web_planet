@@ -29,15 +29,17 @@
     </div>
     <!--收益详情-->
     <div class="m-income-detail-box">
-      <!--<div class="m-detail-item" v-for="item in detailList">
+      <div class="m-detail-item" v-for="item in detailList">
         <div class="m-detail-item-left">
           <div class="m-product-name">{{item.name}}</div>
           <div class="m-product-time">{{item.time}}</div>
         </div>
         <div class="m-detail-item-right">+{{item.num}}</div>
+      </div>
+      <!--<div>
+        <img class="m-detail-img" src="/static/images/icon-no-income.png" alt="">
+        <div class="m-detail-text">暂无收益，请加油哦~</div>
       </div>-->
-      <img class="m-detail-img" src="/static/images/icon-no-income.png" alt="">
-      <div class="m-detail-text">暂无收益，请加油哦~</div>
     </div>
   </div>
 </template>
