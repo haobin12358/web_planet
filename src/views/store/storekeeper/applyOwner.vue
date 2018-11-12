@@ -71,11 +71,12 @@
 
 <script type="text/ecmascript-6">
   import { MessageBox } from 'mint-ui';
+  import common from '../../../common/js/common';
 
   export default {
     data() {
       return {
-        name: '',
+        name: 'applyOwner',
         submitStatus: "",       // 成为店主的申请状态
         submitDone: false,             // 成为店主的申请是否已提交
       }
@@ -98,8 +99,8 @@
         });
       }
     },
-    created() {
-
+    mounted() {
+      common.changeTitle('店主申请');
     }
   }
 </script>

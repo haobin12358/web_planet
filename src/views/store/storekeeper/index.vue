@@ -72,7 +72,7 @@
     </div>
     <!--我的活动-->
     <div class="m-border-radius">
-      <div class="m-total-jump-box">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/activityManagement')">
         <div class="m-jump-title">我的活动</div>
         <div class="m-jump-text">活动管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">

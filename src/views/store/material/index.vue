@@ -2,7 +2,7 @@
   <div class="m-material">
     <!--搜索-->
     <div class="m-selected-search">
-      <span class="m-icon-home"></span>
+      <span class="m-icon-home" @click="changeRoute('/storekeeper/applyOwner')"></span>
       <div class="m-search-input-box" @click="changeRoute('/search')">
         <span class="m-icon-search"></span>
         <span>搜索品牌/商品</span>

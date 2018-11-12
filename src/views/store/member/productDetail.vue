@@ -41,6 +41,8 @@
 </template>
 
 <script>
+  import common from '../../../common/js/common';
+
   export default {
     name: "productDetail",
     data() {
@@ -54,7 +56,7 @@
       },
     },
     mounted() {
-
+      common.changeTitle('详情');
     }
   }
 </script>
