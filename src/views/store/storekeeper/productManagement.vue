@@ -38,6 +38,7 @@
 </template>
 
 <script>
+  import common from '../../../common/js/common';
   import navList from '../../../components/common/navlist';
 
   export default {
@@ -57,7 +58,7 @@
         this.$router.push(v)
       },
       // navList的点击事件
-      navClick(index){
+      navClick(index) {
         let arr = [].concat(this.navList);
         for(let i = 0; i < arr.length; i ++){
           arr[i].active = false;
@@ -65,6 +66,9 @@
         arr[index].active = true;
         this.navList = [].concat(arr);
       }
+    },
+    mounted() {
+      common.changeTitle('商品管理');
     }
   }
 </script>

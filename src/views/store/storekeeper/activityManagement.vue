@@ -47,6 +47,7 @@
 </template>
 
 <script>
+  import common from '../../../common/js/common';
   import navList from '../../../components/common/navlist';
 
   export default {
@@ -74,6 +75,9 @@
         arr[index].active = true;
         this.navList = [].concat(arr);
       }
+    },
+    mounted() {
+      common.changeTitle('活动管理');
     }
   }
 </script>
