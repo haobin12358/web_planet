@@ -36,6 +36,10 @@
           <div class="m-price-share">
             <div class="m-product-price">距离活动结束：<span class="m-price-time">9天22小时22分43秒</span></div>
           </div>
+          <!--历史活动-->
+          <!--<div class="m-price-share">
+            <div class="m-product-price">活动时间：18/05/20-18/06/20</div>
+          </div>-->
         </div>
       </div>
     </div>
