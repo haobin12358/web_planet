@@ -8,6 +8,7 @@ const api={
   wx_login:title + '/user/wx_login',//微信登录
   get_accesstoken : title + '/user/get_accesstoken',
   get_config: title + '/user/get_wx_config',//
+  get_inforcode: title + '/user/get_inforcode',//获取验证码
 
   category_list: title + '/category/list',//获取分类-装备首页商品列表页
   product_get: title +'/product/get',//获取单条商品-商品详情

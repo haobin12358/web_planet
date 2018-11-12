@@ -4,8 +4,8 @@
       <template v-for="(item,index) in navlist">
         <li :class="item.active?'active':''" @click="navClick(index)">{{item.name}}
           <span class="m-icon-box" v-if="item.icon">
-            <span class="m-icon-up"></span>
-             <span class="m-icon-down"></span>
+            <span class="m-icon-asc" v-if="item.desc_asc"></span>
+             <span class="m-icon-desc" v-if="!item.desc_asc"></span>
           </span>
         </li>
       </template>

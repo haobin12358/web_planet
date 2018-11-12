@@ -9,15 +9,6 @@
           <s class="m-grey">￥{{item.prprice}}</s></p>
       </div>
     </li>
-    <li @click="changeRoute">
-      <img src="" class="m-one-product-img" alt="">
-      <div class="m-one-product-text">
-        <h3>【北面】THE NORTH d </h3>
-        <p class="m-flex-between">
-          <span >￥950.00</span>
-          <s class="m-grey">￥950.00</s></p>
-      </div>
-    </li>
   </ul>
 
 </template>

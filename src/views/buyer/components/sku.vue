@@ -4,28 +4,17 @@
       <span class="m-icon-close" @click="changeModal('show_sku',false)"></span>
       <div class="m-sku-content">
         <div class="m-sku-img-box m-center">
-          <img src=""  alt="">
+          <img :src="product.prmainpic"  alt="">
         </div>
         <div  class="m-center">
           <span class="m-red">￥193.0</span>
         </div>
         <div class="m-scroll">
           <ul class="m-sku-box">
-            <li>
-              <p>颜色分类</p>
+            <li v-for="(items,index) in product.skuvalue">
+              <p>{{items.name}}</p>
               <ul class="m-sku-ul">
-                <li>红色</li>
-                <li>红色</li>
-                <li>红色</li>
-                <li class="active">红色</li>
-              </ul>
-            </li>
-            <li>
-              <p>颜色分类</p>
-              <ul class="m-sku-ul">
-                <li>红色</li>
-                <li>红色</li>
-                <li class="active">红色</li>
+                <li v-for="item in items.value">{{item}}</li>
               </ul>
             </li>
           </ul>
@@ -53,6 +42,12 @@
 
           }
         },
+      props:{
+          product:{
+            type:Object,
+            default:null
+          }
+      },
       methods:{
         changeModal(v,bool){
           this.$emit('changeModal',v,bool)

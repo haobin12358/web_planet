@@ -35,13 +35,13 @@
                 <span class="m-one-sku">运动衣</span>
               </div>
             </div>
-            <div class="m-one-select">
-              <p>防风衣/运动外套</p>
-              <div class="m-sku-list">
-                <input type="text" placeholder="最低价">
-                <span class="m-grey">——</span>
-                <input type="text" placeholder="最低价">
-              </div>
+            <!--<div class="m-one-select">-->
+              <!--<p>防风衣/运动外套</p>-->
+              <!--<div class="m-sku-list">-->
+                <!--<input type="text" placeholder="最低价">-->
+                <!--<span class="m-grey">——</span>-->
+                <!--<input type="text" placeholder="最低价">-->
+              <!--</div>-->
             </div>
           </div>
           <div class="m-state-foot">
@@ -51,7 +51,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
 </template>
 
@@ -117,7 +116,8 @@
           },
           isScroll:true,
           total_count:0,
-          bottom_show:false
+          bottom_show:false,
+          category_list:null
         }
       },
       components:{
@@ -173,6 +173,7 @@
          this.bottom_show = false;
          if(index == 3){
            this.changeModal('show_modal',true);
+           this.getCategory();
          }
        },
        //显示隐藏模态框
@@ -212,6 +213,16 @@
            }
          },error => {
            Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
+         })
+       },
+       //获取装备信息
+       getCategory(){
+         axios.get(api.category_list,{params:{
+           deep:2
+           }}).then(res => {
+           if(res.data.status == 200){
+
+           }
          })
        }
      }

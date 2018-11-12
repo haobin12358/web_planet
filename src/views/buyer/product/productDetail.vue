@@ -15,7 +15,7 @@
         </h3>
         <div class="m-info-list">
           <span>快递：{{product_info.prfreight}}</span>
-          <span>月销：0.00</span>
+          <span>月销：{{product_info.month_sale_value}}</span>
           <span>
             {{product_info.brand.pbname}}
           </span>
@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <sku v-if="show_sku" @changeModal="changeModal"></sku>
+      <sku v-if="show_sku" :product="product_info" @changeModal="changeModal"></sku>
     </div>
 </template>
 
@@ -85,7 +85,8 @@
         data(){
           return{
             show_sku:false,
-            product_info:null
+            product_info:null,
+            sku:null
           }
         },
       components:{
@@ -122,6 +123,7 @@
            }).then(res => {
              if(res.data.status == 200){
                this.product_info = res.data.data;
+
              }
               else{
                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
