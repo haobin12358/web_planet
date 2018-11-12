@@ -84,7 +84,7 @@
     </div>
     <!--我的粉丝-->
     <div class="m-border-radius">
-      <div class="m-total-jump-box">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/fansManagement')">
         <div class="m-jump-title">我的粉丝</div>
         <div class="m-jump-text">粉丝管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
@@ -120,6 +120,7 @@
   .m-storekeeper {
     min-height: 100%;
     background-color: #EEEEEE;
+    padding-bottom: -10px;
     .m-storekeeper-bg {
       width: 750px;
       height: 400px;

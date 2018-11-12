@@ -55,6 +55,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/productManagement', component: () => import('../views/store/storekeeper/productManagement'), hidden: true },
   // 店主版 - 店主 - 活动管理
   { path: '/storekeeper/activityManagement', component: () => import('../views/store/storekeeper/activityManagement'), hidden: true },
+  // 店主版 - 店主 - 粉丝管理
+  { path: '/storekeeper/fansManagement', component: () => import('../views/store/storekeeper/fansManagement'), hidden: true },
 
 
   {
