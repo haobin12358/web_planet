@@ -121,8 +121,8 @@
     }
     .m-nav{
       width: 690px;
-      overflow-x: auto;
-      overflow-y: hidden;
+      /*overflow-x: auto;*/
+      /*overflow-y: hidden;*/
       margin: 30px 0 45px 30px;
     }
     .m-material-content {
