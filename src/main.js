@@ -40,7 +40,7 @@ promise.polyfill();
 Vue.prototype.$http = axios;
 //拦截器、
 // import { Loading, Message, MessageBox  } from 'element-ui'
-import { Indicator } from 'mint-ui';
+import { Indicator,Toast} from 'mint-ui';
 // 超时时间
 axios.defaults.timeout = 600000
 //http请求拦截器

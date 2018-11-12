@@ -1,5 +1,5 @@
 <template>
-    <div class="m-product">
+    <div class="m-product" @touchmove.stop="touchMove">
       <!--<div class="m-product-title">-->
         <!--<span class="m-icon-back" @click="changeRoute"></span>-->
         <!--<h3>商品列表</h3>-->
@@ -21,6 +21,11 @@
       <!--</div>-->
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       <product :list="product_list"></product>
+      <div class="m-line" v-if="bottom_show">
+        <div class="m-line-name m-bottom">
+          <span>OUTFIT</span>
+        </div>
+      </div>
 
       <div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">
         <div class="m-modal-state">
@@ -61,6 +66,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api'
+  import {Toast} from 'mint-ui'
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -82,24 +88,28 @@
           nav_list:[
             {
               name:'销量',
-              params:'',
-              active:true
+              params:'sale_value',
+              active:true,
+              desc_asc:true
             },
             {
               name:'新品',
-              params:'',
-              active:false
+              params:'time',
+              active:false,
+              desc_asc:true
             },
             {
               name:'价格',
-              params:'',
+              params:'price',
               active:false,
-              icon:true
+              icon:true,
+              desc_asc:true
             },
             {
               name:'筛选',
               params:'',
-              active:false
+              active:false,
+              desc_asc:true
             }
           ],
           show_modal:false,
@@ -107,8 +117,11 @@
           product_list:[],
           page_info:{
             page_num:1,
-            page_size:10
-          }
+            page_size:5
+          },
+          isScroll:true,
+          total_count:0,
+          bottom_show:false
         }
       },
       components:{
@@ -116,13 +129,34 @@
         navList
       },
       mounted(){
-        common.changeTitle('装备');
-        this.getProduct();
+        common.changeTitle('商品列表');
+        this.getProduct(1,'sale_value|asc');
       },
      methods:{
+        //滚动加载更多
+       touchMove(e){
+         let scrollTop = common.getScrollTop();
+         let scrollHeight = common.getScrollHeight();
+         let ClientHeight = common.getClientHeight();
+         if (scrollTop + ClientHeight  >= scrollHeight -10) {
+           if(this.isScroll){
+             this.isScroll = false;
+             if(this.product_list.length == this.total_count){
+               this.bottom_show = true;
+             }else{
+               for(let i=0;i<this.nav_list.length;i++){
+                 if(this.nav_list[i].active){
+                   this.getProduct(this.page_info.page_num,this.nav_list[i].params + (this.nav_list[i].desc_asc?'|asc':'|desc'));
+                 }
+               }
+             }
+           }
+
+         }
+       },
        // 页面跳转
        changeRoute(){
-         this.$router.push('/equipment/detail')
+         this.$router.push(1,'/equipment/detail')
        },
        //导航切换
        navClick(index){
@@ -131,7 +165,13 @@
            arr[i].active = false;
          }
          arr[index].active = true;
+         arr[index].desc_asc = !arr[index].desc_asc;
          this.nav_list = [].concat(arr);
+         if(arr[index].desc_asc){
+           this.getProduct(1,arr[index].params +'|asc')
+         }else{
+           this.getProduct(1,arr[index].params +'|desc')
+         }
          if(index == 3){
            this.changeModal('show_modal',true);
          }
@@ -146,16 +186,31 @@
          }
        },
        //获取商品列表
-       getProduct(){
+       getProduct(start,desc_asc){
          axios.get(api.product_list,{
            params:{
              pcid:this.$route.query.pcid,
-             page_size:this.page_info.page_size
+             page_size:this.page_info.page_size,
+             order_type:desc_asc,
+             page_num:start
            }
          }).then(res => {
            if(res.data.status == 200){
-              this.product_list = [].concat(res.data.data);
+             if(res.data.data.length >0){
+               this.page_info.page_num = this.page_info.page_num +1;
+             }
+             if(start){
+               this.product_list = this.product_list.concat(res.data.data);
+             }else{
+               this.product_list = res.data.data;
+             }
+             this.isScroll = true;
+             this.total_count = res.data.total_count;
+           } else{
+             Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
            }
+         },error => {
+           Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
          })
        }
      }
