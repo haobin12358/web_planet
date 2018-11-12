@@ -51,6 +51,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/applyOwner', component: () => import('../views/store/storekeeper/applyOwner'), hidden: true },
   // 店主版 - 申请成为店主 - 身份证认证
   { path: '/storekeeper/IDCardApprove', component: () => import('../views/store/storekeeper/IDCardApprove'), hidden: true },
+  // 店主版 - 店主 - 收益详情
+  { path: '/storekeeper/incomeDetail', component: () => import('../views/store/storekeeper/incomeDetail'), hidden: true },
   // 店主版 - 店主 - 商品管理
   { path: '/storekeeper/productManagement', component: () => import('../views/store/storekeeper/productManagement'), hidden: true },
   // 店主版 - 店主 - 活动管理

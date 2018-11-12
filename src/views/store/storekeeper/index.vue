@@ -5,8 +5,7 @@
     <!--顶部文字-->
     <div class="m-total-earnings">累计收益 : ￥15200.50</div>
     <div class="m-month-earnings">本月收益<span class="m-month-earnings-text">6666.00</span>元</div>
-    <div class="m-total-jump-box m-earnings-detail">
-      <div class="m-jump-title"></div>
+    <div class="m-total-jump-box m-earnings-detail" @click="changeRoute('/storekeeper/incomeDetail')">
       <div>收益详情</div>
       <img class="m-jump-img" src="/static/images/icon-more-black.png" alt="">
     </div>
