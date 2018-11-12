@@ -21,12 +21,7 @@
       <!--</div>-->
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       <product :list="product_list"></product>
-      <div class="m-line" v-if="bottom_show">
-        <div class="m-line-name m-bottom">
-          <span>OUTFIT</span>
-        </div>
-      </div>
-
+      <bottom-line v-if="bottom_show"></bottom-line>
       <div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">
         <div class="m-modal-state">
           <div class="m-state-content">
@@ -66,7 +61,8 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api'
-  import {Toast} from 'mint-ui'
+  import {Toast} from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine'
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -126,7 +122,8 @@
       },
       components:{
         product,
-        navList
+        navList,
+        bottomLine
       },
       mounted(){
         common.changeTitle('商品列表');
@@ -172,6 +169,8 @@
          }else{
            this.getProduct(1,arr[index].params +'|desc')
          }
+         this.page_info.page_num = 1;
+         this.bottom_show = false;
          if(index == 3){
            this.changeModal('show_modal',true);
          }
@@ -198,8 +197,10 @@
            if(res.data.status == 200){
              if(res.data.data.length >0){
                this.page_info.page_num = this.page_info.page_num +1;
+             }else{
+               return false;
              }
-             if(start){
+             if(start >1){
                this.product_list = this.product_list.concat(res.data.data);
              }else{
                this.product_list = res.data.data;
