@@ -18,13 +18,16 @@ export const constantRouterMap = [
     children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
     ],
   },
+  // 店主版 - 素材
   {
     path: '/material',
     component: Layout,
     redirect: 'material',
-    children: [{ path: '/material', component: () => import('../views/store/material/index'), hidden: true }
+    children: [{
+      path: '/material', component: () => import('../views/store/material/index'), hidden: true }
     ],
   },
+  // 店主版 - 会员
   {
     path: '/member',
     component: Layout,
@@ -33,15 +36,23 @@ export const constantRouterMap = [
       { path: '/member', component: () => import('../views/store/member/index'), hidden: true }
     ],
   },
-  // 会员 - 详情
+  // 店主版 - 会员 - 详情
   { path: '/member/detail', component: () => import('../views/store/member/detail'), hidden: true },
+  // 店主版 - 店主
   {
     path: '/storekeeper',
     component: Layout,
     redirect: 'storekeeper',
-    children: [{ path: '/storekeeper', component: () => import('../views/store/storekeeper/index'), hidden: true }
+    children: [{
+      path: '/storekeeper', component: () => import('../views/store/storekeeper/index'), hidden: true }
     ],
   },
+  // 店主版 - 申请成为店主
+  { path: '/storekeeper/applyOwner', component: () => import('../views/store/storekeeper/applyOwner'), hidden: true },
+  // 店主版 - 申请成为店主 - 身份证认证
+  { path: '/storekeeper/IDCardApprove', component: () => import('../views/store/storekeeper/IDCardApprove'), hidden: true },
+
+
   {
     path: '/selected',
     component: Layout,

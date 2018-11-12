@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="m-img-box">
-      <img class="m-member-img" src="http://dummyimage.com/750x180" alt="">
+      <img class="m-member-img" src="http://hsingfo-curtain.com/images/Banner/635450965258533382.jpg" alt="">
       <div class="m-img-text-box">
         <div class="m-img-text"><span class="m-img-text-bold">25</span> Spt</div>
         <div class="m-img-text">九月 / 星期二</div>

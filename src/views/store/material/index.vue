@@ -82,7 +82,7 @@
         name: '',
         navList: [
           { name: "全 部", active: true }, { name: "专题活动", active: false }, { name: "大牌推荐", active: false },
-          { name: "新 品", active: false }, { name: "动 态", active: false }, { name: "动 态", active: false }
+          { name: "新 品", active: false }, { name: "动 态", active: false }
         ]
       }
     },
