@@ -24,6 +24,6 @@
 <style lang="less" rel="stylesheet/less" scoped>
 .m-content{
   /*padding: 10px 0;*/
-  margin-bottom: 120px;
+  margin-bottom: 100px;
 }
 </style>

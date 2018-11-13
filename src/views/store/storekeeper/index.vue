@@ -119,7 +119,7 @@
   .m-storekeeper {
     min-height: 100%;
     background-color: #EEEEEE;
-    padding-bottom: -10px;
+    padding-bottom: 10px;
     .m-storekeeper-bg {
       width: 750px;
       height: 400px;
