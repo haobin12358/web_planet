@@ -112,17 +112,46 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import sku from '../components/sku';
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine'
     export default {
         data() {
             return {
-                name: ''
+              cart_list:null,
+              page_info:{
+                page_num:1,
+                page_size:5
+              },
+              isScroll:true,
+              total_count:0,
+              bottom_show:false,
             }
         },
         components: {},
+        mounted(){
+            this.getCart();
+        },
         methods: {
           payOrder(e){
-            console.log(e)
             this.$router.push('/submitOrder');
+          },
+        //  获取购物车信息
+          getCart(){
+            axios.get(api.cart_list,{
+              params:{
+                token:localStorage.getItem('token'),
+                page_size:this.page_info.page_size,
+                page_num: this.page_info.page_num
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.cart_list = res.data.data;
+              }
+            })
           }
         },
         created() {

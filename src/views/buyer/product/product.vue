@@ -197,7 +197,8 @@
              page_size:this.page_info.page_size,
              order_type:desc_asc,
              page_num:start,
-             kw:_kw
+             kw:_kw,
+             token:localStorage.getItem('token')
            }
          }).then(res => {
            if(res.data.status == 200){
