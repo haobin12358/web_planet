@@ -143,26 +143,26 @@
         },
         //购物车确定
         sureClick(item,num){
-            this.canums = num;
-            this.select_value = item;
-           axios.post(api.cart_create + '?token=' + localStorage.getItem('token'),{
-             skuid:item.skuid,
-             canums:num
-           }).
-           then(res => {
-              if(res.data.status == 200){
-                this.show_sku = false;
-                Toast({ message: res.data.message,duration:1000, className: 'm-toast-success' });
-              }else{
-                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
-              }
-           },error => {
-             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
-           })
+          this.canums = num;
+          this.select_value = item;
+          this.postCart();
         },
       //  加入购物请求
-        postCart(item,num){
-
+        postCart(){
+          axios.post(api.cart_create + '?token=' + localStorage.getItem('token'),{
+            skuid:this.select_value.skuid,
+            canums:this.canums
+          }).
+          then(res => {
+            if(res.data.status == 200){
+              this.show_sku = false;
+              Toast({ message: res.data.message,duration:1000, className: 'm-toast-success' });
+            }else{
+              Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
+            }
+          },error => {
+            Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
+          })
         },
       //  加入购物车
         addCart(){
@@ -171,6 +171,14 @@
            }else{
              this.show_sku = true;
            }
+        },
+        //立即购买
+        buyNow(){
+          if(this.select_value){
+
+          }else{
+            this.show_sku = true;
+          }
         }
       }
     }

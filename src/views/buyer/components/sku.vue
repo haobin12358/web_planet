@@ -62,9 +62,12 @@
           }
       },
       mounted(){
-          this.select_value = this.now_select;
-          this.select = this.select_value.skuattritedetail;
-          this.num = this.now_num;
+          if(this.now_select){
+            this.select_value = this.now_select;
+            this.select = this.select_value.skuattritedetail;
+            this.num = this.now_num;
+          }
+
       },
       methods:{
         //  改变模态框
