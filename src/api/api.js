@@ -26,6 +26,8 @@ const api={
   order_pay: title + '/order/pay',//订单支付
   order_get: title + '/order/get',//订单详情
   refund_create: title +'/refund/create',//申请退款
+
+
 };
 
 export default api

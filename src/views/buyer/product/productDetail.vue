@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <sku v-if="show_sku" :product="product_info" @changeModal="changeModal"></sku>
+      <sku v-if="show_sku" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
     </div>
 </template>
 
@@ -123,11 +123,25 @@
            }).then(res => {
              if(res.data.status == 200){
                this.product_info = res.data.data;
-
              }
               else{
                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
              }
+           },error => {
+             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
+           })
+        },
+        sureClick(item,num){
+           axios.post(api.cart_create + '?token=' + localStorage.getItem('token'),{
+             skuid:item.skuid,
+             canums:num
+           }).then(res => {
+              if(res.data.status == 200){
+                this.show_sku = false;
+                Toast({ message: res.data.message,duration:1000, className: 'm-toast-success' });
+              }else{
+                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
+              }
            },error => {
              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
            })

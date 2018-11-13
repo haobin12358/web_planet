@@ -4,31 +4,34 @@
       <span class="m-icon-close" @click="changeModal('show_sku',false)"></span>
       <div class="m-sku-content">
         <div class="m-sku-img-box m-center">
-          <img :src="product.prmainpic"  alt="">
+          <img :src="select_value.skupic"  v-if="select_value" alt="">
+          <img :src="product.prmainpic"  v-else alt="">
         </div>
         <div  class="m-center">
-          <span class="m-red">￥193.0</span>
+          <span class="m-red" v-if="select_value">￥{{select_value.skuprice}}</span>
+          <span class="m-red" v-else>￥{{product.prprice}}</span>
         </div>
         <div class="m-scroll">
           <ul class="m-sku-box">
             <li v-for="(items,index) in product.skuvalue">
               <p>{{items.name}}</p>
               <ul class="m-sku-ul">
-                <li v-for="item in items.value">{{item}}</li>
+                <li v-for="item in items.value" :class="item == select[index]?'active':''" @click.stop="skuSelect(index,item)">{{item}}</li>
               </ul>
             </li>
           </ul>
           <div class="m-sku-num">
             <span>购买数量</span>
             <div class="m-num">
-              <span class="m-icon-cut"></span>
-              <input type="text" class="m-num-input" placeholder="0">
-              <span class="m-icon-add"></span>
+              <span class="m-icon-cut" @click.stop="changeNum(-1)"></span>
+              <input type="number" min="1" v-model="num" class="m-num-input" />
+              <span class="m-icon-add" @click.stop="changeNum(1)"></span>
             </div>
           </div>
         </div>
         <div class="m-sku-btn">
-          <span>确 定</span>
+          <span  class="active" v-if="select_value && select_value.skustock > 0" @click.stop="sureClick">确 定</span>
+          <span v-else>确定</span>
         </div>
       </div>
     </div>
@@ -39,7 +42,9 @@
     export default {
         data(){
           return{
-
+            select:[],
+            select_value:null,
+            num:1
           }
         },
       props:{
@@ -49,8 +54,38 @@
           }
       },
       methods:{
+        //  改变模态框
         changeModal(v,bool){
           this.$emit('changeModal',v,bool)
+        },
+        //数量改变
+        changeNum(v){
+          if(v == -1 && this.num ==1){
+            return false;
+          }
+          this.num = this.num + v;
+        },
+        //sku选择
+        skuSelect(index,item){
+          let _arr = [].concat(this.select);
+          _arr[index] = item;
+          this.select = [].concat(_arr);
+          let change = -1;
+          if(this.select.length === this.product.skuvalue.length){
+            for(let i = 0;i<this.product.skus.length;i++){
+              if((JSON.stringify(this.product.skus[i].skuattritedetail) === JSON.stringify(this.select)) && (this.product.skus[i].skuattritedetail.length == this.select.length)){
+                this.select_value = this.product.skus[i];
+                change = change +1;
+              }
+            }
+          }
+          if(change == -1){
+            this.select_value = null;
+          }
+        },
+      //  确定
+        sureClick(){
+          this.$emit('sureClick',this.select_value,this.num);
         }
       }
     }
@@ -142,11 +177,14 @@
           span{
             display: inline-block;
             width: 680px;
-            background-color: #fcd316;
+            background-color: #d5d5d5;
             height: 62px;
             line-height: 62px;
             font-size: 30px;
             border-radius: 10px;
+            &.active{
+              background-color: #fcd316;
+            }
           }
         }
       }
