@@ -24,7 +24,15 @@
       <div class="m-product-detail-more" @click="changeModal('show_sku',true)">
         <div>
           <span class="m-label">规格</span>
-          <span class="m-select m-black">选择    颜色分类 重量</span>
+          <span class="m-select m-black">选择
+
+            <template  v-if="select_value">
+               <span v-for="(item,index) in select_value.skuattritedetail">{{product_info.prattribute[index]}} {{item}}</span>
+            </template>
+             <template  v-else>
+                 <span v-for="item in product_info.prattribute">{{item}} </span>
+             </template>
+          </span>
         </div>
         <div>
           <span class="m-more"></span>
@@ -51,12 +59,12 @@
         <span class="m-icon-car"></span>
         <span class="m-icon-service"></span>
         <div class="m-product-detail-btn">
-          <span>加入购物车</span>
-          <span class="active">立即购物车</span>
+          <span @click="addCart">加入购物车</span>
+          <span class="active" @click="buyNow">立即购物车</span>
         </div>
       </div>
 
-      <sku v-if="show_sku" :product="product_info" @changeModal="changeModal"></sku>
+      <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
     </div>
 </template>
 
@@ -86,7 +94,9 @@
           return{
             show_sku:false,
             product_info:null,
-            sku:null
+            sku:null,
+            select_value:null,
+            canums:1
           }
         },
       components:{
@@ -123,7 +133,6 @@
            }).then(res => {
              if(res.data.status == 200){
                this.product_info = res.data.data;
-
              }
               else{
                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
@@ -131,6 +140,37 @@
            },error => {
              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
            })
+        },
+        //购物车确定
+        sureClick(item,num){
+            this.canums = num;
+            this.select_value = item;
+           axios.post(api.cart_create + '?token=' + localStorage.getItem('token'),{
+             skuid:item.skuid,
+             canums:num
+           }).
+           then(res => {
+              if(res.data.status == 200){
+                this.show_sku = false;
+                Toast({ message: res.data.message,duration:1000, className: 'm-toast-success' });
+              }else{
+                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
+              }
+           },error => {
+             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
+           })
+        },
+      //  加入购物请求
+        postCart(item,num){
+
+        },
+      //  加入购物车
+        addCart(){
+           if(this.select_value){
+               this.postCart();
+           }else{
+             this.show_sku = true;
+           }
         }
       }
     }
