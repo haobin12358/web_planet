@@ -143,7 +143,7 @@
         </div>
         <div class="m-order-time-btn">
           <div class="m-order-time m-color-999">2018-08-08 16:49:07 创建</div>
-          <div class="m-order-btn m-color-white m-btn-yellow">完 成</div>
+          <div class="m-order-btn m-color-white m-btn-yellow" @click="changeRoute('/storekeeper/delivery')">发 货</div>
         </div>
       </div>
     </div>
@@ -173,7 +173,11 @@
         }
         arr[index].active = true;
         this.navList = [].concat(arr);
-      }
+      },
+      // 跳转其他页面的方法
+      changeRoute(v) {
+        this.$router.push(v)
+      },
     },
     mounted() {
       common.changeTitle('订单管理');
