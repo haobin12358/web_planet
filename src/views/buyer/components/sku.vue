@@ -51,7 +51,20 @@
           product:{
             type:Object,
             default:null
+          },
+          now_select:{
+              type:Object,
+            default:null
+          },
+          now_num:{
+              type:Number,
+              default:1
           }
+      },
+      mounted(){
+          this.select_value = this.now_select;
+          this.select = this.select_value.skuattritedetail;
+          this.num = this.now_num;
       },
       methods:{
         //  改变模态框
