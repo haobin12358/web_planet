@@ -52,7 +52,7 @@
         border: 1px #999999 solid;
         border-radius: 30px;
         font-size: 24px;
-        padding-left: 30px;
+        padding: 5px 0 0 30px;
       }
       .m-name-input {
         width: 220px;
