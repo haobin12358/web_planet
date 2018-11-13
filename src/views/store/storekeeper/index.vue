@@ -166,6 +166,7 @@
     }
     .m-total-jump-box {
       display: flex;
+      align-items: center;
       padding: 25px 25px 25px 50px;
       .m-jump-title {
         flex: 1;
@@ -179,7 +180,7 @@
       .m-jump-img {
         width: 22px;
         height: 22px;
-        margin: 4px 0 0 5px;
+        margin-left: 5px;
       }
     }
     .m-content-box {
