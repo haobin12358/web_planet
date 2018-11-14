@@ -17,13 +17,13 @@
         <template v-for="(items,index) in cart_list">
           <div class="m-shop-one">
             <div class="m-shop-store-name">
-              <span class="m-icon-radio"></span>
+              <span class="m-icon-radio" :class="items.active?'active':''" @click="radioClick('store',index)"></span>
               <span>{{items.pb.pbname}}</span>
               <span class="m-icon-more" ></span>
             </div>
             <template v-for="(item,i) in items.cart">
               <div class="m-shop-product ">
-                <span class="m-icon-radio"></span>
+                <span class="m-icon-radio" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
                 <div class="m-product-info">
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
                   <div class="m-text-info">
@@ -40,9 +40,9 @@
                     <div class="m-sku-num">
                       <span class="m-red">￥{{item.sku.skuprice | money}}</span>
                       <div class="m-num">
-                        <span class="m-icon-cut"></span>
+                        <span class="m-icon-cut" @click.stop="changeNum(-1,index,i)"></span>
                         <input type="number" v-model="item.canums" class="m-num-input" >
-                        <span class="m-icon-add"></span>
+                        <span class="m-icon-add" @click.stop="changeNum(1,index,i)"></span>
                       </div>
                     </div>
                   </div>
@@ -54,10 +54,10 @@
         <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
       </div>
       <div class="m-shop-foot">
-         <span class="m-icon-radio"></span>
+         <span class="m-icon-radio" :class="allRadio?'active':''" @click="radioClick('all')"></span>
          <div>
            <span>合计</span>
-           <span class="m-red">￥0.00</span>
+           <span class="m-red">￥{{total_money | money}}</span>
            <span class="m-shop-btn" @click.stop="payOrder">结算</span>
          </div>
       </div>
@@ -104,7 +104,9 @@
               canums:1,
               product_info:null,
               sku_pb_index:null,
-              sku_pr_index:null
+              sku_pr_index:null,
+              allRadio:false,
+              total_money:0
             }
         },
         components: {
@@ -138,8 +140,14 @@
                 }else{
                   return false;
                 }
-                // let arr = [].concat(this.cart_list);
-
+                let arr = [].concat(this.cart_list);
+                for(let i = 0;i<arr.length;i++){
+                  arr[i].active = false;
+                  for(let j =0;j<arr[i].cart.length;j++){
+                    arr[i].cart[j].active = false;
+                  }
+                }
+                this.cart_list = [].concat(arr);
                 this.isScroll = true;
                 this.total_count = res.data.total_count;
                 this.total_number = res.data.total_number || 0;
@@ -187,21 +195,104 @@
             this.updateCart(item,num)
           },
         //  更新购物车
-          updateCart(item,num){
-            console.log(item);
+          updateCart(item,num,isNum,caid){
             axios.post(api.cart_update +'?token=' + localStorage.getItem('token'),{
-              caid:this.cart_list[this.sku_pb_index].cart[this.sku_pr_index].caid,
+              caid:caid || this.cart_list[this.sku_pb_index].cart[this.sku_pr_index].caid,
               skuid:item.skuid,
               canums:num
             }).then(res => {
               if(res.data.status == 200){
-                let _arr = [].concat(this.cart_list);
-                _arr[this.sku_pb_index].cart[this.sku_pr_index].canums = num;
-                _arr[this.sku_pb_index].cart[this.sku_pr_index].sku = item;
-                this.cart_list = [].concat(_arr);
+                if(isNum){
+
+                }else{
+                  let _arr = [].concat(this.cart_list);
+                  _arr[this.sku_pb_index].cart[this.sku_pr_index].canums = num;
+                  _arr[this.sku_pb_index].cart[this.sku_pr_index].sku = item;
+                  this.cart_list = [].concat(_arr);
+                }
+
               }
             })
-          }
+          },
+          /*改变合计价格*/
+          dealMoney(){
+            let arr = [].concat(this.cart_list);
+            let _total = 0;
+            for(let a =0;a<arr.length;a++){
+              for(let b =0;b<arr[a].cart.length;b++){
+                if(arr[a].cart[b].active ){
+                  _total = _total + Number(arr[a].cart[b].sku.skuprice) * arr[a].cart[b].canums
+                }
+              }
+            }
+            this.total_money = _total;
+          },
+          /*选择框点击*/
+          radioClick(name,index,i){
+            let arr = [].concat(this.cart_list);
+            switch (name){
+              case 'all':
+                this.allRadio = !this.allRadio;
+                for(let a =0;a<arr.length;a++){
+                  arr[a].active = this.allRadio;
+                  for(let b =0;b<arr[a].cart.length;b++){
+                    arr[a].cart[b].active = this.allRadio;
+                  }
+                }
+                this.cart_list = [].concat(arr);
+                break;
+              case 'store':
+                arr[index].active = !arr[index].active;
+                for(let a =0;a<arr[index].cart.length;a++){
+                  arr[index].cart[a].active = arr[index].active;
+                }
+                break;
+              case 'product':
+                arr[index].cart[i].active = !arr[index].cart[i].active;
+                let length = 0;
+                for(let x = 0;x<arr[index].cart.length;x++){
+                  if(  arr[index].cart[i].active == arr[index].cart[x].active){
+                    length = length + 1
+                  }
+                }
+                if(arr[index].cart[i].active){
+                  if(length == arr[index].cart.length){
+                    arr[index].active = arr[index].cart[i].active;
+                  }
+                }else{
+                  if(length > 0 && length < arr[index].cart.length ){
+                    this.allRadio = false;
+                    arr[index].active = false;
+                  }
+                }
+                break;
+
+            }
+
+            if(name != 'all'){
+              let store_length = 0;
+              for(let y = 0;y<arr.length;y++){
+                if(  arr[y].active == arr[index].active){
+                  store_length = store_length + 1
+                }
+              }
+              if(store_length == arr.length){
+                this.allRadio = arr[index].active ;
+              }
+              this.cart_list = [].concat(arr);
+            }
+
+            this.dealMoney();
+          },
+          //数量改变
+          changeNum(v,index,i){
+            if(v == -1 && this.cart_list[index].cart[i].canums ==1){
+              return false;
+            }
+            this.cart_list[index].cart[i].canums = this.cart_list[index].cart[i].canums+ v;
+            this.updateCart(this.cart_list[index].cart[i].sku,this.cart_list[index].cart[i].canums,'num',this.cart_list[index].cart[i].caid);
+            this.dealMoney();
+          },
         },
         created() {
 
