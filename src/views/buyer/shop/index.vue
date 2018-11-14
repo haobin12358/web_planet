@@ -25,12 +25,15 @@
               <div class="m-shop-product ">
                 <span class="m-icon-radio"></span>
                 <div class="m-product-info">
-                  <img :src="item.product.prmainpic" class="m-product-img" alt="">
+                  <img :src="item.sku.skupic" class="m-product-img" alt="">
                   <div class="m-text-info">
                     <h3>{{item.product.prtitle}}</h3>
                     <p class="m-product-sku-select-p">
-                  <span class="m-product-sku-select">
-                     <span>绿色；XL</span>
+                  <span class="m-product-sku-select" @click.stop="skuSelect(index,i,item)">
+                    <template v-for="(key,k) in item.sku.skuattritedetail">
+                      <span >{{key}}</span>
+                      <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
+                    </template>
                     <span class="m-sku-more"></span>
                   </span>
                     </p>
@@ -48,7 +51,7 @@
             </template>
           </div>
         </template>
-
+        <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
       </div>
       <div class="m-shop-foot">
          <span class="m-icon-radio"></span>
@@ -68,7 +71,22 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import {Toast} from 'mint-ui';
-  import bottomLine from '../../../components/common/bottomLine'
+  import bottomLine from '../../../components/common/bottomLine';
+  var scroll = (function (className) {
+    var scrollTop;
+    return {
+      afterOpen: function () {
+        scrollTop = document.scrollingElement.scrollTop || document.body.scrollTop;
+        document.body.classList.add(className);
+        document.body.style.top = -scrollTop + 'px';
+      },
+      beforeClose: function () {
+        document.body.classList.remove(className);
+        document.scrollingElement.scrollTop = scrollTop;
+        document.body.scrollTop = scrollTop;
+      }
+    };
+  })('scroll');
     export default {
         data() {
             return {
@@ -81,9 +99,17 @@
               total_count:0,
               total_number:0,
               bottom_show:false,
+              show_sku:false,
+              select_value:null,
+              canums:1,
+              product_info:null,
+              sku_pb_index:null,
+              sku_pr_index:null
             }
         },
-        components: {},
+        components: {
+          sku
+        },
         mounted(){
             this.getCart();
         },
@@ -112,7 +138,6 @@
                 }else{
                   return false;
                 }
-
                 this.isScroll = true;
                 this.total_count = res.data.total_count;
                 this.total_number = res.data.total_number || 0;
@@ -136,6 +161,45 @@
 
             }
           },
+        //  sku唤起
+          skuSelect(index,i,item){
+            this.sku_pb_index = index;
+            this.sku_pr_index = i;
+            this.select_value = item.sku;
+            this.product_info = item.product;
+            this.canums = item.canums;
+            this.show_sku = true;
+          },
+          // 改变模态框
+          changeModal(v,bool) {
+            this[v] = bool;
+            if(bool){
+              scroll.afterOpen();
+            }else{
+              scroll.beforeClose();
+            }
+          },
+          //购物车确定
+          sureClick(item,num){
+            this.show_sku = false;
+            this.updateCart(item,num)
+          },
+        //  更新购物车
+          updateCart(item,num){
+            console.log(item);
+            axios.post(api.cart_update +'?token=' + localStorage.getItem('token'),{
+              caid:this.cart_list[this.sku_pb_index].cart[this.sku_pr_index].caid,
+              skuid:item.skuid,
+              canums:num
+            }).then(res => {
+              if(res.data.status == 200){
+                let _arr = [].concat(this.cart_list);
+                _arr[this.sku_pb_index].cart[this.sku_pr_index].canums = num;
+                _arr[this.sku_pb_index].cart[this.sku_pr_index].sku = item;
+                this.cart_list = [].concat(_arr);
+              }
+            })
+          }
         },
         created() {
 
