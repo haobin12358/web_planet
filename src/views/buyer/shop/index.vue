@@ -14,24 +14,24 @@
           <!--<span class="m-no-img m-shop-no-img"></span>-->
           <!--<p>购物车空空如也,<span class="m-red">去下单</span>吧~</p>-->
         <!--</div>-->
-        <template v-for="(items,index) in cart_list">
-          <div class="m-shop-one">
+        <template v-for="(items,index) in cart_list" >
+          <div class="m-shop-one" :key="items.pb.pbid">
             <div class="m-shop-store-name">
               <span class="m-icon-radio" :class="items.active?'active':''" @click="radioClick('store',index)"></span>
               <span>{{items.pb.pbname}}</span>
               <span class="m-icon-more" ></span>
             </div>
-            <template v-for="(item,i) in items.cart">
-              <div class="m-shop-product ">
+            <template v-for="(item,i) in items.cart" >
+              <div class="m-shop-product " :key="item.prid">
                 <span class="m-icon-radio" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
-                <div class="m-product-info">
+                <div class="m-product-info" @click="changeRoute('praoduct',item)">
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
                   <div class="m-text-info">
                     <h3>{{item.product.prtitle}}</h3>
                     <p class="m-product-sku-select-p">
                   <span class="m-product-sku-select" @click.stop="skuSelect(index,i,item)">
-                    <template v-for="(key,k) in item.sku.skuattritedetail">
-                      <span >{{key}}</span>
+                    <template v-for="(key,k) in item.sku.skuattritedetail" >
+                      <span :key="key">{{key}}</span>
                       <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
                     </template>
                     <span class="m-sku-more"></span>
@@ -116,6 +116,9 @@
             this.getCart();
         },
         methods: {
+          changeRoute(v,item){
+            this.$router.push({path:'/product/detail',query:{prid:item.prid}});
+          },
           //结算
           payOrder(e){
             this.$router.push('/submitOrder');
@@ -150,7 +153,7 @@
                 this.cart_list = [].concat(arr);
                 this.isScroll = true;
                 this.total_count = res.data.total_count;
-                this.total_number = res.data.total_number || 0;
+                this.total_number = res.data.product_num || 0;
               }
             })
           },

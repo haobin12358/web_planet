@@ -11,8 +11,8 @@
       <!--轮播图-->
       <div class="m-swipe">
         <mt-swipe :auto="3000" v-if="swipe_list">
-          <mt-swipe-item v-for="item in swipe_list">
-            <img :src="item.ibpic" class="img" alt="">
+          <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
+            <img :src="item.ibpic" class="img" alt="" >
           </mt-swipe-item>
         </mt-swipe>
       </div>
@@ -54,8 +54,8 @@
         </h3>
         <div class="m-scroll">
           <ul class="m-selected-scene-ul">
-            <li v-for="(item,index) in scene_list" @click.stop = sceneClick(item)>
-              <img :src="item.pspic" class="m-selected-scene-img" alt="">
+            <li v-for="(item,index) in scene_list" @click.stop = "sceneClick(item)" >
+              <img :src="item.pspic" class="m-selected-scene-img" alt="" >
             </li>
           </ul>
         </div>
@@ -71,15 +71,15 @@
         </h3>
         <div class="m-scroll ">
           <ul class="m-selected-brand-ul" v-if="brand_list">
-            <li v-for="(item,index) in brand_list">
-              <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="">
+            <li v-for="(item,index) in brand_list" >
+              <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="" >
             </li>
           </ul>
         </div>
         <div class="m-scroll m-center-scroll">
           <ul class="m-selected-brand-product-ul">
             <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
-              <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="">
+              <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >
               <div class="m-selected-brand-product-text">
                 <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
                 <p class="m-flex-between m-ft-18">
