@@ -138,6 +138,8 @@
                 }else{
                   return false;
                 }
+                // let arr = [].concat(this.cart_list);
+
                 this.isScroll = true;
                 this.total_count = res.data.total_count;
                 this.total_number = res.data.total_number || 0;
