@@ -109,8 +109,9 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
 .m-login{
-  background-color: #9fd0bf;
-  min-height: 100%;
+  min-height: 100vh;
+  background: url("/static/images/login-bc.png") no-repeat;
+  background-size: 100% 100%;
   text-align: center;
   color: #fff;
   display: flex;

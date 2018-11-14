@@ -38,7 +38,7 @@
           <span class="m-more"></span>
         </div>
       </div>
-      <div class="m-product-detail-more" @click="changeRoute">
+      <div class="m-product-detail-more" @click="changeRoute('/evaluate')">
         <div>
           <span class="m-label">评价</span>
           <span class="m-start active"></span>
@@ -56,7 +56,7 @@
         <img :src="product_info.prdesc"  alt="">
       </div>
       <div class="m-product-detail-foot">
-        <span class="m-icon-car"></span>
+        <span class="m-icon-car" @click.stop="changeRoute('/shop')"></span>
         <span class="m-icon-service"></span>
         <div class="m-product-detail-btn">
           <span @click="addCart">加入购物车</span>
@@ -117,8 +117,8 @@
            }
          },
         //改变路由
-        changeRoute(){
-           this.$router.push('/evaluate');
+        changeRoute(v){
+           this.$router.push(v);
         },
         //返回{
         changeBack(){

@@ -1,44 +1,18 @@
 <template>
-    <div class="m-scene">
+    <div class="m-scene" id="header">
       <div class="m-scroll m-margin">
         <ul class="m-selected-scene-ul">
-          <li>
-            <img src="" class="m-selected-scene-img active" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
-          </li>
-          <li>
-            <img src="" class="m-selected-scene-img" alt="">
+          <li v-for="(item,index) in scene_list" @click="sceneClick(index)">
+            <img :src="item.pspic" class="m-selected-scene-img" :class="item.active?'active':''" alt="">
           </li>
         </ul>
       </div>
       <div class="m-scroll-l">
         <ul class="m-scene-label">
-          <li>冲锋衣裤</li>
-          <li class="active">冲锋衣裤</li>
-          <li>冲锋衣裤</li>
-          <li>冲锋衣裤</li>
-          <li>冲锋衣裤</li>
-          <li>冲锋衣裤</li>
+          <li v-for="(item,index) in nav_list" :class="item.active?'active':''" @click="navClick(index)">{{item.itname}}</li>
         </ul>
       </div>
-      <product></product>
+      <product :list="product_list"></product>
       <span class="m-icon-top"></span>
     </div>
 
@@ -47,10 +21,23 @@
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
   import product from '../components/product';
+  import axios from 'axios';
+  import api from '../../../api/api'
+  import {Toast} from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine';
     export default {
         data() {
             return {
-                name: ''
+                scene_list:'',
+                nav_list:'',
+                product_list:[],
+                page_info:{
+                  page_num:1,
+                  page_size:10
+                },
+                isScroll:true,
+                total_count:0,
+                bottom_show:false,
             }
         },
         components: {
@@ -58,8 +45,109 @@
         },
         mounted(){
             common.changeTitle('场景推荐');
+            this.getScene();
         },
-        methods: {},
+        methods: {
+          //获取场景
+          getScene(){
+            axios.get(api.scene_list).then(res => {
+              if(res.data.status == 200){
+                for(let i=0;i<res.data.data.length;i++){
+                  res.data.data[i].active = false;
+                }
+                res.data.data[0].active = true;
+                this.scene_list = [].concat(res.data.data);
+                this.getNav(res.data.data[0].psid);
+              }
+            })
+          },
+          //获取商品标签
+          getNav(psid){
+            axios.get(api.items_list,{
+              params:{
+                ittype:0,
+                psid:psid
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                if(res.data.data.length == 0){
+                  this.nav_list = []
+                }else{
+                  for(let i=0;i<res.data.data.length;i++){
+                    res.data.data[i].active = false;
+                  }
+                  res.data.data[0].active = true;
+                  this.nav_list = [].concat(res.data.data);
+                  this.getProduct(this.nav_list[0].itid);
+                }
+              }
+            })
+          },
+          //获取商品列表
+          getProduct(itid){
+            let _pcid = this.$route.query.pcid || '';
+            let _kw = this.$route.query.kw || '';
+            let start = this.page_info.page_num;
+            axios.get(api.product_list,{
+              params:{
+                pcid:_pcid,
+                page_size:this.page_info.page_size,
+                page_num:start,
+                token:localStorage.getItem('token'),
+                itid:itid
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                if(res.data.data.length >0){
+                  if(start >1){
+                    this.product_list = this.product_list.concat(res.data.data);
+                  }else{
+                    this.product_list = res.data.data;
+                  }
+                  this.isScroll = true;
+                  this.total_count = res.data.total_count;
+                  this.page_info.page_num = this.page_info.page_num +1;
+                }else{
+                  return false;
+                }
+              } else{
+                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
+              }
+            },error => {
+              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
+            })
+          },
+        //  导航点击
+          sceneClick(index){
+            if(this.scene_list[index].active){
+              return false;
+            }
+            let arr = [].concat(this.scene_list);
+            for(let i =0;i<arr.length;i++){
+              arr[i].active = false;
+            }
+            arr[index].active = true;
+            this.scene_list = [].concat(arr);
+            this.getNav(arr[index].psid);
+          },
+          //  导航点击
+          navClick(index){
+            if(this.nav_list[index].active){
+              return false;
+            }
+            let arr = [].concat(this.nav_list);
+            for(let i =0;i<arr.length;i++){
+              arr[i].active = false;
+            }
+            arr[index].active = true;
+            this.nav_list = [].concat(arr);
+            this.getProduct(arr[index].itid);
+          },
+          //滚动到顶部
+          returnTop:function(){
+            document.querySelector("#header").scrollIntoView(true);
+          }
+        },
         created() {
 
         }
@@ -81,6 +169,7 @@
     width: 717px;
     overflow-x: auto;
     overflow-y: hidden;
+    text-align: left;
     .m-scene-label{
       height: 53px;
       min-width: 101%;

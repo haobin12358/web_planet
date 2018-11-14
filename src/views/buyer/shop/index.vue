@@ -8,102 +8,53 @@
           <span class="m-title">购物车</span>
           <span>管理</span>
         </h3>
-        <p class="m-p">共58件商品</p>
+        <p class="m-p">共{{total_number}}件商品</p>
 
         <!--<div class="m-no-coupon">-->
           <!--<span class="m-no-img m-shop-no-img"></span>-->
           <!--<p>购物车空空如也,<span class="m-red">去下单</span>吧~</p>-->
         <!--</div>-->
-        <div class="m-shop-one">
-          <div class="m-shop-store-name">
-            <span class="m-icon-radio"></span>
-            <span>背面</span>
-            <span class="m-icon-more"></span>
-          </div>
-          <div class="m-shop-product ">
-            <span class="m-icon-radio"></span>
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <h3>北面防雨防风软壳衣北面防雨防风软壳衣</h3>
-                <p class="m-product-sku-select-p">
+        <template v-for="(items,index) in cart_list">
+          <div class="m-shop-one">
+            <div class="m-shop-store-name">
+              <span class="m-icon-radio"></span>
+              <span>{{items.pb.pbname}}</span>
+              <span class="m-icon-more" ></span>
+            </div>
+            <template v-for="(item,i) in items.cart">
+              <div class="m-shop-product ">
+                <span class="m-icon-radio"></span>
+                <div class="m-product-info">
+                  <img :src="item.product.prmainpic" class="m-product-img" alt="">
+                  <div class="m-text-info">
+                    <h3>{{item.product.prtitle}}</h3>
+                    <p class="m-product-sku-select-p">
                   <span class="m-product-sku-select">
                      <span>绿色；XL</span>
                     <span class="m-sku-more"></span>
                   </span>
-                </p>
-                <div class="m-sku-num">
-                  <span class="m-red">￥899</span>
-                  <div class="m-num">
-                    <span class="m-icon-cut"></span>
-                    <input type="text" class="m-num-input" placeholder="0">
-                    <span class="m-icon-add"></span>
+                    </p>
+                    <div class="m-sku-num">
+                      <span class="m-red">￥{{item.sku.skuprice}}</span>
+                      <div class="m-num">
+                        <span class="m-icon-cut"></span>
+                        <input type="number" v-model="item.canums" class="m-num-input" >
+                        <span class="m-icon-add"></span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </template>
           </div>
-        </div>
+        </template>
 
-        <div class="m-shop-one">
-          <div class="m-shop-store-name">
-            <span class="m-icon-radio"></span>
-            <span>背面</span>
-            <span class="m-icon-more"></span>
-          </div>
-          <div class="m-shop-product ">
-            <span class="m-icon-radio"></span>
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <h3>北面防雨防风软壳衣北面防雨防风软壳衣</h3>
-                <p class="m-product-sku-select-p">
-                  <span class="m-product-sku-select">
-                     <span>绿色；XL</span>
-                    <span class="m-sku-more"></span>
-                  </span>
-                </p>
-                <div class="m-sku-num">
-                  <span class="m-red">￥899</span>
-                  <div class="m-num">
-                    <span class="m-icon-cut"></span>
-                    <input type="text" class="m-num-input" placeholder="0">
-                    <span class="m-icon-add"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="m-shop-product ">
-            <span class="m-icon-radio"></span>
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <h3>北面防雨防风软壳衣北面防雨防风软壳衣</h3>
-                <p class="m-product-sku-select-p">
-                  <span class="m-product-sku-select">
-                     <span>绿色；XL</span>
-                    <span class="m-sku-more"></span>
-                  </span>
-                </p>
-                <div class="m-sku-num">
-                  <span class="m-red">￥899</span>
-                  <div class="m-num">
-                    <span class="m-icon-cut"></span>
-                    <input type="text" class="m-num-input" placeholder="0">
-                    <span class="m-icon-add"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="m-shop-foot">
          <span class="m-icon-radio"></span>
          <div>
            <span>合计</span>
-           <span class="m-red">￥18.0</span>
+           <span class="m-red">￥0.00</span>
            <span class="m-shop-btn" @click.stop="payOrder">结算</span>
          </div>
       </div>
@@ -128,6 +79,7 @@
               },
               isScroll:true,
               total_count:0,
+              total_number:0,
               bottom_show:false,
             }
         },
@@ -136,6 +88,7 @@
             this.getCart();
         },
         methods: {
+          //结算
           payOrder(e){
             this.$router.push('/submitOrder');
           },
@@ -149,10 +102,40 @@
               }
             }).then(res => {
               if(res.data.status == 200){
-                this.cart_list = res.data.data;
+                if(res.data.data.length >0){
+                  if(this.page_info.page_num >1){
+                    this.cart_list = this.cart_list.concat(res.data.data);
+                  }else{
+                    this.cart_list = res.data.data;
+                  }
+                  this.page_info.page_num = this.page_info.page_num +1;
+                }else{
+                  return false;
+                }
+
+                this.isScroll = true;
+                this.total_count = res.data.total_count;
+                this.total_number = res.data.total_number || 0;
               }
             })
-          }
+          },
+          //滚动加载更多
+          touchMove(e){
+            let scrollTop = common.getScrollTop();
+            let scrollHeight = common.getScrollHeight();
+            let ClientHeight = common.getClientHeight();
+            if (scrollTop + ClientHeight  >= scrollHeight -10) {
+              if(this.isScroll){
+                this.isScroll = false;
+                if(this.cart_list.length == this.total_count){
+                  this.bottom_show = true;
+                }else{
+                  this.getCart();
+                }
+              }
+
+            }
+          },
         },
         created() {
 
@@ -237,7 +220,7 @@
         .m-product-info{
           display: flex;
           flex-flow: row;
-          align-items: center;
+          align-items: flex-start;
           justify-content: flex-start;
           .m-product-img{
             display: block ;
@@ -246,25 +229,29 @@
             background-color: #edb3b1;
             margin-right: 30px;
           }
-          h3{
-            font-weight: 400;
-          }
-          .m-product-sku-select-p{
-            margin: 30px 0 30px;
-            .m-product-sku-select{
-              padding: 8px 20px;
-              background-color: #E9E9E9;
-              border-radius: 10px;
-              .m-sku-more{
-                display: inline-block;
-                width: 16px;
-                height: 16px;
-                background: url("/static/images/icon-down.png") no-repeat;
-                background-size: 100% 100%;
-                margin-left: 23px;
+          .m-text-info{
+            width: 410px;
+            h3{
+              font-weight: 400;
+            }
+            .m-product-sku-select-p{
+              margin: 30px 0 30px;
+              .m-product-sku-select{
+                padding: 8px 20px;
+                background-color: #E9E9E9;
+                border-radius: 10px;
+                .m-sku-more{
+                  display: inline-block;
+                  width: 16px;
+                  height: 16px;
+                  background: url("/static/images/icon-down.png") no-repeat;
+                  background-size: 100% 100%;
+                  margin-left: 23px;
+                }
               }
             }
           }
+
 
         }
       }

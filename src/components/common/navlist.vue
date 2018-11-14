@@ -1,6 +1,12 @@
 <template>
   <div :class="isScroll ? 'm-scroll-nav':''">
-    <ul class="m-nav-list">
+    <ul class="m-nav-list" v-if="isGet">
+      <template v-for="(item,index) in navlist">
+        <li :class="item.active?'active':''" @click="navClick(index)">{{item.itname}}
+        </li>
+      </template>
+    </ul>
+    <ul class="m-nav-list" v-else>
       <template v-for="(item,index) in navlist">
         <li :class="item.active?'active':''" @click="navClick(index)">{{item.name}}
           <span class="m-icon-box" v-if="item.icon">
@@ -28,6 +34,10 @@
             default:null
           },
           isScroll:{
+            type:Boolean,
+            default:false
+          },
+          isGet:{
             type:Boolean,
             default:false
           }

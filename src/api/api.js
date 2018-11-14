@@ -27,7 +27,11 @@ const api={
   order_get: title + '/order/get',//订单详情
   refund_create: title +'/refund/create',//申请退款
 
-
+  items_list: title + '/items/list',//获取标签列表
+  scene_list: title + '/scene/list',//获取场景列表
+  list_banner_index: title + '/index/list_banner',//获取首页轮播图
+  list_brand_index: title + '/index/list_brand',//获取首页品牌
+  list_product_index: title +'/index/list_product',//获取首页显示的品牌商品
 };
 
 export default api

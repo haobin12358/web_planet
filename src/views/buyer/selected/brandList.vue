@@ -1,7 +1,7 @@
 <template>
     <div class="m-brandList">
       <div class="m-nav">
-        <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
+        <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-bandList-content">
         <div class="m-one-brand-part">
@@ -45,48 +45,30 @@
 <script>
   import common from '../../../common/js/common';
   import navList from '../../../components/common/navlist';
+  import axios from 'axios';
+  import api from '../../../api/api'
+  import {Toast} from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine'
     export default {
       data(){
           return{
-            nav_list:[
-              {
-                name:'精选大牌',
-                params:'',
-                active:true
-              },
-              {
-                name:'专业登山',
-                params:'',
-                active:false
-              },
-              {
-                name:'运动休闲',
-                params:'',
-                active:false
-              },
-              {
-                name:'露营体验',
-                params:'',
-                active:false
-              },
-              {
-                name:'潜水滑雪',
-                params:'',
-                active:false
-              }
-            ]
+            nav_list:[]
           }
         },
       components: {
         navList
       },
       mounted(){
-        common.changeTitle('订单列表');
+        common.changeTitle('品牌列表');
+        this.getBrand();
+        this.getNav();
       },
       methods:{
+        //改变路由
         changeRoute(v){
           this.$router.push(v)
         },
+        //导航切换
         navClick(index){
           let arr = [].concat(this.nav_list);
           for(let i=0;i<arr.length;i++){
@@ -94,6 +76,28 @@
           }
           arr[index].active = true;
           this.nav_list = [].concat(arr)
+        },
+      //  获取标签
+        getNav(){
+          axios.get(api.items_list,{
+            params:{
+              ittype:40
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              for(let i=0;i<res.data.data.length;i++){
+                res.data.data[i].active = false;
+              }
+              res.data.data[0].active = true;
+              this.nav_list = [].concat(res.data.data);
+            }
+          })
+        },
+      //  获取品牌列表
+        getBrand(){
+          axios.get(api.brand_list).then(res => {
+
+          })
         }
       }
     }

@@ -61,7 +61,7 @@
   import axios from 'axios';
   import api from '../../../api/api'
   import {Toast} from 'mint-ui';
-  import bottomLine from '../../../components/common/bottomLine'
+  import bottomLine from '../../../components/common/bottomLine';
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -113,7 +113,7 @@
           product_list:[],
           page_info:{
             page_num:1,
-            page_size:5
+            page_size:10
           },
           isScroll:true,
           total_count:0,
