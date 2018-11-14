@@ -35,7 +35,7 @@
                   </span>
                     </p>
                     <div class="m-sku-num">
-                      <span class="m-red">￥{{item.sku.skuprice}}</span>
+                      <span class="m-red">￥{{item.sku.skuprice | money}}</span>
                       <div class="m-num">
                         <span class="m-icon-cut"></span>
                         <input type="number" v-model="item.canums" class="m-num-input" >

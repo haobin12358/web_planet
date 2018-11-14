@@ -10,15 +10,9 @@
       </div>
       <!--轮播图-->
       <div class="m-swipe">
-        <mt-swipe :auto="3000" >
-          <mt-swipe-item>
-            <img src="" class="img" alt="">
-          </mt-swipe-item>
-          <mt-swipe-item>
-            <img src="" class="img" alt="">
-          </mt-swipe-item>
-          <mt-swipe-item>
-            <img src="" class="img" alt="">
+        <mt-swipe :auto="3000" v-if="swipe_list">
+          <mt-swipe-item v-for="item in swipe_list">
+            <img :src="item.ibpic" class="img" alt="">
           </mt-swipe-item>
         </mt-swipe>
       </div>
@@ -88,93 +82,51 @@
           </span>
         </h3>
         <div class="m-scroll ">
-          <ul class="m-selected-brand-ul">
-            <li>
-              <img src="" class="m-selected-brand-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-img" alt="">
+          <ul class="m-selected-brand-ul" v-if="brand_list">
+            <li v-for="(item,index) in brand_list">
+              <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="">
             </li>
           </ul>
         </div>
         <div class="m-scroll m-center-scroll">
           <ul class="m-selected-brand-product-ul">
-            <li>
-              <img src="" class="m-selected-brand-product-img" alt="">
+            <li v-for="(item,index) in brand_product">
+              <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="">
               <div class="m-selected-brand-product-text">
-                <h3>【北面】THE NORTH FA1212</h3>
+                <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
                 <p class="m-flex-between m-ft-18">
-                  <span>￥850.00</span>
-                  <s class="m-grey m-ft-18">￥850.00</s>
-                </p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-product-img" alt="">
-              <div class="m-selected-brand-product-text">
-                <h3>【北面】THE NORTH FA1212</h3>
-                <p class="m-flex-between">
-                  <span>￥850.00</span>
-                  <s class="m-grey m-ft-18">￥850.00</s>
-                </p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-product-img" alt="">
-              <div class="m-selected-brand-product-text">
-                <h3>【北面】THE NORTH FA1212</h3>
-                <p class="m-flex-between">
-                  <span>￥850.00</span>
-                  <s class="m-grey m-ft-18">￥850.00</s>
-                </p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-selected-brand-product-img" alt="">
-              <div class="m-selected-brand-product-text">
-                <h3>【北面】THE NORTH FA1212</h3>
-                <p class="m-flex-between ">
-                  <span>￥850.00</span>
-                  <s class="m-grey m-ft-18">￥850.00</s>
+                  <span>￥{{item.prprice |money}}</span>
+                  <s class="m-grey m-ft-18">￥{{item.prlineprice | money}}</s>
                 </p>
               </div>
             </li>
           </ul>
         </div>
-        <div class="m-selected-hot m-flex-start">
+        <div class="m-selected-hot m-flex-start" v-if="hot_list && hot_list.length>0">
           <div class="m-hot-box">
               <span class="m-hot">HOT!</span>
               <span>人气热卖</span>
           </div>
-          <div class="m-one-product m-l">
-            <img src="" class="m-one-product-img" alt="">
+          <div class="m-one-product m-l" v-if="hot_list[0]">
+            <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
             <div class="m-one-product-text">
-              <h3>【北面】THE NORTH d </h3>
-              <p>￥950.00</p>
+              <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
+              <p>￥{{hot_list[0].prlineprice | money}}</p>
             </div>
           </div>
           <div>
-            <div class="m-one-product ">
-              <img src="" class="m-one-product-img" alt="">
+            <div class="m-one-product " v-if="hot_list[1]">
+              <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
               <div class="m-one-product-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p>￥950.00</p>
+                <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
+                <p>￥{{hot_list[1].prlineprice | money}}</p>
               </div>
             </div>
-            <div class="m-one-product ">
-              <img src="" class="m-one-product-img" alt="">
+            <div class="m-one-product " v-if="hot_list[2]">
+              <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
               <div class="m-one-product-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p>￥950.00</p>
+                <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
+                <p>￥{{hot_list[2].prlineprice | money}}</p>
               </div>
             </div>
           </div>
@@ -273,7 +225,10 @@
     export default {
         data() {
             return {
-                name: ''
+                swipe_list:null,
+              brand_list:null,
+              brand_product:null,
+              hot_list:null
             }
         },
         components: {
@@ -281,13 +236,25 @@
         },
       mounted(){
         common.changeTitle('精选');
+        this.getSwipe();
+        this.getBrand();
       },
         methods: {
+          /*获取轮播图*/
+          getSwipe(){
+            axios.get(api.list_banner_index).then(res => {
+              if(res.data.status == 200){
+                this.swipe_list = res.data.data;
+              }
+            })
+          },
           /*获取品牌推荐*/
           getBrand(){
-            axios.get(api.brand_list,{
-              params:{
-
+            axios.get(api.brand_recommend_index).then(res => {
+              if(res.data.status == 200){
+                this.brand_list = res.data.data.brands;
+                this.brand_product = res.data.data.product;
+                this.hot_list = res.data.data.hot;
               }
             })
           },
