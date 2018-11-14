@@ -33,6 +33,9 @@ const api={
   list_brand_index: title + '/index/list_brand',//获取首页品牌
   list_product_index: title +'/index/list_product',//获取首页显示的品牌商品
   brand_recommend_index : title + '/index/brand_recommend',//获取首页品牌模块数据
+
+  get_all_news: title + '/news/get_all_news',//获取资讯列表
+  get_news_content: title +'/news/get_news_content',//获取资讯详情
 };
 
 export default api

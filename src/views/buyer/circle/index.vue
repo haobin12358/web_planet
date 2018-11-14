@@ -9,7 +9,7 @@
         <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
       </div>
       <div class="m-circle-content">
-        <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
+        <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
         <div class="m-circle-body">
           <div class="m-video-one">
             <!--<span class="m-video-label">【运动健身】</span>-->
@@ -78,54 +78,40 @@
             </ul>
           </div>
         </div>
-
       </div>
     </div>
 
 </template>
 
 <script type="text/ecmascript-6">
-  import navList from '../../../components/common/navlist'
+  import navList from '../../../components/common/navlist';
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
     export default {
         data() {
             return {
                 name: '',
-              nav_list:[
-                {
-                  name:'全部',
-                  params:'',
-                  active:true
-                },
-                {
-                  name:'运动健身',
-                  params:'',
-                  active:false
-                },
-                {
-                  name:'户外徒步',
-                  params:'',
-                  active:false
-                },
-                {
-                  name:'露营体验',
-                  params:'',
-                  active:false
-                },
-                {
-                  name:'潜水滑雪',
-                  params:'',
-                  active:false
-                }
-              ]
+              nav_list:[],
+              page_info:{
+                page_num:1,
+                page_size:10
+              }
             }
         },
         components: {
           navList
         },
+        mounted(){
+           common.changeTitle('圈子');
+           this.getNav();
+        },
         methods: {
+          /*跳转路由*/
           changeRoute(v){
             this.$router.push(v)
           },
+          /*导航切换*/
           navClick(index){
             let arr = [].concat(this.nav_list);
             for(let i=0;i<arr.length;i++){
@@ -133,6 +119,30 @@
             }
             arr[index].active = true;
             this.nav_list = [].concat(arr)
+          },
+          /*获取导航*/
+          getNav(){
+            axios.get(api.items_list,{
+              params:{
+                ittype:10
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                if(res.data.data.length == 0){
+                  this.nav_list = this.nav_list.concat([])
+                }else{
+                  for(let i=0;i<res.data.data.length;i++){
+                    res.data.data[i].active = false;
+                  }
+                  res.data.data[0].active = true;
+                  this.nav_list = this.nav_list.concat(res.data.data);
+                }
+              }
+            })
+          },
+          /*获取资讯列表*/
+          getNmws(){
+            axios.get(api.get_all_news)
           }
         },
         created() {

@@ -209,7 +209,7 @@
   import product from '../components/product';
   import common from '../../../common/js/common';
   import axios from 'axios';
-  import api from '../../../api/api'
+  import api from '../../../api/api';
     export default {
         data() {
             return {
