@@ -54,12 +54,16 @@
           getScene(){
             axios.get(api.scene_list).then(res => {
               if(res.data.status == 200){
+                let index = 0;
                 for(let i=0;i<res.data.data.length;i++){
                   res.data.data[i].active = false;
+                  if(res.data.data[i].psid == this.$route.query.psid){
+                    index = i;
+                  }
                 }
-                res.data.data[0].active = true;
+                res.data.data[index].active = true;
                 this.scene_list = [].concat(res.data.data);
-                this.getNav(res.data.data[0].psid);
+                this.getNav(res.data.data[index].psid);
               }
             })
           },

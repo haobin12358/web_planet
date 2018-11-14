@@ -16,6 +16,7 @@ const api={
   brand_list: title +'/brand/list',//获取商品列表
   search_history: title + '/product/search_history',//用户搜索记录
   guess_search: title + '/product/guess_search',//推荐
+  del_search_history: title + '/product/del_search_history',//删除搜索记录
 
   cart_create: title + '/cart/create',//添加购物车
   cart_update: title +'/cart/update',//更新购物车
@@ -35,6 +36,9 @@ const api={
   brand_recommend_index : title + '/index/brand_recommend',//获取首页品牌模块数据
 
   get_home : title + '/user/get_home',//获取首页品牌模块数据
+
+  get_all_news: title + '/news/get_all_news',//获取资讯列表
+  get_news_content: title +'/news/get_news_content',//获取资讯详情
 };
 
 export default api

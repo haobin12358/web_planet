@@ -190,6 +190,7 @@
         }
         .m-sku-btn{
           margin-top: 53px;
+          text-align: center;
           span{
             display: inline-block;
             width: 680px;
@@ -198,6 +199,7 @@
             line-height: 62px;
             font-size: 30px;
             border-radius: 10px;
+            text-align: center;
             &.active{
               background-color: #fcd316;
             }

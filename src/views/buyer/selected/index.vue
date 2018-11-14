@@ -11,8 +11,8 @@
       <!--轮播图-->
       <div class="m-swipe">
         <mt-swipe :auto="3000" v-if="swipe_list">
-          <mt-swipe-item v-for="item in swipe_list">
-            <img :src="item.ibpic" class="img" alt="">
+          <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
+            <img :src="item.ibpic" class="img" alt="" >
           </mt-swipe-item>
         </mt-swipe>
       </div>
@@ -54,20 +54,8 @@
         </h3>
         <div class="m-scroll">
           <ul class="m-selected-scene-ul">
-            <li>
-              <img src="" class="m-selected-scene-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-scene-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-scene-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-scene-img" alt="">
-            </li>
-            <li>
-              <img src="" class="m-selected-scene-img" alt="">
+            <li v-for="(item,index) in scene_list" @click.stop = "sceneClick(item)" >
+              <img :src="item.pspic" class="m-selected-scene-img" alt="" >
             </li>
           </ul>
         </div>
@@ -83,15 +71,15 @@
         </h3>
         <div class="m-scroll ">
           <ul class="m-selected-brand-ul" v-if="brand_list">
-            <li v-for="(item,index) in brand_list">
-              <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="">
+            <li v-for="(item,index) in brand_list" >
+              <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="" >
             </li>
           </ul>
         </div>
         <div class="m-scroll m-center-scroll">
           <ul class="m-selected-brand-product-ul">
-            <li v-for="(item,index) in brand_product">
-              <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="">
+            <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
+              <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >
               <div class="m-selected-brand-product-text">
                 <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
                 <p class="m-flex-between m-ft-18">
@@ -107,7 +95,7 @@
               <span class="m-hot">HOT!</span>
               <span>人气热卖</span>
           </div>
-          <div class="m-one-product m-l" v-if="hot_list[0]">
+          <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
             <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
             <div class="m-one-product-text">
               <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
@@ -115,14 +103,14 @@
             </div>
           </div>
           <div>
-            <div class="m-one-product " v-if="hot_list[1]">
+            <div class="m-one-product " v-if="hot_list[1]" @click.stop="productClick(hot_list[1])">
               <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
               <div class="m-one-product-text">
                 <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
                 <p>￥{{hot_list[1].prlineprice | money}}</p>
               </div>
             </div>
-            <div class="m-one-product " v-if="hot_list[2]">
+            <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
               <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
               <div class="m-one-product-text">
                 <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
@@ -221,14 +209,15 @@
   import product from '../components/product';
   import common from '../../../common/js/common';
   import axios from 'axios';
-  import api from '../../../api/api'
+  import api from '../../../api/api';
     export default {
         data() {
             return {
                 swipe_list:null,
               brand_list:null,
               brand_product:null,
-              hot_list:null
+              hot_list:null,
+              scene_list:null
             }
         },
         components: {
@@ -238,6 +227,7 @@
         common.changeTitle('精选');
         this.getSwipe();
         this.getBrand();
+        this.getScene();
       },
         methods: {
           /*获取轮播图*/
@@ -245,6 +235,14 @@
             axios.get(api.list_banner_index).then(res => {
               if(res.data.status == 200){
                 this.swipe_list = res.data.data;
+              }
+            })
+          },
+          //获取场景
+          getScene(){
+            axios.get(api.scene_list).then(res => {
+              if(res.data.status == 200){
+                this.scene_list = [].concat(res.data.data);
               }
             })
           },
@@ -261,6 +259,14 @@
           /*查看更多*/
           changeRoute(v){
             this.$router.push(v)
+          },
+          /*场景点击*/
+          sceneClick(item){
+            this.$router.push({path:'/scene',query:{ psid:item.psid}})
+          },
+          /*商品点击*/
+          productClick(item){
+            this.$router.push({path:'/product/detail',query:{ prid:item.prid}});
           }
         },
         created() {
