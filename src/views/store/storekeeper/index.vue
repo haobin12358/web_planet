@@ -5,9 +5,61 @@
     <!--顶部文字-->
     <div class="m-total-earnings">累计收益 : ￥15200.50</div>
     <div class="m-month-earnings">本月收益<span class="m-month-earnings-text">6666.00</span>元</div>
-    <div class="m-total-jump-box m-earnings-detail" @click="changeRoute('/storekeeper/incomeDetail')">
-      <div>收益详情</div>
-      <img class="m-jump-img" src="/static/images/icon-more-black.png" alt="">
+    <div class="m-total-jump-box m-earnings-detail">
+      <div class="m-earnings-out m-text-bottom" @click="outPopup = true">提现</div>
+      <div class="m-text-bottom" @click="changeRoute('/storekeeper/incomeDetail')">收益详情</div>
+      <img class="m-jump-img" src="/static/images/icon-more-black.png" @click="changeRoute('/storekeeper/incomeDetail')">
+    </div>
+
+    <!--提现-->
+    <div class="m-out-popup-box">
+      <mt-popup class="m-out-popup" v-model="outPopup">
+        <div class="m-out-box" v-if="!outSubmit">
+          <div class="m-out-title m-ft-30">提现金额</div>
+          <div class="m-out-num-box">
+            <div class="m-out-RMB">￥</div>
+            <input type="text" class="m-out-num-input">
+            <img class="m-out-num-clean" src="/static/images/icon-close.png" alt="">
+          </div>
+          <div class="m-out-row">
+            <div class="m-row-left">姓名</div>
+            <div class="m-row-right">
+              <input type="text" class="m-row-input m-width-200">
+            </div>
+          </div>
+          <div class="m-out-row">
+            <div class="m-row-left">银行卡号</div>
+            <div class="m-row-right">
+              <input type="text" class="m-row-input m-width-320">
+            </div>
+          </div>
+          <div class="m-out-row">
+            <div class="m-row-left">银行</div>
+            <div class="m-row-right" @click="bankPopup = true">{{bank}}</div>
+          </div>
+          <div class="m-out-row">
+            <div class="m-row-left">开户行</div>
+            <div class="m-row-right">
+              <input type="text" class="m-row-input m-width-320">
+            </div>
+          </div>
+          <div class="m-out-btn" @click="outBtn('submit')">提 交</div>
+        </div>
+        <div class="m-out-box" v-if="outSubmit">
+          <img class="m-out-know-img" src="/static/images/icon-out-know.png" alt="">
+          <div class="m-ut-know-title">提交成功</div>
+          <div class="m-out-know-text">已成功提交提现申请，我们将在3个工作日内完成审核，请及时关注您的账户余额。</div>
+          <div class="m-out-btn" @click="outBtn('know')">我知道了</div>
+        </div>
+      </mt-popup>
+      <!--银行picker-->
+      <mt-popup class="m-bank-popup" v-model="bankPopup" position="bottom">
+        <div class="m-popup-btn">
+          <div @click="bankPopup = false">取消</div>
+          <div @click="bankDone">确认</div>
+        </div>
+        <mt-picker :slots="slots" @change="bankChange"></mt-picker>
+      </mt-popup>
     </div>
 
     <!--我的订单-->
@@ -101,7 +153,12 @@
     export default {
       data() {
         return {
-          name: ''
+          name: '',
+          outPopup: false,
+          outSubmit: false,
+          bankPopup: false,
+          slots: [{ values: ['中国银行', '中国工商银行', '交通银行', '中国建设银行'] }],
+          bank: ""
         }
       },
       components: {},
@@ -110,6 +167,22 @@
         changeRoute(v) {
           this.$router.push(v)
         },
+        // 提现的选择银行确定按钮
+        bankDone() {
+          this.bankPopup = false;
+        },
+        // 提现的提交按钮
+        outBtn(where) {
+          if(where == "submit") {
+            this.outSubmit = true;
+          }else if(where == "know") {
+            this.outPopup = false;
+          }
+        },
+        // picker选择的银行改变
+        bankChange(picker, values) {
+          this.bank = values[0];
+        }
       }
     }
 </script>
@@ -177,6 +250,13 @@
       .m-jump-text {
         font-size: 24px;
       }
+      .m-earnings-out {
+        flex: 1;
+        text-align: left;
+      }
+      .m-text-bottom {
+        text-decoration: underline;
+      }
       .m-jump-img {
         width: 22px;
         height: 22px;
@@ -191,10 +271,107 @@
         font-size: 28px;
       }
     }
+    .m-out-popup-box {
+      .m-out-popup {
+        width: 700px;
+        border-radius: 30px;
+        .m-out-box {
+          padding: 60px;
+          .m-out-title {
+            text-align: left;
+            margin-bottom: 60px;
+          }
+          .m-out-num-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px #C1C1C1 solid;
+            .m-out-RMB {
+              color: #FCD316;
+              font-size: 50px;
+              font-weight: bold;
+            }
+            .m-out-num-input {
+              width: 400px;
+              height: 70px;
+              font-size: 50px;
+              font-weight: bold;
+            }
+            .m-out-num-clean {
+              width: 40px;
+              height: 40px;
+            }
+          }
+          .m-out-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 28px;
+            padding: 20px 0 10px 0;
+            text-align: right;
+            .m-row-left {
+
+            }
+            .m-row-right {
+              .m-row-input {
+                height: 40px;
+                border: 1px #999999 solid;
+                border-radius: 10px;
+                font-size: 24px;
+                padding: 0 0 0 20px;
+              }
+              .m-width-200 {
+                width: 200px;
+              }
+              .m-width-320 {
+                width: 320px;
+              }
+            }
+          }
+          .m-out-know-img {
+            width: 85px;
+            height: 85px;
+          }
+          .m-ut-know-title {
+            font-size: 30px;
+            font-weight: bold;
+            padding: 20px 0 35px 0;
+          }
+          .m-ut-know-text {
+            font-size: 24px;
+          }
+          .m-out-btn {
+            width: 120px;
+            white-space: nowrap;
+            color: #ffffff;
+            background-color: #FCD316;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 15px 60px;
+            border-radius: 10px;
+            box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
+            margin: 50px 0 0 170px;
+          }
+        }
+      }
+      .m-bank-popup {
+        width: 750px;
+        .m-popup-btn {
+          display: flex;
+          justify-content: space-between;
+          font-size: 28px;
+          padding: 20px 40px 0 40px;
+        }
+      }
+    }
     .m-earnings-detail {
+      width: 650px;
+      display: flex;
       font-size: 21px;
       position: absolute;
       top: 290px;
+      left: 0;
       right: 25px;
     }
     .m-my-order {
