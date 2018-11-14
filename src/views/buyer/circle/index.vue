@@ -2,7 +2,7 @@
     <div class="m-circle">
       <!--搜索-->
       <div class="m-selected-search">
-        <div class="m-search-input-box">
+        <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
           <span class="m-icon-search"></span>
           <span>搜索圈子关键词</span>
         </div>
@@ -108,8 +108,12 @@
         },
         methods: {
           /*跳转路由*/
-          changeRoute(v){
-            this.$router.push(v)
+          changeRoute(v,params,value){
+            if(params == 'shtype'){
+              this.$router.push({path:v,query:{shtype:value}})
+            }else{
+              this.$router.push({path:v})
+            }
           },
           /*导航切换*/
           navClick(index){
@@ -141,7 +145,7 @@
             })
           },
           /*获取资讯列表*/
-          getNmws(){
+          getNews(){
             axios.get(api.get_all_news)
           }
         },

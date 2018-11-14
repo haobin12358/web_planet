@@ -2,33 +2,56 @@
     <div class="m-search">
       <div class="m-flex-between m-search-top">
         <div class="m-search-input-box">
-          <input type="text" v-model="searchContent" @input="searchInfo" placeholder="请输入搜索内容">
-          <span class="m-icon-close"></span>
+          <input type="text" v-model="searchContent" @input="searchInfo" autofocus="!search" @keypress="keyPress" placeholder="请输入搜索内容">
+          <span class="m-icon-close" @click="clearInput"></span>
         </div>
-        <span @click="returnBack" v-if="!searchContent">取消</span>
-        <span @click="changeRoute" v-if="searchContent">搜索</span>
+        <span @click="returnBack">取消</span>
+        <!--<span @click="changeRoute" v-if="searchContent">搜索</span>-->
       </div>
-      <div class="m-search-content">
-        <div class="m-search-one" v-if="!result_list">
+
+      <div class="m-search-content" v-if="isNews">
+        <div class="m-search-one" v-if="!result_list && history_list">
           <p class="m-ft-22 m-flex-between">
             <span>历史记录</span>
-            <span>清除</span>
+            <span @click="clearHistory">清除</span>
+          </p>
+          <ul class="m-search-result-ul" v-if="result_list">
+            <li v-for="item in result_list" @click="changeRoute(item)">
+              <span>{{item.ushname}}</span>
+              <span class="m-icon-go"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="m-search-one" v-else>
+          <ul class="m-search-result-ul" v-if="result_list">
+            <li v-for="item in result_list" @click="changeRoute(item)">
+              <span>{{item.ushname}}</span>
+              <span class="m-icon-go"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="m-search-content" v-else>
+        <div class="m-search-one" v-if="!result_list && history_list">
+          <p class="m-ft-22 m-flex-between">
+            <span>历史记录</span>
+            <span @click="clearHistory">清除</span>
           </p>
           <ul class="m-tab-ul">
-            <li v-for="item in history_list">{{item}}</li>
+            <li v-for="item in history_list" @click="changeRoute(item)">{{item.ushname}}</li>
           </ul>
         </div>
         <!--<div class="m-search-one">-->
-          <!--<p class="m-ft-22 m-flex-between">-->
-            <!--<span>推荐商品</span>-->
-            <!--<span class="m-icon-delete"></span>-->
-          <!--</p>-->
-          <!--<ul class="m-tab-ul">-->
-            <!--<li>北山</li>-->
-            <!--<li>南山</li>-->
-            <!--<li>登山服</li>-->
-            <!--<li>登山服</li>-->
-          <!--</ul>-->
+        <!--<p class="m-ft-22 m-flex-between">-->
+        <!--<span>推荐商品</span>-->
+        <!--<span class="m-icon-delete"></span>-->
+        <!--</p>-->
+        <!--<ul class="m-tab-ul">-->
+        <!--<li>北山</li>-->
+        <!--<li>南山</li>-->
+        <!--<li>登山服</li>-->
+        <!--<li>登山服</li>-->
+        <!--</ul>-->
         <!--</div>-->
         <ul class="m-search-result-ul" v-if="result_list">
           <li v-for="item in result_list" @click="changeRoute(item)">
@@ -37,7 +60,6 @@
           </li>
         </ul>
       </div>
-
     </div>
 </template>
 
@@ -50,31 +72,39 @@
           return{
             searchContent:'',
             history_list:null,
-            result_list:null
+            result_list:null,
+            isNews:false
           }
         },
       mounted(){
           this.historySearch();
       },
       methods:{
+          /*返回*/
         returnBack(){
           this.$router.go(-1)
         },
+        /*获取用户搜索历史纪录*/
         historySearch(){
           axios.get(api.search_history,{
             params:{
-              token:localStorage.getItem('token')
+              token:localStorage.getItem('token'),
+              shtype: this.$route.query.shtype || 'product'
             }
           }).then(res => {
             if(res.data.status ==200){
-              this.history_list = res.data.data;
+              if(res.data.data.length > 0){
+                this.history_list = res.data.data;
+              }
             }
           })
         },
+        /*搜索结果*/
         searchInfo(){
           axios.get(api.guess_search,{
             params:{
-              kw:this.searchContent
+              kw:this.searchContent,
+              shtype:this.$route.query.shtype || 'product'
             }
           }).then(res => {
             if(res.data.status ==200){
@@ -82,9 +112,35 @@
             }
           })
         },
+        /*切换路由*/
         changeRoute(item){
-          this.searchContent = item.ushname || this.searchContent;
-          this.$router.push({path:'/product',query:{kw:item.ushname}})
+          this.searchContent = (item && item.ushname )|| this.searchContent;
+          if(this.$route.query.shtype){
+            this.$router.push({path:'/circle',query:{kw: this.searchContent}})
+          }else{
+            this.$router.push({path:'/product',query:{kw: this.searchContent}})
+          }
+
+        },
+        /*清楚历史*/
+        clearHistory(){
+          axios.post(api.del_search_history+'?token='+ localStorage.getItem('token'),{
+            shtype:this.$route.query.shtype || 'product'
+          }).then(res => {
+            if(res.data.status == 200){
+              this.history_list = null;
+            }
+          })
+        },
+        /*清楚搜索内容*/
+        clearInput(){
+          this.searchContent = '';
+        },
+        /*键盘搜索*/
+        keyPress(e){
+          if(e.keyCode == 13){
+            this.changeRoute();
+          }
         }
       }
     }
