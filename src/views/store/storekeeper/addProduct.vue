@@ -23,7 +23,7 @@
       </div>
       <!--选择商品使用场景-->
       <div class="m-product-part-title">选择商品使用场景</div>
-      <div class="m-product-select-box">
+      <div class="m-product-select-box m-box-bottom">
         <select class="m-product-select" :options="options" v-model="selected">
           <option v-for="item in options">{{item.text}}</option>
         </select>
@@ -68,7 +68,10 @@
     </div>
     <!--商品规格组合-->
     <div class="m-content-radius">
-      <div class="m-product-part-title">商品规格组合</div>
+      <div class="m-product-sku-row">
+        <div class="m-product-part-title">商品规格组合</div>
+        <!--<img class="m-add-icon" src="/static/images/icon-add-sku.png" alt="">-->
+      </div>
       <div class="m-product-text-box">
         <div class="m-text-box-left">商品图片</div>
         <div class="m-text-box-right">
@@ -78,16 +81,91 @@
       <div class="m-product-text-box">
         <div class="m-text-box-left">商品价格</div>
         <div class="m-text-box-right">
-          <input type="text" class="m-row-input m-width" placeholder="请输入商品价格"> 元
+          <input type="text" class="m-row-input m-width-160">元
         </div>
       </div>
       <div class="m-product-text-box">
         <div class="m-text-box-left">商品规格</div>
         <div class="m-text-box-right">
-          <select class="m-product-select" :options="options" v-model="selected">
+          <select class="m-product-select m-width-182" :options="options" v-model="selected">
             <option v-for="item in options">{{item.text}}</option>
           </select>
-          <input type="text" class="m-row-input m-width">
+          <input type="text" class="m-row-input m-width-235">
+          <!--<img class="m-add-icon" src="/static/images/icon-add-sku.png" alt="">-->
+        </div>
+      </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left"></div>
+        <div class="m-text-box-right">
+          <select class="m-product-select m-width-182" :options="options" v-model="selected">
+            <option v-for="item in options">{{item.text}}</option>
+          </select>
+          <input type="text" class="m-row-input m-width-235">
+          <img class="m-add-icon" src="/static/images/icon-add-sku.png" alt="">
+        </div>
+      </div>
+    </div>
+    <!--商品规格组合-->
+    <div class="m-content-radius">
+      <div class="m-product-sku-row">
+        <div class="m-product-part-title">商品规格组合</div>
+        <img class="m-add-icon" src="/static/images/icon-add-sku.png" alt="">
+      </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left">商品图片</div>
+        <div class="m-text-box-right">
+          <img class="m-product-img" src="/static/images/icon-upload-img.png" alt="">
+        </div>
+      </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left">商品价格</div>
+        <div class="m-text-box-right">
+          <input type="text" class="m-row-input m-width-160">元
+        </div>
+      </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left">商品规格</div>
+        <div class="m-text-box-right">
+          <select class="m-product-select m-width-182" :options="options" v-model="selected">
+            <option v-for="item in options">{{item.text}}</option>
+          </select>
+          <input type="text" class="m-row-input m-width-235">
+          <!--<img class="m-add-icon" src="/static/images/icon-add-sku.png" alt="">-->
+        </div>
+      </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left"></div>
+        <div class="m-text-box-right">
+          <select class="m-product-select m-width-182" :options="options" v-model="selected">
+            <option v-for="item in options">{{item.text}}</option>
+          </select>
+          <input type="text" class="m-row-input m-width-235">
+          <img class="m-add-icon" src="/static/images/icon-add-sku.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <!--商品活动-->
+    <div class="m-content-radius">
+      <div class="m-product-part-title">商品活动</div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left">参与活动</div>
+        <div class="m-text-box-right">
+          <select class="m-product-select m-width-500" :options="options" v-model="selected">
+            <option v-for="item in options">{{item.text}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left">活动时间</div>
+        <div class="m-text-box-right">
+          <select class="m-product-select m-width-218" :options="options" v-model="selected">
+            <option v-for="item in options">{{item.text}}</option>
+          </select>
+          <div style="margin-right: 13px">至</div>
+          <select class="m-product-select m-width-218" :options="options" v-model="selected">
+            <option v-for="item in options">{{item.text}}</option>
+          </select>
         </div>
       </div>
     </div>
@@ -141,12 +219,25 @@
       text-align: left;
       margin-bottom: 20px;
       box-shadow: 0 5px 5px rgba(0, 0, 0, 0.16);
+      .m-product-sku-row {
+        display: flex;
+        justify-content: space-between;
+      }
       .m-product-part-title {
         font-weight: bold;
+        line-height: 40px;
+      }
+      .m-add-icon {
+        width: 40px;
+        height: 40px;
+        margin-left: 15px;
       }
       .m-product-select-box {
         display: flex;
         padding: 20px 0 30px 0;
+      }
+      .m-box-bottom {
+        margin-bottom: -30px;
       }
       .m-product-select {
         width: 200px;
@@ -164,6 +255,8 @@
           margin-right: 15px;
         }
         .m-text-box-right {
+          display: flex;
+          align-items: center;
           .m-row-input {
             width: 480px;
             height: 40px;
@@ -172,15 +265,28 @@
             font-size: 24px;
             padding: 0 0 0 20px;
           }
-          .m-width {
-            width: 260px;
+          .m-width-160 {
+            width: 160px;
+            margin-right: 14px;
+          }
+          .m-width-182 {
+            width: 182px;
+          }
+          .m-width-218 {
+            width: 218px;
+          }
+          .m-width-235 {
+            width: 235px;
+          }
+          .m-width-500 {
+            width: 500px;
           }
           .m-row-textarea {
             width: 480px;
             height: 110px;
             border: 1px #999999 solid;
             border-radius: 10px;
-            padding: 0 0 0 20px;
+            padding: 3px 0 0 20px;
             font-size: 24px;
           }
           .m-product-main-img {
