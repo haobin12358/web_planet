@@ -3,7 +3,7 @@
      <div class="m-shop-bg">
        <span class="m-icon-bg"></span>
      </div>
-      <div class="m-shop-content">
+      <div class="m-shop-content" @touchmove.stop="touchMove">
         <h3 class="m-shop-title">
           <span class="m-title">购物车</span>
           <span>管理</span>

@@ -1,5 +1,5 @@
 <template>
-    <div class="m-scene" id="header">
+    <div class="m-scene" id="header" @touchmove.stop="touchMove">
       <div class="m-scroll m-margin">
         <ul class="m-selected-scene-ul">
           <li v-for="(item,index) in scene_list" @click="sceneClick(index)">
@@ -13,6 +13,7 @@
         </ul>
       </div>
       <product :list="product_list"></product>
+      <bottom-line v-if="bottom_show"></bottom-line>
       <span class="m-icon-top"></span>
     </div>
 
@@ -41,7 +42,8 @@
             }
         },
         components: {
-          product
+          product,
+          bottomLine
         },
         mounted(){
             common.changeTitle('场景推荐');
@@ -85,12 +87,9 @@
           },
           //获取商品列表
           getProduct(itid){
-            let _pcid = this.$route.query.pcid || '';
-            let _kw = this.$route.query.kw || '';
             let start = this.page_info.page_num;
             axios.get(api.product_list,{
               params:{
-                pcid:_pcid,
                 page_size:this.page_info.page_size,
                 page_num:start,
                 token:localStorage.getItem('token'),
@@ -146,6 +145,26 @@
           //滚动到顶部
           returnTop:function(){
             document.querySelector("#header").scrollIntoView(true);
+          },
+          //滚动加载更多
+          touchMove(e){
+            let scrollTop = common.getScrollTop();
+            let scrollHeight = common.getScrollHeight();
+            let ClientHeight = common.getClientHeight();
+            if (scrollTop + ClientHeight  >= scrollHeight -10) {
+              if(this.isScroll){
+                this.isScroll = false;
+                if(this.product_list.length == this.total_count){
+                  this.bottom_show = true;
+                }else{
+                  for(let i =0;i<this.nav_list.length;i++){
+                    if(this.nav_list[i].active ){
+                      this.getProduct(this.nav_list[i].itid);
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         created() {
