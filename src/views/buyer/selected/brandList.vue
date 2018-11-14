@@ -1,43 +1,19 @@
 <template>
-    <div class="m-brandList">
-      <div class="m-nav">
+    <div class="m-brandList" @touchmove="touchMove">
+      <div class="m-nav isFixed" >
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-bandList-content">
-        <div class="m-one-brand-part">
-          <h3>精选大牌 /</h3>
-          <ul class="m-brand-ul">
-            <li @click="changeRoute('/brandDetail')">
-              <img src="" alt="">
-            </li>
-            <li>
-              <img src="" alt="">
-            </li>
-            <li>
-              <img src="" alt="">
-            </li>
-            <li>
-              <img src="" alt="">
-            </li>
-          </ul>
-        </div>
-        <div class="m-one-brand-part">
-          <h3>精选大牌 /</h3>
-          <ul class="m-brand-ul">
-            <li>
-              <img src="" alt="">
-            </li>
-            <li>
-              <img src="" alt="">
-            </li>
-            <li>
-              <img src="" alt="">
-            </li>
-            <li>
-              <img src="" alt="">
-            </li>
-          </ul>
-        </div>
+        <template v-for="(items,index) in brand_list">
+          <div class="m-one-brand-part" :ref="items.itid" :id="items.itid">
+            <h3>{{items.itname}}</h3>
+            <ul class="m-brand-ul">
+              <li @click="changeRoute('/brandDetail',item)" v-for="item in items.brands">
+                <img :src="item.pblogo" alt="">
+              </li>
+            </ul>
+          </div>
+        </template>
       </div>
     </div>
 </template>
@@ -52,7 +28,8 @@
     export default {
       data(){
           return{
-            nav_list:[]
+            nav_list:[],
+            brand_list:null,
           }
         },
       components: {
@@ -64,6 +41,12 @@
         this.getNav();
       },
       methods:{
+        touchMove(){
+          let scrollTop = this.$refs.scrollTop;
+          let scrollHeight = common.getScrollHeight();
+          let ClientHeight = common.getClientHeight();
+          console.log(scrollTop,scrollHeight,ClientHeight)
+        },
         //改变路由
         changeRoute(v){
           this.$router.push(v)
@@ -75,7 +58,10 @@
             arr[i].active = false;
           }
           arr[index].active = true;
-          this.nav_list = [].concat(arr)
+          this.nav_list = [].concat(arr);
+          // let id = arr[index].itid;
+          // console.log(document.getElementById(id).scrollIntoView());
+
         },
       //  获取标签
         getNav(){
@@ -95,8 +81,10 @@
         },
       //  获取品牌列表
         getBrand(){
-          axios.get(api.brand_list).then(res => {
-
+          axios.get(api.list_with_group).then(res => {
+            if(res.data.status == 200){
+              this.brand_list = res.data.data;
+            }
           })
         }
       }
@@ -108,13 +96,22 @@
   .m-brandList{
     .m-nav{
       padding-left: 35px;
+      padding-top: 28px;
       width: 715px;
       box-shadow:0 3px 6px rgba(0,0,0,0.16);
       padding-bottom: 10px;
-      margin: 28px 0 48px;
+      margin: 0 0 48px;
+      background-color: #fff;
+      &.isFixed{
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+      }
     }
     .m-bandList-content{
       text-align: left;
+      padding-top: 120px;
       .m-one-brand-part{
         h3{
           padding: 0 0 48px 34px;
@@ -131,7 +128,7 @@
               display: block;
               width: 150px;
               height: 150px;
-              background-color: #9fd0bf;
+              /*background-color: #9fd0bf;*/
             }
             margin-right: 80px;
             &:nth-child(3n){
