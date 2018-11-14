@@ -65,6 +65,18 @@
           </div>
         </div>
       </div>
+      <div class="m-product-text-box">
+        <div class="m-text-box-left">商品详情图</div>
+        <div class="m-text-box-right">
+          <div class="m-product-imgs">
+            <img class="m-product-img" src="/static/images/icon-upload-img.png" alt="">
+            <img class="m-product-img" src="/static/images/icon-upload-img.png" alt="">
+            <img class="m-product-img" src="/static/images/icon-upload-img.png" alt="">
+            <img class="m-product-img" src="/static/images/icon-upload-img.png" alt="">
+            <img class="m-product-img" src="/static/images/icon-upload-img.png" alt="">
+          </div>
+        </div>
+      </div>
     </div>
     <!--商品规格组合-->
     <div class="m-content-radius">
@@ -169,10 +181,6 @@
         </div>
       </div>
     </div>
-
-
-
-
     <!--发货按钮-->
     <div class="m-submit-btn" @click="submitProduct">发 布</div>
   </div>
