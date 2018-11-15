@@ -8,16 +8,16 @@
         <span class="m-icon-set" @click="changeRoute('/personal/setUp')"></span>
       </p>
       <div class="m-personal-info">
-        <img class="m-personal-head-portrait" :src="person.usheader" alt="">
+        <img class="m-personal-head-portrait" :src="user.usheader" alt="">
         <div class="m-personal-info-box">
           <div class="m-personal-info-text">
             <div>
-              <p>{{person.usname}}</p>
+              <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity">行装会员</span>
+                <span class="m-personal-identity">{{user.usidname}}</span>
               </p>
             </div>
-            <img class="m-code-img" :src="person.usqrcode" @click="changeRoute('/personal/code')">
+            <img class="m-code-img" :src="user.usqrcode" @click="changeRoute('/personal/code')">
           </div>
           <ul class="m-personal-ul">
             <li @click="changeRoute('/personal/coupon')">
@@ -28,7 +28,7 @@
             <li @click="changeRoute('/personal/integral')">
               <span class="m-icon-integral"></span>
               <span class="m-name">可用积分</span>
-              <span>{{person.usintegral}}</span>
+              <span>{{user.usintegral}}</span>
             </li>
           </ul>
         </div>
@@ -95,7 +95,7 @@
     data() {
       return {
         name: '',
-        person: {},              // 个人信息
+        user: {},              // 个人信息
       }
     },
     components: {},
@@ -105,10 +105,10 @@
         this.$router.push(v)
       },
       // 获取个人信息
-      getPerson() {
+      getUser() {
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
-            this.person = res.data.data;
+            this.user = res.data.data;
           }else{
             Toast(res.data.message);
           }
@@ -116,7 +116,7 @@
       }
     },
     mounted() {
-      this.getPerson();       // 获取个人信息
+      this.getUser();       // 获取个人信息
     }
   }
 </script>
