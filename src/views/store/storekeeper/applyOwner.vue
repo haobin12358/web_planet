@@ -5,13 +5,13 @@
     </div>
     <div class="m-personal-content m-setUp">
       <div class="m-personal-info">
-        <img src="" class="m-personal-head-portrait" alt="">
+        <img class="m-personal-head-portrait" :src="user.usheader" alt="">
         <div class="m-personal-info-box">
           <div class="m-personal-info-text">
             <div>
-              <p>居居女孩</p>
+              <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity">行装会员</span>
+                <span class="m-personal-identity">{{user.usidname}}</span>
               </p>
             </div>
           </div>
@@ -20,31 +20,28 @@
       <div class="m-personal-body">
         <div class="m-one-part">
           <ul class="m-edit-ul">
-            <li @click="changeRoute('/personal/addressManagement')">
+            <li>
               <div>
                 <span>姓名</span>
               </div>
               <div>
-                <span>居居</span>
+                <input type="text" class="m-edit-input" v-model="user.usrealname" placeholder="请输入真实姓名">
               </div>
             </li>
-            <li>
+            <li @click="genderPopup = true">
               <div>
                 <span>性别</span>
               </div>
               <div>
-                <span>保密</span>
+                <span>{{user.usGender}}</span>
               </div>
-              <!--<div>
-                <span class="m-icon-down"></span>
-              </div>-->
             </li>
             <li>
               <div>
-                <span>电话</span>
+                <span>手机号</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input" placeholder="18356543566">
+                <input type="text" class="m-edit-input" v-model="user.ustelphone" placeholder="请输入手机号">
               </div>
             </li>
             <li @click="changeRoute('/storekeeper/IDCardApprove')">
@@ -52,11 +49,19 @@
                 <span>身份证认证</span>
               </div>
               <div>
-                <span></span>
+                <span>{{idStatus}}</span>
                 <span class="m-icon-more"></span>
               </div>
             </li>
           </ul>
+          <!--性别picker-->
+          <mt-popup class="m-gender-popup" v-model="genderPopup" position="bottom">
+            <div class="m-popup-btn">
+              <div @click="genderPopup = false">取消</div>
+              <div @click="genderDone">确认</div>
+            </div>
+            <mt-picker :slots="slots" @change="genderChange"></mt-picker>
+          </mt-popup>
         </div>
       </div>
     </div>
@@ -72,13 +77,20 @@
 <script type="text/ecmascript-6">
   import { MessageBox } from 'mint-ui';
   import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
   export default {
     data() {
       return {
         name: 'applyOwner',
-        submitStatus: "",       // 成为店主的申请状态
-        submitDone: false,             // 成为店主的申请是否已提交
+        user: {},       // 用户信息
+        genderPopup: false,             // 性别picker
+        idStatus: "",                   // 用户是否已完成身份认证
+        submitStatus: "",               // 成为店主的申请状态
+        submitDone: false,              // 成为店主的申请是否已提交
+        slots: [{ values: ['男', '女'] }],
       }
     },
     components: {},
@@ -91,20 +103,81 @@
       submitApply() {
         MessageBox.confirm('是否确认提交该申请?').
         then(() => {
-          this.submitStatus = "申请中";
-          this.submitDone = true;
+          let params = {
+            ustelphone: this.user.ustelphone,
+            usrealname: this.user.usrealname,
+          };
+          if(this.user.usGender == "男") {
+            params.usgender = "0";
+          }else if(this.user.usGender == "女") {
+            params.usgender = "1";
+          }
+          // console.log(params);
+          axios.post(api.upgrade_agent + '?token=' + localStorage.getItem('token'), params).then(res => {
+            console.log(res);
+            if(res.data.status == 200){
+              this.submitStatus = "申请中";
+              this.submitDone = true;
+              Toast("提交成功");
+            }else{
+              Toast(res.data.message);
+            }
+          });
+
+
         }).catch(() => {
           this.submitStatus = "";
           this.submitDone = false;
         });
+      },
+      // 获取用户信息
+      getUser() {
+        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            this.user = res.data.data;
+            // 性别判断
+            if(this.user.usgender == "0") {
+              this.user.usGender = "男";
+            }else if(this.user.usgender == "1") {
+              this.user.usGender = "女";
+            }
+            // 身份证认证状态判断
+            if(this.user.usidentification == "") {
+              this.idStatus = "待认证";
+            }else {
+              this.idStatus = "已认证";
+            }
+          }else{
+            Toast(res.data.message);
+          }
+        });
+      },
+      genderDone() {
+        // this.user.usGender = values[0];
+        this.genderPopup = false;
+      },
+      // picker选择的银行改变
+      genderChange(picker, values) {
+        this.user.usGender = values[0];
       }
     },
     mounted() {
       common.changeTitle('店主申请');
+
+      this.getUser();     // 获取用户信息
     }
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/personal";
 
+  .m-gender-popup {
+    width: 750px;
+    .m-popup-btn {
+      display: flex;
+      justify-content: space-between;
+      font-size: 28px;
+      padding: 20px 40px 0 40px;
+    }
+  }
 </style>

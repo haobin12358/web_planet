@@ -1,5 +1,5 @@
 
-// const title = 'http://10.0.0.63:7443';
+// const title = 'http://10.0.0.119:7443';
 // const title = 'http://120.79.182.43:7443';
 const title = 'https://planet.daaiti.cn/api/v1';
 
@@ -35,7 +35,8 @@ const api={
   list_product_index: title +'/index/list_product',//获取首页显示的品牌商品
   brand_recommend_index : title + '/index/brand_recommend',//获取首页品牌模块数据
 
-  get_home : title + '/user/get_home',//获取首页品牌模块数据
+  get_home : title + '/user/get_home',              // 获取用户个人信息
+  upgrade_agent : title + '/user/upgrade_agent',    // 获取用户个人信息
 
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情
