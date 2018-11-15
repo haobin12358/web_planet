@@ -125,7 +125,19 @@
           },
           //结算
           payOrder(e){
-            this.$router.push('/submitOrder');
+            let caid = [];
+            for(let i=0;i<this.cart_list.length;i++){
+              for(let j =0;j<this.cart_list[i].cart.length;j++){
+                if(this.cart_list[i].cart[j].active){
+                  if(caid[i]){
+                    caid[i].cart.push(this.cart_list[i].cart[j])
+                  }else{
+                    caid[i] = {cart:[this.cart_list[i].cart[j]],pb:this.cart_list[i].pb}
+                  }
+                }
+              }
+            }
+            this.$router.push({path:'/submitOrder',query:{product:JSON.stringify(caid)}});
           },
         //  获取购物车信息
           getCart(){

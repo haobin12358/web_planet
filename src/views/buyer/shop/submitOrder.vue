@@ -16,18 +16,26 @@
         <span class="m-icon-more"></span>
       </div>
       <div class="m-one-part">
-        <h3>北面</h3>
-        <div class="m-product">
-          <img src="" class="m-product-img" alt="">
-          <div>
-            <h3>北面防雨防风软壳衣</h3>
-            <p class="m-sku-select">绿色；XL</p>
-            <p class="m-price-num">
-              <span class="m-price">￥899</span>
-              <span>x1</span>
-            </p>
+        <div v-for="(items,index) in product_info">
+          <h3>{{items.pb.pbname}}</h3>
+          <div class="m-product" v-for="(item,i) in items.cart">
+            <img :src="item.sku.skupic" class="m-product-img" alt="">
+            <div>
+              <h3>{{item.product.prtitle}}</h3>
+              <p class="m-sku-select">
+                <template v-for="(key,k) in item.sku.skuattritedetail" >
+                  <span >{{key}}</span>
+                  <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
+                </template>
+              </p>
+              <p class="m-price-num">
+                <span class="m-price">￥{{item.sku.skuprice | money}}</span>
+                <span>x{{item.canums}}</span>
+              </p>
+            </div>
           </div>
         </div>
+
       </div>
       <div class="m-one-part">
         <ul class="m-order-ul">
@@ -75,13 +83,24 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui';
     export default {
         data() {
             return {
-                name: ''
+                product_info:null
             }
         },
         components: {},
+      mounted(){
+          common.changeTitle('下单');
+          if(this.$route.query.product){
+            this.product_info = JSON.parse(this.$route.query.product);
+            console.log(this.product_info)
+          }
+      },
         methods: {},
         created() {
 
