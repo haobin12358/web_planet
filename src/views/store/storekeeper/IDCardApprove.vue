@@ -21,10 +21,10 @@
     <img class="m-IDCard-img" v-if="!user.umback" src="/static/images/icon-upload-IDCard-img.png" alt="">
 
     <div class="m-foot-btn">
-      <span @click="submitUser">提交认证</span>
-      <div class="m-footer-btn-box">
-        <div class="m-footer-btn m-grey">返回</div>
-        <div class="m-footer-btn m-yellow">再次编辑</div>
+      <span @click="submitUser" v-if="!user.usidentification">提交认证</span>
+      <div class="m-footer-btn-box" v-if="user.usidentification">
+        <div class="m-footer-btn m-grey" @click="goBack">返 回</div>
+        <div class="m-footer-btn m-yellow" @click="editAgain">再次编辑</div>
       </div>
     </div>
   </div>
@@ -49,7 +49,6 @@
       getIdentifyinginfo() {
         axios.get(api.get_identifyinginfo + '?token=' + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
-            // console.log(res.data.data);
             this.user = res.data.data;
           }else{
             Toast(res.data.message);
@@ -80,6 +79,14 @@
             Toast(res.data.message);
           }
         });
+      },
+      // 返回上一页
+      goBack() {
+        this.$router.go(-1);
+      },
+      // 再次编辑
+      editAgain() {
+        this.user.usidentification = "";
       }
     },
     mounted() {
@@ -106,7 +113,7 @@
         border: 1px #999999 solid;
         border-radius: 30px;
         font-size: 24px;
-        padding: 5px 0 0 30px;
+        padding: 3px 0 0 30px;
       }
       .m-name-input {
         width: 220px;
@@ -135,12 +142,13 @@
         box-shadow: 0 5px 6px rgba(0,0,0,0.16);
       }
       .m-footer-btn-box {
+        margin: 50px 30px 0 30px;
         display: flex;
         justify-content: space-between;
         .m-footer-btn {
           width: 300px;
           height: 106px;
-          line-height: 106px;
+          line-height: 116px;
           font-size: 30px;
           font-weight: bold;
           border-radius: 10px;
