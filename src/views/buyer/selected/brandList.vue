@@ -54,7 +54,6 @@
                 // break;
               }
             // }
-
           }
           for(let i=0;i<arr.length;i++){
             arr[i].active = false;
@@ -63,8 +62,8 @@
           this.nav_list= [].concat(arr);
         },
         //改变路由
-        changeRoute(v){
-          this.$router.push(v)
+        changeRoute(v,item){
+          this.$router.push({path:v,query:{pbid:item.pbid,pbname:item.pbname}})
         },
         //导航切换
         navClick(index){

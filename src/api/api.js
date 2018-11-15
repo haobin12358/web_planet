@@ -40,6 +40,7 @@ const api={
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情
   list_with_group: title + '/brand/list_with_group',//获取品牌列表
+  get_one_brand: title + '/brand/get',//获取一个品牌
 };
 
 export default api
