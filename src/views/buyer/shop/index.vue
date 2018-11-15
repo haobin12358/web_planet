@@ -137,7 +137,12 @@
                 }
               }
             }
-            this.$router.push({path:'/submitOrder',query:{product:JSON.stringify(caid)}});
+            if(caid.length >0){
+              this.$router.push({path:'/submitOrder',query:{product:JSON.stringify(caid)}});
+            }else{
+              Toast('请先选择商品');
+            }
+
           },
         //  获取购物车信息
           getCart(){
@@ -289,9 +294,7 @@
                   }
                 }
                 break;
-
             }
-
             if(name != 'all'){
               let store_length = 0;
               for(let y = 0;y<arr.length;y++){
