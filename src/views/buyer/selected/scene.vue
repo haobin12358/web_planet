@@ -77,7 +77,10 @@
             }).then(res => {
               if(res.data.status == 200){
                 if(res.data.data.length == 0){
-                  this.nav_list = []
+                  this.nav_list = [];
+                  this.product_list = [];
+                  this.total_count = 1;
+                  this.page_info.page_num = 1;
                 }else{
                   for(let i=0;i<res.data.data.length;i++){
                     res.data.data[i].active = false;
@@ -111,6 +114,9 @@
                   this.total_count = res.data.total_count;
                   this.page_info.page_num = this.page_info.page_num +1;
                 }else{
+                  this.product_list = [];
+                  this.total_count = 1;
+                  this.page_info.page_num = 1;
                   return false;
                 }
               } else{

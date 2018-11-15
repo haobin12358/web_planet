@@ -4,16 +4,19 @@
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-bandList-content">
-        <template v-for="(items,index) in brand_list">
-          <div class="m-one-brand-part" :ref="items.itid" :id="items.itid">
-            <h3>{{items.itname}}</h3>
-            <ul class="m-brand-ul">
-              <li @click="changeRoute('/brandDetail',item)" v-for="item in items.brands">
-                <img :src="item.pblogo" alt="">
-              </li>
-            </ul>
-          </div>
-        </template>
+        <div class="m-scroll-content">
+          <template v-for="(items,index) in brand_list">
+            <div class="m-one-brand-part" :ref="items.itid" :id="items.itid">
+              <h3>{{items.itname}}</h3>
+              <ul class="m-brand-ul">
+                <li @click="changeRoute('/brandDetail',item)" v-for="item in items.brands">
+                  <img :src="item.pblogo" alt="">
+                </li>
+              </ul>
+            </div>
+          </template>
+        </div>
+
       </div>
     </div>
 </template>
@@ -42,14 +45,25 @@
       },
       methods:{
         touchMove(){
-          let scrollTop = this.$refs.scrollTop;
-          let scrollHeight = common.getScrollHeight();
-          let ClientHeight = common.getClientHeight();
-          console.log(scrollTop,scrollHeight,ClientHeight)
+          let arr = [].concat(this.nav_list);
+          let _i = 0;
+          for(let i=0;i<arr.length;i++){
+            // if(document.getElementById(arr[i].itid)){
+              if(document.getElementById(arr[i].itid).offsetTop-20 < common.getScrollTop()){
+                _i = i;
+                // break;
+              }
+            // }
+          }
+          for(let i=0;i<arr.length;i++){
+            arr[i].active = false;
+          }
+          arr[_i].active = true;
+          this.nav_list= [].concat(arr);
         },
         //改变路由
-        changeRoute(v){
-          this.$router.push(v)
+        changeRoute(v,item){
+          this.$router.push({path:v,query:{pbid:item.pbid,pbname:item.pbname}})
         },
         //导航切换
         navClick(index){
@@ -59,8 +73,9 @@
           }
           arr[index].active = true;
           this.nav_list = [].concat(arr);
-          // let id = arr[index].itid;
-          // console.log(document.getElementById(id).scrollIntoView());
+          let id = arr[index].itid;
+          // console.log(document.getElementById(id).scrollTop)
+         document.getElementById(id).scrollIntoView();//滚动到顶部
 
         },
       //  获取标签
@@ -94,9 +109,10 @@
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../../common/css/index";
   .m-brandList{
+    /*padding-top: 120px;*/
     .m-nav{
       padding-left: 35px;
-      padding-top: 28px;
+      padding-top: 10px;
       width: 715px;
       box-shadow:0 3px 6px rgba(0,0,0,0.16);
       padding-bottom: 10px;
@@ -111,10 +127,19 @@
     }
     .m-bandList-content{
       text-align: left;
-      padding-top: 120px;
+      /*height: 1200px;*/
+      /*overflow-x: hidden;*/
+      /*overflow-y: auto;*/
+      position: absolute;
+      top: 0;
+      left: 0;
+      .m-scroll-content{
+        height: auto;
+        overflow-y: auto;
+      }
       .m-one-brand-part{
         h3{
-          padding: 0 0 48px 34px;
+          padding:  80px 0 48px 34px;
           font-size: 36px;
           font-weight: bold;
         }

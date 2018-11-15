@@ -71,7 +71,7 @@
         </h3>
         <div class="m-scroll ">
           <ul class="m-selected-brand-ul" v-if="brand_list">
-            <li v-for="(item,index) in brand_list" >
+            <li v-for="(item,index) in brand_list" @click="changeRoute('/brandDetail',item)">
               <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="" >
             </li>
           </ul>
@@ -259,8 +259,8 @@
             })
           },
           /*查看更多*/
-          changeRoute(v){
-            this.$router.push(v)
+          changeRoute(v,item){
+            this.$router.push({path:v,query:{pbid:item.pbid}});
           },
           // 判断是否是店主并跳转页面
           toStore() {
