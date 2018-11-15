@@ -101,7 +101,12 @@
             console.log(this.product_info)
           }
       },
-        methods: {},
+        methods: {
+          /*获取地址*/
+          getAddress(){
+
+          }
+        },
         created() {
 
         }
@@ -232,11 +237,8 @@
   }
   .m-order-btn{
     padding: 0;
-    margin: 0;
     width: 700px;
-    position: fixed;
-    bottom: 83px;
-    left: 25px;
+    margin-top: 120px;
     span{
       display: inline-block;
       width: 700px;
