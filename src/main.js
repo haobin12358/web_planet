@@ -33,7 +33,7 @@ import promise from 'es6-promise';//解决axios在ie9下不生效的方法
 promise.polyfill();
 //
 // // let token = "eyJhbGciOiJIUzI1NiIsImV4cCI6MTUzOTYwMjMyOCwiaWF0IjoxNTM5NTk1MTI4fQ.eyJtb2RlbCI6IlVzZXIiLCJpZCI6Impma3NhZGpmLWZkYXNsa2pmLTMyMTMtMzEyMzEiLCJ0aW1lIjoiMjAxOC0xMC0xNSAxNzoxODo0OCJ9.GPSNz79JnUbsXOQ3BwD-e-Q5_XFrqPE__X2PYQ9XMGc";
-let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjE2MTExNCwiZXhwIjoxNTQyNzY1OTE0fQ.eyJpZCI6ImI5ODkxYTU2LWU3YjEtMTFlOC04NjRlLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.c7sGQTMuwU_QOB4uTGsidz4180LlP1UuTYBVmLIZ3BE'
+let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjI1MzM4MywiZXhwIjoxNTQyODU4MTgzfQ.eyJpZCI6ImI5ODkxYTU2LWU3YjEtMTFlOC04NjRlLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjozfQ.zx3AO-wWAgkEAUov-VWDiJ0YI7RHvlGDGMONZ6eKmV8';
 localStorage.setItem('token', token);
 
 
