@@ -6,7 +6,7 @@
       <div class="m-shop-content" @touchmove.stop="touchMove">
         <h3 class="m-shop-title">
           <span class="m-title">购物车</span>
-          <span>管理</span>
+          <span @click="changeManage">管理</span>
         </h3>
         <p class="m-p">共{{total_number}}件商品</p>
 
@@ -15,14 +15,14 @@
           <!--<p>购物车空空如也,<span class="m-red">去下单</span>吧~</p>-->
         <!--</div>-->
         <template v-for="(items,index) in cart_list" >
-          <div class="m-shop-one" :key="items.pb.pbid">
+          <div class="m-shop-one" >
             <div class="m-shop-store-name">
               <span class="m-icon-radio" :class="items.active?'active':''" @click="radioClick('store',index)"></span>
               <span>{{items.pb.pbname}}</span>
               <span class="m-icon-more" ></span>
             </div>
             <template v-for="(item,i) in items.cart" >
-              <div class="m-shop-product " :key="item.prid">
+              <div class="m-shop-product " >
                 <span class="m-icon-radio" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
                 <div class="m-product-info" @click="changeRoute('praoduct',item)">
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
@@ -31,7 +31,7 @@
                     <p class="m-product-sku-select-p">
                   <span class="m-product-sku-select" @click.stop="skuSelect(index,i,item)">
                     <template v-for="(key,k) in item.sku.skuattritedetail" >
-                      <span :key="key">{{key}}</span>
+                      <span >{{key}}</span>
                       <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
                     </template>
                     <span class="m-sku-more"></span>
@@ -55,11 +55,14 @@
       </div>
       <div class="m-shop-foot">
          <span class="m-icon-radio" :class="allRadio?'active':''" @click="radioClick('all')"></span>
-         <div>
+         <div v-if="!isManage">
            <span>合计</span>
            <span class="m-red">￥{{total_money | money}}</span>
            <span class="m-shop-btn" @click.stop="payOrder">结算</span>
          </div>
+        <div v-else>
+          <span class="m-shop-btn" @click.stop="DestroyCart">删除</span>
+        </div>
       </div>
     </div>
 
@@ -106,7 +109,8 @@
               sku_pb_index:null,
               sku_pr_index:null,
               allRadio:false,
-              total_money:0
+              total_money:0,
+              isManage:false
             }
         },
         components: {
@@ -141,6 +145,10 @@
                   }
                   this.page_info.page_num = this.page_info.page_num +1;
                 }else{
+                  this.cart_list = [];
+                  this.page_info.page_num = 1;
+                  this.total_count = 0;
+                  this.total_number =  0;
                   return false;
                 }
                 let arr = [].concat(this.cart_list);
@@ -296,6 +304,30 @@
             this.updateCart(this.cart_list[index].cart[i].sku,this.cart_list[index].cart[i].canums,'num',this.cart_list[index].cart[i].caid);
             this.dealMoney();
           },
+          /*删除*/
+          DestroyCart(){
+            let caid = [];
+            for(let i=0;i<this.cart_list.length;i++){
+              for(let j =0;j<this.cart_list[i].cart.length;j++){
+                if(this.cart_list[i].cart[j].active){
+                  caid.push(this.cart_list[i].cart[j].caid)
+                }
+              }
+            }
+            axios.post(api.cart_destroy + '?token='+ localStorage.getItem('token'),{
+              caids:caid
+            }).then(res => {
+              if(res.data.status == 200){
+                this.page_info.page_num = 1;
+                this.total_count = 1;
+                this.getCart();
+              }
+            })
+          },
+          /*点击管理*/
+          changeManage(){
+            this.isManage = !this.isManage;
+          }
         },
         created() {
 
@@ -329,7 +361,7 @@
     }
   }
   .m-shop-content{
-    padding: 0 25px;
+    padding: 0 25px 200px 25px;
     text-align: left;
     position: absolute;
     top:0;

@@ -132,6 +132,8 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/scroll";
   .m-equipment{
+    min-height: 100%;
+    background-color: #fff;
     .m-selected-search{
       justify-content: center;
       .m-search-input-box{

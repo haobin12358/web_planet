@@ -84,6 +84,8 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
   .m-equipment-detail{
+    background-color: #fff;
+    min-height: 100%;
     .m-equipment-info{
       position: relative;
       width: 100%;

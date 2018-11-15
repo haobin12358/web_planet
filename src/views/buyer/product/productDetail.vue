@@ -146,6 +146,7 @@
           this.canums = num;
           this.select_value = item;
           this.postCart();
+          this.changeModal('show_sku',false);
         },
       //  加入购物请求
         postCart(){
@@ -155,7 +156,6 @@
           }).
           then(res => {
             if(res.data.status == 200){
-              this.show_sku = false;
               Toast({ message: res.data.message,duration:1000, className: 'm-toast-success' });
             }else{
               Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
