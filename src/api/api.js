@@ -35,8 +35,10 @@ const api={
   list_product_index: title +'/index/list_product',//获取首页显示的品牌商品
   brand_recommend_index : title + '/index/brand_recommend',//获取首页品牌模块数据
 
-  get_home : title + '/user/get_home',              // 获取用户个人信息
-  upgrade_agent : title + '/user/upgrade_agent',    // 获取用户个人信息
+  get_home : title + '/user/get_home',                            // 获取用户个人信息
+  upgrade_agent : title + '/user/upgrade_agent',                  // 店主申请
+  check_idcode : title + '/user/check_idcode',                    // 实名认证 - 身份证
+  get_identifyinginfo : title + '/user/get_identifyinginfo',      // 获取个人身份证详情
 
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情

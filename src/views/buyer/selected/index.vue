@@ -2,7 +2,7 @@
     <div class="m-selected">
       <!--搜索-->
       <div class="m-selected-search">
-        <span class="m-icon-home"></span>
+        <span class="m-icon-home" @click="toStore"></span>
         <div class="m-search-input-box" @click="changeRoute('/search')">
           <span class="m-icon-search"></span>
           <span>搜索商品</span>
@@ -210,6 +210,8 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
+
     export default {
         data() {
             return {
@@ -259,6 +261,19 @@
           /*查看更多*/
           changeRoute(v){
             this.$router.push(v)
+          },
+          // 判断是否是店主并跳转页面
+          toStore() {
+            axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+              if(res.data.status == 200){
+                // console.log(res.data.data);
+                if(res.data.data.uslevel == 1) {
+                  this.$router.push("storekeeper/applyOwner");
+                }
+              }else{
+                Toast(res.data.message);
+              }
+            });
           },
           /*场景点击*/
           sceneClick(item){

@@ -58,7 +58,7 @@
           <mt-popup class="m-gender-popup" v-model="genderPopup" position="bottom">
             <div class="m-popup-btn">
               <div @click="genderPopup = false">取消</div>
-              <div @click="genderDone">确认</div>
+              <div @click="genderPopup = false">确认</div>
             </div>
             <mt-picker :slots="slots" @change="genderChange"></mt-picker>
           </mt-popup>
@@ -85,7 +85,7 @@
     data() {
       return {
         name: 'applyOwner',
-        user: {},       // 用户信息
+        user: {},                       // 用户信息
         genderPopup: false,             // 性别picker
         idStatus: "",                   // 用户是否已完成身份认证
         submitStatus: "",               // 成为店主的申请状态
@@ -114,7 +114,6 @@
           }
           // console.log(params);
           axios.post(api.upgrade_agent + '?token=' + localStorage.getItem('token'), params).then(res => {
-            console.log(res);
             if(res.data.status == 200){
               this.submitStatus = "申请中";
               this.submitDone = true;
@@ -123,8 +122,6 @@
               Toast(res.data.message);
             }
           });
-
-
         }).catch(() => {
           this.submitStatus = "";
           this.submitDone = false;
@@ -152,10 +149,6 @@
           }
         });
       },
-      genderDone() {
-        // this.user.usGender = values[0];
-        this.genderPopup = false;
-      },
       // picker选择的银行改变
       genderChange(picker, values) {
         this.user.usGender = values[0];
@@ -163,7 +156,6 @@
     },
     mounted() {
       common.changeTitle('店主申请');
-
       this.getUser();     // 获取用户信息
     }
   }
