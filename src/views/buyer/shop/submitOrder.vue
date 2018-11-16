@@ -1,7 +1,15 @@
 <template>
     <div class="m-submitOrder">
-      <div class="m-one-part m-pl-s m-pr-s m-address-part" v-if="address_info">
-        <div class="m-left">
+      <div class="m-one-part m-pl-s m-pr-s m-address-part" @click="changeRoute('personal/addressManagement')">
+        <div class="m-left" v-if="!address_info.uaphone">
+          <div class="m-address-name">
+            <div>
+              <span class="m-border"></span>
+              <span>{{address_info.uaname}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="m-left" v-if="address_info.uaphone">
           <div class="m-address-name">
             <div>
               <span class="m-border"></span>
@@ -103,29 +111,27 @@
   import api from '../../../api/api';
   import {Toast} from 'mint-ui';
   import coupon from '../components/couponCard';
+
     export default {
-        data() {
-            return {
-                product_info:null,
-              show_picker :false,
-              show_coupon:false,
-              slots: [
-                {
-                  flex: 1,
-                  values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
-                  className: 'slot1',
-                  textAlign: 'center'
-                }
-              ],
-              picker_params:'company',
-              address_info:null,
-              coupon_info:null
+      data() {
+        return {
+          product_info:null,
+          show_picker :false,
+          show_coupon:false,
+          slots: [
+            {
+              flex: 1,
+              values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+              className: 'slot1',
+              textAlign: 'center'
             }
-        },
-        components: {
-          picker,
-          coupon
-        },
+          ],
+          picker_params: 'company',
+          address_info: {},
+          coupon_info: null
+        }
+      },
+      components: { picker, coupon },
       mounted(){
           common.changeTitle('下单');
           if(this.$route.query.product){
@@ -135,15 +141,17 @@
           this.getCoupon();
       },
         methods: {
+          // 跳转其他页面的方法
+          changeRoute(v) {
+            this.$router.push(v)
+          },
           /*获取地址*/
           getAddress(){
-            axios.get(api.get_one_address,{
-              params:{
-                token:localStorage.getItem('token')
-              }
-            }).then(res => {
+            axios.get(api.get_one_address + "?token=" + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200){
                 this.address_info = res.data.data;
+              }else{
+                this.address_info.uaname = "没有地址信息，请点此添加";
               }
             })
           },
