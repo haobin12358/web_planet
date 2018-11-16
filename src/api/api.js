@@ -53,6 +53,7 @@ const api={
   get_areas: title + '/address/get_areas',//获取区县
   update_address:title + '/user/update_address',//添加用户地址
 
+  list_coupon: title + '/coupon/list',//获取下单优惠券
 };
 
 export default api
