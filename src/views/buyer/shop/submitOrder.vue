@@ -39,14 +39,12 @@
       </div>
       <div class="m-one-part">
         <ul class="m-order-ul">
-          <!--<li class="m-sku-num">-->
-            <!--<span>购买数量</span>-->
-            <!--<div class="m-num">-->
-              <!--<span class="m-icon-cut"></span>-->
-              <!--<input type="text" class="m-num-input" placeholder="0">-->
-              <!--<span class="m-icon-add"></span>-->
-            <!--</div>-->
-          <!--</li>-->
+          <li class="m-sku-num">
+            <span>商品金额</span>
+            <div class="m-num ">
+              ￥{{total_money | money}}
+            </div>
+          </li>
           <li class="m-flex-between">
             <span>配送方式</span>
             <div @click="changeModel('show_picker',true)">
@@ -119,7 +117,8 @@
               ],
               picker_params:'company',
               address_info:null,
-              coupon_info:null
+              coupon_info:null,
+              total_money:0
             }
         },
         components: {
@@ -130,6 +129,13 @@
           common.changeTitle('下单');
           if(this.$route.query.product){
             this.product_info = JSON.parse(this.$route.query.product);
+            let total = 0;
+            for(let i=0;i<this.product_info.length;i++){
+              for(let j=0;j<this.product_info[i].cart.length;j++){
+                total = total+Number(this.product_info[i].cart[j].sku.skuprice)*this.product_info[i].cart[j].canums ;
+              }
+            }
+            this.total_money = total;
           }
           this.getAddress();
           this.getCoupon();
