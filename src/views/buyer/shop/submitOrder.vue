@@ -1,16 +1,16 @@
 <template>
     <div class="m-submitOrder">
-      <div class="m-one-part m-pl-s m-pr-s m-address-part">
+      <div class="m-one-part m-pl-s m-pr-s m-address-part" v-if="address_info">
         <div class="m-left">
           <div class="m-address-name">
             <div>
               <span class="m-border"></span>
-              <span>收货人：居居女孩</span>
+              <span>收货人：{{address_info.uaname}}</span>
             </div>
-            <span>15700000000</span>
+            <span>{{address_info.uaphone}}</span>
           </div>
           <p class="m-address-p">
-            收货地址：杭州市-西湖区-浙江工业大学（屏峰校区）家和西苑14幢112
+            收货地址：{{address_info.addressinfo}}
           </p>
         </div>
         <span class="m-icon-more"></span>
@@ -39,14 +39,14 @@
       </div>
       <div class="m-one-part">
         <ul class="m-order-ul">
-          <li class="m-sku-num">
-            <span>购买数量</span>
-            <div class="m-num">
-              <span class="m-icon-cut"></span>
-              <input type="text" class="m-num-input" placeholder="0">
-              <span class="m-icon-add"></span>
-            </div>
-          </li>
+          <!--<li class="m-sku-num">-->
+            <!--<span>购买数量</span>-->
+            <!--<div class="m-num">-->
+              <!--<span class="m-icon-cut"></span>-->
+              <!--<input type="text" class="m-num-input" placeholder="0">-->
+              <!--<span class="m-icon-add"></span>-->
+            <!--</div>-->
+          <!--</li>-->
           <li class="m-flex-between">
             <span>配送方式</span>
             <div @click="changeModel('show_picker',true)">
@@ -60,7 +60,7 @@
           </li>
           <li class="m-flex-between">
             <span>优惠方式</span>
-            <div>
+            <div @click="changeModel('show_coupon',true)">
               <span class="m-grey">无优惠</span>
               <span class="m-icon-more"></span>
             </div>
@@ -78,7 +78,20 @@
       <div class="m-order-btn">
         <span>支付订单</span>
       </div>
-      <picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>
+      <!--<picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>-->
+
+      <mt-popup
+        v-model="show_coupon"
+        popup-transition="popup-fade" class="m-coupon-modal">
+        <div class="m-coupon-modal-content">
+          <coupon></coupon>
+          <coupon></coupon>
+          <coupon></coupon>
+          <coupon></coupon>
+        </div>
+
+      </mt-popup>
+
     </div>
 
 </template>
@@ -89,11 +102,13 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import {Toast} from 'mint-ui';
+  import coupon from '../components/couponCard';
     export default {
         data() {
             return {
                 product_info:null,
               show_picker :false,
+              show_coupon:false,
               slots: [
                 {
                   flex: 1,
@@ -103,24 +118,48 @@
                 }
               ],
               picker_params:'company',
-
+              address_info:null,
+              coupon_info:null
             }
         },
         components: {
-          picker
+          picker,
+          coupon
         },
       mounted(){
           common.changeTitle('下单');
           if(this.$route.query.product){
             this.product_info = JSON.parse(this.$route.query.product);
-            console.log(this.product_info)
           }
+          this.getAddress();
+          this.getCoupon();
       },
         methods: {
           /*获取地址*/
           getAddress(){
-
+            axios.get(api.get_one_address,{
+              params:{
+                token:localStorage.getItem('token')
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.address_info = res.data.data;
+              }
+            })
           },
+          /*获取优惠券*/
+          getCoupon(){
+            axios.get(api.list_coupon,{
+              params:{
+                token:localStorage.getItem('token')
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.coupon_info = res.data.data;
+              }
+            })
+          },
+          /*改变模态框*/
           changeModel(v,bool){
             this[v] = bool;
           },
@@ -275,6 +314,18 @@
       border-radius: 10px;
       font-weight: bold;
       font-size: 38px;
+    }
+  }
+  .m-coupon-modal{
+    display: flex;
+    flex-flow: column;
+    /*justify-content: center;*/
+    align-items: center;
+    height: 660px;
+    overflow-y: auto;
+    padding-bottom: 40px;
+    .m-coupon-modal-content{
+      padding: 40px 0;
     }
   }
 }
