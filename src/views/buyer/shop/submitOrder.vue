@@ -49,8 +49,8 @@
           </li>
           <li class="m-flex-between">
             <span>配送方式</span>
-            <div>
-              <span>快递:￥10.00</span>
+            <div @click="changeModel('show_picker',true)">
+              <span>快递:包邮</span>
               <span class="m-icon-more"></span>
             </div>
           </li>
@@ -68,8 +68,8 @@
           <li class="m-flex-between">
             <span>付款方式</span>
             <div>
-              <span>支付宝</span>
-              <span class="m-icon-more"></span>
+              <span>微信</span>
+              <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
         </ul>
@@ -78,22 +78,37 @@
       <div class="m-order-btn">
         <span>支付订单</span>
       </div>
+      <picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>
     </div>
 
 </template>
 
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
+  import picker from '../../../components/common/picker';
   import axios from 'axios';
   import api from '../../../api/api';
   import {Toast} from 'mint-ui';
     export default {
         data() {
             return {
-                product_info:null
+                product_info:null,
+              show_picker :false,
+              slots: [
+                {
+                  flex: 1,
+                  values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+                  className: 'slot1',
+                  textAlign: 'center'
+                }
+              ],
+              picker_params:'company',
+
             }
         },
-        components: {},
+        components: {
+          picker
+        },
       mounted(){
           common.changeTitle('下单');
           if(this.$route.query.product){
@@ -105,6 +120,17 @@
           /*获取地址*/
           getAddress(){
 
+          },
+          changeModel(v,bool){
+            this[v] = bool;
+          },
+          /*选择显示隐藏*/
+          pickerSave(v,bool){
+            this[v] = bool
+          },
+          /*搜索*/
+          inputChange(v){
+            console.log(v)
           }
         },
         created() {
