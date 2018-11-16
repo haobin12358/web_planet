@@ -45,14 +45,12 @@ const api={
   list_with_group: title + '/brand/list_with_group',//获取品牌列表
   get_one_brand: title + '/brand/get',//获取一个品牌
 
-
-  get_one_address: title + '/user/get_one_address',//获取单条地址记录
-  get_all_address: title + '/user/get_all_address',//获取所有地址
-  get_provinces: title + '/address/get_provinces',//获取省份
-  get_citys: title + '/address/get_citys',//获取城市
-  get_areas: title + '/address/get_areas',//获取区县
-  update_address:title + '/user/update_address',//添加用户地址
-
+  get_all_address: title + '/user/get_all_address',   // 获取用户所有地址
+  get_one_address: title + '/user/get_one_address',   // 获取单条地址记录
+  update_address: title + '/user/update_address',     // 修改用户收货地址
+  get_provinces: title + '/address/get_provinces',    // 获取所有省份
+  get_citys: title + '/address/get_citys',            // 获取省份下城市
+  get_areas: title + '/address/get_areas',            // 获取城市下的区县
 };
 
 export default api
