@@ -58,7 +58,11 @@
       }
     },
     mounted(){
-
+      if(window.location.hash.indexOf("material") == 2 || window.location.hash.indexOf("selected") == 2) {
+        this.buyer_store = true;
+      }else {
+        this.buyer_store = false;
+      }
     },
     computed:{
       select(){
@@ -75,7 +79,6 @@
         }else {
           this.buyer_store = false;
         }
-        // console.log(val, oldVal);
         this.$store.state.tabbar_select = val;
         common.changeTitle(val);
         switch(val){
