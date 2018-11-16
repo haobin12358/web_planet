@@ -29,7 +29,7 @@
              </div>
              <div class="m-address-edit-box">
                <div>
-                 <span class="m-icon-radio" :class="item.uadefault == 1 ? 'active' : ''" @click="defaultAddress(item, index)"></span>
+                 <span class="m-icon-radio" :class="item.uadefault == '1' ? 'active' : ''" @click="defaultAddress(item, index)"></span>
                  <span>默认地址</span>
                </div>
                <div>
