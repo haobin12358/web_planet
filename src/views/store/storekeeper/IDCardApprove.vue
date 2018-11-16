@@ -148,7 +148,7 @@
         .m-footer-btn {
           width: 300px;
           height: 106px;
-          line-height: 116px;
+          line-height: 106px;
           font-size: 30px;
           font-weight: bold;
           border-radius: 10px;
