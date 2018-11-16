@@ -12,7 +12,7 @@
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
         <div class="m-circle-body">
           <div class="m-video-one">
-            <!--<span class="m-video-label">【运动健身】</span>-->
+            <span class="m-mark-label">审核中</span>
             <h3>谈谈我健身3年的体验</h3>
             <video src="" class="m-video"></video>
             <span class="m-icon-video"></span>
@@ -36,6 +36,7 @@
           </div>
           <div class="m-video-one" @click="changeRoute('/circle/detail')">
             <!--<span class="m-video-label">【运动健身】</span>-->
+            <span class="m-mark-label active">未通过</span>
             <h3>谈谈我健身3年的体验</h3>
             <img src="" class="m-img">
             <!--<span class="m-icon-video"></span>-->
@@ -56,6 +57,9 @@
                 <span class="m-icon-transmit"></span>
               </li>
             </ul>
+            <div class="m-refuse-reason">
+              未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由理由未通过理由未通过理由，请重新发布。
+            </div>
           </div>
           <div class="m-video-one" @click="changeRoute('/circle/detail')">
             <!--<span class="m-video-label">【运动健身】</span>-->
@@ -92,7 +96,26 @@
         data() {
             return {
                 name: '',
-              nav_list:[],
+              nav_list:[
+                {
+                  itdesc: "我是描述",
+                  itid: "1",
+                  itname: "全部",
+                  itrecommend: true,
+                  itsort: null,
+                  ittype: 10,
+                  psid: ""
+                },
+                {
+                  itdesc: "我是描述",
+                  itid: "2",
+                  itname: "我发起的",
+                  itrecommend: true,
+                  itsort: null,
+                  ittype: 10,
+                  psid: ""
+                }
+              ],
               page_info:{
                 page_num:1,
                 page_size:10
@@ -135,11 +158,12 @@
                 if(res.data.data.length == 0){
                   this.nav_list = this.nav_list.concat([])
                 }else{
-                  for(let i=0;i<res.data.data.length;i++){
-                    res.data.data[i].active = false;
+                  let arr=this.nav_list.concat( res.data.data);
+                  for(let i=0;i<arr.length;i++){
+                    arr[i].active = false;
                   }
-                  res.data.data[0].active = true;
-                  this.nav_list = this.nav_list.concat(res.data.data);
+                  arr[0].active = true;
+                  this.nav_list = [].concat(arr);
                 }
               }
             })
@@ -209,6 +233,22 @@
           /*border-radius: 40px;*/
           /*box-shadow: 3px 5px 6px 0 rgba(0, 0, 0, 0.16);*/
           /*}*/
+          .m-mark-label{
+            position: absolute;
+            top:10px;
+            right:0;
+            height: 33px;
+            line-height: 33px;
+            padding: 0 25px;
+            background-color: #E9E9E9;
+            border-radius: 10px  0   0  10px;
+            box-shadow: 3px 5px 6px 0 rgba(0, 0, 0, 0.16);
+            font-size: 18px;
+            color: #999999;
+            &.active{
+              color: #C70000;
+            }
+          }
           h3{
             font-size: 28px;
             font-weight: bold;
@@ -302,6 +342,15 @@
               background-size: 100% 100%;
             }
           }
+          .m-refuse-reason{
+            padding: 14px 0;
+            border-top: 1px solid #CCCCCC;
+            text-align: left;
+            margin: 30px 20px 0 20px;
+            color: #C70000;
+            font-size: 18px;
+          }
+
         }
       }
 
