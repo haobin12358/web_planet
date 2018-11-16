@@ -2,7 +2,7 @@
   <div class="m-material">
     <!--搜索-->
     <div class="m-selected-search">
-      <span class="m-icon-home" @click="changeRoute('/storekeeper/applyOwner')"></span>
+      <span class="m-icon-home"></span>
       <div class="m-search-input-box" @click="changeRoute('/search')">
         <span class="m-icon-search"></span>
         <span>搜索品牌/商品</span>
@@ -75,6 +75,7 @@
 
 <script type="text/ecmascript-6">
   import navList from '../../../components/common/navlist';
+  import common from '../../../common/js/common';
 
   export default {
     data() {
@@ -102,8 +103,8 @@
         this.navList = [].concat(arr);
       }
     },
-    created() {
-
+    mounted() {
+      common.changeTitle('素材');
     }
   }
 </script>

@@ -144,6 +144,11 @@
             }else {
               this.idStatus = "已认证";
             }
+            // 申请成为卖家中
+            if(this.user.uslevel == "3") {
+              this.submitStatus = "申请中";
+              this.submitDone = true;
+            }
           }else{
             Toast(res.data.message);
           }
