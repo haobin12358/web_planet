@@ -39,7 +39,7 @@
                 <input type="text" class="m-addAddress-input" v-model="address.uaphone">
               </div>
             </li>
-            <li class="m-default-address" @click="getAddress">
+            <li class="m-default-address" @click="addressPopup = true">
               <div>
                 <span class="m-border"></span>
                 <span class="m-label"><span class="m-must">*</span> 省市区</span>
@@ -78,14 +78,18 @@
             </li>
           </ul>
 
-          <!--省市区popup-->
+          <!--省市区地址三级联动-->
           <mt-popup class="m-address-popup" v-model="addressPopup" position="bottom">
             <div class="m-popup-btn">
               <div @click="addressPopup = false">取消</div>
-              <div @click="addressPopup = false">确认</div>
+              <div @click="addressDone">确认</div>
             </div>
-            <mt-picker :slots="myAddressSlots" value-key="name" @change="onMyAddressChange"></mt-picker>
-            <p>地址3级联动：{{myAddressProvince}} {{myAddressCity}} {{myAddressArea}}</p>
+            <div class="m-popup-btn">
+              <div></div>
+              <div>{{myAddressProvince}}-{{myAddressCity}}-{{myAddressArea}}</div>
+              <div></div>
+            </div>
+            <mt-picker :slots="myAddressSlots" value-key="name" :visibleItemCount="7" @change="onMyAddressChange"></mt-picker>
           </mt-popup>
 
           <div class="m-foot-btn-save">
@@ -111,8 +115,8 @@
         name: '',
         user: {},
         address: { uadefault: "0" },
-        addressText: "省-市-区",
-        addressPopup: true,
+        addressText: "请选择省-市-区",
+        addressPopup: false,
         myAddressSlots: [
           {
             flex: 1,
@@ -140,9 +144,9 @@
             textAlign: 'center'
           }
         ],
-        myAddressProvince:'',
-        myAddressCity:'',
-        myAddressArea:'',
+        myAddressProvince: '',
+        myAddressCity: '',
+        myAddressArea: '',
       }
     },
     components: {},
@@ -163,63 +167,23 @@
       },
       // 地址三级联动
       onMyAddressChange(picker, values) {
-        console.log(values[0].children[0].children);
-        // console.log([values[0]][0].children[0].children);
-        if(myaddress[0].values){ //这个判断类似于v-if的效果（可以不加，但是vue会报错，很不爽）
-          picker.setSlotValues(1, values[0].children[0].children); // Object.keys()会返回一个数组，当前省的数组
-          picker.setSlotValues(2, myaddress[values[0]][values[0]]); // 区/县数据就是一个数组
-          this.myAddressProvince = myaddress[values[0]];
-          this.myAddressCity = values[1];
-          this.myAddressArea = values[2];
+        if(values[0]) {      // 判断values[0]是否有值
+          picker.setSlotValues(1, values[0].children);    // 将所点击省份拿到的城市list赋值
+          this.myAddressProvince = values[0].name;
+          if(values[1]) {      // 判断values[1]是否有值
+            picker.setSlotValues(2, values[1].children);  // 将所点击城市拿到的区县list赋值
+            this.myAddressCity = values[1].name;
+            if(values[2]) {      // 判断values[2]是否有值
+              this.myAddressArea = values[2].name;
+              this.address.aaid = values[2].code;
+            }
+          }
         }
       },
-      // 省份改变
-      provinceChange(picker, values) {
-        // console.log(values);
-      },
-      // 城市改变
-      cityChange() {
-
-      },
-      // 区县改变
-      areaChange() {
-
-      },
-      // 获取地址信息 - 省市区
-      getAddress() {
-        this.addressPopup = true;
-        // this.getProvince();         // 获取所有省份
-      },
-      // 获取所有省份
-      getProvince() {
-        axios.get(api.get_provinces).then(res => {
-          if(res.data.status == 200){
-            this.province_slots.values = res.data.data;
-            console.log(this.province_slots);
-          }else{
-            Toast(res.data.message);
-          }
-        });
-      },
-      // 获取省份下城市
-      getCity() {
-        axios.get(api.get_citys).then(res => {
-          if(res.data.status == 200){
-            this.slots = res.data.data;
-          }else{
-            Toast(res.data.message);
-          }
-        });
-      },
-      // 获取城市下的区县
-      getArea() {
-        axios.get(api.get_areas).then(res => {
-          if(res.data.status == 200){
-            this.slots = res.data.data;
-          }else{
-            Toast(res.data.message);
-          }
-        });
+      // 省市区三级联动选择后
+      addressDone() {
+        this.addressText = this.myAddressProvince + "-" + this.myAddressCity + "-" + this.myAddressArea;
+        this.addressPopup = false;
       },
       // 设置默认地址
       defaultAddress() {
@@ -237,16 +201,17 @@
         }else if(!this.address.uaphone){
           Toast("请先输入收件人手机号");
           return false;
+        }else if(!this.address.aaid){
+          Toast("请先选择省市区");
+          return false;
         }else if(!this.address.uatext){
           Toast("请先输入详细地址");
           return false;
         }
-        console.log(this.address, this.address.uadefault);
-
-
         axios.post(api.add_address + '?token=' + localStorage.getItem('token'), this.address).then(res => {
           if(res.data.status == 200){
             Toast("添加成功");
+            this.$router.go(-1);
           }else{
             Toast(res.data.message);
           }
@@ -258,7 +223,7 @@
       this.getUser();         // 获取用户信息
 
       this.$nextTick(() => { //vue里面全部加载好了再执行的函数 （类似于setTimeout）
-        this.myAddressSlots[0].defaultIndex = 0
+        this.myAddressSlots[0].defaultIndex = 0;
         // 这里的值需要和 data里面 defaultIndex 的值不一样才能够初始化
         //因为我没有看过源码（我猜测是因为数据没有改变，不会触发更新）
       });

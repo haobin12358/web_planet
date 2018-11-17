@@ -119,6 +119,7 @@
     mounted() {
       common.changeTitle('地址管理');
       this.getAllAddress();         // 获取用户所有地址
+      console.log(212);
     }
   }
 </script>
