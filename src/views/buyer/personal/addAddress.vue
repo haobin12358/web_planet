@@ -36,7 +36,7 @@
                 <span class="m-label"><span class="m-must">*</span> 手机号</span>
               </div>
               <div>
-                <input type="text" class="m-addAddress-input" v-model="address.uaphone">
+                <input type="text" class="m-addAddress-input" v-model="address.uaphone" maxlength="11">
               </div>
             </li>
             <li class="m-default-address" @click="addressPopup = true">
@@ -64,7 +64,7 @@
                 <span class="m-label">邮政编码</span>
               </div>
               <div>
-                <input type="text" class="m-addAddress-input" v-model="address.uapostalcode">
+                <input type="text" class="m-addAddress-input" v-model="address.uapostalcode" maxlength="6">
               </div>
             </li>
             <li class="m-no-border m-default-address">
