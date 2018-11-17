@@ -131,29 +131,6 @@
         }
       },
       components: { picker, coupon },
-        data() {
-            return {
-                product_info:null,
-              show_picker :false,
-              show_coupon:false,
-              slots: [
-                {
-                  flex: 1,
-                  values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
-                  className: 'slot1',
-                  textAlign: 'center'
-                }
-              ],
-              picker_params:'company',
-              address_info:null,
-              coupon_info:null,
-              total_money:0
-            }
-        },
-        components: {
-          picker,
-          coupon
-        },
       mounted(){
           common.changeTitle('下单');
           if(this.$route.query.product){
