@@ -171,7 +171,7 @@
         axios.get(api.get_one_address + "?token=" + localStorage.getItem('token') + "&uaid=" + this.uaid).then(res => {
           if(res.data.status == 200){
             this.address = res.data.data;
-            this.addressText = res.data.data.addressinfo;
+            this.addressText = res.data.data.areainfo;
           }else{
             Toast(res.data.message);
           }
