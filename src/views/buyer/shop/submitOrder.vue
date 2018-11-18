@@ -1,6 +1,6 @@
 <template>
     <div class="m-submitOrder">
-      <div class="m-one-part m-pl-s m-pr-s m-address-part" @click="changeRoute('personal/addressManagement')">
+      <div class="m-one-part m-pl-s m-pr-s m-address-part" @click="changeRoute('personal/addressManagement', 'choose')">
         <div class="m-left" v-if="!address_info.uaphone">
           <div class="m-address-name">
             <div>
@@ -82,7 +82,7 @@
       </div>
 
       <div class="m-order-btn">
-        <span>支付订单</span>
+        <span @click="submitOrder">支付订单</span>
       </div>
       <!--<picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>-->
 
@@ -127,39 +127,48 @@
           picker_params: 'company',
           address_info: {},
           coupon_info: null,
-          total_money:0
+          total_money: 0,
+          uaid: "",                 // 收货地址id
         }
       },
       components: { picker, coupon },
       mounted(){
-          common.changeTitle('下单');
-          if(this.$route.query.product){
-            this.product_info = JSON.parse(this.$route.query.product);
-            let total = 0;
-            for(let i=0;i<this.product_info.length;i++){
-              for(let j=0;j<this.product_info[i].cart.length;j++){
-                total = total+Number(this.product_info[i].cart[j].sku.skuprice)*this.product_info[i].cart[j].canums ;
-              }
+        common.changeTitle('下单');
+        if(this.$route.query.product){
+          this.product_info = JSON.parse(this.$route.query.product);
+          let total = 0;
+          for(let i=0;i<this.product_info.length;i++){
+            for(let j=0;j<this.product_info[i].cart.length;j++){
+              total = total+Number(this.product_info[i].cart[j].sku.skuprice)*this.product_info[i].cart[j].canums ;
             }
-            this.total_money = total;
           }
-          this.getAddress();
-          this.getCoupon();
+          this.total_money = total;
+        }
+        this.uaid = localStorage.getItem("uaid");
+        this.getOneAddress();
+        this.getCoupon();
       },
         methods: {
           // 跳转其他页面的方法
-          changeRoute(v) {
-            this.$router.push(v)
+          changeRoute(v, where) {
+            if(where) {
+              this.$router.push({ path: v, query: { from: where }});
+            }
           },
-          /*获取地址*/
-          getAddress(){
-            axios.get(api.get_one_address + "?token=" + localStorage.getItem('token')).then(res => {
+          /*获取默认地址*/
+          getOneAddress(){
+            let params = { token: localStorage.getItem('token') };
+            if(this.uaid) {
+              params.uaid = this.uaid;
+            }
+            axios.get(api.get_one_address, { params: params }).then(res => {
               if(res.data.status == 200){
                 this.address_info = res.data.data;
+                this.uaid = res.data.data.uaid;
               }else{
                 this.address_info.uaname = "没有地址信息，请点此添加";
               }
-            })
+            });
           },
           /*获取优惠券*/
           getCoupon(){
@@ -184,6 +193,14 @@
           /*搜索*/
           inputChange(v){
             console.log(v)
+          },
+          // 提交并调起支付
+          submitOrder() {
+            if(!this.uaid) {
+              Toast("请先选择收货地址");
+              return false;
+            }
+            console.log(this.uaid);
           }
         },
         created() {

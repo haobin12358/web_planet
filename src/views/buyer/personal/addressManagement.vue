@@ -16,7 +16,7 @@
       <div class="m-personal-body" v-if="addressList.length > 0">
         <div class="m-one-part m-address-part">
           <ul class="m-edit-ul m-address-edit-ul">
-           <li v-for="(item, index) in addressList">
+           <li v-for="(item, index) in addressList" @click="chooseAddress(item)">
              <div class="m-left">
                <div class="m-address-name">
                  <div>
@@ -58,7 +58,9 @@
     data() {
       return {
         name: '',
-        addressList: []
+        addressList: [],
+        from: "",                 // 是否是从下单页进来
+        uaid: ""
       }
     },
     components: {},
@@ -66,9 +68,16 @@
       // 跳转页面
       changeRoute(v, item){
         if(item) {
-          this.$router.push({ path: v, query:{ uaid: item.uaid }})
+          this.$router.push({ path: v, query: { uaid: item.uaid }})
         }else {
           this.$router.push(v);
+        }
+      },
+      // 选择该地址
+      chooseAddress(item) {
+        if(this.from) {
+          this.$router.go(-1);
+          localStorage.setItem("uaid", item.uaid);
         }
       },
       // 默认地址的设置
@@ -123,6 +132,8 @@
     mounted() {
       common.changeTitle('地址管理');
       this.getAllAddress();         // 获取用户所有地址
+
+      this.from = this.$route.query.from;
     }
   }
 </script>
