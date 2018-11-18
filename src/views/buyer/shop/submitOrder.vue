@@ -165,6 +165,7 @@
               if(res.data.status == 200){
                 this.address_info = res.data.data;
                 this.uaid = res.data.data.uaid;
+                localStorage.removeItem('uaid');      // 使用过uaid后将其删除
               }else{
                 this.address_info.uaname = "没有地址信息，请点此添加";
               }

@@ -28,13 +28,13 @@
                <p class="m-address-p">{{item.addressinfo}}</p>
              </div>
              <div class="m-address-edit-box">
-               <div>
-                 <span class="m-icon-radio" :class="item.uadefault == '1' ? 'active' : ''" @click="defaultAddress(item, index)"></span>
+               <div @click.stop="defaultAddress(item, index)">
+                 <span class="m-icon-radio" :class="item.uadefault == '1' ? 'active' : ''"></span>
                  <span>默认地址</span>
                </div>
                <div>
-                 <span class="m-mr-40 m-ft-22" @click="changeRoute('/personal/addAddress', item)">编辑</span>
-                 <span class="m-ft-22" @click="deleteAddress(item, index)">删除</span>
+                 <span class="m-mr-40 m-ft-22" @click.stop="changeRoute('/personal/addAddress', item)">编辑</span>
+                 <span class="m-ft-22" @click.stop="deleteAddress(item, index)">删除</span>
                </div>
              </div>
            </li>
