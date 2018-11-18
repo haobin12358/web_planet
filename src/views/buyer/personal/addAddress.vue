@@ -147,6 +147,7 @@
         myAddressProvince: '',
         myAddressCity: '',
         myAddressArea: '',
+        uaid: ""
       }
     },
     components: {},
@@ -160,6 +161,17 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
+          }else{
+            Toast(res.data.message);
+          }
+        });
+      },
+      // 获取用户的一条信息
+      getOneAddress() {
+        axios.get(api.get_one_address + "?token=" + localStorage.getItem('token') + "&uaid=" + this.uaid).then(res => {
+          if(res.data.status == 200){
+            this.address = res.data.data;
+            this.addressText = res.data.data.addressinfo;
           }else{
             Toast(res.data.message);
           }
@@ -208,14 +220,26 @@
           Toast("请先输入详细地址");
           return false;
         }
-        axios.post(api.add_address + '?token=' + localStorage.getItem('token'), this.address).then(res => {
-          if(res.data.status == 200){
-            Toast("添加成功");
-            this.$router.go(-1);
-          }else{
-            Toast(res.data.message);
-          }
-        });
+        if(this.uaid) {
+          this.address.uaid = this.uaid;
+          axios.post(api.update_address + '?token=' + localStorage.getItem('token'), this.address).then(res => {
+            if(res.data.status == 200){
+              Toast("修改成功");
+              this.$router.go(-1);
+            }else{
+              Toast(res.data.message);
+            }
+          });
+        }else {
+          axios.post(api.add_address + '?token=' + localStorage.getItem('token'), this.address).then(res => {
+            if(res.data.status == 200){
+              Toast("添加成功");
+              this.$router.go(-1);
+            }else{
+              Toast(res.data.message);
+            }
+          });
+        }
       }
     },
     created() {
@@ -227,6 +251,10 @@
         // 这里的值需要和 data里面 defaultIndex 的值不一样才能够初始化
         //因为我没有看过源码（我猜测是因为数据没有改变，不会触发更新）
       });
+
+      // 接收传过来的uaid
+      this.uaid = this.$route.query.uaid;
+      this.getOneAddress();         // 获取用户的一条信息
     }
   }
 </script>

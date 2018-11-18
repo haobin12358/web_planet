@@ -33,7 +33,7 @@
                  <span>默认地址</span>
                </div>
                <div>
-                 <span class="m-mr-40 m-ft-22">编辑</span>
+                 <span class="m-mr-40 m-ft-22" @click="changeRoute('/personal/addAddress', item)">编辑</span>
                  <span class="m-ft-22" @click="deleteAddress(item, index)">删除</span>
                </div>
              </div>
@@ -64,8 +64,12 @@
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v){
-        this.$router.push(v)
+      changeRoute(v, item){
+        if(item) {
+          this.$router.push({ path: v, query:{ uaid: item.uaid }})
+        }else {
+          this.$router.push(v);
+        }
       },
       // 默认地址的设置
       defaultAddress(item, index) {
@@ -119,7 +123,6 @@
     mounted() {
       common.changeTitle('地址管理');
       this.getAllAddress();         // 获取用户所有地址
-      console.log(212);
     }
   }
 </script>
