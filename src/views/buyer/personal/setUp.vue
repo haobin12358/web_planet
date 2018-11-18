@@ -24,7 +24,7 @@
       <div class="m-personal-body">
         <div class="m-one-part">
            <ul class="m-edit-ul">
-             <li>
+             <li @click="changeRoute('/personal/addressManagement')">
                <div>
                  <span class="m-icon m-icon-loc"></span>
                  <span>收货地址</span>
