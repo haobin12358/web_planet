@@ -17,12 +17,12 @@
         <span class="m-icon-order-status m-send" ></span>
       </div>
       <div class="m-order-one-part">
-        <div class="m-user-text">
+        <div class="m-user-text" v-if="logistic_info" @click="changeRoute('/logisticsInformation')">
           <span class="m-icon-wuliu m-done"></span>
           <div class="m-flex-between">
             <div>
-              <p class="m-wuliu-text">您的包裹已出库</p>
-              <p>2018-11-05 11:55:09</p>
+              <p class="m-wuliu-text">{{logistic_info.ollastresult.status}}</p>
+              <p>{{logistic_info.ollastresult.time}}</p>
             </div>
             <span class="m-icon-more"></span>
           </div>
@@ -99,8 +99,14 @@
         </div>
       </div>
       <div class="m-align-right">
-        <span>查看物流</span>
-        <span class="active" v-if="order_info.omstatus == 20">确认收货</span>
+        <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
+        <span v-if="order_info.omstatus == 0 || order_info.omstatus == -40 || order_info.omstatus == 30">
+          删除订单
+        </span>
+        <span class="active" v-if="order_info.omstatus == 10 || order_info.omstatus == 20">确认收货</span>
+        <span class="active" v-if="order_info.omstatus == 0">
+          立即付款
+        </span>
       </div>
 
       <bottom></bottom>
@@ -116,7 +122,8 @@
     export default {
        data(){
          return{
-            order_info:''
+            order_info:'',
+           logistic_info :null
          }
        },
       components:{
@@ -125,6 +132,7 @@
       mounted(){
         common.changeTitle('订单详情');
         this.getOrderInfo();
+
       },
       methods:{
         changeRoute(v,item){
@@ -138,10 +146,14 @@
             case '/selectBack':
               this.$router.push({path:v,query:{product:JSON.stringify(item)}});
               break;
+            case '/logisticsInformation':
+              this.$router.push({path:v,query:{omid:this.order_info.omid}});
+              break;
             default:
               this.$router.push(v)
           }
         },
+        //获取订单详情
         getOrderInfo(){
           axios.get(api.order_get,{
             params:{
@@ -151,6 +163,21 @@
           }).then(res => {
             if(res.data.status == 200){
               this.order_info = res.data.data;
+              if(res.data.data.omstatus >= 20){
+                this.getLogistic();
+              }
+            }
+          })
+        },
+      //  获取物流信息
+        getLogistic(){
+          axios.get(api.get_logistic,{
+            params:{
+              omid:this.$route.query.omid
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.logistic_info = res.data.data;
             }
           })
         }
