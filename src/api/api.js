@@ -59,6 +59,7 @@ const api={
   get_areas: title + '/address/get_areas',            // 获取城市下的区县
 
   list_coupon: title + '/coupon/list',//获取下单优惠券
+  upload_file: title + '/file/upload',//上传图片
 };
 
 export default api

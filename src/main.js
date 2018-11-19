@@ -39,7 +39,7 @@ Vue.prototype.$moment = moment;
 // 良泽的测试号
 // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjAxMzA1NiwiZXhwIjoxNTQyNjE3ODU2fQ.eyJpZCI6IjAwMTRiMjZlLWU2NTktMTFlOC04MDJlLWI4MmE3MmFiMjIxNCIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.mJFZ6DgEmJGuNyDxj9rSyItDPP4r12zB0njF5ys91uE';
 // 只是没有如果
-let token =  'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjAxMzA1NiwiZXhwIjoxNTQyNjE3ODU2fQ.eyJpZCI6IjAwMTRiMjZlLWU2NTktMTFlOC04MDJlLWI4MmE3MmFiMjIxNCIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.mJFZ6DgEmJGuNyDxj9rSyItDPP4r12zB0njF5ys91uE';
+let token =  'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjYxODIyOCwiZXhwIjoxNTQzMjIzMDI4fQ.eyJpZCI6IjAwMTRiMjZlLWU2NTktMTFlOC04MDJlLWI4MmE3MmFiMjIxNCIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoyfQ.u2XIVIAhEEbAAEiHM16PEDF95Ym3UsV8HnH9vLgBko8';
 localStorage.setItem('token', token);
 
 
