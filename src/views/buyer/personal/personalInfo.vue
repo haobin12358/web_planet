@@ -74,7 +74,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
-  import moment from 'moment';// 格式化时间
+  import moment from 'moment';                      // 格式化时间
 
   export default {
     data() {
@@ -132,14 +132,11 @@
       },
       // 保存用户信息
       saveUser() {
-        let params = {
-          usname: this.name,
-          usbirthday: this.birthday
-        };
+        let params = { usname: this.name, usbirthday: this.birthday };
         if(this.gender == "男") {
-          params.usgenter = "0";
+          params.usgender = "0";
         }else if(this.gender == "女") {
-          params.usgenter = "1";
+          params.usgender = "1";
         }
         axios.post(api.update_user + '?token=' + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
