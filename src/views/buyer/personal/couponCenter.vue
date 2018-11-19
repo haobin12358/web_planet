@@ -17,7 +17,8 @@
         <span>天</span>
       </div>
       <div class="m-couponCenter-week">
-        <span class="m-circle active">1</span>
+        <!--每周哪几天签到-->
+        <!--<span class="m-circle active">1</span>
         <span class="m-circle-line"></span>
         <span class="m-circle">2</span>
         <span class="m-circle-line"></span>
@@ -29,8 +30,8 @@
         <span class="m-circle-line"></span>
         <span class="m-circle">6</span>
         <span class="m-circle-line"></span>
-        <span class="m-circle">7</span>
-        <span class="m-couponCenter-week-btn">签到</span>
+        <span class="m-circle">7</span>-->
+        <span class="m-couponCenter-week-btn" :class="signIn ? 'active' : ''" @click="userSignIn">签到</span>
       </div>
     </div>
     <div class="m-couponCenter-content">
@@ -39,11 +40,10 @@
       </div>
       <div class="m-couponCenter-content-ul">
         <!--<coupon-card></coupon-card>-->
-        <coupon-card></coupon-card>
-        <!--<div class="m-no-coupon">-->
-          <!--<span></span>-->
-          <!--<p>还没有获得优惠券哦~</p>-->
-        <!--</div>-->
+        <div class="m-no-coupon">
+          <span class="m-no-img"></span>
+          <p>还没有获得优惠券哦~</p>
+        </div>
       </div>
     </div>
   </div>
@@ -53,36 +53,19 @@
 <script type="text/ecmascript-6">
   import navList from '../../../components/common/navlist';
   import couponCard from '../components/couponCard';
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
+
   export default {
     data() {
       return {
         nav_list:[
-          {
-            name:'限时优惠券',
-            params:'',
-            active:true
-          },
-          {
-            name:'满减优惠券',
-            params:'',
-            active:false
-          },
-          {
-            name:'活动1',
-            params:'',
-            active:false
-          },
-          {
-            name:'活动2',
-            params:'',
-            active:false
-          },
-          {
-            name:'活动2',
-            params:'',
-            active:false
-          }
-        ]
+          { name:'限时优惠券', params:'', active:true }, { name:'满减优惠券', params:'', active:false }, { name:'活动1', params:'', active:false },
+          { name:'活动2', params:'', active:false }, { name:'活动2', params:'', active:false }
+        ],
+        signIn: false,            // 是否已签到
       }
     },
     components: {
@@ -90,6 +73,7 @@
       couponCard
     },
     methods: {
+      // navList点击事件
       navClick(index){
         let arr = [].concat(this.nav_list);
         for(let i=0;i<arr.length;i++){
@@ -97,15 +81,27 @@
         }
         arr[index].active = true;
         this.nav_list = [].concat(arr)
+      },
+      // 用户签到
+      userSignIn() {
+        axios.post(api.user_sign_in + '?token=' + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            Toast(res.data.message);
+          }else{
+            Toast(res.data.message);
+          }
+        });
       }
     },
-    created() {
-
+    mounted() {
+      common.changeTitle('优惠中心');
+      // this.getUser();       // 获取个人信息
     }
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
+
   .m-couponCenter{
     .m-couponCenter-top{
       width: 100%;
@@ -118,10 +114,10 @@
         padding: 30px 0 24px 63px;
       }
       .m-couponCenter-rule{
-         position: absolute;
+        position: absolute;
         right: 0;
         top: 90px;
-        width: 36px;
+        width: 30px;
         padding: 20px 0;
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
@@ -131,7 +127,8 @@
         text-align: center;
       }
       .m-couponCenter-day{
-        text-align: center;
+        /*text-align: center;*/
+        margin-left: 125px;
         .m-couponCenter-day-bg{
           display: inline-block;
           width: 87px;
@@ -198,15 +195,18 @@
         }
         .m-couponCenter-week-btn{
           display: inline-block;
-          width: 105px;
-          height: 30px;
-          line-height: 30px;
+          width: 150px;
+          height: 40px;
+          line-height: 40px;
           background-color: #fff;
           text-align: center;
           font-size: 21px;
           border-radius: 30px;
-          box-shadow:0px 3px 6px rgba(0,0,0,0.16);
+          box-shadow: 0 3px 6px rgba(0,0,0,0.16);
           margin-left: 50px;
+          &.active {
+            opacity: 0.5;
+          }
         }
       }
     }

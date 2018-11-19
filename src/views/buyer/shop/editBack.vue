@@ -104,7 +104,7 @@
       },
       showPicker(v,i){
         this.show_picker =true;
-        // this.slots = this[v];
+        this.slots = this[v];
         this.picker_select = i
       },
       pickerSave(v,bool,select){
