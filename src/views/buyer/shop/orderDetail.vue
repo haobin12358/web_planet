@@ -80,7 +80,7 @@
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
           <p class="m-back-btn">
-            <span @click="changeRoute('/selectBack')">退款</span>
+            <span @click="changeRoute('/selectBack',item)">退款</span>
           </p>
         </div>
 
@@ -134,6 +134,9 @@
               break;
             case '/product/detail':
               this.$router.push({path:v,query:{prid:item.prid}});
+              break;
+            case '/selectBack':
+              this.$router.push({path:v,query:{product:JSON.stringify(item)}});
               break;
             default:
               this.$router.push(v)
