@@ -5,13 +5,13 @@
     </div>
     <div class="m-personal-content m-setUp">
       <div class="m-personal-info">
-        <img src="" class="m-personal-head-portrait" alt="">
+        <img :src="user.usheader" class="m-personal-head-portrait" alt="">
         <div class="m-personal-info-box">
           <div class="m-personal-info-text">
             <div>
-              <p>居居女孩</p>
+              <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity">行装会员</span>
+                <span class="m-personal-identity">{{user.usidname}}</span>
               </p>
             </div>
           </div>
@@ -24,16 +24,16 @@
               <div>
                 <span>真实姓名</span>
               </div>
-              <div>
-                <input type="text" class="m-edit-input" v-model="username">
-              </div>
+              <div class="m-grey">{{user.usrealname}}</div>
             </li>
-            <li>
+            <li @click="changeRoute('/storekeeper/IDCardApprove')">
               <div>
                 <span>身份证号</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input" v-model="card">
+                <span class="m-grey" v-if="!user.usidentification">未认证</span>
+                <span class="m-grey" v-if="user.usidentification">{{user.usidentification}}</span>
+                <span class="m-icon-more"></span>
               </div>
             </li>
             <li @click="changeRoute('/personal/editInput')">
@@ -41,7 +41,7 @@
                 <span>手机号</span>
               </div>
               <div>
-                <span class="m-grey">去绑定手机号</span>
+                <span class="m-grey">{{user.ustelphone}}</span>
                 <span class="m-icon-more"></span>
               </div>
             </li>
@@ -50,7 +50,7 @@
                 <span>支付密码</span>
               </div>
               <div>
-               <span class="m-grey">设置修改</span>
+               <span class="m-grey">去修改</span>
                 <span class="m-icon-more"></span>
               </div>
             </li>
@@ -58,27 +58,41 @@
         </div>
       </div>
     </div>
-
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
+
   export default {
     data() {
       return {
-        card:'339000000000000000',
-        username:'居居女孩'
+        user: {}                     // 个人信息
       }
     },
     components: {},
     methods: {
+      // 跳转页面
       changeRoute(v){
         this.$router.push(v)
+      },
+      // 获取个人信息
+      getUser() {
+        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            this.user = res.data.data;
+          }else{
+            Toast(res.data.message);
+          }
+        });
       }
     },
-    created() {
-
+    mounted() {
+      common.changeTitle('安全中心');
+      this.getUser();       // 获取个人信息
     }
   }
 </script>
