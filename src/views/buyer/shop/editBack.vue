@@ -1,22 +1,28 @@
 <template>
-  <div class="m-selectBack">
+  <div class="m-selectBack"v-if="product_info">
     <div class="m-product-info">
-      <img src="" alt="">
+      <img :src="product_info.prmainpic" alt="">
       <div>
-        <p>女士冲锋衣</p>
-        <p class="m-ft-22">规格：红色；XS</p>
+        <p>{{product_info.prtitle}}</p>
+        <p class="m-ft-22">规格：
+          <template v-for="(key,k) in product_info.skuattritedetail" >
+            <span >{{key}}</span>
+            <span v-if="k < product_info.skuattritedetail.length-1">；</span>
+          </template>
+        </p>
       </div>
     </div>
     <div class="m-selectBack-content">
       <div class="m-one-select">
         <ul class="m-selectBack-ul">
-          <li >
+          <li  @click="showPicker('status_slot','status_select')">
             <div class="m-flex-between">
               <span class="m-border"></span>
               <span>货物状态</span>
             </div>
             <span >
-          <span class="m-grey">请选择</span>
+          <span class="m-grey" v-if="status_select">{{status_select}}</span>
+             <span class="m-grey" v-else>请选择</span>
           <span class="m-icon-more"></span>
         </span>
           </li>
@@ -47,21 +53,55 @@
         <span @click="changeRoute('/backDetail')">提交</span>
       </div>
     </div>
-
+    <picker :show_picker="show_picker"  :slots="slots" @pickerSave="pickerSave" ></picker>
   </div>
 </template>
 
 <script>
+  import picker from '../../../components/common/picker';
   export default {
     data(){
       return{
-
+        product_info:null,
+        slots: [
+          {
+            flex: 1,
+            values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+        ],
+        status_slot:[{
+          flex: 1,
+          values: ['已收到货', '未收到货'],
+          className: 'slot1',
+          textAlign: 'center'
+        }],
+        show_picker:false,
+        status_select:null,
+        picker_select:''
       }
+    },
+    components: { picker},
+    mounted(){
+      this.product_info = JSON.parse(this.$route.query.product);
+
     },
     methods:{
       changeRoute(v){
         this.$router.push(v)
-      }
+      },
+      showPicker(v,i){
+        this.show_picker =true;
+        this.slots = this[v];
+        this.picker_select = i
+      },
+      pickerSave(v,bool,select){
+        if(select){
+          this[this.picker_select] = select[0]
+        }
+        this[v] = bool;
+      },
     }
   }
 </script>

@@ -1,10 +1,15 @@
 <template>
     <div class="m-selectBack">
       <div class="m-product-info">
-        <img src="" alt="">
+        <img :src="product_info.prmainpic" alt="">
         <div>
-          <p>女士冲锋衣</p>
-          <p class="m-ft-22">规格：红色；XS</p>
+          <p>{{product_info.prtitle}}</p>
+          <p class="m-ft-22">规格：
+            <template v-for="(key,k) in product_info.skuattritedetail" >
+              <span >{{key}}</span>
+              <span v-if="k < product_info.skuattritedetail.length-1">；</span>
+            </template>
+          </p>
         </div>
       </div>
       <ul class="m-selectBack-ul">
@@ -36,12 +41,16 @@
     export default {
         data(){
           return{
-
+            product_info:''
           }
         },
+      mounted(){
+          this.product_info = JSON.parse(this.$route.query.product);
+
+      },
       methods:{
         changeRoute(v){
-          this.$router.push(v)
+          this.$router.push({path:v,query:{product:this.$route.query.product}});
         }
       }
     }
