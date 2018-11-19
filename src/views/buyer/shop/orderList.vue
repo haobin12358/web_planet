@@ -46,7 +46,7 @@
                 <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack')">
                   退款
                 </li>
-                <li @click.stop="changeRoute('/logisticsInformation')" v-if="items.omstatus==20 || items.omstatus == 35 ">
+                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35 ">
                   查看物流
                 </li>
 
@@ -134,6 +134,9 @@
               this.$router.push({path:v,query:{pbid:item.pbid}});
               break;
             case '/orderDetail':
+              this.$router.push({path:v,query:{omid:item.omid}});
+              break;
+            case '/logisticsInformation':
               this.$router.push({path:v,query:{omid:item.omid}});
               break;
             default:

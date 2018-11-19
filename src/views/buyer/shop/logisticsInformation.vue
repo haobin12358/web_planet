@@ -1,73 +1,59 @@
 <template>
     <div class="m-logisticsInformation">
       <div class="m-one-part">
-        <p>商品：女士冲锋衣</p>
-        <div class="m-logisticsInformation-product-info">
-          <img src="" alt="">
-          <div>
-            <p>订单号：123456789000</p>
-            <div class="m-product-sku-price">
-              <p>
-                <span>规格：</span>
-                <span>红色；XS</span>
-              </p>
-              <p>
-                <span>付款金额:</span>
-                <span class="m-price">￥899.00</span>
-              </p>
+        <template v-for="(items,index) in order_info.order_part">
+          <p>商品：{{items.prtitle}}</p>
+          <div class="m-logisticsInformation-product-info">
+            <img :src="items.prmainpic" alt="">
+            <div>
+              <p>订单号：{{order_info.omno}}</p>
+              <div class="m-product-sku-price">
+                <p>
+                  <span>规格：</span>
+                  <span>
+                    <template v-for="(key,k) in items.skuattritedetail" >
+                        <span >{{key}}</span>
+                        <span v-if="k < items.skuattritedetail.length-1">；</span>
+                      </template>
+                  </span>
+                </p>
+                <p>
+                  <span>付款金额:</span>
+                  <span class="m-price">￥{{items.opsubtotal | money}}</span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
+
       </div>
-      <div class="m-one-part">
+      <div class="m-one-part" >
         <p class="m-flex-between">
-          <span>物流：顺丰快递</span>
-          <span class="m-ft-20">物流单号：123456789000</span>
+          <span>物流：{{logistic_info.expName}}</span>
+          <span class="m-ft-20">物流单号：{{logistic_info.olexpressno}}</span>
         </p>
         <p class="m-flex-between m-mt-15">
-          <span>收货人：居居女孩</span>
-          <span>联系电话：15700000000</span>
+          <span>收货人：{{order_info.omrecvname}}</span>
+          <span>联系电话：{{order_info.omrecvphone}}</span>
         </p>
         <p>
-          收货地址：杭州市-西湖区-浙江工业大学（屏峰校区）家和西苑14幢112
+          收货地址：{{order_info.omrecvaddress}}
         </p>
       </div>
-      <div class="m-map"></div>
+      <!--<div class="m-map"></div>-->
       <div class="m-logisticsInformation-text">
         <p>物流信息：</p>
         <ul class="m-logisticsInformation-ul">
-          <li>
+          <li v-for="(items,index) in logistic_info.list">
             <div class="m-time">
-              <p>09-21</p>
-              <p class="m-ft-22">09:19</p>
+              <p>{{items.time}}</p>
+              <!--<p class="m-ft-22">09:19</p>-->
             </div>
             <div class="m-logisticsInformation-info">
-              <span class="m-circle active"></span>
-              <span class="m-top"></span>
-              <p>已揽件</p>
-              <p class="m-ft-22">【杭州市】包裹由物流公司揽收</p>
-            </div>
-          </li>
-          <li>
-            <div class="m-time">
-              <p>09-21</p>
-              <p class="m-ft-22">09:19</p>
-            </div>
-            <div class="m-logisticsInformation-info">
-              <span class="m-circle"></span>
-              <p class="m-ft-22">【杭州市】包裹由物流公司揽收</p>
-            </div>
-          </li>
-          <li>
-            <div class="m-time">
-              <p>09-21</p>
-              <p class="m-ft-22">09:19</p>
-            </div>
-            <div class="m-logisticsInformation-info">
-              <span class="m-circle active"></span>
-              <span class="m-bottom"></span>
-              <p>已揽件</p>
-              <p class="m-ft-22">【杭州市】包裹由物流公司揽收</p>
+              <span class="m-circle " :class="(index == 0 || index == (logistic_info.list.length -1))?'active':''"></span>
+              <span  :class="index == 0?'m-top':(index == (logistic_info.list.length -1) ? 'm-bottom':'')"></span>
+              <!--<p>已揽件</p>-->
+              <p class="m-ft-22">{{items.status}}</p>
             </div>
           </li>
         </ul>
@@ -77,14 +63,52 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui';
     export default {
         data() {
             return {
-                name: ''
+              order_info:'',
+              logistic_info :null
             }
         },
         components: {},
-        methods: {},
+        mounted(){
+          common.changeTitle('物流信息');
+          this.getOrderInfo();
+        },
+        methods: {
+          //获取订单详情
+          getOrderInfo(){
+            axios.get(api.order_get,{
+              params:{
+                token:localStorage.getItem('token'),
+                omid:this.$route.query.omid
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.order_info = res.data.data;
+                if(res.data.data.omstatus >= 20){
+                  this.getLogistic();
+                }
+              }
+            })
+          },
+          //  获取物流信息
+          getLogistic(){
+            axios.get(api.get_logistic,{
+              params:{
+                omid:this.$route.query.omid
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.logistic_info = res.data.data.oldata;
+              }
+            })
+          }
+        },
         created() {
 
         }
@@ -112,7 +136,7 @@
     }
     .m-logisticsInformation-product-info{
       .flex-row(flex-start);
-      padding-top: 18px;
+      padding: 18px 0;
       img{
         display: block;
         width: 100px;
@@ -141,15 +165,16 @@
         align-items: flex-start;
         /*padding: 25px 0;*/
         .m-time{
-          width: 80px;
+          width: 160px;
           text-align: right;
         }
         .m-logisticsInformation-info{
           position: relative;
           padding: 0 35px 0;
-          height: 120px;
+          height: 130px;
           border-left: 1px dashed @mainColor;
           margin-left: 40px;
+          width: 450px;
           .m-top{
             position: absolute;
             top: 0;
