@@ -254,7 +254,9 @@
 
       // 接收传过来的uaid
       this.uaid = this.$route.query.uaid;
-      this.getOneAddress();         // 获取用户的一条信息
+      if(this.uaid) {
+        this.getOneAddress();         // 获取用户的一条信息
+      }
     }
   }
 </script>
