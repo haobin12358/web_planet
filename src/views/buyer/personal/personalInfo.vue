@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="m-foot-btn">
-      <span @click="saveUser">确  认</span>
+      <span @click="saveUser">保 存</span>
     </div>
   </div>
 
