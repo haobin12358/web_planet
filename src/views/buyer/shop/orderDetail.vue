@@ -1,9 +1,21 @@
 <template>
     <div class="m-orderDetail">
-       <div class="m-orderDetail-status">
-         <span>买家已付款</span>
-         <span class="m-icon-order-status "></span>
+       <div class="m-orderDetail-status" v-if="order_info.omstatus ==0">
+         <span >买家待付款</span>
+         <span class="m-icon-order-status m-pay" ></span>
        </div>
+      <div class="m-orderDetail-status" v-if="order_info.omstatus ==10">
+        <span >买家已付款</span>
+        <span class="m-icon-order-status m-pay" ></span>
+      </div>
+      <div class="m-orderDetail-status" v-if="order_info.omstatus ==20">
+        <span >卖家已发货</span>
+        <span class="m-icon-order-status m-send" ></span>
+      </div>
+      <div class="m-orderDetail-status" v-if="order_info.omstatus ==30 || order_info.omstatus ==35">
+        <span >买家已签收</span>
+        <span class="m-icon-order-status m-send" ></span>
+      </div>
       <div class="m-order-one-part">
         <div class="m-user-text">
           <span class="m-icon-wuliu m-done"></span>
@@ -19,37 +31,42 @@
           <span class="m-icon-loc"></span>
           <div>
             <p>
-              <span>居居女孩</span>
-              <span class="m-user-tel">15700000000</span>
+              <span>{{order_info.omrecvname}}</span>
+              <span class="m-user-tel">{{order_info.omrecvphone}}</span>
             </p>
             <p class="m-bottom-text">
-              收货地址：杭州市-西湖区-浙江工业大学（屏峰校区）家和西苑14幢112
+              收货地址：{{order_info.omrecvaddress}}
             </p>
           </div>
         </div>
       </div>
       <div class="m-order-one-part m-box-shadow">
         <div class="m-order-store-tile">
-          <div>
+          <div @click.stop="changeRoute('/brandDetail')">
             <span class="m-icon-store"></span>
-            <span class="m-store-name">背面</span>
+            <span class="m-store-name">{{order_info.pbname}}</span>
             <span class="m-icon-more"></span>
           </div>
           <span class="m-red">待发货</span>
         </div>
-        <div>
+        <div v-for="(item,index) in order_info.order_part">
           <div class="m-order-product-ul">
             <div class="m-product-info" @click.stop="changeRoute('/product/detail',item)">
-              <img src="" class="m-product-img" alt="">
+              <img :src="item.prmainpic" class="m-product-img" alt="">
               <div>
                 <p class="m-flex-between">
                 <span class="m-product-name">南面防雨防风软壳衣
                 南面防雨防风软壳衣</span>
-                  <span>￥899</span>
+                  <span>￥{{item.skuprice}}</span>
                 </p>
                 <p class="m-flex-between m-sku-text m-ft-22">
-                  <span class="m-product-label">绿色；XL</span>
-                  <span >x1</span>
+                  <span class="m-product-label">
+                    <template v-for="(key,k) in item.skuattritedetail" >
+                        <span >{{key}}</span>
+                        <span v-if="k < item.skuattritedetail.length-1">；</span>
+                      </template>
+                  </span>
+                  <span >x{{order_info.opnum}}1</span>
                 </p>
               </div>
             </div>
@@ -60,41 +77,13 @@
           </p>
           <p class="m-flex-between m-ft-22">
             <span>实付款（含运费）</span>
-            <span class="m-price">￥899.00</span>
+            <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
           <p class="m-back-btn">
             <span @click="changeRoute('/selectBack')">退款</span>
           </p>
         </div>
-        <div>
-          <div class="m-order-product-ul">
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <p class="m-flex-between">
-                <span class="m-product-name">南面防雨防风软壳衣
-                南面防雨防风软壳衣</span>
-                  <span>￥899</span>
-                </p>
-                <p class="m-flex-between m-sku-text m-ft-22">
-                  <span class="m-product-label">绿色；XL</span>
-                  <span >x1</span>
-                </p>
-              </div>
-            </div>
-          </div>
-          <p class="m-flex-between m-ft-22">
-            <span>运费</span>
-            <span>￥0.00</span>
-          </p>
-          <p class="m-flex-between m-ft-22">
-            <span>实付款（含运费）</span>
-            <span class="m-price">￥899.00</span>
-          </p>
-          <p class="m-back-btn">
-            <span @click="changeRoute('/selectBack')">退款</span>
-          </p>
-        </div>
+
 
       </div>
       <div class="m-order-one-part m-box-shadow">
@@ -103,7 +92,7 @@
           <span>订单信息</span>
         </p>
         <div class="m-ft-22 m-time-text">
-          <p>订单编号：123456789000</p>
+          <p>订单编号：{{order_info.omno}}</p>
           <p>创建时间：2018-11-05 11:26:00</p>
           <p>付款时间：2018-11-05 11:27:30</p>
           <p>发货时间：2018-11-05 11:55:09</p>
@@ -111,7 +100,7 @@
       </div>
       <div class="m-align-right">
         <span>查看物流</span>
-        <span class="active">确认收货</span>
+        <span class="active" v-if="order_info.omstatus == 20">确认收货</span>
       </div>
 
       <bottom></bottom>
@@ -121,21 +110,46 @@
 <script>
   import common from '../../../common/js/common';
   import bottom from '../components/bottomService';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui';
     export default {
        data(){
          return{
-
+            order_info:''
          }
        },
       components:{
         bottom
       },
       mounted(){
-        common.changeTitle('订单列表');
+        common.changeTitle('订单详情');
+        this.getOrderInfo();
       },
       methods:{
-        changeRoute(v){
-          this.$router.push(v);
+        changeRoute(v,item){
+          switch (v){
+            case '/brandDetail':
+              this.$router.push({path:v,query:{pbid:this.order_info.pbid}});
+              break;
+            case '/product/detail':
+              this.$router.push({path:v,query:{prid:item.prid}});
+              break;
+            default:
+              this.$router.push(v)
+          }
+        },
+        getOrderInfo(){
+          axios.get(api.order_get,{
+            params:{
+              token:localStorage.getItem('token'),
+              omid:this.$route.query.omid
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.order_info = res.data.data;
+            }
+          })
         }
       }
     }
