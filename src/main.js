@@ -32,10 +32,14 @@ FastClick.attach(document.body);
 import promise from 'es6-promise';//解决axios在ie9下不生效的方法
 promise.polyfill();
 
+// 引入moment用来格式化时间
+import moment from "moment";
+Vue.prototype.$moment = moment;
+
 // 良泽的测试号
-let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjAxMzA1NiwiZXhwIjoxNTQyNjE3ODU2fQ.eyJpZCI6IjAwMTRiMjZlLWU2NTktMTFlOC04MDJlLWI4MmE3MmFiMjIxNCIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.mJFZ6DgEmJGuNyDxj9rSyItDPP4r12zB0njF5ys91uE';
+// let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjAxMzA1NiwiZXhwIjoxNTQyNjE3ODU2fQ.eyJpZCI6IjAwMTRiMjZlLWU2NTktMTFlOC04MDJlLWI4MmE3MmFiMjIxNCIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.mJFZ6DgEmJGuNyDxj9rSyItDPP4r12zB0njF5ys91uE';
 // 只是没有如果
-// let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjUwMTAwOCwiZXhwIjoxNTQzMTA1ODA4fQ.eyJpZCI6ImI5ODkxYTU2LWU3YjEtMTFlOC04NjRlLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjozfQ._M7QWS3YVO7GXNKfT68-xSw9GGA8H8j6u29P5U_NEXg';
+let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MjUwMTAwOCwiZXhwIjoxNTQzMTA1ODA4fQ.eyJpZCI6ImI5ODkxYTU2LWU3YjEtMTFlOC04NjRlLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjozfQ._M7QWS3YVO7GXNKfT68-xSw9GGA8H8j6u29P5U_NEXg';
 localStorage.setItem('token', token);
 
 
