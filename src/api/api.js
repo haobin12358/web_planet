@@ -39,6 +39,7 @@ const api={
   upgrade_agent : title + '/user/upgrade_agent',                  // 店主申请
   check_idcode : title + '/user/check_idcode',                    // 实名认证 - 身份证
   get_identifyinginfo : title + '/user/get_identifyinginfo',      // 获取个人身份证详情
+  update_user : title + '/user/update_user',                      // 更新用户信息
 
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情
