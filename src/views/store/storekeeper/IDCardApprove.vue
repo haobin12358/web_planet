@@ -24,7 +24,7 @@
       <span @click="submitUser" v-if="!user.usidentification">提交认证</span>
       <div class="m-footer-btn-box" v-if="user.usidentification">
         <div class="m-footer-btn m-grey" @click="goBack">返 回</div>
-        <div class="m-footer-btn m-yellow" @click="editAgain">再次编辑</div>
+        <div class="m-footer-btn m-yellow" @click="editAgain">再次认证</div>
       </div>
     </div>
   </div>
