@@ -9,7 +9,7 @@
           <span class="m-picker-btn" @click="pickerSave(false)">确定</span>
         </p>
         <input type="text" v-if="is_search" v-model="input_value" class="m-picker-input" @input="inputChange"/>
-        <mt-picker :slots="slots"  @change="onValuesChange"></mt-picker>
+        <mt-picker :slots="slots"  @change="onValuesChange" value-key="name"></mt-picker>
       <!--</div>-->
     </mt-popup>
 
@@ -44,6 +44,7 @@
       },
       methods:{
         onValuesChange(picker, values) {
+          console.log(values)
           this.select= values;
         },
         pickerSave(v){

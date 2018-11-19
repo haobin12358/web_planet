@@ -1,27 +1,31 @@
 <template>
   <div class="m-selectBack"v-if="product_info">
     <div class="m-product-info">
-      <img :src="product_info.prmainpic" alt="">
-      <div>
-        <p>{{product_info.prtitle}}</p>
-        <p class="m-ft-22">规格：
-          <template v-for="(key,k) in product_info.skuattritedetail" >
-            <span >{{key}}</span>
-            <span v-if="k < product_info.skuattritedetail.length-1">；</span>
-          </template>
-        </p>
-      </div>
+      <template v-for="(items,index) in product_info">
+        <div class="m-one-product">
+          <img :src="items.prmainpic" alt="">
+          <div>
+            <p>{{items.prtitle}}</p>
+            <p class="m-ft-22">规格：
+              <template v-for="(key,k) in items.skuattritedetail" >
+                <span >{{key}}</span>
+                <span v-if="k < items.skuattritedetail.length-1">；</span>
+              </template>
+            </p>
+          </div>
+        </div>
+      </template>
     </div>
     <div class="m-selectBack-content">
       <div class="m-one-select">
         <ul class="m-selectBack-ul">
-          <li  @click="showPicker('status_slot','status_select')">
+          <li  @click="showPicker('status_slot','status_select')" v-if="oraproductstatus">
             <div class="m-flex-between">
               <span class="m-border"></span>
               <span>货物状态</span>
             </div>
             <span >
-          <span class="m-grey" v-if="status_select">{{status_select}}</span>
+          <span class="m-grey" v-if="status_select">{{status_select.name}}</span>
              <span class="m-grey" v-else>请选择</span>
           <span class="m-icon-more"></span>
         </span>
@@ -37,7 +41,7 @@
         </span>
           </li>
         </ul>
-        <p class="m-selectBack-num">退款金额：<span class="m-price">￥899.00</span></p>
+        <p class="m-selectBack-num">退款金额：<span class="m-price">￥{{total_money | money}}</span></p>
       </div>
       <div class="m-one-select">
         <div>
@@ -66,26 +70,33 @@
         slots: [
           {
             flex: 1,
-            values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+            values: [],
             className: 'slot1',
             textAlign: 'center'
           }
         ],
         status_slot:[{
           flex: 1,
-          values: ['已收到货', '未收到货'],
+          values: [{name:'已收到货',value:0},{name: '未收到货',value:1}],
           className: 'slot1',
           textAlign: 'center'
         }],
         show_picker:false,
         status_select:null,
-        picker_select:''
+        picker_select:'',
+        oraproductstatus:0,
+        total_money:0
       }
     },
     components: { picker},
     mounted(){
       this.product_info = JSON.parse(this.$route.query.product);
-
+      this.oraproductstatus = this.$route.query.oraproductstatus;
+      let total = 0;
+      for(let i = 0;i<this.product_info.length;i++){
+        total = total + Number(this.product_info[i].opsubtotal);
+      }
+      this.total_money = total;
     },
     methods:{
       changeRoute(v){
@@ -93,7 +104,7 @@
       },
       showPicker(v,i){
         this.show_picker =true;
-        this.slots = this[v];
+        // this.slots = this[v];
         this.picker_select = i
       },
       pickerSave(v,bool,select){
@@ -112,14 +123,17 @@
     min-height: 100vh;
     background-color: #eee;
     .m-product-info{
-      display: flex;
-      flex-flow: row;
-      width: 100%;
-      background-color: #fff;
-      padding: 34px 25px;
-      text-align: left;
+      /*padding: 34px 25px;*/
       box-shadow:0 5px 5px rgba(0,0,0,0.16);
       margin-bottom: 20px;
+      .m-one-product{
+        display: flex;
+        flex-flow: row;
+        width: 100%;
+        background-color: #fff;
+        padding: 34px 25px 20px;
+        text-align: left;
+      }
       img{
         display: block;
         width: 140px;

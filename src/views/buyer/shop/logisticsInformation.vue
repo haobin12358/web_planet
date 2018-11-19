@@ -1,5 +1,5 @@
 <template>
-    <div class="m-logisticsInformation">
+    <div class="m-logisticsInformation" v-if="order_info">
       <div class="m-one-part">
         <template v-for="(items,index) in order_info.order_part">
           <p>商品：{{items.prtitle}}</p>
@@ -28,7 +28,7 @@
 
       </div>
       <div class="m-one-part" >
-        <p class="m-flex-between">
+        <p class="m-flex-between" v-if="logistic_info">
           <span>物流：{{logistic_info.expName}}</span>
           <span class="m-ft-20">物流单号：{{logistic_info.olexpressno}}</span>
         </p>
@@ -41,7 +41,7 @@
         </p>
       </div>
       <!--<div class="m-map"></div>-->
-      <div class="m-logisticsInformation-text">
+      <div class="m-logisticsInformation-text"  v-if="logistic_info">
         <p>物流信息：</p>
         <ul class="m-logisticsInformation-ul">
           <li v-for="(items,index) in logistic_info.list">

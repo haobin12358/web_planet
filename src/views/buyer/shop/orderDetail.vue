@@ -144,7 +144,9 @@
               this.$router.push({path:v,query:{prid:item.prid}});
               break;
             case '/selectBack':
-              this.$router.push({path:v,query:{product:JSON.stringify(item)}});
+              let arr = [] ;
+              arr.push(item)
+              this.$router.push({path:v,query:{product:JSON.stringify(arr)}});
               break;
             case '/logisticsInformation':
               this.$router.push({path:v,query:{omid:this.order_info.omid}});

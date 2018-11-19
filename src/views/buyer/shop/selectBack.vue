@@ -1,19 +1,24 @@
 <template>
     <div class="m-selectBack">
-      <div class="m-product-info">
-        <img :src="product_info.prmainpic" alt="">
-        <div>
-          <p>{{product_info.prtitle}}</p>
-          <p class="m-ft-22">规格：
-            <template v-for="(key,k) in product_info.skuattritedetail" >
-              <span >{{key}}</span>
-              <span v-if="k < product_info.skuattritedetail.length-1">；</span>
-            </template>
-          </p>
-        </div>
+
+        <div class="m-product-info">
+          <template v-for="(items,index) in product_info">
+            <div class="m-one-product">
+              <img :src="items.prmainpic" alt="">
+              <div>
+                <p>{{items.prtitle}}</p>
+                <p class="m-ft-22">规格：
+                  <template v-for="(key,k) in items.skuattritedetail" >
+                    <span >{{key}}</span>
+                    <span v-if="k < items.skuattritedetail.length-1">；</span>
+                  </template>
+                </p>
+              </div>
+            </div>
+          </template>
       </div>
       <ul class="m-selectBack-ul">
-        <li @click="changeRoute('/editBack')">
+        <li @click="changeRoute('/editBack',0)">
           <div class="m-flex-between">
             <span class="m-border"></span>
             <div>
@@ -23,7 +28,7 @@
           </div>
           <span class="m-icon-more"></span>
         </li>
-        <li>
+        <li  @click="changeRoute('/editBack',1)">
           <div class="m-flex-between">
             <span class="m-border"></span>
             <div>
@@ -49,8 +54,8 @@
 
       },
       methods:{
-        changeRoute(v){
-          this.$router.push({path:v,query:{product:this.$route.query.product}});
+        changeRoute(v,item){
+          this.$router.push({path:v,query:{product:this.$route.query.product,oraproductstatus:item}});
         }
       }
     }
@@ -62,14 +67,17 @@
   min-height: 100vh;
   background-color: #eee;
   .m-product-info{
-    display: flex;
-    flex-flow: row;
-    width: 100%;
-    background-color: #fff;
-    padding: 34px 25px;
-    text-align: left;
+    /*padding: 34px 25px;*/
     box-shadow:0 5px 5px rgba(0,0,0,0.16);
     margin-bottom: 20px;
+    .m-one-product{
+      display: flex;
+      flex-flow: row;
+      width: 100%;
+      background-color: #fff;
+      padding: 34px 25px 20px;
+      text-align: left;
+    }
     img{
       display: block;
       width: 140px;
