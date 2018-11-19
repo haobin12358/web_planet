@@ -1,38 +1,55 @@
 <template>
-    <div class="m-code">
-      <div class="m-day-box">
-        <h3>
-          <span class="m-day">25</span>
-          <span>Spt</span>
-        </h3>
-        <h3>九月 / 星期二</h3>
-      </div>
-      <img src="" class="m-code-img" alt="">
-      <p class="m-right-info">用户二维码</p>
-      <ul class="m-code-ul">
-        <li>
-          1.该二维码是您的专属推广二维码，可直接右上角分享到朋友圈邀请好友成为商城会员。</li>
-          <li>2.使用微信扫一扫功能直接邀请您的好友成为商城会员。</li>
-          <li>3.长按图片保存后分享到朋友圈。</li>
-
-      </ul>
+  <div class="m-code">
+    <div class="m-day-box">
+      <h3>
+        <span class="m-day">25</span>
+        <span>Spt</span>
+      </h3>
+      <h3>九月 / 星期二</h3>
     </div>
-
+    <img :src="user.usqrcode" class="m-code-img" alt="">
+    <p class="m-right-info">用户二维码</p>
+    <ul class="m-code-ul">
+      <li>
+        1.该二维码是您的专属推广二维码，可直接右上角分享到朋友圈邀请好友成为商城会员。</li>
+        <li>2.使用微信扫一扫功能直接邀请您的好友成为商城会员。</li>
+        <li>3.长按图片保存后分享到朋友圈。</li>
+    </ul>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        data() {
-            return {
-                name: ''
-            }
-        },
-        components: {},
-        methods: {},
-        created() {
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
-        }
+  export default {
+    data() {
+      return {
+        name: '',
+        user: {}
+      }
+    },
+    components: {},
+    methods: {
+      // 获取个人信息
+      getUser() {
+        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            this.user = res.data.data;
+            console.log(this.user);
+          }else{
+            Toast(res.data.message);
+          }
+        })
+      },
+    },
+    mounted() {
+      common.changeTitle('');
+      this.getUser();       // 获取个人信息
     }
+  }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
 .m-code{
