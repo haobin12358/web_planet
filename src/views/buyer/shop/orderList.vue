@@ -1,5 +1,5 @@
 <template>
-    <div class="m-orderList">
+    <div class="m-orderList" @touchmove.stop="touchMove">
       <div class="m-nav">
         <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       </div>
@@ -66,9 +66,8 @@
             </div>
           </div>
         </template>
-
-
       </div>
+      <bottom-line v-if="bottom_show"></bottom-line>
     </div>
 </template>
 
@@ -144,6 +143,9 @@
         },
         //导航点击
         navClick(index){
+          this.page_info.page_num = 1;
+          this.total_count = 0;
+          this.bottom_show =false;
           let arr = [].concat(this.nav_list);
           if( arr[index].active){
             return false;
@@ -166,7 +168,22 @@
             }
           }).then(res => {
             if(res.data.status == 200){
-              this.order_list = res.data.data
+              this.order_list = res.data.data;
+              if(res.data.data.length >0){
+                if(this.page_info.page_num >1){
+                  this.order_list = this.order_list.concat(res.data.data);
+                }else{
+                  this.order_list = res.data.data;
+                }
+                this.page_info.page_num = this.page_info.page_num +1;
+              }else{
+                this.order_list = [];
+                this.page_info.page_num = 1;
+                this.total_count = 0;
+                return false;
+              }
+              this.isScroll = true;
+              this.total_count = res.data.total_count;
             }
           })
         },
@@ -184,7 +201,24 @@
                 this.nav_list = [].concat(res.data.data);
               }
           })
-        }
+        },
+        //滚动加载更多
+        touchMove(e){
+          let scrollTop = common.getScrollTop();
+          let scrollHeight = common.getScrollHeight();
+          let ClientHeight = common.getClientHeight();
+          if (scrollTop + ClientHeight  >= scrollHeight -10) {
+            if(this.isScroll){
+              this.isScroll = false;
+              if(this.order_list.length == this.total_count){
+                this.bottom_show = true;
+              }else{
+                this.getOrderList();
+              }
+            }
+
+          }
+        },
       }
     }
 </script>
@@ -194,6 +228,7 @@
   .m-orderList{
     background-color: #eee;
     min-height: 100%;
+    padding-bottom: 30px;
     .m-nav{
       background-color: #fff;
     }
