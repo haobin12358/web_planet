@@ -42,6 +42,7 @@ const api={
   get_identifyinginfo : title + '/user/get_identifyinginfo',      // 获取个人身份证详情
   update_user : title + '/user/update_user',                      // 更新用户信息
   get_user_integral : title + '/user/get_user_integral',          // 获取积分列表
+  user_sign_in : title + '/user/user_sign_in',                    // 用户签到
 
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情
