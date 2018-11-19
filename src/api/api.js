@@ -27,6 +27,7 @@ const api={
   order_pay: title + '/order/pay',//订单支付
   order_get: title + '/order/get',//订单详情
   refund_create: title +'/refund/create',//申请退款
+  order_count: title + '/order/count',//订单数量
 
   items_list: title + '/items/list',//获取标签列表
   scene_list: title + '/scene/list',//获取场景列表

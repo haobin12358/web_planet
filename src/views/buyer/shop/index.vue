@@ -53,6 +53,7 @@
         </template>
         <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
       </div>
+      <bottom-line v-if="bottom_show"></bottom-line>
       <div class="m-shop-foot">
          <span class="m-icon-radio" :class="allRadio?'active':''" @click="radioClick('all')"></span>
          <div v-if="!isManage">
@@ -114,7 +115,8 @@
             }
         },
         components: {
-          sku
+          sku,
+          bottomLine
         },
         mounted(){
             this.getCart();
