@@ -99,11 +99,11 @@
         </div>
       </div>
       <div class="m-align-right">
-        <span @click="changeRoute('/logisticsInformation')">查看物流</span>
+        <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
         <span v-if="order_info.omstatus == 0 || order_info.omstatus == -40 || order_info.omstatus == 30">
           删除订单
         </span>
-        <span class="active" v-if="order_info.omstatus == 20">确认收货</span>
+        <span class="active" v-if="order_info.omstatus == 10 || order_info.omstatus == 20">确认收货</span>
         <span class="active" v-if="order_info.omstatus == 0">
           立即付款
         </span>
