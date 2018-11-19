@@ -111,7 +111,7 @@
           }else{
             Toast(res.data.message);
           }
-        })
+        });
       },
       // 性别picker的确认按钮
       genderDone() {
