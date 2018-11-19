@@ -87,6 +87,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
   import api from '../../../api/api'
   import { Toast } from 'mint-ui';
   import axios from 'axios';
@@ -116,6 +117,7 @@
       }
     },
     mounted() {
+      common.changeTitle('我的');
       this.getUser();       // 获取个人信息
     }
   }
