@@ -39,7 +39,7 @@
         </div>
         <div>
           <div class="m-order-product-ul">
-            <div class="m-product-info">
+            <div class="m-product-info" @click.stop="changeRoute('/product/detail',item)">
               <img src="" class="m-product-img" alt="">
               <div>
                 <p class="m-flex-between">

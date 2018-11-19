@@ -10,94 +10,64 @@
         <!--<p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>-->
       <!--</div>-->
       <div class="m-orderList-content">
-        <div class="m-one-part" @click="changeRoute('/orderDetail')">
-         <div class="m-order-store-tile">
-           <div>
-             <span class="m-icon-store"></span>
-             <span class="m-store-name">背面</span>
-             <span class="m-icon-more"></span>
-           </div>
-           <span class="m-red">待发货</span>
-         </div>
-          <div class="m-order-product-ul">
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <p class="m-flex-between">
-                <span class="m-product-name">南面防雨防风软壳衣
-                南面防雨防风软壳衣</span>
-                  <span class="m-price">￥899</span>
-                </p>
-                <p class="m-flex-between">
-                  <span class="m-product-label">绿色；XL</span>
-                  <span >x1</span>
-                </p>
+        <template v-for="(items,index) in order_list">
+          <div class="m-one-part"  @click="changeRoute('/orderDetail',items)">
+            <div class="m-order-store-tile" >
+              <div @click.stop="changeRoute('/brandDetail',items)">
+                <span class="m-icon-store"></span>
+                <span class="m-store-name">{{items.pbname}}</span>
+                <span class="m-icon-more"></span>
               </div>
+              <span class="m-red">{{items.omstatus_zh}}</span>
             </div>
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <p class="m-flex-between">
-                <span class="m-product-name">南面防雨防风软壳衣
-                南面防雨防风软壳衣</span>
-                  <span class="m-price">￥899</span>
-                </p>
-                <p class="m-flex-between">
-                  <span class="m-product-label">绿色；XL</span>
-                  <span >x1</span>
-                </p>
-              </div>
+            <div class="m-order-product-ul">
+              <template v-for="(item,i) in items.order_part">
+                <div class="m-product-info" >
+                  <img src="" class="m-product-img" alt="">
+                  <div>
+                    <p class="m-flex-between">
+                      <span class="m-product-name">{{item.prtitle}}</span>
+                      <span class="m-price">￥{{item.skuprice | money}}</span>
+                    </p>
+                    <p class="m-flex-between">
+                      <span class="m-product-label">
+                        <template v-for="(key,k) in item.skuattritedetail" >
+                        <span >{{key}}</span>
+                        <span v-if="k < item.skuattritedetail.length-1">；</span>
+                      </template>
+                      </span>
+                      <span >x{{item.opnum}}</span>
+                    </p>
+                  </div>
+                </div>
+              </template>
+
+              <ul class="m-order-btn-ul">
+                <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack')">
+                  退款
+                </li>
+                <li @click.stop="changeRoute('/logisticsInformation')" v-if="items.omstatus==20 || items.omstatus == 35 ">
+                  查看物流
+                </li>
+
+                <li v-if="items.omstatus == 0 || items.omstatus == -40 || items.omstatus == 30">
+                  删除订单
+                </li>
+                <li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35 ">
+                  评价
+                </li>
+                <li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">
+                  确认收货
+                </li>
+                <li class="active" v-if="items.omstatus == 0">
+                  立即付款
+                </li>
+              </ul>
             </div>
-            <ul class="m-order-btn-ul">
-              <li @click.stop="changeRoute('/logisticsInformation')">
-                查看物流
-              </li>
-              <li>
-                删除订单
-              </li>
-              <li class="active">
-                确认收货
-              </li>
-            </ul>
           </div>
-        </div>
-        <div class="m-one-part">
-          <div class="m-order-store-tile">
-            <div>
-              <span class="m-icon-store"></span>
-              <span class="m-store-name">背面</span>
-              <span class="m-icon-more"></span>
-            </div>
-            <span class="m-red">待发货</span>
-          </div>
-          <div class="m-order-product-ul">
-            <div class="m-product-info">
-              <img src="" class="m-product-img" alt="">
-              <div>
-                <p class="m-flex-between">
-                <span class="m-product-name">南面防雨防风软壳衣
-                南面防雨防风软壳衣</span>
-                  <span class="m-price">￥899</span>
-                </p>
-                <p class="m-flex-between">
-                  <span class="m-product-label">绿色；XL</span>
-                  <span >x1</span>
-                </p>
-              </div>
-            </div>
-            <ul class="m-order-btn-ul">
-              <li>
-                退货
-              </li>
-              <li>
-                删除订单
-              </li>
-              <li class="active" @click.stop="changeRoute('/addComment')">
-                评价
-              </li>
-            </ul>
-          </div>
-        </div>
+        </template>
+
+
       </div>
     </div>
 </template>
@@ -105,6 +75,10 @@
 <script>
   import common from '../../../common/js/common';
   import navList from '../../../components/common/navlist';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine';
     export default {
         data(){
           return{
@@ -134,26 +108,82 @@
                 params:'',
                 active:false
               }
-            ]
+            ],
+            page_info:{
+              page_num:1,
+              page_size:5
+            },
+            isScroll:true,
+            total_count:0,
+            bottom_show:false,
+            order_list:null
           }
         },
       components: {
-        navList
+        navList,
+        bottomLine
       },
       mounted(){
           common.changeTitle('订单列表');
+          this.getOrderList();
+          this.getOrderNum();
       },
       methods:{
-        changeRoute(v){
-          this.$router.push(v)
+        changeRoute(v,item){
+          switch (v){
+            case '/brandDetail':
+              this.$router.push({path:v,query:{pbid:item.pbid}});
+              break;
+            case '/orderDetail':
+              this.$router.push({path:v,query:{omid:item.omid}});
+              break;
+            default:
+              this.$router.push(v)
+          }
+
         },
+        //导航点击
         navClick(index){
           let arr = [].concat(this.nav_list);
+          if( arr[index].active){
+            return false;
+          }
           for(let i=0;i<arr.length;i++){
             arr[i].active = false;
           }
           arr[index].active = true;
-          this.nav_list = [].concat(arr)
+          this.nav_list = [].concat(arr);
+          this.getOrderList(arr[index].status);
+        },
+      //  获取订单列表
+        getOrderList(omstatus){
+          axios.get(api.order_list,{
+            params:{
+              token:localStorage.getItem('token'),
+              page_num:this.page_info.page_num,
+              page_size: this.page_info.page_size,
+              omstatus:omstatus
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.order_list = res.data.data
+            }
+          })
+        },
+        getOrderNum(){
+          axios.get(api.order_count,{
+            params:{
+              token:localStorage.getItem('token')
+            }
+          }).then(res => {
+              if(res.data.status == 200){
+                for(let i =0;i<res.data.data.length;i++){
+                  res.data.data[i].active = false;
+                }
+                res.data.data[0].active = true;
+                this.nav_list = [].concat(res.data.data);
+              }
+          })
         }
       }
     }
