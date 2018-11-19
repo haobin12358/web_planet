@@ -1,90 +1,80 @@
 <template>
-    <div class="m-integral">
-      <div class="m-integral-top">
-        <p class="m-integral-top-p">可用积分</p>
-        <div class="m-integral-code">
-          <span class="m-integral-top-img"></span>
-          <span >520</span>
-        </div>
-      </div>
-      <div class="m-integral-content">
-        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
-       <ul class="m-integral-detail-ul">
-         <li>
-           <p class="m-integral-detail-p">
-             <span>签到积分</span>
-             <span>+1</span>
-           </p>
-           <p class="m-grey">2018-0-20  14:12:31</p>
-         </li>
-         <li>
-           <p class="m-integral-detail-p">
-             <span>签到积分</span>
-             <span>+1</span>
-           </p>
-           <p class="m-grey">2018-0-20  14:12:31</p>
-         </li>
-         <li>
-           <p class="m-integral-detail-p">
-             <span>签到积分</span>
-             <span>+1</span>
-           </p>
-           <p class="m-grey">2018-0-20  14:12:31</p>
-         </li>
-         <li>
-           <p class="m-integral-detail-p">
-             <span>签到积分</span>
-             <span>+1</span>
-           </p>
-           <p class="m-grey">2018-0-20  14:12:31</p>
-         </li>
-       </ul>
+  <div class="m-integral">
+    <div class="m-integral-top">
+      <p class="m-integral-top-p">可用积分</p>
+      <div class="m-integral-code">
+        <span class="m-integral-top-img"></span>
+        <span>{{usintegral}}</span>
       </div>
     </div>
-
+    <div class="m-integral-content">
+      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+     <ul class="m-integral-detail-ul">
+       <li v-if="uilist.length > 0" v-for="item in uilist">
+         <p class="m-integral-detail-p">
+           <span>{{item.uiaction}}</span>
+           <span>+ {{item.uiintegral}}</span>
+         </p>
+         <p class="m-grey">{{item.createtime}}</p>
+       </li>
+       <li v-if="uilist.length == 0">
+         <p style="text-align: center">暂无可用积分</p>
+       </li>
+     </ul>
+    </div>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   import navList from '../../../components/common/navlist';
-    export default {
-        data() {
-            return {
-              nav_list:[
-                {
-                  name:'全部',
-                  params:'',
-                  active:true
-                },
-                {
-                  name:'收入',
-                  params:'',
-                  active:false
-                },
-                {
-                  name:'支出',
-                  params:'',
-                  active:false
-                }
-              ]
-            }
-        },
-        components: {
-          navList
-        },
-        methods: {
-          navClick(index){
-            let arr = [].concat(this.nav_list);
-            for(let i=0;i<arr.length;i++){
-              arr[i].active = false;
-            }
-            arr[index].active = true;
-            this.nav_list = [].concat(arr)
-          }
-        },
-        created() {
+  import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
+  export default {
+    data() {
+      return {
+        nav_list:[
+          { name:'全部', params:'all', active:true }, { name:'收入', params:'income', active:false }, { name:'支出', params:'expenditure', active:false }
+        ],
+        usintegral: "",             // 可用总积分数
+        uilist: [],                 // 积分来源list
+      }
+    },
+    components: { navList },
+    methods: {
+      // navList的点击事件
+      navClick(index){
+        let arr = [].concat(this.nav_list);
+        for(let i = 0; i < arr.length; i ++){
+          arr[i].active = false;
         }
+        arr[index].active = true;
+        this.getUserIntegral(arr[index].params);               // 获取积分列表
+        this.nav_list = [].concat(arr);
+      },
+      // 获取积分列表
+      getUserIntegral(uifilter) {
+        let params = {
+          token: localStorage.getItem('token'),
+          uifilter: uifilter
+        };
+        axios.get(api.get_user_integral, { params: params }).then(res => {
+          if(res.data.status == 200){
+            this.usintegral = res.data.data.usintegral;
+            this.uilist = res.data.data.uilist;
+          }else{
+            Toast(res.data.message);
+          }
+        })
+      },
+    },
+    mounted() {
+      common.changeTitle('可用积分');
+      this.getUserIntegral("all");               // 获取积分列表
     }
+  }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
