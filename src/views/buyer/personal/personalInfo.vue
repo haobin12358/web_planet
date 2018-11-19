@@ -107,6 +107,9 @@
               this.user.usGender = "女";
             }
             this.name = this.user.usname;
+            if(!this.user.usbirthday) {
+              this.user.usbirthday = "1995-01-01";
+            }
             this.birthday = this.user.usbirthday;
           }else{
             Toast(res.data.message);
