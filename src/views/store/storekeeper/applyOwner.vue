@@ -154,7 +154,7 @@
           }
         });
       },
-      // picker选择的银行改变
+      // picker选择的性别改变
       genderChange(picker, values) {
         this.user.usGender = values[0];
       }
