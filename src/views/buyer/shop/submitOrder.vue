@@ -27,7 +27,9 @@
         <div v-for="(items,index) in product_info">
           <h3>{{items.pb.pbname}}</h3>
           <div class="m-product" v-for="(item,i) in items.cart">
-            <img :src="item.sku.skupic" class="m-product-img" alt="">
+            <div>
+              <img :src="item.sku.skupic" class="m-product-img" alt="">
+            </div>
             <div>
               <h3>{{item.product.prtitle}}</h3>
               <p class="m-sku-select">
@@ -199,7 +201,7 @@
               Toast("请先选择收货地址");
               return false;
             }
-            console.log(this.uaid);
+            console.log("收货地址id", this.uaid);
           }
         },
         created() {
@@ -339,8 +341,8 @@
       width: 700px;
       height:106px;
       line-height: 106px;
-      background:rgba(252,211,22,1);
-      box-shadow:0 5px 6px rgba(0,0,0,0.16);
+      background: rgba(252,211,22,1);
+      box-shadow: 0 5px 6px rgba(0,0,0,0.16);
       border-radius: 10px;
       font-weight: bold;
       font-size: 38px;
