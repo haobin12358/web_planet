@@ -32,10 +32,10 @@
               <span class="m-icon-label"></span>
               <span>专业精选</span>
             </li>
-            <!--<li>-->
-              <!--<span class="m-icon-label"></span>-->
-              <!--<span>十五天无忧退换</span>-->
-            <!--</li>-->
+            <li>
+              <span class="m-icon-label"></span>
+              <span>十五天无忧退换</span>
+            </li>
           </ul>
         </div>
         <div class="m-selected-label-right">
@@ -46,7 +46,7 @@
       <!--场景推荐-->
       <div class="m-selected-one">
         <h3 class="m-selected-title m-flex-between" @click="changeRoute('scene')">
-          <span>场景推荐</span>
+          <span>场景推荐 /</span>
           <span class="m-selected-title-more">
             <span>查看更多</span>
             <span class="m-icon-more"></span>
@@ -63,7 +63,7 @@
       <!--品牌推荐-->
       <div class="m-selected-one">
         <h3 class="m-selected-title m-flex-between">
-          <span>品牌推荐</span>
+          <span>品牌推荐 /</span>
           <span class="m-selected-title-more"  @click="changeRoute('brandList')">
             <span>查看更多</span>
             <span class="m-icon-more"></span>
@@ -76,7 +76,7 @@
             </li>
           </ul>
         </div>
-        <div class="m-scroll m-center-scroll">
+        <div class="m-scroll ">
           <ul class="m-selected-brand-product-ul">
             <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
               <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >
@@ -87,6 +87,22 @@
                   <s class="m-grey m-ft-18">￥{{item.prlineprice | money}}</s>
                 </p>
               </div>
+            </li>
+          </ul>
+        </div>
+<!--商品分类-->
+        <h3 class="m-selected-title m-flex-between">
+          <span>商品分类/</span>
+          <span class="m-selected-title-more"  @click="changeRoute('brandList')">
+            <span>查看更多</span>
+            <span class="m-icon-more"></span>
+          </span>
+        </h3>
+        <div class="m-scroll " v-if="icon_list">
+          <ul class="m-equipment-icon-ul">
+            <li v-for="(item,index) in icon_list" @click="changeRoute(item)">
+              <img :src="item.pcpic" alt="">
+              <span class="m-name">{{item.pcname}}</span>
             </li>
           </ul>
         </div>
@@ -123,7 +139,7 @@
       <!--活动专题-->
       <div class="m-selected-one">
         <h3 class="m-selected-title m-flex-start">
-          <span>活动专题</span>
+          <span>活动专题 /</span>
         </h3>
         <div class="m-one-activity m-top">
           <img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">
@@ -193,7 +209,7 @@
       <!--为您精选-->
       <div class="m-selected-one">
         <h3 class="m-selected-title m-flex-between">
-          <span>为您精选</span>
+          <span>为您精选 /</span>
           <span class="m-selected-title-more">
             <span>查看更多</span>
             <span class="m-icon-more"></span>
@@ -219,7 +235,8 @@
               brand_list:null,
               brand_product:null,
               hot_list:null,
-              scene_list:null
+              scene_list:null,
+              icon_list:null,
             }
         },
         components: {
@@ -230,6 +247,7 @@
         this.getSwipe();
         this.getBrand();
         this.getScene();
+        this.getCategory();
       },
         methods: {
           /*获取轮播图*/
@@ -255,6 +273,14 @@
                 this.brand_list = res.data.data.brands;
                 this.brand_product = res.data.data.product;
                 this.hot_list = res.data.data.hot;
+              }
+            })
+          },
+          //获取装备信息
+          getCategory(){
+            axios.get(api.category_list).then(res => {
+              if(res.data.status == 200){
+                this.icon_list = [].concat(res.data.data);
               }
             })
           },
@@ -400,6 +426,33 @@
             }
           }
         }
+      }
+    }
+  }
+  .m-equipment-icon-ul{
+    .flex-row(flex-start);
+    li{
+      /*margin-right: 10px;*/
+      font-size: 21px;
+      line-height: 24px;
+      letter-spacing: -0.4px;
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 10px;
+      box-shadow: none;
+      margin-right: 0;
+      img{
+        display: block;
+        width: 180px;
+        height: 180px;
+      }
+      .m-name{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 180px;
+        text-align: center;
       }
     }
   }
