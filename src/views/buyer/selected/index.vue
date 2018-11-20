@@ -2,7 +2,7 @@
     <div class="m-selected">
       <!--搜索-->
       <div class="m-selected-search">
-        <span class="m-icon-home"></span>
+        <span class="m-icon-home" @click="changeRoutes('/gift')"></span>
         <div class="m-search-input-box" @click="changeRoute('/search')">
           <span class="m-icon-search"></span>
           <span>搜索商品</span>
@@ -298,6 +298,9 @@
                 this.$router.push({path:v,query:{pbid:item.pbid}});
             }
 
+          },
+          changeRoutes(v) {
+            this.$router.push(v);
           },
           /*场景点击*/
           sceneClick(item){
