@@ -93,14 +93,14 @@
 <!--商品分类-->
         <h3 class="m-selected-title m-flex-between">
           <span>商品分类/</span>
-          <span class="m-selected-title-more"  @click="changeRoute('brandList')">
+          <span class="m-selected-title-more"  @click="changeRoute('equipment/detail')">
             <span>查看更多</span>
             <span class="m-icon-more"></span>
           </span>
         </h3>
         <div class="m-scroll " v-if="icon_list">
           <ul class="m-equipment-icon-ul">
-            <li v-for="(item,index) in icon_list" @click="changeRoute(item)">
+            <li v-for="(item,index) in icon_list" @click="changeRoute('equipment/detail',item)">
               <img :src="item.pcpic" alt="">
               <span class="m-name">{{item.pcname}}</span>
             </li>
@@ -286,7 +286,14 @@
           },
           /*查看更多*/
           changeRoute(v,item){
-            this.$router.push({path:v,query:{pbid:item.pbid}});
+            switch (v){
+              case 'equipment/detail':
+                this.$router.push({path:v,query:{pcid:item.pcid}});
+                break;
+              default:
+                this.$router.push({path:v,query:{pbid:item.pbid}});
+            }
+
           },
           /*场景点击*/
           sceneClick(item){
@@ -444,14 +451,14 @@
       margin-right: 0;
       img{
         display: block;
-        width: 180px;
-        height: 180px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        /*box-shadow:5px 5px 6px rgba(0,0,0,0.16);*/
       }
       .m-name{
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 180px;
+        display: block;
+        width: 120px;
         text-align: center;
       }
     }
