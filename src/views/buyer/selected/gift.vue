@@ -115,7 +115,7 @@
       width: 150px;
       font-size: 30px;
       letter-spacing: 3px;
-      padding: 10px 270px;
+      padding: 15px 270px;
       border-radius: 60px;
       background: linear-gradient(90deg,rgba(251,232,145,1) 0%,rgba(255,204,1,1) 100%);
       position: absolute;
