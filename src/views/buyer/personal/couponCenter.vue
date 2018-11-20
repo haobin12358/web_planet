@@ -39,11 +39,7 @@
         <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-couponCenter-content-ul">
-        <!--<coupon-card></coupon-card>-->
-        <div class="m-no-coupon">
-          <span class="m-no-img"></span>
-          <p>还没有获得优惠券哦~</p>
-        </div>
+        <coupon-card :couponList="couponList"></coupon-card>
       </div>
     </div>
   </div>
@@ -61,17 +57,12 @@
   export default {
     data() {
       return {
-        nav_list:[
-          { name:'限时优惠券', params:'', active:true }, { name:'满减优惠券', params:'', active:false }, { name:'活动1', params:'', active:false },
-          { name:'活动2', params:'', active:false }, { name:'活动2', params:'', active:false }
-        ],
+        nav_list: [],
         signIn: false,            // 是否已签到
+        couponList: []            // 优惠券list
       }
     },
-    components: {
-      navList,
-      couponCard
-    },
+    components: { navList, couponCard },
     methods: {
       // navList点击事件
       navClick(index){
@@ -80,7 +71,8 @@
           arr[i].active = false;
         }
         arr[index].active = true;
-        this.nav_list = [].concat(arr)
+        this.getUserCoupon(arr[index].itid);      // 获取优惠券列表
+        this.nav_list = [].concat(arr);
       },
       // 用户签到
       userSignIn() {
@@ -91,11 +83,41 @@
             Toast(res.data.message);
           }
         });
-      }
+      },
+      // 获取标签列表
+      getItems() {
+        let params = { ittype: 20 };
+        axios.get(api.items_list, { params: params }).then(res => {
+          if(res.data.status == 200){
+            this.nav_list = res.data.data;
+            for(let i = 0; i < this.nav_list.length; i ++) {
+              this.nav_list[i].name = this.nav_list[i].itname;
+              this.nav_list[i].active = false;
+              this.nav_list[0].active = true;
+            }
+            // 获取优惠券列表
+            this.getUserCoupon(this.nav_list[0].itid);
+          }else{
+            Toast(res.data.message);
+          }
+        });
+      },
+      // 获取优惠券列表
+      getUserCoupon(itid) {
+        let params = { token: localStorage.getItem('token'), itid: itid };
+        axios.get(api.coupon_list, { params: params }).then(res => {
+          if(res.data.status == 200){
+            this.couponList = res.data.data;
+          }else{
+            Toast(res.data.message);
+          }
+        });
+      },
     },
     mounted() {
       common.changeTitle('优惠中心');
-      // this.getUser();       // 获取个人信息
+      this.getItems();            // 获取标签列表
+      // this.getUserCoupon();       // 获取优惠券列表
     }
   }
 </script>

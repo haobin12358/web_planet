@@ -1,27 +1,53 @@
 <template>
-  <!--unable-->
-    <div class="m-coupon-card ">
-      <span class="m-left-circle"></span>
-      <span class="m-price-icon">￥</span>
-      <div class="m-coupon-detail">
-        <span class="m-ft-160">60</span>
-        <div>
-          <p class="m-ft-48">服饰类专用</p>
-          <p class="m-ft-36">无限制可叠加</p>
+  <div>
+    <div v-if="couponList.length > 0">
+      <div class="m-coupon-card" v-for="item in couponList">
+        <span class="m-left-circle"></span>
+        <span class="m-price-icon">￥</span>
+        <div class="m-coupon-detail">
+          <span class="m-ft-130">{{item.cosubtration}}</span>
+          <div>
+            <p class="m-ft-48">{{item.title_subtitle.title}}</p>
+            <p class="m-ft-36">{{item.title_subtitle.subtitle}}</p>
+          </div>
+          <div class="m-coupon-time">
+            有效时间：{{item.covalidstarttime}} 至 {{item.covalidendtime}}
+          </div>
         </div>
+        <span class="m-right-circle"></span>
       </div>
-      <span class="m-right-circle"></span>
     </div>
+    <div class="m-no-coupon" v-if="couponList.length == 0">
+      <span class="m-no-img"></span>
+      <p style="margin-top: -40px">暂时还没有优惠券哦~</p>
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "coupon-card"
+  export default {
+    data() {
+      return {
+
+      }
+    },
+    props: {
+      couponList: { type: Array, default: null },
+    },
+    methods: {
+      /*navClick(i){
+        this.$emit('navClick',i);
+      }*/
+    },
+    mounted() {
+      console.log(this.couponList);
     }
+  }
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
-@import "../../../common/css/index";
+  @import "../../../common/css/index";
+
   .m-coupon-card{
     position: relative;
     width: 619px;
@@ -35,8 +61,8 @@
     }
     .m-price-icon{
       position: absolute;
-      top: 14px;
-      left: 60px;
+      top: 10px;
+      left: 15px;
       font-size: 46px;
     }
     .m-icon-word{
@@ -65,19 +91,27 @@
     }
     .m-coupon-detail{
       .flex-row(space-between);
-      width: 482px;
+      width: 540px;
       padding-right: 30px;
       position: absolute;
       top: 23px;
-      left: 106px;
+      left: 40px;
       text-align: left;
-      .m-ft-160{
-        font-size: 160px;
+      .m-coupon-time {
+        position: absolute;
+        bottom: -15px;
+        left: -30px;
+        font-size: 16px;
+      }
+      .m-ft-130{
+        font-size: 130px;
         font-weight: bold;
+        line-height: 180px;
+        margin: -10px 0 0 10px;
       }
       .m-ft-48{
-        font-size: 48px;
-        margin-bottom: 20px;
+        font-size: 44px;
+        margin: -10px -10px 10px 0;
       }
     }
   }

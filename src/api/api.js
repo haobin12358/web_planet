@@ -45,6 +45,9 @@ const api={
   get_user_integral : title + '/user/get_user_integral',          // 获取积分列表
   user_sign_in : title + '/user/user_sign_in',                    // 用户签到
 
+  list_user_coupon : title + '/coupon/list_user_coupon',          // 获取用户个人的优惠券
+  coupon_list : title + '/coupon/list',                           // 获取优惠券列表
+
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情
   list_with_group: title + '/brand/list_with_group',//获取品牌列表
