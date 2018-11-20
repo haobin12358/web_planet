@@ -288,7 +288,11 @@
           changeRoute(v,item){
             switch (v){
               case 'equipment/detail':
-                this.$router.push({path:v,query:{pcid:item.pcid}});
+                if(item){
+                  this.$router.push({path:v,query:{pcid:item.pcid}});
+                }else{
+                  this.$router.push({path:v});
+                }
                 break;
               default:
                 this.$router.push({path:v,query:{pbid:item.pbid}});

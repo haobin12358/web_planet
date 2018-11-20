@@ -21,7 +21,7 @@
         <div class="m-side-scroll">
           <ul class="m-side-ul">
             <li v-for="(item,index) in icon_list" :class="item.active?'active':''" @click="sideClick(index)">
-              <img src="https://planet.daaiti.cn/img/equipment/equipment-child.png"  alt="">
+              <img :src="item.pcpic"  alt="">
               <span>{{item.pcname}}</span>
             </li>
           </ul>
@@ -100,7 +100,7 @@
                 }
               }
               if(!this.$route.query.pcid){
-                res.data.data[i].active = true;
+                res.data.data[0].active = true;
               }
               this.icon_list = [].concat(res.data.data);
               if(this.$route.query.pcid){
@@ -210,8 +210,9 @@
             width: 120px;
             height: 120px;
             margin-left: 15px;
+            margin-right: 5px;
             vertical-align: middle;
-            box-shadow:5px 0 10px rgba(0,0,0,0.16);
+            /*box-shadow:5px 5px 10px rgba(0,0,0,0.16);*/
             border-radius: 50%;
           }
         }
