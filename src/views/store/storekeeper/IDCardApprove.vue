@@ -30,11 +30,6 @@
 
       <div class="m-foot-btn">
         <span @click="submitUser">提交认证</span>
-        <!--<span @click="submitUser" v-if="!user.usidentification">提交认证</span>
-        <div class="m-footer-btn-box" v-if="user.usidentification">
-          <div class="m-footer-btn m-grey" @click="goBack">返 回</div>
-          <div class="m-footer-btn m-yellow" @click="editAgain">再次认证</div>
-        </div>-->
       </div>
     </div>
   </div>
@@ -89,14 +84,6 @@
             Toast(res.data.message);
           }
         });
-      },
-      // 返回上一页
-      goBack() {
-        this.$router.go(-1);
-      },
-      // 再次编辑
-      editAgain() {
-        this.user.usidentification = "";
       }
     },
     mounted() {
@@ -110,6 +97,7 @@
   @import "../../../common/css/index";
 
   .m-IDCard-box {
+    min-height: 100%;
     background-color: #EEEEEE;
     .m-IDCard-bg {
       width: 750px;
@@ -119,6 +107,7 @@
     .m-IDCard {
       width: 600px;
       padding: 60px 50px;
+      margin-bottom: 260px;
       border-radius: 10px;
       background-color: #ffffff;
       position: absolute;
@@ -159,7 +148,9 @@
         border-radius: 30px;
       }
       .m-foot-btn{
-        margin: 30px -25px;
+        position: absolute;
+        bottom: -150px;
+        left: 0;
         span{
           display: inline-block;
           width: 700px;
@@ -170,26 +161,6 @@
           font-weight: bold;
           border-radius: 10px;
           box-shadow: 0 5px 6px rgba(0,0,0,0.16);
-        }
-        .m-footer-btn-box {
-          margin: 50px 30px 0 30px;
-          display: flex;
-          justify-content: space-between;
-          .m-footer-btn {
-            width: 300px;
-            height: 106px;
-            line-height: 106px;
-            font-size: 30px;
-            font-weight: bold;
-            border-radius: 10px;
-            box-shadow: 0 5px 6px rgba(0,0,0,0.16);
-          }
-          .m-yellow {
-            background-color: @mainColor;
-          }
-          .m-grey {
-            background-color: #CCCCCC;
-          }
         }
       }
     }
