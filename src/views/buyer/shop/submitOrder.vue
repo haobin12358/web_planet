@@ -82,9 +82,16 @@
           </li>
         </ul>
       </div>
+      <!--商家大礼包支付成功的popup-->
+      <mt-popup class="m-gift-popup" v-model="giftPopup" pop-transition="popup-fade">
+        <img class="m-gift-popup-img" src="/static/images/icon-out-know.png" alt="">
+        <div class="m-ft-30 m-ft-b">支付成功</div>
+        <div class="m-gift-popup-text m-ft-24">支付成功，提交申请并完成审批即可成为卖家。</div>
+        <div class="m-gift-popup-btn m-ft-30 m-ft-b" @click="changeRoute('/storekeeper/IDCardApprove')">填写申请</div>
+      </mt-popup>
 
       <div class="m-order-btn">
-        <span @click="submitOrder">支付订单</span>
+        <span @click="submitOrder" ref="button">支付订单</span>
       </div>
       <!--<picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>-->
 
@@ -128,7 +135,9 @@
           coupon_info: null,
           total_money: 0,
           uaid: "",                 // 收货地址id
-          couponList: []            // 优惠券list
+          couponList: [],           // 优惠券list
+          fromGift: false,          // 是否是商家大礼包的结算页面
+          giftPopup: false,         // 商家大礼包支付后的popup
         }
       },
       components: { picker, coupon },
@@ -143,6 +152,10 @@
             }
           }
           this.total_money = total;
+          // 判断是否是从商家大礼包来结算的
+          if(this.$route.query.gift) {
+            this.fromGift = true
+          }
         }
         this.uaid = localStorage.getItem("uaid");
         this.getOneAddress();
@@ -153,6 +166,8 @@
           changeRoute(v, where) {
             if(where) {
               this.$router.push({ path: v, query: { from: where }});
+            }else {
+              this.$router.push(v);
             }
           },
           /*获取默认地址*/
@@ -202,6 +217,10 @@
               return false;
             }
             console.log("收货地址id", this.uaid);
+            // 是从商家大礼包来结算的则弹出popup
+            if(this.fromGift) {
+              this.giftPopup = true;
+            }
           }
         },
         created() {
@@ -330,6 +349,29 @@
         width: 400px;
         padding: 0 40px 10px;
       }
+    }
+  }
+  .m-gift-popup {
+    width: 700px;
+    height: 600px;
+    margin: -300px 0 0 25px;
+    border-radius: 30px;
+    .m-gift-popup-img {
+      width: 85px;
+      height: 85px;
+      margin: 100px 0 36px 0;
+    }
+    .m-gift-popup-text {
+      margin: 45px 0 120px 0;
+    }
+    .m-gift-popup-btn {
+      width: 120px;
+      color: #ffffff;
+      background-color: #FCD316;
+      padding: 15px 70px;
+      margin-left: 220px;
+      border-radius: 10px;
+      box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
     }
   }
   .m-order-btn{

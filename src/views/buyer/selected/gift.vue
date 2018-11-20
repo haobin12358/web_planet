@@ -59,7 +59,7 @@
                 axios.post(api.cart_update +'?token=' + localStorage.getItem('token'), params).then(res => {
                   if(res.data.status == 200){
                     // 去创建订单页
-                    this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(caid) }});
+                    this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(caid), gift: true }});
                   }else{
                     Toast(res.data.message);
                   }
