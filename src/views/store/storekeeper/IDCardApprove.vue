@@ -1,30 +1,40 @@
 <template>
-  <div class="m-IDCard">
-    <div class="m-IDCard-row">
-      <div class="m-row-title">真实姓名</div>
-      <input type="text" class="m-row-input m-name-input" v-model="user.usrealname" placeholder="请输入真实姓名">
-    </div>
-    <div class="m-IDCard-row">
-      <div class="m-row-title">身份证号</div>
-      <input type="text" class="m-row-input m-num-input" v-model="user.usidentification" maxlength="18" placeholder="请输入身份证号">
-    </div>
+  <div class="m-IDCard-box">
+    <div class="m-IDCard-bg"></div>
+    <div class="m-IDCard">
+      <div>
+        <div class="m-IDCard-row">
+          <div class="m-row-title">真实姓名</div>
+          <input type="text" class="m-row-input m-width-220" v-model="user.usrealname" placeholder="请填写真实姓名">
+        </div>
+        <div class="m-IDCard-row">
+          <div class="m-row-title">性别</div>
+          <input type="text" class="m-row-input m-width-220" placeholder="请选择性别">
+        </div>
+        <div class="m-IDCard-row">
+          <div class="m-row-title">手机号码</div>
+          <input type="text" class="m-row-input m-width-220" placeholder="请填写手机号码">
+        </div>
+        <div class="m-IDCard-row">
+          <div class="m-row-title">身份证号</div>
+          <input type="text" class="m-row-input m-width-450" v-model="user.usidentification" maxlength="18" placeholder="请填写身份证号">
+        </div>
+        <div class="m-IDCard-row">
+          <div class="m-row-title">身份证照片</div>
+        </div>
+      </div>
+      <img class="m-IDCard-img" v-if="user.umfront" :src="user.umfront" alt="">
+      <img class="m-IDCard-img" v-if="!user.umfront" src="/static/images/icon-upload-IDCard-img.png" alt="">
+      <img class="m-IDCard-img" v-if="user.umback" :src="user.umback" alt="">
+      <img class="m-IDCard-img" v-if="!user.umback" src="/static/images/icon-upload-IDCard-img.png" alt="">
 
-    <div class="m-IDCard-row">
-      <div class="m-row-title">身份证正面</div>
-    </div>
-    <img class="m-IDCard-img" v-if="user.umfront" :src="user.umfront" alt="">
-    <img class="m-IDCard-img" v-if="!user.umfront" src="/static/images/icon-upload-IDCard-img.png" alt="">
-    <div class="m-IDCard-row">
-      <div class="m-row-title">身份证反面</div>
-    </div>
-    <img class="m-IDCard-img" v-if="user.umback" :src="user.umback" alt="">
-    <img class="m-IDCard-img" v-if="!user.umback" src="/static/images/icon-upload-IDCard-img.png" alt="">
-
-    <div class="m-foot-btn">
-      <span @click="submitUser" v-if="!user.usidentification">提交认证</span>
-      <div class="m-footer-btn-box" v-if="user.usidentification">
-        <div class="m-footer-btn m-grey" @click="goBack">返 回</div>
-        <div class="m-footer-btn m-yellow" @click="editAgain">再次认证</div>
+      <div class="m-foot-btn">
+        <span @click="submitUser">提交认证</span>
+        <!--<span @click="submitUser" v-if="!user.usidentification">提交认证</span>
+        <div class="m-footer-btn-box" v-if="user.usidentification">
+          <div class="m-footer-btn m-grey" @click="goBack">返 回</div>
+          <div class="m-footer-btn m-yellow" @click="editAgain">再次认证</div>
+        </div>-->
       </div>
     </div>
   </div>
@@ -99,66 +109,87 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
 
-  .m-IDCard {
-    padding: 60px 50px;
-    .m-IDCard-row {
-      display: flex;
-      margin-bottom: 25px;
-      .m-row-title {
-        color: #666666;
-        font-size: 30px;
-        margin-right: 32px;
-      }
-      .m-row-input {
-        border: 1px #999999 solid;
-        border-radius: 30px;
-        font-size: 24px;
-        padding: 3px 0 0 30px;
-      }
-      .m-name-input {
-        width: 220px;
-      }
-      .m-num-input {
-        width: 450px;
-      }
+  .m-IDCard-box {
+    background-color: #EEEEEE;
+    .m-IDCard-bg {
+      width: 750px;
+      height: 371px;
+      background: linear-gradient(180deg,rgba(252,211,22,1) 0%,rgba(239,232,197,1) 100%);
     }
-    .m-IDCard-img {
-      width: 655px;
-      height: 429px;
-      margin-bottom: 30px;
-      border-radius: 30px;
-    }
-    .m-foot-btn{
-      margin: 30px -25px;
-      span{
-        display: inline-block;
-        width: 700px;
-        height: 106px;
-        line-height: 106px;
-        background-color: @mainColor;
-        font-size: 38px;
-        font-weight: bold;
-        border-radius: 10px;
-        box-shadow: 0 5px 6px rgba(0,0,0,0.16);
-      }
-      .m-footer-btn-box {
-        margin: 50px 30px 0 30px;
+    .m-IDCard {
+      width: 600px;
+      padding: 60px 50px;
+      border-radius: 10px;
+      background-color: #ffffff;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      .m-IDCard-row {
         display: flex;
         justify-content: space-between;
-        .m-footer-btn {
-          width: 300px;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px #CCCCCC solid;
+        &:last-child {
+          border-bottom: 0;
+        }
+        .m-row-title {
+          color: #999999;
+          font-size: 30px;
+          margin-right: 32px;
+        }
+        .m-row-input {
+          color: #999999;
+          border-radius: 30px;
+          font-size: 24px;
+          text-align: right;
+        }
+        .m-width-220 {
+          width: 220px;
+        }
+        .m-width-450 {
+          width: 400px;
+        }
+      }
+      .m-IDCard-img {
+        float: left;
+        width: 377px;
+        height: 247px;
+        margin-bottom: 30px;
+        border-radius: 30px;
+      }
+      .m-foot-btn{
+        margin: 30px -25px;
+        span{
+          display: inline-block;
+          width: 700px;
           height: 106px;
           line-height: 106px;
-          font-size: 30px;
+          background-color: @mainColor;
+          font-size: 38px;
           font-weight: bold;
           border-radius: 10px;
           box-shadow: 0 5px 6px rgba(0,0,0,0.16);
         }
-        .m-yellow {
-          background-color: @mainColor;
-        }
-        .m-grey {
-          background-color: #CCCCCC;
+        .m-footer-btn-box {
+          margin: 50px 30px 0 30px;
+          display: flex;
+          justify-content: space-between;
+          .m-footer-btn {
+            width: 300px;
+            height: 106px;
+            line-height: 106px;
+            font-size: 30px;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+          }
+          .m-yellow {
+            background-color: @mainColor;
+          }
+          .m-grey {
+            background-color: #CCCCCC;
+          }
         }
       }
     }
