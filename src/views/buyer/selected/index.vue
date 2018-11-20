@@ -294,8 +294,11 @@
                   this.$router.push({path:v});
                 }
                 break;
-              default:
+              case '/brandDetail':
                 this.$router.push({path:v,query:{pbid:item.pbid}});
+                break;
+              default:
+                this.$router.push({path:v,});
             }
 
           },
