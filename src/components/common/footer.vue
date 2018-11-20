@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>
+    <!--<span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>-->
 
     <mt-tabbar v-model="selected" :fixed="true">
       <template v-for="(item,index) in tabbar" >

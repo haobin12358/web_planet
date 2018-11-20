@@ -74,6 +74,7 @@ export const constantRouterMap = [
     children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
     ],
   },
+  { path: '/gift', component: () => import('../views/buyer/selected/gift'), hidden: true },
   { path: '/scene', component: () => import('../views/buyer/selected/scene'), hidden: true },
   { path: '/brandList', component: () => import('../views/buyer/selected/brandList'), hidden: true },
   { path: '/brandDetail', component: () => import('../views/buyer/selected/brandDetail'), hidden: true },
