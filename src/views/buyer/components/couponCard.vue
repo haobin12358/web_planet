@@ -40,7 +40,7 @@
       }*/
     },
     mounted() {
-      console.log(this.couponList);
+      // console.log(this.couponList);
     }
   }
 </script>

@@ -90,10 +90,7 @@
         v-model="show_coupon"
         popup-transition="popup-fade" class="m-coupon-modal">
         <div class="m-coupon-modal-content">
-          <coupon></coupon>
-          <coupon></coupon>
-          <coupon></coupon>
-          <coupon></coupon>
+          <coupon :couponList="couponList"></coupon>
         </div>
 
       </mt-popup>
@@ -129,6 +126,7 @@
           coupon_info: null,
           total_money: 0,
           uaid: "",                 // 收货地址id
+          couponList: []            // 优惠券list
         }
       },
       components: { picker, coupon },
