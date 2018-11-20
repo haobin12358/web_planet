@@ -34,13 +34,13 @@
                  <span class="m-icon-more"></span>
                </div>
              </li>
-             <li>
+             <li @click="clearCache">
                <div>
                  <span class="m-icon m-icon-delete"></span>
                  <span>清楚缓存</span>
                </div>
                <div>
-                 <span>1.5M</span>
+                 <span>{{cache}} M</span>
                  <span class="m-icon-more"></span>
                </div>
              </li>
@@ -76,6 +76,7 @@
       return {
         name: '',
         user: {},              // 个人信息
+        cache: 1.5,
       }
     },
     components: {},
@@ -93,6 +94,15 @@
             Toast(res.data.message);
           }
         })
+      },
+      // 清除缓存
+      clearCache() {
+        if(this.cache != 0) {
+          Toast("清除成功");
+          this.cache = 0;
+        }else {
+          Toast("暂无缓存，无需清理");
+        }
       }
     },
     mounted() {
