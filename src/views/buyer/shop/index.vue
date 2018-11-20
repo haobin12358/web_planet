@@ -6,8 +6,8 @@
       <div class="m-shop-content" @touchmove.stop="touchMove">
         <h3 class="m-shop-title">
           <span class="m-title">购物车</span>
-          <span v-if="!isManage" @click="changeManage">管理</span>
-          <span v-if="isManage" @click="changeManage">完成</span>
+          <span class="m-ft-26" v-if="!isManage" @click="changeManage">管理</span>
+          <span class="m-ft-26" v-if="isManage" @click="changeManage">完成</span>
         </h3>
         <p class="m-p">共{{total_number}}件商品</p>
 
