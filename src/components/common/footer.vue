@@ -100,6 +100,9 @@
           case '装备':
             this.$router.push('/equipment');
             break;
+          case '活动':
+            this.$router.push('/activity');
+            break;
           case '购物车':
             this.$router.push('/shop');
             break;

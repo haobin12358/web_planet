@@ -137,7 +137,20 @@ export const constantRouterMap = [
   { path: '/personal/editInput', component: () => import('../views/buyer/personal/editInput'), hidden: true },
   { path: '/personal/couponCenter', component: () => import('../views/buyer/personal/couponCenter'), hidden: true },
 
-
+  // 活动模块
+  {
+    path: '/activity',
+    component: Layout,
+    redirect: 'activity',
+    children: [{ path: '/activity', component: () => import('../views/buyer/activity/index'), hidden: true }
+    ],
+  },
+  { path: '/activity/newcomer', component: () => import('../views/buyer/activity/newcomer'), hidden: true },            // 新人尝鲜礼包
+  { path: '/activity/dailyGuess', component: () => import('../views/buyer/activity/dailyGuess'), hidden: true },        // 每日竞猜
+  { path: '/activity/pandora', component: () => import('../views/buyer/activity/pandora'), hidden: true },              // 魔法礼盒
+  { path: '/activity/freeTrial', component: () => import('../views/buyer/activity/freeTrial'), hidden: true },          // 免费试用
+  { path: '/activity/freeProduct', component: () => import('../views/buyer/activity/activityProduct'), hidden: true },      // 免费试用 - 商品
+  { path: '/activity/freeDetail', component: () => import('../views/buyer/activity/activityProductDetail'), hidden: true },        // 免费试用 - 商品详情
 ];
 
 export default new Router({
