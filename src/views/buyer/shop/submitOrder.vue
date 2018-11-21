@@ -192,9 +192,11 @@
           },
           /*获取优惠券*/
           getCoupon(){
-            axios.get(api.list_coupon,{
+            axios.get(api.list_user_coupon,{
               params:{
-                token:localStorage.getItem('token')
+                token:localStorage.getItem('token'),
+                ucalreadyuse:false,
+                canuse:true
               }
             }).then(res => {
               if(res.data.status == 200){
