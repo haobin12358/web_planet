@@ -1,11 +1,12 @@
 <template>
-  <div class="m-coupon">
+  <div class="m-coupon" @touchmove.stop="touchMove">
     <div class="m-nav">
       <nav-list :navlist="nav_list" :isScroll="false" @navClick="navClick"></nav-list>
     </div>
     <div class="m-coupon-content">
       <coupon-card :couponList="couponList"></coupon-card>
     </div>
+    <bottom-line v-if="bottom_show"></bottom-line>
   </div>
 </template>
 
@@ -16,6 +17,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine';
 
   export default {
     data() {
@@ -23,48 +25,95 @@
         nav_list:[
           { name: '未使用', params: '2', active: true }, { name: '已使用', params: '1', active: false }, { name: '已过期', params: '0', active: false }
         ],
-        couponList: []            // 优惠券list
+        couponList: [],            // 优惠券list
+        status: "2",               // 暂存navList点击的优惠券状态，默认是未使用("0")开头
+        page_num: 1,
+        page_size: 6,
+        isScroll: true,
+        total_count: 0,
+        bottom_show: false
       }
     },
-    components: { navList, couponCard },
+    components: { navList, couponCard, bottomLine },
     methods: {
       // navList的点击事件
       navClick(index){
+        this.page_num = 1;
+        this.total_count = 0;
+        this.bottom_show = false;
+
         let arr = [].concat(this.nav_list);
         for(let i = 0; i < arr.length; i ++) {
           arr[i].active = false;
         }
         arr[index].active = true;
-        this.getUserCoupon(arr[index].params);            // 获取用户个人优惠券
+        this.status = arr[index].params;
+        this.getUserCoupon();            // 获取用户个人优惠券
         this.nav_list = [].concat(arr);
       },
       // 获取用户个人优惠券
-      getUserCoupon(status) {
+      getUserCoupon() {
         let params = {
-          token: localStorage.getItem('token')
+          token: localStorage.getItem('token'),
+          page_num : this.page_num,
+          page_size : this.page_size
         };
-        if(status == "0") {
+        if(this.status == "0") {
           params.canuse = "false";
-        }else if(status == "1") {
+        }else if(this.status == "1") {
           params.ucalreadyuse = "true";
-        }else if(status == "2") {
+        }else if(this.status == "2") {
           params.ucalreadyuse = "false";
         }
-        this.couponList = [];
         axios.get(api.list_user_coupon, { params: params }).then(res => {
           if(res.data.status == 200){
-            for(let i = 0; i < res.data.data.length; i ++) {
-              this.couponList.push(res.data.data[i].coupon)
+            this.isScroll = true;
+            if(res.data.data.length > 0) {
+              if(this.page_num > 1) {     // 把新数据给list续上
+                let list = [];
+                for(let i = 0; i < res.data.data.length; i ++) {
+                  list.push(res.data.data[i].coupon);
+                }
+                this.couponList = this.couponList.concat(list);
+              }else{
+                for(let i = 0; i < res.data.data.length; i ++) {
+                  this.couponList.push(res.data.data[i].coupon);
+                }
+              }
+              this.page_num = this.page_num + 1;
+              this.total_count = res.data.total_count;
             }
           }else{
             Toast(res.data.message);
+            this.couponList = [];
+            this.page_num = 1;
+            this.total_count = 0;
+            return false;
           }
         });
+      },
+      //滚动加载更多
+      touchMove(e){
+        let scrollTop = common.getScrollTop();
+        let scrollHeight = common.getScrollHeight();
+        let ClientHeight = common.getClientHeight();
+        if (scrollTop + ClientHeight  >= scrollHeight - 10) {
+          if(this.isScroll) {
+            this.isScroll = false;
+            if(this.couponList.length == this.total_count) {
+              this.bottom_show = true;
+            }else {
+              this.getUserCoupon();         // 获取优惠券列表
+            }
+          }else {
+            this.bottom_show = true;
+          }
+        }
       }
     },
     mounted() {
       common.changeTitle('我的优惠券');
-      this.getUserCoupon("2");            // 获取用户个人优惠券
+      this.getUserCoupon();            // 获取用户个人优惠券
     }
   }
 </script>

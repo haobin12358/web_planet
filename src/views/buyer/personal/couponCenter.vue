@@ -1,5 +1,5 @@
 <template>
-  <div class="m-couponCenter">
+  <div class="m-couponCenter" @touchmove.stop="touchMove">
     <div class="m-couponCenter-top">
       <span class="m-couponCenter-rule">积分规则</span>
       <p class="m-couponCenter-top-p">累计积分：520</p>
@@ -43,8 +43,8 @@
         <coupon-card :couponList="couponList"></coupon-card>
       </div>
     </div>
+    <bottom-line v-if="bottom_show"></bottom-line>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -54,25 +54,37 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine';
 
   export default {
     data() {
       return {
         nav_list: [],
         signIn: false,            // 是否已签到
-        couponList: []            // 优惠券list
+        couponList: [],           // 优惠券list
+        itid: "",                 // 暂存itid
+        page_num: 1,
+        page_size: 10,
+        isScroll: true,
+        total_count: 0,
+        bottom_show: false
       }
     },
-    components: { navList, couponCard },
+    components: { navList, couponCard, bottomLine },
     methods: {
       // navList点击事件
       navClick(index){
+        this.page_num = 1;
+        this.total_count = 0;
+        this.bottom_show = false;
+
         let arr = [].concat(this.nav_list);
         for(let i=0;i<arr.length;i++){
           arr[i].active = false;
         }
         arr[index].active = true;
-        this.getUserCoupon(arr[index].itid);      // 获取优惠券列表
+        this.itid = arr[index].itid;
+        this.getUserCoupon();      // 获取优惠券列表
         this.nav_list = [].concat(arr);
       },
       // 用户签到
@@ -97,29 +109,65 @@
               this.nav_list[i].active = false;
               this.nav_list[0].active = true;
             }
-            // 获取优惠券列表
-            this.getUserCoupon(this.nav_list[0].itid);
+            this.itid = this.nav_list[0].itid;
+            this.getUserCoupon();         // 获取优惠券列表
           }else{
             Toast(res.data.message);
           }
         });
       },
       // 获取优惠券列表
-      getUserCoupon(itid) {
-        let params = { token: localStorage.getItem('token'), itid: itid };
+      getUserCoupon() {
+        let params = {
+          token: localStorage.getItem('token'),
+          itid: this.itid,
+          page_num : this.page_num,
+          page_size : this.page_size
+        };
         axios.get(api.coupon_list, { params: params }).then(res => {
-          if(res.data.status == 200){
-            this.couponList = res.data.data;
+          if(res.data.status == 200) {
+            this.couponList = [];
+            this.isScroll = true;
+            if(res.data.data.length > 0) {
+              if(this.page_num > 1) {     // 把新数据给list续上
+                this.couponList = this.couponList.concat(res.data.data);
+              }else{
+                this.couponList = res.data.data;
+              }
+              this.page_num = this.page_num + 1;
+              this.total_count = res.data.total_count;
+            }
           }else{
             Toast(res.data.message);
+            this.couponList = [];
+            this.page_num = 1;
+            this.total_count = 0;
+            return false;
           }
         });
       },
+      //滚动加载更多
+      touchMove(e){
+        let scrollTop = common.getScrollTop();
+        let scrollHeight = common.getScrollHeight();
+        let ClientHeight = common.getClientHeight();
+        if (scrollTop + ClientHeight  >= scrollHeight - 10) {
+          if(this.isScroll) {
+            this.isScroll = false;
+            if(this.couponList.length == this.total_count) {
+              this.bottom_show = true;
+            }else {
+              this.getUserCoupon();         // 获取优惠券列表
+            }
+          }else {
+            this.bottom_show = true;
+          }
+        }
+      }
     },
     mounted() {
       common.changeTitle('优惠中心');
       this.getItems();            // 获取标签列表
-      // this.getUserCoupon();       // 获取优惠券列表
     }
   }
 </script>
