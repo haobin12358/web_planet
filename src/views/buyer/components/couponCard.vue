@@ -3,9 +3,11 @@
     <div v-if="couponList.length > 0">
       <div class="m-coupon-card" v-for="item in couponList" @click="couponClick(item)">
         <span class="m-left-circle"></span>
-        <span class="m-price-icon">￥</span>
+        <span class="m-price-icon" v-if="item.codiscount == 10">￥</span>
         <div class="m-coupon-detail">
-          <span class="m-ft-130">{{item.cosubtration}}</span>
+          <span class="m-ft-130" v-if="item.codiscount == 10">{{item.cosubtration}}</span>
+          <span class="m-ft-140" v-if="item.codiscount != 10">{{item.codiscount}}</span>
+          <span class="m-ft-40" v-if="item.codiscount != 10">折</span>
           <div>
             <p class="m-ft-48">{{item.title_subtitle.title}}</p>
             <p class="m-ft-36">{{item.title_subtitle.subtitle}}</p>
@@ -35,16 +37,14 @@
       couponList: { type: Array, default: null },
     },
     methods: {
-      /*navClick(i){
-        this.$emit('navClick',i);
-      }*/
+      // 优惠券选择
       couponClick(item){
         this.$emit('couponClick',item)
       }
     },
     mounted() {
       // console.log(this.couponList);
-    }
+    },
   }
 </script>
 
@@ -110,7 +110,17 @@
         font-size: 130px;
         font-weight: bold;
         line-height: 180px;
-        margin: -10px 0 0 10px;
+        margin: -10px 0 0 0;
+      }
+      .m-ft-140{
+        font-size: 140px;
+        font-weight: bold;
+        line-height: 180px;
+        margin: 0 0 -10px 30px;
+      }
+      .m-ft-40 {
+        font-size: 46px;
+        margin: 40px 0 0 -50px;
       }
       .m-ft-48{
         font-size: 44px;
