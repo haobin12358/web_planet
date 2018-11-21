@@ -50,12 +50,15 @@
           }
         },
       mounted(){
+        if(this.$route.query.allOrder){
+          this.product_info = JSON.parse(this.$route.query.product).order_part;
+        }else{
           this.product_info = JSON.parse(this.$route.query.product);
-
+        }
       },
       methods:{
         changeRoute(v,item){
-          this.$router.push({path:v,query:{product:this.$route.query.product,oraproductstatus:item}});
+          this.$router.push({path:v,query:{product:this.$route.query.product,oraproductstatus:item,allOrder:this.$route.query.allOrder || null}});
         }
       }
     }

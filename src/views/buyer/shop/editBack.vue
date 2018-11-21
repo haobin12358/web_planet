@@ -47,7 +47,7 @@
       <div class="m-one-select">
         <div>
           <span>退款原因：</span>
-          <textarea name="" id="" placeholder="选填"></textarea>
+          <textarea name="" id="" v-model="oraaddtion" placeholder="选填"></textarea>
         </div>
         <div class="m-selectBack-img-box">
           <div class="m-selectBack-camera" @click="uploadImg">
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="m-foot-btn">
-        <span @click="changeRoute('/backDetail')">提交</span>
+        <span @click="submitRefund">提交</span>
       </div>
     </div>
     <picker :show_picker="show_picker"  :slots="slots" @pickerSave="pickerSave" ></picker>
@@ -96,24 +96,31 @@
         oraproductstatus:0,
         total_money:0,
         img_box:[],//上传图片集合
+        upload_img:[],
         refund_slot:[{
           flex: 1,
           values: [],
           className: 'slot1',
           textAlign: 'center'
         }],
-        refund_select:null
+        refund_select:null,
+        order:null,
+        oraaddtion:''
       }
     },
     components: { picker},
     mounted(){
-      this.product_info = JSON.parse(this.$route.query.product);
-      this.oraproductstatus = Number(this.$route.query.oraproductstatus);
-      let total = 0;
-      for(let i = 0;i<this.product_info.length;i++){
-        total = total + Number(this.product_info[i].opsubtotal);
+      if(this.$route.query.allOrder){
+        this.order = JSON.parse(this.$route.query.product);
+        this.total_money = JSON.parse(this.$route.query.product).omtruemount;
+        this.product_info = JSON.parse(this.$route.query.product).order_part;
+      }else{
+        this.product_info = JSON.parse(this.$route.query.product);
+        this.total_money = JSON.parse(this.$route.query.product)[0].opsubtotal;
       }
-      this.total_money = total;
+
+      this.oraproductstatus = Number(this.$route.query.oraproductstatus);
+
     //  获取退货原因
       this.getBack();
     },
@@ -149,6 +156,7 @@
         form.append("file", files[0]);
         axios.post(api.upload_file+'?token='+localStorage.getItem('token'),form).then(res => {
           if(res.data.status == 200){
+            this.upload_img.push(res.data.data);
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.img_box.push(this.result);
@@ -167,6 +175,33 @@
             for(let i =0;i<res.data.data.length;i++){
               this.refund_slot[0].values.push(res.data.data[i].diname);
             }
+          }
+        })
+      },
+    //  申请退款
+      submitRefund(){
+        if(!this.refund_select){
+          Toast("请先选择退货原因");
+          return false;
+        }
+        if(this.oraproductstatus == 1 && !this.status_select){
+          Toast("请先选择货物状态");
+          return false;
+        }
+        axios.post(api.refund_create + '?token=' + localStorage.getItem('token'),{
+          omid: (this.order && this.order.omid ) || '',
+          opid: (!this.order && this.product_info[0].opid) || '' ,
+          orareason: this.refund_select,
+          oraproductstatus:  (this.status_select && this.status_select.value) || 0 ,
+          oraaddtion: this.oraaddtion,
+          oraddtionvoucher: this.upload_img,
+          orastate: this.oraproductstatus,
+          oramount: this.total_money
+        }).then(res => {
+          if(res.data.status == 200){
+            this.$router.push('/backDetail');
+          }else{
+            Toast(res.data.message);
           }
         })
       }
