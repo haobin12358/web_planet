@@ -112,7 +112,7 @@
             ],
             page_info:{
               page_num:1,
-              page_size:5
+              page_size:10
             },
             isScroll:true,
             total_count:0,
@@ -177,7 +177,7 @@
             }
           }).then(res => {
             if(res.data.status == 200){
-              this.order_list = res.data.data;
+              this.isScroll = true;
               if(res.data.data.length >0){
                 if(this.page_info.page_num >1){
                   this.order_list = this.order_list.concat(res.data.data);
@@ -185,14 +185,15 @@
                   this.order_list = res.data.data;
                 }
                 this.page_info.page_num = this.page_info.page_num +1;
+                this.total_count = res.data.total_count;
               }else{
-                this.order_list = [];
+                this.order_list = null
                 this.page_info.page_num = 1;
                 this.total_count = 0;
                 return false;
               }
-              this.isScroll = true;
-              this.total_count = res.data.total_count;
+
+
             }
           })
         },
@@ -213,16 +214,23 @@
         },
         //滚动加载更多
         touchMove(e){
+
           let scrollTop = common.getScrollTop();
           let scrollHeight = common.getScrollHeight();
           let ClientHeight = common.getClientHeight();
+          console.log(scrollTop + ClientHeight  >= scrollHeight -10)
           if (scrollTop + ClientHeight  >= scrollHeight -10) {
             if(this.isScroll){
               this.isScroll = false;
               if(this.order_list.length == this.total_count){
                 this.bottom_show = true;
               }else{
-                this.getOrderList();
+                for(let i=0;i<this.nav_list.length;i++){
+                  if(this.nav_list[i].active){
+                    this.getOrderList(this.nav_list[i].status);
+                  }
+                }
+
               }
             }
 

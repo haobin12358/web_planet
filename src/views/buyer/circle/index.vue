@@ -1,5 +1,5 @@
 <template>
-    <div class="m-circle">
+    <div class="m-circle" @touchmove.stop="touchMove">
       <!--搜索-->
       <div class="m-selected-search">
         <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
@@ -48,10 +48,10 @@
               </div>
             </div>
           </template>
-
-
+          <bottom-line v-if="bottom_show"></bottom-line>
         </div>
       </div>
+
     </div>
 
 </template>
@@ -61,6 +61,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
+  import bottomLine from '../../../components/common/bottomLine';
     export default {
         data() {
             return {
@@ -90,11 +91,15 @@
                 page_num:1,
                 page_size:10
               },
-              select_nav:null
+              select_nav:null,
+              isScroll:true,
+              total_count:0,
+              bottom_show:false,
             }
         },
         components: {
-          navList
+          navList,
+          bottomLine
         },
         mounted(){
            common.changeTitle('圈子');
@@ -155,7 +160,21 @@
               }
             }).then(res => {
               if(res.data.status == 200){
-                this.news_list = res.data.data;
+                this.isScroll =true;
+                if(res.data.data.length >0){
+                  if(this.page_info.page_num >1){
+                    this.news_list =  this.news_list.concat(res.data.data);
+                  }else{
+                    this.news_list = res.data.data;
+                  }
+                  this.page_info.page_num = this.page_info.page_num + 1;
+                  this.total_count = res.data.total_count;
+                }else{
+                  this.news_list = null;
+                  this.page_info.page_num = 1;
+                  this.total_count = 0;
+                }
+
               }
             })
           },
@@ -176,7 +195,28 @@
                 this.news_list = [].concat(arr);
               }
             })
-          }
+          },
+          //滚动加载更多
+          touchMove(e){
+            let scrollTop = common.getScrollTop();
+            let scrollHeight = common.getScrollHeight();
+            let ClientHeight = common.getClientHeight();
+            if (scrollTop + ClientHeight  >= scrollHeight -10) {
+              if(this.isScroll){
+                this.isScroll = false;
+                if(this.news_list.length == this.total_count){
+                  this.bottom_show = true;
+                }else{
+                  for(let i=0;i<this.nav_list.length;i++){
+                    if(this.nav_list[i].active){
+                      this.getNews(this.nav_list[i].neid);
+                    }
+                  }
+                }
+              }
+
+            }
+          },
         },
         created() {
 
