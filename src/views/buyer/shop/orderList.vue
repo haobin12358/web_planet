@@ -50,8 +50,11 @@
                   查看物流
                 </li>
 
-                <li v-if="items.omstatus == 0 || items.omstatus == -40 || items.omstatus == 30">
+                <li v-if=" items.omstatus == -40 || items.omstatus == 30">
                   删除订单
+                </li>
+                <li v-if="items.omstatus == 0" @click="cancelOrder">
+                  取消订单
                 </li>
                 <li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35 ">
                   评价
@@ -225,6 +228,17 @@
 
           }
         },
+        //取消订单
+        cancelOrder(){
+          axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
+            omid:this.$route.query.omid
+          }).then(res => {
+            if(res.data.status == 200){
+
+            }
+          })
+
+        }
       }
     }
 </script>

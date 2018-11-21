@@ -4,6 +4,10 @@
          <span >买家待付款</span>
          <span class="m-icon-order-status m-pay" ></span>
        </div>
+      <div class="m-orderDetail-status" v-if="order_info.omstatus == -40">
+        <span >买家已取消</span>
+        <span class="m-icon-order-status m-pay" ></span>
+      </div>
       <div class="m-orderDetail-status" v-if="order_info.omstatus ==10">
         <span >买家已付款</span>
         <span class="m-icon-order-status m-pay" ></span>
@@ -47,7 +51,7 @@
             <span class="m-store-name">{{order_info.pbname}}</span>
             <span class="m-icon-more"></span>
           </div>
-          <span class="m-red">待发货</span>
+          <span class="m-red">{{order_info.omstatus_zh}}</span>
         </div>
         <div v-for="(item,index) in order_info.order_part">
           <div class="m-order-product-ul">
@@ -80,7 +84,7 @@
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
           <p class="m-back-btn">
-            <span @click="changeRoute('/selectBack',item)">退款</span>
+            <span @click="changeRoute('/selectBack',item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
           </p>
         </div>
 
@@ -100,8 +104,11 @@
       </div>
       <div class="m-align-right">
         <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
-        <span v-if="order_info.omstatus == 0 || order_info.omstatus == -40 || order_info.omstatus == 30">
+        <span v-if="order_info.omstatus == -40 || order_info.omstatus == 30">
           删除订单
+        </span>
+        <span v-if="order_info.omstatus == 0 " @click="cancelOrder">
+         取消订单
         </span>
         <span class="active" v-if="order_info.omstatus == 10 || order_info.omstatus == 20">确认收货</span>
         <span class="active" v-if="order_info.omstatus == 0">
@@ -182,6 +189,17 @@
               this.logistic_info = res.data.data;
             }
           })
+        },
+        //取消订单
+        cancelOrder(){
+          axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
+            omid:this.$route.query.omid
+          }).then(res => {
+            if(res.data.status == 200){
+
+            }
+          })
+
         }
       }
     }
