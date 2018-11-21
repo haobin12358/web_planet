@@ -2,8 +2,8 @@
     <div class="m-circle-detail">
       <!--搜索-->
       <div class="m-selected-search">
-        <span class="m-icon-back" @click="changeRoute"></span>
-        <div class="m-search-input-box">
+        <span class="m-icon-back" @click="changeRoute('/circle')"></span>
+        <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
           <span class="m-icon-search"></span>
           <span>搜索圈子关键词</span>
         </div>
@@ -44,7 +44,7 @@
           <span class="m-icon-close" @click="changeModal('show_modal',false)"></span>
           <div class="m-modal-content">
              <h3>全部{{total_count}}条评论</h3>
-            <div class="m-scroll">
+            <div class="m-scroll" ref="comment" @touchmove.stop="touchMove">
               <ul class="m-comment-ul">
                 <li v-for="(items,index) in comment_list">
                   <img :src="items.user.usheader" class="m-user-img" alt="">
@@ -55,24 +55,29 @@
                       <div class="m-icon-list">
                         <span >{{items.createtime}}</span>
                         <div>
-                          <span class="m-icon-like" :class="items.is_favorite?'active':''"></span>
-                          <span>0</span>
-                          <span class="m-icon-comment"></span>
-                          <span>2</span>
+                          <span class="m-icon-like" :class="items.is_favorite?'active':''" @click.stop="commentLike(index)"></span>
+                          <span>{{items.favorite_count}}</span>
+                          <span class="m-icon-comment" @click.stop="commentClick(items,index)"></span>
+                          <span @click.stop="commentClick(items,index)">{{items.reply_count}}</span>
                         </div>
                       </div>
                     </div>
-                    <p class="m-comment-content" v-for="(item,i) in items.reply">
+                    <p class="m-comment-content" v-for="(item,i) in items.reply" @click.stop="commentClick(item,index)">
                       <span class="m-user-name">{{item.commentuser}}</span>
                       <span class="m-comment-back" v-if="item.replieduser">回复</span>
                       <span class="m-user-name m-mr" v-if="item.replieduser"> {{item.replieduser}}</span>
                       <span>{{item.nctext}}</span>
                     </p>
-                    <input type="text" class="m-comment-input" v-if="items.comment">
                   </div>
                 </li>
               </ul>
+              <bottom-line v-if="bottom_show"></bottom-line>
             </div>
+            <p v-if="show_comment" class="m-comment-input">
+              <input type="text"  v-model="comment_content" placeholder="请输入评论">
+              <span class="m-input-sure" @click.stop="sureComment">确定</span>
+            </p>
+
           </div>
         </div>
       </div>
@@ -82,6 +87,8 @@
 <script>
   import axios from 'axios';
   import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine';
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -110,15 +117,26 @@
             isScroll:true,
             total_count:0,
             bottom_show:false,
-            comment_list:null
+            comment_list:null,
+            comment_one :null,
+            comment_content:'',
+            show_comment:false
           }
+      },
+      components:{
+        bottomLine
       },
       mounted(){
         this.getNewsDetail();
       },
       methods:{
-        changeRoute(){
-          this.$router.push('/circle')
+        /*跳转路由*/
+        changeRoute(v,params,value){
+          if(params == 'shtype'){
+            this.$router.push({path:v,query:{shtype:value}})
+          }else{
+            this.$router.push({path:v})
+          }
         },
         changeModal(v,bool){
           this[v] = bool;
@@ -126,6 +144,7 @@
             scroll.afterOpen();
           }else{
             scroll.beforeClose();
+            this.comment_one = null;
           }
           if(v == 'show_modal'){
             this.getComment();
@@ -177,9 +196,6 @@
             if(res.data.status == 200){
               this.isScroll =true;
               if(res.data.data.length >0){
-                for(let i=0;i<res.data.data.length;i++){
-                  res.data.data.comment = false;
-                }
                 if(this.page_info.page_num >1){
                   this.comment_list =  this.comment_list.concat(res.data.data);
                 }else{
@@ -191,10 +207,70 @@
                 this.comment_list = null;
                 this.page_info.page_num = 1;
                 this.total_count = 0;
+                this.show_comment = true;
               }
             }
           })
-        }
+        },
+        /*点击评论*/
+        commentClick(item,index){
+          this.show_comment = !this.show_comment;
+          this.comment_one = item;
+        },
+        //点击评论确定
+        sureComment(){
+          axios.post(api.create_comment + '?token=' + localStorage.getItem('token'),{
+            neid:this.$route.query.neid,
+            nctext:this.comment_content,
+            ncid:this.comment_one && this.comment_one.ncid
+          }).then(res => {
+            if(res.data.status == 200){
+              Toast('评论成功');
+              this.page_info.page_num = this.page_info.page_num -1;
+              this.getComment();
+              this.comment_content = '';
+              // this.comment_one.comment = false;
+              this.show_comment = !show_comment;
+            }
+          })
+        },
+        //评论点赞
+        commentLike(index){
+          axios.post(api.favorite_comment + '?token='+localStorage.getItem('token'),{
+            ncid:this.comment_list[index].ncid,
+          }).then(res => {
+            if(res.data.status == 200){
+              let arr = [].concat(this.comment_list);
+              if(arr[index].is_favorite){
+                arr[index].favorite_count = arr[index].favorite_count-1;
+              }else{
+                arr[index].favorite_count = arr[index].favorite_count+1;
+              }
+              arr[index].is_favorite = !arr[index].is_favorite;
+              this.comment_list = [].concat(arr);
+            }
+          })
+        },
+        //滚动加载更多
+        touchMove(e){
+          // let scrollTop = common.getScrollTop();
+          // let scrollHeight = common.getScrollHeight();
+          // let ClientHeight = common.getClientHeight();
+          let scrollTop = this.$refs.comment.scrollTop;
+          let scrollHeight = this.$refs.comment.scrollHeight;
+          let ClientHeight = this.$refs.comment.offsetHeight;
+          if (scrollTop + ClientHeight  >= scrollHeight -10) {
+            if(this.isScroll){
+              this.isScroll = false;
+              if(this.comment_list.length == this.total_count){
+                this.bottom_show = true;
+              }else{
+                this.getComment();
+              }
+            }
+
+          }
+        },
       }
     }
 </script>
@@ -359,12 +435,6 @@
             .m-comment-content{
               margin: 8px 0;
             }
-            .m-comment-input{
-              height: 40px;
-              line-height: 40px;
-              border: 1px solid #ccc;
-              width: 80%;
-            }
             .m-comment-back{
               display: inline-block;
               color: #999;
@@ -373,6 +443,29 @@
           }
         }
       }
+      .m-comment-input{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        border-top: 1px solid #ccc;
+        height: 100px;
+        background-color: #fff;
+        z-index: 100;
+        input{
+          height: 60px;
+          line-height: 60px;
+          width: 80%;
+        }
+        .m-input-sure{
+          padding: 0 10px ;
+          line-height: 100px;
+          color: #fcd316;
+          margin-left: 10px;
+        }
+
+      }
+
     }
   }
 }
