@@ -8,24 +8,32 @@
           <span>搜索圈子关键词</span>
         </div>
       </div>
-      <div class="m-circle-content">
-        <h3 class="m-circle-title">谈谈我健身10年的体验</h3>
-        <img src="" class="m-circle-img" alt="">
+      <div class="m-circle-content" v-if="news_info">
+        <h3 class="m-circle-title">{{news_info.netitle}}</h3>
+        <template v-if="news_info.image" v-for="(item,index) in news_info.image">
+          <img :src="item.niimage" class="m-circle-img" alt="">
+        </template>
         <div class="m-content">
-          <h3>健身的注意事项</h3>
-          <p>什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么...</p>
-          <video src=""></video>
-          <p>什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么...</p>
+          <!--<h3>健身的注意事项</h3>-->
+          <p>{{news_info.netext}}</p>
+          <div class="m-video-box" v-if="news_info.video">
+            <video :src="news_info.video.nvvideo" class="m-video"></video>
+            <img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">
+            <span class="m-video-time">{{news_info.video.nvduration}}</span>
+            <span class="m-icon-video"></span>
+          </div>
+          <!--<p>什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么什么...</p>-->
         </div>
       </div>
-      <div class="m-circle-foot">
+      <div class="m-circle-foot" v-if="news_info">
         <div class="float-left">
-          <span class="m-icon-btn active">
+          <span class="m-icon-btn active" @click.stop="isLickClick(1)">
             <span class="m-icon-zan"></span>
-            <span>赞同120</span>
+            <span>赞同{{news_info.favoritnumber}}</span>
           </span>
-          <span class="m-icon-btn">
+          <span class="m-icon-btn" @click.stop="isLickClick(0)">
             <span class="m-icon-cai"></span>
+            <span>踩{{news_info.tramplenumber}}</span>
           </span>
         </div>
         <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论</span>
@@ -35,127 +43,32 @@
         <div class="m-modal-state">
           <span class="m-icon-close" @click="changeModal('show_modal',false)"></span>
           <div class="m-modal-content">
-             <h3>全部52条评论</h3>
+             <h3>全部{{total_count}}条评论</h3>
             <div class="m-scroll">
               <ul class="m-comment-ul">
-                <li>
-                  <img src="" class="m-user-img" alt="">
+                <li v-for="(items,index) in comment_list">
+                  <img :src="items.user.usheader" class="m-user-img" alt="">
                   <div class="m-comment-text">
                     <div>
-                      <p class="m-user-name">momo酱</p>
-                      <p>很有收获学习~</p>
+                      <p class="m-user-name">{{items.user.usname}}</p>
+                      <p>{{items.nctext}}</p>
                       <div class="m-icon-list">
-                        <span >18/09/25</span>
+                        <span >{{items.createtime}}</span>
                         <div>
-                          <span class="m-icon-like"></span>
-                          <span>25</span>
+                          <span class="m-icon-like" :class="items.is_favorite?'active':''"></span>
+                          <span>0</span>
                           <span class="m-icon-comment"></span>
                           <span>2</span>
                         </div>
                       </div>
                     </div>
-                    <p class="m-comment-content">
-                      <span class="m-user-name">jojo</span>
-                      <span class="m-comment-back">回复</span>
-                      <span class="m-user-name m-mr">jojo</span>
-                      <span>我也很有收获学习~</span>
+                    <p class="m-comment-content" v-for="(item,i) in items.reply">
+                      <span class="m-user-name">{{item.commentuser}}</span>
+                      <span class="m-comment-back" v-if="item.replieduser">回复</span>
+                      <span class="m-user-name m-mr" v-if="item.replieduser"> {{item.replieduser}}</span>
+                      <span>{{item.nctext}}</span>
                     </p>
-                    <p class="m-comment-content">
-                      <span class="m-user-name">jojo</span>
-                      <span class="m-comment-back">回复</span>
-                      <span class="m-user-name m-mr">jojo</span>
-                      <span>我也很有收获学习~</span>
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <img src="" class="m-user-img" alt="">
-                  <div class="m-comment-text">
-                    <div>
-                      <p class="m-user-name">momo酱</p>
-                      <p>很有收获学习~</p>
-                      <div class="m-icon-list">
-                        <span >18/09/25</span>
-                        <div>
-                          <span class="m-icon-like"></span>
-                          <span>25</span>
-                          <span class="m-icon-comment"></span>
-                          <span>2</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <img src="" class="m-user-img" alt="">
-                  <div class="m-comment-text">
-                    <div>
-                      <p class="m-user-name">momo酱</p>
-                      <p>很有收获学习~</p>
-                      <div class="m-icon-list">
-                        <span >18/09/25</span>
-                        <div>
-                          <span class="m-icon-like"></span>
-                          <span>25</span>
-                          <span class="m-icon-comment"></span>
-                          <span>2</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <img src="" class="m-user-img" alt="">
-                  <div class="m-comment-text">
-                    <div>
-                      <p class="m-user-name">momo酱</p>
-                      <p>很有收获学习~</p>
-                      <div class="m-icon-list">
-                        <span >18/09/25</span>
-                        <div>
-                          <span class="m-icon-like"></span>
-                          <span>25</span>
-                          <span class="m-icon-comment"></span>
-                          <span>2</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <img src="" class="m-user-img" alt="">
-                  <div class="m-comment-text">
-                    <div>
-                      <p class="m-user-name">momo酱</p>
-                      <p>很有收获学习~</p>
-                      <div class="m-icon-list">
-                        <span >18/09/25</span>
-                        <div>
-                          <span class="m-icon-like"></span>
-                          <span>25</span>
-                          <span class="m-icon-comment"></span>
-                          <span>2</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <img src="" class="m-user-img" alt="">
-                  <div class="m-comment-text">
-                    <div>
-                      <p class="m-user-name">momo酱</p>
-                      <p>很有收获学习~</p>
-                      <div class="m-icon-list">
-                        <span >18/09/25</span>
-                        <div>
-                          <span class="m-icon-like"></span>
-                          <span>25</span>
-                          <span class="m-icon-comment"></span>
-                          <span>2</span>
-                        </div>
-                      </div>
-                    </div>
+                    <input type="text" class="m-comment-input" v-if="items.comment">
                   </div>
                 </li>
               </ul>
@@ -167,6 +80,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  import api from '../../../api/api';
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -186,8 +101,20 @@
         name: "detail",
       data(){
           return{
-            show_modal:false
+            show_modal:false,
+            news_info:null,
+            page_info:{
+              page_num:1,
+              page_size:10
+            },
+            isScroll:true,
+            total_count:0,
+            bottom_show:false,
+            comment_list:null
           }
+      },
+      mounted(){
+        this.getNewsDetail();
       },
       methods:{
         changeRoute(){
@@ -200,6 +127,73 @@
           }else{
             scroll.beforeClose();
           }
+          if(v == 'show_modal'){
+            this.getComment();
+          }
+        },
+        /*获取资讯详情*/
+        getNewsDetail(){
+          axios.get(api.get_news_content,{
+            params:{
+              neid:this.$route.query.neid,
+              token:localStorage.getItem('token')
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.news_info = res.data.data;
+            }
+          })
+        },
+        /*点赞*/
+        isLickClick(v){
+          if(this.news_info.is_favorite == 1 || this.news_info.is_trample == 1){
+            return false;
+          }
+          axios.post(api.favorite_news + '?token='+localStorage.getItem('token'),{
+            neid:this.$route.query.neid,
+            tftype:v
+          }).then(res => {
+            if(res.data.status == 200){
+              if(v){
+                this.news_info.favoritnumber =  this.news_info.favoritnumber +1;
+                this.news_info.is_favorite = 1;
+              }else{
+                this.news_info.tramplenumber =  this.news_info.tramplenumber-1;
+                this.news_info.is_trample =  1;
+              }
+            }
+          })
+        },
+        /*获取评论*/
+        getComment(){
+          axios.get(api.get_news_comment,{
+            params:{
+              neid:this.$route.query.neid,
+              token:localStorage.getItem('token'),
+              page_num:this.page_info.page_num,
+              page_size: this.page_info.page_size
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.isScroll =true;
+              if(res.data.data.length >0){
+                for(let i=0;i<res.data.data.length;i++){
+                  res.data.data.comment = false;
+                }
+                if(this.page_info.page_num >1){
+                  this.comment_list =  this.comment_list.concat(res.data.data);
+                }else{
+                  this.comment_list = res.data.data;
+                }
+                this.page_info.page_num = this.page_info.page_num + 1;
+                this.total_count = res.data.total_count;
+              }else{
+                this.comment_list = null;
+                this.page_info.page_num = 1;
+                this.total_count = 0;
+              }
+            }
+          })
         }
       }
     }
@@ -225,6 +219,40 @@
   .m-content{
     padding: 46px 46px 200px;
     text-align: left;
+    .m-video-box{
+      position: relative;
+      .m-video{
+        display: block;
+        width: 100%;
+        height: 360px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .m-video-img{
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 360px;
+        border-radius: 10px;
+      }
+      .m-icon-video{
+        display: block;
+        width: 109px;
+        height: 109px;
+        position: absolute;
+        top: 148px;
+        left: 298px;
+        background: url("/static/images/icon-video.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      .m-video-time{
+        position: absolute;
+        bottom: 4px;
+        right: 13px;
+        color: #fff;
+      }
+    }
     h3{
       font-size: 28px;
       font-weight: bold;
@@ -234,14 +262,7 @@
       margin-bottom: 20px;
       color: #666666;
     }
-    video{
-      display: block;
-      width: 100%;
-      height: 360px;
-      border-radius: 10px;
-      background-color: #9fd0bf;
-      margin-bottom: 20px;
-    }
+
   }
 }
 .m-comment-modal{
@@ -338,6 +359,12 @@
             .m-comment-content{
               margin: 8px 0;
             }
+            .m-comment-input{
+              height: 40px;
+              line-height: 40px;
+              border: 1px solid #ccc;
+              width: 80%;
+            }
             .m-comment-back{
               display: inline-block;
               color: #999;
@@ -380,6 +407,7 @@
     color: #fff;
     line-height: 42px;
     margin-right: 30px;
+    vertical-align: middle;
     &.active{
       background-color: @mainColor;
     }
@@ -397,7 +425,7 @@
       height: 38px;
       background: url("/static/images/icon-cai.png") no-repeat top;
       background-size: 100% 100%;
-      vertical-align: text-top;
+      vertical-align: text-bottom;
     }
   }
 }

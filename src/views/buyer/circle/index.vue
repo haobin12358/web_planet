@@ -12,7 +12,7 @@
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
         <div class="m-circle-body">
           <template v-for="(items,index) in news_list">
-            <div class="m-video-one" @click="changeRoute('/circle/detail')">
+            <div class="m-video-one" @click="changeRoute('/circle/detail',items)">
               <template v-if="select_nav.itid == 'mynews'">
                 <span class="m-mark-label active" v-if="items.nestatus == 'refuse'">未通过</span>
                 <span class="m-mark-label" v-else-if="items.nestatus == 'usual'">审核通过</span>
@@ -109,6 +109,10 @@
         methods: {
           /*跳转路由*/
           changeRoute(v,params,value){
+            if(v == '/circle/detail'){
+              this.$router.push({path:v,query:{neid:params.neid}});
+              return false;
+            }
             if(params == 'shtype'){
               this.$router.push({path:v,query:{shtype:value}})
             }else{
@@ -156,7 +160,8 @@
                 page_num:this.page_info.page_num,
                 page_size: this.page_info.page_size,
                 itid:itid,
-                nestatus:''
+                nestatus:'',
+                kw:this.$route.query.kw
               }
             }).then(res => {
               if(res.data.status == 200){

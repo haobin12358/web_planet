@@ -56,6 +56,7 @@ const api={
   create_comment: title + '/news/create_comment',//发表评论
   favorite_comment: title +'/news/favorite_comment',//评论点赞
   del_comment: title + '/news/del_comment',//删除评论
+  get_news_comment: title + '/news/get_news_comment',//获取资讯评论
 
   list_with_group: title + '/brand/list_with_group',//获取品牌列表
   get_one_brand: title + '/brand/get',//获取一个品牌
