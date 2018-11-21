@@ -62,7 +62,7 @@
                         </div>
                       </div>
                     </div>
-                    <p class="m-comment-content" v-for="(item,i) in items.reply" @click.stop="commentClick(item,index)">
+                    <p class="m-comment-content" v-for="(item,i) in items.reply" @click.stop="commentClick(item,index)" @touchstart="gtouchstart(item,index,i)" @touchmove="gtouchmove()" @touchend="gtouchend(item,index,i)">
                       <span class="m-user-name">{{item.commentuser}}</span>
                       <span class="m-comment-back" v-if="item.replieduser">回复</span>
                       <span class="m-user-name m-mr" v-if="item.replieduser"> {{item.replieduser}}</span>
@@ -87,7 +87,7 @@
 <script>
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import { Toast,MessageBox} from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
   var scroll = (function (className) {
     var scrollTop;
@@ -120,7 +120,9 @@
             comment_list:null,
             comment_one :null,
             comment_content:'',
-            show_comment:false
+            comment_index:null,
+            show_comment:false,
+            timeOutEvent:null
           }
       },
       components:{
@@ -216,6 +218,7 @@
         commentClick(item,index){
           this.show_comment = !this.show_comment;
           this.comment_one = item;
+          this.comment_index = index;
         },
         //点击评论确定
         sureComment(){
@@ -226,7 +229,9 @@
           }).then(res => {
             if(res.data.status == 200){
               Toast('评论成功');
-              this.page_info.page_num = this.page_info.page_num -1;
+              if(this.page_info.page_num >1){
+                this.page_info.page_num = this.page_info.page_num -1
+              }
               this.getComment();
               this.comment_content = '';
               // this.comment_one.comment = false;
@@ -271,6 +276,51 @@
 
           }
         },
+        gtouchstart(item,index,i){
+          let that = this
+          this.timeOutEvent = setTimeout(function(){
+            that.longPress(item,index,i)
+          },500);//这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适
+          return false;
+        },
+        //手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件
+        gtouchend(item){
+          let that = this;
+          clearTimeout(that.timeOutEvent);//清除定时器
+          if(that.timeOutEvent!=0){
+            //这里写要执行的内容（尤如onclick事件）
+            // vm.goChat(item);
+          }
+          return false;
+        },
+        //如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按
+        gtouchmove(){
+          let that =this;
+          clearTimeout(that.timeOutEvent);//清除定时器
+          that.timeOutEvent = 0;
+        },
+        //真正长按后应该执行的内容
+        longPress(item,index,i){
+          this.timeOutEvent = 0;
+          //执行长按要执行的内容，如弹出菜单
+          let that = this
+          MessageBox.confirm('你确定要删除这条评论吗?').then(action => {
+            if(action){
+              axios.post(api.del_comment + '?token='+localStorage.getItem('token'),{
+                ncid:item.ncid
+              }).then(res => {
+                  Toast({
+                    message: res.data.message,
+                    duration: 1000
+                  });
+                  if(res.data.status == 200){
+                    console.log(that.comment_list,index)
+                    that.comment_list[index].reply.splice(i, 1);
+                  }
+              })
+            }
+          });
+        }
       }
     }
 </script>
@@ -348,7 +398,7 @@
   height: 100vh;
   width: 100%;
   background-color: rgba(0,0,0,0.2);
-  z-index: 1001;
+  z-index: 101;
   transition: opacity .5s;
   .m-modal-state{
     background-color: #fff;
@@ -471,7 +521,7 @@
 }
 .m-circle-foot{
   position: fixed;
-  z-index: 1000;
+  z-index: 100;
   bottom: 0;
   left: 0;
   padding: 45px 49px 98px;

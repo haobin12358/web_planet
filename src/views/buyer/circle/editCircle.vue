@@ -16,7 +16,7 @@
             <span class="m-icon-upload-img"></span>
             <span class="m-icon-upload-video"></span>
           </div>
-          <span>预览</span>
+          <!--<span>预览</span>-->
         </div>
       </div>
 
