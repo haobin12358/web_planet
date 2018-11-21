@@ -37,11 +37,16 @@ let store= new Vuex.Store({
         active_icon:'/static/images/footer/icon-circle-active.png',
         url:'circle'
       },{
+        name:'活动',
+        icon:'/static/images/footer/icon-activity.png',
+        active_icon:'/static/images/footer/icon-activity-active.png',
+        url:'activity'
+      },/*{
         name:'装备',
         icon:'/static/images/footer/icon-equipment.png',
         active_icon:'/static/images/footer/icon-equipment-active.png',
         url:'equipment'
-      },{
+      },*/{
         name:'购物车',
         icon:'/static/images/footer/icon-member.png',
         active_icon:'/static/images/footer/icon-member-active.png',
