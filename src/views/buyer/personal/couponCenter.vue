@@ -1,49 +1,51 @@
 <template>
   <div class="m-couponCenter" @touchmove.stop="touchMove">
-    <div class="m-couponCenter-top">
-      <span class="m-couponCenter-rule">积分规则</span>
-      <p class="m-couponCenter-top-p">累计积分：520</p>
-      <div class="m-couponCenter-day">
-        <span>已连续签到</span>
-        <span class="m-couponCenter-day-bg">
+    <mt-loadmore :top-method="loadTop">
+      <div class="m-couponCenter-top">
+        <span class="m-couponCenter-rule">积分规则</span>
+        <p class="m-couponCenter-top-p">累计积分：520</p>
+        <div class="m-couponCenter-day">
+          <span>已连续签到</span>
+          <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
         <span class="m-num">0</span></span>
-        <span class="m-couponCenter-day-bg">
+          <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
           <span class="m-num">0</span></span>
-        <span class="m-couponCenter-day-bg">
+          <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
           <span class="m-num">3</span></span>
-        <span>天</span>
+          <span>天</span>
+        </div>
+        <div class="m-couponCenter-week">
+          <!--每周哪几天签到-->
+          <!--<span class="m-circle active">1</span>
+          <span class="m-circle-line"></span>
+          <span class="m-circle">2</span>
+          <span class="m-circle-line"></span>
+          <span class="m-circle">3</span>
+          <span class="m-circle-line"></span>
+          <span class="m-circle">4</span>
+          <span class="m-circle-line"></span>
+          <span class="m-circle">5</span>
+          <span class="m-circle-line"></span>
+          <span class="m-circle">6</span>
+          <span class="m-circle-line"></span>
+          <span class="m-circle">7</span>-->
+          <span class="m-couponCenter-week-btn" v-if="!signIn" @click="userSignIn">签到</span>
+          <span class="m-couponCenter-week-btn active" v-if="signIn">已签到</span>
+        </div>
       </div>
-      <div class="m-couponCenter-week">
-        <!--每周哪几天签到-->
-        <!--<span class="m-circle active">1</span>
-        <span class="m-circle-line"></span>
-        <span class="m-circle">2</span>
-        <span class="m-circle-line"></span>
-        <span class="m-circle">3</span>
-        <span class="m-circle-line"></span>
-        <span class="m-circle">4</span>
-        <span class="m-circle-line"></span>
-        <span class="m-circle">5</span>
-        <span class="m-circle-line"></span>
-        <span class="m-circle">6</span>
-        <span class="m-circle-line"></span>
-        <span class="m-circle">7</span>-->
-        <span class="m-couponCenter-week-btn" v-if="!signIn" @click="userSignIn">签到</span>
-        <span class="m-couponCenter-week-btn active" v-if="signIn">已签到</span>
+      <div class="m-couponCenter-content">
+        <div class="m-nav">
+          <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
+        </div>
+        <div class="m-couponCenter-content-ul">
+          <coupon-card :couponList="couponList"></coupon-card>
+        </div>
       </div>
-    </div>
-    <div class="m-couponCenter-content">
-      <div class="m-nav">
-        <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
-      </div>
-      <div class="m-couponCenter-content-ul">
-        <coupon-card :couponList="couponList"></coupon-card>
-      </div>
-    </div>
-    <bottom-line v-if="bottom_show"></bottom-line>
+      <bottom-line v-if="bottom_show"></bottom-line>
+    </mt-loadmore>
   </div>
 </template>
 
@@ -70,6 +72,7 @@
         bottom_show: false
       }
     },
+    inject:['reload'],
     components: { navList, couponCard, bottomLine },
     methods: {
       // navList点击事件
@@ -126,7 +129,7 @@
         };
         axios.get(api.coupon_list, { params: params }).then(res => {
           if(res.data.status == 200) {
-            this.couponList = [];
+            // this.couponList = [];
             this.isScroll = true;
             if(res.data.data.length > 0) {
               if(this.page_num > 1) {     // 把新数据给list续上
@@ -159,10 +162,12 @@
             }else {
               this.getUserCoupon();         // 获取优惠券列表
             }
-          }else {
-            this.bottom_show = true;
           }
         }
+      },
+      // 下拉刷新
+      loadTop() {
+        this.reload();
       }
     },
     mounted() {
