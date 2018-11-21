@@ -31,7 +31,8 @@
         <span class="m-circle">6</span>
         <span class="m-circle-line"></span>
         <span class="m-circle">7</span>-->
-        <span class="m-couponCenter-week-btn" :class="signIn ? 'active' : ''" @click="userSignIn">签到</span>
+        <span class="m-couponCenter-week-btn" v-if="!signIn" @click="userSignIn">签到</span>
+        <span class="m-couponCenter-week-btn active" v-if="signIn">已签到</span>
       </div>
     </div>
     <div class="m-couponCenter-content">
@@ -79,6 +80,7 @@
         axios.post(api.user_sign_in + '?token=' + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             Toast(res.data.message);
+            this.signIn = true;
           }else{
             Toast(res.data.message);
           }

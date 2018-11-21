@@ -39,7 +39,7 @@
     methods: {
       // 优惠券选择
       couponClick(item){
-        this.$emit('couponClick',item)
+        this.$emit('couponClick',item);
       }
     },
     mounted() {
@@ -110,13 +110,14 @@
         font-size: 130px;
         font-weight: bold;
         line-height: 180px;
-        margin: -10px 0 0 0;
+        /*margin: -10px 0 0 0;*/
+        margin: 0 0 -10px -10px;
       }
       .m-ft-140{
         font-size: 140px;
         font-weight: bold;
         line-height: 180px;
-        margin: 0 0 -10px 30px;
+        margin: -10px 0 0 30px;
       }
       .m-ft-40 {
         font-size: 46px;
