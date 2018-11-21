@@ -68,9 +68,14 @@
           </li>
           <li class="m-flex-between">
             <span>优惠方式</span>
-            <div @click="changeModel('show_coupon',true)">
-              <span class="m-grey">无优惠</span>
-              <span class="m-icon-more"></span>
+            <div v-if="couponList" @click="changeModel('show_coupon',true)">
+                <span class="m-grey" v-if="coupon_info">{{coupon_info.coname}}</span>
+                <span v-else>选择优惠券</span>
+                <span class="m-icon-more"></span>
+            </div>
+            <div v-else>
+              <span >无优惠券</span>
+              <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
           <li class="m-flex-between">
@@ -99,9 +104,8 @@
         v-model="show_coupon"
         popup-transition="popup-fade" class="m-coupon-modal">
         <div class="m-coupon-modal-content">
-          <coupon :couponList="couponList"></coupon>
+          <coupon :couponList="couponList" @couponClick="couponClick"></coupon>
         </div>
-
       </mt-popup>
 
     </div>
@@ -194,7 +198,7 @@
               }
             }).then(res => {
               if(res.data.status == 200){
-                this.coupon_info = res.data.data;
+                this.couponList = res.data.data;
               }
             })
           },
@@ -216,11 +220,15 @@
               Toast("请先选择收货地址");
               return false;
             }
-            console.log("收货地址id", this.uaid);
             // 是从商家大礼包来结算的则弹出popup
             if(this.fromGift) {
               this.giftPopup = true;
             }
+          },
+          /*优惠券选择*/
+          couponClick(item){
+            this.coupon_info = item;
+            this.show_coupon = false;
           }
         },
         created() {

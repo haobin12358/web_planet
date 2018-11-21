@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="couponList.length > 0">
-      <div class="m-coupon-card" v-for="item in couponList">
+      <div class="m-coupon-card" v-for="item in couponList" @click="couponClick(item)">
         <span class="m-left-circle"></span>
         <span class="m-price-icon">￥</span>
         <div class="m-coupon-detail">
@@ -38,6 +38,9 @@
       /*navClick(i){
         this.$emit('navClick',i);
       }*/
+      couponClick(item){
+        this.$emit('couponClick',item)
+      }
     },
     mounted() {
       // console.log(this.couponList);
