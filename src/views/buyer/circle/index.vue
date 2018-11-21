@@ -11,76 +11,45 @@
       <div class="m-circle-content">
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
         <div class="m-circle-body">
-          <div class="m-video-one">
-            <span class="m-mark-label">审核中</span>
-            <h3>谈谈我健身3年的体验</h3>
-            <video src="" class="m-video"></video>
-            <span class="m-icon-video"></span>
-            <!--<span class="m-video-like">-->
-              <!--<span class="m-like-icon"></span>-->
-              <!--<span>12545</span>-->
-            <!--</span>-->
-            <ul class="m-video-icon-ul">
-              <li>
-                <span class="m-icon-like active"></span>
-                <span>123</span>
-              </li>
-              <li class="m-border">
-                <span class="m-icon-comment"></span>
-                <span>123</span>
-              </li>
-              <li>
-                <span class="m-icon-transmit"></span>
-              </li>
-            </ul>
-          </div>
-          <div class="m-video-one" @click="changeRoute('/circle/detail')">
-            <!--<span class="m-video-label">【运动健身】</span>-->
-            <span class="m-mark-label active">未通过</span>
-            <h3>谈谈我健身3年的体验</h3>
-            <img src="" class="m-img">
-            <!--<span class="m-icon-video"></span>-->
-            <!--<span class="m-video-like">-->
-            <!--&lt;!&ndash;<span class="m-like-icon active"></span>&ndash;&gt;-->
-            <!--<span>12545</span>-->
-          <!--</span>-->
-            <ul class="m-video-icon-ul">
-              <li>
-                <span class="m-icon-like"></span>
-                <span>123</span>
-              </li>
-              <li class="m-border">
-                <span class="m-icon-comment"></span>
-                <span>123</span>
-              </li>
-              <li>
-                <span class="m-icon-transmit"></span>
-              </li>
-            </ul>
-            <div class="m-refuse-reason">
-              未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由未通过理由理由未通过理由未通过理由，请重新发布。
+          <template v-for="(items,index) in news_list">
+            <div class="m-video-one" @click="changeRoute('/circle/detail')">
+              <template v-if="select_nav.itid == 'mynews'">
+                <span class="m-mark-label active" v-if="items.nestatus == 'refuse'">未通过</span>
+                <span class="m-mark-label" v-else-if="items.nestatus == 'usual'">审核通过</span>
+                <span class="m-mark-label" v-else>审核中</span>
+              </template>
+
+              <h3>{{items.netitle}}</h3>
+              <div class="m-video-box" v-if="items.showtype == 'video'">
+                <video :src="items.video" class="m-video"></video>
+                <img :src="items.videothumbnail" class="m-video-img" alt="">
+                <span class="m-video-time">{{items.videoduration}}</span>
+                <span class="m-icon-video"></span>
+              </div>
+              <img :src="items.mainpic" class="m-img"  v-else-if="items.showtype == 'picture'">
+              <p class="m-text" v-else>
+                {{items.netext}}
+              </p>
+              <ul class="m-video-icon-ul">
+                <li @click.stop="likeClick(index)">
+                  <span class="m-icon-like " :class="items.is_favorite?'active':''"></span>
+                  <span>{{items.favoritnumber}}</span>
+                </li>
+                <li class="m-border">
+                  <span class="m-icon-comment"></span>
+                  <span>{{items.commentnumber}}</span>
+                </li>
+                <li>
+                  <span class="m-icon-transmit"></span>
+                </li>
+              </ul>
+              <div class="m-refuse-reason" v-if="select_nav.itid == 'mynews' && items.nestatus == 'refuse'">
+                {{items.refuse_info}}
+              </div>
             </div>
-          </div>
-          <div class="m-video-one" @click="changeRoute('/circle/detail')">
-            <!--<span class="m-video-label">【运动健身】</span>-->
-            <h3>谈谈我健身3年的体验</h3>
-            <p class="m-text">
-              分享我的2018年秋季莫干山露营体验分享我的2018年秋季莫干山露营体验分享我的2018年秋季莫干山露营体验分享我的2018年秋季莫干山露营体验分享我的2018年秋季莫干山露...
-            </p>
-            <ul class="m-video-icon-ul">
-              <li>
-                <span class="m-icon-like"></span>
-                <span>123</span>
-              </li>
-              <li class="m-border">
-                <span class="m-icon-comment"></span>
-                <span>123</span>
-              </li>
-              <li>
-                <span class="m-icon-transmit"></span>
-              </li>
-            </ul>
-          </div>
+          </template>
+
+
         </div>
       </div>
     </div>
@@ -99,7 +68,7 @@
               nav_list:[
                 {
                   itdesc: "我是描述",
-                  itid: "1",
+                  itid: "",
                   itname: "全部",
                   itrecommend: true,
                   itsort: null,
@@ -108,7 +77,7 @@
                 },
                 {
                   itdesc: "我是描述",
-                  itid: "2",
+                  itid: "mynews",
                   itname: "我发起的",
                   itrecommend: true,
                   itsort: null,
@@ -116,10 +85,12 @@
                   psid: ""
                 }
               ],
+              news_list:null,
               page_info:{
                 page_num:1,
                 page_size:10
-              }
+              },
+              select_nav:null
             }
         },
         components: {
@@ -128,6 +99,7 @@
         mounted(){
            common.changeTitle('圈子');
            this.getNav();
+           this.getNews();
         },
         methods: {
           /*跳转路由*/
@@ -146,6 +118,8 @@
             }
             arr[index].active = true;
             this.nav_list = [].concat(arr)
+            this.select_nav = arr[index];
+            this.getNews(this.nav_list[index].itid)
           },
           /*获取导航*/
           getNav(){
@@ -165,12 +139,43 @@
                   arr[0].active = true;
                   this.nav_list = [].concat(arr);
                 }
+                this.select_nav = this.nav_list[0];
               }
             })
           },
           /*获取资讯列表*/
-          getNews(){
-            axios.get(api.get_all_news)
+          getNews(itid){
+            axios.get(api.get_all_news,{
+              params:{
+                token:localStorage.getItem('token'),
+                page_num:this.page_info.page_num,
+                page_size: this.page_info.page_size,
+                itid:itid,
+                nestatus:''
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.news_list = res.data.data;
+              }
+            })
+          },
+          /*点赞*/
+          likeClick(i){
+            axios.post(api.favorite_news + '?token='+localStorage.getItem('token'),{
+              neid:this.news_list[i].neid,
+              tftype:1
+            }).then(res => {
+              if(res.data.status == 200){
+                let arr = [].concat(this.news_list);
+                if(arr[i].is_favorite){
+                  arr[i].favoritnumber = arr[i].favoritnumber-1;
+                }else{
+                  arr[i].favoritnumber = arr[i].favoritnumber+1;
+                }
+                arr[i].is_favorite = !arr[i].is_favorite;
+                this.news_list = [].concat(arr);
+              }
+            })
           }
         },
         created() {
@@ -255,12 +260,39 @@
             text-align: left;
             padding: 10px 20px;
           }
-          .m-video{
-            display: block;
-            width: 700px;
-            height: 360px;
-            background-color: #9fd0bf;
+          .m-video-box{
+            position: relative;
+            .m-video{
+              display: block;
+              width: 700px;
+              height: 360px;
+              /*background-color: #9fd0bf;*/
+            }
+            .m-video-img{
+             position: absolute;
+              top:0;
+              left: 0;
+              width: 700px;
+              height: 360px;
+            }
+            .m-icon-video{
+              display: block;
+              width: 109px;
+              height: 109px;
+              position: absolute;
+              top: 148px;
+              left: 298px;
+              background: url("/static/images/icon-video.png") no-repeat;
+              background-size: 100% 100%;
+            }
+            .m-video-time{
+              position: absolute;
+              bottom: 4px;
+              right: 13px;
+              color: #fff;
+            }
           }
+
           .m-img{
             display: block;
             width: 700px;
@@ -271,16 +303,7 @@
             text-align: left;
             padding: 10px 22px;
           }
-          .m-icon-video{
-            display: block;
-            width: 109px;
-            height: 109px;
-            position: absolute;
-            top: 210px;
-            left: 298px;
-            background: url("/static/images/icon-video.png") no-repeat;
-            background-size: 100% 100%;
-          }
+
           .m-video-like{
             position: absolute;
             top: 161px;
