@@ -1,12 +1,14 @@
 <template>
   <div class="m-coupon" @touchmove.stop="touchMove">
-    <div class="m-nav">
-      <nav-list :navlist="nav_list" :isScroll="false" @navClick="navClick"></nav-list>
-    </div>
-    <div class="m-coupon-content">
-      <coupon-card :couponList="couponList"></coupon-card>
-    </div>
-    <bottom-line v-if="bottom_show"></bottom-line>
+    <mt-loadmore :top-method="loadTop">
+      <div class="m-nav">
+        <nav-list :navlist="nav_list" :isScroll="false" @navClick="navClick"></nav-list>
+      </div>
+      <div class="m-coupon-content">
+        <coupon-card :couponList="couponList"></coupon-card>
+      </div>
+      <bottom-line v-if="bottom_show"></bottom-line>
+    </mt-loadmore>
   </div>
 </template>
 
@@ -28,12 +30,13 @@
         couponList: [],            // 优惠券list
         status: "2",               // 暂存navList点击的优惠券状态，默认是未使用("0")开头
         page_num: 1,
-        page_size: 6,
+        page_size: 10,
         isScroll: true,
         total_count: 0,
         bottom_show: false
       }
     },
+    inject:['reload'],
     components: { navList, couponCard, bottomLine },
     methods: {
       // navList的点击事件
@@ -105,10 +108,12 @@
             }else {
               this.getUserCoupon();         // 获取优惠券列表
             }
-          }else {
-            this.bottom_show = true;
           }
         }
+      },
+      // 下拉刷新
+      loadTop() {
+        this.reload();
       }
     },
     mounted() {
