@@ -42,7 +42,7 @@
               <span class="m-icon-more"></span>
             </span>
           </p>
-          <ul class="m-part-icon-ul">
+          <ul class="m-part-icon-ul m-margin">
             <li>
               <img src="/static/images/icon-order-pay.png" alt="">
               <span>待付款</span>
@@ -77,6 +77,16 @@
             <li @click="changeRoute('/personal/couponCenter')">
               <img src="/static/images/icon-personal-discount.png"  alt="">
               <span>优惠中心</span>
+            </li>
+            <li @click="changeRoute('/personal')">
+              <img src="/static/images/icon-personal-discount.png"  alt="">
+              <span>领券中心</span>
+            </li>
+          </ul>
+          <ul class="m-part-icon-ul m-use">
+            <li @click="changeRoute('/personal/guess')">
+              <img src="/static/images/icon-personal-guess.png"  alt="">
+              <span>竞猜记录</span>
             </li>
           </ul>
         </div>
