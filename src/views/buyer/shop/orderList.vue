@@ -43,7 +43,7 @@
               </template>
 
               <ul class="m-order-btn-ul">
-                <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items.order_part)">
+                <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">
                   退款
                 </li>
                 <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35 ">
@@ -143,7 +143,7 @@
               this.$router.push({path:v,query:{omid:item.omid}});
               break;
             case '/selectBack':
-              this.$router.push({path:v,query:{product:JSON.stringify(item)}});
+              this.$router.push({path:v,query:{product:JSON.stringify(item),allOrder:1}});
               break;
             default:
               this.$router.push(v)
