@@ -7,13 +7,22 @@
           <div class="m-row-title">真实姓名</div>
           <input type="text" class="m-row-input m-width-220" v-model="user.usrealname" placeholder="请填写真实姓名">
         </div>
-        <div class="m-IDCard-row">
+        <div class="m-IDCard-row" @click="genderPopup = true">
           <div class="m-row-title">性别</div>
-          <input type="text" class="m-row-input m-width-220" placeholder="请选择性别">
+          <div class="m-row-input m-width-450">{{user.usGender}}</div>
         </div>
+        <!--性别picker-->
+        <mt-popup class="m-gender-popup" v-model="genderPopup" position="bottom">
+          <div class="m-popup-btn">
+            <div @click="genderPopup = false">取消</div>
+            <div @click="genderDone">确认</div>
+          </div>
+          <mt-picker :slots="slots" @change="genderChange"></mt-picker>
+        </mt-popup>
+
         <div class="m-IDCard-row">
           <div class="m-row-title">手机号码</div>
-          <input type="text" class="m-row-input m-width-220" placeholder="请填写手机号码">
+          <input type="text" class="m-row-input m-width-450" placeholder="请填写手机号码">
         </div>
         <div class="m-IDCard-row">
           <div class="m-row-title">身份证号</div>
@@ -46,7 +55,10 @@
     data() {
       return {
         name: 'IDCardApprove',
-        user: {},                     // 用户信息
+        user: { usGender: "请选择性别" },      // 用户信息
+        genderPopup: false,                   // 性别picker
+        slots: [{ values: ['男', '女'] }],
+        gender: "",                           // 暂存性别
       }
     },
     methods: {
@@ -55,10 +67,25 @@
         axios.get(api.get_identifyinginfo + '?token=' + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
+            // 性别判断
+            if(this.user.usgender == "0") {
+              this.user.usGender = "男";
+            }else if(this.user.usgender == "1") {
+              this.user.usGender = "女";
+            }
           }else{
             Toast(res.data.message);
           }
         });
+      },
+      // 性别picker的确认按钮
+      genderDone() {
+        this.genderPopup = false;
+        this.user.usGender = this.gender;
+      },
+      // picker选择的性别改变
+      genderChange(picker, values) {
+        this.gender = values[0];
       },
       // 提交认证按钮
       submitUser() {
@@ -138,6 +165,15 @@
         }
         .m-width-450 {
           width: 400px;
+        }
+      }
+      .m-gender-popup {
+        width: 750px;
+        .m-popup-btn {
+          display: flex;
+          justify-content: space-between;
+          font-size: 28px;
+          padding: 20px 40px 0 40px;
         }
       }
       .m-IDCard-img {
