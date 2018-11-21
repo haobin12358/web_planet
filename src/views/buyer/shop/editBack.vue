@@ -30,14 +30,15 @@
           <span class="m-icon-more"></span>
         </span>
           </li>
-          <li >
+          <li @click="showPicker('refund_slot','refund_select')" >
             <div class="m-flex-between">
               <span class="m-border"></span>
               <span>退款原因</span>
             </div>
             <span >
-          <span class="m-grey">请选择</span>
-          <span class="m-icon-more"></span>
+             <span class="m-grey" v-if="refund_select">{{refund_select}}</span>
+             <span class="m-grey" v-else>请选择</span>
+            <span class="m-icon-more"></span>
         </span>
           </li>
         </ul>
@@ -94,34 +95,46 @@
         picker_select:'',
         oraproductstatus:0,
         total_money:0,
-        img_box:[]
+        img_box:[],//上传图片集合
+        refund_slot:[{
+          flex: 1,
+          values: [],
+          className: 'slot1',
+          textAlign: 'center'
+        }],
+        refund_select:null
       }
     },
     components: { picker},
     mounted(){
       this.product_info = JSON.parse(this.$route.query.product);
-      this.oraproductstatus = this.$route.query.oraproductstatus;
+      this.oraproductstatus = Number(this.$route.query.oraproductstatus);
       let total = 0;
       for(let i = 0;i<this.product_info.length;i++){
         total = total + Number(this.product_info[i].opsubtotal);
       }
       this.total_money = total;
+    //  获取退货原因
+      this.getBack();
     },
     methods:{
       changeRoute(v){
         this.$router.push(v)
       },
+      //显示选择
       showPicker(v,i){
         this.show_picker =true;
         this.slots = this[v];
         this.picker_select = i
       },
+      //picker确定
       pickerSave(v,bool,select){
         if(select){
           this[this.picker_select] = select[0]
         }
         this[v] = bool;
       },
+      //上传图片
       uploadImg(e){
        if( this.img_box && this.img_box.length == 4){
          Toast('最多只可上传4长图片');
@@ -139,6 +152,20 @@
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.img_box.push(this.result);
+            }
+          }
+        })
+      },
+    //  获取图款原因
+      getBack(){
+        axios.get(api.list_dispute_type,{
+          params:{
+            type:this.oraproductstatus
+          }
+        }).then(res => {
+          if(res.data.status == 200){
+            for(let i =0;i<res.data.data.length;i++){
+              this.refund_slot[0].values.push(res.data.data[i].diname);
             }
           }
         })

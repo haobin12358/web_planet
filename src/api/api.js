@@ -30,6 +30,7 @@ const api={
   order_count: title + '/order/count',//订单数量
   get_logistic: title + '/logistic/get',//获取物流信息
   cancle_order: title + '/order/cancle',//取消订单
+  list_dispute_type: title + '/refund/list_dispute_type',//获取退款原因
 
   items_list: title + '/items/list',//获取标签列表
   scene_list: title + '/scene/list',//获取场景列表
