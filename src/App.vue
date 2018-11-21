@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!--<span class="m-return" @click.stop="returnClick">返回</span>-->
-    <router-view/>
+    <router-view v-if="isRouterAlive"/>
   </div>
 </template>
 
@@ -12,6 +12,16 @@
   import {Toast} from 'mint-ui';
 export default {
   name: 'App',
+  provide(){
+    return{
+      reload:this.reload
+    }
+  },
+  data(){
+    return{
+      isRouterAlive:true
+    }
+  },
   mounted(){
     // alert(common.GetQueryString('code'))
 
@@ -20,7 +30,12 @@ export default {
     returnClick(){
       this.$router.go(-1);
     },
-
+    reload(){
+      this.isRouterAlive = false;
+      this.$nextTick(function () {
+        this.isRouterAlive =true;
+      })
+    }
   }
 }
 </script>

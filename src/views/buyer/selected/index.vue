@@ -1,222 +1,224 @@
 <template>
     <div class="m-selected">
-      <!--搜索-->
-      <div class="m-selected-search">
-        <span class="m-icon-home" @click="changeRoute('/gift')"></span>
-        <div class="m-search-input-box" @click="changeRoute('/search')">
-          <span class="m-icon-search"></span>
-          <span>搜索商品</span>
-        </div>
-      </div>
-      <!--轮播图-->
-      <div class="m-swipe">
-        <mt-swipe :auto="3000" v-if="swipe_list">
-          <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
-            <img :src="item.ibpic" class="img" alt="" >
-          </mt-swipe-item>
-        </mt-swipe>
-      </div>
-      <!--标签-->
-      <div class="m-selected-label">
-        <div class="m-selected-label-left">
-          <div class="m-selected-label-l">
-            <span>100%正品保证</span>
-            <span>假一赔十</span>
+      <mt-loadmore :top-method="loadTop" ref="loadmore">
+        <!--搜索-->
+        <div class="m-selected-search">
+          <span class="m-icon-home" @click="changeRoute('/gift')"></span>
+          <div class="m-search-input-box" @click="changeRoute('/search')">
+            <span class="m-icon-search"></span>
+            <span>搜索商品</span>
           </div>
-          <ul class="m-selected-label-ul">
-            <li>
-              <span class="m-icon-label"></span>
-              <span>正品保证</span>
-            </li>
-            <li>
-              <span class="m-icon-label"></span>
-              <span>专业精选</span>
-            </li>
-            <li>
-              <span class="m-icon-label"></span>
-              <span>十五天无忧退换</span>
-            </li>
-          </ul>
         </div>
-        <div class="m-selected-label-right">
-          <span class="m-icon-gift"></span>
-          <span>签到有礼！</span>
+        <!--轮播图-->
+        <div class="m-swipe">
+          <mt-swipe :auto="3000" v-if="swipe_list">
+            <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
+              <img :src="item.ibpic" class="img" alt="" >
+            </mt-swipe-item>
+          </mt-swipe>
         </div>
-      </div>
-      <!--场景推荐-->
-      <div class="m-selected-one">
-        <h3 class="m-selected-title m-flex-between" @click="changeRoute('scene')">
-          <span>场景推荐 /</span>
-          <span class="m-selected-title-more">
-            <span>查看更多</span>
-            <span class="m-icon-more"></span>
-          </span>
-        </h3>
-        <div class="m-scroll">
-          <ul class="m-selected-scene-ul">
-            <li v-for="(item,index) in scene_list" @click.stop = "sceneClick(item)" >
-              <img :src="item.pspic" class="m-selected-scene-img" alt="" >
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!--品牌推荐-->
-      <div class="m-selected-one">
-        <h3 class="m-selected-title m-flex-between">
-          <span>品牌推荐 /</span>
-          <span class="m-selected-title-more"  @click="changeRoute('brandList')">
-            <span>查看更多</span>
-            <span class="m-icon-more"></span>
-          </span>
-        </h3>
-        <div class="m-scroll ">
-          <ul class="m-selected-brand-ul" v-if="brand_list">
-            <li v-for="(item,index) in brand_list" @click="changeRoute('/brandDetail',item)">
-              <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="" >
-            </li>
-          </ul>
-        </div>
-        <div class="m-scroll ">
-          <ul class="m-selected-brand-product-ul">
-            <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
-              <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >
-              <div class="m-selected-brand-product-text">
-                <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
-                <p class="m-flex-between m-ft-18">
-                  <span>￥{{item.prprice |money}}</span>
-                  <s class="m-grey m-ft-18">￥{{item.prlineprice | money}}</s>
-                </p>
-              </div>
-            </li>
-          </ul>
-        </div>
-<!--商品分类-->
-        <h3 class="m-selected-title m-flex-between">
-          <span>商品分类/</span>
-          <span class="m-selected-title-more"  @click="changeRoute('equipment/detail')">
-            <span>查看更多</span>
-            <span class="m-icon-more"></span>
-          </span>
-        </h3>
-        <div class="m-scroll " v-if="icon_list">
-          <ul class="m-equipment-icon-ul">
-            <li v-for="(item,index) in icon_list" @click="changeRoute('equipment/detail',item)">
-              <img :src="item.pcpic" alt="">
-              <span class="m-name">{{item.pcname}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="m-selected-hot m-flex-start" v-if="hot_list && hot_list.length>0">
-          <div class="m-hot-box">
-              <span class="m-hot">HOT!</span>
-              <span>人气热卖</span>
-          </div>
-          <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
-            <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
-            <div class="m-one-product-text">
-              <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
-              <p>￥{{hot_list[0].prlineprice | money}}</p>
+        <!--标签-->
+        <div class="m-selected-label">
+          <div class="m-selected-label-left">
+            <div class="m-selected-label-l">
+              <span>100%正品保证</span>
+              <span>假一赔十</span>
             </div>
+            <ul class="m-selected-label-ul">
+              <li>
+                <span class="m-icon-label"></span>
+                <span>正品保证</span>
+              </li>
+              <li>
+                <span class="m-icon-label"></span>
+                <span>专业精选</span>
+              </li>
+              <li>
+                <span class="m-icon-label"></span>
+                <span>十五天无忧退换</span>
+              </li>
+            </ul>
           </div>
-          <div>
-            <div class="m-one-product " v-if="hot_list[1]" @click.stop="productClick(hot_list[1])">
-              <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
+          <div class="m-selected-label-right">
+            <span class="m-icon-gift"></span>
+            <span>签到有礼！</span>
+          </div>
+        </div>
+        <!--场景推荐-->
+        <div class="m-selected-one">
+          <h3 class="m-selected-title m-flex-between" @click="changeRoute('scene')">
+            <span>场景推荐 /</span>
+            <span class="m-selected-title-more">
+              <span>查看更多</span>
+              <span class="m-icon-more"></span>
+            </span>
+          </h3>
+          <div class="m-scroll">
+            <ul class="m-selected-scene-ul">
+              <li v-for="(item,index) in scene_list" @click.stop = "sceneClick(item)" >
+                <img :src="item.pspic" class="m-selected-scene-img" alt="" >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!--品牌推荐-->
+        <div class="m-selected-one">
+          <h3 class="m-selected-title m-flex-between">
+            <span>品牌推荐 /</span>
+            <span class="m-selected-title-more"  @click="changeRoute('brandList')">
+              <span>查看更多</span>
+              <span class="m-icon-more"></span>
+            </span>
+          </h3>
+          <div class="m-scroll ">
+            <ul class="m-selected-brand-ul" v-if="brand_list">
+              <li v-for="(item,index) in brand_list" @click="changeRoute('/brandDetail',item)">
+                <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="" >
+              </li>
+            </ul>
+          </div>
+          <div class="m-scroll ">
+            <ul class="m-selected-brand-product-ul">
+              <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
+                <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >
+                <div class="m-selected-brand-product-text">
+                  <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
+                  <p class="m-flex-between m-ft-18">
+                    <span>￥{{item.prprice |money}}</span>
+                    <s class="m-grey m-ft-18">￥{{item.prlineprice | money}}</s>
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+  <!--商品分类-->
+          <h3 class="m-selected-title m-flex-between">
+            <span>商品分类/</span>
+            <span class="m-selected-title-more"  @click="changeRoute('equipment/detail')">
+              <span>查看更多</span>
+              <span class="m-icon-more"></span>
+            </span>
+          </h3>
+          <div class="m-scroll " v-if="icon_list">
+            <ul class="m-equipment-icon-ul">
+              <li v-for="(item,index) in icon_list" @click="changeRoute('equipment/detail',item)">
+                <img :src="item.pcpic" alt="">
+                <span class="m-name">{{item.pcname}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="m-selected-hot m-flex-start" v-if="hot_list && hot_list.length>0">
+            <div class="m-hot-box">
+                <span class="m-hot">HOT!</span>
+                <span>人气热卖</span>
+            </div>
+            <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
+              <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
               <div class="m-one-product-text">
-                <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
-                <p>￥{{hot_list[1].prlineprice | money}}</p>
+                <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
+                <p>￥{{hot_list[0].prlineprice | money}}</p>
               </div>
             </div>
-            <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
-              <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
-              <div class="m-one-product-text">
-                <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
-                <p>￥{{hot_list[2].prlineprice | money}}</p>
+            <div>
+              <div class="m-one-product " v-if="hot_list[1]" @click.stop="productClick(hot_list[1])">
+                <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
+                <div class="m-one-product-text">
+                  <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
+                  <p>￥{{hot_list[1].prlineprice | money}}</p>
+                </div>
+              </div>
+              <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
+                <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
+                <div class="m-one-product-text">
+                  <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
+                  <p>￥{{hot_list[2].prlineprice | money}}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!--活动专题-->
-      <div class="m-selected-one">
-        <h3 class="m-selected-title m-flex-start">
-          <span>活动专题 /</span>
-        </h3>
-        <div class="m-one-activity m-top">
-          <img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">
-          <ul class="m-activity-ul">
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p class="m-flex-between">
-                  <span >￥950.00</span>
-                  <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p class="m-flex-between">
-                  <span >￥950.00</span>
-                  <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p class="m-flex-between">
-                  <span >￥950.00</span>
-                  <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-          </ul>
+        <!--活动专题-->
+        <div class="m-selected-one">
+          <h3 class="m-selected-title m-flex-start">
+            <span>活动专题 /</span>
+          </h3>
+          <div class="m-one-activity m-top">
+            <img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">
+            <ul class="m-activity-ul">
+              <li>
+                <img src="" class="m-one-activity-img" alt="">
+                <div class="m-one-activity-text">
+                  <h3>【北面】THE NORTH d </h3>
+                  <p class="m-flex-between">
+                    <span >￥950.00</span>
+                    <s class="m-grey">￥950.00</s></p>
+                </div>
+              </li>
+              <li>
+                <img src="" class="m-one-activity-img" alt="">
+                <div class="m-one-activity-text">
+                  <h3>【北面】THE NORTH d </h3>
+                  <p class="m-flex-between">
+                    <span >￥950.00</span>
+                    <s class="m-grey">￥950.00</s></p>
+                </div>
+              </li>
+              <li>
+                <img src="" class="m-one-activity-img" alt="">
+                <div class="m-one-activity-text">
+                  <h3>【北面】THE NORTH d </h3>
+                  <p class="m-flex-between">
+                    <span >￥950.00</span>
+                    <s class="m-grey">￥950.00</s></p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="m-one-activity ">
+            <img src="" class="m-activity-img" alt="">
+            <ul class="m-activity-ul">
+              <li>
+                <img src="" class="m-one-activity-img" alt="">
+                <div class="m-one-activity-text">
+                  <h3>【北面】THE NORTH d </h3>
+                  <p class="m-flex-between">
+                    <span >￥950.00</span>
+                    <s class="m-grey">￥950.00</s></p>
+                </div>
+              </li>
+              <li>
+                <img src="" class="m-one-activity-img" alt="">
+                <div class="m-one-activity-text">
+                  <h3>【北面】THE NORTH d </h3>
+                  <p class="m-flex-between">
+                    <span >￥950.00</span>
+                    <s class="m-grey">￥950.00</s></p>
+                </div>
+              </li>
+              <li>
+                <img src="" class="m-one-activity-img" alt="">
+                <div class="m-one-activity-text">
+                  <h3>【北面】THE NORTH d </h3>
+                  <p class="m-flex-between">
+                    <span >￥950.00</span>
+                    <s class="m-grey">￥950.00</s></p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="m-one-activity ">
-          <img src="" class="m-activity-img" alt="">
-          <ul class="m-activity-ul">
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p class="m-flex-between">
-                  <span >￥950.00</span>
-                  <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p class="m-flex-between">
-                  <span >￥950.00</span>
-                  <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-            <li>
-              <img src="" class="m-one-activity-img" alt="">
-              <div class="m-one-activity-text">
-                <h3>【北面】THE NORTH d </h3>
-                <p class="m-flex-between">
-                  <span >￥950.00</span>
-                  <s class="m-grey">￥950.00</s></p>
-              </div>
-            </li>
-          </ul>
+        <!--为您精选-->
+        <div class="m-selected-one">
+          <h3 class="m-selected-title m-flex-between">
+            <span>为您精选 /</span>
+            <span class="m-selected-title-more">
+              <span>查看更多</span>
+              <span class="m-icon-more"></span>
+            </span>
+          </h3>
+          <product></product>
         </div>
-      </div>
-      <!--为您精选-->
-      <div class="m-selected-one">
-        <h3 class="m-selected-title m-flex-between">
-          <span>为您精选 /</span>
-          <span class="m-selected-title-more">
-            <span>查看更多</span>
-            <span class="m-icon-more"></span>
-          </span>
-        </h3>
-        <product></product>
-      </div>
+      </mt-loadmore>
     </div>
 
 </template>
@@ -242,6 +244,7 @@
         components: {
           product
         },
+      inject:['reload'],
       mounted(){
         common.changeTitle('精选');
         this.getSwipe();
@@ -309,6 +312,10 @@
           /*商品点击*/
           productClick(item){
             this.$router.push({path:'/product/detail',query:{ prid:item.prid}});
+          },
+          /*下拉刷新*/
+          loadTop(){
+            this.reload();
           }
         },
         created() {

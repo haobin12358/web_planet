@@ -136,6 +136,7 @@
       components:{
         bottom
       },
+      inject:['reload'],
       mounted(){
         common.changeTitle('订单详情');
         this.getOrderInfo();
@@ -196,7 +197,7 @@
             omid:this.$route.query.omid
           }).then(res => {
             if(res.data.status == 200){
-
+              this.reload();
             }
           })
 
