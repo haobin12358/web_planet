@@ -129,7 +129,7 @@
             this.couponList = [];
             this.isScroll = true;
             if(res.data.data.length > 0) {
-              if(this.page_num > 1) {
+              if(this.page_num > 1) {     // 把新数据给list续上
                 this.couponList = this.couponList.concat(res.data.data);
               }else{
                 this.couponList = res.data.data;
@@ -163,7 +163,7 @@
             this.bottom_show = true;
           }
         }
-      },
+      }
     },
     mounted() {
       common.changeTitle('优惠中心');
