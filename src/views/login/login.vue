@@ -134,13 +134,7 @@
           if(common.GetQueryString('code')){
             // alert(common.GetQueryString('code'))
             window.localStorage.setItem("code",common.GetQueryString('code'));
-            axios.get(api.wx_login,{
-              params:{
-                code: common.GetQueryString('code'),
-                ussupper:localStorage.getItem('UPPerd') || '',
-                app_from: window.location.origin
-              }
-            }).then(res => {
+            axios.post(api.wx_login, { code: common.GetQueryString('code') }).then(res => {
               if(res.data.status == 200){;
                 window.localStorage.setItem("token",res.data.data.token);
                 window.localStorage.setItem("openid",res.data.data.openid);
