@@ -5,92 +5,84 @@
         <!--<h3>商品列表</h3>-->
       <!--</div>-->
       <div class="m-evaluate-content">
-        <div class="m-evaluate-one">
-          <img src="" class="m-evaluate-portrait" alt="">
-          <div class="m-evaluate-one-content">
-            <h3>居居女孩</h3>
-            <div class="m-evaluate-start">
-              <div>
-                <span class="m-label">评价</span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start "></span>
+        <template v-for="(item,index) in evaluate_list">
+          <div class="m-evaluate-one">
+            <img :src="item.user.usheader" class="m-evaluate-portrait" alt="">
+            <div class="m-evaluate-one-content">
+              <h3>{{item.user.usname}}</h3>
+              <div class="m-evaluate-start">
+                <div>
+                  <span class="m-label">评价</span>
+                  <span class="m-icon-start " v-for="(a,b) in star" :class="b<= item.oescore?'active':''"></span>
+                </div>
+                <span>{{item.zh_oescore}}</span>
               </div>
-              <span>好</span>
-            </div>
-            <p class="m-evaluate-text">
-              <span class="m-label">评价详情</span>
-              <span>
-               非常好用！非常好用！非常好用！非常好用！非常好用！非常好用！
+              <p class="m-evaluate-text">
+                <span class="m-label">评价详情</span>
+                <span>
+               {{item.oetext}}
              </span>
-            </p>
-            <ul class="m-evaluate-img-ul">
-              <li>
-                <img src="" alt="">
-              </li>
-              <li>
-                <img src="" alt="">
-              </li>
-              <li>
-                <img src="" alt="">
-              </li>
-            </ul>
-            <p class="m-product-label">黑色 15kg</p>
-          </div>
-        </div>
-        <div class="m-evaluate-one">
-          <img src="" class="m-evaluate-portrait" alt="">
-          <div class="m-evaluate-one-content">
-            <h3>居居女孩</h3>
-            <div class="m-evaluate-start">
-              <div>
-                <span class="m-label">评价</span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start active"></span>
-                <span class="m-icon-start "></span>
-              </div>
-              <span>好</span>
+              </p>
+              <ul class="m-evaluate-img-ul">
+                <li v-for="(k,j) in item.image">
+                  <img :src="k.oeimg" alt="">
+                </li>
+                <!--<li v-for="(k,j) in item.video">-->
+                  <!--<div class="m-video-box">-->
+                    <!--<video :src="k.oevideo" ></video>-->
+                  <!--</div>-->
+                <!--</li>-->
+              </ul>
+              <p class="m-product-label">
+                <span v-for="(key,i) in item.skuattritedetail">{{key}}  </span>
+              </p>
             </div>
-            <p class="m-evaluate-text">
-              <span class="m-label">评价详情</span>
-              <span>
-               非常好用！非常好用！非常好用！非常好用！非常好用！非常好用！
-             </span>
-            </p>
-            <ul class="m-evaluate-img-ul">
-              <li>
-                <img src="" alt="">
-              </li>
-              <li>
-                <img src="" alt="">
-              </li>
-              <li>
-                <img src="" alt="">
-              </li>
-            </ul>
-            <p class="m-product-label">黑色 15kg</p>
           </div>
-        </div>
+        </template>
       </div>
 
     </div>
 </template>
 
 <script>
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import {Toast} from 'mint-ui'
     export default {
         data(){
           return{
-
+            page_info:{
+              page_num:1,
+              page_size:10
+            },
+            isScroll:true,
+            total_count:0,
+            bottom_show:false,
+            evaluate_list:null,
+            star:['','','','','']
           }
         },
+      mounted(){
+          this.getEvaluation();
+      },
       methods:{
         changeRoute(){
           this.$router.go(-1);
-        }
+        },
+        //获取评价
+        getEvaluation(){
+          axios.get(api.get_evaluation,{
+            params:{
+              prid:this.$route.query.prid,
+              page_num:this.page_info.page_num,
+              page_size:this.page_info.page_size
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.evaluate_list = res.data.data;
+            }
+          })
+        },
       }
     }
 </script>
@@ -154,11 +146,11 @@
           display: inline-block;
           width: 40px;
           height: 40px;
-          background: url("/static/images/icon-evaluate-start.png") no-repeat;
+          background: url("/static/images/icon-evaluate-star.png") no-repeat;
           background-size: 100% 100%;
           vertical-align: text-bottom;
           &.active{
-            background: url("/static/images/icon-evaluate-start-active.png") no-repeat;
+            background: url("/static/images/icon-evaluate-star-active.png") no-repeat;
             background-size: 100% 100%;
           }
         }
@@ -187,6 +179,18 @@
             width: 170px;
             height: 170px;
             background-color: #9fd0bf;
+          }
+          .m-video-box{
+            display: block;
+            width: 170px;
+            height: 170px;
+            background-color: #9fd0bf;
+            video{
+              display: block;
+              width: 170px;
+              height: 170px;
+              background-color: #9fd0bf;
+            }
           }
         }
       }

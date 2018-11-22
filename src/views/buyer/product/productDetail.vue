@@ -45,7 +45,7 @@
           <span class="m-start active"></span>
           <span class="m-start active"></span>
           <span class="m-start active"></span>
-          <span class="m-start "></span>
+          <span class="m-start"></span>
         </div>
         <div>
           <span class="m-ft-20">查看详情</span>
@@ -119,7 +119,11 @@
          },
         //改变路由
         changeRoute(v){
-           this.$router.push(v);
+           if(v == '/evaluate'){
+             this.$router.push({path:v,query:{prid:this.product_info.prid}});
+           }else{
+             this.$router.push(v);
+           }
         },
         //返回{
         changeBack(){
@@ -141,6 +145,10 @@
            },error => {
              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
            })
+        },
+        //获取评价
+        getEvaluation(){
+          // axios.get(api.get_evaluation,)
         },
         //购物车确定
         sureClick(item,num){
