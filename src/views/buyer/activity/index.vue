@@ -2,7 +2,7 @@
   <div class="m-activity">
     <div class="m-activity-top-bg"></div>
 
-    <div class="m-activity-box">
+    <div class="m-activity-box animated bounceInUp">
       <div class="m-activity-item" v-for="item in activityList" @click="changeRoute(item.url)">
         <img class="m-activity-img" src="http://www.cssqt.com.cdn.suixin8.com/uploads/520_4961/201811/db05483b3a09487dea5a44f380194cad.jpg" alt="">
         <div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>
@@ -21,7 +21,7 @@
         name: '',
         activityList: [
           { record: "", btn: "首单可免", url: "" },
-          { record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "" },
+          { record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "dailyGuess" },
           { record: "", btn: "邀请好友帮拆魔盒", url: "" },
           { record: "", btn: "我要试用", url: "" }
         ]
