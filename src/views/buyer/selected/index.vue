@@ -73,7 +73,7 @@
           <div class="m-scroll ">
             <ul class="m-selected-brand-ul" v-if="brand_list">
               <li v-for="(item,index) in brand_list" @click="changeRoute('/brandDetail',item)">
-                <img :src="item.brand.pblogo" class="m-selected-brand-img" alt="" >
+                <img :src="item.pblogo" class="m-selected-brand-img" alt="" >
               </li>
             </ul>
           </div>
@@ -85,7 +85,7 @@
                   <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
                   <p class="m-flex-between m-ft-18">
                     <span>￥{{item.prprice |money}}</span>
-                    <s class="m-grey m-ft-18">￥{{item.prlineprice | money}}</s>
+                    <s class="m-grey m-ft-18" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
                   </p>
                 </div>
               </li>
@@ -116,7 +116,7 @@
               <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
               <div class="m-one-product-text">
                 <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
-                <p>￥{{hot_list[0].prlineprice | money}}</p>
+                <p v-if="hot_list[0].prlineprice">￥{{hot_list[0].prlineprice | money}}</p>
               </div>
             </div>
             <div>
@@ -124,14 +124,14 @@
                 <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
                 <div class="m-one-product-text">
                   <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
-                  <p>￥{{hot_list[1].prlineprice | money}}</p>
+                  <p v-if="hot_list[1].prlineprice">￥{{hot_list[1].prlineprice | money}}</p>
                 </div>
               </div>
               <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
                 <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
                 <div class="m-one-product-text">
                   <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
-                  <p>￥{{hot_list[2].prlineprice | money}}</p>
+                  <p v-if="hot_list[2].prlineprice">￥{{hot_list[2].prlineprice | money}}</p>
                 </div>
               </div>
             </div>
@@ -276,6 +276,7 @@
                 this.brand_list = res.data.data.brands;
                 this.brand_product = res.data.data.product;
                 this.hot_list = res.data.data.hot;
+                console.log(this.brand_list,this.brand_product,this.hot_list)
               }
             })
           },
