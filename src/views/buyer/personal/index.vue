@@ -46,18 +46,22 @@
             <li>
               <img src="/static/images/icon-order-pay.png" alt="">
               <span>待付款</span>
+              <div class="m-order-num" v-if="pay != 0">{{pay}}</div>
             </li>
             <li>
               <img src="/static/images/icon-order-send.png" class="m-square" alt="">
               <span>待发货</span>
+              <div class="m-order-num" v-if="send != 0">{{send}}</div>
             </li>
             <li>
               <img src="/static/images/icon-receive.png" class="m-square" alt="">
               <span>待收货</span>
+              <div class="m-order-num" v-if="receive != 0">{{receive}}</div>
             </li>
             <li>
               <img src="/static/images/icon-order-after-sale.png" alt="">
               <span>售后</span>
+              <div class="m-order-num" v-if="after_sales != 0">{{after_sales}}</div>
             </li>
           </ul>
         </div>
@@ -75,15 +79,9 @@
               <span>安全中心</span>
             </li>
             <li @click="changeRoute('/personal/couponCenter')">
-              <img src="/static/images/icon-personal-discount.png"  alt="">
+              <img src="/static/images/icon-personal-coupon.png"  alt="">
               <span>优惠中心</span>
             </li>
-            <li @click="changeRoute('/personal')">
-              <img src="/static/images/icon-personal-discount.png"  alt="">
-              <span>领券中心</span>
-            </li>
-          </ul>
-          <ul class="m-part-icon-ul m-use">
             <li @click="changeRoute('/personal/guess')">
               <img src="/static/images/icon-personal-guess.png"  alt="">
               <span>竞猜记录</span>
@@ -106,7 +104,11 @@
     data() {
       return {
         name: '',
-        user: {},              // 个人信息
+        user: {},               // 个人信息
+        pay: "0",               // 待付款
+        send: "0",              // 待发货
+        receive: "0",           // 待收货
+        after_sales: "0",       // 售后
       }
     },
     components: {},
@@ -124,11 +126,32 @@
             Toast(res.data.message);
           }
         })
+      },
+      // 获取订单数量
+      getOrderCount() {
+        axios.get(api.order_count + "?extentions=refund&token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            for(let i = 0; i < res.data.data.length; i ++) {
+              if(res.data.data[i].status == "0") {
+                this.pay = res.data.data[i].count;
+              }else if(res.data.data[i].status == "10") {
+                this.send = res.data.data[i].count;
+              }else if(res.data.data[i].status == "20") {
+                this.receive = res.data.data[i].count;
+              }else if(res.data.data[i].status == "refund") {
+                this.after_sales = res.data.data[i].count;
+              }
+            }
+          }else{
+            Toast(res.data.message);
+          }
+        })
       }
     },
     mounted() {
       common.changeTitle('我的');
-      this.getUser();       // 获取个人信息
+      this.getUser();             // 获取个人信息
+      this.getOrderCount();       // 获取订单数量
     }
   }
 </script>
