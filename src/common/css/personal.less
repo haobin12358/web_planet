@@ -83,7 +83,7 @@
       .m-personal-ul{
         .flex-row(space-between);
         li{
-          line-height: 29px;
+          line-height: 35px;
           .m-icon-gift{
             display: inline-block;
             width: 26px;
@@ -156,6 +156,7 @@
           .flex-row(space-between);
           margin: 30px 10px;
           li{
+            position: relative;
             text-align: center;
             img{
               display: block;
@@ -165,6 +166,19 @@
               &.m-square{
                 width: 64px;
               }
+            }
+            .m-order-num {
+              width: 32px;
+              height: 32px;
+              line-height: 36px;
+              color: #C70000;
+              font-size: 21px;
+              border: 3px solid rgba(199,0,0,1);
+              border-radius: 50%;
+              background-color: #ffffff;
+              position: absolute;
+              top: -12px;
+              right: -10px;
             }
           }
           &.m-use{

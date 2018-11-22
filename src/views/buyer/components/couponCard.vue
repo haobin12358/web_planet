@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="couponList.length > 0">
-      <div class="m-coupon-card" v-for="item in couponList" @click="couponClick(item)">
+      <!--<div class="m-coupon-card" v-for="item in couponList">
         <span class="m-left-circle"></span>
         <span class="m-price-icon" v-if="item.codiscount == 10">￥</span>
         <div class="m-coupon-detail">
@@ -17,9 +17,38 @@
           </div>
         </div>
         <span class="m-right-circle"></span>
+      </div>-->
+      <div class="m-coupon-card" :class="item.ready_collected ? 'm-have' : '' || item.navName == '已过期' ? 'm-had' : '' || item.navName == '已使用' ? 'm-have' : ''"
+           v-for="item in couponList" @click="couponClick(item)">
+        <div class="m-card-left">
+          <img class="m-store-img" :class="item.navName == '已过期' ? 'm-had' : '' || item.navName == '已使用' ? 'm-have' : ''"
+               :src="item.title_subtitle.left_logo" alt="">
+          <div class="m-store-name">{{item.title_subtitle.left_text}}</div>
+        </div>
+        <div class="m-card-right">
+          <div class="m-card-time">{{item.covalidstarttime}}—{{item.covalidendtime}}</div>
+          <div class="m-card-detail">
+            <div class="m-detail-left" v-if="item.codiscount == '10'">
+              <span class="m-text-small">￥</span>
+              <span class="m-text-big">{{item.cosubtration}}</span>
+            </div>
+            <div class="m-detail-left m-space" v-else>
+              <span class="m-text-big">{{item.codiscount}}</span>
+              <span class="m-text-small">折</span>
+            </div>
+            <div class="m-detail-right">
+              <div class="m-detail-title">{{item.title_subtitle.title}}</div>
+              <div class="m-detail-subtitle">{{item.title_subtitle.subtitle}}</div>
+              <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName" @click="getCoupon">点击领取</div>
+              <div class="m-detail-btn" v-if="!item.cocancollect">不可领取</div>
+              <div class="m-detail-btn" v-if="item.ready_collected">已领取</div>
+              <div class="m-detail-btn" v-if="item.navName">{{item.navName}}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="m-no-coupon" v-if="couponList.length == 0">
+    <div class="m-no-coupon" v-else>
       <span class="m-no-img"></span>
       <p style="margin-top: -40px">暂时还没有优惠券哦~</p>
     </div>
@@ -40,6 +69,10 @@
       // 优惠券选择
       couponClick(item){
         this.$emit('couponClick',item);
+      },
+      // 点击领取优惠券
+      getCoupon() {
+
       }
     },
     mounted() {
@@ -52,80 +85,84 @@
   @import "../../../common/css/index";
 
   .m-coupon-card{
-    position: relative;
-    width: 619px;
-    height: 213px;
-    background:linear-gradient(108deg,rgba(252,211,22,1) 0%,rgba(245,147,145,1) 100%);
-    border-radius: 10px;
-    margin-bottom: 30px;
-    color: #fff;
-    &.unable{
-      background:linear-gradient(108deg,rgba(233,233,233,1) 0%,rgba(153,153,153,1) 100%);
+    display: flex;
+    justify-content: space-between;
+    width: 700px;
+    height: 171px;
+    margin: 0 0 5px 25px;
+    background: url("/static/images/coupon/icon-new.png") no-repeat;
+    background-size: 100% 100%;
+    &.m-had {
+      background: url("/static/images/coupon/icon-had.png") no-repeat;
+      background-size: 100% 100%;
     }
-    .m-price-icon{
-      position: absolute;
-      top: 10px;
-      left: 15px;
-      font-size: 46px;
+    &.m-have {
+      background: url("/static/images/coupon/icon-have.png") no-repeat;
+      background-size: 100% 100%;
     }
-    .m-icon-word{
-      font-size: 46px;
-      display: inline-block;
-      margin-top: 60px;
-      /*vertical-align: text-bottom;*/
-    }
-    .m-left-circle{
-      position: absolute;
-      top: 84px;
-      left: -21px;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background-color: #fff;
-    }
-    .m-right-circle{
-      position: absolute;
-      top: 84px;
-      right: -21px;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background-color: #fff;
-    }
-    .m-coupon-detail{
-      .flex-row(space-between);
-      width: 540px;
-      padding-right: 30px;
-      position: absolute;
-      top: 23px;
-      left: 40px;
-      text-align: left;
-      .m-coupon-time {
-        position: absolute;
-        bottom: -15px;
-        left: -30px;
-        font-size: 16px;
+    .m-card-left {
+      margin: 20px 0 0 45px;
+      .m-store-img {
+        width: 100px;
+        height: 100px;
+        background: #ffffff;
+        box-shadow: 2px 3px 6px rgba(0,0,0,0.16);
+        border-radius: 10px;
+        &.m-had {
+          opacity: 0.3;
+        }
+        &.m-have {
+          opacity: 0.5;
+        }
       }
-      .m-ft-130{
-        font-size: 130px;
-        font-weight: bold;
-        line-height: 180px;
-        /*margin: -10px 0 0 0;*/
-        margin: 0 0 -10px -10px;
+      .m-store-name {
+        color: #ffffff;
+        font-size: 18px;
       }
-      .m-ft-140{
-        font-size: 140px;
-        font-weight: bold;
-        line-height: 180px;
-        margin: -10px 0 0 30px;
+    }
+    .m-card-right {
+      width: 63%;
+      color: #ffffff;
+      font-size: 18px;
+      margin: 15px 20px 0 0;
+      .m-card-time {
+        margin-bottom: 5px;
+        text-align: right;
       }
-      .m-ft-40 {
-        font-size: 46px;
-        margin: 40px 0 0 -50px;
-      }
-      .m-ft-48{
-        font-size: 44px;
-        margin: -10px -10px 10px 0;
+      .m-card-detail {
+        display: flex;
+        justify-content: space-between;
+        .m-detail-left {
+          margin-top: -10px;
+          .m-text-small{
+            font-size: 46px;
+          }
+          .m-text-big {
+            font-size: 100px;
+            font-weight: bold;
+          }
+          &.m-space {
+            margin-left: 50px;
+          }
+        }
+        .m-detail-right {
+          .m-detail-title {
+
+          }
+          .m-detail-subtitle {
+
+          }
+          .m-detail-btn {
+            width: 96px;
+            height: 32px;
+            line-height: 35px;
+            font-size: 24px;
+            padding: 5px 16px;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,1);
+            border-radius: 30px;
+          }
+        }
       }
     }
   }

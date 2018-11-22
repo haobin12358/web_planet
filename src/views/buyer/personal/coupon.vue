@@ -29,6 +29,7 @@
         ],
         couponList: [],            // 优惠券list
         status: "2",               // 暂存navList点击的优惠券状态，默认是未使用("0")开头
+        navName: "未使用",          // 暂存navList点击的name
         page_num: 1,
         page_size: 10,
         isScroll: true,
@@ -51,6 +52,8 @@
         }
         arr[index].active = true;
         this.status = arr[index].params;
+        this.navName = arr[index].name;
+        this.couponList = [];
         this.getUserCoupon();            // 获取用户个人优惠券
         this.nav_list = [].concat(arr);
       },
@@ -67,6 +70,7 @@
           params.ucalreadyuse = "true";
         }else if(this.status == "2") {
           params.ucalreadyuse = "false";
+          params.canuse = "true";
         }
         axios.get(api.list_user_coupon, { params: params }).then(res => {
           if(res.data.status == 200){
@@ -85,6 +89,12 @@
               }
               this.page_num = this.page_num + 1;
               this.total_count = res.data.total_count;
+            }
+            for(let i = 0; i < this.couponList.length; i ++) {
+              if(this.couponList[i].title_subtitle.left_text.length > 8) {
+                this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.splice(0, 8) + "..";
+              }
+              this.couponList[i].navName = this.navName;
             }
           }else{
             Toast(res.data.message);
@@ -135,7 +145,7 @@
       padding: 0 80px;
     }
     .m-coupon-content{
-      padding: 30px 65px;
+      /*padding: 20px 0 0 0;*/
     }
   }
 </style>

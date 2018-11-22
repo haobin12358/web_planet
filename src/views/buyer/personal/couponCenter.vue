@@ -87,6 +87,7 @@
         }
         arr[index].active = true;
         this.itid = arr[index].itid;
+        this.couponList = [];
         this.getUserCoupon();      // 获取优惠券列表
         this.nav_list = [].concat(arr);
       },
@@ -129,7 +130,6 @@
         };
         axios.get(api.coupon_list, { params: params }).then(res => {
           if(res.data.status == 200) {
-            // this.couponList = [];
             this.isScroll = true;
             if(res.data.data.length > 0) {
               if(this.page_num > 1) {     // 把新数据给list续上
@@ -139,6 +139,11 @@
               }
               this.page_num = this.page_num + 1;
               this.total_count = res.data.total_count;
+            }
+            for(let i = 0; i < this.couponList.length; i ++) {
+              if(this.couponList[i].title_subtitle.left_text.length > 8) {
+                this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substring(0, 8) + "..";
+              }
             }
           }else{
             Toast(res.data.message);
@@ -295,7 +300,7 @@
         margin: 20px 0 46px 30px;
       }
       .m-couponCenter-content-ul{
-        padding: 20px 72px;
+        /*padding: 20px 72px;*/
       }
     }
   }
