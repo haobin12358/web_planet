@@ -3,10 +3,10 @@
     <div class="m-activity-top-bg"></div>
 
     <div class="m-activity-box animated bounceInUp">
-      <div class="m-activity-item" v-for="item in activityList" @click="changeRoute(item.url)">
+      <div class="m-activity-item" v-for="item in activityList">
         <img class="m-activity-img" src="http://www.cssqt.com.cdn.suixin8.com/uploads/520_4961/201811/db05483b3a09487dea5a44f380194cad.jpg" alt="">
         <div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>
-        <div class="m-activity-btn" :class="item.btn.length > 6 ? 'active' : ''">{{item.btn}}</div>
+        <div class="m-activity-btn animated infinite pulse" :class="item.btn.length > 6 ? 'active' : ''" @click="changeRoute(item.url)">{{item.btn}}</div>
       </div>
     </div>
   </div>
@@ -22,8 +22,8 @@
         activityList: [
           { record: "", btn: "首单可免", url: "/activityProduct" },
           { record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "/dailyGuess" },
-          { record: "", btn: "邀请好友帮拆魔盒", url: "" },
-          { record: "", btn: "我要试用", url: "" }
+          { record: "", btn: "邀请好友帮拆魔盒", url: "/pandora" },
+          { record: "", btn: "我要试用", url: "/activityProduct" }
         ]
       }
     },
@@ -53,7 +53,7 @@
     }
     .m-activity-box {
       position: absolute;
-      top: 100px;
+      top: 240px;
       margin-bottom: 100px;
       .m-activity-item {
         width: 700px;
@@ -82,6 +82,10 @@
           width: 300px;
           color: #AF3300;
           font-size: 38px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           font-weight: bold;
           padding: 20px 25px;
           background: linear-gradient(180deg,rgba(255,235,148,1) 0%,rgba(252,211,22,1) 100%);
@@ -91,7 +95,7 @@
           bottom: 50px;
           left: 175px;
           &.active {
-            font-size: 28px;
+            font-size: 30px;
           }
         }
       }
