@@ -60,7 +60,7 @@
         <span class="m-icon-service"></span>
         <div class="m-product-detail-btn">
           <span @click="addCart">加入购物车</span>
-          <span class="active" @click="buyNow">立即购物车</span>
+          <span class="active" @click="buyNow">立即购买</span>
         </div>
       </div>
 
@@ -96,7 +96,8 @@
             product_info:null,
             sku:null,
             select_value:null,
-            canums:1
+            canums:1,
+            cart_buy:null
           }
         },
       components:{
@@ -145,7 +146,13 @@
         sureClick(item,num){
           this.canums = num;
           this.select_value = item;
-          this.postCart();
+          if(this.cart_buy == 'cart'){
+            this.postCart();
+            this.cart_buy = null;
+          }else if(this.cart_buy == 'buy'){
+            this.buyNow();
+            this.cart_buy = null;
+          }
           this.changeModal('show_sku',false);
         },
       //  加入购物请求
@@ -171,13 +178,21 @@
            }else{
              this.show_sku = true;
            }
+           this.cart_buy = 'cart';
         },
         //立即购买
         buyNow(){
           if(this.select_value){
-
+            let product = {};
+            product.pb = this.product_info.brand;
+            product.cart = [];
+            product.cart.push({product:{prtitle:this.product_info.prtitle},sku:this.select_value,canums:this.canums,prid:this.product_info.prid});
+            let arr = [];
+            arr.push(product);
+            this.$router.push({path:'/submitOrder',query:{product:JSON.stringify(arr)}});
           }else{
             this.show_sku = true;
+            this.cart_buy = 'buy';
           }
         }
       }

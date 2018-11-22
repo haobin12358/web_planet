@@ -147,6 +147,7 @@
       components: { picker, coupon },
       mounted(){
         common.changeTitle('下单');
+        console.log(JSON.parse(this.$route.query.product))
         if(this.$route.query.product){
           this.product_info = JSON.parse(this.$route.query.product);
           let total = 0;
