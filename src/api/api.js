@@ -49,6 +49,7 @@ const api={
 
   list_user_coupon : title + '/coupon/list_user_coupon',          // 获取用户个人的优惠券
   coupon_list : title + '/coupon/list',                           // 获取优惠券列表
+  coupon_fetch : title + '/coupon/fetch',                         // 领取优惠券
 
   get_all_news: title + '/news/get_all_news',//获取资讯列表
   get_news_content: title +'/news/get_news_content',//获取资讯详情

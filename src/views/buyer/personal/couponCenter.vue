@@ -41,7 +41,7 @@
           <nav-list :navlist="nav_list" :isScroll="true" @navClick="navClick"></nav-list>
         </div>
         <div class="m-couponCenter-content-ul">
-          <coupon-card :couponList="couponList"></coupon-card>
+          <coupon-card :couponList="couponList" @getCoupon="getCoupon"></coupon-card>
         </div>
       </div>
       <bottom-line v-if="bottom_show"></bottom-line>
@@ -151,6 +151,17 @@
             this.page_num = 1;
             this.total_count = 0;
             return false;
+          }
+        });
+      },
+      // 点击领取优惠券
+      getCoupon(index) {
+        axios.post(api.coupon_fetch + '?token=' + localStorage.getItem('token'), { coid: this.couponList[index].coid }).then(res => {
+          if(res.data.status == 200){
+            Toast("领取成功");
+            this.couponList[index].ready_collected = true;
+          }else{
+            Toast(res.data.message);
           }
         });
       },

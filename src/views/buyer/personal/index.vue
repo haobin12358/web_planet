@@ -42,7 +42,7 @@
               <span class="m-icon-more"></span>
             </span>
           </p>
-          <ul class="m-part-icon-ul m-margin">
+          <ul class="m-part-icon-ul">
             <li>
               <img src="/static/images/icon-order-pay.png" alt="">
               <span>待付款</span>
@@ -59,7 +59,13 @@
               <div class="m-order-num" v-if="receive != 0">{{receive}}</div>
             </li>
             <li>
-              <img src="/static/images/icon-order-after-sale.png" alt="">
+              <img src="/static/images/m-serviceCenter-after.png" class="m-square" alt="">
+              <span>待评价</span>
+              <div class="m-order-num" v-if="evaluate != 0">{{evaluate}}</div>
+            </li>
+            <li>
+              <!--<img src="/static/images/icon-order-after-sale.png" alt="">-->
+              <img src="/static/images/icon-personal-back.png" alt="">
               <span>售后</span>
               <div class="m-order-num" v-if="after_sales != 0">{{after_sales}}</div>
             </li>
@@ -108,6 +114,7 @@
         pay: "0",               // 待付款
         send: "0",              // 待发货
         receive: "0",           // 待收货
+        evaluate: "0",          // 待评价
         after_sales: "0",       // 售后
       }
     },
@@ -138,6 +145,8 @@
                 this.send = res.data.data[i].count;
               }else if(res.data.data[i].status == "20") {
                 this.receive = res.data.data[i].count;
+              }else if(res.data.data[i].status == "35") {
+                this.evaluate = res.data.data[i].count;
               }else if(res.data.data[i].status == "refund") {
                 this.after_sales = res.data.data[i].count;
               }

@@ -2,9 +2,9 @@
   <div>
     <div v-if="couponList.length > 0">
       <div class="m-coupon-card" :class="item.ready_collected ? 'm-have' : '' || item.navName == '已过期' ? 'm-had' : '' || item.navName == '已使用' ? 'm-have' : ''"
-           v-for="item in couponList" @click="couponClick(item)">
+           v-for="(item, index) in couponList" @click="couponClick(item)">
         <div class="m-card-left">
-          <img class="m-store-img" :class="item.navName == '已过期' ? 'm-had' : '' || item.navName == '已使用' ? 'm-have' : ''"
+          <img class="m-store-img" :class="item.navName == '已过期' ? 'm-had' : '' || item.navName == '已使用' ? 'm-have' : '' || item.ready_collected ? 'm-have' : ''"
                :src="item.title_subtitle.left_logo" alt="">
           <div class="m-store-name">{{item.title_subtitle.left_text}}</div>
         </div>
@@ -22,7 +22,7 @@
             <div class="m-detail-right">
               <div>{{item.title_subtitle.title}}</div>
               <div>{{item.title_subtitle.subtitle}}</div>
-              <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName" @click="getCoupon">点击领取</div>
+              <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName" @click="getCoupon(index)">点击领取</div>
               <div class="m-detail-btn" v-if="!item.cocancollect">不可领取</div>
               <div class="m-detail-btn" v-if="item.ready_collected">已领取</div>
               <div class="m-detail-btn" v-if="item.navName">{{item.navName}}</div>
@@ -54,8 +54,8 @@
         this.$emit('couponClick',item);
       },
       // 点击领取优惠券
-      getCoupon() {
-
+      getCoupon(index) {
+        this.$emit('getCoupon', index);
       }
     },
     mounted() {
