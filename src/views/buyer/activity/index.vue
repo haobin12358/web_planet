@@ -20,8 +20,8 @@
       return {
         name: '',
         activityList: [
-          { record: "", btn: "首单可免", url: "" },
-          { record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "dailyGuess" },
+          { record: "", btn: "首单可免", url: "/activityProduct" },
+          { record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "/dailyGuess" },
           { record: "", btn: "邀请好友帮拆魔盒", url: "" },
           { record: "", btn: "我要试用", url: "" }
         ]
