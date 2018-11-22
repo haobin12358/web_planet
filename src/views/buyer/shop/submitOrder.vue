@@ -147,7 +147,7 @@
       components: { picker, coupon },
       mounted(){
         common.changeTitle('下单');
-        console.log(JSON.parse(this.$route.query.product))
+        // console.log(JSON.parse(this.$route.query.product));
         if(this.$route.query.product){
           this.product_info = JSON.parse(this.$route.query.product);
           let total = 0;
@@ -192,16 +192,18 @@
             });
           },
           /*获取优惠券*/
-          getCoupon(){
-            axios.get(api.list_user_coupon,{
-              params:{
-                token:localStorage.getItem('token'),
-                ucalreadyuse:false,
-                canuse:true
-              }
-            }).then(res => {
+          getCoupon() {
+            let params = {
+              token: localStorage.getItem('token'),
+              ucalreadyuse: false,
+              canuse: true
+            };
+            axios.get(api.list_user_coupon, { params: params }).then(res => {
               if(res.data.status == 200){
-                this.couponList = res.data.data;
+                this.couponList = [];
+                for(let i = 0; i < res.data.data.length; i ++) {
+                  this.couponList.push(res.data.data[i].coupon);
+                }
               }
             })
           },

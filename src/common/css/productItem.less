@@ -1,4 +1,11 @@
 @import "../../common/css/index";
+.m-activity-product-text-box {
+  text-align: left;
+  margin-left: 55px;
+  .m-activity-product-text {
+    margin-top: 20px;
+  }
+}
 .m-product-part {
   display: flex;
   padding-bottom: 50px;
@@ -20,7 +27,10 @@
       .m-product-name {
         font-size: 28px;
         font-weight: bold;
-        margin-bottom: 10px;
+        .m-product-tag {
+          color: #FCD316;
+          margin: 0 -10px 0 -15px;
+        }
       }
       .m-product-btn-box {
         display: flex;
@@ -35,8 +45,16 @@
       flex: 1;
       font-size: 24px;
     }
+    .m-return-time {
+      color: #999999;
+      font-size: 24px;
+      .m-yellow-text {
+        color: #FCD316;
+      }
+    }
     .m-price-share {
       display: flex;
+      margin-bottom: 5px;
       .m-product-price {
         flex: 1;
         color: #999999;
