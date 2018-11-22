@@ -41,11 +41,7 @@
       <div class="m-product-detail-more" @click="changeRoute('/evaluate')">
         <div>
           <span class="m-label">评价</span>
-          <span class="m-start active"></span>
-          <span class="m-start active"></span>
-          <span class="m-start active"></span>
-          <span class="m-start active"></span>
-          <span class="m-start"></span>
+          <span class="m-start " v-for="(a,b) in star" :class="b<= product_info.praveragescore -1?'active':((b< product_info.praveragescore && b>product_info.praveragescore)?'half':'')"></span>
         </div>
         <div>
           <span class="m-ft-20">查看详情</span>
@@ -97,7 +93,8 @@
             sku:null,
             select_value:null,
             canums:1,
-            cart_buy:null
+            cart_buy:null,
+            star:['','','','','']
           }
         },
       components:{
@@ -138,6 +135,7 @@
            }).then(res => {
              if(res.data.status == 200){
                this.product_info = res.data.data;
+               this.product_info.praveragescore = this.product_info.praveragescore / 2;
              }
               else{
                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
