@@ -1,23 +1,6 @@
 <template>
   <div>
     <div v-if="couponList.length > 0">
-      <!--<div class="m-coupon-card" v-for="item in couponList">
-        <span class="m-left-circle"></span>
-        <span class="m-price-icon" v-if="item.codiscount == 10">￥</span>
-        <div class="m-coupon-detail">
-          <span class="m-ft-130" v-if="item.codiscount == 10">{{item.cosubtration}}</span>
-          <span class="m-ft-140" v-if="item.codiscount != 10">{{item.codiscount}}</span>
-          <span class="m-ft-40" v-if="item.codiscount != 10">折</span>
-          <div>
-            <p class="m-ft-48">{{item.title_subtitle.title}}</p>
-            <p class="m-ft-36">{{item.title_subtitle.subtitle}}</p>
-          </div>
-          <div class="m-coupon-time">
-            有效时间：{{item.covalidstarttime}} 至 {{item.covalidendtime}}
-          </div>
-        </div>
-        <span class="m-right-circle"></span>
-      </div>-->
       <div class="m-coupon-card" :class="item.ready_collected ? 'm-have' : '' || item.navName == '已过期' ? 'm-had' : '' || item.navName == '已使用' ? 'm-have' : ''"
            v-for="item in couponList" @click="couponClick(item)">
         <div class="m-card-left">
@@ -37,8 +20,8 @@
               <span class="m-text-small">折</span>
             </div>
             <div class="m-detail-right">
-              <div class="m-detail-title">{{item.title_subtitle.title}}</div>
-              <div class="m-detail-subtitle">{{item.title_subtitle.subtitle}}</div>
+              <div>{{item.title_subtitle.title}}</div>
+              <div>{{item.title_subtitle.subtitle}}</div>
               <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName" @click="getCoupon">点击领取</div>
               <div class="m-detail-btn" v-if="!item.cocancollect">不可领取</div>
               <div class="m-detail-btn" v-if="item.ready_collected">已领取</div>
@@ -146,12 +129,6 @@
           }
         }
         .m-detail-right {
-          .m-detail-title {
-
-          }
-          .m-detail-subtitle {
-
-          }
           .m-detail-btn {
             width: 96px;
             height: 32px;
