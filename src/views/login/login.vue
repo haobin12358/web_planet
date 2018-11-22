@@ -14,8 +14,8 @@
       <div class="m-login-btn" @click="loginClick">登  录</div>
 
       <div class="m-wei-box">
-        <p>
-          <span class="m-icon-wei"></span>
+        <p >
+          <span class="m-icon-wei" @click="login"></span>
         </p>
         <p>微信快速登录</p>
       </div>
@@ -95,12 +95,62 @@
               Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
             });
 
-          }
+          },
+          isWeiXin() {
+            let ua = window.navigator.userAgent.toLowerCase();
+            console.log(ua);//mozilla/5.0 (iphone; cpu iphone os 9_1 like mac os x) applewebkit/601.1.46 (khtml, like gecko)version/9.0 mobile/13b143 safari/601.1
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+              return true;
+            } else {
+              return false;
+            }
+
+          },
+          login() {
+            axios.get(api.get_wxconfig,{
+              params:{
+                url: window.location.href,
+                app_from: window.location.origin
+              }
+            } ).then((res) => {
+              if(res.data.status == 200){
+                const id = res.data.data.appId
+                const url = window.location.href;
+                // const  url = 'https://daaiti.cn/WeiDian/#/login';
+                window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
+                  +  id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+              }
+
+            }).catch((error) => {
+              console.log(error ,'1111')
+            })
+          },
 
         },
       mounted(){
         common.changeTitle('登录');
-
+        if(this.isWeiXin()){    //是来自微信内置浏览器
+          // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
+          if(common.GetQueryString('code')){
+            // alert(common.GetQueryString('code'))
+            window.localStorage.setItem("code",common.GetQueryString('code'));
+            axios.get(api.wx_login,{
+              params:{
+                code: common.GetQueryString('code'),
+                ussupper:localStorage.getItem('UPPerd') || '',
+                app_from: window.location.origin
+              }
+            }).then(res => {
+              if(res.data.status == 200){;
+                window.localStorage.setItem("token",res.data.data.token);
+                window.localStorage.setItem("openid",res.data.data.openid);
+                this.$router.push('/');
+              }else{
+                Toast({ message: res.data.message, className: 'm-toast-fail' });
+              }
+            });
+          }
+        }
       },
         created() {
 
