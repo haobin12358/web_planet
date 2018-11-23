@@ -2,6 +2,7 @@
   <div class="m-activity-product">
     <div class="m-img-box">
       <img class="m-member-img" src="http://hsingfo-curtain.com/images/Banner/635450965258533382.jpg" alt="">
+      <div class="m-top-bg"></div>
       <div class="m-img-text-box">
         <div class="m-img-text"><span class="m-img-text-bold">25</span> Spt</div>
         <div class="m-img-text">九月 / 星期二</div>
@@ -83,9 +84,19 @@
   .m-activity-product {
     min-height: 100%;
     .m-img-box {
+      margin-bottom: -15px;
       .m-member-img {
         width: 750px;
         height: 360px;
+      }
+      .m-top-bg {
+        width: 750px;
+        height: 67px;
+        background: url("/static/images/icon-bg.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 295px;
+        left: 0;
       }
       .m-img-text-box {
         position: absolute;
