@@ -49,10 +49,28 @@
             <div class="m-rule-no">3</div>
             <div>猜中填写地址支付即可</div>
           </div>
-          <div class="m-ft-21">活动最终解释权归本公司所有</div>
+          <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
         </div>
       </div>
     </div>
+
+    <!--竞猜成功-->
+    <mt-popup class="m-guess-popup" v-model="successPopup" pop-transition="popup-fade">
+      <div class="m-guess-success">
+        <img class="m-guess-icon" src="/static/images/activity/guess-success.png" alt="">
+        <div class="m-success-text m-ft-30 m-ft-b">恭喜您竞猜正确！</div>
+        <div class="m-success-text margin m-ft-24">以该价格购买此商品吧！！</div>
+        <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b">去购买</div>
+      </div>
+    </mt-popup>
+    <!--竞猜失败-->
+    <mt-popup class="m-guess-popup" v-model="failPopup" pop-transition="popup-fade">
+      <div class="m-guess-fail">
+        <img class="m-guess-icon" src="/static/images/activity/guess-fail.png" alt="">
+        <div class="m-ft-30 m-ft-b">很遗憾，回答错误，请明天再来吧！</div>
+        <div class="m-guess-btn m-fail-btn m-ft-30 m-ft-b">知道了</div>
+      </div>
+    </mt-popup>
   </div>
 </template>
 
@@ -67,6 +85,8 @@
         result: "|",           // 光标
         count: "",
         submit: false,         // 是否已提交
+        successPopup: false,   // 猜对啦
+        failPopup: false,      // 猜错啦
       }
     },
     components: {},
@@ -369,13 +389,58 @@
               font-size: 30px;
               font-weight: bold;
               line-height: 35px;
-              padding: 20px;
+              padding: 10px;
               margin: 0 30px 30px 30px;
               background-color: #FCD316;
               border-radius: 50%;
             }
           }
+          .m-text {
+            position: absolute;
+            bottom: 12px;
+            left: 188px;
+          }
         }
+      }
+    }
+    .m-guess-popup {
+      width: 700px;
+      height: 600px;
+      margin: -300px 0 0 25px;
+      border-radius: 30px;
+      .m-guess-success {
+        width: 700px;
+        height: 600px;
+        background: url("/static/images/activity/icon-success-bg.png") no-repeat;
+        background-size: 100% 100%;
+        .m-success-text {
+          color: #FCD316;
+          &.margin {
+            margin-top: 46px;
+          }
+        }
+        .m-success-btn {
+          margin: 110px 0 0 225px;
+        }
+      }
+      .m-guess-fail {
+        .m-fail-btn {
+          margin: 180px 0 0 225px;
+        }
+      }
+      .m-guess-icon {
+        width: 85px;
+        height: 85px;
+        margin: 130px 0 30px 0;
+      }
+      .m-guess-btn {
+        width: 250px;
+        height: 70px;
+        line-height: 80px;
+        color: #ffffff;
+        background: #FCD316;
+        box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
+        border-radius: 10px;
       }
     }
   }
