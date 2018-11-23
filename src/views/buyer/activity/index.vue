@@ -54,7 +54,7 @@
     .m-activity-box {
       position: absolute;
       top: 240px;
-      margin-bottom: 100px;
+      /*margin-bottom: 100px;*/
       .m-activity-item {
         width: 700px;
         height: 500px;
@@ -62,6 +62,9 @@
         box-shadow: 0 5px 6px rgba(0,0,0,0.16);
         border-radius: 20px;
         position: relative;
+        &:last-child {
+          margin-bottom: 130px;
+        }
         .m-activity-img {
           width: 700px;
           height: 500px;
