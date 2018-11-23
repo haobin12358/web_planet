@@ -2,9 +2,9 @@
   <div class="m-pandora">
     <div class="m-box-product">
       <div class="m-box-tip m-ft-28 m-ft-b">您的好友为您打开了魔力盒子！</div>
-      <div class="m-gift-one"></div>
-      <div class="m-gift-two"></div>
-      <div class="m-gift-three"></div>
+      <div class="m-gift-one" @click="boxPopup = true"></div>
+      <div class="m-gift-two" @click="boxPopup = true"></div>
+      <div class="m-gift-three" @click="boxPopup = true"></div>
       <img class="m-product-img" src="http://dummyimage.com/550x550" alt="">
     </div>
     <div class="m-product-detail">
@@ -12,7 +12,7 @@
         <div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥345.00</div>
         <div class="m-box-btn m-ft-38 m-ft-b">点击购买</div>
       </div>
-      <div class="m-product-name m-ft-38 m-ft-b tl">魔术礼盒  //</div>
+      <div class="m-product-name m-ft-38 m-ft-b tl">魔术礼盒</div>
       <div class="m-product-price">
         <div class="m-price-two">原价：￥400.00</div>
         <div class="m-price-three m-red">最低价：￥200.00</div>
@@ -48,6 +48,13 @@
         <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
       </div>
     </div>
+
+    <!--点击魔盒的popup-->
+    <mt-popup class="m-box-popup" v-model="boxPopup" pop-transition="popup-fade">
+      <div class="m-gift-icon"></div>
+      <div class="m-popup-text m-ft-30 m-ft-b">您为您的好友减少了<span class="m-red">5元</span>购买金额！</div>
+      <div class="m-popup-btn m-ft-30 m-ft-b">告诉好友</div>
+    </mt-popup>
   </div>
 </template>
 
@@ -58,7 +65,7 @@
     data() {
       return {
         name: '',
-
+        boxPopup: false,            // 点击魔盒的popup
       }
     },
     components: {},
@@ -222,6 +229,35 @@
           bottom: 0;
           left: 188px;
         }
+      }
+    }
+    .m-box-popup {
+      width: 680px;
+      height: 600px;
+      margin: -300px 0 0 25px;
+      border-radius: 30px;
+      border: 10px #9A5AEB dashed;
+      .m-gift-icon {
+        width: 183px;
+        height: 204px;
+        background: url("/static/images/activity/gift-four.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: -90px;
+        left: 1px;
+      }
+      .m-popup-text {
+        margin-top: 260px;
+      }
+      .m-popup-btn {
+        width: 250px;
+        height: 70px;
+        line-height: 75px;
+        margin: 141px 0 0 225px;
+        color: #ffffff;
+        background-color: #FCD316;
+        box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
+        border-radius: 10px;
       }
     }
   }
