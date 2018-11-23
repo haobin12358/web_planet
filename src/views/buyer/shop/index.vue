@@ -11,11 +11,11 @@
         </h3>
         <p class="m-p">共{{total_number}}件商品</p>
 
-        <!--<div class="m-no-coupon">-->
-          <!--<span class="m-no-img m-shop-no-img"></span>-->
-          <!--<p>购物车空空如也,<span class="m-red">去下单</span>吧~</p>-->
-        <!--</div>-->
-        <template v-for="(items,index) in cart_list" >
+        <div class="m-no-coupon" v-if="cart_list.length == 0">
+          <span class="m-no-img m-shop-no-img"></span>
+          <p>购物车空空如也，<span class="m-red" @click="changeRoute('/selected')">去首页逛逛</span>吧~</p>
+        </div>
+        <template v-for="(items, index) in cart_list" v-if="cart_list != 0">
           <div class="m-shop-one" >
             <div class="m-shop-store-name">
               <span class="m-icon-radio" :class="items.active?'active':''" @click="radioClick('store',index)"></span>
@@ -23,7 +23,7 @@
               <span class="m-icon-more" ></span>
             </div>
             <template v-for="(item,i) in items.cart" >
-              <div class="m-shop-product " >
+              <div class="m-shop-product">
                 <span class="m-icon-radio" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
                 <div class="m-product-info" @click="changeRoute('praoduct',item)">
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
@@ -50,11 +50,11 @@
                 </div>
               </div>
             </template>
+            <bottom-line v-if="bottom_show"></bottom-line>
           </div>
         </template>
         <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
       </div>
-      <bottom-line v-if="bottom_show"></bottom-line>
       <div class="m-shop-foot">
          <span class="m-icon-radio" :class="allRadio?'active':''" @click="radioClick('all')"></span>
          <div v-if="!isManage">
@@ -67,7 +67,6 @@
         </div>
       </div>
     </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -95,7 +94,7 @@
     export default {
         data() {
             return {
-              cart_list:null,
+              cart_list: [],
               page_info:{
                 page_num:1,
                 page_size:5
@@ -115,16 +114,17 @@
               isManage:false
             }
         },
-        components: {
-          sku,
-          bottomLine
-        },
+        components: { sku, bottomLine },
         mounted(){
             this.getCart();
         },
         methods: {
           changeRoute(v,item){
-            this.$router.push({path:'/product/detail',query:{prid:item.prid}});
+            if(item) {
+              this.$router.push({path:'/product/detail',query:{prid:item.prid}});
+            }else {
+              this.$router.push(v);
+            }
           },
           //结算
           payOrder(e){
@@ -356,7 +356,7 @@
   @import "../../../common/css/index";
 .m-shop{
   width: 100%;
-  min-height: 1334px;
+  min-height: 100%;
   background-color: #EEEEEE;
   position: relative;
   /*z-index: -2;*/
@@ -385,7 +385,7 @@
     top:0;
     left: 0;
     .m-no-coupon{
-      margin-top: 200px;
+      margin: 200px 80px 0 100px;
     }
     .m-shop-title{
       .flex-row(space-between);
