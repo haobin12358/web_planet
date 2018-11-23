@@ -2,9 +2,9 @@
   <div class="m-pandora">
     <div class="m-box-product">
       <div class="m-box-tip m-ft-28 m-ft-b">您的好友为您打开了魔力盒子！</div>
-      <div class="m-gift-one" @click="boxPopup = true"></div>
-      <div class="m-gift-two" @click="boxPopup = true"></div>
-      <div class="m-gift-three" @click="boxPopup = true"></div>
+      <div class="m-gift-one" @click="pandora"></div>
+      <div class="m-gift-two" @click="pandora"></div>
+      <div class="m-gift-three" @click="pandora"></div>
       <img class="m-product-img" src="http://dummyimage.com/550x550" alt="">
     </div>
     <div class="m-product-detail">
@@ -70,7 +70,10 @@
     },
     components: {},
     methods: {
-
+      // 点击魔盒
+      pandora() {
+        this.boxPopup = true;
+      }
     },
     mounted() {
       common.changeTitle('魔法礼盒');
