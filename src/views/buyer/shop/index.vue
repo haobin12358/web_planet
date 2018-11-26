@@ -24,8 +24,8 @@
             </div>
             <template v-for="(item,i) in items.cart" >
               <div class="m-shop-product">
-                <span class="m-icon-radio" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
                 <div class="m-product-info" @click="changeRoute('praoduct',item)">
+                  <span class="m-icon-radio m-radio-margin" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
                   <div class="m-text-info">
                     <h3>{{item.product.prtitle}}</h3>
@@ -182,6 +182,16 @@
                 this.isScroll = true;
                 this.total_count = res.data.total_count;
                 this.total_number = res.data.product_num || 0;
+                // 简化显示的商品名称
+                for(let i = 0; i < this.cart_list.length; i ++) {
+                  for(let j = 0; j < this.cart_list[i].cart.length; j ++) {
+                    if(this.cart_list[i].cart[j].product.prtitle) {
+                      if(this.cart_list[i].cart[j].product.prtitle.length > 38) {
+                        this.cart_list[i].cart[j].product.prtitle = this.cart_list[i].cart[j].product.prtitle.substring(0, 38) + "..";
+                      }
+                    }
+                  }
+                }
               }
             })
           },
@@ -505,6 +515,9 @@
       background: url("/static/images/icon-radio-active.png") no-repeat;
       background-size: 100% 100%;
     }
+  }
+  .m-radio-margin {
+    margin-top: 65px;
   }
 }
 </style>
