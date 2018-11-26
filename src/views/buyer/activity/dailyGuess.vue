@@ -76,13 +76,16 @@
 
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
   export default {
     data() {
       return {
         name: '',
         num: "",               // 猜测的数字 2710.51
-        result: "|",           // 光标
+        result: "",           // 光标
         count: "",
         submit: false,         // 是否已提交
         successPopup: false,   // 猜对啦
@@ -105,11 +108,16 @@
       },
       // 提交猜测的结果
       submitResult() {
-        if(!this.submit) {
-          this.submit = true;
-          this.result = "";
-          // console.log(this.num);
-          alert(this.num);
+        if(this.num) {
+          if(!this.submit) {
+            this.submit = true;
+            this.result = "";
+            axios.post(api.create_guess_num + '?token=' + localStorage.getItem('token'), { gnnum: this.num }).then(res => {
+              Toast(res.data.message);
+            });
+          }
+        }else {
+          Toast("请先输入竞猜数字");
         }
       },
       // 闪动光标 - 倒计时
@@ -127,6 +135,7 @@
                 this.result = "|";
               }
             }else {
+              this.result = "";
               clearInterval(timer);
               timer = null;
             }
@@ -135,11 +144,29 @@
             timer = null;
           }
         }, 700);
+      },
+      // 获取今日参与记录
+      getGuess() {
+        let params = {
+          token: localStorage.getItem('token'),
+          date: new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + new Date().getDate().toString()
+        };
+        axios.get(api.get_guess_num, { params: params }).then(res => {
+          if(res.data.status == 200){
+            if(res.data.data.gnnum) {
+              this.num = res.data.data.gnnum;
+              this.submit = true;
+            }
+          }else {
+            Toast(res.data.message);
+          }
+        });
       }
     },
     mounted() {
       common.changeTitle('每日竞猜');
-      this.timeOut();                   // 闪动光标 - 倒计时
+      this.timeOut();                    // 闪动光标 - 倒计时
+      this.getGuess();                   // 获取今日参与记录
     }
   }
 </script>
