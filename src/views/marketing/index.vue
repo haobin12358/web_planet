@@ -1,8 +1,8 @@
 <template>
   <div >
     <page-nav :list="nav_list" @navClick="navClick"></page-nav>
-    <coupon v-if="select=='coupon'"></coupon>
-    <sign v-if="select=='sign'"></sign>
+    <coupon v-if="select.value=='coupon'"></coupon>
+    <sign v-if="select.value=='sign'"></sign>
   </div>
 </template>
 
@@ -25,7 +25,11 @@
             active:false
           }
         ],
-        select:'coupon'
+        select:{
+          name:'优惠券',
+          value:'coupon',
+          active:true
+        }
       }
     },
     components:{
@@ -41,7 +45,7 @@
         }
         arr[index].active =true;
         this.nav_list = [].concat(arr);
-        this.select = this.nav_list[index].value;
+        this.select = this.nav_list[index];
       }
     }
   }

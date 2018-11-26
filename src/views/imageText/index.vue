@@ -1,13 +1,54 @@
 <template>
-    <div>
-      tuwen
-    </div>
+  <div >
+    <page-nav :list="nav_list" @navClick="navClick"></page-nav>
+    <activity v-if="select.value == 'activity'"></activity>
+    <tweet v-else-if="select.value == 'tweet'"></tweet>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "index"
+  import pageNav from '../../components/common/pageNav';
+  import activity from './activity';
+  import tweet from './tweet';
+  export default {
+    data(){
+      return{
+        nav_list:[
+          {
+            name:'活动专题',
+            value:'activity',
+            active:true
+          },
+          {
+            name:'推文专题',
+            value:'tweet',
+            active:false
+          }
+        ],
+        select:{
+          name:'活动专题',
+          value:'activity',
+          active:true
+        }
+      }
+    },
+    components:{
+      pageNav,
+      activity,
+      tweet
+    },
+    methods:{
+      navClick(index){
+        let arr = [].concat(this.nav_list);
+        for(let i=0;i<arr.length;i++){
+          arr[i].active = false;
+        }
+        arr[index].active =true;
+        this.nav_list = [].concat(arr);
+        this.select = this.nav_list[index];
+      }
     }
+  }
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>

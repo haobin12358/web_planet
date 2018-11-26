@@ -2,8 +2,8 @@
   <div >
       <page-nav :list="nav_list" @navClick="navClick"></page-nav>
 
-    <distributor v-if="select == 'distributor'"></distributor>
-    <supplier v-else-if="select == 'supplier'"></supplier>
+    <distributor v-if="select.value == 'distributor'"></distributor>
+    <supplier v-else-if="select.value == 'supplier'"></supplier>
   </div>
 </template>
 
@@ -26,7 +26,11 @@
             active:false
           }
         ],
-        select:'distributor'
+        select:{
+          name:'分销商经销',
+          value:'distributor',
+          active:true
+        }
       }
     },
     components:{
@@ -42,7 +46,7 @@
         }
         arr[index].active =true;
         this.nav_list = [].concat(arr);
-        this.select = this.nav_list[index].value;
+        this.select = this.nav_list[index];
       }
     }
   }
