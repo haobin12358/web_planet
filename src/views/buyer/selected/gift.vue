@@ -43,7 +43,15 @@
       },
       // 购买礼包按钮
       buyGift() {
-        // 将商家大礼包加入到购物车
+        let product = {};
+        product.pb = this.gift.brand;
+        product.cart = [];
+        product.cart.push({ product: { prtitle: this.gift.prtitle }, sku: this.gift.skus[0], canums: "1", prid: this.gift.prid});
+        let arr = [];
+        arr.push(product);
+        this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr) }});
+
+        /*// 将商家大礼包加入到购物车
         let params = { skuid: this.gift.skus[0].skuid, canums: 1 };
         axios.post(api.cart_create + '?token=' + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
@@ -71,7 +79,7 @@
           }else{
             Toast(res.data.message);
           }
-        });
+        });*/
       },
     },
     mounted() {
