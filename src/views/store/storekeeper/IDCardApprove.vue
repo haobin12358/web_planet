@@ -1,25 +1,29 @@
 <template>
   <div class="m-IDCard-box">
     <div class="m-IDCard-bg"></div>
+    <div class="m-IDCard-top">
+      <div class="m-IDCard-rows" v-if="user.uslevel == '2'">
+        <div class="m-row-left m-left-url">大行星后台管理系统网址</div>
+        <div class="m-row-right" id="url" @click="copyText('url')">http://localhost:8080/#/login</div>
+      </div>
+      <div class="m-IDCard-rows">
+        <div class="m-row-left">账号</div>
+        <div class="m-row-right" id="userName" @click="copyText('userName')">15700000000</div>
+      </div>
+      <div class="m-IDCard-rows">
+        <div class="m-row-left">密码</div>
+        <div class="m-password-box">
+          <div class="m-row-right">{{password}}</div>
+          <div class="m-eye-icon" :class="showPassword ? 'active' : ''" @click="passWord"></div>
+        </div>
+      </div>
+    </div>
     <div class="m-IDCard">
       <div>
         <div class="m-IDCard-row">
           <div class="m-row-title">真实姓名</div>
           <input type="text" class="m-row-input m-width-220" v-model="user.usrealname" placeholder="请填写真实姓名">
         </div>
-        <div class="m-IDCard-row" @click="genderPopup = true">
-          <div class="m-row-title">性别</div>
-          <div class="m-row-input m-width-450">{{user.usGender}}</div>
-        </div>
-        <!--性别picker-->
-        <mt-popup class="m-gender-popup" v-model="genderPopup" position="bottom">
-          <div class="m-popup-btn">
-            <div @click="genderPopup = false">取消</div>
-            <div @click="genderDone">确认</div>
-          </div>
-          <mt-picker :slots="slots" @change="genderChange"></mt-picker>
-        </mt-popup>
-
         <div class="m-IDCard-row">
           <div class="m-row-title">手机号码</div>
           <input type="text" class="m-row-input m-width-450" placeholder="请填写手机号码">
@@ -36,10 +40,29 @@
       <img class="m-IDCard-img" v-if="!user.umfront" src="/static/images/icon-upload-IDCard-img.png" alt="">
       <img class="m-IDCard-img" v-if="user.umback" :src="user.umback" alt="">
       <img class="m-IDCard-img" v-if="!user.umback" src="/static/images/icon-upload-IDCard-img.png" alt="">
-
-      <div class="m-foot-btn">
+      <!--按钮-->
+      <div class="m-foot-btn" v-if="user.uslevel == '1'">
         <span @click="submitUser">提交认证</span>
       </div>
+      <!--弹窗-->
+      <mt-popup class="m-submit-popup" v-model="submitPopup" pop-transition="popup-fade">
+        <img class="m-submit-loading" src="/static/images/icon-loading.png" alt="">
+        <div class="m-ft-30 m-ft-b">提交成功</div>
+        <div class="m-submit-text m-ft-24">管理员审核中，请耐心等待</div>
+      </mt-popup>
+      <!--弹窗-->
+      <mt-popup class="m-submit-popup" v-model="auditPopup" pop-transition="popup-fade">
+        <!--<div>
+          <img class="m-submit-loading" src="/static/images/icon-no.png" alt="">
+          <div class="m-ft-30 m-ft-b">审核未通过</div>
+          <div class="m-submit-text m-ft-24">请检查所输入的信息后，再次提交</div>
+        </div>-->
+        <div>
+          <img class="m-submit-loading" src="/static/images/icon-out-know.png" alt="">
+          <div class="m-ft-30 m-ft-b">审核通过</div>
+          <div class="m-submit-text m-ft-24">请依据给出的网址、用户名和密码登录</div>
+        </div>
+      </mt-popup>
     </div>
   </div>
 </template>
@@ -55,37 +78,43 @@
     data() {
       return {
         name: 'IDCardApprove',
-        user: { usGender: "请选择性别" },      // 用户信息
-        genderPopup: false,                   // 性别picker
-        slots: [{ values: ['男', '女'] }],
-        gender: "",                           // 暂存性别
+        password: "******",
+        showPassword: false,
+        user: {},                   // 用户信息
+        submitPopup: false,
+        auditPopup: false,
       }
     },
     methods: {
+      // 复制文本
+      copyText(v) {
+        let text = document.getElementById(v).innerText;
+        this.$copyText(text).then(function (e) {
+          Toast("已复制到剪切板");
+        }, function (e) {
+          console.log(e);
+        })
+      },
+      // 查看密码
+      passWord() {
+        if(this.showPassword) {
+          this.showPassword = false;
+          this.password = "******";
+        }else if(!this.showPassword) {
+          this.showPassword = true;
+          this.password = "123456";
+        }
+      },
       // 获取个人身份证详情
       getIdentifyinginfo() {
         axios.get(api.get_identifyinginfo + '?token=' + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
-            // 性别判断
-            if(this.user.usgender == "0") {
-              this.user.usGender = "男";
-            }else if(this.user.usgender == "1") {
-              this.user.usGender = "女";
-            }
+            // console.log(this.user);
           }else{
             Toast(res.data.message);
           }
         });
-      },
-      // 性别picker的确认按钮
-      genderDone() {
-        this.genderPopup = false;
-        this.user.usGender = this.gender;
-      },
-      // picker选择的性别改变
-      genderChange(picker, values) {
-        this.gender = values[0];
       },
       // 提交认证按钮
       submitUser() {
@@ -104,9 +133,10 @@
           if(res.data.status == 200){
             Toast(res.data.data.reason);
             // 验证通过则返回上一页
-            if(!res.data.data.result) {
+            /*if(!res.data.data.result) {
               this.$router.go(-1);
-            }
+            }*/
+            this.submitPopup = true;
           }else{
             Toast(res.data.message);
           }
@@ -131,6 +161,48 @@
       height: 371px;
       background: linear-gradient(180deg,rgba(252,211,22,1) 0%,rgba(239,232,197,1) 100%);
     }
+    .m-IDCard-top {
+      width: 600px;
+      padding: 60px 50px 30px 50px;
+      margin-bottom: 260px;
+      border-radius: 10px;
+      background-color: #ffffff;
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+      .m-IDCard-rows {
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        margin-bottom: 10px;
+        .m-row-left {
+          font-size: 24px;
+          color: #999999;
+        }
+        .m-left-url {
+          width: 200px;
+          margin-bottom: 30px;
+        }
+        .m-password-box {
+          display: flex;
+        }
+        .m-row-right {
+          font-size: 30px;
+        }
+        .m-eye-icon {
+          width: 28px;
+          height: 28px;
+          background: url("/static/images/icon-eye-close.png") no-repeat;
+          background-size: 100% 100%;
+          margin-left: 10px;
+          &.active {
+            background: url("/static/images/icon-eye-open.png") no-repeat;
+            background-size: 100% 100%;
+          }
+        }
+      }
+    }
     .m-IDCard {
       width: 600px;
       padding: 60px 50px;
@@ -138,8 +210,9 @@
       border-radius: 10px;
       background-color: #ffffff;
       position: absolute;
-      top: 25px;
+      top: 330px;
       left: 25px;
+      box-shadow: 0 5px 6px rgba(0,0,0,0.16);
       .m-IDCard-row {
         display: flex;
         justify-content: space-between;
@@ -167,15 +240,6 @@
           width: 400px;
         }
       }
-      .m-gender-popup {
-        width: 750px;
-        .m-popup-btn {
-          display: flex;
-          justify-content: space-between;
-          font-size: 28px;
-          padding: 20px 40px 0 40px;
-        }
-      }
       .m-IDCard-img {
         float: left;
         width: 377px;
@@ -197,6 +261,20 @@
           font-weight: bold;
           border-radius: 10px;
           box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+        }
+      }
+      .m-submit-popup {
+        width: 700px;
+        height: 440px;
+        margin: -300px 0 0 25px;
+        border-radius: 30px;
+        .m-submit-loading {
+          width: 85px;
+          height: 85px;
+          margin: 99px 0 36px 0;
+        }
+        .m-submit-text {
+          margin-top: 53px;
         }
       }
     }

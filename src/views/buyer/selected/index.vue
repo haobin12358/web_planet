@@ -1,6 +1,6 @@
 <template>
     <div class="m-selected">
-      <mt-loadmore :top-method="loadTop" ref="loadmore">
+      <!--<mt-loadmore :top-method="loadTop" ref="loadmore">-->
         <!--搜索-->
         <div class="m-selected-search">
           <span class="m-icon-home" @click="changeRoute('/gift')"></span>
@@ -91,7 +91,7 @@
               </li>
             </ul>
           </div>
-  <!--商品分类-->
+          <!--商品分类-->
           <h3 class="m-selected-title m-flex-between">
             <span>商品分类/</span>
             <span class="m-selected-title-more"  @click="changeRoute('equipment/detail')">
@@ -218,7 +218,7 @@
           </h3>
           <product></product>
         </div>
-      </mt-loadmore>
+      <!--</mt-loadmore>-->
     </div>
 
 </template>
@@ -276,7 +276,7 @@
                 this.brand_list = res.data.data.brands;
                 this.brand_product = res.data.data.product;
                 this.hot_list = res.data.data.hot;
-                console.log(this.brand_list,this.brand_product,this.hot_list)
+                // console.log(this.brand_list,this.brand_product,this.hot_list)
               }
             })
           },
@@ -291,6 +291,21 @@
           /*查看更多*/
           changeRoute(v,item){
             switch (v){
+              case '/gift':
+                axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+                  if(res.data.status == 200){
+                    if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包购买页
+                      this.$router.push({path:v});
+                    }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去身份认证页
+                      this.$router.push("/storekeeper/IDCardApprove");
+                    }else if(res.data.data.uslevel == "3") {      // 3 - 身份认证中 - 去身份认证页
+                      this.$router.push("/storekeeper/applyOwner");
+                    }
+                  }else{
+                    Toast(res.data.message);
+                  }
+                });
+                break;
               case 'equipment/detail':
                 if(item){
                   this.$router.push({path:v,query:{pcid:item.pcid}});
