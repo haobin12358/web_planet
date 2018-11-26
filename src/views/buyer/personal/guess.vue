@@ -7,21 +7,21 @@
     </div>
     <div class="m-guess-row">
       <div class="m-text-left">本月总计</div>
-      <div class="m-text-right m-red">30次</div>
+      <div class="m-text-right m-red">{{recordList.length}}次</div>
     </div>
     <div class="m-guess-row">
       <div class="m-text-left">本月猜对</div>
       <div class="m-text-right m-red">1次</div>
     </div>
-    <div class="m-record-box">
-      <div class="m-record-item" v-for="item in recordList">
-        <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
+    <div class="m-record-box" v-if="recordList.length > 0">
+      <div class="m-record-item" :class="item.product ? 'active' : ''" v-for="item in recordList">
+        <img class="m-product-img" :src="item.product.prmainpic" alt="">
         <div class="m-text-box">
-          <div class="m-text-row">女士冲锋衣</div>
+          <div class="m-text-row">{{item.product.prtitle}}</div>
           <div class="m-text-row">我的答案：{{item.gnnum}}</div>
-          <div class="m-text-row">正确答案：{{item.correct_num.cnnum}}</div>
+          <div class="m-text-row" v-if="item.correct_num">正确答案：{{item.correct_num.cnnum}}</div>
         </div>
-        <div class="m-date-text">{{item.correct_num.cndate}}</div>
+        <div class="m-date-text">{{item.gndate}}</div>
       </div>
     </div>
     <!--时间选择popup-->
@@ -89,8 +89,12 @@
         };
         axios.get(api.history_join, { params: params }).then(res => {
           if(res.data.status == 200){
-            // console.log(res.data.data);
+            console.log(res.data.data);
             this.recordList = res.data.data;
+            // 商品名称显示优化
+            for(let i = 0; i < this.recordList.length; i ++) {
+              this.recordList[i].product.prtitle = this.recordList[i].product.prtitle.substring(0, 12) + "..";
+            }
           }else{
             Toast(res.data.message);
           }
@@ -151,12 +155,19 @@
       color: #F53B52;
     }
     .m-record-box {
-      padding: 30px 70px;
       .m-record-item {
         display: flex;
         color: #666666;
         font-size: 24px;
         align-items: center;
+        padding:0 70px 10px 70px;
+        border-bottom: 1px #E9E9E9 solid;
+        margin-bottom: 20px;
+        background-color: #FCD316;
+        &.active {
+          /*background-color: #FCD316;*/
+          padding: 0;
+        }
         .m-product-img {
           width: 119px;
           height: 119px;
