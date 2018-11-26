@@ -1,144 +1,192 @@
 <template>
   <div class="m-guess">
-    竞猜记录
+    <div class="m-date-box">
+      <div class="m-date-text m-ft-30 m-ft-b">{{date}}</div>
+      <img class="m-date-img" src="/static/images/icon-down-open.png" v-if="datePopup" @click="datePopup = false">
+      <img class="m-date-img" src="/static/images/icon-down-close.png" v-if="!datePopup" @click="datePopup = true">
+    </div>
+    <div class="m-guess-row">
+      <div class="m-text-left">本月总计</div>
+      <div class="m-text-right m-red">30次</div>
+    </div>
+    <div class="m-guess-row">
+      <div class="m-text-left">本月猜对</div>
+      <div class="m-text-right m-red">1次</div>
+    </div>
+    <div class="m-record-box">
+      <div class="m-record-item" v-for="item in recordList">
+        <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
+        <div class="m-text-box">
+          <div class="m-text-row">女士冲锋衣</div>
+          <div class="m-text-row">我的答案：{{item.gnnum}}</div>
+          <div class="m-text-row">正确答案：{{item.correct_num.cnnum}}</div>
+        </div>
+        <div class="m-date-text">{{item.correct_num.cndate}}</div>
+      </div>
+    </div>
+    <!--时间选择popup-->
+    <mt-popup class="m-date-popup" v-model="datePopup" position="bottom">
+      <p class="m-picker-text">
+        <span class="cancel" @click="datePopup = false">取消</span>
+        <span class="m-picker-btn" @click="dateDone">确定</span>
+      </p>
+      <mt-picker :slots="slots"  @change="onValuesChange" :visibleItemCount="7"></mt-picker>
+    </mt-popup>
   </div>
-  <!--<div class="m-coupon" @touchmove.stop="touchMove">
-    <mt-loadmore :top-method="loadTop">
-      <div class="m-nav">
-        <nav-list :navlist="nav_list" :isScroll="false" @navClick="navClick"></nav-list>
-      </div>
-      <div class="m-coupon-content">
-        <coupon-card :couponList="couponList"></coupon-card>
-      </div>
-      <bottom-line v-if="bottom_show"></bottom-line>
-    </mt-loadmore>
-  </div>-->
 </template>
 
 <script type="text/ecmascript-6">
-  import couponCard from '../components/couponCard';
-  import navList from '../../../components/common/navlist';
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
-  import bottomLine from '../../../components/common/bottomLine';
 
   export default {
     data() {
       return {
-        nav_list:[
-          { name: '未使用', params: '2', active: true }, { name: '已使用', params: '1', active: false }, { name: '已过期', params: '0', active: false }
+        datePopup: false,                 // 时间选择popup
+        slots: [
+          {
+            flex: 1,
+            values: [],
+            className: 'slot1',
+            textAlign: 'right'
+          }, {
+            divider: true,
+            content: '-',
+            className: 'slot2'
+          }, {
+            flex: 1,
+            values: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+            className: 'slot3',
+            textAlign: 'left'
+          }
         ],
-        couponList: [],            // 优惠券list
-        status: "2",               // 暂存navList点击的优惠券状态，默认是未使用("0")开头
-        page_num: 1,
-        page_size: 10,
-        isScroll: true,
-        total_count: 0,
-        bottom_show: false
+        date: "",                       // 本月
+        dateValue: [],                  // 暂存日期
+        recordList: []
       }
     },
-    inject:['reload'],
-    components: { navList, couponCard, bottomLine },
+    components: {},
     methods: {
-      // navList的点击事件
-      navClick(index){
-        this.page_num = 1;
-        this.total_count = 0;
-        this.bottom_show = false;
-
-        let arr = [].concat(this.nav_list);
-        for(let i = 0; i < arr.length; i ++) {
-          arr[i].active = false;
-        }
-        arr[index].active = true;
-        this.status = arr[index].params;
-        this.getUserCoupon();            // 获取用户个人优惠券
-        this.nav_list = [].concat(arr);
+      // 时间popup确认按钮
+      dateDone() {
+        this.datePopup = false;
+        this.date = this.dateValue[0] + "-" + this.dateValue[1];
+        this.getHistory();               // 获取竞猜记录
       },
-      // 获取用户个人优惠券
-      getUserCoupon() {
+      onValuesChange(picker, values) {
+        if(values[0]) {
+          this.dateValue = values;
+        }
+      },
+      // 获取竞猜记录
+      getHistory() {
         let params = {
           token: localStorage.getItem('token'),
-          page_num : this.page_num,
-          page_size : this.page_size
+          year : this.dateValue[0],
+          month : this.dateValue[1]
         };
-        if(this.status == "0") {
-          params.canuse = "false";
-        }else if(this.status == "1") {
-          params.ucalreadyuse = "true";
-        }else if(this.status == "2") {
-          params.ucalreadyuse = "false";
-        }
-        axios.get(api.list_user_coupon, { params: params }).then(res => {
+        axios.get(api.history_join, { params: params }).then(res => {
           if(res.data.status == 200){
-            this.isScroll = true;
-            if(res.data.data.length > 0) {
-              if(this.page_num > 1) {     // 把新数据给list续上
-                let list = [];
-                for(let i = 0; i < res.data.data.length; i ++) {
-                  list.push(res.data.data[i].coupon);
-                }
-                this.couponList = this.couponList.concat(list);
-              }else{
-                for(let i = 0; i < res.data.data.length; i ++) {
-                  this.couponList.push(res.data.data[i].coupon);
-                }
-              }
-              this.page_num = this.page_num + 1;
-              this.total_count = res.data.total_count;
-            }
+            // console.log(res.data.data);
+            this.recordList = res.data.data;
           }else{
             Toast(res.data.message);
-            this.couponList = [];
-            this.page_num = 1;
-            this.total_count = 0;
-            return false;
           }
         });
       },
-      //滚动加载更多
-      touchMove(e){
-        let scrollTop = common.getScrollTop();
-        let scrollHeight = common.getScrollHeight();
-        let ClientHeight = common.getClientHeight();
-        if (scrollTop + ClientHeight  >= scrollHeight - 10) {
-          if(this.isScroll) {
-            this.isScroll = false;
-            if(this.couponList.length == this.total_count) {
-              this.bottom_show = true;
-            }else {
-              this.getUserCoupon();         // 获取优惠券列表
-            }
-          }
+      // 设置可选择的年份
+      setYear() {
+        let now = new Date();
+        let year = Number(now.toString().substring(11, 15)) + 1;
+        for(let i = 2018; i < year; i ++) {
+          this.slots[0].values.push(i);
         }
-      },
-      // 下拉刷新
-      loadTop() {
-        this.reload();
+        this.date = now.toString().substring(11, 15) + "-" + this.slots[2].values[now.getMonth()];
+        this.dateValue = [now.toString().substring(11, 15), this.slots[2].values[now.getMonth()]];
       }
     },
     mounted() {
       common.changeTitle('竞猜记录');
-      // this.getUserCoupon();            // 获取用户个人优惠券
+      this.setYear();                  // 设置可选择的年份
+      this.getHistory();               // 获取竞猜记录
     }
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
 
-  .m-coupon{
+  .m-guess{
     min-height: 100%;
-    .m-nav {
-      width: 600px;
-      margin: 0 75px;
+    .m-date-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 50px 0 10px 0;
+      .m-date-text {
+
+      }
+      .m-date-img {
+        width: 24px;
+        height: 12px;
+        margin-left: 10px;
+      }
     }
-    .m-nav-list{
-      padding: 0 80px;
+    .m-guess-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 30px;
+      font-weight: bold;
+      padding: 20px 70px 0 70px;
+      .m-text-left {
+
+      }
+      .m-text-right {
+
+      }
     }
-    .m-coupon-content{
-      padding: 30px 65px;
+    .m-red {
+      color: #F53B52;
+    }
+    .m-record-box {
+      padding: 30px 70px;
+      .m-record-item {
+        display: flex;
+        color: #666666;
+        font-size: 24px;
+        align-items: center;
+        .m-product-img {
+          width: 119px;
+          height: 119px;
+        }
+        .m-text-box {
+          flex: 1;
+          margin-left: 40px;
+          text-align: left;
+          .m-text-row {
+            margin: 5px 0;
+          }
+        }
+        .m-date-text {
+
+        }
+      }
+    }
+    .m-date-popup {
+      .m-picker-text{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 30px;
+        padding: 10px 20px;
+        span.cancel{
+          color: #a4a4a4;
+        }
+
+      }
     }
   }
 </style>
