@@ -43,28 +43,27 @@
             </span>
           </p>
           <ul class="m-part-icon-ul">
-            <li>
+            <li @click="changeRoute('orderList', 1)">
               <img src="/static/images/icon-order-pay.png" alt="">
-              <span>待付款</span>
+              <span>待支付</span>
               <div class="m-order-num" v-if="pay != 0">{{pay}}</div>
             </li>
-            <li>
+            <li @click="changeRoute('orderList', 2)">
               <img src="/static/images/icon-order-send.png" class="m-square" alt="">
               <span>待发货</span>
               <div class="m-order-num" v-if="send != 0">{{send}}</div>
             </li>
-            <li>
+            <li @click="changeRoute('orderList', 3)">
               <img src="/static/images/icon-receive.png" class="m-square" alt="">
               <span>待收货</span>
               <div class="m-order-num" v-if="receive != 0">{{receive}}</div>
             </li>
-            <li>
+            <li @click="changeRoute('orderList', 4)">
               <img src="/static/images/m-serviceCenter-after.png" class="m-square" alt="">
               <span>待评价</span>
               <div class="m-order-num" v-if="evaluate != 0">{{evaluate}}</div>
             </li>
-            <li>
-              <!--<img src="/static/images/icon-order-after-sale.png" alt="">-->
+            <li @click="changeRoute('orderList', 5)">
               <img src="/static/images/icon-personal-back.png" alt="">
               <span>售后</span>
               <div class="m-order-num" v-if="after_sales != 0">{{after_sales}}</div>
@@ -121,8 +120,12 @@
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v){
-        this.$router.push(v)
+      changeRoute(v, which){
+        if(which) {
+          this.$router.push({ path: v,query: { which: which}});
+        }else {
+          this.$router.push(v);
+        }
       },
       // 获取个人信息
       getUser() {

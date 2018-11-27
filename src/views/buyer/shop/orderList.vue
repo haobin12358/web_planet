@@ -11,7 +11,7 @@
       <!--</div>-->
       <div class="m-orderList-content">
         <template v-for="(items,index) in order_list">
-          <div class="m-one-part"  @click="changeRoute('/orderDetail',items)">
+          <div class="m-one-part"  @click.stop="changeRoute('/orderDetail',items)">
             <div class="m-order-store-tile" >
               <div @click.stop="changeRoute('/brandDetail',items)">
                 <span class="m-icon-store"></span>
@@ -78,60 +78,28 @@
   import navList from '../../../components/common/navlist';
   import axios from 'axios';
   import api from '../../../api/api';
-  import {Toast} from 'mint-ui';
+  import { Toast } from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
+
     export default {
-        data(){
-          return{
-            nav_list:[
-              {
-                name:'全部',
-                params:'',
-                active:true
-              },
-              {
-                name:'待付款',
-                params:'',
-                active:false
-              },
-              {
-                name:'待发货',
-                params:'',
-                active:false
-              },
-              {
-                name:'待收货',
-                params:'',
-                active:false
-              },
-              {
-                name:'已完成',
-                params:'',
-                active:false
-              }
-            ],
-            page_info:{
-              page_num:1,
-              page_size:10
-            },
-            isScroll:true,
-            total_count:0,
-            bottom_show:false,
-            order_list:null
-          }
-        },
-      inject:['reload'],
-      components: {
-        navList,
-        bottomLine
+      data(){
+        return{
+          nav_list: [],
+          page_info: { page_num: 1, page_size: 10 },
+          isScroll: true,
+          total_count: 0,
+          bottom_show: false,
+          order_list: null
+        }
       },
+      inject: ['reload'],
+      components: { navList, bottomLine },
       mounted(){
-          common.changeTitle('订单列表');
-          this.getOrderList();
-          this.getOrderNum();
+        common.changeTitle('订单列表');
+        this.getOrderNum();               // 获取各状态的订单数量
       },
       methods:{
-        changeRoute(v,item){
+        changeRoute(v,item) {
           switch (v){
             case '/brandDetail':
               this.$router.push({path:v,query:{pbid:item.pbid}});
@@ -148,77 +116,81 @@
             default:
               this.$router.push(v)
           }
-
         },
-        //导航点击
-        navClick(index){
+        // 导航点击
+        navClick(index) {
           this.page_info.page_num = 1;
           this.total_count = 0;
-          this.bottom_show =false;
+          this.bottom_show = false;
           let arr = [].concat(this.nav_list);
-          if( arr[index].active){
+          if(arr[index].active) {
             return false;
           }
-          for(let i=0;i<arr.length;i++){
+          for(let i = 0; i < arr.length; i ++) {
             arr[i].active = false;
           }
           arr[index].active = true;
           this.nav_list = [].concat(arr);
           this.getOrderList(arr[index].status);
         },
-      //  获取订单列表
-        getOrderList(omstatus){
-          axios.get(api.order_list,{
-            params:{
-              token:localStorage.getItem('token'),
-              page_num:this.page_info.page_num,
-              page_size: this.page_info.page_size,
-              omstatus:omstatus
-            }
-          }).then(res => {
+        // 获取订单列表
+        getOrderList(omstatus) {
+          let params = {
+            token: localStorage.getItem('token'),
+            page_num: this.page_info.page_num,
+            page_size: this.page_info.page_size,
+            omstatus: omstatus
+          };
+          axios.get(api.order_list, { params: params }).then(res => {
             if(res.data.status == 200){
               this.isScroll = true;
-              if(res.data.data.length >0){
-                if(this.page_info.page_num >1){
+              if(res.data.data.length > 0){
+                if(this.page_info.page_num > 1){
                   this.order_list = this.order_list.concat(res.data.data);
                 }else{
                   this.order_list = res.data.data;
                 }
-                this.page_info.page_num = this.page_info.page_num +1;
+                this.page_info.page_num = this.page_info.page_num + 1;
                 this.total_count = res.data.total_count;
               }else{
-                this.order_list = null
+                this.order_list = null;
                 this.page_info.page_num = 1;
                 this.total_count = 0;
                 return false;
               }
-
-
             }
           })
         },
-        getOrderNum(){
-          axios.get(api.order_count,{
-            params:{
-              token:localStorage.getItem('token')
-            }
-          }).then(res => {
-              if(res.data.status == 200){
-                for(let i =0;i<res.data.data.length;i++){
-                  res.data.data[i].active = false;
-                }
-                res.data.data[0].active = true;
-                this.nav_list = [].concat(res.data.data);
+        // 获取各状态的订单数量
+        getOrderNum() {
+          axios.get(api.order_count + "?token=" + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              for(let i = 0; i < res.data.data.length; i ++) {
+                res.data.data[i].active = false;
               }
+              this.nav_list = [].concat(res.data.data);
+
+              // 显示哪个类型的订单
+              for(let i = 0; i < this.nav_list.length; i ++) {
+                this.nav_list[i].active = false;
+              }
+              let which = this.$route.query.which;
+              if(which) {
+                this.navClick(which);
+              }else {
+                this.nav_list[0].active = true;
+                this.getOrderList();
+              }
+            }else {
+              Toast(res.data.message);
+            }
           })
         },
         //滚动加载更多
-        touchMove(e){
-
+        touchMove(e) {
           let scrollTop = common.getScrollTop();
           let scrollHeight = common.getScrollHeight();
           let ClientHeight = common.getClientHeight();
-          console.log(scrollTop + ClientHeight  >= scrollHeight -10)
           if (scrollTop + ClientHeight  >= scrollHeight -10) {
             if(this.isScroll){
               this.isScroll = false;
@@ -230,10 +202,8 @@
                     this.getOrderList(this.nav_list[i].status);
                   }
                 }
-
               }
             }
-
           }
         },
         //取消订单
@@ -245,7 +215,6 @@
               this.reload();
             }
           })
-
         }
       }
     }
