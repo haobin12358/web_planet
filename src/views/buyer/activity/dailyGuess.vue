@@ -282,6 +282,9 @@
                 background-size: 100% 100%;
               }
               &.m-one:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/one-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -290,6 +293,9 @@
                 background-size: 100% 100%;
               }
               &.m-two:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/two-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -298,6 +304,9 @@
                 background-size: 100% 100%;
               }
               &.m-three:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/three-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -306,6 +315,9 @@
                 background-size: 100% 100%;
               }
               &.m-four:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/four-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -314,6 +326,9 @@
                 background-size: 100% 100%;
               }
               &.m-five:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/five-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -322,6 +337,9 @@
                 background-size: 100% 100%;
               }
               &.m-six:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/six-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -330,6 +348,9 @@
                 background-size: 100% 100%;
               }
               &.m-seven:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/seven-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -338,6 +359,9 @@
                 background-size: 100% 100%;
               }
               &.m-eight:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/eight-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -346,6 +370,9 @@
                 background-size: 100% 100%;
               }
               &.m-nine:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/nine-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -354,6 +381,9 @@
                 background-size: 100% 100%;
               }
               &.m-zero:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/zero-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -362,6 +392,9 @@
                 background-size: 100% 100%;
               }
               &.m-point:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/point-active.png") no-repeat;
                 background-size: 100% 100%;
               }
@@ -370,6 +403,9 @@
                 background-size: 100% 100%;
               }
               &.m-delete:active {
+                width: 200px;
+                height: 200px;
+                margin: -5px 7px -5px -5px;
                 background: url("/static/images/activity/delete-active.png") no-repeat;
                 background-size: 100% 100%;
               }
