@@ -86,7 +86,13 @@ export const constantRouterMap = [
       component: () => import('../views/imageText/index'),
       name: 'imageText',
       meta: { title: 'imageText', icon: 'imageText', noCache: true }
-    }
+    },
+      {
+        path: 'addTweet',
+        component: () => import('../views/imageText/addTweet'),
+        name: 'addTweet',
+        meta: { title: 'addTweet', icon: 'addTweet', noCache: true }
+      }
     ],
   },
   {

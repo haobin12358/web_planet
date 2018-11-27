@@ -8,7 +8,7 @@
     </h3>
     <div class="m-search-box">
       <div>
-          <span class="m-btn active">
+          <span class="m-btn active" @click="changeRoute('/imageText/addTweet')">
             <span class="m-btn-icon m-add"></span>
             <span>添加推文</span>
           </span>
@@ -95,6 +95,11 @@
     data(){
       return {
         state4:''
+      }
+    },
+    methods:{
+      changeRoute(v){
+        this.$router.push(v);
       }
     }
   }
