@@ -7,19 +7,19 @@
     </div>
     <div class="m-guess-row">
       <div class="m-text-left">本月总计</div>
-      <div class="m-text-right m-red">{{recordList.length}}次</div>
+      <div class="m-red">{{recordList.length}}次</div>
     </div>
     <div class="m-guess-row">
       <div class="m-text-left">本月猜对</div>
-      <div class="m-text-right m-red">1次</div>
+      <div class="m-red">{{number}}次</div>
     </div>
-    <div class="m-record-box" v-if="recordList.length > 0">
-      <div class="m-record-item" :class="item.product ? 'active' : ''" v-for="item in recordList">
+    <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList" :class="item.result == 'correct' ? 'active' : ''">
+      <div class="m-record-item">
         <img class="m-product-img" :src="item.product.prmainpic" alt="">
         <div class="m-text-box">
           <div class="m-text-row">{{item.product.prtitle}}</div>
-          <div class="m-text-row">我的答案：{{item.gnnum}}</div>
-          <div class="m-text-row" v-if="item.correct_num">正确答案：{{item.correct_num.cnnum}}</div>
+          <div class="m-text-row" :class="item.result == 'correct' ? 'm-red' : ''">我的答案：{{item.gnnum}}</div>
+          <div class="m-text-row" v-if="item.correct_num" :class="item.result == 'correct' ? 'm-red' : ''">正确答案：{{item.correct_num.cnnum}}</div>
         </div>
         <div class="m-date-text">{{item.gndate}}</div>
       </div>
@@ -64,7 +64,8 @@
         ],
         date: "",                       // 本月
         dateValue: [],                  // 暂存日期
-        recordList: []
+        recordList: [],
+        number: ""
       }
     },
     components: {},
@@ -88,8 +89,8 @@
           month : this.dateValue[1]
         };
         axios.get(api.history_join, { params: params }).then(res => {
-          if(res.data.status == 200){
-            console.log(res.data.data);
+          if(res.data.status == 200) {
+            this.number = res.data.correct_count;
             this.recordList = res.data.data;
             // 商品名称显示优化
             for(let i = 0; i < this.recordList.length; i ++) {
@@ -128,7 +129,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 50px 0 10px 0;
+      padding: 50px 0 30px 0;
       .m-date-text {
 
       }
@@ -143,31 +144,24 @@
       justify-content: space-between;
       font-size: 30px;
       font-weight: bold;
-      padding: 20px 70px 0 70px;
-      .m-text-left {
-
-      }
-      .m-text-right {
-
-      }
+      padding: 0 70px 20px 70px;
     }
     .m-red {
       color: #F53B52;
     }
     .m-record-box {
+      padding: 0 70px;
+      margin-bottom: 10px;
+      &.active {
+        background-color: #FCE889;
+      }
       .m-record-item {
         display: flex;
         color: #666666;
         font-size: 24px;
         align-items: center;
-        padding:0 70px 10px 70px;
+        padding: 10px 0;
         border-bottom: 1px #E9E9E9 solid;
-        margin-bottom: 20px;
-        background-color: #FCD316;
-        &.active {
-          /*background-color: #FCD316;*/
-          padding: 0;
-        }
         .m-product-img {
           width: 119px;
           height: 119px;
