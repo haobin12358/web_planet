@@ -69,7 +69,7 @@
         padding: 15px;
       }
       h3{
-        width: 325px;
+        width: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

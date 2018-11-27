@@ -47,7 +47,7 @@
         <!--场景推荐-->
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between" @click="changeRoute('scene')">
-            <span>场景推荐 /</span>
+            <span>场景推荐</span>
             <span class="m-selected-title-more">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
@@ -64,7 +64,7 @@
         <!--品牌推荐-->
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between">
-            <span>品牌推荐 /</span>
+            <span>品牌推荐</span>
             <span class="m-selected-title-more"  @click="changeRoute('brandList')">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
@@ -93,7 +93,7 @@
           </div>
           <!--商品分类-->
           <h3 class="m-selected-title m-flex-between">
-            <span>商品分类/</span>
+            <span>商品分类</span>
             <span class="m-selected-title-more"  @click="changeRoute('equipment/detail')">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
@@ -138,85 +138,85 @@
           </div>
         </div>
         <!--活动专题-->
-        <div class="m-selected-one">
-          <h3 class="m-selected-title m-flex-start">
-            <span>活动专题 /</span>
-          </h3>
-          <div class="m-one-activity m-top">
-            <img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">
-            <ul class="m-activity-ul">
-              <li>
-                <img src="" class="m-one-activity-img" alt="">
-                <div class="m-one-activity-text">
-                  <h3>【北面】THE NORTH d </h3>
-                  <p class="m-flex-between">
-                    <span >￥950.00</span>
-                    <s class="m-grey">￥950.00</s></p>
-                </div>
-              </li>
-              <li>
-                <img src="" class="m-one-activity-img" alt="">
-                <div class="m-one-activity-text">
-                  <h3>【北面】THE NORTH d </h3>
-                  <p class="m-flex-between">
-                    <span >￥950.00</span>
-                    <s class="m-grey">￥950.00</s></p>
-                </div>
-              </li>
-              <li>
-                <img src="" class="m-one-activity-img" alt="">
-                <div class="m-one-activity-text">
-                  <h3>【北面】THE NORTH d </h3>
-                  <p class="m-flex-between">
-                    <span >￥950.00</span>
-                    <s class="m-grey">￥950.00</s></p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="m-one-activity ">
-            <img src="" class="m-activity-img" alt="">
-            <ul class="m-activity-ul">
-              <li>
-                <img src="" class="m-one-activity-img" alt="">
-                <div class="m-one-activity-text">
-                  <h3>【北面】THE NORTH d </h3>
-                  <p class="m-flex-between">
-                    <span >￥950.00</span>
-                    <s class="m-grey">￥950.00</s></p>
-                </div>
-              </li>
-              <li>
-                <img src="" class="m-one-activity-img" alt="">
-                <div class="m-one-activity-text">
-                  <h3>【北面】THE NORTH d </h3>
-                  <p class="m-flex-between">
-                    <span >￥950.00</span>
-                    <s class="m-grey">￥950.00</s></p>
-                </div>
-              </li>
-              <li>
-                <img src="" class="m-one-activity-img" alt="">
-                <div class="m-one-activity-text">
-                  <h3>【北面】THE NORTH d </h3>
-                  <p class="m-flex-between">
-                    <span >￥950.00</span>
-                    <s class="m-grey">￥950.00</s></p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <!--<div class="m-selected-one">-->
+          <!--<h3 class="m-selected-title m-flex-start">-->
+            <!--<span>活动专题</span>-->
+          <!--</h3>-->
+          <!--<div class="m-one-activity m-top">-->
+            <!--<img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">-->
+            <!--<ul class="m-activity-ul">-->
+              <!--<li>-->
+                <!--<img src="" class="m-one-activity-img" alt="">-->
+                <!--<div class="m-one-activity-text">-->
+                  <!--<h3>【北面】THE NORTH d </h3>-->
+                  <!--<p class="m-flex-between">-->
+                    <!--<span >￥950.00</span>-->
+                    <!--<s class="m-grey">￥950.00</s></p>-->
+                <!--</div>-->
+              <!--</li>-->
+              <!--<li>-->
+                <!--<img src="" class="m-one-activity-img" alt="">-->
+                <!--<div class="m-one-activity-text">-->
+                  <!--<h3>【北面】THE NORTH d </h3>-->
+                  <!--<p class="m-flex-between">-->
+                    <!--<span >￥950.00</span>-->
+                    <!--<s class="m-grey">￥950.00</s></p>-->
+                <!--</div>-->
+              <!--</li>-->
+              <!--<li>-->
+                <!--<img src="" class="m-one-activity-img" alt="">-->
+                <!--<div class="m-one-activity-text">-->
+                  <!--<h3>【北面】THE NORTH d </h3>-->
+                  <!--<p class="m-flex-between">-->
+                    <!--<span >￥950.00</span>-->
+                    <!--<s class="m-grey">￥950.00</s></p>-->
+                <!--</div>-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</div>-->
+          <!--<div class="m-one-activity ">-->
+            <!--<img src="" class="m-activity-img" alt="">-->
+            <!--<ul class="m-activity-ul">-->
+              <!--<li>-->
+                <!--<img src="" class="m-one-activity-img" alt="">-->
+                <!--<div class="m-one-activity-text">-->
+                  <!--<h3>【北面】THE NORTH d </h3>-->
+                  <!--<p class="m-flex-between">-->
+                    <!--<span >￥950.00</span>-->
+                    <!--<s class="m-grey">￥950.00</s></p>-->
+                <!--</div>-->
+              <!--</li>-->
+              <!--<li>-->
+                <!--<img src="" class="m-one-activity-img" alt="">-->
+                <!--<div class="m-one-activity-text">-->
+                  <!--<h3>【北面】THE NORTH d </h3>-->
+                  <!--<p class="m-flex-between">-->
+                    <!--<span >￥950.00</span>-->
+                    <!--<s class="m-grey">￥950.00</s></p>-->
+                <!--</div>-->
+              <!--</li>-->
+              <!--<li>-->
+                <!--<img src="" class="m-one-activity-img" alt="">-->
+                <!--<div class="m-one-activity-text">-->
+                  <!--<h3>【北面】THE NORTH d </h3>-->
+                  <!--<p class="m-flex-between">-->
+                    <!--<span >￥950.00</span>-->
+                    <!--<s class="m-grey">￥950.00</s></p>-->
+                <!--</div>-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
         <!--为您精选-->
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between">
-            <span>为您精选 /</span>
+            <span>为您精选</span>
             <span class="m-selected-title-more">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
             </span>
           </h3>
-          <product></product>
+          <product :list="recommend_for_you_list"></product>
         </div>
       <!--</mt-loadmore>-->
     </div>
@@ -231,112 +231,111 @@
   import { Toast } from 'mint-ui';
 
     export default {
-        data() {
-            return {
-                swipe_list:null,
-              brand_list:null,
-              brand_product:null,
-              hot_list:null,
-              scene_list:null,
-              icon_list:null,
-            }
-        },
-        components: {
-          product
-        },
+      data() {
+        return {
+          swipe_list:null,
+          brand_list:null,
+          brand_product:null,
+          hot_list:null,
+          scene_list:null,
+          recommend_for_you_list: [],
+          icon_list:null,
+        }
+      },
+      components: { product },
       inject:['reload'],
-      mounted(){
+      mounted() {
         common.changeTitle('精选');
         this.getSwipe();
         this.getBrand();
         this.getScene();
         this.getCategory();
       },
-        methods: {
-          /*获取轮播图*/
-          getSwipe(){
-            axios.get(api.list_banner_index).then(res => {
-              if(res.data.status == 200){
-                this.swipe_list = res.data.data;
-              }
-            })
-          },
-          //获取场景
-          getScene(){
-            axios.get(api.scene_list).then(res => {
-              if(res.data.status == 200){
-                this.scene_list = [].concat(res.data.data);
-              }
-            })
-          },
-          /*获取品牌推荐*/
-          getBrand(){
-            axios.get(api.brand_recommend_index).then(res => {
-              if(res.data.status == 200){
-                this.brand_list = res.data.data.brands;
-                this.brand_product = res.data.data.product;
-                this.hot_list = res.data.data.hot;
-                // console.log(this.brand_list,this.brand_product,this.hot_list)
-              }
-            })
-          },
-          //获取装备信息
-          getCategory(){
-            axios.get(api.category_list).then(res => {
-              if(res.data.status == 200){
-                this.icon_list = [].concat(res.data.data);
-              }
-            })
-          },
-          /*查看更多*/
-          changeRoute(v,item){
-            switch (v){
-              case '/gift':
-                axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
-                  if(res.data.status == 200){
-                    if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包购买页
-                      this.$router.push({path:v});
-                    }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去身份认证页
-                      this.$router.push("/storekeeper/IDCardApprove");
-                    }else if(res.data.data.uslevel == "3") {      // 3 - 身份认证中 - 去身份认证页
-                      this.$router.push("/storekeeper/applyOwner");
-                    }
-                  }else{
-                    Toast(res.data.message);
-                  }
-                });
-                break;
-              case 'equipment/detail':
-                if(item){
-                  this.$router.push({path:v,query:{pcid:item.pcid}});
-                }else{
-                  this.$router.push({path:v});
-                }
-                break;
-              case '/brandDetail':
-                this.$router.push({path:v,query:{pbid:item.pbid}});
-                break;
-              default:
-                this.$router.push({path:v,});
+      methods: {
+        /*获取轮播图*/
+        getSwipe(){
+          axios.get(api.list_banner_index).then(res => {
+            if(res.data.status == 200){
+              this.swipe_list = res.data.data;
             }
-
-          },
-          /*场景点击*/
-          sceneClick(item){
-            this.$router.push({path:'/scene',query:{ psid:item.psid}})
-          },
-          /*商品点击*/
-          productClick(item){
-            this.$router.push({path:'/product/detail',query:{ prid:item.prid}});
-          },
-          /*下拉刷新*/
-          loadTop(){
-            this.reload();
-          }
+          })
         },
-        created() {
+        //获取场景
+        getScene(){
+          axios.get(api.scene_list).then(res => {
+            if(res.data.status == 200){
+              this.scene_list = [].concat(res.data.data);
+            }
+          })
+        },
+        /*获取品牌推荐*/
+        getBrand(){
+          axios.get(api.brand_recommend_index).then(res => {
+            if(res.data.status == 200){
+              this.brand_list = res.data.data.brands;
+              this.brand_product = res.data.data.product;
+              this.hot_list = res.data.data.hot;
+              this.recommend_for_you_list = res.data.data.recommend_for_you;
+            }
+          })
+        },
+        //获取装备信息
+        getCategory(){
+          axios.get(api.category_list).then(res => {
+            if(res.data.status == 200){
+              this.icon_list = [].concat(res.data.data);
+            }
+          })
+        },
+        /*查看更多*/
+        changeRoute(v,item){
+          switch (v){
+            case '/gift':
+              axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+                if(res.data.status == 200){
+                  if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包购买页
+                    this.$router.push({path:v});
+                  }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去身份认证页
+                    this.$router.push("/storekeeper/IDCardApprove");
+                  }else if(res.data.data.uslevel == "3") {      // 3 - 身份认证中 - 去身份认证页
+                    this.$router.push("/storekeeper/applyOwner");
+                  }
+                }else{
+                  Toast(res.data.message);
+                }
+              });
+              break;
+            case 'equipment/detail':
+              if(item){
+                this.$router.push({path:v,query:{pcid:item.pcid}});
+              }else{
+                this.$router.push({path:v});
+              }
+              break;
+            case '/brandDetail':
+              this.$router.push({path:v,query:{pbid:item.pbid}});
+              break;
+            default:
+              this.$router.push({path:v,});
+          }
 
+        },
+        /*场景点击*/
+        sceneClick(item){
+          this.$router.push({path:'/scene',query:{ psid:item.psid}})
+        },
+        /*商品点击*/
+        productClick(item){
+          this.$router.push({path:'/product/detail',query:{ prid:item.prid}});
+        },
+        /*下拉刷新*/
+        loadTop(){
+          this.reload();
         }
+      },
+      created() {
+
+      }
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
