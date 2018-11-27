@@ -1,8 +1,8 @@
 <template>
   <div class="m-IDCard-box">
     <div class="m-IDCard-bg"></div>
-    <div class="m-IDCard-top">
-      <div class="m-IDCard-rows" v-if="user.uslevel == '2'">
+    <div class="m-IDCard-top" v-if="user.uslevel == '2'">
+      <div class="m-IDCard-rows">
         <div class="m-row-left m-left-url">大行星后台管理系统网址</div>
         <div class="m-row-right" id="url" @click="copyText('url')">{{user.manager_address}}</div>
       </div>
@@ -185,9 +185,13 @@
   .m-IDCard-box {
     min-height: 100%;
     background-color: #EEEEEE;
+    position: relative;
     .m-IDCard-bg {
       width: 750px;
       height: 371px;
+      /*position: absolute;*/
+      /*top: 0;*/
+      /*bottom: 0;*/
       background: linear-gradient(180deg,rgba(252,211,22,1) 0%,rgba(239,232,197,1) 100%);
     }
     .m-IDCard-top {
@@ -196,9 +200,9 @@
       margin-bottom: 260px;
       border-radius: 10px;
       background-color: #ffffff;
-      position: absolute;
-      top: 25px;
-      left: 25px;
+      /*position: absolute;*/
+      /*top: 25px;*/
+      /*left: 25px;*/
       box-shadow: 0 5px 6px rgba(0,0,0,0.16);
       .m-IDCard-rows {
         display: flex;
@@ -234,13 +238,14 @@
     }
     .m-IDCard {
       width: 600px;
+      height: 930px;
       padding: 60px 50px;
-      margin-bottom: 260px;
+      margin: 0 0 260px 25px;
       border-radius: 10px;
       background-color: #ffffff;
-      position: absolute;
-      top: 330px;
-      left: 25px;
+      /*position: absolute;*/
+      /*top: 330px;*/
+      /*left: 25px;*/
       box-shadow: 0 5px 6px rgba(0,0,0,0.16);
       .m-IDCard-row {
         display: flex;

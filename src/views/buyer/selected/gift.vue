@@ -49,7 +49,7 @@
         product.cart.push({ product: { prtitle: this.gift.prtitle }, sku: this.gift.skus[0], canums: "1", prid: this.gift.prid});
         let arr = [];
         arr.push(product);
-        this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr) }});
+        this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), gift: true }});
 
         /*// 将商家大礼包加入到购物车
         let params = { skuid: this.gift.skus[0].skuid, canums: 1 };
