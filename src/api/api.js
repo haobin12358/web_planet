@@ -73,6 +73,7 @@ const api={
   create_guess_num: title + '/guess_num/create',          // 参与猜数字
   get_guess_num: title + '/guess_num/get',                // 参与猜数字
   history_join: title + '/guess_num/history_join',        // 获取历史参与结果(以月为单位)
+  get_commodity: title + '/commodity/get',        // 获取历史参与结果(以月为单位)
 
   list_coupon: title + '/coupon/list',//获取下单优惠券
   upload_file: title + '/file/upload',//上传图片

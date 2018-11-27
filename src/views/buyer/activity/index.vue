@@ -7,7 +7,7 @@
         <img class="m-activity-img" src="http://img.zcool.cn/community/01e021593541cfa8012193a3a081af.gif" alt="">
         <!--用户****中奖了-->
         <!--<div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>-->
-        <div class="m-activity-btn animated infinite pulse" :class="item.btn.length > 6 ? 'active' : ''" @click="changeRoute(item.url)">{{item.btn}}</div>
+        <div class="m-activity-btn animated infinite pulse" :class="item.btn.length > 6 ? 'active' : ''" @click="changeRoute(item.url, item.params)">{{item.btn}}</div>
       </div>
     </div>
   </div>
@@ -21,18 +21,22 @@
       return {
         name: '',
         activityList: [
-          { record: "", btn: "首单可免", url: "/activityProduct" },
-          { record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "/dailyGuess" },
-          { record: "", btn: "邀请好友帮拆魔盒", url: "/pandora" },
-          { record: "", btn: "我要试用", url: "/activityProduct" }
+          { params: "new", record: "", btn: "首单可免", url: "/activityProduct" },
+          { params: "", record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "/dailyGuess" },
+          { params: "", record: "", btn: "邀请好友帮拆魔盒", url: "/pandora" },
+          { params: "try", record: "", btn: "我要试用", url: "/activityProduct" }
         ]
       }
     },
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v){
-        this.$router.push(v)
+      changeRoute(v, which){
+        if(which) {
+          this.$router.push({ path: v, query: { which: which }});
+        }else {
+          this.$router.push(v);
+        }
       }
     },
     mounted() {
