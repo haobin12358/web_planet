@@ -8,7 +8,7 @@
           <span>已连续签到</span>
           <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
-        <span class="m-num">0</span></span>
+          <span class="m-num">0</span></span>
           <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
           <span class="m-num">0</span></span>
@@ -225,7 +225,7 @@
         .m-couponCenter-day-bg{
           display: inline-block;
           width: 87px;
-          height: 138px;
+          height: 133px;
           line-height: 138px;
           font-size: 90px;
           font-weight: 400;
@@ -238,11 +238,11 @@
           position: relative;
           .m-line{
             position: absolute;
-            top: 50%;
+            top: 48%;
             left: 0;
             width: 87px;
             height: 1px;
-           border-top: 1px solid #e9e9e9;
+            border-top: 1px solid #e9e9e9;
             margin: 0;
             z-index: 0;
           }
