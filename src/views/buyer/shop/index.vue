@@ -13,7 +13,7 @@
 
         <div class="m-no-coupon" v-if="cart_list.length == 0">
           <span class="m-no-img m-shop-no-img"></span>
-          <p>购物车空空如也，<span class="m-red" @click="changeRoute('/selected')">去首页逛逛</span>吧~</p>
+          <p>购物车空空如也，去逛逛吧~</p>
         </div>
         <template v-for="(items, index) in cart_list" v-if="cart_list != 0">
           <div class="m-shop-one" >
@@ -25,7 +25,7 @@
             <template v-for="(item,i) in items.cart" >
               <div class="m-shop-product">
                 <div class="m-product-info" @click="changeRoute('praoduct',item)">
-                  <span class="m-icon-radio m-radio-margin" :class="item.active?'active':''" @click="radioClick('product',index,i)"></span>
+                  <span class="m-icon-radio m-radio-margin" :class="item.active?'active':''" @click.stop="radioClick('product',index,i)"></span>
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
                   <div class="m-text-info">
                     <h3>{{item.product.prtitle}}</h3>
@@ -74,7 +74,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import {Toast} from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
   var scroll = (function (className) {
     var scrollTop;
@@ -119,7 +119,7 @@
             this.getCart();
         },
         methods: {
-          changeRoute(v,item){
+          changeRoute(v, item){
             if(item) {
               this.$router.push({path:'/product/detail',query:{prid:item.prid}});
             }else {
@@ -324,7 +324,7 @@
             this.dealMoney();
           },
           //数量改变
-          changeNum(v,index,i){
+          changeNum(v, index, i) {
             if(v == -1 && this.cart_list[index].cart[i].canums ==1){
               return false;
             }
@@ -333,24 +333,32 @@
             this.dealMoney();
           },
           /*删除*/
-          DestroyCart(){
+          DestroyCart() {
             let caid = [];
-            for(let i=0;i<this.cart_list.length;i++){
-              for(let j =0;j<this.cart_list[i].cart.length;j++){
-                if(this.cart_list[i].cart[j].active){
-                  caid.push(this.cart_list[i].cart[j].caid)
+            for(let i = 0; i < this.cart_list.length; i ++) {
+              for(let j = 0; j < this.cart_list[i].cart.length; j ++) {
+                if(this.cart_list[i].cart[j].active) {
+                  caid.push(this.cart_list[i].cart[j].caid);
                 }
               }
             }
-            axios.post(api.cart_destroy + '?token='+ localStorage.getItem('token'),{
-              caids:caid
-            }).then(res => {
-              if(res.data.status == 200){
-                this.page_info.page_num = 1;
-                this.total_count = 1;
-                this.getCart();
-              }
-            })
+            if(caid.length > 0) {
+              MessageBox.confirm('确认删除吗?').then(() => {
+                axios.post(api.cart_destroy + '?token=' + localStorage.getItem('token'), { caids: caid }).then(res => {
+                  if(res.data.status == 200){
+                    this.page_info.page_num = 1;
+                    this.total_count = 1;
+                    this.getCart();
+                  }else {
+                    Toast(res.data.message);
+                  }
+                });
+              }).catch(() => {
+
+              });
+            }else {
+              Toast("请先选择商品");
+            }
           },
           /*点击管理*/
           changeManage(){
@@ -471,8 +479,6 @@
               }
             }
           }
-
-
         }
       }
     }
@@ -506,8 +512,8 @@
   }
   .m-icon-radio{
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 32px;
     background: url("/static/images/icon-radio.png") no-repeat;
     background-size: 100% 100%;
     vertical-align: text-top;
