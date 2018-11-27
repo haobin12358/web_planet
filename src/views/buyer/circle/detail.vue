@@ -29,11 +29,11 @@
         <div class="float-left">
           <span class="m-icon-btn active" @click.stop="isLickClick(1)">
             <span class="m-icon-zan"></span>
-            <span>赞同{{news_info.favoritnumber}}</span>
+            <span>赞同 {{news_info.favoritnumber}}</span>
           </span>
           <span class="m-icon-btn" @click.stop="isLickClick(0)">
             <span class="m-icon-cai"></span>
-            <span>踩{{news_info.tramplenumber}}</span>
+            <span>踩 {{news_info.tramplenumber}}</span>
           </span>
         </div>
         <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论</span>
@@ -544,10 +544,11 @@
   }
   .m-icon-btn{
     display: inline-block;
-    padding:0 18px;
+    padding: 5px 18px 0 18px;
     background-color: #ccc;
     border-radius: 10px;
     color: #fff;
+    font-size: 24px;
     line-height: 42px;
     margin-right: 30px;
     vertical-align: middle;
