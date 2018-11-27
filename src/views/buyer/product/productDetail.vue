@@ -208,7 +208,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
 .m-product-detail{
-  padding-bottom: 200px;
+  padding-bottom: 100px;
   .m-product-swipe{
     position: relative;
     width: 100%;
@@ -292,7 +292,8 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 26px 0 98px;
+    padding: 26px 0;
+    /*padding: 26px 0 98px;*/
     background-color: #fff;
     text-align: left;
     .m-icon-car{
