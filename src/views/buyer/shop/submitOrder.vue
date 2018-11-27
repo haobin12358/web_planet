@@ -244,7 +244,6 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
 .m-submitOrder{
-  width: 100%;
   min-height: 100%;
   background-color: #eee;
   padding: 17px 25px 200px;
