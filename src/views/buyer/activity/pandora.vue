@@ -2,10 +2,10 @@
   <div class="m-pandora">
     <div class="m-box-product">
       <div class="m-box-tip m-ft-28 m-ft-b">您的好友为您打开了魔力盒子！</div>
-      <div class="m-gift-one" @click="pandora"></div>
-      <div class="m-gift-two" @click="pandora"></div>
-      <div class="m-gift-three" @click="pandora"></div>
-      <img class="m-product-img" src="http://dummyimage.com/550x550" alt="">
+      <div class="m-gift-one animated bounceInLeft" @click="pandora"></div>
+      <div class="m-gift-two animated bounceInDown" @click="pandora"></div>
+      <div class="m-gift-three animated bounceInUp" @click="pandora"></div>
+      <img class="m-product-img animated bounceIn" src="http://dummyimage.com/550x550" alt="">
     </div>
     <div class="m-product-detail">
       <div class="m-buy-product">
@@ -250,13 +250,13 @@
         left: 1px;
       }
       .m-popup-text {
-        margin-top: 260px;
+        margin-top: 230px;
       }
       .m-popup-btn {
         width: 250px;
         height: 70px;
         line-height: 75px;
-        margin: 141px 0 0 225px;
+        margin: 160px 0 0 225px;
         color: #ffffff;
         background-color: #FCD316;
         box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
