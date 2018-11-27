@@ -8,7 +8,7 @@
           <div class="m-guess-result m-ft-50 m-ft-b">{{num}}<span class="m-result">{{result}}</span></div>
         </div>
         <div class="m-done-img">
-          <div class="m-done-btn m-ft-44 m-ft-b" :class="submit ? 'm-submit-done' : ''" @click="submitResult">确认</div>
+          <div class="m-done-btn m-ft-44 m-ft-b" :class="submit ? 'm-submit-done' : '' || !hour ? 'm-submit-done' : ''" @click="submitResult">确认</div>
         </div>
       </div>
     </div>
@@ -90,6 +90,7 @@
         submit: false,         // 是否已提交
         successPopup: false,   // 猜对啦
         failPopup: false,      // 猜错啦
+        hour: false,           // 当前的小时是否在竞猜时间内
       }
     },
     components: {},
@@ -108,26 +109,31 @@
       },
       // 提交猜测的结果
       submitResult() {
-        if(this.num) {
-          if(!this.submit) {
-            this.submit = true;
-            this.result = "";
-            axios.post(api.create_guess_num + '?token=' + localStorage.getItem('token'), { gnnum: this.num }).then(res => {
-              Toast(res.data.message);
-            });
+        if(!this.submit) {
+          this.getTime();    // 获取当前时间
+          if(this.hour) {
+            if(this.num) {
+              this.submit = true;
+              this.result = "";
+              axios.post(api.create_guess_num + '?token=' + localStorage.getItem('token'), { gnnum: this.num }).then(res => {
+                Toast(res.data.message);
+              });
+            }else {
+              Toast("请先输入竞猜数字");
+            }
+          }else {
+            Toast("每日开放时间：0点-15点");
           }
-        }else {
-          Toast("请先输入竞猜数字");
         }
       },
       // 闪动光标 - 倒计时
       timeOut() {
         let timer = null;
-        let TIME_COUNT = 2000000000000;
-        this.count = TIME_COUNT;
+        let TIME_COUNT = 2;
+        this.count = 1;
         timer = setInterval(() => {
           if(this.count > 0 && this.count <= TIME_COUNT) {
-            this.count --;
+            // this.count --;
             if(!this.submit) {
               if(this.result == "|") {
                 this.result = "";
@@ -144,6 +150,13 @@
             timer = null;
           }
         }, 700);
+      },
+      // 获取当前时间
+      getTime() {
+        let hour = new Date().getHours();
+        if(hour < 15) {
+          this.hour = true;
+        }
       },
       // 获取今日参与记录
       getGuess() {
@@ -167,6 +180,7 @@
       common.changeTitle('每日竞猜');
       this.timeOut();                    // 闪动光标 - 倒计时
       this.getGuess();                   // 获取今日参与记录
+      this.getTime();                    // 获取当前时间
     }
   }
 </script>
@@ -203,7 +217,7 @@
         .m-guess-result {
           max-width: 480px;
           color: #ffffff;
-          margin: 40px 0 0 70px;
+          margin: 35px 0 0 70px;
         }
       }
       .m-done-img {
