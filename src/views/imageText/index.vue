@@ -20,7 +20,7 @@
             active:true
           },
           {
-            name:'推文专题',
+            name:'推文编辑',
             value:'tweet',
             active:false
           }
