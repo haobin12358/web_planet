@@ -63,7 +63,7 @@
               <span>待评价</span>
               <div class="m-order-num" v-if="evaluate != 0">{{evaluate}}</div>
             </li>
-            <li @click="changeRoute('orderList', 5)">
+            <li @click="changeRoute('personal/afterSales')">
               <img src="/static/images/icon-personal-back.png" alt="">
               <span>售后</span>
               <div class="m-order-num" v-if="after_sales != 0">{{after_sales}}</div>
