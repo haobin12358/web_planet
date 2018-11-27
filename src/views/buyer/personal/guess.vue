@@ -13,6 +13,10 @@
       <div class="m-text-left">本月猜对</div>
       <div class="m-red">{{number}}次</div>
     </div>
+    <div class="m-no-guess" v-if="recordList.length == 0">
+      <span class="m-no-img"></span>
+      <div class="m-no-text m-ft-26 m-ft-b">暂无竞猜记录</div>
+    </div>
     <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList" :class="item.result == 'correct' ? 'active' : ''">
       <div class="m-record-item">
         <img class="m-product-img" :src="item.product.prmainpic" alt="">
@@ -148,6 +152,18 @@
     }
     .m-red {
       color: #F53B52;
+    }
+    .m-no-guess {
+      .m-no-img {
+        display: inline-block;
+        width: 516px;
+        height: 516px;
+        background: url("/static/images/icon-no-coupon.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      .m-no-text {
+        margin-top: -100px;
+      }
     }
     .m-record-box {
       padding: 0 70px;
