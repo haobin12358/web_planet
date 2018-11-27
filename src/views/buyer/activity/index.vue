@@ -4,8 +4,9 @@
 
     <div class="m-activity-box animated bounceInUp">
       <div class="m-activity-item" v-for="item in activityList">
-        <img class="m-activity-img" src="http://www.cssqt.com.cdn.suixin8.com/uploads/520_4961/201811/db05483b3a09487dea5a44f380194cad.jpg" alt="">
-        <div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>
+        <img class="m-activity-img" src="http://img.zcool.cn/community/01e021593541cfa8012193a3a081af.gif" alt="">
+        <!--用户****中奖了-->
+        <!--<div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>-->
         <div class="m-activity-btn animated infinite pulse" :class="item.btn.length > 6 ? 'active' : ''" @click="changeRoute(item.url)">{{item.btn}}</div>
       </div>
     </div>

@@ -2,7 +2,7 @@
   <div class="m-dailyGuess">
     <div class="m-guess-title">
       <img class="m-guess-img" src="/static/images/activity/main-bg.png" alt="">
-      <img class="m-product-img" src="http://dummyimage.com/550x550" alt="">
+      <img class="m-product-img animated bounceIn" src="http://dummyimage.com/550x550" alt="">
       <div>
         <div class="m-input-img">
           <div class="m-guess-result m-ft-50 m-ft-b">{{num}}<span class="m-result">{{result}}</span></div>
@@ -17,18 +17,18 @@
         <div class="m-line-long"></div>
         <div class="m-num-bg">
           <div class="m-num-box">
-            <div class="m-num-item m-one" @click="numClick('1')"></div>
-            <div class="m-num-item m-two" @click="numClick('2')"></div>
-            <div class="m-num-item m-three" @click="numClick('3')"></div>
-            <div class="m-num-item m-four" @click="numClick('4')"></div>
-            <div class="m-num-item m-five" @click="numClick('5')"></div>
-            <div class="m-num-item m-six" @click="numClick('6')"></div>
-            <div class="m-num-item m-seven" @click="numClick('7')"></div>
-            <div class="m-num-item m-eight" @click="numClick('8')"></div>
-            <div class="m-num-item m-nine" @click="numClick('9')"></div>
-            <div class="m-num-item m-point" @click="numClick('.')"></div>
-            <div class="m-num-item m-zero" @click="numClick('0')"></div>
-            <div class="m-num-item m-delete" @click="numClick('delete')"></div>
+            <div class="m-num-item m-one animated bounceInDown bounceInLeft" @click="numClick('1')"></div>
+            <div class="m-num-item m-two animated bounceInDown" @click="numClick('2')"></div>
+            <div class="m-num-item m-three animated bounceInDown bounceInRight" @click="numClick('3')"></div>
+            <div class="m-num-item m-four animated bounceInDown bounceInLeft" @click="numClick('4')"></div>
+            <div class="m-num-item m-five animated bounceInDown" @click="numClick('5')"></div>
+            <div class="m-num-item m-six animated bounceInDown bounceInRight" @click="numClick('6')"></div>
+            <div class="m-num-item m-seven animated bounceInDown" @click="numClick('7')"></div>
+            <div class="m-num-item m-eight animated bounceInDown" @click="numClick('8')"></div>
+            <div class="m-num-item m-nine animated bounceInDown" @click="numClick('9')"></div>
+            <div class="m-num-item m-point animated bounceInDown" @click="numClick('.')"></div>
+            <div class="m-num-item m-zero animated bounceInDown" @click="numClick('0')"></div>
+            <div class="m-num-item m-delete animated bounceInDown" @click="numClick('delete')"></div>
           </div>
         </div>
         <div class="m-line-short"></div>
@@ -85,7 +85,7 @@
       return {
         name: '',
         num: "",               // 猜测的数字 2710.51
-        result: "",           // 光标
+        result: "",            // 光标
         count: "",
         submit: false,         // 是否已提交
         successPopup: false,   // 猜对啦
