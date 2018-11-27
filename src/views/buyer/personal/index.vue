@@ -23,7 +23,7 @@
             <li @click="changeRoute('/personal/coupon')">
               <span class="m-icon-gift"></span>
               <span class="m-name">优惠券</span>
-              <span>0</span>
+              <span>{{user.uscoupon}}</span>
             </li>
             <li @click="changeRoute('/personal/integral')">
               <span class="m-icon-integral"></span>
