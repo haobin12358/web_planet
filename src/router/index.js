@@ -42,6 +42,18 @@ export const constantRouterMap = [
     ],
   },
   {
+    path: '/approveManage',
+    component: Layout,
+    redirect: '',
+    children: [{
+      path: '',
+      component: () => import('../views/admin/approveManage'),
+      name: 'approveManage',
+      meta: { title: 'approveManage', icon: 'approveManage', noCache: true }
+    }
+    ],
+  },
+  {
     path: '/profile',
     component: Layout,
     redirect: '',

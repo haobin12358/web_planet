@@ -19,6 +19,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="passward">修改密码</el-dropdown-item>
         <el-dropdown-item command="admin">管理员管理</el-dropdown-item>
+        <el-dropdown-item command="approve">审批流管理</el-dropdown-item>
         <el-dropdown-item command="exit" divided>退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -131,6 +132,8 @@ export default {
         this.show_pwd_modal = true;
       }else if(command == 'admin'){
         this.$router.push('/admin');
+      } else if(command == 'approve'){
+        this.$router.push('/approveManage');
       }
     },
     modalClick(e){

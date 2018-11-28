@@ -3,15 +3,12 @@
     <h3 class="m-part-title">
         <span>
            <span class="m-part-title-icon"></span>
-           <span>图文编辑</span>
+           <span>活动编辑</span>
         </span>
     </h3>
     <el-form ref="form" :model="form" :rules="rules" label-width="1.2rem" label-position="right" class="demo-ruleForm">
       <el-form-item label="标题：" required>
-        <el-input v-model="form.name" class="m-input-m"></el-input>
-      </el-form-item>
-      <el-form-item label="作者：" required>
-        <el-input v-model="form.name" class="m-input-m"></el-input>
+        <el-input v-model="form.name" class="m-input-m" placeholder="输入活动专题名称"></el-input>
       </el-form-item>
       <!--</el-form-item>-->
       <el-form-item label="封面：" required>
@@ -22,7 +19,8 @@
           :on-remove="handleRemove">
           <span class="m-upload-img"></span>
         </el-upload>
-        <p class="m-alert-text">建议尺寸：750*450像素</p>
+        <p class="m-alert-text">添加banner图片，
+          建议尺寸：682*324像素</p>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
@@ -53,23 +51,11 @@
           :on-remove="handleRemove">
           <span class="m-upload-video"></span>
         </el-upload>
-        <p class="m-alert-text">建议尺寸：750*450像素</p>
+        <p class="m-alert-text">建议大小：10MB以内</p>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-form-item>
-      <el-form-item label="标签：" required>
-        <el-select v-model="value" class="m-input-m" placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <span class="m-add-text">+新增标签</span>
-      </el-form-item>
-
       <h3 class="m-part-title m-mr-top">
           <span>
              <span class="m-part-title-icon"></span>
@@ -107,7 +93,7 @@
           </span>
       </h3>
       <el-form-item label="优惠券：" >
-        <el-select v-model="value" class="m-input-m" placeholder="选择优惠券">
+        <el-select v-model="value5" class="m-input-m" multiple placeholder="选择优惠券">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -159,7 +145,8 @@
           value: '选项5',
           label: '北京烤鸭'
         }],
-        value: ''
+        value: '',
+        value5:[]
       }
     },
     methods: {
