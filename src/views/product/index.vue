@@ -5,7 +5,7 @@
          <span class="m-part-title-icon"></span>
          <span>商品列表</span>
       </span>
-      <span class="m-btn active">
+      <span class="m-btn active" @click="changeRoute('/product/addProductOne')">
         <span class="m-btn-icon m-add"></span>
         <span>发布商品</span>
       </span>
@@ -125,6 +125,9 @@
       Pagination
     },
     methods:{
+      changeRoute(v){
+        this.$router.push(v)
+      },
       querySearchAsync(){
 
       },

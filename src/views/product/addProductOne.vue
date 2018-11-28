@@ -1,0 +1,350 @@
+<template>
+    <div class="m-addProduct">
+      <h3 class="m-part-title">
+         <span class="m-part-title-icon"></span>
+         <span>发布商品</span>
+      </h3>
+      <div class="m-addProduct-step">
+        <span class="active">1.选择商品分类</span>
+        <span>2.编辑基本信息</span>
+        <span>3.编辑商品详情</span>
+      </div>
+
+      <el-form ref="form" :model="form" :rules="rules" label-width="1.3rem" label-position="left" class="demo-ruleForm">
+        <el-form-item label="快速选择：">
+          <el-select v-model="value8" class="m-input-m" filterable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商品类目" >
+          <div class="m-category-content">
+            <p>当前选择类目：<span class="m-category-select">服装鞋包 >上衣</span></p>
+            <div id="m-scroll">
+              <div class="m-one-category">
+                <div class="m-category-search-box">
+                  <span class="icon icon-search"></span>
+                  <input type="text"  placeholder=""  >
+                </div>
+                <div class="m-classify">
+                  <ul>
+                    <!--<template v-for="(item,i) in items">-->
+                      <li>
+                        <span>1231</span>
+                        <i class="el-icon-arrow-right"></i>
+                      </li>
+                    <li>
+                      <span>1231</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </li>
+                    <!--</template>-->
+                  </ul>
+                </div>
+              </div>
+              <div class="m-one-category">
+                <div class="m-category-search-box">
+                  <span class="icon icon-search"></span>
+                  <input type="text"  placeholder=""  >
+                </div>
+                <div class="m-classify">
+                  <ul>
+                    <!--<template v-for="(item,i) in items">-->
+                    <li>
+                      <span>1231</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </li>
+                    <li>
+                      <span>1231</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </li>
+                    <!--</template>-->
+                  </ul>
+                </div>
+              </div>
+              <div class="m-one-category">
+                <div class="m-category-search-box">
+                  <span class="icon icon-search"></span>
+                  <input type="text"  placeholder=""  >
+                </div>
+                <div class="m-classify">
+                  <ul>
+                    <!--<template v-for="(item,i) in items">-->
+                    <li>
+                      <span>1231</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </li>
+                    <li>
+                      <span>1231</span>
+                      <i class="el-icon-arrow-right"></i>
+                    </li>
+                    <!--</template>-->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-form-item>
+        <el-form-item label="类目管理：" ></el-form-item>
+        <div class="m-category-table">
+          <div class="m-category-box">
+            <p class="m-category-title">一级类目</p>
+            <div class="m-one">
+              <span>服装鞋包</span>
+              <span class="m-add-category-text">+新增一级类目</span>
+            </div>
+          </div>
+          <div class="m-category-box">
+            <p class="m-category-title">二级类目</p>
+            <div class="m-one">
+              <span>服装鞋包</span>
+              <span class="m-add-category-text">+新增二级类目</span>
+            </div>
+          </div>
+          <div class="m-category-box">
+            <p class="m-category-title">三级类目</p>
+            <div class="m-one">
+              <span>服装鞋包</span>
+              <span class="m-add-category-text">+新增三级类目</span>
+            </div>
+          </div>
+        </div>
+        <el-form-item label="品牌选择：" >
+          <el-select v-model="value8" class="m-input-m" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span class="m-add-text">+新增品牌</span>
+        </el-form-item>
+        <el-form-item label="场景选择：" >
+          <el-select v-model="value8" class="m-input-m" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span class="m-add-text">+新增场景</span>
+        </el-form-item>
+        <el-form-item label="标签选择：" >
+          <el-select v-model="value8" class="m-input-m" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <span class="m-add-text">+新增标签</span>
+        </el-form-item>
+      </el-form>
+      <div class="m-form-btn-box">
+        <span class="m-form-btn active" @click="changeRoute('/product/addProductTwo')">下一步</span>
+      </div>
+    </div>
+
+</template>
+
+<script type="text/ecmascript-6">
+    export default {
+        data() {
+            return {
+              form:{
+                resource:'',
+                date1:'',
+                name:''
+              },
+              rules:{
+                PRname:[
+                  { required: true, message: '请输入商品名称', trigger: 'blur' }
+                ]
+              },
+              options: [{
+                value: '选项1',
+                label: '黄金糕'
+              }, {
+                value: '选项2',
+                label: '双皮奶'
+              }, {
+                value: '选项3',
+                label: '蚵仔煎'
+              }, {
+                value: '选项4',
+                label: '龙须面'
+              }, {
+                value: '选项5',
+                label: '北京烤鸭'
+              }],
+              value8: '',
+              tableData: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+              }]
+            }
+        },
+        components: {},
+        methods: {
+          changeRoute(v){
+            this.$router.push(v)
+          }
+        },
+        created() {
+
+        }
+    }
+</script>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/index";
+  .m-addProduct{
+    .m-addProduct-step{
+      width: 100%;
+      padding: 0.1rem 0;
+      display: flex;
+      flex-flow: row;
+      justify-content: space-around;
+      align-items: center;
+      border: 1px solid #97ADCB;
+      margin: 0.25rem 0;
+      font-size: 0.18rem;
+      font-weight: bold;
+      span.active{
+        color: #CB7E88;
+      }
+    }
+    .m-category-content{
+      width: 10.2rem;
+      height: 100%;
+      overflow: hidden;
+      font-size: 0.18rem;
+      #m-scroll{
+        margin-left: 0;
+        -webkit-transition: margin-left 0.28s;
+        transition: margin-left 0.28s;
+        .flex-row(flex-start);
+      }
+      .m-category-select{
+        font-size: 0.15rem;
+        color: #999;
+      }
+      .m-one-category{
+        width: 2.9rem;
+        height: 90%;
+        border: 1px solid @sidebarChildColor;
+        background-color: #fff;
+        text-align: center;
+        padding: 0.1rem 0 0;
+        margin-right: 0.1rem;
+        .m-category-search-box{
+          width: 2.9rem;
+          height: 0.35rem;
+          line-height: 0.27rem;
+          font-size: 0.12rem;
+          border-bottom: 1px solid @mainColor;
+          position: relative;
+          .icon-search{
+            width: 0.18rem;
+            height: 0.18rem;
+            position: absolute;
+            top: 0.05rem;
+            left: 0.1rem;
+            background: url("../../common/images/icon-search.png");
+            background-size: 100% 100%;
+          }
+          input{
+            border: none;
+            height: 0.35rem;
+            width: 2.4rem;
+            padding-left: 0.4rem;
+            &:focus{
+              border: none;
+              outline-offset: 0;
+              outline-color:transparent;
+            }
+          }
+        }
+        .m-classify{
+          height: 2.2rem;
+          margin-top: 0.1rem;
+          overflow-y: scroll;
+          ul{
+            li{
+              .flex-row(space-between);
+              padding: 0 0.1rem 0.1rem;
+              color: @greyColor;
+              cursor: pointer;
+              &.active{
+                color: @sidebarChildColor;
+              }
+              span{
+                display: block;
+                line-height: 0.2rem;
+              }
+            }
+          }
+        }
+      }
+    }
+    .m-category-table{
+      .flex-row(flex-start);
+      margin-bottom: 0.2rem;
+      .m-category-box{
+        width: 33%;
+        text-align: center;
+        &:last-child{
+          .m-one{
+            border-right: 1px solid #eee;
+          }
+        }
+        .m-category-title{
+          height: 0.47rem;
+          line-height: 0.47rem;
+          background-color: #eee;
+        }
+        .m-one{
+          height: 1.5rem;
+          position: relative;
+          border: 1px solid #eee;
+          border-top: none;
+          border-right: none;
+          .flex-row(center);
+          .m-add-category-text{
+            position: absolute;
+            bottom: 0.1rem;
+            right: 0.1rem;
+            color: @mainColor;
+          }
+        }
+      }
+    }
+    .m-add-text{
+      margin-left: 0.6rem;
+    }
+    .m-form-btn-box{
+      margin-top: 1.6rem;
+    }
+  }
+  /*滚动条样式*/
+  .m-classify::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 5px;
+  }
+  .m-classify::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px @sidebarChildColor;
+    background: @sidebarChildColor;
+  }
+  .m-classify::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px @scrollBgColor;
+    border-radius: 10px;
+    background:@scrollBgColor;
+  }
+</style>
