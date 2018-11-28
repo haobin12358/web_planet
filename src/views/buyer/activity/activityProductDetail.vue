@@ -79,6 +79,7 @@
         show_sku: false,
         select_value: null,
         canums: 1,
+        cart_buy: null,
       }
     },
     components: { sku },
@@ -113,6 +114,10 @@
       sureClick(item, num){
         this.canums = num;
         this.select_value = item;
+        if(this.cart_buy == 'buy'){
+          this.buy();
+          this.cart_buy = null;
+        }
         this.changeModal('show_sku', false);
       },
       buy() {
@@ -123,9 +128,10 @@
           product.cart.push({ product: { prtitle: this.product.tctitle }, sku: this.select_value, canums: "1", prid: this.product.tcid});
           let arr = [];
           arr.push(product);
-          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), gift: true }});
+          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr)}});
         }else {
           this.changeModal('show_sku', true);
+          this.cart_buy = 'buy';
         }
       }
     },
