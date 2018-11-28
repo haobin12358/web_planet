@@ -131,9 +131,9 @@
         .m-detail-right {
           .m-detail-btn {
             width: 96px;
-            height: 32px;
-            line-height: 35px;
-            font-size: 24px;
+            height: 25px;
+            line-height: 29px;
+            font-size: 22px;
             padding: 5px 16px;
             margin-top: 10px;
             border: 1px solid rgba(255,255,255,1);
