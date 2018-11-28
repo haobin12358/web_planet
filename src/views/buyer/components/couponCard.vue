@@ -129,6 +129,8 @@
           }
         }
         .m-detail-right {
+          display: flex;
+          flex-direction: column;
           .m-detail-btn {
             width: 96px;
             height: 25px;
