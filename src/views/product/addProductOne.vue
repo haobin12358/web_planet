@@ -147,7 +147,7 @@
         </el-form-item>
       </el-form>
       <div class="m-form-btn-box">
-        <span class="m-form-btn active">下一步</span>
+        <span class="m-form-btn active" @click="changeRoute('/product/addProductTwo')">下一步</span>
       </div>
     </div>
 
@@ -192,7 +192,11 @@
             }
         },
         components: {},
-        methods: {},
+        methods: {
+          changeRoute(v){
+            this.$router.push(v)
+          }
+        },
         created() {
 
         }
@@ -323,6 +327,9 @@
     }
     .m-add-text{
       margin-left: 0.6rem;
+    }
+    .m-form-btn-box{
+      margin-top: 1.6rem;
     }
   }
   /*滚动条样式*/

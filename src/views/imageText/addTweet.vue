@@ -184,10 +184,6 @@
         margin-top: 1rem;
       }
     }
-    .m-alert-text{
-      color: #999999;
-      font-size: 0.15rem;
-    }
     .m-add-text{
       margin-left: 0.5rem;
     }

@@ -68,6 +68,18 @@ export const constantRouterMap = [
         component: () => import('../views/product/addProductOne'),
         name: 'addProductOne',
         meta: { title: 'addProductOne', icon: 'addProductOne', noCache: true }
+      },
+      {
+        path: 'addProductTwo',
+        component: () => import('../views/product/addProductTwo'),
+        name: 'addProductTwo',
+        meta: { title: 'addProductTwo', icon: 'addProductTwo', noCache: true }
+      },
+      {
+        path: 'addProductThree',
+        component: () => import('../views/product/addProductThree'),
+        name: 'addProductThree',
+        meta: { title: 'addProductThree', icon: 'addProductThree', noCache: true }
       }
     ],
   },
