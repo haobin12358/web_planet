@@ -41,7 +41,7 @@ const api={
 
   get_home : title + '/user/get_home',                            // 获取用户个人信息
   upgrade_agent : title + '/user/upgrade_agent',                  // 店主申请
-  check_idcode : title + '/user/check_idcode',                    // 实名认证 - 身份证
+  // check_idcode : title + '/user/check_idcode',                    // 实名认证 - 身份证
   get_identifyinginfo : title + '/user/get_identifyinginfo',      // 获取个人身份证详情
   update_user : title + '/user/update_user',                      // 更新用户信息
   get_user_integral : title + '/user/get_user_integral',          // 获取积分列表

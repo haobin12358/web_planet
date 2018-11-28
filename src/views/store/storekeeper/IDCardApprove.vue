@@ -41,10 +41,10 @@
             </div>
             <mt-picker :slots="slots" @change="genderChange"></mt-picker>
           </mt-popup>
-          <div class="m-IDCard-row">
+          <!--<div class="m-IDCard-row">
             <div class="m-row-title">手机号码</div>
             <input type="text" class="m-row-input m-width-450" v-model="user.ustelphone" placeholder="请填写手机号码" :readonly="user.uslevel != '1'">
-          </div>
+          </div>-->
           <div class="m-IDCard-row">
             <div class="m-row-title">身份证号</div>
             <input type="text" class="m-row-input m-width-450" v-model="user.usidentification" maxlength="18" placeholder="请填写身份证号" :readonly="user.uslevel != '1'">
@@ -54,11 +54,11 @@
           </div>
         </div>
         <div class="m-IDCard-img">
-          <img class="m-IDCard-img" v-if="user.umfrontTemp" :src="user.umfrontTemp" alt="">
+          <img class="m-IDCard-img" v-if="umfrontTemp" :src="umfrontTemp" alt="">
           <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif" @change="uploadFrontImg" :disabled="user.uslevel != '1'">
         </div>
         <div class="m-IDCard-img">
-          <img class="m-IDCard-img" v-if="user.umbackTemp" :src="user.umbackTemp" alt="">
+          <img class="m-IDCard-img" v-if="umbackTemp" :src="umbackTemp" alt="">
           <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif" @change="uploadBackImg" :disabled="user.uslevel != '1'">
         </div>
         <!--按钮-->
@@ -108,7 +108,8 @@
         genderPopup: false,                   // 性别picker
         slots: [{ values: ['男', '女'] }],
         gender: "",                           // 暂存性别
-        img_box: []
+        umfrontTemp: "",                      // 暂存正面
+        umbackTemp: "",                       // 暂存反面
       }
     },
     methods: {
@@ -145,7 +146,7 @@
             this.user.umfront = res.data.data;
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
-              that.user.umfrontTemp = this.result;
+              that.umfrontTemp = this.result;
             }
           }
         })
@@ -164,7 +165,7 @@
             this.user.umback = res.data.data;
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
-              that.user.umbackTemp = this.result;
+              that.umbackTemp = this.result;
             }
           }
         })
@@ -175,6 +176,8 @@
           if(res.data.status == 200){
             // console.log(res.data.data);
             this.user = res.data.data;
+            this.umfrontTemp = this.user.umfront;
+            this.umbackTemp = this.user.umback;
             // 性别判断
             if(this.user.usgender == "0") {
               this.user.usGender = "男";
@@ -211,22 +214,18 @@
           return false;
         }
         let params = {
-          ustelphone: this.user.ustelphone,
+          // ustelphone: this.user.ustelphone,
           usgender: this.user.usgender,
           usrealname: this.user.usrealname,
           usidentification: this.user.usidentification,
           umfront: this.user.umfront,
           umback: this.user.umback,
         };
-        console.log(params);
-        axios.get(api.upgrade_agent + "?token=" + localStorage.getItem('token'), { params: params }).then(res => {
+        axios.post(api.upgrade_agent + "?token=" + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
-            console.log(res.data);
-            Toast(res.data.data.reason);
-            // 验证通过则返回上一页
-            /*if(!res.data.data.result) {
-              this.$router.go(-1);
-            }*/
+            Toast(res.data.message);
+            // 申请提交成功则返回上一页
+            this.$router.go(-1);
             this.submitPopup = true;
           }else{
             Toast(res.data.message);

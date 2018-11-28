@@ -25,10 +25,18 @@
                 <span>姓名</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input" v-model="user.usrealname" placeholder="请输入真实姓名">
+                <input type="text" class="m-edit-input" v-model="user.usrealname" placeholder="请输入真实姓名" :readonly="user.uslevel != '1'">
               </div>
             </li>
-            <li @click="genderPopup = true">
+            <li @click="genderPopup = true" v-if="user.uslevel == '1'">
+              <div>
+                <span>性别</span>
+              </div>
+              <div>
+                <span>{{user.usGender}}</span>
+              </div>
+            </li>
+            <li v-if="user.uslevel != '1'">
               <div>
                 <span>性别</span>
               </div>
@@ -41,7 +49,7 @@
                 <span>手机号</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input" v-model="user.ustelphone" placeholder="请输入手机号">
+                <input type="text" class="m-edit-input" v-model="user.ustelphone" placeholder="请输入手机号" :readonly="user.uslevel != '1'">
               </div>
             </li>
             <li @click="changeRoute('/storekeeper/IDCardApprove')">
