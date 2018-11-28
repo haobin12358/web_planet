@@ -90,26 +90,38 @@
         </el-form-item>
         <el-form-item label="类目管理：" ></el-form-item>
         <div class="m-category-table">
-          <div class="m-category-box">
+          <div class="m-category-title-th">
             <p class="m-category-title">一级类目</p>
-            <div class="m-one">
-              <span>服装鞋包</span>
-              <span class="m-add-category-text">+新增一级类目</span>
-            </div>
-          </div>
-          <div class="m-category-box">
             <p class="m-category-title">二级类目</p>
-            <div class="m-one">
-              <span>服装鞋包</span>
-              <span class="m-add-category-text">+新增二级类目</span>
-            </div>
+            <p class="m-category-title">三级类目</p>
           </div>
           <div class="m-category-box">
-            <p class="m-category-title">三级类目</p>
-            <div class="m-one">
-              <span>服装鞋包</span>
-              <span class="m-add-category-text">+新增三级类目</span>
-            </div>
+             <div class="m-category-tr">
+               <span class="m-add-category-text m-first">+新增一级类目</span>
+               <div class="m-category-td">
+                  <span>服装鞋包</span>
+               </div>
+               <div class="m-category-td m-colspan">
+                 <div class="m-category-td-tr">
+                   <div class="m-category-td-th-td">
+                     <span>服装鞋包</span>
+                     <span class="m-add-category-text">+新增一级类目</span>
+                   </div>
+                   <div class="m-category-td-th-td">
+                     <span>服装鞋包</span>
+                     <span class="m-add-category-text">+新增一级类目</span>
+                   </div>
+                 </div>
+                 <div class="m-category-td-tr">
+                   <div class="m-category-td-th-td">
+                     <span>服装鞋包</span>
+                   </div>
+                   <div class="m-category-td-th-td">
+                     <span>服装鞋包</span>
+                   </div>
+                 </div>
+               </div>
+             </div>
           </div>
         </div>
         <el-form-item label="品牌选择：" >
@@ -294,33 +306,62 @@
       }
     }
     .m-category-table{
-      .flex-row(flex-start);
+      text-align: center;
       margin-bottom: 0.2rem;
-      .m-category-box{
-        width: 33%;
-        text-align: center;
-        &:last-child{
-          .m-one{
-            border-right: 1px solid #eee;
-          }
-        }
+      .m-category-title-th{
+        .flex-row(flex-start);
         .m-category-title{
           height: 0.47rem;
           line-height: 0.47rem;
           background-color: #eee;
+          width: 33%;
+          border-right: 1px solid #eee;
         }
-        .m-one{
-          height: 1.5rem;
-          position: relative;
-          border: 1px solid #eee;
+      }
+      .m-category-box{
+        .m-category-tr{
+          border: 1px solid @borderColor;
           border-top: none;
           border-right: none;
-          .flex-row(center);
+          position: relative;
+          .flex-row(flex-start);
           .m-add-category-text{
             position: absolute;
             bottom: 0.1rem;
             right: 0.1rem;
             color: @mainColor;
+            &.m-first{
+              right: 0;
+              left: 26%;
+              width: 1rem;
+            }
+          }
+          .m-category-td{
+            width: 33%;
+            position: relative;
+            &.m-colspan{
+              width: 66%;
+              border-right: 1px solid @borderColor;
+              border-left: 1px solid @borderColor;
+              .m-category-td-tr{
+                width: 100%;
+                .flex-row(flex-start);
+                border-bottom: 1px solid @borderColor;
+                &:last-child{
+                  border-bottom: none;
+                }
+                .m-category-td-th-td{
+                  width: 50%;
+                  height: 0.9rem;
+                  .flex-row(center);
+                  position: relative;
+                  border-left: 1px solid @borderColor;
+                  &:first-child{
+                    border-left: none;
+                  }
+                }
+              }
+            }
           }
         }
       }
