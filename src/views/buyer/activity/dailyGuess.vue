@@ -231,6 +231,7 @@
         .m-done-btn {
           color: #ffffff;
           margin-top: 26px;
+          line-height: 75px;
         }
         .m-submit-done {
           opacity: 0.5;

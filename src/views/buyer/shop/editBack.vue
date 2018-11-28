@@ -25,21 +25,21 @@
               <span>货物状态</span>
             </div>
             <span >
-          <span class="m-grey" v-if="status_select">{{status_select.name}}</span>
-             <span class="m-grey" v-else>请选择</span>
-          <span class="m-icon-more"></span>
-        </span>
+              <span class="m-grey" v-if="status_select">{{status_select.name}}</span>
+              <span class="m-grey" v-else>请选择</span>
+              <span class="m-icon-more"></span>
+            </span>
           </li>
           <li @click="showPicker('refund_slot','refund_select')" >
             <div class="m-flex-between">
               <span class="m-border"></span>
               <span>退款原因</span>
             </div>
-            <span >
-             <span class="m-grey" v-if="refund_select">{{refund_select}}</span>
-             <span class="m-grey" v-else>请选择</span>
-            <span class="m-icon-more"></span>
-        </span>
+            <span>
+              <span class="m-grey" v-if="refund_select">{{refund_select}}</span>
+              <span class="m-grey" v-else>请选择</span>
+              <span class="m-icon-more"></span>
+            </span>
           </li>
         </ul>
         <p class="m-selectBack-num">退款金额：<span class="m-price">￥{{total_money | money}}</span></p>
@@ -121,8 +121,10 @@
 
       this.oraproductstatus = Number(this.$route.query.oraproductstatus);
 
-    //  获取退货原因
+      // 获取退货原因
       this.getBack();
+
+      console.log(this.oraproductstatus);
     },
     methods:{
       changeRoute(v){
@@ -164,7 +166,7 @@
           }
         })
       },
-    //  获取图款原因
+    //  获取退款原因
       getBack(){
         axios.get(api.list_dispute_type,{
           params:{

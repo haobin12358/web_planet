@@ -1,8 +1,6 @@
 <template>
   <!--<div class="m-picker-status" v-if="show_picker">-->
-    <mt-popup
-      v-model="show_picker"
-      popup-transition="popup-fade">
+    <mt-popup v-model="show_picker" position="bottom">
       <!--<div class="m-picker-box" >-->
         <p class="m-picker-text">
           <span class="cancel" @click="cancelSave(false)">取消</span>
@@ -69,11 +67,10 @@
     align-items: center;
     justify-content: space-between;
     font-size: 30px;
-    padding: 10px;
+    padding: 0 30px;
     span.cancel{
       color: #a4a4a4;
     }
-
   }
   .m-picker-input{
     border: none;
@@ -81,7 +78,7 @@
     padding: 0 4%;
     height: 72px;
     line-height: 72px;
-    box-shadow:0px 5px 6px rgba(0,0,0,0.16);
+    box-shadow: 0 5px 6px rgba(0,0,0,0.16);
   }
 
 </style>

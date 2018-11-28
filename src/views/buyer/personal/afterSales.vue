@@ -1,17 +1,21 @@
 <template>
   <div class="m-after-sales" >
     <div class="m-order-box">
-      <div class="m-order-item">
+      <div class="m-order-item" v-for="item in order">
         <div class="m-store-box" @click.stop="changeRoute('/brandDetail')">
           <img class="m-store-img" src="/static/images/icon-store.png" alt="">
-          <div class="m-store-name m-ft-24">南面</div>
+          <div class="m-store-name m-ft-24">{{item.pbname}}</div>
           <img class="m-more-img" src="/static/images/icon-more.png" alt="">
         </div>
-        <div class="m-product-box" @click.stop="changeRoute('/product/detail')">
-          <img class="m-product-img" src="http://dummyimage.com/140x140" alt="">
+        <div class="m-product-box" @click.stop="changeRoute('/product/detail')" v-for="product in item.order_part">
+          <div>
+            <img class="m-product-img" src="http://dummyimage.com/140x140" alt="">
+          </div>
           <div class="m-product-text-box">
-            <div class="m-product-text m-ft-24">女士冲锋衣</div>
-            <div class="m-product-text m-ft-21">规格：红色；XS</div>
+            <div class="m-product-text m-ft-24">{{product.prtitle}}</div>
+            <div class="m-product-text m-ft-21">规格：
+              <span v-for="(sku, index) in product.skuattritedetail">{{product.prattribute[index]}}：{{sku}} </span>
+            </div>
           </div>
         </div>
         <div class="m-btn-box">
@@ -38,6 +42,7 @@
         name: '',
         page_num: 1,
         page_size: 10,
+        order: null,
       }
     },
     components: {},
@@ -69,6 +74,7 @@
         axios.get(api.order_list, { params: params }).then(res => {
           if(res.data.status == 200){
             console.log(res.data.data);
+            this.order = res.data.data;
           }else {
             Toast(res.data.message);
           }
