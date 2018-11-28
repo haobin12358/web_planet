@@ -106,7 +106,7 @@
         display: inline-block;
         width: 20px;
         height: 20px;
-        background: url("../../common/images/icon-title.png") no-repeat;
+        background: url("../../common/images/icon-title-child.png") no-repeat;
         background-size: 100% 100%;
         vertical-align: text-bottom;
         margin-right: 10px;
