@@ -14,7 +14,7 @@
     </div>
     <!--内容-->
     <div class="m-product-content">
-      <div class="m-product-part" @click="changeRoute('/activityProductDetail')" v-for="item in productList">
+      <div class="m-product-part" v-for="item in productList" @click="changeRoute('/activityProductDetail', item)">
         <div class="m-part-left">
           <img class="m-product-img" :src="item.tcmainpic" alt="">
         </div>
@@ -56,8 +56,10 @@
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v){
-        this.$router.push(v)
+      changeRoute(v, item) {
+        console.log(item.tcid);
+        // this.$router.push(v);
+        this.$router.push({ path: v, query: { tcid: item.tcid }});
       },
       // 商品分享按钮
       productShare() {

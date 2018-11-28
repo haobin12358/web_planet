@@ -36,6 +36,8 @@
     data() {
       return {
         name: '',
+        page_num: 1,
+        page_size: 10,
       }
     },
     components: {},
@@ -56,12 +58,18 @@
             this.$router.push(v);
         }
       },
-      // 获取个人信息
-      getUser() {
-        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+      // 获取订单列表
+      getOrderList() {
+        let params = {
+          token: localStorage.getItem('token'),
+          page_num: this.page_num,
+          page_size: this.page_size,
+          omstatus: "inrefund"
+        };
+        axios.get(api.order_list, { params: params }).then(res => {
           if(res.data.status == 200){
-            this.user = res.data.data;
-          }else{
+            console.log(res.data.data);
+          }else {
             Toast(res.data.message);
           }
         })
@@ -91,8 +99,8 @@
     },
     mounted() {
       common.changeTitle('售后');
-      this.getUser();             // 获取个人信息
-      this.getOrderCount();       // 获取订单数量
+      this.getOrderList();             // 获取订单列表
+      // this.getOrderCount();       // 获取订单数量
     }
   }
 </script>
