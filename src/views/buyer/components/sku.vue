@@ -7,7 +7,7 @@
           <img :src="select_value.skupic"  v-if="select_value" alt="">
           <img :src="product.prmainpic"  v-else alt="">
         </div>
-        <div  class="m-center">
+        <div class="m-center">
           <span class="m-red" v-if="select_value">￥{{select_value.skuprice}}</span>
           <span class="m-red" v-else>￥{{product.prprice}}</span>
         </div>
@@ -20,7 +20,7 @@
               </ul>
             </li>
           </ul>
-          <div class="m-sku-num">
+          <div class="m-sku-num" v-if="!activity">
             <span>购买数量</span>
             <div class="m-num">
               <span class="m-icon-cut" @click.stop="changeNum(-1)"></span>
@@ -44,7 +44,7 @@
           return{
             select:[],
             select_value:null,
-            num:1
+            num:1,
           }
         },
       props:{
@@ -57,8 +57,12 @@
             default:null
           },
           now_num:{
-              type:Number,
-              default:1
+            type:Number,
+            default:1
+          },
+          activity:{
+            type:Boolean,
+            default:false
           }
       },
       mounted(){
@@ -134,6 +138,7 @@
         right: 35px;
         height: 35px;
         width: 35px;
+        padding: 5px;
         background: url("/static/images/icon-close.png") no-repeat;
         background-size: 100% 100%;
       }
