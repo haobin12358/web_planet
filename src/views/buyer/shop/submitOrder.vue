@@ -64,7 +64,8 @@
           </li>
           <li class="m-message">
             <span>买家留言：</span>
-            <textarea name="" id=""  placeholder="选填"></textarea>
+            <textarea name="" id=""></textarea>
+            <!--<textarea name="" id=""  placeholder="选填"></textarea>-->
           </li>
           <li class="m-flex-between">
             <span>优惠方式</span>
@@ -229,6 +230,7 @@
             if(this.fromGift) {
               this.giftPopup = true;
             }
+            alert("success");
           },
           /*优惠券选择*/
           couponClick(item){

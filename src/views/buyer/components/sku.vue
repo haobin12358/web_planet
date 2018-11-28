@@ -157,7 +157,7 @@
             display: inline-block;
             width: 230px;
             height: 230px;
-            box-shadow:0px 5px 6px rgba(0,0,0,0.16);
+            box-shadow: 0 5px 6px rgba(0,0,0,0.16);
           }
         }
         .m-scroll{
@@ -180,6 +180,8 @@
               padding: 0;
               overflow-y: scroll;
               li{
+                height: 25px;
+                line-height: 28px;
                 padding: 5px 56px;
                 background-color: #D5D5D5;
                 border-radius: 30px;
