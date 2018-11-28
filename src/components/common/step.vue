@@ -64,7 +64,7 @@
           height: 0.05rem;
           background-color: #eeeeef;
           &.active{
-            background-color: @red;
+            background-color: @mainColor;
           }
         }
         &.m-progress-circle{
@@ -105,21 +105,21 @@
     }
     &.active{
       p{
-        color: @red;
+        color: @mainColor;
       }
       .m-progress-icon{
         span{
           &.m-progress-line{
-            background-color: @red;
+            background-color: @mainColor;
             &:last-child{
               background-color: #efefef;
             }
             &.active{
-              background-color: @red;
+              background-color: @mainColor;
             }
           }
           &.m-progress-circle{
-            background-color: @red;
+            background-color: @mainColor;
           }
         }
       }

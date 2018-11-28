@@ -110,6 +110,12 @@ export const constantRouterMap = [
         component: () => import('../views/imageText/addTweet'),
         name: 'addTweet',
         meta: { title: 'addTweet', icon: 'addTweet', noCache: true }
+      },
+      {
+        path: 'addActivity',
+        component: () => import('../views/imageText/addActivity'),
+        name: 'addActivity',
+        meta: { title: 'addActivity', icon: 'addActivity', noCache: true }
       }
     ],
   },
@@ -134,7 +140,13 @@ export const constantRouterMap = [
       component: () => import('../views/order/index'),
       name: 'order',
       meta: { title: 'order', icon: 'order', noCache: true }
-    }
+    },
+      {
+        path: 'orderDetail',
+        component: () => import('../views/order/orderDetail'),
+        name: 'orderDetail',
+        meta: { title: 'orderDetail', icon: 'orderDetail', noCache: true }
+      }
     ],
   },
   {
