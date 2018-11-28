@@ -3,18 +3,18 @@
     <mt-loadmore :top-method="loadTop">
       <div class="m-couponCenter-top">
         <span class="m-couponCenter-rule">积分规则</span>
-        <p class="m-couponCenter-top-p">累计积分：520</p>
+        <p class="m-couponCenter-top-p">累计积分：{{integral.usintegral}}</p>
         <div class="m-couponCenter-day">
           <span>已连续签到</span>
           <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
-          <span class="m-num">0</span></span>
+          <span class="m-num">{{one}}</span></span>
           <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
-          <span class="m-num">0</span></span>
+          <span class="m-num">{{two}}</span></span>
           <span class="m-couponCenter-day-bg">
           <span class="m-line"></span>
-          <span class="m-num">3</span></span>
+          <span class="m-num">{{three}}</span></span>
           <span>天</span>
         </div>
         <div class="m-couponCenter-week">
@@ -69,7 +69,11 @@
         page_size: 10,
         isScroll: true,
         total_count: 0,
-        bottom_show: false
+        bottom_show: false,
+        integral: {},             // 顶部数据对象
+        one: "0",
+        two: "0",
+        three: "0"
       }
     },
     inject:['reload'],
@@ -98,6 +102,35 @@
             Toast(res.data.message);
             this.signIn = true;
           }else{
+            Toast(res.data.message);
+          }
+        });
+      },
+      // 获取优惠券中心顶部数据
+      getDiscount() {
+        axios.get(api.get_discount + "?token=" + localStorage.getItem("token")).then(res => {
+          if(res.data.status == 200){
+            this.integral = res.data.data;
+            this.signIn = res.data.data.signin_today;
+            let length = res.data.data.uscontinuous.toString().length;
+            if(length == 1) {
+              this.one = "0";
+              this.two = "0";
+              this.three = res.data.data.uscontinuous;
+            }else if(length == 2) {
+              this.one = "0";
+              this.two = res.data.data.uscontinuous.toString().substr(0, 1);
+              this.three = res.data.data.uscontinuous.toString().substr(1, 1);
+            }else if(length == 3) {
+              this.one = res.data.data.uscontinuous.toString().substr(0, 1);
+              this.two = res.data.data.uscontinuous.toString().substr(1, 1);
+              this.three = res.data.data.uscontinuous.toString().substr(2, 1);
+            }else if(length == 4) {
+              this.one = "9";
+              this.two = "9";
+              this.three = "9";
+            }
+          }else {
             Toast(res.data.message);
           }
         });
@@ -188,6 +221,7 @@
     },
     mounted() {
       common.changeTitle('优惠中心');
+      this.getDiscount();         // 获取优惠券中心顶部数据
       this.getItems();            // 获取标签列表
     }
   }
@@ -220,7 +254,6 @@
         text-align: center;
       }
       .m-couponCenter-day{
-        /*text-align: center;*/
         margin-left: 125px;
         .m-couponCenter-day-bg{
           display: inline-block;
@@ -248,7 +281,7 @@
           }
           .m-num{
             position: absolute;
-            /*top: 50%;*/
+            top: 5px;
             left: 21px;
             z-index: 100;
           }
@@ -290,7 +323,7 @@
           display: inline-block;
           width: 150px;
           height: 40px;
-          line-height: 40px;
+          line-height: 43px;
           background-color: #fff;
           text-align: center;
           font-size: 21px;

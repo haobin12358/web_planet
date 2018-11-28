@@ -46,6 +46,7 @@ const api={
   update_user : title + '/user/update_user',                      // 更新用户信息
   get_user_integral : title + '/user/get_user_integral',          // 获取积分列表
   user_sign_in : title + '/user/user_sign_in',                    // 用户签到
+  get_discount : title + '/user/get_discount',                    // 获取优惠券中心顶部数据
 
   list_user_coupon : title + '/coupon/list_user_coupon',          // 获取用户个人的优惠券
   coupon_list : title + '/coupon/list',                           // 获取优惠券列表
@@ -62,18 +63,19 @@ const api={
   list_with_group: title + '/brand/list_with_group',//获取品牌列表
   get_one_brand: title + '/brand/get',//获取一个品牌
 
-  add_address: title + '/user/add_address',               // 添加用户收货地址
-  get_all_address: title + '/user/get_all_address',       // 获取用户所有地址
-  get_one_address: title + '/user/get_one_address',       // 获取单条地址记录
-  update_address: title + '/user/update_address',         // 修改用户收货地址
-  get_provinces: title + '/address/get_provinces',        // 获取所有省份
-  get_citys: title + '/address/get_citys',                // 获取省份下城市
-  get_areas: title + '/address/get_areas',                // 获取城市下的区县
+  add_address: title + '/user/add_address',                       // 添加用户收货地址
+  get_all_address: title + '/user/get_all_address',               // 获取用户所有地址
+  get_one_address: title + '/user/get_one_address',               // 获取单条地址记录
+  update_address: title + '/user/update_address',                 // 修改用户收货地址
+  get_provinces: title + '/address/get_provinces',                // 获取所有省份
+  get_citys: title + '/address/get_citys',                        // 获取省份下城市
+  get_areas: title + '/address/get_areas',                        // 获取城市下的区县
 
-  create_guess_num: title + '/guess_num/create',          // 参与猜数字
-  get_guess_num: title + '/guess_num/get',                // 参与猜数字
-  history_join: title + '/guess_num/history_join',        // 获取历史参与结果(以月为单位)
-  get_commodity: title + '/commodity/get',        // 获取历史参与结果(以月为单位)
+  create_guess_num: title + '/guess_num/create',                  // 参与猜数字
+  get_guess_num: title + '/guess_num/get',                        // 参与猜数字
+  history_join: title + '/guess_num/history_join',                // 获取历史参与结果(以月为单位)
+  get_commodity: title + '/commodity/get',                        // 获取试用商品列表
+  get_commodity_detail: title + '/commodity/get_commodity',       // 获取试用商品列表
 
   list_coupon: title + '/coupon/list',//获取下单优惠券
   upload_file: title + '/file/upload',//上传图片
