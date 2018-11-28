@@ -222,24 +222,7 @@
         height: 1.28rem;
       }
     }
-    .m-form-btn-box{
-      text-align: center;
-      margin-top: 3rem;
-      .m-form-btn{
-        display: inline-block;
-        padding: 0.05rem 0.3rem;
-        border: 1px solid @borderColor;
-        border-radius: 5px;
-        color: #C8C8C8;
-        cursor: pointer;
-        &.active{
-          background-color: @mainColor;
-          color: #fff;
-          border-color: @mainColor;
-          margin-right: 0.2rem;
-        }
-      }
-    }
+
   }
 
 </style>

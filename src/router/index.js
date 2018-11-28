@@ -62,7 +62,13 @@ export const constantRouterMap = [
       component: () => import('../views/product/index'),
       name: 'product',
       meta: { title: 'product', icon: 'product', noCache: true }
-    }
+    },
+      {
+        path: 'addProductOne',
+        component: () => import('../views/product/addProductOne'),
+        name: 'addProductOne',
+        meta: { title: 'addProductOne', icon: 'addProductOne', noCache: true }
+      }
     ],
   },
   {
