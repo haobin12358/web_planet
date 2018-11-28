@@ -1,9 +1,10 @@
 <template>
     <div>
-      <h3 class="m-part-title">
+      <h3 class="m-part-title m-flex-start">
         <span class="m-part-title-icon"></span>
         <span>优惠券</span>
       </h3>
+
       <div class="m-search-box">
         <div>
           <span class="m-btn active">
@@ -11,6 +12,7 @@
             <span>添加优惠券</span>
           </span>
         </div>
+
         <div>
           <el-input v-model="state4" class="m-search-input" placeholder="商品名称"></el-input>
           <el-autocomplete

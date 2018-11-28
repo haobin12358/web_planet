@@ -67,6 +67,8 @@ html, body {
   }
 }
 .m-btn{
+  cursor: pointer;
+
   &.el-form-item{
     margin-bottom: 0;
   }
@@ -430,3 +432,25 @@ section{
 .m-bottom{
   margin-top: 0.5rem;
 }
+
+.wl(@width,@height) {
+  width: @width;
+  height: @height;
+}
+
+.sc(@size, @color) {
+  font-size: @size;
+  color: @color;
+}
+
+.fj(@type: space-between;) {
+  display: flex;
+  justify-content: @type;
+}
+
+.fjc(@type: space-between;) {
+  display: flex;
+  justify-content: @type;
+  flex-direction: column;
+}
+
