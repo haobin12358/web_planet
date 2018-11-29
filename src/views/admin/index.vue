@@ -102,7 +102,7 @@
     top: 0;
     left: -4.3rem;
     width: 5rem;
-    height: 3rem;
+    /*height: 3rem;*/
     box-shadow:0 3px 6px rgba(0,0,0,0.16);
     border-radius: 10px;
     z-index: 100;

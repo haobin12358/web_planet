@@ -133,7 +133,32 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <span class="m-add-text">+新增品牌</span>
+          <div class="m-modal-text">
+            <span class="m-add-text">+新增品牌</span>
+            <!--<div class="m-absolute-modal" >-->
+              <!--<p>新增品牌</p>-->
+              <!--<div class="m-admin-input-box">-->
+                <!--<el-input v-model="input" placeholder="请输入品牌名称" ></el-input>-->
+                <!--<el-upload-->
+                  <!--class="m-upload-s"-->
+                  <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+                  <!--list-type="picture-card"-->
+                  <!--:on-preview="handlePictureCardPreview"-->
+                  <!--:on-remove="handleRemove">-->
+                  <!--<span class="m-upload-img"></span>-->
+                <!--</el-upload>-->
+                <!--<p class="m-alert-text">添加品牌logo图片，建议尺寸：200*200像素</p>-->
+                <!--<el-dialog :visible.sync="dialogVisible">-->
+                  <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+                <!--</el-dialog>-->
+              <!--</div>-->
+              <!--<div class="m-modal-btn-box">-->
+                <!--<span class="m-btn active">保存</span>-->
+                <!--<span class="m-btn ">取消</span>-->
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+
         </el-form-item>
         <el-form-item label="场景选择：" >
           <el-select v-model="value8" class="m-input-m" placeholder="请选择">
@@ -144,7 +169,31 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <span class="m-add-text">+新增场景</span>
+          <div class="m-modal-text">
+            <span class="m-add-text">+新增场景</span>
+            <div class="m-absolute-modal" >
+              <p>新增场景</p>
+              <div class="m-admin-input-box">
+                <el-input v-model="input" placeholder="请输入场景名称" ></el-input>
+                <el-upload
+                  class="m-upload-s"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  list-type="picture-card"
+                  :on-preview="handlePictureCardPreview"
+                  :on-remove="handleRemove">
+                  <span class="m-upload-img"></span>
+                </el-upload>
+                <p class="m-alert-text">添加品牌logo图片，建议尺寸：200*200像素</p>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+              </div>
+              <div class="m-modal-btn-box">
+                <span class="m-btn active">保存</span>
+                <span class="m-btn ">取消</span>
+              </div>
+            </div>
+          </div>
         </el-form-item>
         <el-form-item label="标签选择：" >
           <el-select v-model="value8" class="m-input-m" placeholder="请选择">
@@ -155,7 +204,19 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <span class="m-add-text">+新增标签</span>
+          <div class="m-modal-text">
+            <span class="m-add-text">+新增标签</span>
+            <!--<div class="m-absolute-modal" >-->
+              <!--<p>新增标签</p>-->
+              <!--<div class="m-admin-input-box">-->
+                <!--<el-input v-model="input" placeholder="请输入标签名称" ></el-input>-->
+              <!--</div>-->
+              <!--<div class="m-modal-btn-box">-->
+                <!--<span class="m-btn active">保存</span>-->
+                <!--<span class="m-btn ">取消</span>-->
+              <!--</div>-->
+            <!--</div>-->
+          </div>
         </el-form-item>
       </el-form>
       <div class="m-form-btn-box">
@@ -371,6 +432,34 @@
     }
     .m-form-btn-box{
       margin-top: 1.6rem;
+    }
+  }
+  .m-modal-text{
+    display: inline-block;
+    /*position: relative;*/
+    .m-absolute-modal{
+      position: absolute;
+      background-color: #fff;
+      top: 0;
+      right: 0.5rem;
+      width: 5rem;
+      /*height: 3rem;*/
+      box-shadow:0 3px 6px rgba(0,0,0,0.16);
+      border-radius: 10px;
+      z-index: 100;
+      padding: 0.37rem 0.26rem 0.5rem 0.44rem;
+      text-align: left;
+      .m-admin-input-box{
+        margin:0;
+        .m-input-xs{
+          width: 2rem;
+          margin-right: 0.1rem;
+          display: inline-block;
+          margin-bottom: 0.2rem;
+        }
+
+      }
+
     }
   }
   /*滚动条样式*/
