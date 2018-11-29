@@ -5,6 +5,10 @@
       <div class="m-gift-one animated bounceInLeft" @click="pandora"></div>
       <div class="m-gift-two animated bounceInDown" @click="pandora"></div>
       <div class="m-gift-three animated bounceInUp" @click="pandora"></div>
+      <div class="m-cloud-one"></div>
+      <div class="m-cloud-two"></div>
+      <div class="m-cloud-three"></div>
+      <div class="m-cloud-four" :class="!record ? 'active' : ''"></div>
       <img class="m-product-img animated bounceIn" src="http://dummyimage.com/550x550" alt="">
     </div>
     <div class="m-product-detail">
@@ -25,7 +29,7 @@
       <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse">点击分享好友</div>
     </div>
 
-    <div class="m-record-text">
+    <div class="m-record-text" :class="record ? 'active' : ''" v-if="record">
       <div class="m-rule-icon"></div>
       <div class="m-text-bg">
         <div class="m-rule-title">拆盒记录</div>
@@ -48,6 +52,7 @@
         <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
       </div>
     </div>
+    <div class="m-cloud-five" :class="record ? 'active' : ''"></div>
 
     <!--点击魔盒的popup-->
     <mt-popup class="m-box-popup" v-model="boxPopup" pop-transition="popup-fade">
@@ -66,6 +71,7 @@
       return {
         name: '',
         boxPopup: false,            // 点击魔盒的popup
+        record: true,
       }
     },
     components: {},
@@ -84,11 +90,12 @@
   @import "../../../common/css/index";
 
   .m-pandora {
+    /*position: relative;*/
     .m-box-product {
-      /*position: relative;*/
-      height: 928px;
-      background: url("/static/images/activity/icon-bg.png") no-repeat;
-      background-size: 100% 100%;
+      position: relative;
+      height: 500px;
+      background-color: #845AFA;
+      z-index: 1;
       .m-box-tip {
         color: #FCD316;
         padding-top: 23px;
@@ -101,6 +108,7 @@
         position: absolute;
         top: 223px;
         left: 119px;
+        z-index: 2;
       }
       .m-gift-two {
         width: 162px;
@@ -119,31 +127,80 @@
         position: absolute;
         top: 453px;
         right: 58px;
+        z-index: 4;
+      }
+      .m-cloud-one {
+        width: 750px;
+        height: 431px;
+        background: url("/static/images/activity/cloud-one.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        z-index: 1;
+      }
+      .m-cloud-two {
+        width: 750px;
+        height: 380px;
+        background: url("/static/images/activity/cloud-two.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 275px;
+        left: 0;
+        z-index: 3;
+      }
+      .m-cloud-three {
+        width: 750px;
+        height: 877px;
+        background: url("/static/images/activity/cloud-three.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 520px;
+        left: 0;
+        z-index: 5;
+      }
+      .m-cloud-four {
+        width: 750px;
+        height: 1200px;
+        background: url("/static/images/activity/cloud-four.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 700px;
+        left: 0;
+        z-index: 6;
+        &.active {
+          height: 800px;
+        }
       }
       .m-product-img {
         width: 383px;
         height: 383px;
         border: 20px solid rgba(255,255,255,1);
-        box-shadow: -10px -10px 20px rgba(0,0,0,0.16);
+        box-shadow: 10px 10px 20px rgba(0,0,0,0.16);
         border-radius: 20px;
         position: absolute;
         top: 494px;
         left: 39px;
+        z-index: 7;
       }
     }
     .m-product-detail {
       padding: 0 40px;
+      z-index: 8;
+      position: absolute;
+      top: 940px;
+      left: 0;
       .m-buy-product {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-right: -20px;
         .m-price-one {
-
+          margin-right: 30px;
         }
       }
       .m-product-name {
-        padding: 32px 0 49px 0;
+        padding: 25px 0 30px 0;
       }
       .m-product-price {
         display: flex;
@@ -161,7 +218,7 @@
     .m-box-btn {
       width: 230px;
       height: 51px;
-      line-height: 50px;
+      line-height: 60px;
       white-space: nowrap;
       color: #AF3300;
       padding: 16px 40px;
@@ -170,13 +227,30 @@
       border-radius: 50px;
     }
     .m-share-btn {
-      margin: 54px 0 0 153px;
+      margin: 35px 0 0 180px;
     }
     .m-share-rule {
       padding: 33px 40px;
+      position: absolute;
+      top: 1160px;
+      left: 0;
+      z-index: 8;
       .m-rule-text {
         color: #999999;
         font-size: 24px;
+      }
+    }
+    .m-cloud-five {
+      width: 750px;
+      height: 226px;
+      background: url("/static/images/activity/cloud-five.png") no-repeat;
+      background-size: 100% 100%;
+      position: absolute;
+      top: 1310px;
+      left: 0;
+      z-index: 1;
+      &.active {
+        top: 1795px;
       }
     }
     .m-red {
@@ -190,6 +264,10 @@
       position: absolute;
       top: 1500px;
       left: 25px;
+      z-index: 2;
+      &.active {
+        top: 1460px;
+      }
       .m-rule-icon {
         width: 99px;
         height: 39px;
