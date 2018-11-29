@@ -59,7 +59,7 @@
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column align="center" width="200" prop="userId" label="商品" >
+        <el-table-column align="center" width="180" prop="userId" label="商品" >
           <template slot-scope="scope">
             <img src="" class="m-product-img" alt="">
             <span>商品1</span>
@@ -74,7 +74,7 @@
         <el-table-column align="center" prop="registerTime" label="状态概况"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
         <el-table-column align="center" prop="registerTime" label="供应源"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
         <el-table-column align="center" prop="email" sortable label="库存" ></el-table-column>
-        <el-table-column align="center"  label="操作" >
+        <el-table-column align="center" width="180" label="操作" >
           <template slot-scope="scope">
             <span class="m-table-link m-bd">编辑</span>
             <span class="m-table-link">删除</span>

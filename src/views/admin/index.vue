@@ -35,7 +35,22 @@
           <el-table-column align="center" prop="email" sortable label="最近登录时间" ></el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
-              <span class="m-table-link m-bd">管理</span>
+              <div class="m-modal-text" >
+                <span class="m-table-link m-bd">管理</span>
+                <div class="m-absolute-modal" v-if="scope.row.group == '买家'">
+                  <p>李老六管理员数据管理</p>
+                  <div class="m-admin-input-box">
+                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
+                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
+                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
+                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
+                  </div>
+                  <div class="m-modal-btn-box">
+                    <span class="m-btn active">保存</span>
+                    <span class="m-btn ">取消</span>
+                  </div>
+                </div>
+              </div>
               <span class="m-table-link">删除</span>
             </template>
           </el-table-column>
@@ -78,5 +93,32 @@
 
 <style lang="less" rel="stylesheet/less" scoped>
 
+.m-modal-text{
+  display: inline-block;
+  /*position: relative;*/
+  .m-absolute-modal{
+    position: absolute;
+    background-color: #fff;
+    top: 0;
+    left: -4.3rem;
+    width: 5rem;
+    height: 3rem;
+    box-shadow:0 3px 6px rgba(0,0,0,0.16);
+    border-radius: 10px;
+    z-index: 100;
+    padding: 0.37rem 0.26rem 0.5rem 0.44rem;
+    text-align: left;
+    .m-admin-input-box{
+      margin: 0.3rem 0 0.1rem;
+      .m-input-xs{
+        width: 2rem;
+        margin-right: 0.1rem;
+        display: inline-block;
+        margin-bottom: 0.2rem;
+      }
+    }
 
+
+  }
+}
 </style>

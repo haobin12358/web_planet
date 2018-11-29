@@ -179,6 +179,10 @@ html, body {
   border: 1px solid @formBorderColor;
   height: 0.32rem;
   line-height: 0.32rem;
+
+}
+.el-input__icon{
+  line-height: inherit;
 }
 .el-input.is-active .el-input__inner, .el-input__inner:focus{
   border-color: @formBorderColor;
@@ -221,10 +225,10 @@ html, body {
 }
 
 .el-input{
-  font-size: 0.16rem;
+  font-size: 0.14rem;
 }
 .el-radio__label{
-  font-size: 0.16rem;
+  font-size: 0.14rem;
 }
 .el-radio__input.is-checked .el-radio__inner{
   border-color: #BACB97;
@@ -234,7 +238,7 @@ html, body {
   color: #000;
 }
 .el-input--suffix .el-input__inner{
-  font-size: 16px;
+  font-size: 0.14rem;
   padding-right: 10px;
 }
 .el-table td, .el-table th.is-leaf {
@@ -415,7 +419,7 @@ section{
   &.active{
     background-color: @btnActiveColor;
   }
-  &:hover{
+  &.active:hover{
     background-color: @btnActiveColor;
   }
   &.cancel{
@@ -486,3 +490,22 @@ section{
   flex-direction: column;
 }
 
+.m-modal-btn-box{
+  text-align: right;
+  span{
+    display: inline-block;
+    padding: 0 0.3rem;
+    border: 1px solid @borderColor;
+    border-radius: 5px;
+    color: #C8C8C8;
+    cursor: pointer;
+    background-color: #fff;
+    &.active{
+      background-color: @mainColor;
+      color: #fff;
+      border-color: @mainColor;
+      margin-right: 0.2rem;
+    }
+  }
+
+}
