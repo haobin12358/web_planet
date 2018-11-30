@@ -92,7 +92,7 @@
             }
             for(let i = 0; i < this.couponList.length; i ++) {
               if(this.couponList[i].title_subtitle.left_text.length > 8) {
-                this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.splice(0, 8) + "..";
+                this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substr(0, 8) + "..";
               }
               this.couponList[i].navName = this.navName;
             }

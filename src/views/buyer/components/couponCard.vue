@@ -22,7 +22,7 @@
             <div class="m-detail-right">
               <div>{{item.title_subtitle.title}}</div>
               <div>{{item.title_subtitle.subtitle}}</div>
-              <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName" @click="getCoupon(index)">点击领取</div>
+              <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName && !order" @click="getCoupon(index)">点击领取</div>
               <div class="m-detail-btn" v-if="!item.cocancollect">不可领取</div>
               <div class="m-detail-btn" v-if="item.ready_collected">已领取</div>
               <div class="m-detail-btn" v-if="item.navName">{{item.navName}}</div>
@@ -47,6 +47,7 @@
     },
     props: {
       couponList: { type: Array, default: null },
+      order: { type: Boolean, default: false },
     },
     methods: {
       // 优惠券选择

@@ -101,11 +101,9 @@
       </div>
       <!--<picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>-->
 
-      <mt-popup
-        v-model="show_coupon"
-        popup-transition="popup-fade" class="m-coupon-modal">
+      <mt-popup v-model="show_coupon" popup-transition="popup-fade" class="m-coupon-modal">
         <div class="m-coupon-modal-content">
-          <coupon :couponList="couponList" @couponClick="couponClick"></coupon>
+          <coupon :couponList="couponList" :order="true" @couponClick="couponClick"></coupon>
         </div>
       </mt-popup>
 
@@ -203,6 +201,9 @@
               if(res.data.status == 200){
                 this.couponList = [];
                 for(let i = 0; i < res.data.data.length; i ++) {
+                  if(res.data.data[i].coupon.title_subtitle.left_text.length > 8) {
+                    res.data.data[i].coupon.title_subtitle.left_text = res.data.data[i].coupon.title_subtitle.left_text.substr(0, 8) + "..";
+                  }
                   this.couponList.push(res.data.data[i].coupon);
                 }
               }
