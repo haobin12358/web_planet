@@ -2,10 +2,10 @@
     <div class="m-login">
       <!--<p>登录</p>-->
       <img src="" class="m-login-logo" alt="">
-      <div  class="m-login-input m-login-bottom" >
+      <div  class="m-login-input" >
         <input type="text" v-model="ustelphone" placeholder="请输入手机号码">
         <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
-        <span class="m-code cancel" v-else>{{count}}秒后重新发送</span>
+        <span class="m-code cancel" v-else>{{count}}60秒后重新发送</span>
       </div>
       <div type="text" class="m-login-input" >
         <input type="text" v-model="identifyingcode" placeholder="请输入验证码">
@@ -30,102 +30,90 @@
   import common from '../../common/js/common';
   import {Toast} from 'mint-ui';
     export default {
-        data() {
-            return {
-                name: '',
-              ustelphone:'',
-              identifyingcode:'',
-              isSend:false,
-              timer:null,
-              count:''
-            }
-        },
-        components: {},
-        methods: {
-          sendCode(){
-            if(this.ustelphone){
-              const TIME_COUNT = 60;
-              axios.get(api.get_inforcode,{
-                params:{
-                  ustelphone:this.ustelphone
-                }
-              }).then(res => {
-                if(res.data.status ==200){
-
-                }
-              });
-              if (!this.timer) {
-                this.count = TIME_COUNT;
-                this.isSend = true;
-                this.timer = setInterval(() => {
-                  if (this.count > 0 && this.count <= TIME_COUNT) {
-                    this.count--;
-                  } else {
-                    this.isSend = false;
-                    clearInterval(this.timer);
-                    this.timer = null;
-                  }
-                }, 1000)
+      data() {
+        return {
+          name: '',
+          ustelphone:'',
+          identifyingcode:'',
+          isSend:false,
+          timer:null,
+          count:''
+        }
+      },
+      components: {},
+      methods: {
+        sendCode() {
+          if(this.ustelphone){
+            const TIME_COUNT = 60;
+            axios.get(api.get_inforcode + "?ustelphone=" + this.ustelphone).then(res => {
+              if(res.data.status ==200){
+                console.log(res.data.data);
               }
-            }else{
-              Toast({ message: '请先输入手机',duration:1000, className: 'm-toast-fail' });
-            }
-
-          },
-          loginClick(){
-            if(!this.ustelphone){
-              Toast({ message: '请先输入手机',duration:1000, className: 'm-toast-fail' });
-              return false;
-            }else if(!this.identifyingcode){
-              Toast({ message: '请先输入验证码',duration:1000, className: 'm-toast-fail' });
-              return false;
-            }
-
-            axios.post(api.login,{
-              ustelphone:this.ustelphone,
-              identifyingcode:this.identifyingcode
-            }).then(res => {
-              if(res.data.status == 200){
-                localStorage.setItem('token',res.data.data.token);
-                this.$router.push('/');
-              }
-            },error =>{
-              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
             });
-
-          },
-          isWeiXin() {
-            let ua = window.navigator.userAgent.toLowerCase();
-            console.log(ua);//mozilla/5.0 (iphone; cpu iphone os 9_1 like mac os x) applewebkit/601.1.46 (khtml, like gecko)version/9.0 mobile/13b143 safari/601.1
-            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-              return true;
-            } else {
-              return false;
+            if(!this.timer) {
+              this.count = TIME_COUNT;
+              this.isSend = true;
+              this.timer = setInterval(() => {
+                if(this.count > 0 && this.count <= TIME_COUNT) {
+                  this.count--;
+                }else {
+                  this.isSend = false;
+                  clearInterval(this.timer);
+                  this.timer = null;
+                }
+              }, 1000)
             }
-
-          },
-          login() {
-            axios.get(api.get_wxconfig,{
-              params:{
-                url: window.location.href,
-                app_from: window.location.origin
-              }
-            } ).then((res) => {
-              if(res.data.status == 200){
-                const id = res.data.data.appId
-                const url = window.location.href;
-                // const  url = 'https://daaiti.cn/WeiDian/#/login';
-                window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-                  +  id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
-              }
-
-            }).catch((error) => {
-              console.log(error ,'1111')
-            })
-          },
-
+          }else{
+            Toast("请先输入手机号码");
+          }
         },
-      mounted(){
+        loginClick(){
+          if(!this.ustelphone){
+            Toast("请先输入手机号码");
+            return false;
+          }else if(!this.identifyingcode){
+            Toast("请先输入验证码");
+            return false;
+          }
+          let params = {
+            ustelphone: this.ustelphone,
+            identifyingcode: this.identifyingcode
+          };
+          axios.post(api.login, { params: params }).then(res => {
+            if(res.data.status == 200){
+              localStorage.setItem('token', res.data.data.token);
+              this.$router.push('/');
+            }
+          });
+        },
+        isWeiXin() {
+          let ua = window.navigator.userAgent.toLowerCase();
+          console.log(ua);      // mozilla/5.0 (iphone; cpu iphone os 9_1 like mac os x) applewebkit/601.1.46 (khtml, like gecko)version/9.0 mobile/13b143 safari/601.1
+          if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+            return true;
+          }else {
+            return false;
+          }
+        },
+        login() {
+          let params = {
+            url: window.location.href,
+            app_from: window.location.origin
+          };
+          axios.get(api.get_wxconfig, { params: params }).then((res) => {
+            if(res.data.status == 200){
+              const id = res.data.data.appId
+              const url = window.location.href;
+              // const  url = 'https://daaiti.cn/WeiDian/#/login';
+              window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
+                + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+            }
+          }).catch((error) => {
+            console.log(error ,'1111')
+          });
+        }
+      },
+      mounted() {
         common.changeTitle('登录');
         if(this.isWeiXin()){    //是来自微信内置浏览器
           // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
@@ -141,10 +129,7 @@
             });
           }
         }
-      },
-        created() {
-
-        }
+      }
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
@@ -176,19 +161,19 @@
     background-color: rgba(255,255,255,0.2);
     color: #333;
     text-align: left;
-    /*&.m-login-bottom{*/
-      margin-bottom: 45px;
-    /*}*/
+    margin-bottom: 45px;
     .m-code{
       display: inline-block;
+      margin-left: 40px;
       padding: 6px 18px;
       border-radius: 10px;
       background-color: #FCD316;
       font-size: 21px;
       color: #fff;
-      box-shadow:0px 3px 6px rgba(0,0,0,0.16);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16);
       &.cancel{
         background-color: #ccc;
+        margin-left: 5px;
       }
     }
     input{
