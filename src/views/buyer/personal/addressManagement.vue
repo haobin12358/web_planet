@@ -95,8 +95,6 @@
               this.addressList[i].uadefault = "0";
             }
             this.addressList[index].uadefault = params.uadefault;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -109,8 +107,6 @@
             if(res.data.status == 200){
               Toast("删除成功");
               this.addressList.splice(index, 1);
-            }else{
-              Toast(res.data.message);
             }
           });
         }).catch(() => {
@@ -123,8 +119,6 @@
         axios.get(api.get_all_address, { params: params }).then(res => {
           if(res.data.status == 200){
             this.addressList = res.data.data;
-          }else{
-            Toast(res.data.message);
           }
         })
       }

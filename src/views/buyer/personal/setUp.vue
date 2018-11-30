@@ -90,8 +90,6 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
-          }else{
-            Toast(res.data.message);
           }
         })
       },

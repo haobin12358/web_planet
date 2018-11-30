@@ -184,8 +184,6 @@
             }else if(this.user.usgender == "1") {
               this.user.usGender = "女";
             }
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -227,8 +225,6 @@
             // 申请提交成功则返回上一页
             this.$router.go(-1);
             this.submitPopup = true;
-          }else{
-            Toast(res.data.message);
           }
         });
       }

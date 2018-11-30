@@ -36,8 +36,6 @@
         axios.get(api.product_get + '?prid=pridgift').then(res => {
           if(res.data.status == 200){
             this.gift = res.data.data;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -68,16 +66,10 @@
                   if(res.data.status == 200){
                     // 去创建订单页
                     this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(caid), gift: true }});
-                  }else{
-                    Toast(res.data.message);
                   }
                 });
-              }else{
-                Toast(res.data.message);
               }
             });
-          }else{
-            Toast(res.data.message);
           }
         });*/
       },

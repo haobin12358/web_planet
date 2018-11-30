@@ -74,6 +74,11 @@ import api from './api/api'
 axios.interceptors.response.use(data => {// 响应成功关闭loading
   // loadinginstace.close()
 
+  // 返回状态码不是200时统一报错
+  if(data.data.status != 200) {
+    Toast(data.data.message);
+  }
+
   if(data.data.status_code == 403001 ){
     axios.get(api.get_config,{
       params:{

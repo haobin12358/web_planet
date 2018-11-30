@@ -83,8 +83,6 @@
             this.banner = res.data.data.banner;
             this.productList = res.data.data.commodity;
             this.remarks = res.data.data.remarks;
-          }else{
-            Toast(res.data.message);
           }
         });
       }

@@ -181,8 +181,6 @@
             this.news_info.is_favorite = res.data.data.is_favorite;
             this.news_info.tramplenumber = res.data.data.trample_count;
             this.news_info.is_trample = res.data.data.is_trample;
-          }else {
-            Toast(res.data.message);
           }
         })
       },

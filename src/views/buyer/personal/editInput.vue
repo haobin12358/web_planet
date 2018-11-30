@@ -101,7 +101,9 @@
           }, 1000);
         }
         axios.get(api.get_inforcode + "?ustelphone=" + this.ustelphone).then(res => {
-          Toast(res.data.message);
+          if(res.data.status == 200) {
+            Toast(res.data.message);
+          }
         });
       },
       // 保存信息
@@ -132,8 +134,6 @@
           if(res.data.status == 200){
             Toast(res.data.message);
             this.$router.go(-1);
-          }else{
-            Toast(res.data.message);
           }
         });
       }

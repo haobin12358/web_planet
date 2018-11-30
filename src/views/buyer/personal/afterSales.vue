@@ -75,8 +75,6 @@
           if(res.data.status == 200){
             console.log(res.data.data);
             this.order = res.data.data;
-          }else {
-            Toast(res.data.message);
           }
         })
       },
@@ -97,8 +95,6 @@
                 this.after_sales = res.data.data[i].count;
               }
             }
-          }else{
-            Toast(res.data.message);
           }
         })
       }

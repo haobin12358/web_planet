@@ -100,8 +100,6 @@
             for(let i = 0; i < this.recordList.length; i ++) {
               this.recordList[i].product.prtitle = this.recordList[i].product.prtitle.substring(0, 12) + "..";
             }
-          }else{
-            Toast(res.data.message);
           }
         });
       },

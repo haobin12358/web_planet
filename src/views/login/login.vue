@@ -88,8 +88,6 @@
               if(res.data.status == 200){
                 localStorage.setItem('token',res.data.data.token);
                 this.$router.push('/');
-              }else{
-                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
               }
             },error =>{
               Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
@@ -135,12 +133,10 @@
             // alert(common.GetQueryString('code'))
             window.localStorage.setItem("code",common.GetQueryString('code'));
             axios.post(api.wx_login, { code: common.GetQueryString('code') }).then(res => {
-              if(res.data.status == 200){;
+              if(res.data.status == 200){
                 window.localStorage.setItem("token",res.data.data.token);
                 window.localStorage.setItem("openid",res.data.data.openid);
                 this.$router.push('/');
-              }else{
-                Toast({ message: res.data.message, className: 'm-toast-fail' });
               }
             });
           }

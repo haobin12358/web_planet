@@ -172,8 +172,6 @@
               }
               this.isScroll = true;
               this.total_count = res.data.total_count;
-            } else{
-              Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
             }
           },error => {
             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });

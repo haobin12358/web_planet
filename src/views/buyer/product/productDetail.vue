@@ -137,9 +137,6 @@
                this.product_info = res.data.data;
                this.product_info.praveragescore = this.product_info.praveragescore / 2;
              }
-              else{
-               Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
-             }
            },error => {
              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
            })
@@ -170,8 +167,6 @@
           then(res => {
             if(res.data.status == 200){
               Toast({ message: res.data.message,duration:1000, className: 'm-toast-success' });
-            }else{
-              Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
             }
           },error => {
             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });

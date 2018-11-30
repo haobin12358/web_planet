@@ -161,8 +161,6 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -172,8 +170,6 @@
           if(res.data.status == 200){
             this.address = res.data.data;
             this.addressText = res.data.data.areainfo;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -226,8 +222,6 @@
             if(res.data.status == 200){
               Toast("修改成功");
               this.$router.go(-1);
-            }else{
-              Toast(res.data.message);
             }
           });
         }else {
@@ -235,8 +229,6 @@
             if(res.data.status == 200){
               Toast("添加成功");
               this.$router.go(-1);
-            }else{
-              Toast(res.data.message);
             }
           });
         }

@@ -126,8 +126,6 @@
               this.submitStatus = "申请中";
               this.submitDone = true;
               Toast("提交成功");
-            }else{
-              Toast(res.data.message);
             }
           });
         }).catch(() => {
@@ -157,8 +155,6 @@
               this.submitStatus = "申请中";
               this.submitDone = true;
             }
-          }else{
-            Toast(res.data.message);
           }
         });
       },

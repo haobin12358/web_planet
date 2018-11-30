@@ -116,7 +116,9 @@
               this.submit = true;
               this.result = "";
               axios.post(api.create_guess_num + '?token=' + localStorage.getItem('token'), { gnnum: this.num }).then(res => {
-                Toast(res.data.message);
+                if(res.data.status == 200){
+                  Toast(res.data.message);
+                }
               });
             }else {
               Toast("请先输入竞猜数字");
@@ -170,8 +172,6 @@
               this.num = res.data.data.gnnum;
               this.submit = true;
             }
-          }else {
-            Toast(res.data.message);
           }
         });
       }

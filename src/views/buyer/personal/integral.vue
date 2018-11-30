@@ -64,8 +64,6 @@
           if(res.data.status == 200){
             this.usintegral = res.data.data.usintegral;
             this.uilist = res.data.data.uilist;
-          }else{
-            Toast(res.data.message);
           }
         })
       },

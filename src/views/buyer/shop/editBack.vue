@@ -202,8 +202,6 @@
         }).then(res => {
           if(res.data.status == 200){
             this.$router.push('/backDetail');
-          }else{
-            Toast(res.data.message);
           }
         })
       }

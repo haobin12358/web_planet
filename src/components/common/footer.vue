@@ -46,8 +46,6 @@
               }else if(res.data.data.uslevel == "3") {      // 3 - 申请成为卖家中
                 this.$router.push("storekeeper/applyOwner");
               }
-            }else{
-              Toast(res.data.message);
             }
           });
         }else if(this.selected == this.$store.state.tabbar_store[0].name) {     // 目前在卖家版首页

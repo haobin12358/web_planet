@@ -97,7 +97,6 @@
               this.couponList[i].navName = this.navName;
             }
           }else{
-            Toast(res.data.message);
             this.couponList = [];
             this.page_num = 1;
             this.total_count = 0;

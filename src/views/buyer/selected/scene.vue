@@ -119,8 +119,6 @@
                   this.page_info.page_num = 1;
                   return false;
                 }
-              } else{
-                Toast({ message: res.data.message,duration:1000, className: 'm-toast-fail' });
               }
             },error => {
               Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });

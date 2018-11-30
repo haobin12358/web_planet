@@ -300,8 +300,6 @@
                   }else if(res.data.data.uslevel == "3") {      // 3 - 身份认证中 - 去身份认证页
                     this.$router.push("/storekeeper/applyOwner");
                   }
-                }else{
-                  Toast(res.data.message);
                 }
               });
               break;

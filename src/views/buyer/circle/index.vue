@@ -194,8 +194,6 @@
             }
             arr[i].is_favorite = !arr[i].is_favorite;
             this.news_list = [].concat(arr);
-          }else {
-            Toast(res.data.message);
           }
         })
       },

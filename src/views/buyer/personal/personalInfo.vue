@@ -111,8 +111,6 @@
               this.user.usbirthday = "1995-01-01";
             }
             this.birthday = this.user.usbirthday;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -143,8 +141,6 @@
         }
         axios.post(api.update_user + '?token=' + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
-            Toast(res.data.message);
-          }else{
             Toast(res.data.message);
           }
         });

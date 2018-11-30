@@ -105,8 +105,6 @@
             this.product = res.data.data;
             this.product.prmainpic = res.data.data.tcmainpic;
             this.product.prprice = res.data.data.tcdeposit;
-          }else{
-            Toast(res.data.message);
           }
         });
       },

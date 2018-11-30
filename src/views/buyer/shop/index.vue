@@ -349,8 +349,6 @@
                     this.page_info.page_num = 1;
                     this.total_count = 1;
                     this.getCart();
-                  }else {
-                    Toast(res.data.message);
                   }
                 });
               }).catch(() => {

@@ -101,8 +101,6 @@
           if(res.data.status == 200){
             Toast(res.data.message);
             this.signIn = true;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -130,8 +128,6 @@
               this.two = "9";
               this.three = "9";
             }
-          }else {
-            Toast(res.data.message);
           }
         });
       },
@@ -148,8 +144,6 @@
             }
             this.itid = this.nav_list[0].itid;
             this.getUserCoupon();         // 获取优惠券列表
-          }else{
-            Toast(res.data.message);
           }
         });
       },
@@ -179,7 +173,6 @@
               }
             }
           }else{
-            Toast(res.data.message);
             this.couponList = [];
             this.page_num = 1;
             this.total_count = 0;
@@ -193,8 +186,6 @@
           if(res.data.status == 200){
             Toast("领取成功");
             this.couponList[index].ready_collected = true;
-          }else{
-            Toast(res.data.message);
           }
         });
       },
