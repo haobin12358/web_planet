@@ -169,9 +169,13 @@ export const constantRouterMap = [
       path: '',
       component: () => import('../views/marketing/index'),
       name: 'marketing',
-      meta: { title: 'marketing', icon: 'marketing', noCache: true }
-    }
-    ],
+      meta: {title: 'marketing', icon: 'marketing', noCache: true}
+    }, {
+      path: 'couponEdit',
+      component: () => import('../views/marketing/couponEdit'),
+      name: 'couponEdit',
+      meta: {noCache: true}
+    },],
   },
   {
     path: '/commission',
