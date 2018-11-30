@@ -93,6 +93,79 @@
             </li>
           </ul>
         </div>
+        <div class="m-one-part m-margin">
+          <p class="m-one-part-title">
+            <span class="m-name">我的活动</span>
+          </p>
+          <div class="m-activity-subtitle">账户余额</div>
+          <div class="m-activity-money">
+            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">500.00</span></div>
+            <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
+          </div>
+          <ul class="m-part-icon-ul m-use">
+            <li @click="changeRoute('/')">
+              <img src="/static/images/activity/icon-activity.png" alt="">
+              <span>活动订单</span>
+            </li>
+            <!--<li @click="changeRoute('/personal/guess')">
+              <img src="/static/images/activity/guess-history.png"  alt="">
+              <span>竞猜历史</span>
+            </li>-->
+          </ul>
+        </div>
+
+        <!--提现-->
+        <div class="m-out-popup-box">
+          <mt-popup class="m-out-popup" v-model="outPopup">
+            <div class="m-out-box" v-if="!outSubmit">
+              <div class="m-out-title m-ft-30">提现金额</div>
+              <div class="m-out-num-box">
+                <div class="m-out-RMB">￥</div>
+                <input type="text" v-model="moneyNum" class="m-out-num-input">
+                <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0.00'">
+              </div>
+              <div class="m-out-row">
+                <div class="m-row-left">姓名</div>
+                <div class="m-row-right">
+                  <input type="text" class="m-row-input m-width-200">
+                </div>
+              </div>
+              <div class="m-out-row">
+                <div class="m-row-left">银行卡号</div>
+                <div class="m-row-right">
+                  <input type="text" class="m-row-input m-width-320">
+                </div>
+              </div>
+              <div class="m-out-row">
+                <div class="m-row-left">银行</div>
+                <div class="m-row-right" @click="bankPopup = true">{{bank}}</div>
+              </div>
+              <div class="m-out-row">
+                <div class="m-row-left">开户行</div>
+                <div class="m-row-right">
+                  <input type="text" class="m-row-input m-width-320">
+                </div>
+              </div>
+              <div class="m-out-btn" @click="outBtn('submit')">提 交</div>
+            </div>
+            <div class="m-out-box" v-if="outSubmit">
+              <img class="m-out-know-img" src="/static/images/icon-out-know.png" alt="">
+              <div class="m-out-know-title">提交成功</div>
+              <div class="m-out-know-text">已成功提交提现申请，我们将在3个工作日内完成审核，请及时关注您的账户余额。</div>
+              <div class="m-out-btn" @click="outBtn('know')">我知道了</div>
+            </div>
+          </mt-popup>
+          <!--银行picker-->
+          <mt-popup class="m-bank-popup" v-model="bankPopup" position="bottom">
+            <div class="m-popup-btn">
+              <div @click="bankPopup = false">取消</div>
+              <div @click="bankDone">确认</div>
+            </div>
+            <mt-picker :slots="slots" @change="bankChange"></mt-picker>
+          </mt-popup>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -115,6 +188,12 @@
         receive: "0",           // 待收货
         evaluate: "0",          // 待评价
         after_sales: "0",       // 售后
+        outPopup: false,
+        outSubmit: false,
+        bankPopup: false,
+        moneyNum: "0.00",
+        slots: [{ values: ['中国银行', '中国工商银行', '交通银行', '中国建设银行'] }],
+        bank: ""
       }
     },
     components: {},
@@ -126,6 +205,22 @@
         }else {
           this.$router.push(v);
         }
+      },
+      // 提现的提交按钮
+      outBtn(where) {
+        if(where == "submit") {
+          this.outSubmit = true;
+        }else if(where == "know") {
+          this.outPopup = false;
+        }
+      },
+      // 提现的选择银行确定按钮
+      bankDone() {
+        this.bankPopup = false;
+      },
+      // picker选择的银行改变
+      bankChange(picker, values) {
+        this.bank = values[0];
       },
       // 获取个人信息
       getUser() {

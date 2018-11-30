@@ -151,10 +151,35 @@
             font-weight: bold;
           }
         }
+        .m-activity-subtitle {
+          padding: 16px 0;
+        }
+        .m-activity-money {
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px #CCCCCC solid;
+          padding-bottom: 20px;
+          .m-red {
+            color: #C70000;
+          }
+          .m-money {
+
+          }
+          .m-money-btn {
+            margin-top: 15px;
+            height: 35px;
+            line-height: 40px;
+            color: #999999;
+            padding: 5px 40px;
+            border: 1px #999999 solid;
+            border-radius: 30px;
+          }
+        }
         .m-part-icon-ul{
           //.flex-row(space-around);
           .flex-row(space-between);
-          margin: 30px 10px;
+          //.flex-row(flex-start);
+          margin: 30px 10px 10px 10px;
           li{
             position: relative;
             text-align: center;
@@ -312,6 +337,108 @@
               background: url("/static/images/icon-default-active.png");
               background-size: 100% 100%;
             }
+          }
+        }
+      }
+      .m-margin {
+        margin-bottom: 150px;
+      }
+      .m-out-popup-box {
+        .m-out-popup {
+          width: 700px;
+          height: 750px;
+          margin: -400px 25px 0 25px;
+          border-radius: 30px;
+          .m-out-box {
+            padding: 60px;
+            text-align: center;
+            .m-out-title {
+              text-align: left;
+              margin-bottom: 60px;
+            }
+            .m-out-num-box {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding-bottom: 20px;
+              margin-bottom: 20px;
+              border-bottom: 1px #C1C1C1 solid;
+              .m-out-RMB {
+                color: #FCD316;
+                font-size: 50px;
+                font-weight: bold;
+              }
+              .m-out-num-input {
+                width: 400px;
+                height: 70px;
+                font-size: 50px;
+                font-weight: bold;
+              }
+              .m-out-num-clean {
+                width: 40px;
+                height: 40px;
+              }
+            }
+            .m-out-row {
+              display: flex;
+              justify-content: space-between;
+              font-size: 28px;
+              padding: 20px 0 10px 0;
+              text-align: right;
+              .m-row-left {
+
+              }
+              .m-row-right {
+                .m-row-input {
+                  height: 40px;
+                  border: 1px #999999 solid;
+                  border-radius: 10px;
+                  font-size: 24px;
+                  padding: 0 0 0 20px;
+                }
+                .m-width-200 {
+                  width: 200px;
+                }
+                .m-width-320 {
+                  width: 320px;
+                }
+              }
+            }
+            .m-out-know-img {
+              width: 85px;
+              height: 85px;
+              padding: 50px 0 20px 0;
+            }
+            .m-out-know-title {
+              font-size: 30px;
+              font-weight: bold;
+            }
+            .m-out-know-text {
+              font-size: 24px;
+              padding: 150px 0 30px 0;
+            }
+            .m-out-btn {
+              width: 120px;
+              text-align: center;
+              white-space: nowrap;
+              color: #ffffff;
+              background-color: #FCD316;
+              font-size: 30px;
+              font-weight: bold;
+              padding: 15px 60px;
+              border-radius: 10px;
+              box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
+              margin: 50px 0 0 170px;
+            }
+          }
+        }
+        .m-bank-popup {
+          width: 750px;
+          .m-popup-btn {
+            display: flex;
+            justify-content: space-between;
+            font-size: 28px;
+            padding: 20px 40px 0 40px;
           }
         }
       }

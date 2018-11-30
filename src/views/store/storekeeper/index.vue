@@ -274,6 +274,8 @@
     .m-out-popup-box {
       .m-out-popup {
         width: 700px;
+        height: 750px;
+        margin: -400px 25px 0 25px;
         border-radius: 30px;
         .m-out-box {
           padding: 60px;
