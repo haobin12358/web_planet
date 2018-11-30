@@ -13,7 +13,6 @@
       <span class="icon icon-search"></span>
       <input type="text" placeholder="搜索">
     </div>
-
     <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
       <span>hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
       <el-dropdown-menu slot="dropdown">

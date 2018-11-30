@@ -4,6 +4,11 @@ const title ='https://planet.daaiti.cn/api/v1/';
 
 const api={
   login: title + 'user/admin_login',//用户登录
+  get_admin_list: title + 'user/get_admin_list',//获取管理员列表
+  add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',//添加啊管理员
+  update_admin: title + 'user/update_admin',//更新管理员
+  product_list: title + 'product/list',//获取商品列表
+
   get_order_situation: title + 'order/get_order_situation',//获取订单概况
   get_all_order: title + 'order/order_list',//获取所有订单
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情

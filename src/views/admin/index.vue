@@ -6,19 +6,13 @@
       </h3>
       <div class="m-search-box">
         <div>
-          <span class="m-btn active">
+          <span class="m-btn active" @click="addEdit">
             <span class="m-btn-icon m-add"></span>
             <span>添加管理员</span>
           </span>
         </div>
         <div>
-          <el-autocomplete
-            class="m-search-input"
-            v-model="state4"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="搜索管理员/代理商"
-            @select="handleSelect"
-          ></el-autocomplete>
+          <el-input v-model="input" class="m-input-s" placeholder="搜索管理员/代理商"></el-input>
           <span class="m-btn m-search-btn">
             <span class="m-btn-icon m-search"></span>
             <span>搜索</span>
@@ -27,27 +21,34 @@
       </div>
 
       <div class="m-content">
-        <el-table :data="data" class="m-table" stripe style="width: 100%">
-          <el-table-column align="center" prop="userId" label="用户编号" ></el-table-column>
-          <el-table-column align="center" prop="userName" label="用户名"></el-table-column>
+        <el-table :data="admin_data" class="m-table" stripe style="width: 100%">
+          <el-table-column align="center" prop="adid" label="用户编号" ></el-table-column>
+          <el-table-column align="center" prop="adname" label="用户名"></el-table-column>
           <el-table-column align="center" prop="email"  label="手机号" ></el-table-column>
-          <el-table-column align="center" prop="registerTime" label="类别"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
-          <el-table-column align="center" prop="email" sortable label="最近登录时间" ></el-table-column>
+          <el-table-column align="center" prop="adlevel" label="类别"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
+          <el-table-column align="center" prop="createtime" sortable label="最近登录时间" ></el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
               <div class="m-modal-text" >
-                <span class="m-table-link m-bd">管理</span>
-                <div class="m-absolute-modal" v-if="scope.row.group == '买家'">
-                  <p>李老六管理员数据管理</p>
+                <span class="m-table-link m-bd" @click="manageClick(scope.$index)">管理</span>
+                <div class="m-absolute-modal" v-if="scope.row.click">
+                  <p>{{scope.row.adname}}管理员数据管理</p>
                   <div class="m-admin-input-box">
-                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
-                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
-                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
-                    <el-input v-model="input" placeholder="请输入内容" class="m-input-xs"></el-input>
+                    <el-input v-model="scope.row.adname" placeholder="用户名" class="m-input-xs"></el-input>
+                    <el-select v-model="scope.row.adlevel" class="m-input-xs" placeholder="管理员">
+                      <el-option
+                        v-for="item in level"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
+                    <el-input v-model="input" placeholder="账号/手机号" class="m-input-xs"></el-input>
+                    <el-input v-model="input" placeholder="密码" class="m-input-xs"></el-input>
                   </div>
                   <div class="m-modal-btn-box">
-                    <span class="m-btn active">保存</span>
-                    <span class="m-btn ">取消</span>
+                    <span class="m-btn active" @click="saveChange(scope.$index,true)">保存</span>
+                    <span class="m-btn " @click="saveChange(scope.$index,false)">取消</span>
                   </div>
                 </div>
               </div>
@@ -56,36 +57,154 @@
           </el-table-column>
         </el-table>
 
+
         <div class="m-bottom">
           <pagination :total="total_page" @pageChange="pageChange"></pagination>
+        </div>
+      </div>
+      <div class="m-modal" v-if="add_admin">
+        <div class="m-absolute-modal m-add-modal" >
+          <p>管理员数据管理</p>
+          <div class="m-admin-input-box">
+            <el-input v-model="new_admin.adname" placeholder="用户名" class="m-input-xs"></el-input>
+            <el-select v-model="new_admin.adlevel" class="m-input-xs" placeholder="管理员">
+              <el-option
+                v-for="item in level"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-input v-model="input" placeholder="账号/手机号" class="m-input-xs"></el-input>
+            <el-input v-model="new_admin.adpassword" placeholder="密码" class="m-input-xs"></el-input>
+          </div>
+          <div class="m-modal-btn-box">
+            <span class="m-btn active" @click.stop="addAdmin(true)">保存</span>
+            <span class="m-btn " @click.stop="addAdmin(false)">取消</span>
+          </div>
         </div>
       </div>
     </div>
 </template>
 
 <script>
-  import data from '../../common/json/userInfo';
   import Pagination from "../../components/common/page";
+  import axios from 'axios';
+  import api from '../../api/api'
     export default {
         data(){
           return{
-            state4:'',
-            data:data,
-            total_page:6
+            input:'',
+            add_admin:false,
+            new_admin:{
+              adname:'',
+              adpassword:'',
+              adlevel:''
+            },
+            admin_data:[],
+            total_page:0,
+            level:[
+              {
+                name:'普通管理员',
+                value:'普通管理员'
+              },
+              {
+                name:'代理商',
+                value:'代理商'
+              },
+              {
+                name:'超级管理员',
+                value:'超级管理员'
+              }
+            ]
           }
         },
       components:{
         Pagination
       },
+      mounted(){
+          this.getAdmin(1)
+      },
       methods:{
-        querySearchAsync(){
-
+        //  获取会员列表
+        getAdmin(num){
+          axios.get(api.get_admin_list,{
+            params: {
+              token: localStorage.getItem('token'),
+              page_num:num || 1,
+              page_size:10
+            }}).then(res => {
+              if(res.data.status == 200){
+                let arr = [].concat(res.data.data);
+                for(let i=0;i<arr.length;i++){
+                  arr[i].click=false;
+                }
+                this.admin_data = [].concat(arr);
+                this.total_page = res.data.total_page;
+              }else{
+                this.$message.error(res.data.message);
+              }
+          })
         },
-        handleSelect(){
-
+        // /点击管理
+        manageClick(index){
+          let arr = [].concat(this.admin_data);
+          if(arr[index].click){
+            arr[index].click = !arr[index].click;
+          }else{
+            for(let i=0;i<arr.length;i++){
+              arr[i].click=false;
+            }
+            arr[index].click = true;
+          }
+          this.admin_data = [].concat(arr);
         },
-        pageChange(){
+        //保存 取消
+        saveChange(index,bool){
+          let arr = [].concat(this.admin_data);
+          if(bool){
+            axios.post(api.update_admin+'?token='+localStorage.getItem('token'),arr[index]).then(res => {
+              if(res.data.status == 200){
+                arr[index].click = false;
+                this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                });
+              }else{
+                this.$message.error(res.data.message);
+              }
 
+            })
+          }else{
+            arr[index].click = false;
+          }
+          this.admin_data = [].concat(arr);
+        },
+        //分页
+        pageChange(num){
+          this.getAdmin(num)
+        },
+        //点击弹出新增会员
+        addEdit(){
+          this.add_admin = true;
+        },
+        //新增会员保存
+        addAdmin(bool){
+          if(bool){
+            axios.post(api.add_admin_by_superadmin + '?token='+localStorage.getItem('token'),this.new_admin).then(res => {
+              if(res.data.status ==200){
+                this.$message({
+                  message: res.data.message,
+                  type: 'success'
+                });
+                this.add_admin = false;
+              }else{
+                this.$message.error(res.data.message);
+              }
+            })
+          }else{
+            this.add_admin = false;
+          }
         }
       }
     }
@@ -96,29 +215,46 @@
 .m-modal-text{
   display: inline-block;
   /*position: relative;*/
-  .m-absolute-modal{
+
+}
+.m-modal{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.m-absolute-modal{
+  position: absolute;
+  background-color: #fff;
+  top: 0;
+  left: -4.3rem;
+  width: 5rem;
+  /*height: 3rem;*/
+  box-shadow:0 3px 6px rgba(0,0,0,0.16);
+  border-radius: 10px;
+  z-index: 100;
+  padding: 0.37rem 0.26rem 0.5rem 0.44rem;
+  text-align: left;
+  &.m-add-modal{
     position: absolute;
-    background-color: #fff;
-    top: 0;
-    left: -4.3rem;
-    width: 5rem;
-    /*height: 3rem;*/
-    box-shadow:0 3px 6px rgba(0,0,0,0.16);
-    border-radius: 10px;
-    z-index: 100;
-    padding: 0.37rem 0.26rem 0.5rem 0.44rem;
-    text-align: left;
-    .m-admin-input-box{
-      margin: 0.3rem 0 0.1rem;
-      .m-input-xs{
-        width: 2rem;
-        margin-right: 0.1rem;
-        display: inline-block;
-        margin-bottom: 0.2rem;
-      }
-    }
-
-
+    top: 50%;
+    left: 50%;
+    transform: translateX(-2.5rem) translateY(-1.5rem);
   }
+  .m-admin-input-box{
+    margin: 0.3rem 0 0.1rem;
+    .m-input-xs{
+      width: 2rem;
+      margin-right: 0.1rem;
+      display: inline-block;
+      margin-bottom: 0.2rem;
+    }
+  }
+
+
 }
 </style>
