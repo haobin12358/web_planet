@@ -15,7 +15,7 @@
     </div>
 
     <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
-      <span>hello,{{$store.state.role}}<i class="icon-person-navbar icon"></i></span>
+      <span>hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="passward">修改密码</el-dropdown-item>
         <el-dropdown-item command="admin">管理员管理</el-dropdown-item>
