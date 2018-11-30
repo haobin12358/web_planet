@@ -7,10 +7,10 @@
 
       <div class="m-search-box">
         <div>
-          <span class="m-btn active">
+          <router-link tag="span" to="/marketing/couponEdit" class="m-btn active">
             <span class="m-btn-icon m-add"></span>
             <span>添加优惠券</span>
-          </span>
+          </router-link>
         </div>
 
         <div>
