@@ -4,8 +4,8 @@
       <img class="m-member-img" :src="banner" alt="">
       <div class="m-top-bg"></div>
       <div class="m-img-text-box">
-        <div class="m-img-text"><span class="m-img-text-bold">25</span> Spt</div>
-        <div class="m-img-text">九月 / 星期二</div>
+        <div class="m-img-text"><span class="m-img-text-bold">{{dayNum}}</span> {{monthNum}}</div>
+        <div class="m-img-text">{{month}} / {{day}}</div>
       </div>
     </div>
     <div class="m-activity-product-text-box">
@@ -51,6 +51,10 @@
         banner: "",
         remarks: "",
         productList: [],
+        day: "",
+        month: "",
+        dayNum: "",
+        monthNum: "",
       }
     },
     components: {},
@@ -85,11 +89,85 @@
             this.remarks = res.data.data.remarks;
           }
         });
+      },
+      // 获取时间
+      getDate() {
+        this.dayNum = new Date().getDate();
+        this.monthNum = new Date().toString().substr(4, 3);
+
+        // 判断星期几
+        switch(new Date().getDay()) {
+          case 1:
+            this.day = "星期一";
+            break;
+          case 2:
+            this.day = "星期二";
+            break;
+          case 3:
+            this.day = "星期三";
+            break;
+          case 4:
+            this.day = "星期四";
+            break;
+          case 5:
+            this.day = "星期五";
+            break;
+          case 6:
+            this.day = "星期六";
+            break;
+          case 7:
+            this.day = "星期日";
+            break;
+        }
+
+        // 判断月份
+        switch(new Date().getMonth() + 1) {
+          case 1:
+            this.month = "一月";
+            break;
+          case 2:
+            this.month = "二月";
+            break;
+          case 3:
+            this.month = "三月";
+            break;
+          case 4:
+            this.month = "四月";
+            break;
+          case 5:
+            this.month = "五月";
+            break;
+          case 6:
+            this.month = "六月";
+            break;
+          case 7:
+            this.month = "七月";
+            break;
+          case 8:
+            this.month = "八月";
+            break;
+          case 9:
+            this.month = "九月";
+            break;
+            break;
+          case 10:
+            this.month = "十月";
+            break;
+            break;
+          case 11:
+            this.month = "十一月";
+            break;
+            break;
+          case 12:
+            this.month = "十二月";
+            break;
+        }
       }
     },
     mounted() {
       common.changeTitle('活动商品');
       this.getProduct();               // 获取商品
+      this.getDate();                   // 获取时间
     }
   }
 </script>
