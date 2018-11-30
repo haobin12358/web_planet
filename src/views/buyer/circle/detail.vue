@@ -46,7 +46,7 @@
       <div class="m-modal-state">
         <span class="m-icon-close" @click="changeModal('show_modal',false)"></span>
         <div class="m-modal-content">
-           <h3>全部{{total_count}}条评论</h3>
+           <h3>全部 {{total_count}} 条评论</h3>
           <div class="m-scroll" ref="comment" @touchmove.stop="touchMove">
             <ul class="m-comment-ul">
               <li v-for="(items,index) in comment_list">
@@ -54,7 +54,7 @@
                 <div class="m-comment-text">
                   <div>
                     <p class="m-user-name">{{items.user.usname}}</p>
-                    <p>{{items.nctext}}</p>
+                    <p class="m-user-comment" @touchstart="gtouchstart(items,index)" @touchmove="gtouchmove()" @touchend="gtouchend(items,index)">{{items.nctext}}</p>
                     <div class="m-icon-list">
                       <span >{{items.createtime}}</span>
                       <div>
@@ -66,9 +66,9 @@
                     </div>
                   </div>
                   <p class="m-comment-content" v-for="(item,i) in items.reply" @click.stop="commentClick(item,index)" @touchstart="gtouchstart(item,index,i)" @touchmove="gtouchmove()" @touchend="gtouchend(item,index,i)">
-                    <span class="m-user-name">{{item.commentuser}}</span>
+                    <span class="m-user-name m-mr">{{item.commentuser}}</span>
                     <span class="m-comment-back" v-if="item.replieduser">回复</span>
-                    <span class="m-user-name m-mr" v-if="item.replieduser"> {{item.replieduser}}</span>
+                    <span class="m-user-name m-mr" v-if="item.replieduser">{{item.replieduser}}</span>
                     <span>{{item.nctext}}</span>
                   </p>
                 </div>
@@ -77,7 +77,7 @@
             <bottom-line v-if="bottom_show"></bottom-line>
           </div>
           <p v-if="show_comment" class="m-comment-input">
-            <input type="text"  v-model="comment_content" placeholder="请输入评论">
+            <input type="text" v-model="comment_content" placeholder="请输入评论">
             <span class="m-input-sure" @click.stop="sureComment">确定</span>
           </p>
         </div>
@@ -236,7 +236,7 @@
             this.getComment();
             this.comment_content = '';
             // this.comment_one.comment = false;
-            this.show_comment = !show_comment;
+            this.show_comment = !this.show_comment;
           }
         })
       },
@@ -301,15 +301,18 @@
         that.timeOutEvent = 0;
       },
       //真正长按后应该执行的内容
-      longPress(item,index,i){
-        this.timeOutEvent = 0;
-        //执行长按要执行的内容，如弹出菜单
-        let that = this
-        MessageBox.confirm('你确定要删除这条评论吗?').then(action => {
-          if(action){
-            axios.post(api.del_comment + '?token='+localStorage.getItem('token'),{
-              ncid:item.ncid
-            }).then(res => {
+      longPress(item, index, i) {
+        console.log(item, index, i);
+        // 1 为自己的评论， 0 不是自己的评论
+        if(item.is_own == 1) {
+          this.timeOutEvent = 0;
+          //执行长按要执行的内容，如弹出菜单
+          let that = this;
+          MessageBox.confirm('你确定要删除这条评论吗?').then(action => {
+            if(action){
+              axios.post(api.del_comment + '?token='+localStorage.getItem('token'),{
+                ncid:item.ncid
+              }).then(res => {
                 Toast({
                   message: res.data.message,
                   duration: 1000
@@ -318,9 +321,10 @@
                   console.log(that.comment_list,index)
                   that.comment_list[index].reply.splice(i, 1);
                 }
-            })
-          }
-        });
+              })
+            }
+          });
+        }
       }
     }
   }
@@ -454,7 +458,7 @@
             flex-flow: row;
             justify-content: flex-start;
             align-items: flex-start;
-            margin-bottom: 80px;
+            margin: 40px 0 60px 0;
             .m-user-img{
               display: block;
               width: 96px;
@@ -467,8 +471,11 @@
               font-weight: bold;
               text-align: left;
               &.m-mr{
-                margin-right: 30px;
+                margin-right: 8px;
               }
+            }
+            .m-user-comment {
+              margin-top: 8px;
             }
             .m-comment-text{
               width: 560px;
@@ -506,7 +513,7 @@
             .m-comment-back{
               display: inline-block;
               color: #999;
-              margin: 0 16px;
+              margin-right: 8px;
             }
           }
         }
@@ -524,16 +531,20 @@
           height: 60px;
           line-height: 60px;
           width: 80%;
+          font-size: 24px;
         }
         .m-input-sure{
           padding: 0 10px ;
           line-height: 100px;
           color: #fcd316;
           margin-left: 10px;
+          font-size: 24px;
         }
-
+        input::-webkit-input-placeholder {
+          color: #aab2bd;
+          font-size: 24px;
+        }
       }
-
     }
   }
 }
@@ -556,6 +567,8 @@
     width: 67px;
     height: 45px;
     line-height: 45px;
+    font-size: 24px;
+    padding: 3px 10px;
     background: url("/static/images/icon-circle-comment.png") no-repeat;
     background-size: 100% 100%;
     color: #fff;
