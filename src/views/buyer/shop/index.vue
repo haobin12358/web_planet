@@ -19,12 +19,12 @@
           <div class="m-shop-one" >
             <div class="m-shop-store-name">
               <span class="m-icon-radio" :class="items.active?'active':''" @click="radioClick('store',index)"></span>
-              <span>{{items.pb.pbname}}</span>
+              <span @click="changeRoute('brandDetail', items)">{{items.pb.pbname}}</span>
               <span class="m-icon-more" ></span>
             </div>
             <template v-for="(item,i) in items.cart" >
               <div class="m-shop-product">
-                <div class="m-product-info" @click="changeRoute('praoduct',item)">
+                <div class="m-product-info" @click="changeRoute('product',item)">
                   <span class="m-icon-radio m-radio-margin" :class="item.active?'active':''" @click.stop="radioClick('product',index,i)"></span>
                   <img :src="item.sku.skupic" class="m-product-img" alt="">
                   <div class="m-text-info">
@@ -121,7 +121,11 @@
         methods: {
           changeRoute(v, item){
             if(item) {
-              this.$router.push({path:'/product/detail',query:{prid:item.prid}});
+              if(v == "brandDetail") {
+                this.$router.push({ path: '/brandDetail', query: { pbid: item.pb.pbid }});
+              }else if(v == "product") {
+                this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+              }
             }else {
               this.$router.push(v);
             }
