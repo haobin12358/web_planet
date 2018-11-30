@@ -2,7 +2,18 @@
   <div class="m-couponCenter" @touchmove.stop="touchMove">
     <mt-loadmore :top-method="loadTop">
       <div class="m-couponCenter-top">
-        <span class="m-couponCenter-rule">积分规则</span>
+        <span class="m-couponCenter-rule" @click="rulePopup = true">积分规则</span>
+
+        <!--积分规则popup-->
+        <mt-popup class="m-rule-popup" v-model="rulePopup" pop-transition="popup-fade">
+          <div class="m-rule-btn">
+            <div @click="rulePopup = false">取消</div>
+          </div>
+          <div class="m-rule-text">{{integral.integralrule}}</div>
+        </mt-popup>
+
+
+
         <p class="m-couponCenter-top-p">累计积分：{{integral.usintegral}}</p>
         <div class="m-couponCenter-day">
           <span>已连续签到</span>
@@ -73,7 +84,8 @@
         integral: {},             // 顶部数据对象
         one: "0",
         two: "0",
-        three: "0"
+        three: "0",
+        rulePopup: false,
       }
     },
     inject:['reload'],
@@ -101,6 +113,8 @@
           if(res.data.status == 200){
             Toast(res.data.message);
             this.signIn = true;
+
+            this.getDiscount();         // 获取优惠券中心顶部数据
           }
         });
       },
@@ -243,6 +257,24 @@
         box-shadow:0 3px 6px rgba(0,0,0,0.16);
         font-size: 18px;
         text-align: center;
+      }
+      .m-rule-popup {
+        width: 700px;
+        height: 500px;
+        margin: -300px 0 0 25px;
+        border-radius: 30px;
+        .m-rule-btn{
+          display: flex;
+          justify-content: flex-end;
+          font-size: 28px;
+          padding: 20px 30px;
+        }
+        .m-rule-text {
+          font-size: 24px;
+          text-indent: 2em;
+          padding: 20px 50px;
+          line-height: 40px;
+        }
       }
       .m-couponCenter-day{
         margin-left: 125px;
