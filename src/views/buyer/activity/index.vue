@@ -4,10 +4,11 @@
 
     <div class="m-activity-box animated bounceInUp">
       <div class="m-activity-item" v-for="item in activityList">
-        <img class="m-activity-img" src="http://img.zcool.cn/community/01e021593541cfa8012193a3a081af.gif" alt="">
+        <img class="m-activity-img" :src="item.acbackground" alt="">
+        <!--<img class="m-activity-img" src="http://img.zcool.cn/community/01e021593541cfa8012193a3a081af.gif" alt="">-->
         <!--用户****中奖了-->
         <!--<div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>-->
-        <div class="m-activity-btn animated infinite pulse" :class="item.btn.length > 6 ? 'active' : ''" @click="changeRoute(item.url, item.params)">{{item.btn}}</div>
+        <div class="m-activity-btn animated infinite pulse" :class="item.acbutton.length > 6 ? 'active' : ''" @click="changeRoute(item.actype)">{{item.acbutton}}</div>
       </div>
     </div>
   </div>
@@ -15,32 +16,49 @@
 
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
   export default {
     data() {
       return {
         name: '',
-        activityList: [
-          { params: "new", record: "", btn: "首单可免", url: "/activityProduct" },
-          { params: "", record: "用户XX刚刚猜对啦猜对啦猜对啦", btn: "参与竞猜", url: "/dailyGuess" },
-          { params: "", record: "", btn: "邀请好友帮拆魔盒", url: "/pandora" },
-          { params: "try", record: "", btn: "我要试用", url: "/activityProduct" }
-        ]
+        activityList: []
       }
     },
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v, which){
-        if(which) {
-          this.$router.push({ path: v, query: { which: which }});
-        }else {
-          this.$router.push(v);
+      changeRoute(v) {
+        switch(v) {
+          case 0:
+            this.$router.push({ path: "/activityProduct", query: { which: "new" }});
+            break;
+          case 1:
+            this.$router.push("/dailyGuess");
+            break;
+          case 2:
+            this.$router.push("/pandora");
+            break;
+          case 3:
+            this.$router.push({ path: "/activityProduct", query: { which: "try" }});
+            break;
         }
+      },
+      // 获取活动list
+      getActivit() {
+        axios.get(api.activity_list + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            // console.log(res.data.data);
+            this.activityList = res.data.data;
+          }
+        });
       }
     },
     mounted() {
       common.changeTitle('活动');
+      this.getActivit();                // 获取活动list
     }
   }
 </script>

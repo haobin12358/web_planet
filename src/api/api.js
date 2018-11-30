@@ -10,9 +10,9 @@ const api={
   get_inforcode: title + 'user/get_inforcode',                   // 获取验证码
 
   category_list: title + 'category/list',                        // 获取分类-装备首页商品列表页
-  product_get: title + 'product/get',                             // 获取单条商品-商品详情
-  product_list: title + 'product/list',                           // 获取商品列表
-  brand_list: title + 'brand/list',                               // 获取商品列表
+  product_get: title + 'product/get',                            // 获取单条商品-商品详情
+  product_list: title + 'product/list',                          // 获取商品列表
+  brand_list: title + 'brand/list',                              // 获取商品列表
   search_history: title + 'product/search_history',              // 用户搜索记录
   guess_search: title + 'product/guess_search',                  // 推荐
   del_search_history: title + 'product/del_search_history',      // 删除搜索记录
@@ -74,7 +74,8 @@ const api={
   get_guess_num: title + 'guess_num/get',                        // 参与猜数字
   history_join: title + 'guess_num/history_join',                // 获取历史参与结果(以月为单位)
   get_commodity: title + 'commodity/get',                        // 获取试用商品列表
-  get_commodity_detail: title + 'commodity/get_commodity',       // 获取试用商品列表
+  get_commodity_detail: title + 'commodity/get_commodity',       // 获取试用商品详情
+  activity_list: title + 'activity/list',                        // 获取正在进行中的活动
 
   list_coupon: title + 'coupon/list',                            // 获取下单优惠券
   upload_file: title + 'file/upload',                            // 上传图片
