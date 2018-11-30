@@ -1,6 +1,11 @@
 <template>
   <div class="m-after-sales" >
-    <div class="m-order-box">
+    <div class="m-no-coupon" v-if="order.length == 0">
+      <span class="m-no-img m-order-no-img"></span>
+      <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
+    </div>
+
+    <div class="m-order-box" v-else>
       <div class="m-order-item" v-for="item in order">
         <div class="m-store-box" @click.stop="changeRoute('/brandDetail')">
           <img class="m-store-img" src="/static/images/icon-store.png" alt="">
@@ -42,7 +47,7 @@
         name: '',
         page_num: 1,
         page_size: 10,
-        order: null,
+        order: [],
       }
     },
     components: {},
@@ -111,7 +116,10 @@
 
   .m-after-sales {
     min-height: 100%;
-    background-color: #EEEEEE;
+    /*background-color: #EEEEEE;*/
+    .m-no-coupon{
+      margin-top: 300px;
+    }
     .m-order-box {
       .m-order-item {
         background-color: #ffffff;

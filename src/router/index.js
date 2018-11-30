@@ -153,6 +153,7 @@ export const constantRouterMap = [
   { path: '/freeTrial', component: () => import('../views/buyer/activity/freeTrial'), hidden: true },          // 免费试用
   { path: '/activityProduct', component: () => import('../views/buyer/activity/activityProduct'), hidden: true },      // 免费试用 - 商品
   { path: '/activityProductDetail', component: () => import('../views/buyer/activity/activityProductDetail'), hidden: true },        // 免费试用 - 商品详情
+  { path: '/activityOrder', component: () => import('../views/buyer/activity/activityOrder'), hidden: true },        // 活动订单
 ];
 
 export default new Router({

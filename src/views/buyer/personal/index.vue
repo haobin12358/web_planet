@@ -103,7 +103,7 @@
             <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
           </div>
           <ul class="m-part-icon-ul m-use">
-            <li @click="changeRoute('/')">
+            <li @click="changeRoute('/activityOrder')">
               <img src="/static/images/activity/icon-activity.png" alt="">
               <span>活动订单</span>
             </li>
