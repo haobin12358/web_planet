@@ -300,7 +300,6 @@
       },
       //真正长按后应该执行的内容
       longPress(item, index, i) {
-        console.log(item, index, i);
         // 1 为自己的评论， 0 不是自己的评论
         if(item.is_own == 1) {
           this.timeOutEvent = 0;
@@ -311,13 +310,13 @@
               axios.post(api.del_comment + '?token='+localStorage.getItem('token'),{
                 ncid:item.ncid
               }).then(res => {
-                Toast({
-                  message: res.data.message,
-                  duration: 1000
-                });
                 if(res.data.status == 200){
-                  console.log(that.comment_list,index)
-                  that.comment_list[index].reply.splice(i, 1);
+                  if(i == undefined) {
+                    that.comment_list.splice(index, 1);
+                  }else {
+                    that.comment_list[index].reply.splice(i, 1);
+                  }
+                  Toast({ message: res.data.message, duration: 1000 });
                 }
               })
             }
