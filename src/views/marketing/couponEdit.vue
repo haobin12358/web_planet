@@ -241,7 +241,6 @@
   .container {
     .breadcrumb {
       margin-bottom: .6rem;
-      /*font-size: .3rem;*/
     }
 
     .form-section-title {

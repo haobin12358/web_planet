@@ -186,7 +186,12 @@ export const constantRouterMap = [
       component: () => import('../views/commission/index'),
       name: 'commission',
       meta: { title: 'commission', icon: 'commission', noCache: true }
-    }
+    },{
+      path: 'commissionEdit',
+      component: () => import('../views/commission/commissionEdit'),
+      name: 'commissionEdit',
+      meta: { noCache: true }
+    },
     ],
   },
   {
@@ -229,12 +234,18 @@ export const constantRouterMap = [
     path: '/stock',
     component: Layout,
     redirect: '',
-    children: [{
-      path: '',
-      component: () => import('../views/stock/index'),
-      name: 'stock',
-      meta: { title: 'stock', icon: 'stock', noCache: true }
-    }
+    children: [
+      {
+        path: '',
+        component: () => import('../views/stock/index'),
+        name: 'stock',
+        meta: {title: 'stock', icon: 'stock', noCache: true}
+      },{
+        path: 'stockEdit',
+        component: () => import('../views/stock/stockEdit'),
+        name: 'stockEdit',
+        meta: { noCache: true}
+      },
     ],
   },
   {

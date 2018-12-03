@@ -31,7 +31,9 @@ axios.defaults.timeout = 60000
 var loadinginstace
 axios.interceptors.request.use(config => {
   // element ui Loading方法
-  loadinginstace = Loading.service({ fullscreen: true });
+  if (!config.noLoading) {
+    loadinginstace = Loading.service({fullscreen: true});
+  }
   // console.log(loadinginstace)
   return config
 }, error => {
@@ -39,19 +41,26 @@ axios.interceptors.request.use(config => {
     message:'加载超时',
     type:'warning'
   });
-  loadinginstace.close()
+  if (loadinginstace) {
+    loadinginstace.close();
+  }
   return Promise.reject(error)
 })
 // http响应拦截器
 axios.interceptors.response.use(data => {// 响应成功关闭loading
-  loadinginstace.close()
+  if (loadinginstace) {
+    loadinginstace.close();
+  }
+
   return data
 }, error => {
   Message({
     message:'请求失败',
     type:'warning'
   });
-  loadinginstace.close()
+  if (loadinginstace) {
+    loadinginstace.close();
+  }
   return Promise.reject(error)
 })
 

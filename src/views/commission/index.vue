@@ -1,13 +1,13 @@
 <template>
   <div>
     <h3 class="m-part-title m-flex-between">
-      <div>
+      <div class="m-flex-start">
         <span class="m-part-title-icon"></span>
         <span>佣金列表</span>
       </div>
-      <span class="m-btn active">
+      <router-link tag="span" to="/commission/commissionEdit" class="m-btn active">
         <span>佣金设置</span>
-      </span>
+      </router-link>
     </h3>
     <div class="m-search-box">
       <div>
@@ -46,6 +46,7 @@
 <script>
   import data from '../../common/json/userInfo';
   import Pagination from "../../components/common/page";
+
   export default {
     data(){
       return{
