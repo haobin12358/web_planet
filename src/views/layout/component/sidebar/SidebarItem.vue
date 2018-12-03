@@ -125,6 +125,10 @@
         background: url("../../../../common/images/side/icon-activity-side.png");
         background-size: 100% 100%;
       }
+      &.icon-set-side{
+        background: url("../../../../common/images/side/icon-set-side.png");
+        background-size: 100% 100%;
+      }
     }
     .sidebar-one-content{
       padding: 0.2rem 0.2rem;

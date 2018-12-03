@@ -22,7 +22,7 @@
           </span>
       </div>
       <div>
-          <span class="m-btn">
+          <span class="m-btn" @click="changeRoute('/member/addSupplier')">
             <span class="m-btn-icon m-add"></span>
             <span>添加供应商</span>
           </span>
@@ -99,6 +99,9 @@
       Pagination
     },
     methods:{
+      changeRoute(v){
+        this.$router.push({path:v})
+      },
       querySearchAsync(){
 
       },

@@ -13,9 +13,8 @@
       <span class="icon icon-search"></span>
       <input type="text" placeholder="搜索">
     </div>
-
     <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
-      <span>hello,{{$store.state.role}}<i class="icon-person-navbar icon"></i></span>
+      <span>hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="passward">修改密码</el-dropdown-item>
         <el-dropdown-item command="admin">管理员管理</el-dropdown-item>
@@ -29,7 +28,7 @@
         <div class="m-modal-content" @click="modalClick">
           <h3>管理员数据管理</h3>
           <p>--修改密码</p>
-          <el-form :inline="false" :model="pwdForm" :rules="rules" ref="pwdForm"  label-width="1.2rem">
+          <el-form :inline="false" :model="pwdForm" :rules="rules" ref="pwdForm"  label-width="1.4rem">
                 <el-form-item label="请输入旧密码" prop="MApasswordOld">
                   <el-input v-model="pwdForm.MApasswordOld" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
@@ -221,8 +220,15 @@ export default {
       margin-bottom: 0.2rem;
     }
     .m-btn-p{
+      display: inline-block;
       font-size: 0.14rem;
       cursor: pointer;
+      padding: 0 0.3rem;
+      height: 0.32rem;
+      line-height: 0.32rem;
+      background-color: @mainColor;
+      color: #fff;
+      border-radius: 5px;
     }
   }
 }

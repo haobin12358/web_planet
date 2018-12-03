@@ -54,26 +54,26 @@
     </div>
 
     <div class="m-content">
-      <el-table :data="data" class="m-table" stripe style="width: 100%">
+      <el-table :data="product_data" class="m-table" stripe style="width: 100%">
         <el-table-column
           type="selection"
           width="55">
         </el-table-column>
         <el-table-column align="center" width="180" prop="userId" label="商品" >
           <template slot-scope="scope">
-            <img src="" class="m-product-img" alt="">
-            <span>商品1</span>
+            <img :src="scope.row.prmainpic" class="m-product-img" alt="">
+            <span>{{scope.row.prtitle}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="userName" label="商品编号"></el-table-column>
-        <el-table-column align="center" prop="userName"  label="价格" ></el-table-column>
-        <el-table-column align="center" prop="userName" label="品牌"></el-table-column>
+        <el-table-column align="center" prop="prprice"  label="价格" ></el-table-column>
+        <el-table-column align="center" prop="brand.pbname" label="品牌"></el-table-column>
         <el-table-column align="center" prop="userName"  label="场景" ></el-table-column>
-        <el-table-column align="center" prop="userName"  label="总销量" ></el-table-column>
-        <el-table-column align="center" prop="email" sortable label="创建时间" ></el-table-column>
+        <el-table-column align="center" prop="prsalesvalue"  label="总销量" ></el-table-column>
+        <el-table-column align="center" prop="createtime" sortable label="创建时间" ></el-table-column>
         <el-table-column align="center" prop="registerTime" label="状态概况"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
         <el-table-column align="center" prop="registerTime" label="供应源"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
-        <el-table-column align="center" prop="email" sortable label="库存" ></el-table-column>
+        <el-table-column align="center" prop="prstocks" sortable label="库存" ></el-table-column>
         <el-table-column align="center" width="180" label="操作" >
           <template slot-scope="scope">
             <span class="m-table-link m-bd">编辑</span>
@@ -96,11 +96,13 @@
 <script>
   import data from '../../common/json/userInfo';
   import Pagination from "../../components/common/page";
+  import axios from 'axios';
+  import api from '../../api/api';
   export default {
     data(){
       return{
         state4:'',
-        data:data,
+        product_data:data,
         total_page:6,
         options: [{
           value: '选项1',
@@ -124,7 +126,24 @@
     components:{
       Pagination
     },
+    mounted(){
+      this.getProduct(1);
+    },
     methods:{
+      getProduct(num){
+        axios.get(api.product_list,{
+          params:{
+            token:localStorage.getItem('token'),
+            page_size:10,
+            page_num:num
+          }
+        }).then(res => {
+          if(res.data.status == 200){
+            this.product_data = res.data.data;
+            this.total_page = res.data.total_page;
+          }
+        })
+      },
       changeRoute(v){
         this.$router.push(v)
       },
@@ -134,8 +153,8 @@
       handleSelect(){
 
       },
-      pageChange(){
-
+      pageChange(num){
+        console.log(num)
       }
     }
   }

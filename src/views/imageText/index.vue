@@ -10,24 +10,26 @@
   import pageNav from '../../components/common/pageNav';
   import activity from './activity';
   import tweet from './tweet';
+  import axios from 'axios';
+  import api from '../../api/api'
   export default {
     data(){
       return{
         nav_list:[
           {
-            name:'活动专题',
-            value:'activity',
+            name:'推文编辑',
+            value:'tweet',
             active:true
           },
           {
-            name:'推文编辑',
-            value:'tweet',
+            name:'活动专题',
+            value:'activity',
             active:false
           }
         ],
         select:{
-          name:'活动专题',
-          value:'activity',
+          name:'推文编辑',
+          value:'tweet',
           active:true
         }
       }
@@ -46,6 +48,9 @@
         arr[index].active =true;
         this.nav_list = [].concat(arr);
         this.select = this.nav_list[index];
+      },
+      getTweet(){
+
       }
     }
   }

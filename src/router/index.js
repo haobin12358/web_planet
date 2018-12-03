@@ -25,7 +25,7 @@ import Layout from '../views/layout/Layout'
   }
  **/
 export const constantRouterMap = [
-  { path: '/', component: () => import('../views/profile/index'),   redirect: 'profile', hidden: true },
+  { path: '/', component: () => import('../views/login/index'),   redirect: 'login', hidden: true },
   { path: '/login', component: () => import('../views/login/index'), hidden: true },
   { path: '/forgetPwd', component: () => import('../views/login/forgetPwd'), hidden: true },
   { path: '/error', component: () => import('../views/error/error'), hidden: true },
@@ -104,7 +104,14 @@ export const constantRouterMap = [
       component: () => import('../views/member/index'),
       name: 'member',
       meta: { title: 'member', icon: 'member', noCache: true }
-    }
+    },
+      {
+        path: 'addSupplier',
+        component: () => import('../views/member/addSupplier'),
+        name: 'addSupplier',
+        meta: { title: 'addSupplier', icon: 'addSupplier', noCache: true }
+      }
+
     ],
   },
   {
@@ -186,12 +193,7 @@ export const constantRouterMap = [
       component: () => import('../views/commission/index'),
       name: 'commission',
       meta: { title: 'commission', icon: 'commission', noCache: true }
-    },{
-      path: 'commissionEdit',
-      component: () => import('../views/commission/commissionEdit'),
-      name: 'commissionEdit',
-      meta: { noCache: true }
-    },
+    }
     ],
   },
   {
@@ -231,24 +233,6 @@ export const constantRouterMap = [
     ],
   },
   {
-    path: '/stock',
-    component: Layout,
-    redirect: '',
-    children: [
-      {
-        path: '',
-        component: () => import('../views/stock/index'),
-        name: 'stock',
-        meta: {title: 'stock', icon: 'stock', noCache: true}
-      },{
-        path: 'stockEdit',
-        component: () => import('../views/stock/stockEdit'),
-        name: 'stockEdit',
-        meta: { noCache: true}
-      },
-    ],
-  },
-  {
     path: '/activity',
     component: Layout,
     redirect: '',
@@ -259,7 +243,19 @@ export const constantRouterMap = [
       meta: { title: 'activity', icon: 'activity', noCache: true }
     }
     ],
-  }
+  } ,
+  {
+    path: '/set',
+    component: Layout,
+    redirect: '',
+    children: [{
+      path: '',
+      component: () => import('../views/set/index'),
+      name: 'set',
+      meta: { title: 'set', icon: 'set', noCache: true }
+    }
+    ],
+  },
 ]
 
 export default new Router({
