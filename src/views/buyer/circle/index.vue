@@ -126,6 +126,7 @@
         this.nav_list = [].concat(arr);
         this.select_nav = arr[index];
         this.page_info.page_num = 1;
+        this.bottom_show = false;
         this.getNews(this.nav_list[index].itid);
       },
       /*获取导航*/
