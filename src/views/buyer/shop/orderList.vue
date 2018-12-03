@@ -300,7 +300,7 @@
               display: inline-block;
               width: 129px;
               height: 41px;
-              line-height: 41px;
+              line-height: 43px;
               text-align: center;
               border: 1px solid #999;
               border-radius: 30px;

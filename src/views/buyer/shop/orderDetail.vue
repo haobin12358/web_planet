@@ -385,7 +385,7 @@
       display: inline-block;
       width: 129px;
       height: 41px;
-      line-height: 41px;
+      line-height: 43px;
       border-radius: 30px;
       border: 1px solid #999;
       color: #999;
