@@ -154,6 +154,14 @@
           video: this.video,
           source: "h5"
         };
+        if(this.title == "") {
+          Toast("请输入标题");
+          return false;
+        }
+        if(this.content == "") {
+          Toast("请输入内容");
+          return false;
+        }
         axios.post(api.create_news + "?token=" + localStorage.getItem("token"), params).then(res => {
           if(res.data.status == 200){
             Toast(res.data.message);
