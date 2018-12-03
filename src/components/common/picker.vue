@@ -42,7 +42,7 @@
       },
       methods:{
         onValuesChange(picker, values) {
-          console.log(values)
+          // console.log(values)
           this.select= values;
         },
         pickerSave(v){

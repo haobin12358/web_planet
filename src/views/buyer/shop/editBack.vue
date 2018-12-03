@@ -19,7 +19,7 @@
     <div class="m-selectBack-content">
       <div class="m-one-select">
         <ul class="m-selectBack-ul">
-          <li  @click="showPicker('status_slot','status_select')" v-if="oraproductstatus">
+          <li  @click="showPicker('status_slot','status_select')" v-if="showProduct">
             <div class="m-flex-between">
               <span class="m-border"></span>
               <span>货物状态</span>
@@ -86,7 +86,7 @@
         ],
         status_slot:[{
           flex: 1,
-          values: [{name:'已收到货',value:0},{name: '未收到货',value:1}],
+          values: [{name:'已收到货',value:0},{name: '未收到货',value:10}],
           className: 'slot1',
           textAlign: 'center'
         }],
@@ -105,7 +105,8 @@
         }],
         refund_select:null,
         order:null,
-        oraaddtion:''
+        oraaddtion:'',
+        showProduct: true
       }
     },
     components: { picker},
@@ -120,11 +121,14 @@
       }
 
       this.oraproductstatus = Number(this.$route.query.oraproductstatus);
-
+      // 判断是否显示货物状态
+      if(this.oraproductstatus) {
+        this.showProduct = false;
+      }else {
+        this.showProduct = true;
+      }
       // 获取退货原因
       this.getBack();
-
-      console.log(this.oraproductstatus);
     },
     methods:{
       changeRoute(v){
@@ -132,16 +136,21 @@
       },
       //显示选择
       showPicker(v,i){
-        this.show_picker =true;
+        this.show_picker = false;
+        this.show_picker = true;
         this.slots = this[v];
         this.picker_select = i
       },
       //picker确定
       pickerSave(v,bool,select){
         if(select){
-          this[this.picker_select] = select[0]
+          this[this.picker_select] = select[0];
+          this.oraproductstatus = select[0].value;
         }
         this[v] = bool;
+        // 获取退货原因
+        this.getBack();
+        console.log(this.refund_slot[0].values);
       },
       //上传图片
       uploadImg(e){
@@ -167,13 +176,14 @@
         })
       },
     //  获取退款原因
-      getBack(){
+      getBack() {
         axios.get(api.list_dispute_type,{
           params:{
             type:this.oraproductstatus
           }
         }).then(res => {
           if(res.data.status == 200){
+            this.refund_slot[0].values = [];
             for(let i =0;i<res.data.data.length;i++){
               this.refund_slot[0].values.push(res.data.data[i].diname);
             }
@@ -181,13 +191,13 @@
         })
       },
     //  申请退款
-      submitRefund(){
-        if(!this.refund_select){
-          Toast("请先选择退货原因");
+      submitRefund() {
+        if(this.oraproductstatus == 0 && !this.status_select){
+          Toast("请先选择货物状态");
           return false;
         }
-        if(this.oraproductstatus == 1 && !this.status_select){
-          Toast("请先选择货物状态");
+        if(!this.refund_select){
+          Toast("请先选择退货原因");
           return false;
         }
         axios.post(api.refund_create + '?token=' + localStorage.getItem('token'),{
@@ -224,6 +234,7 @@
         width: 100%;
         background-color: #fff;
         padding: 34px 25px 20px;
+        box-sizing: border-box;
         text-align: left;
       }
       img{

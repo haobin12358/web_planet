@@ -18,7 +18,7 @@
           </template>
       </div>
       <ul class="m-selectBack-ul">
-        <li @click="changeRoute('/editBack',0)">
+        <li @click="changeRoute('/editBack',10)">
           <div class="m-flex-between">
             <span class="m-border"></span>
             <div>
@@ -28,7 +28,7 @@
           </div>
           <span class="m-icon-more"></span>
         </li>
-        <li  @click="changeRoute('/editBack',1)">
+        <li  @click="changeRoute('/editBack',0)">
           <div class="m-flex-between">
             <span class="m-border"></span>
             <div>
@@ -58,7 +58,8 @@
       },
       methods:{
         changeRoute(v,item){
-          this.$router.push({path:v,query:{product:this.$route.query.product,oraproductstatus:item,allOrder:this.$route.query.allOrder || null}});
+          this.$router.push({path:v,query:{product:this.$route.query.product,
+              oraproductstatus:item,allOrder:this.$route.query.allOrder || null}});
         }
       }
     }
