@@ -148,6 +148,7 @@
             }
             arr[index].active = true;
             this.nav_list = [].concat(arr);
+            this.page_info.page_num = 1;
             this.getProduct(arr[index].itid);
           },
           //滚动到顶部
