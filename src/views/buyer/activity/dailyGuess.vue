@@ -2,7 +2,7 @@
   <div class="m-dailyGuess">
     <div class="m-guess-title">
       <img class="m-guess-img" src="/static/images/activity/main-bg.png" alt="">
-      <img class="m-product-img animated bounceIn" src="http://dummyimage.com/550x550" alt="">
+      <img class="m-product-img animated bounceIn" :src="rule.prpic">
       <div>
         <div class="m-input-img">
           <div class="m-guess-result m-ft-50 m-ft-b">{{num}}<span class="m-result">{{result}}</span></div>
@@ -39,15 +39,15 @@
           <div class="m-rule-title">活动规则</div>
           <div class="m-rule-row">
             <div class="m-rule-no">1</div>
-            <div>活动玩法balabala</div>
+            <div>{{rule.acdesc[0]}}</div>
           </div>
           <div class="m-rule-row">
             <div class="m-rule-no">2</div>
-            <div>没人每日仅限一次balabala</div>
+            <div>{{rule.acdesc[1]}}</div>
           </div>
           <div class="m-rule-row">
             <div class="m-rule-no">3</div>
-            <div>猜中填写地址支付即可</div>
+            <div>{{rule.acdesc[2]}}</div>
           </div>
           <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
         </div>
@@ -91,6 +91,7 @@
         successPopup: false,   // 猜对啦
         failPopup: false,      // 猜错啦
         hour: false,           // 当前的小时是否在竞猜时间内
+        rule: {}
       }
     },
     components: {},
@@ -174,6 +175,15 @@
             }
           }
         });
+      },
+      // 获取该活动的规则
+      getRule() {
+        axios.get(api.get_activity + "?actype=1").then(res => {
+          if(res.data.status == 200){
+            // console.log(res.data.data);
+            this.rule = res.data.data;
+          }
+        });
       }
     },
     mounted() {
@@ -181,6 +191,7 @@
       this.timeOut();                    // 闪动光标 - 倒计时
       this.getGuess();                   // 获取今日参与记录
       this.getTime();                    // 获取当前时间
+      this.getRule();                    // 获取该活动的规则
     }
   }
 </script>

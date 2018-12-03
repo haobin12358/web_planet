@@ -9,7 +9,7 @@
       <div class="m-cloud-two"></div>
       <div class="m-cloud-three"></div>
       <div class="m-cloud-four" :class="!record ? 'active' : ''"></div>
-      <img class="m-product-img animated bounceIn" src="http://dummyimage.com/550x550" alt="">
+      <img class="m-product-img animated bounceIn" :src="rule.prpic">
     </div>
     <div class="m-product-detail">
       <div class="m-buy-product">
@@ -18,14 +18,14 @@
       </div>
       <div class="m-product-name m-ft-38 m-ft-b tl">魔术礼盒</div>
       <div class="m-product-price">
-        <div class="m-price-two">原价：￥400.00</div>
-        <div class="m-price-three m-red">最低价：￥200.00</div>
+        <div class="m-price-two">原价：￥{{rule.infos.skuprice}}</div>
+        <div class="m-price-three m-red">最低价：￥{{rule.infos.skuminprice}}</div>
       </div>
     </div>
     <div class="m-share-rule tl">
-      <div class="m-rule-text">第一档：随机减少<span class="m-red">3-5</span>元</div>
-      <div class="m-rule-text">第二档：随机减少<span class="m-red">5-10</span>元或增加<span class="m-red">1-2</span>元</div>
-      <div class="m-rule-text">第三档：随机减少<span class="m-red">10-20</span>元或增加<span class="m-red">5-10</span>元</div>
+      <div class="m-rule-text">第一档：随机减少<span class="m-red">{{rule.infos.gearsone[0]}}</span>元</div>
+      <div class="m-rule-text">第二档：随机减少<span class="m-red">{{rule.infos.gearstwo[0]}}</span>元或增加<span class="m-red">{{rule.infos.gearstwo[1]}}</span>元</div>
+      <div class="m-rule-text">第三档：随机减少<span class="m-red">{{rule.infos.gearsthree[0]}}</span>元或增加<span class="m-red">{{rule.infos.gearsthree[1]}}</span>元</div>
       <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse">点击分享好友</div>
     </div>
 
@@ -65,6 +65,9 @@
 
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
   export default {
     data() {
@@ -72,6 +75,7 @@
         name: '',
         boxPopup: false,            // 点击魔盒的popup
         record: true,
+        rule: {}
       }
     },
     components: {},
@@ -79,10 +83,19 @@
       // 点击魔盒
       pandora() {
         this.boxPopup = true;
+      },
+      // 获取该活动的规则
+      getRule() {
+        axios.get(api.get_activity + "?actype=2").then(res => {
+          if(res.data.status == 200){
+            this.rule = res.data.data;
+          }
+        });
       }
     },
     mounted() {
       common.changeTitle('魔法礼盒');
+      this.getRule();                 // 获取该活动的规则
     }
   }
 </script>
@@ -108,7 +121,7 @@
         position: absolute;
         top: 223px;
         left: 119px;
-        z-index: 2;
+        z-index: 10;
       }
       .m-gift-two {
         width: 162px;
@@ -118,6 +131,7 @@
         position: absolute;
         top: 128px;
         right: 118px;
+        z-index: 10;
       }
       .m-gift-three {
         width: 198px;
@@ -127,7 +141,7 @@
         position: absolute;
         top: 453px;
         right: 58px;
-        z-index: 4;
+        z-index: 10;
       }
       .m-cloud-one {
         width: 750px;

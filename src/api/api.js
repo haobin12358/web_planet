@@ -70,12 +70,13 @@ const api={
   get_citys: title + 'address/get_citys',                        // 获取省份下城市
   get_areas: title + 'address/get_areas',                        // 获取城市下的区县
 
-  create_guess_num: title + 'guess_num/create',                  // 参与猜数字
+  create_guess_num: title + 'guess_num/create',                  // 查看猜数字单日参与记录
   get_guess_num: title + 'guess_num/get',                        // 参与猜数字
   history_join: title + 'guess_num/history_join',                // 获取历史参与结果(以月为单位)
   get_commodity: title + 'commodity/get',                        // 获取试用商品列表
   get_commodity_detail: title + 'commodity/get_commodity',       // 获取试用商品详情
   activity_list: title + 'activity/list',                        // 获取正在进行中的活动
+  get_activity: title + 'activity/get',                          // 魔盒礼盒与竞猜活动详情
 
   list_coupon: title + 'coupon/list',                            // 获取下单优惠券
   upload_file: title + 'file/upload',                            // 上传图片
