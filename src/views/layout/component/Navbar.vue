@@ -30,13 +30,13 @@
           <p>--修改密码</p>
           <el-form :inline="false" :model="pwdForm" :rules="rules" ref="pwdForm"  label-width="1.4rem">
                 <el-form-item label="请输入旧密码" prop="MApasswordOld">
-                  <el-input v-model="pwdForm.MApasswordOld" type="password" class="m-input-pwd" placeholder=""></el-input>
+                  <el-input v-model="pwdForm.password_old" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
                 <el-form-item label="请输入新密码" prop="MApasswordNew">
-                  <el-input v-model="pwdForm.MApasswordNew" type="password" class="m-input-pwd" placeholder=""></el-input>
+                  <el-input v-model="pwdForm.password_new" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
                 <el-form-item label="请确认新密码" prop="MApasswordRepeat">
-                  <el-input v-model="pwdForm.MApasswordRepeat" type="password" class="m-input-pwd" placeholder=""></el-input>
+                  <el-input v-model="pwdForm.password_repeat" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
               <p class="m-btn-p" @click="pwdSubmit('pwdForm')">确认修改</p>
           </el-form>
@@ -64,18 +64,18 @@ export default {
       isActive:false,
       show_pwd_modal:false,
       pwdForm:{
-        MApasswordOld:'',
-        MApasswordNew:'',
-        MApasswordRepeat:''
+        password_old:'',
+        password_new:'',
+        password_repeat:''
       },
       rules: {
-        MApasswordOld: [
+        password_old: [
           { required: true, message: '请输入旧密码', trigger: 'blur' }
         ],
-        MApasswordNew:[
+        password_new:[
           { required: true, message: '请输入新密码', trigger: 'blur' }
           ],
-        MApasswordRepeat:[
+        password_repeat:[
           { required: true, message: '请确认新密码', trigger: 'blur' }
         ],
       }
@@ -102,7 +102,7 @@ export default {
       let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post(api.changePwd + '?token=' + that.$store.state.token,that.pwdForm).
+          axios.post(api.update_admin_password + '?token=' + localStorage.getItem('token'),that.pwdForm).
           then(res=>{
             if(res.data.status == 200){
               this.$message({
