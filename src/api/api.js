@@ -51,6 +51,7 @@ const api={
   coupon_list : title + 'coupon/list',                           // 获取优惠券列表
   coupon_fetch : title + 'coupon/fetch',                         // 领取优惠券
 
+  create_news: title + 'news/create_news',                       // 发布资讯
   get_all_news: title + 'news/get_all_news',                     // 获取资讯列表
   get_news_content: title +'news/get_news_content',              // 获取资讯详情
   favorite_news: title + 'news/favorite_news',                   // 资讯点赞

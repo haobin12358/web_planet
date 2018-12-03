@@ -330,7 +330,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../../common/css/index";
 .m-circle-content{
-  margin: 18px 0 38px 0;
+  padding: 18px 0 38px 0;
   .m-circle-title{
     font-size: 28px;
     font-weight: bold;

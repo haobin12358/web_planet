@@ -125,7 +125,8 @@
         arr[index].active = true;
         this.nav_list = [].concat(arr);
         this.select_nav = arr[index];
-        this.getNews(this.nav_list[index].itid)
+        this.page_info.page_num = 1;
+        this.getNews(this.nav_list[index].itid);
       },
       /*获取导航*/
       getNav(){
@@ -157,7 +158,7 @@
             page_num:this.page_info.page_num,
             page_size: this.page_info.page_size,
             itid:itid,
-            nestatus:'',
+            nestatus:'usual',
             kw:this.$route.query.kw
           }
         }).then(res => {
