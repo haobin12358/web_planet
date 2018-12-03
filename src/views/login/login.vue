@@ -5,7 +5,7 @@
     <div  class="m-login-input" >
       <input type="text" v-model="ustelphone" placeholder="请输入手机号码">
       <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
-      <span class="m-code cancel" v-else>{{count}}60秒后重新发送</span>
+      <span class="m-code cancel" v-else>{{count}}秒后重新发送</span>
     </div>
     <div type="text" class="m-login-input" >
       <input type="text" v-model="identifyingcode" placeholder="请输入验证码">
@@ -85,9 +85,10 @@
           }
         });
       },
+      // 是否是微信自带的浏览器
       isWeiXin() {
-        let ua = window.navigator.userAgent.toLowerCase();
         // mozilla/5.0 (iphone; cpu iphone os 9_1 like mac os x) applewebkit/601.1.46 (khtml, like gecko)version/9.0 mobile/13b143 safari/601.1
+        let ua = window.navigator.userAgent.toLowerCase();
         // console.log(ua);
 
         if(ua.match(/MicroMessenger/i) == 'micromessenger') {
@@ -104,11 +105,11 @@
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
           if(res.data.status == 200){
             console.log(res.data);
-            // const id = res.data.data.appId;
-            // const url = window.location.href;
-            // // const  url = 'https://daaiti.cn/WeiDian/#/login';
-            // window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-            //   + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+            const id = res.data.data.appId;
+            const url = window.location.href;
+            // const  url = 'https://daaiti.cn/WeiDian/#/login';
+            window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
+              + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
           }
         }).catch((error) => {
           console.log(error ,'1111')
