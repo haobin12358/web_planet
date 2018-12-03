@@ -23,7 +23,7 @@
         <div class="m-video-box" v-if="news_info.video" v-on:click="playVideo()">
           <img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">
           <video :src="news_info.video.nvvideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
-          <!--<span class="m-video-time">{{news_info.video.nvduration}}</span>-->
+          <span class="m-video-time">{{news_info.video.nvduration}}</span>
           <span class="m-icon-video"></span>
         </div>
       </div>
@@ -39,14 +39,14 @@
           <span>反对 {{news_info.tramplenumber}}</span>
         </span>
       </div>
-      <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论</span>
+      <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论 {{news_info.commentnumber}}</span>
     </div>
 
     <div class="m-comment-modal" v-if="show_modal">
       <div class="m-modal-state">
         <span class="m-icon-close" @click="changeModal('show_modal',false)"></span>
         <div class="m-modal-content">
-           <h3>全部 {{total_count}} 条评论</h3>
+           <h3>全部 {{comment_count}} 条评论</h3>
           <div class="m-scroll" ref="comment" @touchmove.stop="touchMove">
             <ul class="m-comment-ul">
               <li v-for="(items,index) in comment_list">
@@ -118,6 +118,7 @@
         },
         isScroll:true,
         total_count:0,
+        comment_count:0,
         bottom_show:false,
         comment_list:null,
         comment_one :null,
@@ -169,6 +170,9 @@
         }).then(res => {
           if(res.data.status == 200){
             this.news_info = res.data.data;
+            if(res.data.data.commentnumber > 99) {
+              this.news_info.commentnumber = "99+";
+            }
           }
         })
       },
@@ -204,6 +208,7 @@
               }
               this.page_info.page_num = this.page_info.page_num + 1;
               this.total_count = res.data.total_count;
+              this.comment_count = res.data.comment_count;
             }else{
               this.comment_list = null;
               this.page_info.page_num = 1;
@@ -393,7 +398,7 @@
       }
       .m-video-time{
         position: absolute;
-        bottom: 4px;
+        bottom: -150px;
         right: 13px;
         color: #fff;
       }
@@ -561,7 +566,7 @@
   }
   .m-circle-comment{
     display: block;
-    width: 67px;
+    width: 90px;
     height: 45px;
     line-height: 45px;
     font-size: 24px;
