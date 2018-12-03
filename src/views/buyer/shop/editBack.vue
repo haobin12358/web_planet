@@ -50,12 +50,12 @@
           <textarea name="" id="" v-model="oraaddtion" placeholder="选填"></textarea>
         </div>
         <div class="m-selectBack-img-box">
-          <div class="m-selectBack-camera" @click="uploadImg">
-            <input type="file" name="file"  class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif" multiple="" @change="uploadImg">
-          </div>
           <template v-for="(item,index) in img_box">
             <img :src="item" alt="">
           </template>
+          <div class="m-selectBack-camera">
+            <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg" ref="imgUpload">
+          </div>
 
         </div>
       </div>
@@ -153,9 +153,9 @@
         console.log(this.refund_slot[0].values);
       },
       //上传图片
-      uploadImg(e){
-       if( this.img_box && this.img_box.length == 4){
-         Toast('最多只可上传4长图片');
+      uploadImg(e) {
+       if(this.img_box && this.img_box.length == 4) {
+         Toast('最多只可上传4张图片');
          return false;
        }
         let files = e.target.files || e.dataTransfer.files;
@@ -165,13 +165,14 @@
         let that = this;
         let form = new FormData();
         form.append("file", files[0]);
-        axios.post(api.upload_file+'?token='+localStorage.getItem('token'),form).then(res => {
+        axios.post(api.upload_file+'?type=productBack&token='+localStorage.getItem('token'),form).then(res => {
           if(res.data.status == 200){
             this.upload_img.push(res.data.data);
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.img_box.push(this.result);
-            }
+            };
+            this.$refs.imgUpload.value = "";
           }
         })
       },
@@ -301,21 +302,21 @@
         .m-selectBack-img-box{
           margin-bottom: 30px;
           .m-selectBack-camera{
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             background: url('/static/images/icon-camera-text.png') no-repeat;
             background-size: 100% 100%;
             display: inline-block;
-            margin-right: 20px;
+            margin-right: 15px;
             position: relative;
             margin-bottom: 20px;
           }
           img{
             display: inline-block;
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             margin-bottom: 20px;
-            margin-right: 20px;
+            margin-right: 15px;
           }
         }
 
@@ -324,7 +325,7 @@
     }
     .m-foot-btn{
       text-align: center;
-      margin-top: 250px;
+      padding: 100px 0;
       span{
         display: inline-block;
         width: 700px;
@@ -339,12 +340,11 @@
     }
   }
   .m-upload-input{
-      position: absolute;
-      font-size: 100px;
-      right: 0;
-      top: 0;
-      opacity: 0;
-      width: 220px;
-      height: 220px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 200px;
+    height: 200px;
   }
 </style>
