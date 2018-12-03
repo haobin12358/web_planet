@@ -165,83 +165,80 @@
         this.getOneAddress();
         this.getCoupon();
       },
-        methods: {
-          // 跳转其他页面的方法
-          changeRoute(v, where) {
-            if(where) {
-              this.$router.push({ path: v, query: { from: where }});
-            }else {
-              this.$router.push(v);
-            }
-          },
-          /*获取默认地址*/
-          getOneAddress(){
-            let params = { token: localStorage.getItem('token') };
-            if(this.uaid) {
-              params.uaid = this.uaid;
-            }
-            axios.get(api.get_one_address, { params: params }).then(res => {
-              if(res.data.status == 200){
-                this.address_info = res.data.data;
-                this.uaid = res.data.data.uaid;
-                localStorage.removeItem('uaid');      // 使用过uaid后将其删除
-              }else{
-                this.address_info.uaname = "没有地址信息，请点此添加";
-              }
-            });
-          },
-          /*获取优惠券*/
-          getCoupon() {
-            let params = {
-              token: localStorage.getItem('token'),
-              ucalreadyuse: false,
-              canuse: true
-            };
-            axios.get(api.list_user_coupon, { params: params }).then(res => {
-              if(res.data.status == 200){
-                this.couponList = [];
-                for(let i = 0; i < res.data.data.length; i ++) {
-                  if(res.data.data[i].coupon.title_subtitle.left_text.length > 8) {
-                    res.data.data[i].coupon.title_subtitle.left_text = res.data.data[i].coupon.title_subtitle.left_text.substr(0, 8) + "..";
-                  }
-                  this.couponList.push(res.data.data[i].coupon);
-                }
-              }
-            })
-          },
-          /*改变模态框*/
-          changeModel(v,bool){
-            this[v] = bool;
-          },
-          /*选择显示隐藏*/
-          pickerSave(v,bool){
-            this[v] = bool
-          },
-          /*搜索*/
-          inputChange(v){
-            console.log(v)
-          },
-          // 提交并调起支付
-          submitOrder() {
-            if(!this.uaid) {
-              Toast("请先选择收货地址");
-              return false;
-            }
-            // 是从商家大礼包来结算的则弹出popup
-            if(this.fromGift) {
-              this.giftPopup = true;
-            }
-            alert("success");
-          },
-          /*优惠券选择*/
-          couponClick(item){
-            this.coupon_info = item;
-            this.show_coupon = false;
+      methods: {
+        // 跳转其他页面的方法
+        changeRoute(v, where) {
+          if(where) {
+            this.$router.push({ path: v, query: { from: where }});
+          }else {
+            this.$router.push(v);
           }
         },
-        created() {
-
+        /*获取默认地址*/
+        getOneAddress(){
+          let params = { token: localStorage.getItem('token') };
+          if(this.uaid) {
+            params.uaid = this.uaid;
+          }
+          axios.get(api.get_one_address, { params: params }).then(res => {
+            if(res.data.status == 200){
+              this.address_info = res.data.data;
+              this.uaid = res.data.data.uaid;
+              localStorage.removeItem('uaid');      // 使用过uaid后将其删除
+            }else{
+              this.address_info.uaname = "没有地址信息，请点此添加";
+            }
+          });
+        },
+        /*获取优惠券*/
+        getCoupon() {
+          let params = {
+            token: localStorage.getItem('token'),
+            ucalreadyuse: false,
+            canuse: true
+          };
+          axios.get(api.list_user_coupon, { params: params }).then(res => {
+            if(res.data.status == 200){
+              this.couponList = [];
+              for(let i = 0; i < res.data.data.length; i ++) {
+                if(res.data.data[i].coupon.title_subtitle.left_text.length > 8) {
+                  res.data.data[i].coupon.title_subtitle.left_text = res.data.data[i].coupon.title_subtitle.left_text.substr(0, 8) + "..";
+                }
+                this.couponList.push(res.data.data[i].coupon);
+              }
+            }
+          })
+        },
+        /*改变模态框*/
+        changeModel(v,bool){
+          this[v] = bool;
+        },
+        /*选择显示隐藏*/
+        pickerSave(v,bool){
+          this[v] = bool
+        },
+        /*搜索*/
+        inputChange(v){
+          console.log(v)
+        },
+        // 提交并调起支付
+        submitOrder() {
+          if(!this.uaid) {
+            Toast("请先选择收货地址");
+            return false;
+          }
+          // 是从商家大礼包来结算的则弹出popup
+          if(this.fromGift) {
+            this.giftPopup = true;
+          }
+          alert("success");
+        },
+        /*优惠券选择*/
+        couponClick(item){
+          this.coupon_info = item;
+          this.show_coupon = false;
         }
+      }
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
@@ -249,7 +246,7 @@
 .m-submitOrder{
   min-height: 100%;
   background-color: #eee;
-  padding: 17px 25px 200px;
+  padding: 17px 25px 100px 25px;
   color: #333;
   .m-icon-more{
     display: inline-block;
@@ -392,7 +389,7 @@
   .m-order-btn{
     padding: 0;
     width: 700px;
-    margin-top: 120px;
+    margin-top: 100px;
     span{
       display: inline-block;
       width: 700px;
