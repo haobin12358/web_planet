@@ -51,6 +51,10 @@
             <span>336.00
             <span class="m-order-up"></span></span>
           </p>
+          <p class="m-order-all">
+            <span>全部交易额</span>
+            <span class="m-order-price">￥336.00</span>
+          </p>
         </li>
         <li>
           <div class="m-icon-price-box">
@@ -64,6 +68,10 @@
             <span>昨日</span>
             <span>336.00
             <span class="m-order-up m-down"></span></span>
+          </p>
+          <p class="m-order-all">
+            <span>全部订单数</span>
+            <span >336</span>
           </p>
         </li>
         <li>
@@ -217,6 +225,7 @@
     /*height: 190px;*/
     li{
       width: 24%;
+      height: 2rem;
       padding: 0.4rem 0.5rem 0.24rem;
       border-right: 1px solid @borderColor;
       &:last-child{
@@ -269,6 +278,16 @@
             background: url("../../common/images/icon-order-down.png") no-repeat;
             background-size: 100% 100%;
           }
+        }
+      }
+      .m-order-all{
+        border-top: 1px solid @borderColor;
+        padding: 0.1rem 0.1rem 0.1rem 0;
+        font-size: 0.18rem;
+        margin-top: 0.2rem;
+        .flex-row(space-between);
+        .m-order-price{
+            color: #D80000;
         }
       }
     }

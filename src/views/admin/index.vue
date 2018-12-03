@@ -21,7 +21,7 @@
       </div>
 
       <div class="m-content">
-        <el-table :data="admin_data" class="m-table" stripe  :default-sort = "{prop: 'logintime', order: 'descending'}" style="width: 100%">
+        <el-table :data="admin_data" v-loading="loading" class="m-table" stripe  :default-sort = "{prop: 'logintime', order: 'descending'}" style="width: 100%">
           <el-table-column align="center" prop="adnum" label="用户编号" ></el-table-column>
           <el-table-column align="center" prop="adname" label="用户名"></el-table-column>
           <el-table-column align="center" prop="adtelphone"  label="手机号" ></el-table-column>
@@ -105,7 +105,8 @@
             },
             admin_data:[],
             total_page:0,
-            level:[]
+            level:[],
+            loading:false
           }
         },
       components:{
@@ -118,6 +119,7 @@
       methods:{
         //  获取会员列表
         getAdmin(num){
+          this.loading = true;
           axios.get(api.get_admin_list,{
             params: {
               token: localStorage.getItem('token'),
@@ -131,6 +133,7 @@
                 }
                 this.admin_data = [].concat(arr);
                 this.total_page = res.data.total_page;
+                this.loading = false;
               }else{
                 this.$message.error(res.data.message);
               }
