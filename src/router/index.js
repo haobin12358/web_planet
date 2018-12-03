@@ -104,7 +104,14 @@ export const constantRouterMap = [
       component: () => import('../views/member/index'),
       name: 'member',
       meta: { title: 'member', icon: 'member', noCache: true }
-    }
+    },
+      {
+        path: 'addSupplier',
+        component: () => import('../views/member/addSupplier'),
+        name: 'addSupplier',
+        meta: { title: 'addSupplier', icon: 'addSupplier', noCache: true }
+      }
+
     ],
   },
   {
@@ -226,18 +233,6 @@ export const constantRouterMap = [
     ],
   },
   {
-    path: '/stock',
-    component: Layout,
-    redirect: '',
-    children: [{
-      path: '',
-      component: () => import('../views/stock/index'),
-      name: 'stock',
-      meta: { title: 'stock', icon: 'stock', noCache: true }
-    }
-    ],
-  },
-  {
     path: '/activity',
     component: Layout,
     redirect: '',
@@ -248,7 +243,19 @@ export const constantRouterMap = [
       meta: { title: 'activity', icon: 'activity', noCache: true }
     }
     ],
-  }
+  } ,
+  {
+    path: '/set',
+    component: Layout,
+    redirect: '',
+    children: [{
+      path: '',
+      component: () => import('../views/set/index'),
+      name: 'set',
+      meta: { title: 'set', icon: 'set', noCache: true }
+    }
+    ],
+  },
 ]
 
 export default new Router({

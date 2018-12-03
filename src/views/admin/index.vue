@@ -29,7 +29,7 @@
           <el-table-column align="center" prop="logintime" sortable label="最近登录时间" column-key="logintime" ></el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
-              <el-popover trigger="click" placement="left" >
+              <el-popover trigger="manual" placement="left" v-model="admin_data[scope.$index].click">
                 <div class="m-absolute-modal">
                   <p>{{scope.row.adname}}管理员数据管理</p>
                   <div class="m-admin-input-box">
@@ -47,7 +47,7 @@
                   </div>
                   <div class="m-modal-btn-box">
                     <span class="m-btn active" @click="saveChange(scope.$index,true,scope.row)">保存</span>
-                    <span class="m-btn " @click="saveChange(scope.$index,false)">取消</span>
+                    <span class="m-btn"  @click="saveChange(scope.$index,false)">取消</span>
                   </div>
                 </div>
                 <span class="m-table-link m-bd name-wrapper" slot="reference"  @click="manageClick(scope.$index)">管理</span>
@@ -144,11 +144,11 @@
               level.push({text:res.data.data[key],value:res.data.data[key],code:key})
             }
             this.level = [].concat(level);
+            console.log(this.level,'adadssa')
           })
         },
         //筛选
         filterTag(value, row) {
-          console.log(value,row)
           return row.adlevel === value;
         },
         // /点击管理
@@ -174,10 +174,10 @@
                 params.adlevel = this.level[i].code
               }
             }
+            console.log(params,this.level)
             axios.post(api.update_admin+'?token='+localStorage.getItem('token'),params).then(res => {
               if(res.data.status == 200){
                 arr[index].click = false;
-                console.log(arr[index].click)
                 this.admin_data = [].concat(arr);
                 this.$notify.success(res.data.message)
               }else{
@@ -186,8 +186,9 @@
             })
           }else{
             arr[index].click = false;
+            this.admin_data = [].concat(arr);
           }
-          this.admin_data = [].concat(arr);
+
         },
         //分页
         pageChange(num){
