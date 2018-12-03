@@ -77,7 +77,7 @@
   import navList from '../../../components/common/navlist';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import { MessageBox } from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
 
     export default {
@@ -204,14 +204,18 @@
           }
         },
         //取消订单
-        cancelOrder(item){
-          axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
-            omid:item.omid
-          }).then(res => {
-            if(res.data.status == 200){
-              this.reload();
-            }
-          })
+        cancelOrder(item) {
+          MessageBox.confirm('是否取消该订单？').then(() => {
+            axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
+              omid:item.omid
+            }).then(res => {
+              if(res.data.status == 200){
+                this.reload();
+              }
+            });
+          }).catch(() => {
+
+          });
         }
       }
     }
