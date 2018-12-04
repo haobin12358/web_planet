@@ -12,9 +12,9 @@
 </template>
 
 <script>
-    export default {
-        name: "bottom-service"
-    }
+  export default {
+    name: "bottom-service"
+  }
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
@@ -24,7 +24,7 @@
   background-color: #FCD316;
   height: 86px;
   line-height: 86px;
-  margin: 200px 25px 50px;
+  margin: 150px 25px 50px 25px;
   padding: 10px 0;
   .m-foot-btn{
     display: inline-block;
