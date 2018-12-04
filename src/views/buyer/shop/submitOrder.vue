@@ -144,15 +144,15 @@
         }
       },
       components: { picker, coupon },
-      mounted(){
+      mounted() {
         common.changeTitle('下单');
         // console.log(JSON.parse(this.$route.query.product));
-        if(this.$route.query.product){
+        if(this.$route.query.product) {
           this.product_info = JSON.parse(this.$route.query.product);
           let total = 0;
-          for(let i=0;i<this.product_info.length;i++){
-            for(let j=0;j<this.product_info[i].cart.length;j++){
-              total = total+Number(this.product_info[i].cart[j].sku.skuprice)*this.product_info[i].cart[j].canums ;
+          for(let i = 0; i < this.product_info.length; i ++) {
+            for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+              total = total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
             }
           }
           this.total_money = total;
