@@ -16,6 +16,9 @@ const api={
   get_omfilter: title + 'order/get_omfilter',//获取订单filter
   update_order_status: title + 'order/update_order_status',//更新订单状态
 
+  update_activity: title + 'activity/update', //  修改活动基础信息
+  add_commodity: title + 'commodity/add', //  添加试用商品
+
 }
 
 export default api

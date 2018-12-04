@@ -75,8 +75,6 @@
         <el-button type="primary" @click="dialogQaVisible = false">确 定</el-button>
       </div>
     </el-dialog>
-
-
   </div>
 </template>
 
