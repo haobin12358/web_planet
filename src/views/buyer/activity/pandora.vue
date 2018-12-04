@@ -75,7 +75,7 @@
         name: '',
         boxPopup: false,            // 点击魔盒的popup
         record: true,
-        rule: {}
+        rule: { infos: { skuprice: "", gearsone: [], gearstwo: [], gearsthree: [] }}
       }
     },
     components: {},
