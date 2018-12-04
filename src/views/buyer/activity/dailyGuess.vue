@@ -91,7 +91,7 @@
         successPopup: false,   // 猜对啦
         failPopup: false,      // 猜错啦
         hour: false,           // 当前的小时是否在竞猜时间内
-        rule: {}
+        rule: { acdesc: [] }
       }
     },
     components: {},
