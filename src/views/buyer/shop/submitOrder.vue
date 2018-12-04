@@ -23,67 +23,70 @@
         </div>
         <span class="m-icon-more"></span>
       </div>
-      <div class="m-one-part">
-        <div v-for="(items,index) in product_info">
-          <h3>{{items.pb.pbname}}</h3>
-          <div class="m-product" v-for="(item,i) in items.cart">
-            <div>
-              <img :src="item.sku.skupic" class="m-product-img" alt="">
-            </div>
-            <div>
-              <h3>{{item.product.prtitle}}</h3>
-              <p class="m-sku-select">
-                <template v-for="(key,k) in item.sku.skuattritedetail" >
-                  <span >{{key}}</span>
-                  <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
-                </template>
-              </p>
-              <p class="m-price-num">
-                <span class="m-price">￥{{item.sku.skuprice | money}}</span>
-                <span>x{{item.canums}}</span>
-              </p>
-            </div>
+      <div class="m-one-part" v-for="(items, index) in product_info">
+        <h3>{{items.pb.pbname}}</h3>
+        <div class="m-product" v-for="(item, i) in items.cart">
+          <div>
+            <img :src="item.sku.skupic" class="m-product-img" alt="">
+          </div>
+          <div>
+            <h3>{{item.product.prtitle}}</h3>
+            <p class="m-sku-select">
+              <template v-for="(key,k) in item.sku.skuattritedetail" >
+                <span >{{key}}</span>
+                <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
+              </template>
+            </p>
+            <p class="m-price-num">
+              <span class="m-price">￥{{item.sku.skuprice | money}}</span>
+              <span>x{{item.canums}}</span>
+            </p>
           </div>
         </div>
-
-      </div>
-      <div class="m-one-part">
         <ul class="m-order-ul">
           <li class="m-sku-num">
             <span>商品金额</span>
             <div class="m-num ">
-              ￥{{total_money | money}}
+              ￥{{items.total | money}}
             </div>
           </li>
           <li class="m-flex-between">
             <span>配送方式</span>
             <div @click="changeModel('show_picker',true)">
               <span>快递:包邮</span>
-              <span class="m-icon-more"></span>
+              <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
           <li class="m-message">
             <span>买家留言：</span>
-            <textarea name="" id=""></textarea>
+            <textarea  v-model="items.ommessage" id=""></textarea>
             <!--<textarea name="" id=""  placeholder="选填"></textarea>-->
           </li>
           <li class="m-flex-between">
             <span>优惠方式</span>
-            <div v-if="couponList" @click="changeModel('show_coupon',true)">
-                <span class="m-grey" v-if="coupon_info">{{coupon_info.coname}}</span>
-                <span v-else>选择优惠券</span>
-                <span class="m-icon-more"></span>
+            <div v-if="couponList" @click="changeModel('show_coupon',true, index + 1)">
+              <span class="m-grey" v-if="items.coupon_info">{{items.coupon_info.coname}}</span>
+              <span v-else>选择优惠券</span>
+              <span class="m-icon-more"></span>
             </div>
             <div v-else>
-              <span >无优惠券</span>
-              <!--<span class="m-icon-more"></span>-->
+              <span>无优惠券</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="m-one-part">
+        <ul class="m-order-ul">
+          <li class="m-sku-num">
+            <span>总计金额</span>
+            <div class="m-num ">
+              ￥{{total_money | money}}
             </div>
           </li>
           <li class="m-flex-between">
             <span>付款方式</span>
             <div>
               <span>微信</span>
-              <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
         </ul>
@@ -99,7 +102,6 @@
       <div class="m-order-btn">
         <span @click="submitOrder" ref="button">支付订单</span>
       </div>
-      <!--<picker :show_picker="show_picker" :params="picker_params" :is_search="true"  :slots="slots" @pickerSave="pickerSave" @inputChange="inputChange"></picker>-->
 
       <mt-popup v-model="show_coupon" popup-transition="popup-fade" class="m-coupon-modal">
         <div class="m-coupon-modal-content">
@@ -113,7 +115,6 @@
 
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
-  import picker from '../../../components/common/picker';
   import axios from 'axios';
   import api from '../../../api/api';
   import {Toast} from 'mint-ui';
@@ -135,7 +136,7 @@
           ],
           picker_params: 'company',
           address_info: {},
-          coupon_info: null,
+          index: "",                // 暂存点击的是哪个商家的优惠券
           total_money: 0,
           uaid: "",                 // 收货地址id
           couponList: [],           // 优惠券list
@@ -143,22 +144,23 @@
           giftPopup: false,         // 商家大礼包支付后的popup
         }
       },
-      components: { picker, coupon },
+      components: { coupon },
       mounted() {
         common.changeTitle('下单');
-        // console.log(JSON.parse(this.$route.query.product));
         if(this.$route.query.product) {
           this.product_info = JSON.parse(this.$route.query.product);
           let total = 0;
           for(let i = 0; i < this.product_info.length; i ++) {
+            this.product_info[i].total = 0;
+            this.product_info[i].coupon_info = { coid: "" };
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
-              total = total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
+              this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
             }
+            this.total_money = this.total_money + this.product_info[i].total;
           }
-          this.total_money = total;
           // 判断是否是从商家大礼包来结算的
           if(this.$route.query.gift) {
-            this.fromGift = true
+            this.fromGift = true;
           }
         }
         this.uaid = localStorage.getItem("uaid");
@@ -174,8 +176,8 @@
             this.$router.push(v);
           }
         },
-        /*获取默认地址*/
-        getOneAddress(){
+        // 获取默认地址
+        getOneAddress() {
           let params = { token: localStorage.getItem('token') };
           if(this.uaid) {
             params.uaid = this.uaid;
@@ -190,7 +192,7 @@
             }
           });
         },
-        /*获取优惠券*/
+        // 获取优惠券
         getCoupon() {
           let params = {
             token: localStorage.getItem('token'),
@@ -209,19 +211,19 @@
             }
           })
         },
+        // 选择优惠券
+        couponClick(item) {
+          this.product_info[this.index].coupon_info = item;
+          this.show_coupon = false;
+        },
         /*改变模态框*/
-        changeModel(v,bool){
+        changeModel(v,bool, index) {
           this[v] = bool;
+          if(index) {
+            this.index = index - 1;
+          }
         },
-        /*选择显示隐藏*/
-        pickerSave(v,bool){
-          this[v] = bool
-        },
-        /*搜索*/
-        inputChange(v){
-          console.log(v)
-        },
-        // 提交并调起支付
+        // 创建订单并调起支付
         submitOrder() {
           if(!this.uaid) {
             Toast("请先选择收货地址");
@@ -231,12 +233,31 @@
           if(this.fromGift) {
             this.giftPopup = true;
           }
-          alert("success");
-        },
-        /*优惠券选择*/
-        couponClick(item){
-          this.coupon_info = item;
-          this.show_coupon = false;
+          let params = {
+            omfrom: this.$route.query.from || "10",
+            omclient: "0",
+            uaid: this.uaid,
+            opaytype: "0",
+            info: []
+          };
+          for(let i = 0; i < this.product_info.length; i ++) {
+            params.info[i] = {
+              pbid: this.product_info[i].pb.pbid,
+              ommessage: this.product_info[i].ommessage || "",
+              coupons: [this.product_info[i].coupon_info.coid],
+              skus: []
+            };
+            for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+              let sku = {
+                skuid: this.product_info[i].cart[j].skuid,
+                nums: this.product_info[i].cart[j].canums
+              };
+              params.info[i].skus.push(sku);
+            }
+          }
+          console.log(params);
+
+
         }
       }
     }
@@ -256,7 +277,7 @@
     background-size: 100% 100%;
     vertical-align: middle;
   }
-  .m-one-part{
+  .m-one-part {
     width: 612px;
     padding: 16px 44px 22px;
     background-color: #fff;
@@ -312,12 +333,13 @@
       font-size: 24px;
       font-weight: 400;
       color: #333;
+      margin-top: 10px;
     }
     .m-product{
       display: flex;
       flex-flow: row;
       justify-content: flex-start;
-      margin-top: 30px;
+      margin-top: 20px;
       h3{
         margin: 0;
       }
@@ -357,9 +379,9 @@
       flex-flow: row;
       textarea{
         display: block;
-        min-height: 100px;
+        min-height: 50px;
         width: 400px;
-        padding: 0 40px 10px;
+        padding: 0 20px 10px 20px;
       }
     }
   }
@@ -411,6 +433,7 @@
     overflow-y: auto;
     padding-bottom: 40px;
     .m-coupon-modal-content{
+      width: 750px;
       padding: 40px 0;
     }
   }
