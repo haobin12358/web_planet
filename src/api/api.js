@@ -22,6 +22,7 @@ const api={
   cart_list: title + 'cart/list',                                // 购物车列表
   cart_destroy: title + 'cart/destroy',                          // 清空购物车
   order_create: title + 'order/create',                          // 创建订单
+  order_coupons: title + 'order/order_coupons',                  // 获取提交订单时候可以使用的优惠券
   order_list: title + 'order/list',                              // 获取订单列表
   order_pay: title + 'order/pay',                                // 订单支付
   order_get: title + 'order/get',                                // 订单详情

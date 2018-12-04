@@ -46,7 +46,7 @@
         <ul class="m-order-ul">
           <li class="m-sku-num">
             <span>商品金额</span>
-            <div class="m-num ">
+            <div class="m-num m-price">
               ￥{{items.total | money}}
             </div>
           </li>
@@ -64,13 +64,13 @@
           </li>
           <li class="m-flex-between" @click="changeModel('show_coupon',true, index + 1)">
             <span>优惠方式</span>
-            <div v-if="couponList">
-              <span class="m-grey" v-if="items.coupon_info">{{items.coupon_info.coname}}</span>
-              <span v-else>选择优惠券</span>
+            <div v-if="items.couponList.length > 0">
+              <span class="m-grey" v-if="items.coupon_info.coname">{{items.coupon_info.coname}}</span>
+              <span v-else>请选择优惠券</span>
               <span class="m-icon-more"></span>
             </div>
             <div v-else>
-              <span>无优惠券</span>
+              <span>暂无优惠券</span>
             </div>
           </li>
         </ul>
@@ -79,7 +79,7 @@
         <ul class="m-order-ul">
           <li class="m-sku-num">
             <span>总计金额</span>
-            <div class="m-num ">
+            <div class="m-num m-price">
               ￥{{total_money | money}}
             </div>
           </li>
@@ -158,6 +158,7 @@
           let total = 0;
           for(let i = 0; i < this.product_info.length; i ++) {
             this.product_info[i].total = 0;
+            this.product_info[i].couponList = [];
             this.product_info[i].coupon_info = { caid: [] };
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
               this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
@@ -171,8 +172,8 @@
         }
         this.from = this.$route.query.from;
         this.uaid = localStorage.getItem("uaid");
+        this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
         this.getOneAddress();
-        this.getCoupon();
       },
       methods: {
         // 跳转其他页面的方法
@@ -199,35 +200,47 @@
             }
           });
         },
-        // 获取优惠券
+        // 获取提交订单时候可以使用的优惠券
         getCoupon() {
-          let params = {
-            token: localStorage.getItem('token'),
-            ucalreadyuse: false,
-            canuse: true
-          };
-          axios.get(api.list_user_coupon, { params: params }).then(res => {
-            if(res.data.status == 200){
-              this.couponList = [];
-              for(let i = 0; i < res.data.data.length; i ++) {
-                if(res.data.data[i].coupon.title_subtitle.left_text.length > 8) {
-                  res.data.data[i].coupon.title_subtitle.left_text = res.data.data[i].coupon.title_subtitle.left_text.substr(0, 8) + "..";
-                }
-                this.couponList.push(res.data.data[i].coupon);
-              }
+          for(let i = 0; i < this.product_info.length; i ++) {
+            this.product_info[i].params = {
+              pbid: this.product_info[i].pb.pbid,
+              skus: []
+            };
+            for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+              let sku = {
+                skuid: this.product_info[i].cart[j].skuid,
+                nums: this.product_info[i].cart[j].canums
+              };
+              this.product_info[i].params.skus.push(sku);
             }
-          })
+            axios.post(api.order_coupons + '?token=' + localStorage.getItem('token'), this.product_info[i].params).then(res => {
+              if(res.data.status == 200) {
+                for(let n = 0; n < res.data.data.length; n ++) {
+                  if(res.data.data[n].coupon.title_subtitle.left_text.length > 8) {
+                    res.data.data[n].coupon.title_subtitle.left_text = res.data.data[n].coupon.title_subtitle.left_text.substr(0, 8) + "..";
+                  }
+                  res.data.data[n].coupon.reduce = res.data.data[n].reduce;
+                  this.product_info[i].couponList.push(res.data.data[n].coupon);
+                  this.product_info = this.product_info.concat();
+                }
+              }
+            });
+          }
         },
         // 选择优惠券
         couponClick(item) {
           this.product_info[this.index].coupon_info = item;
           this.show_coupon = false;
+          this.product_info[this.index].total = this.product_info[this.index].total - item.reduce;
+          this.total_money = this.total_money - item.reduce;
         },
         /*改变模态框*/
-        changeModel(v,bool, index) {
+        changeModel(v, bool, index) {
           this[v] = bool;
           if(index) {
             this.index = index - 1;
+            this.couponList = this.product_info[this.index].couponList;
           }
         },
         // 试用商品
