@@ -125,7 +125,8 @@
   import bottom from '../components/bottomService';
   import axios from 'axios';
   import api from '../../../api/api';
-  import {Toast} from 'mint-ui';
+  import { MessageBox } from 'mint-ui';
+
     export default {
        data(){
          return{
@@ -191,16 +192,19 @@
             }
           })
         },
-        //取消订单
-        cancelOrder(){
-          axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
-            omid:this.$route.query.omid
-          }).then(res => {
-            if(res.data.status == 200){
-              this.reload();
-            }
-          })
+        // 取消订单
+        cancelOrder() {
+          MessageBox.confirm('是否取消该订单？').then(() => {
+            axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
+              omid:this.$route.query.omid
+            }).then(res => {
+              if(res.data.status == 200){
+                this.reload();
+              }
+            })
+          }).catch(() => {
 
+          });
         }
       }
     }
