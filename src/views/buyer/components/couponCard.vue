@@ -135,6 +135,7 @@
           .m-detail-btn {
             width: 96px;
             height: 25px;
+            text-align: center;
             line-height: 29px;
             font-size: 22px;
             padding: 5px 16px;

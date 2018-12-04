@@ -18,7 +18,6 @@
         <img :src="item.niimage" class="m-circle-img" alt="">
       </template>
       <div class="m-content">
-        <!--<h3>健身的注意事项</h3>-->
         <p>{{news_info.netext}}</p>
         <div class="m-video-box" v-if="news_info.video" v-on:click="playVideo()">
           <img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">
@@ -40,6 +39,16 @@
         </span>
       </div>
       <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论 {{news_info.commentnumber}}</span>
+    </div>
+    <div class="m-box">
+      <div class="m-item" v-if="news_info.coupon">
+        <div class="m-box-title">优惠领取</div>
+        <coupon-card :couponList="news_info.coupon" @getCoupon="getCoupon"></coupon-card>
+      </div>
+      <div class="m-item" v-if="news_info.product">
+        <div class="m-box-title m-margin">相关推荐</div>
+        <product :list="news_info.product"></product>
+      </div>
     </div>
 
     <div class="m-comment-modal" v-if="show_modal">
@@ -91,6 +100,9 @@
   import api from '../../../api/api';
   import { Toast,MessageBox} from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
+  import couponCard from '../components/couponCard';
+  import product from '../components/product';
+
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -108,10 +120,10 @@
   })('scroll');
   export default {
     name: "detail",
-    data(){
-      return{
+    data() {
+      return {
         show_modal:false,
-        news_info:null,
+        news_info: { author: {}, coupon: [], product: [] },
         page_info:{
           page_num:1,
           page_size:10
@@ -128,13 +140,11 @@
         timeOutEvent:null
       }
     },
-    components:{
-      bottomLine
-    },
-    mounted(){
+    components: { bottomLine, couponCard, product },
+    mounted() {
       this.getNewsDetail();
     },
-    methods:{
+    methods: {
       // 播放视频
       playVideo() {
         let vdo = document.getElementById("videoPlay");
@@ -169,12 +179,22 @@
           }
         }).then(res => {
           if(res.data.status == 200){
+            console.log(res.data.data.product);
             this.news_info = res.data.data;
             if(res.data.data.commentnumber > 99) {
               this.news_info.commentnumber = "99+";
             }
           }
         })
+      },
+      // 点击领取优惠券
+      getCoupon(index) {
+        axios.post(api.coupon_fetch + '?token=' + localStorage.getItem('token'), { coid: this.news_info.coupon[index].coid }).then(res => {
+          if(res.data.status == 200){
+            Toast("领取成功");
+            this.news_info.coupon[index].ready_collected = true;
+          }
+        });
       },
       /*点赞*/
       isLickClick(v) {
@@ -335,7 +355,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../../common/css/index";
 .m-circle-content{
-  padding: 18px 0 38px 0;
+  padding: 18px 0 150px 0;
   .m-circle-title{
     font-size: 28px;
     font-weight: bold;
@@ -365,7 +385,7 @@
     margin: 14px 0 30px ;
   }
   .m-content{
-    padding: 46px 46px 200px;
+    padding: 46px 46px 200px 46px;
     text-align: left;
     .m-video-box{
       position: relative;
@@ -376,7 +396,7 @@
         height: 360px;
         border-radius: 10px;
         margin-bottom: 20px;
-        border: 1px red solid;
+        /*border: 1px red solid;*/
       }
       .m-video-img{
         position: absolute;
@@ -551,6 +571,7 @@
   }
 }
 .m-circle-foot{
+  box-shadow: 5px 5px 6px 5px rgba(0, 0, 0, 0.16);
   position: fixed;
   z-index: 100;
   bottom: 0;
@@ -606,4 +627,18 @@
     }
   }
 }
+  .m-box {
+    margin: -100px 0 120px 0;
+    .m-item {
+      text-align: left;
+      .m-box-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0 0 15px 46px;
+        &.m-margin {
+          margin: 20px 0 -10px 46px;
+        }
+      }
+    }
+  }
 </style>
