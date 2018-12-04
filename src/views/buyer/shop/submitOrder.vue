@@ -62,9 +62,9 @@
             <textarea  v-model="items.ommessage" id=""></textarea>
             <!--<textarea name="" id=""  placeholder="选填"></textarea>-->
           </li>
-          <li class="m-flex-between">
+          <li class="m-flex-between" @click="changeModel('show_coupon',true, index + 1)">
             <span>优惠方式</span>
-            <div v-if="couponList" @click="changeModel('show_coupon',true, index + 1)">
+            <div v-if="couponList">
               <span class="m-grey" v-if="items.coupon_info">{{items.coupon_info.coname}}</span>
               <span v-else>选择优惠券</span>
               <span class="m-icon-more"></span>
@@ -100,7 +100,7 @@
       </mt-popup>
 
       <div class="m-order-btn">
-        <span @click="submitOrder" ref="button">支付订单</span>
+        <span @click="submitOrder">支付订单</span>
       </div>
 
       <mt-popup v-model="show_coupon" popup-transition="popup-fade" class="m-coupon-modal">
@@ -152,7 +152,7 @@
           let total = 0;
           for(let i = 0; i < this.product_info.length; i ++) {
             this.product_info[i].total = 0;
-            this.product_info[i].coupon_info = { coid: "" };
+            this.product_info[i].coupon_info = { caid: [] };
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
               this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
             }
@@ -234,19 +234,22 @@
             this.giftPopup = true;
           }
           let params = {
-            omfrom: this.$route.query.from || "10",
-            omclient: "0",
+            omfrom: this.$route.query.from || 10,
+            omclient: 0,
             uaid: this.uaid,
-            opaytype: "0",
+            opaytype: 0,
             info: []
           };
           for(let i = 0; i < this.product_info.length; i ++) {
             params.info[i] = {
               pbid: this.product_info[i].pb.pbid,
               ommessage: this.product_info[i].ommessage || "",
-              coupons: [this.product_info[i].coupon_info.coid],
               skus: []
             };
+            params.info[i].coupons = [];
+            if(this.product_info[i].coupon_info.coid) {
+              params.info[i].coupons.push(this.product_info[i].coupon_info.coid);
+            }
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
               let sku = {
                 skuid: this.product_info[i].cart[j].skuid,
@@ -255,9 +258,11 @@
               params.info[i].skus.push(sku);
             }
           }
-          console.log(params);
+          axios.post(api.order_create + "?token=" + localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200){
 
-
+            }
+          });
         }
       }
     }

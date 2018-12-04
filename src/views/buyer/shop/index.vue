@@ -147,7 +147,7 @@
           }
           if(caid.length > 0) {
             this.$router.push({ path: '/submitOrder',
-              query: { product: JSON.stringify(caid), from: "0" }});
+              query: { product: JSON.stringify(caid), from: 0 }});
           }else {
             Toast('请先选择商品');
           }
