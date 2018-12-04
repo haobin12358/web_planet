@@ -42,27 +42,13 @@
               </template>
 
               <ul class="m-order-btn-ul">
-                <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">
-                  退款
-                </li>
-                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35 ">
-                  查看物流
-                </li>
-                <li v-if=" items.omstatus == -40 || items.omstatus == 30">
-                  删除订单
-                </li>
-                <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">
-                  取消订单
-                </li>
-                <li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35 ">
-                  评价
-                </li>
-                <li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">
-                  确认收货
-                </li>
-                <li class="active" v-if="items.omstatus == 0">
-                  立即付款
-                </li>
+                <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
+                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35">查看物流</li>
+                <!--<li v-if=" items.omstatus == -40 || items.omstatus == 30">删除订单</li>-->
+                <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
+                <!--<li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35">评价</li>-->
+                <li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">确认收货</li>
+                <li class="active" v-if="items.omstatus == 0">立即付款</li>
               </ul>
             </div>
           </div>
@@ -78,6 +64,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import bottomLine from '../../../components/common/bottomLine';
+  import { MessageBox } from 'mint-ui';
 
     export default {
       data(){
@@ -212,14 +199,19 @@
             }
           }
         },
-        //取消订单
+        // 取消订单
         cancelOrder(item) {
-          axios.post(api.cancle_order + '?token=' + localStorage.getItem('token'),
-            { omid:item.omid }).then(res => {
-            if(res.data.status == 200) {
-              this.reload();
-            }
-          })
+          MessageBox.confirm('是否取消该订单？').then(() => {
+            this.page_info.page_num = 1;
+            axios.post(api.cancle_order + '?token=' + localStorage.getItem('token'),
+              { omid:item.omid }).then(res => {
+              if(res.data.status == 200) {
+                this.getOrderList();
+              }
+            })
+          }).catch(() => {
+
+          });
         }
       }
     }

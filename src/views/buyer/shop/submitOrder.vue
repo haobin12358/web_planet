@@ -147,7 +147,7 @@
           couponList: [],           // 优惠券list
           fromGift: false,          // 是否是商家大礼包的结算页面
           giftPopup: false,         // 商家大礼包支付后的popup
-          from: ""
+          from: ""                  // undefined是立即购买，0是从购物车结算，activityProduct是试用商品
         }
       },
       components: { coupon },
@@ -172,7 +172,9 @@
         }
         this.from = this.$route.query.from;
         this.uaid = localStorage.getItem("uaid");
-        this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
+        if(this.from !== 'activityProduct') {
+          this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
+        }
         this.getOneAddress();
       },
       methods: {
@@ -209,7 +211,7 @@
             };
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
               let sku = {
-                skuid: this.product_info[i].cart[j].skuid,
+                skuid: this.product_info[i].cart[j].sku.skuid,
                 nums: this.product_info[i].cart[j].canums
               };
               this.product_info[i].params.skus.push(sku);
@@ -264,7 +266,7 @@
             }
           });
         },
-        // 创建订单并调起支付
+        // 购物车或直接购买时创建订单并调起支付
         submitOrder() {
           if(!this.uaid) {
             Toast("请先选择收货地址");
@@ -297,7 +299,7 @@
             }
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
               let sku = {
-                skuid: this.product_info[i].cart[j].skuid,
+                skuid: this.product_info[i].cart[j].sku.skuid,
                 nums: this.product_info[i].cart[j].canums
               };
               params.info[i].skus.push(sku);
