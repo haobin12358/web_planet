@@ -1,6 +1,6 @@
 <template>
     <div class="m-orderDetail">
-       <div class="m-orderDetail-status" v-if="order_info.omstatus ==0">
+       <div class="m-orderDetail-status" v-if="order_info.omstatus == 0">
          <span >买家待付款</span>
          <span class="m-icon-order-status m-pay" ></span>
        </div>
@@ -8,17 +8,17 @@
         <span >买家已取消</span>
         <span class="m-icon-order-status m-pay" ></span>
       </div>
-      <div class="m-orderDetail-status" v-if="order_info.omstatus ==10">
+      <div class="m-orderDetail-status" v-if="order_info.omstatus == 10">
         <span >买家已付款</span>
         <span class="m-icon-order-status m-pay" ></span>
       </div>
-      <div class="m-orderDetail-status" v-if="order_info.omstatus ==20">
+      <div class="m-orderDetail-status" v-if="order_info.omstatus == 20">
         <span >卖家已发货</span>
         <span class="m-icon-order-status m-send" ></span>
       </div>
-      <div class="m-orderDetail-status" v-if="order_info.omstatus ==30 || order_info.omstatus ==35">
+      <div class="m-orderDetail-status" v-if="order_info.omstatus == 30 || order_info.omstatus == 35">
         <span >买家已签收</span>
-        <span class="m-icon-order-status m-send" ></span>
+        <span class="m-icon-order-status m-send"></span>
       </div>
       <div class="m-order-one-part">
         <div class="m-user-text" v-if="logistic_info" @click="changeRoute('/logisticsInformation')">
@@ -53,7 +53,7 @@
           </div>
           <span class="m-red">{{order_info.omstatus_zh}}</span>
         </div>
-        <div v-for="(item,index) in order_info.order_part">
+        <div v-for="(item, index) in order_info.order_part">
           <div class="m-order-product-ul">
             <div class="m-product-info" @click.stop="changeRoute('/product/detail',item)">
               <img :src="item.prmainpic" class="m-product-img" alt="">
@@ -134,24 +134,35 @@
         this.from = this.$route.query.from;
       },
       methods: {
-        changeRoute(v,item) {
-          switch (v){
-            case '/brandDetail':
-              this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
-              break;
-            case '/product/detail':
-              this.$router.push({path:v,query:{prid:item.prid}});
-              break;
-            case '/selectBack':
-              let arr = [] ;
-              arr.push(item)
-              this.$router.push({path:v,query:{product:JSON.stringify(arr)}});
-              break;
-            case '/logisticsInformation':
-              this.$router.push({path:v,query:{omid:this.order_info.omid}});
-              break;
-            default:
-              this.$router.push(v)
+        changeRoute(v, item) {
+          if(this.from !== 'activityProduct') {
+            switch (v) {
+              case '/brandDetail':
+                this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
+                break;
+              case '/product/detail':
+                this.$router.push({ path: v, query: { prid: item.prid }});
+                break;
+              case '/selectBack':
+                let arr = [] ;
+                arr.push(item);
+                this.$router.push({ path: v, query: { product: JSON.stringify(arr) }});
+                break;
+              case '/logisticsInformation':
+                this.$router.push({ path: v, query: { omid: this.order_info.omid }});
+                break;
+              default:
+                this.$router.push(v);
+            }
+          }else {
+            switch (v) {
+              case '/brandDetail':
+                this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
+                break;
+              case '/product/detail':
+                this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid }});
+                break;
+            }
           }
         },
         //获取订单详情
