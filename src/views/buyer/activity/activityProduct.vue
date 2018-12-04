@@ -61,13 +61,11 @@
     methods: {
       // 跳转页面
       changeRoute(v, item) {
-        console.log(item.tcid);
-        // this.$router.push(v);
         this.$router.push({ path: v, query: { tcid: item.tcid }});
       },
       // 商品分享按钮
       productShare() {
-        console.log("share");
+
       },
       // 获取商品
       getProduct() {

@@ -100,7 +100,12 @@
       </mt-popup>
 
       <div class="m-order-btn">
-        <span @click="submitOrder">支付订单</span>
+        <!--试用商品-->
+        <span v-if="from === 'activityProduct'" @click="submitOrderActivityProduct">提交订单</span>
+        <!--<span v-else-if="from === ''" @click="submitOrder">提交订单</span>-->
+        <!--<span v-else-if="from === ''" @click="submitOrder">提交订单</span>-->
+        <!--购物车或直接下单-->
+        <span v-else @click="submitOrder">提交订单</span>
       </div>
 
       <mt-popup v-model="show_coupon" popup-transition="popup-fade" class="m-coupon-modal">
@@ -142,11 +147,12 @@
           couponList: [],           // 优惠券list
           fromGift: false,          // 是否是商家大礼包的结算页面
           giftPopup: false,         // 商家大礼包支付后的popup
+          from: ""
         }
       },
       components: { coupon },
       mounted() {
-        common.changeTitle('下单');
+        common.changeTitle('提交订单');
         if(this.$route.query.product) {
           this.product_info = JSON.parse(this.$route.query.product);
           let total = 0;
@@ -163,6 +169,7 @@
             this.fromGift = true;
           }
         }
+        this.from = this.$route.query.from;
         this.uaid = localStorage.getItem("uaid");
         this.getOneAddress();
         this.getCoupon();
@@ -223,6 +230,27 @@
             this.index = index - 1;
           }
         },
+        // 试用商品
+        submitOrderActivityProduct() {
+          if(!this.uaid) {
+            Toast("请先选择收货地址");
+            return false;
+          }
+          let params = {
+            tcid: this.product_info[0].cart[0].sku.tcid,
+            pbid: this.product_info[0].pb.pbid,
+            skuid: this.product_info[0].cart[0].sku.skuid,
+            omclient: 0,
+            uaid: this.uaid,
+            opaytype: 0,
+            ommessage: this.product_info[0].ommessage || ""
+          };
+          axios.post(api.create_order + "?token=" + localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200){
+
+            }
+          });
+        },
         // 创建订单并调起支付
         submitOrder() {
           if(!this.uaid) {
@@ -234,12 +262,16 @@
             this.giftPopup = true;
           }
           let params = {
-            omfrom: this.$route.query.from || 10,
             omclient: 0,
             uaid: this.uaid,
             opaytype: 0,
             info: []
           };
+          if(this.$route.query.from === undefined) {
+            params.omfrom = 10;
+          }else {
+            params.omfrom = this.$route.query.from;
+          }
           for(let i = 0; i < this.product_info.length; i ++) {
             params.info[i] = {
               pbid: this.product_info[i].pb.pbid,

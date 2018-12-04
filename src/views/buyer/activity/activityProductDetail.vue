@@ -118,6 +118,7 @@
         }
         this.changeModal('show_sku', false);
       },
+      // 立即下单
       buy() {
         if(this.select_value) {
           let product = {};
@@ -126,7 +127,7 @@
           product.cart.push({ product: { prtitle: this.product.tctitle }, sku: this.select_value, canums: "1", prid: this.product.tcid});
           let arr = [];
           arr.push(product);
-          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr)}});
+          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: 'activityProduct' }});
         }else {
           this.changeModal('show_sku', true);
           this.cart_buy = 'buy';

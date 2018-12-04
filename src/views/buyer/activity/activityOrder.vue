@@ -83,16 +83,17 @@
       data(){
         return{
           nav_list: [
-            { active: true, name: "新人首单", count: "0", actype: "0" },
-            { active: false, name: "每日竞猜", count: "0", actype: "1" },
-            { active: false, name: "好友魔盒", count: "0", actype: "2" },
-            { active: false, name: "免费试用", count: "0", actype: "3" }
+            { active: true, name: "新人首单", count: "0", omfrom: 40 },
+            { active: false, name: "每日竞猜", count: "0", omfrom: 30 },
+            { active: false, name: "好友魔盒", count: "0", omfrom: 50 },
+            { active: false, name: "免费试用", count: "0", omfrom: 60 }
           ],
           page_info: { page_num: 1, page_size: 10 },
           isScroll: true,
           total_count: 0,
           bottom_show: false,
-          order_list: []
+          order_list: [],
+          omfrom: 40
         }
       },
       inject: ['reload'],
@@ -100,6 +101,7 @@
       mounted(){
         common.changeTitle('订单列表');
         // this.getOrderNum();               // 获取各状态的订单数量
+        this.getOrderList();
       },
       methods:{
         changeRoute(v,item) {
@@ -134,21 +136,23 @@
           }
           arr[index].active = true;
           this.nav_list = [].concat(arr);
-          this.getOrderList(arr[index].actype);
+          this.page_info.page_num = 1;
+          this.omfrom = arr[index].omfrom;
+          this.getOrderList();
         },
         // 获取订单列表
-        getOrderList(omstatus) {
+        getOrderList() {
           let params = {
             token: localStorage.getItem('token'),
             page_num: this.page_info.page_num,
             page_size: this.page_info.page_size,
-            omstatus: omstatus
+            omfrom: this.omfrom
           };
           axios.get(api.order_list, { params: params }).then(res => {
-            if(res.data.status == 200){
+            if(res.data.status == 200) {
               this.isScroll = true;
-              if(res.data.data.length > 0){
-                if(this.page_info.page_num > 1){
+              if(res.data.data.length > 0) {
+                if(this.page_info.page_num > 1) {
                   this.order_list = this.order_list.concat(res.data.data);
                 }else{
                   this.order_list = res.data.data;
@@ -199,9 +203,9 @@
               if(this.order_list.length == this.total_count){
                 this.bottom_show = true;
               }else{
-                for(let i=0;i<this.nav_list.length;i++){
-                  if(this.nav_list[i].active){
-                    this.getOrderList(this.nav_list[i].status);
+                for(let i = 0; i < this.nav_list.length; i ++) {
+                  if(this.nav_list[i].active) {
+                    this.getOrderList();
                   }
                 }
               }
@@ -209,11 +213,10 @@
           }
         },
         //取消订单
-        cancelOrder(item){
-          axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
-            omid:item.omid
-          }).then(res => {
-            if(res.data.status == 200){
+        cancelOrder(item) {
+          axios.post(api.cancle_order + '?token=' + localStorage.getItem('token'),
+            { omid:item.omid }).then(res => {
+            if(res.data.status == 200) {
               this.reload();
             }
           })
@@ -225,7 +228,6 @@
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../../common/css/index";
   .m-orderList{
-    /*background-color: #eee;*/
     min-height: 100%;
     padding-bottom: 30px;
     .m-nav{
