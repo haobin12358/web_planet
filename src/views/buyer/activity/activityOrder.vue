@@ -91,19 +91,19 @@
         this.getOrderList();
       },
       methods:{
-        changeRoute(v,item) {
+        changeRoute(v, item) {
           switch (v){
             case '/brandDetail':
-              this.$router.push({path:v,query:{pbid:item.pbid}});
+              this.$router.push({ path: v, query: { pbid: item.pbid }});
               break;
             case '/orderDetail':
-              this.$router.push({path:v,query:{omid:item.omid}});
+              this.$router.push({ path: v, query: { omid: item.omid, from: "activityProduct" }});
               break;
             case '/logisticsInformation':
-              this.$router.push({path:v,query:{omid:item.omid}});
+              this.$router.push({ path: v, query: { omid: item.omid }});
               break;
             case '/selectBack':
-              this.$router.push({path:v,query:{product:JSON.stringify(item),allOrder:1}});
+              this.$router.push({ path: v, query: { product: JSON.stringify(item), allOrder: 1 }});
               break;
             default:
               this.$router.push(v)

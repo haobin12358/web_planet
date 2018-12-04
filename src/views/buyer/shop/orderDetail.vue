@@ -87,8 +87,6 @@
             <span @click="changeRoute('/selectBack',item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
           </p>
         </div>
-
-
       </div>
       <div class="m-order-one-part m-box-shadow">
         <p>
@@ -97,25 +95,18 @@
         </p>
         <div class="m-ft-22 m-time-text">
           <p>订单编号：{{order_info.omno}}</p>
-          <p>创建时间：2018-11-05 11:26:00</p>
-          <p>付款时间：2018-11-05 11:27:30</p>
-          <p>发货时间：2018-11-05 11:55:09</p>
+          <p>创建时间：{{order_info.createtime}}</p>
+          <p v-if="order_info.pay_time">付款时间：{{order_info.pay_time}}</p>
+          <p v-if="order_info.send_time">发货时间：{{order_info.send_time}}</p>
         </div>
       </div>
-      <div class="m-align-right">
+      <div class="m-align-right" v-if="from !== 'activityProduct'">
         <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
-        <span v-if="order_info.omstatus == -40 || order_info.omstatus == 30">
-          删除订单
-        </span>
-        <span v-if="order_info.omstatus == 0 " @click="cancelOrder">
-         取消订单
-        </span>
+        <span v-if="order_info.omstatus == -40 || order_info.omstatus == 30">删除订单</span>
+        <span v-if="order_info.omstatus == 0 " @click="cancelOrder">取消订单</span>
         <span class="active" v-if="order_info.omstatus == 10 || order_info.omstatus == 20">确认收货</span>
-        <span class="active" v-if="order_info.omstatus == 0">
-          立即付款
-        </span>
+        <span class="active" v-if="order_info.omstatus == 0">立即付款</span>
       </div>
-
       <bottom></bottom>
     </div>
 </template>
@@ -128,23 +119,22 @@
   import { MessageBox } from 'mint-ui';
 
     export default {
-       data(){
-         return{
-            order_info:'',
-           logistic_info :null
-         }
-       },
-      components:{
-        bottom
+      data() {
+        return {
+          order_info: '',
+          logistic_info: null,
+          from: ""
+        }
       },
-      inject:['reload'],
-      mounted(){
+      components: { bottom },
+      inject: ['reload'],
+      mounted() {
         common.changeTitle('订单详情');
         this.getOrderInfo();
-
+        this.from = this.$route.query.from;
       },
-      methods:{
-        changeRoute(v,item){
+      methods: {
+        changeRoute(v,item) {
           switch (v){
             case '/brandDetail':
               this.$router.push({path:v,query:{pbid:this.order_info.pbid}});
@@ -165,7 +155,7 @@
           }
         },
         //获取订单详情
-        getOrderInfo(){
+        getOrderInfo() {
           axios.get(api.order_get,{
             params:{
               token:localStorage.getItem('token'),
@@ -180,8 +170,8 @@
             }
           })
         },
-      //  获取物流信息
-        getLogistic(){
+        // 获取物流信息
+        getLogistic() {
           axios.get(api.get_logistic,{
             params:{
               omid:this.$route.query.omid
