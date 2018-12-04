@@ -311,7 +311,7 @@
               }
               break;
             case '/brandDetail':
-              this.$router.push({path:v,query:{pbid:item.pbid}});
+              this.$router.push({ path: v, query: { pbid: item.pbid,pbname: item.pbname }});
               break;
             default:
               this.$router.push({path:v,});

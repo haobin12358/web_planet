@@ -137,7 +137,7 @@
         changeRoute(v,item) {
           switch (v){
             case '/brandDetail':
-              this.$router.push({path:v,query:{pbid:this.order_info.pbid}});
+              this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
             case '/product/detail':
               this.$router.push({path:v,query:{prid:item.prid}});

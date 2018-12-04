@@ -37,51 +37,29 @@
   import api from '../../../api/api'
   import {Toast} from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
+
     export default {
-        data(){
-          return{
-            nav_list:[
-              {
-                name:'综合',
-                params:'',
-                active:true
-              },
-              {
-                name:'销量',
-                params:'sale_value',
-                active:false,
-                icon:true,
-                desc_asc:true
-              },
-              {
-                name:'价格',
-                params:'price',
-                icon:true,
-                active:false,
-                desc_asc:true
-              }
-            ],
-            brand_info:null,
-            product_list:null,
-            bottom_show:false,
-            page_info:{
-              page_num:1,
-              page_size:5
-            },
-            isScroll:true,
-            total_count:0,
-            isFold:false
-          }
-        },
-      components:{
-          navList,
-          product,
-        bottomLine
+      data() {
+        return{
+          nav_list: [
+            { name: '综合', params: '', active: true },
+            { name: '销量', params: 'sale_value', active: false, icon: true, desc_asc: true },
+            { name: '价格', params: 'price', icon: true, active: false, desc_asc: true }
+          ],
+          brand_info: null,
+          product_list: null,
+          bottom_show: false,
+          page_info: { page_num: 1, page_size: 5 },
+          isScroll: true,
+          total_count: 0,
+          isFold: false
+        }
       },
-      mounted(){
-          common.changeTitle(this.$route.query.pbname);
-          this.getBrand();
-          this.getProduct();
+      components:{ navList, product, bottomLine },
+      mounted() {
+        common.changeTitle(this.$route.query.pbname);
+        this.getBrand();
+        this.getProduct();
       },
       methods: {
         //滚动加载更多
