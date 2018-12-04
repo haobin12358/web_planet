@@ -8,6 +8,7 @@ const api={
   add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',//添加啊管理员
   get_admin_all_type: title + 'user/get_admin_all_type',//获取管理员身份
   update_admin: title + 'user/update_admin',//更新管理员
+  update_admin_password: title + 'user/update_admin_password',//修改密码
   product_list: title + 'product/list',//获取商品列表
 
   get_order_situation: title + 'order/get_order_situation',//获取订单概况
