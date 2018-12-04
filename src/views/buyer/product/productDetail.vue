@@ -210,8 +210,8 @@
     height: 784px;
     .m-icon-back{
       position: absolute;
-      top: 20px;
-      left: 68px;
+      top: 30px;
+      left: 40px;
       width: 24px;
       height: 41px;
       background: url("/static/images/icon-detail-back.png") no-repeat;
@@ -220,7 +220,7 @@
   }
   .m-product-detail-info{
     padding: 30px;
-    box-shadow:0px 3px 6px rgba(0,0,0,0.16);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     h3{
       display: flex;
       flex-flow: row;
