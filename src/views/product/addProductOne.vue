@@ -23,65 +23,26 @@
         </el-form-item>
         <el-form-item label="商品类目" >
           <div class="m-category-content">
-            <p>当前选择类目：<span class="m-category-select">服装鞋包 >上衣</span></p>
+            <p>当前选择类目：<span class="m-category-select">
+              <template v-for="(items,index) in select_category">
+                <span>{{items.pcname}}</span>
+                <span v-if="index <2"> > </span>
+              </template>
+            </span></p>
             <div id="m-scroll">
-              <div class="m-one-category">
+              <div class="m-one-category" v-for="(items,index) in category_list">
                 <div class="m-category-search-box">
                   <span class="icon icon-search"></span>
                   <input type="text"  placeholder=""  >
                 </div>
                 <div class="m-classify">
                   <ul>
-                    <!--<template v-for="(item,i) in items">-->
-                      <li>
-                        <span>1231</span>
-                        <i class="el-icon-arrow-right"></i>
+                    <template v-for="(item,i) in items">
+                      <li @click="getCategory(index,item.pcid,item)">
+                        <span>{{item.pcname}}</span>
+                        <i class="el-icon-arrow-right" v-if="index <2"></i>
                       </li>
-                    <li>
-                      <span>1231</span>
-                      <i class="el-icon-arrow-right"></i>
-                    </li>
-                    <!--</template>-->
-                  </ul>
-                </div>
-              </div>
-              <div class="m-one-category">
-                <div class="m-category-search-box">
-                  <span class="icon icon-search"></span>
-                  <input type="text"  placeholder=""  >
-                </div>
-                <div class="m-classify">
-                  <ul>
-                    <!--<template v-for="(item,i) in items">-->
-                    <li>
-                      <span>1231</span>
-                      <i class="el-icon-arrow-right"></i>
-                    </li>
-                    <li>
-                      <span>1231</span>
-                      <i class="el-icon-arrow-right"></i>
-                    </li>
-                    <!--</template>-->
-                  </ul>
-                </div>
-              </div>
-              <div class="m-one-category">
-                <div class="m-category-search-box">
-                  <span class="icon icon-search"></span>
-                  <input type="text"  placeholder=""  >
-                </div>
-                <div class="m-classify">
-                  <ul>
-                    <!--<template v-for="(item,i) in items">-->
-                    <li>
-                      <span>1231</span>
-                      <i class="el-icon-arrow-right"></i>
-                    </li>
-                    <li>
-                      <span>1231</span>
-                      <i class="el-icon-arrow-right"></i>
-                    </li>
-                    <!--</template>-->
+                    </template>
                   </ul>
                 </div>
               </div>
@@ -226,6 +187,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import axios from 'axios';
+  import api from '../../api/api'
     export default {
         data() {
             return {
@@ -239,7 +202,20 @@
                   { required: true, message: '请输入商品名称', trigger: 'blur' }
                 ]
               },
-              options: [{
+              //类目
+              category_list:[],
+              select_category:[],
+              //品牌
+              brand_list:[],
+              show_brand:false,
+              //场景
+              scene_list:[],
+              show_scene:false,
+              //标签
+              items_list:[],
+              show_items:false,
+              options: [
+                {
                 value: '选项1',
                 label: '黄金糕'
               }, {
@@ -264,9 +240,43 @@
             }
         },
         components: {},
+      mounted(){
+          this.getCategory(-1);
+      },
         methods: {
           changeRoute(v){
             this.$router.push(v)
+          },
+        //  获取类目
+          getCategory(i,id,item){
+            let _select = [].concat(this.select_category);
+            _select[i] = item;
+            this.select_category = [].concat(_select);
+
+            if(i == 2){
+              this.$notify({
+                title: '警告',
+                message: '这已经是最后一层了',
+                type: 'warning'
+              });
+              return false;
+            }
+
+            axios.get(api.category_list,{
+              params:{
+                up:id || ''
+              }
+            }).then(res => {
+              let arr = [].concat(this.category_list);
+                if(res.data.status == 200){
+                    arr[i+1] = res.data.data;
+                    this.category_list = [].concat(arr);
+                }
+            })
+          },
+        //  获取品牌
+          getBrand(){
+            // axios.get(api.brand_list,)
           }
         },
         created() {

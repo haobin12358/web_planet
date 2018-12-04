@@ -10,6 +10,11 @@ const api={
   update_admin: title + 'user/update_admin',//更新管理员
   update_admin_password: title + 'user/update_admin_password',//修改密码
   product_list: title + 'product/list',//获取商品列表
+  delete_product: title + 'product/delete_list',//删除商品
+  supplizer_list: title +'supplizer/list',//获取供应商列表
+  category_list: title + 'category/list',//获取类目
+  brand_list: title + 'brand/list',//获取品牌
+
 
   get_order_situation: title + 'order/get_order_situation',//获取订单概况
   get_all_order: title + 'order/order_list',//获取所有订单
