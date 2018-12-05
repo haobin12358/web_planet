@@ -9,7 +9,7 @@ promise.polyfill();
 
 //ui选择elementui
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css'
+import './theme/index.css'
 import './common/css/index.less'
 Vue.use(ElementUI);
 
