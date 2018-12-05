@@ -20,11 +20,12 @@ export const constantRouterMap = [
   },
   // 店主版 - 素材
   {
-    path: '/material',
+    path: '/material/circle',
     component: Layout,
-    redirect: 'material',
-    children: [{
-      path: '/material', component: () => import('../views/store/material/index'), hidden: true }
+    redirect: 'material/circle',
+    children: [
+      { path: '/material', component: () => import('../views/store/material/index'), hidden: true },
+      { path: '/material/circle', component: () => import('../views/store/material/circle'), hidden: true }
     ],
   },
   // 店主版 - 会员
@@ -65,6 +66,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/activityManagement', component: () => import('../views/store/storekeeper/activityManagement'), hidden: true },
   // 店主版 - 店主 - 粉丝管理
   { path: '/storekeeper/fansManagement', component: () => import('../views/store/storekeeper/fansManagement'), hidden: true },
+  // 店主版 - 店主 - 团队管理
+  { path: '/storekeeper/group', component: () => import('../views/store/storekeeper/group'), hidden: true },
 
 
   {
@@ -75,6 +78,7 @@ export const constantRouterMap = [
     ],
   },
   { path: '/gift', component: () => import('../views/buyer/selected/gift'), hidden: true },
+  { path: '/giftBox', component: () => import('../views/buyer/selected/giftBox'), hidden: true },
   { path: '/scene', component: () => import('../views/buyer/selected/scene'), hidden: true },
   { path: '/brandList', component: () => import('../views/buyer/selected/brandList'), hidden: true },
   { path: '/brandDetail', component: () => import('../views/buyer/selected/brandDetail'), hidden: true },

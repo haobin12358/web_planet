@@ -3,7 +3,8 @@
       <!--<mt-loadmore :top-method="loadTop" ref="loadmore">-->
         <!--搜索-->
         <div class="m-selected-search">
-          <span class="m-icon-home" @click="changeRoute('/gift')"></span>
+          <span class="m-icon-home"></span>
+          <!--<span class="m-icon-home" @click="changeRoute('/giftBox')"></span>-->
           <div class="m-search-input-box" @click="changeRoute('/search')">
             <span class="m-icon-search"></span>
             <span>搜索商品</span>
@@ -228,7 +229,6 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
 
     export default {
       data() {
@@ -288,9 +288,9 @@
           })
         },
         /*查看更多*/
-        changeRoute(v,item){
-          switch (v){
-            case '/gift':
+        changeRoute(v, item) {
+          switch(v) {
+            case '/giftBox':
               axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
                 if(res.data.status == 200){
                   if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包购买页
@@ -316,7 +316,6 @@
             default:
               this.$router.push({path:v,});
           }
-
         },
         /*场景点击*/
         sceneClick(item){

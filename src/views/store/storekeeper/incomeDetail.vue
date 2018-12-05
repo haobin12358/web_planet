@@ -108,6 +108,8 @@
             textAlign: 'left'
           }
         ],
+
+        // 和group类似的页面
         timeValue: []
       }
     },

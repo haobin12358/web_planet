@@ -18,8 +18,8 @@
           <div class="m-out-title m-ft-30">提现金额</div>
           <div class="m-out-num-box">
             <div class="m-out-RMB">￥</div>
-            <input type="text" class="m-out-num-input">
-            <img class="m-out-num-clean" src="/static/images/icon-close.png" alt="">
+            <input type="text" class="m-out-num-input" v-model="moneyNum">
+            <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0.00'">
           </div>
           <div class="m-out-row">
             <div class="m-row-left">姓名</div>
@@ -63,21 +63,21 @@
     </div>
 
     <!--我的订单-->
-    <div class="m-border-radius m-my-order">
+    <!--<div class="m-border-radius m-my-order">
       <div class="m-total-jump-box" @click="changeRoute('/storekeeper/orderManagement')">
         <div class="m-jump-title">我的订单</div>
         <div class="m-jump-text">订单管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
-    </div>
+    </div>-->
     <!--我的商品-->
-    <div class="m-border-radius">
+    <!--<div class="m-border-radius">
       <div class="m-total-jump-box" @click="changeRoute('/storekeeper/productManagement')">
         <div class="m-jump-title">我的商品</div>
         <div class="m-jump-text">商品管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
-      <!--商品展示-->
+      &lt;!&ndash;商品展示&ndash;&gt;
       <div class="m-most-product">最新发布</div>
       <div class="m-product-box">
         <div class="m-product-part" @click="changeRoute('/member/productDetail')">
@@ -96,11 +96,11 @@
             </div>
           </div>
         </div>
-        <!--暂无最新发布商品-->
-        <!--<img class="m-no-order-img" src="/static/images/icon-no-order.png" alt="">
-        <div class="m-no-order-text">暂无最新发布商品</div>-->
+        &lt;!&ndash;暂无最新发布商品&ndash;&gt;
+        &lt;!&ndash;<img class="m-no-order-img" src="/static/images/icon-no-order.png" alt="">
+        <div class="m-no-order-text">暂无最新发布商品</div>&ndash;&gt;
       </div>
-      <!--商品展示-->
+      &lt;!&ndash;商品展示&ndash;&gt;
       <div class="m-most-product">最热商品</div>
       <div class="m-product-box">
         <div class="m-product-part" @click="changeRoute('/member/productDetail')">
@@ -120,30 +120,38 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
     <!--我的活动-->
-    <div class="m-border-radius">
+    <!--<div class="m-border-radius">
       <div class="m-total-jump-box" @click="changeRoute('/storekeeper/activityManagement')">
         <div class="m-jump-title">我的活动</div>
         <div class="m-jump-text">活动管理</div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
-      <!--内容文字-->
+      &lt;!&ndash;内容文字&ndash;&gt;
       <div class="m-content-box">
         <div class="m-content-text">正在参与活动：2</div>
       </div>
-    </div>
+    </div>-->
     <!--我的粉丝-->
     <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/fansManagement')">
-        <div class="m-jump-title">我的粉丝</div>
-        <div class="m-jump-text">粉丝管理</div>
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/group')">
+        <div class="m-jump-title">我的团队</div>
+        <div class="m-jump-text"></div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
       <!--内容文字-->
       <div class="m-content-box">
         <div class="m-content-text">粉丝总数：123</div>
         <div class="m-content-text">本月新增：66</div>
+      </div>
+    </div>
+    <!--购买邀请码-->
+    <div class="m-border-radius">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/orderManagement')">
+        <div class="m-jump-title">购买激活码</div>
+        <div class="m-jump-text"></div>
+        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
     </div>
   </div>
@@ -158,7 +166,8 @@
           outSubmit: false,
           bankPopup: false,
           slots: [{ values: ['中国银行', '中国工商银行', '交通银行', '中国建设银行'] }],
-          bank: ""
+          bank: "",
+          moneyNum: "0.00"
         }
       },
       components: {},
@@ -192,11 +201,11 @@
   .m-storekeeper {
     min-height: 100%;
     background-color: #EEEEEE;
-    padding-bottom: 10px;
+    /*padding-bottom: 300px;*/
     .m-storekeeper-bg {
       width: 750px;
       height: 400px;
-      margin-bottom: 65px;
+      margin-bottom: 40px;
     }
     .m-total-earnings {
       font-size: 24px;
@@ -216,10 +225,13 @@
     }
     .m-border-radius {
       width: 700px;
-      margin: 0 auto 20px auto;
+      margin: 0 auto 30px auto;
       border-radius: 20px;
       background-color: #ffffff;
       box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+      &:last-child {
+        margin-bottom: -100px;
+      }
       .m-most-product {
         font-size: 24px;
         text-align: left;

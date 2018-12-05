@@ -14,18 +14,20 @@ let store= new Vuex.Store({
         name:'素材',
         icon:'/static/images/footer/icon-material.png',
         active_icon:'/static/images/footer/icon-material-active.png',
-        url:'material'
-      },{
+        url:'material/circle'
+      },/*{
         name:'会员',
         icon:'/static/images/footer/icon-member.png',
         active_icon:'/static/images/footer/icon-member-active.png',
         url:'member'
-      },{
+      },*/{
         name:'店主',
         icon:'/static/images/footer/icon-storekeeper.png',
         active_icon:'/static/images/footer/icon-storekeeper-active.png',
         url:'storekeeper'
       }],
+
+
       tabbar_buyer:[{
         name:'精选',
         icon:'/static/images/footer/icon-material.png',

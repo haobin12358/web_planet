@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--<span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>-->
+    <span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>
 
     <mt-tabbar v-model="selected" :fixed="true">
       <template v-for="(item,index) in tabbar" >
@@ -55,8 +55,8 @@
         }
       }
     },
-    mounted(){
-      if(window.location.hash.indexOf("material") == 2 || window.location.hash.indexOf("selected") == 2) {
+    mounted() {
+      if(window.location.hash.indexOf("material/circle") == 2 || window.location.hash.indexOf("selected") == 2) {
         this.buyer_store = true;
       }else {
         this.buyer_store = false;
@@ -81,7 +81,7 @@
         common.changeTitle(val);
         switch(val){
           case '素材':
-            this.$router.push('/material');
+            this.$router.push('/material/circle');
             break;
           case '会员':
             this.$router.push('/member');
