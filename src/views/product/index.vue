@@ -171,6 +171,7 @@
       changeRoute(v){
         this.$router.push(v)
       },
+      //多选
       handleSelectionChange(val){
         this.select_product = val;
       },

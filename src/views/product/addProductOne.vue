@@ -205,6 +205,7 @@
               //类目
               category_list:[],
               select_category:[],
+              all_category:[],
               //品牌
               brand_list:[],
               show_brand:false,
@@ -242,6 +243,7 @@
         components: {},
       mounted(){
           this.getCategory(-1);
+          this.getAllCategory();
       },
         methods: {
           changeRoute(v){
@@ -272,6 +274,18 @@
                     arr[i+1] = res.data.data;
                     this.category_list = [].concat(arr);
                 }
+            })
+          },
+        // 获取所有类目
+          getAllCategory(){
+            axios.get(api.category_list,{
+              params:{
+                deep:2
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.all_category = res.data.data;
+              }
             })
           },
         //  获取品牌
