@@ -9,6 +9,14 @@
       </div>
       <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
     </div>
+    <!--轮播图-->
+    <div class="m-swipe">
+      <mt-swipe :auto="3000" v-if="swipe_list">
+        <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
+          <img :src="item.ibpic" class="img" alt="" >
+        </mt-swipe-item>
+      </mt-swipe>
+    </div>
     <div class="m-circle-content">
       <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
       <div class="m-circle-body">
@@ -67,6 +75,7 @@
     data() {
       return {
         name: '',
+        swipe_list: null,
         nav_list: [
           {
             itdesc: "我是描述",
@@ -100,11 +109,20 @@
     },
     components: { navList, bottomLine },
     mounted() {
-       common.changeTitle('圈子');
-       this.getNav();
-       this.getNews();
+      common.changeTitle('圈子');
+      this.getNav();
+      this.getNews();
+      this.getSwipe();
     },
     methods: {
+      /*获取轮播图*/
+      getSwipe(){
+        axios.get(api.list_banner_index).then(res => {
+          if(res.data.status == 200){
+            this.swipe_list = res.data.data;
+          }
+        })
+      },
       /*跳转路由*/
       changeRoute(v,params,value){
         if(v == '/circle/detail'){
@@ -228,7 +246,11 @@
   .m-circle{
     min-height: 100vh;
     overflow-x: hidden;
-    .m-circle-content{
+    .m-swipe{
+      padding: 0 33px;
+    }
+    .m-circle-content {
+      padding-top: 20px;
       .m-scroll-l{
         width: 700px;
         overflow-x: auto;
@@ -245,7 +267,6 @@
           li{
             display: inline-block;
             padding: 5px;
-            /*width: 150px!important;*/
             height: 34px;
             line-height: 34px;
             margin-right: 62px;
@@ -267,17 +288,6 @@
           margin-bottom: 30px;
           background-color: #fff;
           padding-bottom: 26px;
-          /*.m-video-label{*/
-          /*position: absolute;*/
-          /*top:-21px;*/
-          /*left:16px;*/
-          /*height: 43px;*/
-          /*line-height: 43px;*/
-          /*padding: 0 25px;*/
-          /*background-color: #fcd316;*/
-          /*border-radius: 40px;*/
-          /*box-shadow: 3px 5px 6px 0 rgba(0, 0, 0, 0.16);*/
-          /*}*/
           .m-mark-label{
             position: absolute;
             top:10px;
@@ -332,7 +342,6 @@
               color: #fff;
             }
           }
-
           .m-img{
             display: block;
             width: 700px;
@@ -343,7 +352,6 @@
             text-align: left;
             padding: 10px 22px;
           }
-
           .m-video-like{
             position: absolute;
             top: 161px;
