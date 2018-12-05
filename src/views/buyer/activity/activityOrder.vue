@@ -47,7 +47,7 @@
                 <!--<li v-if=" items.omstatus == -40 || items.omstatus == 30">删除订单</li>-->
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
                 <!--<li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35">评价</li>-->
-                <li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">确认收货</li>
+                <!--<li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">确认收货</li>-->
                 <li class="active" v-if="items.omstatus == 0">立即付款</li>
               </ul>
             </div>
@@ -67,14 +67,9 @@
   import { MessageBox } from 'mint-ui';
 
     export default {
-      data(){
-        return{
-          nav_list: [
-            { active: true, name: "新人首单", count: "0", omfrom: 40 },
-            { active: false, name: "每日竞猜", count: "0", omfrom: 30 },
-            { active: false, name: "好友魔盒", count: "0", omfrom: 50 },
-            { active: false, name: "免费试用", count: "0", omfrom: 60 }
-          ],
+      data() {
+        return {
+          nav_list: [],
           page_info: { page_num: 1, page_size: 10 },
           isScroll: true,
           total_count: 0,
@@ -85,12 +80,7 @@
       },
       inject: ['reload'],
       components: { navList, bottomLine },
-      mounted(){
-        common.changeTitle('订单列表');
-        // this.getOrderNum();               // 获取各状态的订单数量
-        this.getOrderList();
-      },
-      methods:{
+      methods: {
         changeRoute(v, item) {
           switch (v){
             case '/brandDetail':
@@ -156,29 +146,17 @@
           })
         },
         // 获取各状态的订单数量
-        /*getOrderNum() {
-          axios.get(api.order_count + "?token=" + localStorage.getItem('token')).then(res => {
+        getOrderNum() {
+          axios.get(api.order_count + "?ordertype=act&token=" + localStorage.getItem('token')).then(res => {
             if(res.data.status == 200) {
               for(let i = 0; i < res.data.data.length; i ++) {
                 res.data.data[i].active = false;
               }
+              res.data.data[0].active = true;
               this.nav_list = [].concat(res.data.data);
-              console.log(this.nav_list);
-
-              // 显示哪个类型的订单
-              for(let i = 0; i < this.nav_list.length; i ++) {
-                this.nav_list[i].active = false;
-              }
-              let which = this.$route.query.which;
-              if(which) {
-                this.navClick(which);
-              }else {
-                this.nav_list[0].active = true;
-                this.getOrderList();
-              }
             }
           })
-        },*/
+        },
         //滚动加载更多
         touchMove(e) {
           let scrollTop = common.getScrollTop();
@@ -213,6 +191,11 @@
 
           });
         }
+      },
+      mounted() {
+        common.changeTitle('订单列表');
+        this.getOrderNum();             // 获取各状态的订单数量
+        this.getOrderList();
       }
     }
 </script>

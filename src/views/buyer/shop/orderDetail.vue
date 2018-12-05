@@ -84,7 +84,7 @@
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
           <p class="m-back-btn">
-            <span @click="changeRoute('/selectBack',item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
+            <span @click="changeRoute('/selectBack',item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0 && from !== 'activityProduct'">退款</span>
           </p>
         </div>
       </div>
