@@ -7,14 +7,14 @@
 
     <div class="m-order-box" v-else>
       <div class="m-order-item" v-for="item in order">
-        <div class="m-store-box" @click.stop="changeRoute('/brandDetail')">
+        <div class="m-store-box" @click.stop="changeRoute('/brandDetail', item)">
           <img class="m-store-img" src="/static/images/icon-store.png" alt="">
           <div class="m-store-name m-ft-24">{{item.pbname}}</div>
           <img class="m-more-img" src="/static/images/icon-more.png" alt="">
         </div>
-        <div class="m-product-box" @click.stop="changeRoute('/product/detail')" v-for="product in item.order_part">
+        <div class="m-product-box" @click.stop="changeRoute('/orderDetail', item)" v-for="product in item.order_part">
           <div>
-            <img class="m-product-img" src="http://dummyimage.com/140x140" alt="">
+            <img class="m-product-img" :src="product.prmainpic" alt="">
           </div>
           <div class="m-product-text-box">
             <div class="m-product-text m-ft-24">{{product.prtitle}}</div>
@@ -25,9 +25,8 @@
         </div>
         <div class="m-btn-box">
           <img class="m-after-sales-img" src="/static/images/icon-order-after-sale.png" alt="">
-          <div class="m-after-sales-text">仅退款 退款成功</div>
-          <div class="m-after-sales-btn">查看详情</div>
-          <div class="m-after-sales-btn">查看详情</div>
+          <div class="m-after-sales-text m-ft-22">{{item.order_refund_apply.orastate_zh}} {{item.order_refund_apply.orastatus_zh}}</div>
+          <div class="m-after-sales-btn" @click.stop="changeRoute('/orderDetail', item)">查看详情</div>
         </div>
       </div>
     </div>
@@ -46,26 +45,24 @@
       return {
         name: '',
         page_num: 1,
-        page_size: 10,
+        page_size: 20,
         order: [],
       }
     },
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v, which) {
+      changeRoute(v, item) {
         switch (v){
           case '/brandDetail':
             this.$router.push({ path: v, query: { pbid: item.pbid }});
             break;
           case '/orderDetail':
-            this.$router.push({ path: v, query: { omid: item.omid }});
+            this.$router.push({ path: v, query: { omid: item.omid, from: 'afterSales' }});
             break;
           case '/product/detail':
             this.$router.push({ path: v, query: { prid: item.prid }});
             break;
-          default:
-            this.$router.push(v);
         }
       },
       // 获取订单列表
@@ -77,29 +74,8 @@
           omstatus: "inrefund"
         };
         axios.get(api.order_list, { params: params }).then(res => {
-          if(res.data.status == 200){
-            console.log(res.data.data);
+          if(res.data.status == 200) {
             this.order = res.data.data;
-          }
-        })
-      },
-      // 获取订单数量
-      getOrderCount() {
-        axios.get(api.order_count + "?extentions=refund&token=" + localStorage.getItem('token')).then(res => {
-          if(res.data.status == 200){
-            for(let i = 0; i < res.data.data.length; i ++) {
-              if(res.data.data[i].status == "0") {
-                this.pay = res.data.data[i].count;
-              }else if(res.data.data[i].status == "10") {
-                this.send = res.data.data[i].count;
-              }else if(res.data.data[i].status == "20") {
-                this.receive = res.data.data[i].count;
-              }else if(res.data.data[i].status == "35") {
-                this.evaluate = res.data.data[i].count;
-              }else if(res.data.data[i].status == "refund") {
-                this.after_sales = res.data.data[i].count;
-              }
-            }
           }
         })
       }
@@ -107,7 +83,6 @@
     mounted() {
       common.changeTitle('售后');
       this.getOrderList();             // 获取订单列表
-      // this.getOrderCount();       // 获取订单数量
     }
   }
 </script>
@@ -144,7 +119,7 @@
           }
         }
         .m-product-box {
-          padding: 35px 0;
+          padding-top: 35px;
           display: flex;
           .m-product-img {
             width: 140px;
@@ -162,6 +137,7 @@
         .m-btn-box {
           display: flex;
           align-items: center;
+          padding-top: 30px;
           .m-after-sales-img {
             width: 22px;
             height: 18px;

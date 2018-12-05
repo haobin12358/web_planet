@@ -11,7 +11,7 @@
       <div class="m-product-detail-info">
         <h3>
           <span class="m-product-title">{{product_info.prtitle}}</span>
-          <span class="m-red">￥1668.0</span>
+          <span class="m-red">￥{{product_info.prprice | money}}</span>
         </h3>
         <div class="m-info-list">
           <span>快递：{{product_info.prfreight}}</span>
@@ -256,7 +256,7 @@
     justify-content: space-between;
     padding: 24px 30px;
     color: #999999;
-    box-shadow:0px 3px 6px rgba(0,0,0,0.16);
+    box-shadow: 3px 6px rgba(0,0,0,0.16);
     .m-label{
       display: inline-block;
       margin-right: 30px;
@@ -278,8 +278,6 @@
     img{
       display: block;
       width: 100%;
-      /*height: 600px;*/
-      /*background-color: #9fd0bf;*/
     }
   }
   .m-product-detail-foot{
