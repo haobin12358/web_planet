@@ -14,6 +14,8 @@ const api={
   supplizer_list: title +'supplizer/list',//获取供应商列表
   category_list: title + 'category/list',//获取类目
   brand_list: title + 'brand/list',//获取品牌
+  scene_list: title + 'scene/list',//获取场景
+  items_list: title + 'items/list',//获取标签
 
 
   get_order_situation: title + 'order/get_order_situation',//获取订单概况
@@ -24,6 +26,10 @@ const api={
 
   update_activity: title + 'activity/update', //  修改活动基础信息
   add_commodity: title + 'commodity/add', //  添加试用商品
+  get_all_qa:title + 'qa/get_all',//获取所有问题
+  add_questanswer: title +'qa/add_questanswer',//添加问题
+  add_questoutline: title + 'qa/add_questoutline',//添加问题类型
+  upload_file: title + 'file/upload',//上传图片
 
 }
 
