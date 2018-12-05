@@ -8,14 +8,11 @@
         <div class="m-one-part">
           <div>
             <span class="m-icon-text active">问</span>
-            <span>如何修改订单？</span>
+            <span class="m-ft-26">{{question.ququest}}</span>
           </div>
           <div class="m-serviceCenter-answer">
             <span class="m-icon-text">答</span>
-            <p class="m-serviceCenter-answer-content">
-              如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答
-              如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答如何修改订单的回答
-            </p>
+            <p class="m-serviceCenter-answer-content m-ft-24">{{question.qacontent}}</p>
           </div>
         </div>
 
@@ -38,23 +35,37 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
+  import api from '../../../api/api';
+  import axios from 'axios';
+
   export default {
     data() {
       return {
+        question: { ququest: "" }
       }
     },
     components: {},
     methods: {
-      changeRoute(v){
-        this.$router.push('/personal/serviceCenterDetail');
-      }
+      // 通过问题id获取答案
+      getQuestion() {
+        let params = {
+          quid: this.$route.query.quid,
+          token: localStorage.getItem('token')
+        };
+        axios.get(api.get_answer, { params: params }).then(res => {
+          if(res.data.status == 200) {
+            this.question = res.data.data;
+          }
+        })
+      },
     },
-    created() {
-
+    mounted() {
+      common.changeTitle('客服中心');
+      this.getQuestion();      // 通过问题id获取答案
     }
   }
 </script>
@@ -75,6 +86,7 @@
         display: inline-block;
         width: 60px;
         height: 60px;
+        font-size: 30px;
         line-height: 60px;
         text-align: center;
         border-radius: 10px;
@@ -93,7 +105,8 @@
         .m-serviceCenter-answer-content{
           width: 507px;
           padding: 14px 4px;
-          line-height: 32px;
+          line-height: 40px;
+          text-indent: 2em;
         }
       }
     }

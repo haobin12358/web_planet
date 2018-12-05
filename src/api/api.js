@@ -47,6 +47,8 @@ const api={
   get_user_integral : title + 'user/get_user_integral',          // 获取积分列表
   user_sign_in : title + 'user/user_sign_in',                    // 用户签到
   get_discount : title + 'user/get_discount',                    // 获取优惠券中心顶部数据
+  get_all_quest : title + 'qa/get_all_quest',                    // 获取所有的问题
+  get_answer : title + 'qa/get_answer',                          // 通过问题id获取答案
 
   list_user_coupon : title + 'coupon/list_user_coupon',          // 获取用户个人的优惠券
   coupon_list : title + 'coupon/list',                           // 获取优惠券列表

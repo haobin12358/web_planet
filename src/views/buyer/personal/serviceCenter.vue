@@ -8,16 +8,16 @@
         <div class="m-one-part">
 
           <div class="m-serviceCenter-ul">
-            <div v-for="(item,index) in ul_list" @click="changeRoute(item)">
-              <div class="m-serviceCenter-li">
+            <div v-for="(item, index) in qa_list">
+              <div class="m-serviceCenter-li" @click="openQuestion(index)">
                 <div>
-                  <span :class="item.icon"></span>
-                  <span>{{item.name}}</span>
+                  <img class="m-question-img" :src="item.qoicon" alt="">
+                  <span>{{item.qoname}}</span>
                 </div>
-                <span class="m-icon-more " :class="item.child.length >0?'m-icon-unfold':''"></span>
+                <span class="m-icon-more" :class="item.questions ? 'm-icon-unfold' : ''"></span>
               </div>
-              <div class="m-serviceCenter-li-ul" v-if="item.child.length > 0">
-                <p v-for="i in item.child">{{i.name}}</p>
+              <div class="m-serviceCenter-li-ul" v-if="item.questions">
+                <p v-for="items in item.question" class="m-ft-24" @click="changeRoute(items)">{{items.ququest}}</p>
               </div>
             </div>
           </div>
@@ -42,80 +42,45 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
+  import common from '../../../common/js/common';
+  import api from '../../../api/api';
+  import axios from 'axios';
+
   export default {
     data() {
       return {
-        ul_list:[
-          {
-            name:'订单问题',
-            icon:'m-icon-order',
-            url:'',
-            params:'',
-            child:[
-              {
-                name:'如何修改订单',
-                icon:'',
-                url:'',
-                params:''
-              },
-              {
-                name:'如何取消订单',
-                icon:'',
-                url:'',
-                params:''
-              }
-            ]
-          },
-          {
-            name:'售后问题',
-            icon:'m-icon-after',
-            url:'',
-            params:'',
-            child:[]
-          },
-          {
-            name:'支付问题',
-            icon:'m-icon-pay',
-            url:'',
-            params:'',
-            child:[]
-          },
-          {
-            name:'物流问题',
-            icon:'m-icon-logs',
-            url:'',
-            params:'',
-            child:[]
-          },
-          {
-            name:'优惠券',
-            icon:'m-icon-coupon',
-            url:'',
-            params:'',
-            child:[]
-          },
-          {
-            name:'大行星积分',
-            icon:'m-icon-integral',
-            url:'',
-            params:'',
-            child:[]
-          }
-        ]
+        qa_list: [{ question: [] }]
       }
     },
     components: {},
     methods: {
-      changeRoute(v){
-        this.$router.push('/personal/serviceCenterDetail');
+      // 跳转页面
+      changeRoute(items) {
+        this.$router.push({ path: '/personal/serviceCenterDetail', query: { quid: items.quid }});
+      },
+      // 获取所有的问题
+      getQuestion() {
+        axios.get(api.get_all_quest).then(res => {
+          if(res.data.status == 200) {
+            this.qa_list = res.data.data;
+            for(let i = 0; i < this.qa_list.length; i ++) {
+              this.qa_list[i].questions = false;
+            }
+          }
+        })
+      },
+      // 展开问题
+      openQuestion(index) {
+        this.qa_list[index].questions = !this.qa_list[index].questions;
+        this.qa_list = this.qa_list.concat();
       }
     },
-    created() {
-
+    mounted() {
+      common.changeTitle('客服中心');
+      this.getQuestion();       // 获取所有的问题
     }
   }
 </script>
@@ -138,59 +103,10 @@
         border-bottom: 1px solid #CCCCCC;
         .flex-row(space-between);
         font-size: 30px;
-        .m-icon-order{
-          display: inline-block;
+        .m-question-img {
           width: 46px;
           height: 43px;
-          background: url("/static/images/m-serviceCenter-order.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: 22px;
-        }
-        .m-icon-after{
-          display: inline-block;
-          width: 46px;
-          height: 39px;
-          background: url("/static/images/m-serviceCenter-after.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: 22px;
-        }
-        .m-icon-pay{
-          display: inline-block;
-          width: 46px;
-          height: 35px;
-          background: url("/static/images/m-serviceCenter-pay.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: 22px;
-        }
-        .m-icon-logs{
-          display: inline-block;
-          width: 45px;
-          height: 43px;
-          background: url("/static/images/m-serviceCenter-logs.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: 22px;
-        }
-        .m-icon-coupon{
-          display: inline-block;
-          width: 43px;
-          height: 36px;
-          background: url("/static/images/m-serviceCenter-coupon.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: 25px;
-        }
-        .m-icon-integral{
-          display: inline-block;
-          width: 43px;
-          height: 45px;
-          background: url("/static/images/m-serviceCenter-integral.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: 25px;
+          margin: 0 20px -8px 0;
         }
       }
       .m-serviceCenter-li-ul{
