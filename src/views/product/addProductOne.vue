@@ -26,7 +26,7 @@
             <p>当前选择类目：<span class="m-category-select">
               <template v-for="(items,index) in select_category">
                 <span>{{items.pcname}}</span>
-                <span v-if="index <2"> > </span>
+                <span v-if="index <select_category.length-1"> > </span>
               </template>
             </span></p>
             <div id="m-scroll">
@@ -49,49 +49,69 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="类目管理：" ></el-form-item>
-        <div class="m-category-table">
-          <div class="m-category-title-th">
-            <p class="m-category-title">一级类目</p>
-            <p class="m-category-title">二级类目</p>
-            <p class="m-category-title">三级类目</p>
-          </div>
-          <div class="m-category-box">
-             <div class="m-category-tr">
-               <span class="m-add-category-text m-first">+新增一级类目</span>
-               <div class="m-category-td">
-                  <span>服装鞋包</span>
-               </div>
-               <div class="m-category-td m-colspan">
-                 <div class="m-category-td-tr">
-                   <div class="m-category-td-th-td">
-                     <span>服装鞋包</span>
-                     <span class="m-add-category-text">+新增一级类目</span>
-                   </div>
-                   <div class="m-category-td-th-td">
-                     <span>服装鞋包</span>
-                     <span class="m-add-category-text">+新增一级类目</span>
-                   </div>
-                 </div>
-                 <div class="m-category-td-tr">
-                   <div class="m-category-td-th-td">
-                     <span>服装鞋包</span>
-                   </div>
-                   <div class="m-category-td-th-td">
-                     <span>服装鞋包</span>
-                   </div>
-                 </div>
-               </div>
-             </div>
-          </div>
-        </div>
+        <!--<el-form-item label="类目管理：" ></el-form-item>-->
+        <!--<div class="m-category-table">-->
+          <!--<div class="m-category-title-th">-->
+            <!--<p class="m-category-title">一级类目</p>-->
+            <!--<p class="m-category-title">二级类目</p>-->
+            <!--<p class="m-category-title">三级类目</p>-->
+          <!--</div>-->
+          <!--<div class="m-category-box">-->
+            <!--<template v-for="(items,index) in all_category">-->
+              <!--<div class="m-category-tr">-->
+                <!--<span class="m-add-category-text m-first" v-if="index == 0">+新增一级类目</span>-->
+                <!--<div class="m-category-td">-->
+                  <!--<span>服装鞋包</span>-->
+                <!--</div>-->
+                <!--<div class="m-category-td m-colspan">-->
+                  <!--<div class="m-category-td-tr" v-for="(item,i) in items.subs">-->
+                    <!--<div class="m-category-td-th-td">-->
+                      <!--<span>服装鞋包</span>-->
+                      <!--<span class="m-add-category-text" v-if="i == 0">+新增二级类目</span>-->
+                    <!--</div>-->
+                    <!--<div class="m-category-td-th-td">-->
+                      <!--<span>服装鞋包</span>-->
+                      <!--<span class="m-add-category-text">+新增三级类目</span>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</template>-->
+             <!--<div class="m-category-tr">-->
+               <!--<span class="m-add-category-text m-first">+新增一级类目</span>-->
+               <!--<div class="m-category-td">-->
+                  <!--<span>服装鞋包</span>-->
+               <!--</div>-->
+               <!--<div class="m-category-td m-colspan">-->
+                 <!--<div class="m-category-td-tr">-->
+                   <!--<div class="m-category-td-th-td">-->
+                     <!--<span>服装鞋包</span>-->
+                     <!--<span class="m-add-category-text">+新增一级类目</span>-->
+                   <!--</div>-->
+                   <!--<div class="m-category-td-th-td">-->
+                     <!--<span>服装鞋包</span>-->
+                     <!--<span class="m-add-category-text">+新增一级类目</span>-->
+                   <!--</div>-->
+                 <!--</div>-->
+                 <!--<div class="m-category-td-tr">-->
+                   <!--<div class="m-category-td-th-td">-->
+                     <!--<span>服装鞋包</span>-->
+                   <!--</div>-->
+                   <!--<div class="m-category-td-th-td">-->
+                     <!--<span>服装鞋包</span>-->
+                   <!--</div>-->
+                 <!--</div>-->
+               <!--</div>-->
+             <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
         <el-form-item label="品牌选择：" >
-          <el-select v-model="value8" class="m-input-m" placeholder="请选择">
+          <el-select v-model="form.pbid" class="m-input-m" placeholder="请选择">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in brand_list"
+              :key="item.pbid"
+              :label="item.pbname"
+              :value="item.pbid">
             </el-option>
           </el-select>
           <div class="m-modal-text">
@@ -121,47 +141,47 @@
           </div>
         </el-form-item>
         <el-form-item label="场景选择：" >
-          <el-select v-model="value8" class="m-input-m" placeholder="请选择">
+          <el-select v-model="form.psid" multiple class="m-input-m" placeholder="请选择">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in scene_list"
+              :key="item.psid"
+              :label="item.psname"
+              :value="item.psid">
             </el-option>
           </el-select>
-          <div class="m-modal-text">
-            <span class="m-add-text">+新增场景</span>
-            <div class="m-absolute-modal" >
-              <p>新增场景</p>
-              <div class="m-admin-input-box">
-                <el-input v-model="input" placeholder="请输入场景名称" ></el-input>
-                <el-upload
-                  class="m-upload-s"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  list-type="picture-card"
-                  :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove">
-                  <span class="m-upload-img"></span>
-                </el-upload>
-                <p class="m-alert-text">添加品牌logo图片，建议尺寸：200*200像素</p>
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="">
-                </el-dialog>
-              </div>
-              <div class="m-modal-btn-box">
-                <span class="m-btn active">保存</span>
-                <span class="m-btn ">取消</span>
-              </div>
-            </div>
-          </div>
+          <!--<div class="m-modal-text">-->
+            <!--<span class="m-add-text">+新增场景</span>-->
+            <!--<div class="m-absolute-modal" >-->
+              <!--<p>新增场景</p>-->
+              <!--<div class="m-admin-input-box">-->
+                <!--<el-input v-model="input" placeholder="请输入场景名称" ></el-input>-->
+                <!--<el-upload-->
+                  <!--class="m-upload-s"-->
+                  <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+                  <!--list-type="picture-card"-->
+                  <!--:on-preview="handlePictureCardPreview"-->
+                  <!--:on-remove="handleRemove">-->
+                  <!--<span class="m-upload-img"></span>-->
+                <!--</el-upload>-->
+                <!--<p class="m-alert-text">添加品牌logo图片，建议尺寸：200*200像素</p>-->
+                <!--<el-dialog :visible.sync="dialogVisible">-->
+                  <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+                <!--</el-dialog>-->
+              <!--</div>-->
+              <!--<div class="m-modal-btn-box">-->
+                <!--<span class="m-btn active">保存</span>-->
+                <!--<span class="m-btn ">取消</span>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
         </el-form-item>
         <el-form-item label="标签选择：" >
-          <el-select v-model="value8" class="m-input-m" placeholder="请选择">
+          <el-select v-model="form.items" multiple class="m-input-m" placeholder="请选择">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in items_list"
+              :key="item.itid"
+              :label="item.itname"
+              :value="item.itid">
             </el-option>
           </el-select>
           <div class="m-modal-text">
@@ -193,9 +213,9 @@
         data() {
             return {
               form:{
-                resource:'',
-                date1:'',
-                name:''
+                pbid:'',
+                psid:[],
+                items:[],
               },
               rules:{
                 PRname:[
@@ -244,10 +264,14 @@
       mounted(){
           this.getCategory(-1);
           this.getAllCategory();
+          this.getBrand();
+          this.getScene();
+          this.getItem();
       },
         methods: {
           changeRoute(v){
             this.$router.push(v)
+            // console.log(this.form)
           },
         //  获取类目
           getCategory(i,id,item){
@@ -290,7 +314,31 @@
           },
         //  获取品牌
           getBrand(){
-            // axios.get(api.brand_list,)
+            axios.get(api.brand_list,{
+              params:{
+                page_size:200
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.brand_list = res.data.data;
+              }
+            })
+          },
+          //  获取场景
+          getScene(){
+            axios.get(api.scene_list).then(res => {
+              if(res.data.status == 200){
+                this.scene_list = res.data.data;
+              }
+            })
+          },
+          //  获取标签
+          getItem(){
+            axios.get(api.items_list).then(res => {
+              if(res.data.status == 200){
+                this.items_list = res.data.data;
+              }
+            })
           }
         },
         created() {

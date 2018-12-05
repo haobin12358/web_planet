@@ -105,7 +105,21 @@ export const constantRouterMap = [
       path: '',
       component: () => import('../views/member/index'),
       name: 'member',
-      meta: { title: 'member', icon: 'member', noCache: true }
+      meta: { title: 'member', icon: 'member', noCache: true },
+      children:[
+        {
+          path: 'supplier',
+          component: () => import('../views/member/supplier'),
+        },
+        {
+          path: 'distributor',
+          component: () => import('../views/member/distributor'),
+        },
+        {
+          path: '',
+          component: () => import('../views/member/distributor'),
+        }
+      ]
     },
       {
         path: 'addSupplier',

@@ -1,42 +1,31 @@
 <template>
   <div >
       <page-nav :list="nav_list" @navClick="navClick"></page-nav>
-
-    <distributor v-if="select.value == 'distributor'"></distributor>
-    <supplier v-else-if="select.value == 'supplier'"></supplier>
+    <router-view ></router-view>
   </div>
 </template>
 
 <script>
   import pageNav from '../../components/common/pageNav';
-  import supplier from './supplier';
-  import distributor from './distributor';
   export default {
     data(){
       return{
         nav_list:[
           {
             name:'分销商经销',
-            value:'distributor',
+            src:'distributor',
             active:true
           },
           {
             name:'供应商经销',
-            value:'supplier',
+            src:'supplier',
             active:false
           }
-        ],
-        select:{
-          name:'分销商经销',
-          value:'distributor',
-          active:true
-        }
+        ]
       }
     },
     components:{
-      pageNav,
-      supplier,
-      distributor
+      pageNav
     },
     methods:{
       navClick(index){
@@ -46,7 +35,7 @@
         }
         arr[index].active =true;
         this.nav_list = [].concat(arr);
-        this.select = this.nav_list[index];
+        this.$router.push('/member/'+arr[index].src);
       }
     }
   }
