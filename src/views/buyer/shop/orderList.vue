@@ -50,7 +50,7 @@
                 <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35 ">
                   查看物流
                 </li>
-                <li v-if=" items.omstatus == -40 || items.omstatus == 30">
+                <li v-if=" items.omstatus == -40" @click.stop="deleteOrder(items)">
                   删除订单
                 </li>
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">
@@ -205,12 +205,22 @@
             }
           }
         },
-        //取消订单
+        // 取消订单
         cancelOrder(item) {
           MessageBox.confirm('是否取消该订单？').then(() => {
-            axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'),{
-              omid:item.omid
-            }).then(res => {
+            axios.post(api.cancle_order + '?token='+ localStorage.getItem('token'), { omid: item.omid }).then(res => {
+              if(res.data.status == 200){
+                this.reload();
+              }
+            });
+          }).catch(() => {
+
+          });
+        },
+        // 删除订单
+        deleteOrder(item) {
+          MessageBox.confirm('是否删除该订单？').then(() => {
+            axios.post(api.order_delete + '?token='+ localStorage.getItem('token'), { omid: item.omid }).then(res => {
               if(res.data.status == 200){
                 this.reload();
               }
