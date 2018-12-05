@@ -33,7 +33,7 @@ const wxApi = {
   },
   wxRegister (callback) {
     // let data = {params: {reqUrl: window.location.href}}
-    axios.get(api.get_config,{
+    axios.get(api.get_wxconfig,{
       params:{
         url: window.location.href
       }
@@ -49,7 +49,7 @@ const wxApi = {
         });
     }).catch((error) => {
       console.log(error ,'1111')
-    })
+    });
 
     wx.ready((res) => {
       // 如果需要定制ready回调方法
@@ -94,7 +94,7 @@ const wxApi = {
     })
   },
   ShareTimeline (opstion){
-    // console.log(opstion)
+    console.log(opstion);
     wx.ready(()=> {
       // wx.onMenuShareTimeline({});
       wx.onMenuShareAppMessage({
@@ -103,14 +103,15 @@ const wxApi = {
         imgUrl: opstion.imgUrl || '', // 分享图标
         success () {
           // 用户成功分享后执行的回调函数
-          opstion.success()
+          opstion.success();
+          console.log('success');
         },
         cancel () {
           // 用户取消分享后执行的回调函数
-
-          opstion.error()
+          opstion.error();
+          console.log('cancel');
         },error(){
-          console.log('1112')
+          console.log('error')
         }
       });
       wx.onMenuShareTimeline({

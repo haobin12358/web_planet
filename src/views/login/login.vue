@@ -104,7 +104,6 @@
         };
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
           if(res.data.status == 200){
-            console.log(res.data);
             const id = res.data.data.appId;
             const url = window.location.href;
             // const  url = 'https://daaiti.cn/WeiDian/#/login';
@@ -112,7 +111,7 @@
               + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
           }
         }).catch((error) => {
-          console.log(error ,'1111')
+          console.log(error ,'1111');
         });
       }
     },

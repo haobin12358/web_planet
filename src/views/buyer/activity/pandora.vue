@@ -26,7 +26,7 @@
       <div class="m-rule-text">第一档：随机减少<span class="m-red">{{rule.infos.gearsone[0]}}</span>元</div>
       <div class="m-rule-text">第二档：随机减少<span class="m-red">{{rule.infos.gearstwo[0]}}</span>元或增加<span class="m-red">{{rule.infos.gearstwo[1]}}</span>元</div>
       <div class="m-rule-text">第三档：随机减少<span class="m-red">{{rule.infos.gearsthree[0]}}</span>元或增加<span class="m-red">{{rule.infos.gearsthree[1]}}</span>元</div>
-      <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse">点击分享好友</div>
+      <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse" @click="share">点击分享好友</div>
     </div>
 
     <div class="m-record-text" :class="record ? 'active' : ''" v-if="record">
@@ -67,7 +67,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import wxapi from '../../../common/js/mixins';
 
   export default {
     data() {
@@ -78,11 +78,27 @@
         rule: { infos: { skuprice: "", gearsone: [], gearstwo: [], gearsthree: [] }}
       }
     },
-    components: {},
+    mixins: [wxapi],
     methods: {
       // 点击魔盒
       pandora() {
         this.boxPopup = true;
+      },
+      // 点击分享好友
+      share() {
+        const url = window.location.href;
+        let opstion = {
+          title: '大行星', // 分享标题
+          link: url,      // 分享链接
+          imgUrl: 'http://dummyimage.com/200x200',// 分享图标
+          success: function () {
+            console.log('分享成功');
+          },
+          error: function () {
+            console.log('分享失败');
+          }
+        };
+        wxapi.ShareTimeline(opstion);
       },
       // 获取该活动的规则
       getRule() {
@@ -232,7 +248,8 @@
     .m-box-btn {
       width: 230px;
       height: 51px;
-      line-height: 60px;
+      text-align: center;
+      line-height: 55px;
       white-space: nowrap;
       color: #AF3300;
       padding: 16px 40px;
@@ -241,7 +258,8 @@
       border-radius: 50px;
     }
     .m-share-btn {
-      margin: 35px 0 0 180px;
+      width: 300px;
+      margin: 35px 0 0 145px;
     }
     .m-share-rule {
       padding: 33px 40px;
