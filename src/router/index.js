@@ -68,6 +68,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/fansManagement', component: () => import('../views/store/storekeeper/fansManagement'), hidden: true },
   // 店主版 - 店主 - 团队管理
   { path: '/storekeeper/group', component: () => import('../views/store/storekeeper/group'), hidden: true },
+  // 店主版 - 店主 - 购买激活码
+  { path: '/storekeeper/activationCode', component: () => import('../views/store/storekeeper/activationCode'), hidden: true },
 
 
   {

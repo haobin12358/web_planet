@@ -148,7 +148,7 @@
     </div>
     <!--购买邀请码-->
     <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/orderManagement')">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/activationCode')">
         <div class="m-jump-title">购买激活码</div>
         <div class="m-jump-text"></div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
