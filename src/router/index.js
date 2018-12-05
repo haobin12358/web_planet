@@ -33,7 +33,7 @@ export const constantRouterMap = [
   { path: '/error', component: () => import('../views/error/error'), hidden: true },
   {
     path: '/admin',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -45,7 +45,7 @@ export const constantRouterMap = [
   },
   {
     path: '/approveManage',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -57,7 +57,7 @@ export const constantRouterMap = [
   },
   {
     path: '/profile',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -69,7 +69,7 @@ export const constantRouterMap = [
   },
   {
     path: '/product',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -99,28 +99,20 @@ export const constantRouterMap = [
   },
   {
     path: '/member',
-    component: Layout,
-    redirect: '',
+    component: commonLayout,
+    redirect: '/member/distributor',
     children: [{
-      path: '',
-      component: () => import('../views/member/index'),
-      name: 'member',
-      meta: { title: 'member', icon: 'member', noCache: true },
-      children:[
-        {
-          path: 'supplier',
-          component: () => import('../views/member/supplier'),
-        },
-        {
-          path: 'distributor',
-          component: () => import('../views/member/distributor'),
-        },
-        {
-          path: '',
-          component: () => import('../views/member/distributor'),
-        }
-      ]
+      path: 'distributor',
+      component: () => import('../views/member/distributor'),
+      name: 'distributor',
+      meta: { title: 'distributor', icon: 'distributor', noCache: true },
     },
+      {
+        path: 'supplier',
+        component: () => import('../views/member/supplier'),
+        name: 'supplier',
+        meta: { title: 'supplier', icon: 'supplier', noCache: true },
+      },
       {
         path: 'addSupplier',
         component: () => import('../views/member/addSupplier'),
@@ -132,14 +124,20 @@ export const constantRouterMap = [
   },
   {
     path: '/imageText',
-    component: Layout,
-    redirect: '',
+    component: commonLayout,
+    redirect: '/imageText/tweet',
     children: [{
-      path: '',
-      component: () => import('../views/imageText/index'),
-      name: 'imageText',
-      meta: { title: 'imageText', icon: 'imageText', noCache: true }
+      path: 'tweet',
+      component: () => import('../views/imageText/tweet'),
+      name: 'tweet',
+      meta: { title: 'tweet', icon: 'tweet', noCache: true }
     },
+      {
+        path: 'activity',
+        component: () => import('../views/imageText/activity'),
+        name: 'activity',
+        meta: { title: 'activity', icon: 'activity', noCache: true }
+      },
       {
         path: 'addTweet',
         component: () => import('../views/imageText/addTweet'),
@@ -168,7 +166,7 @@ export const constantRouterMap = [
   },
   {
     path: '/order',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -186,7 +184,7 @@ export const constantRouterMap = [
   },
   {
     path: '/marketing',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -202,7 +200,7 @@ export const constantRouterMap = [
   },
   {
     path: '/commission',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -214,7 +212,7 @@ export const constantRouterMap = [
   },
   {
     path: '/approve',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -226,7 +224,7 @@ export const constantRouterMap = [
   },
   {
     path: '/service',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -238,7 +236,7 @@ export const constantRouterMap = [
   },
   {
     path: '/procurement',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',
@@ -274,7 +272,7 @@ export const constantRouterMap = [
   },
   {
     path: '/set',
-    component: Layout,
+    component: commonLayout,
     redirect: '',
     children: [{
       path: '',

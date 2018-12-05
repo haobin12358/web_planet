@@ -1,18 +1,46 @@
 <style lang="less" scoped>
     @import "../../common/css/index";
+    @import "../../common/css/modal";
     .fz(@fontSize){
       font-size: @fontSize;
     }
+    .m-system-name-box{
+      text-align: center;
+      padding: 0.3rem 0 0.12rem;
+      border-bottom: 1px solid #e7eef1;
+      margin: 0 0.2rem 0.15rem 0.2rem;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      color: #fff;
+      .m-system-circle{
+        display: inline-block;
+        width:0.25rem;
+        height: 0.25rem;
+        background:rgba(255,255,255,1);
+        border-radius:18px;
+        margin-right: 13px;
+      }
+      .m-system-name-text{
+        text-align: left;
+        .m-system-name{
+          font-size: 0.2rem;
+          cursor: pointer;
+        }
+        .m-ft-10{
+          font-size: 10px;
+        }
+      }
 
+    }
     .common-layout {
         .fj();
         .wl(100vw, 100vh);
 
         .left-aside {
-            .wl(2.6rem, 100vh);
+            .wl(1.6rem, 100vh);
             overflow-y: scroll;
-            background: #545c64;
-
+            background: @sidebarColor;
             .tac {
                 .system-title{
                     text-align: center;
@@ -61,6 +89,73 @@
             }
         }
     }
+    .m-sidebar{
+      text-align: center;
+      li{
+        padding-left: 0!important;
+      }
+    }
+    .icon{
+      display: inline-block;
+      width: 0.3rem;
+      height: 0.3rem;
+    }
+    .icon-person-navbar{
+      background: url("../../common/images/icon-person-navbar.png");
+      background-size: 100% 100%;
+      margin: 0 0.05rem;
+    }
+    .navbar-sidebar{
+      display: inline-block;
+      width: 0.4rem;
+      height: 0.4rem;
+      cursor: pointer;
+    }
+    .hamburger.is-active {
+      -webkit-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+    .hamburger {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    .m-modal{
+      .m-modal-state{
+        width: 4rem;
+        height: 350px;
+        text-align: center;
+        p{
+          font-size: 0.12rem;
+          margin-bottom: 0.2rem;
+        }
+        .m-btn-p{
+          display: inline-block;
+          font-size: 0.14rem;
+          cursor: pointer;
+          padding: 0 0.3rem;
+          height: 0.32rem;
+          line-height: 0.32rem;
+          background-color: @mainColor;
+          color: #fff;
+          border-radius: 5px;
+        }
+      }
+    }
+    /*滚动条样式*/
+    .left-aside::-webkit-scrollbar {/*滚动条整体样式*/
+      width: 0;     /*高宽分别对应横竖滚动条的尺寸*/
+      height: 0;
+    }
+    .left-aside::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+      border-radius: 5px;
+      -webkit-box-shadow: inset 0 0 0 rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.2);
+    }
+    .left-aside::-webkit-scrollbar-track {/*滚动条里面轨道*/
+      -webkit-box-shadow: inset 0 0 0 rgba(0,0,0,0.2);
+      border-radius: 0;
+      background: rgba(0,0,0,0.1);
+    }
 </style>
 
 <template>
@@ -68,13 +163,19 @@
         <aside class="left-aside">
             <el-row class="tac">
                 <el-col :span="24">
-                    <p class="system-title">
-                        蓓莉云仓后台管理系统
-                    </p>
-                    <el-menu class="m-sidebar" :default-active="defaultPage.path" background-color="#545c64"
-                             text-color="#fff" active-text-color="#ffd04b" :router="true">
+                  <div class="m-system-name-box">
+                    <span class="m-system-circle"></span>
+                    <div class="m-system-name-text">
+                      <h3 class="m-system-name">大行星 </h3>
+                      <p class="m-ft-10">后台管理系统</p>
+                    </div>
+                  </div>
+                    <el-menu class="m-sidebar" :default-active="defaultPage.path"
+                             text-color="#fff" active-text-color="#fff" :router="true">
                         <el-menu-item v-for="item,index in menu" :index="item.path" :key="index">
                             <i class="el-icon-menu"></i>
+                          <!--<img :src="item.iconPath" alt="">-->
+                          <!--<i :class="item.iconPath" class="icon"></i>-->
                             <span slot="title">{{item.title}}</span>
                         </el-menu-item>
                     </el-menu>
@@ -90,16 +191,36 @@
                 <!--<el-autocomplete prefix-icon="el-icon-menu" placeholder="请输入菜单名" v-model="searchTxt"-->
                                  <!--value-key="title"  :fetch-suggestions="querySearch" @select="selectMenu">-->
                 <!--</el-autocomplete>-->
-                <el-dropdown class="admin-name" trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
-                        Admin
-                      <i class="el-icon-arrow-down el-icon--right"></i>
-                     </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="logout">退出系统</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <img class="head-img" src="/static/images/admin.png" alt="">
+              <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
+                <span>hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="passward">修改密码</el-dropdown-item>
+                  <el-dropdown-item command="admin">管理员管理</el-dropdown-item>
+                  <el-dropdown-item command="approve">审批流管理</el-dropdown-item>
+                  <el-dropdown-item command="exit" divided>退出</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+
+              <div class="m-modal" v-show="show_pwd_modal" @click="hideModal">
+                <div class="m-modal-state">
+                  <div class="m-modal-content" @click="modalClick">
+                    <h3>管理员数据管理</h3>
+                    <p>--修改密码</p>
+                    <el-form :inline="false" :model="pwdForm" :rules="rules" ref="pwdForm"  label-width="1.4rem">
+                      <el-form-item label="请输入旧密码" prop="MApasswordOld">
+                        <el-input v-model="pwdForm.password_old" type="password" class="m-input-pwd" placeholder=""></el-input>
+                      </el-form-item>
+                      <el-form-item label="请输入新密码" prop="MApasswordNew">
+                        <el-input v-model="pwdForm.password_new" type="password" class="m-input-pwd" placeholder=""></el-input>
+                      </el-form-item>
+                      <el-form-item label="请确认新密码" prop="MApasswordRepeat">
+                        <el-input v-model="pwdForm.password_repeat" type="password" class="m-input-pwd" placeholder=""></el-input>
+                      </el-form-item>
+                      <p class="m-btn-p" @click="pwdSubmit('pwdForm')">确认修改</p>
+                    </el-form>
+                  </div>
+                </div>
+              </div>
             </header>
 
             <main class="main-view">
@@ -124,7 +245,24 @@
 
         data() {
             return {
-                searchTxt: ''
+                searchTxt: '',
+              show_pwd_modal:false,
+              pwdForm:{
+                password_old:'',
+                password_new:'',
+                password_repeat:''
+              },
+              rules: {
+                password_old: [
+                  { required: true, message: '请输入旧密码', trigger: 'blur' }
+                ],
+                password_new:[
+                  { required: true, message: '请输入新密码', trigger: 'blur' }
+                ],
+                password_repeat:[
+                  { required: true, message: '请确认新密码', trigger: 'blur' }
+                ],
+              }
             }
         },
 
@@ -189,16 +327,6 @@
             handleClick(tab) {
                 this.$router.push(tab.name)
             },
-            handleCommand(command){
-                switch (command) {
-                    case 'logout':
-                        this.$common.setStore('token', '');
-                        this.$router.push('/login');
-                        break;
-                }
-
-            },
-
             querySearch(queryString, cb) {
                 // console.log(queryString);
                 let searchRes =  this.menuList.filter(item => item.title .toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
@@ -209,7 +337,50 @@
                 console.log(menu);
                 this.$router.push(menu.path)
             },
+          hideModal(){
+            this.show_pwd_modal = false;
+          },
+          pwdSubmit(formName){
+            let that = this;
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                axios.post(api.update_admin_password + '?token=' + localStorage.getItem('token'),that.pwdForm).
+                then(res=>{
+                  if(res.data.status == 200){
+                    this.$message({
+                      message: res.data.message,
+                      type: 'success'
+                    });
+                    this.show_pwd_modal = false;
+                    for(let i in that.pwdForm){
+                      that.pwdForm[i] = ''
+                    }
+                  }else{
+                    this.$message.error(res.data.message);
+                  }
+                }, res=>{
+                  this.$message.error(res.data.message);
+                });
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
 
+          },
+          handleCommand(command) {
+            if(command == 'passward'){
+              this.show_pwd_modal = true;
+            }else if(command == 'admin'){
+              this.$router.push('/admin');
+            } else if(command == 'approve'){
+              this.$router.push('/approveManage');
+            }
+          },
+          modalClick(e){
+            e.stopPropagation();
+            return false
+          }
         },
 
         created() {
