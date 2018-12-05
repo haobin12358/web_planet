@@ -37,7 +37,7 @@
     </h3>
     <div class="m-search-box">
       <div>
-        <span class="m-btn active" @click="dialogQaVisible = true;question_form.quid =''">
+        <span class="m-btn active" @click="addClick('dialogQaVisible')">
           <span class="m-btn-icon m-add"></span>
           <span>新增</span>
         </span>
@@ -145,6 +145,7 @@
           case 'dialogQaVisible':
             this.question_form.quest = '';
             this.question_form.answer = '';
+            this.question_form.quid = '';
         }
 
       },
