@@ -20,9 +20,11 @@
               <span class="m-red">{{items.omstatus_zh}}</span>
             </div>
             <div class="m-order-product-ul">
-              <template v-for="(item,i) in items.order_part">
-                <div class="m-product-info" >
-                  <img src="" class="m-product-img" alt="">
+              <template v-for="(item, i) in items.order_part">
+                <div class="m-product-info">
+                  <div>
+                    <img class="m-product-img" :src="item.prmainpic" alt="">
+                  </div>
                   <div>
                     <p class="m-flex-between">
                       <span class="m-product-name">{{item.prtitle}}</span>
@@ -237,7 +239,7 @@
       margin-top: 300px;
     }
     .m-orderList-content{
-      padding: 26px;
+      padding: 0 26px;
       .m-icon-more{
         display: inline-block;
         width: 22px;
@@ -268,11 +270,11 @@
         }
         .m-order-product-ul{
           margin-top: 16px;
-          .m-product-info{
+          .m-product-info {
             display: flex;
             flex-flow: row;
             justify-content: flex-start;
-            margin: 15px 0;
+            margin-top: 30px;
             .m-product-img{
               display: block;
               width: 153px;

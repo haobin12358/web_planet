@@ -192,11 +192,11 @@
           }
         }).then(res => {
           if(res.data.status == 200) {
-            console.log(res.data.data.order_refund_apply);
             this.order_info = res.data.data;
             if(res.data.data.omstatus >= 20){
               this.getLogistic();
             }
+            // 售后信息
             if(res.data.data.order_refund_apply) {
               this.refund = res.data.data.order_refund_apply;
             }
@@ -344,8 +344,9 @@
       }
       .m-product-box {
         padding-bottom: 30px;
+        border-bottom: 1px #EEEEEE solid;
         &:last-child {
-          border-top: 1px #EEEEEE solid;
+          border-bottom: none;
         }
         .m-order-product-ul {
           margin: 50px 0 20px 0;
