@@ -29,6 +29,8 @@ const api={
   get_all_qa:title + 'qa/get_all',//获取所有问题
   add_questanswer: title +'qa/add_questanswer',//添加问题
   add_questoutline: title + 'qa/add_questoutline',//添加问题类型
+  delete_questoutline: title + 'qa/delete_questoutline',//删除问题分类
+  delete_question: title + 'qa/delete_question',//删除问题
   upload_file: title + 'file/upload',//上传图片
 
 }

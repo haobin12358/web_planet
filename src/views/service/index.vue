@@ -26,7 +26,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="editType(scope.row)">编辑</el-button>
-          <el-button type="text">删除</el-button>
+          <el-button type="text" @click="deleteType(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,7 +49,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="editQuestion(scope.row)">编辑</el-button>
-          <el-button type="text">删除</el-button>
+          <el-button type="text" @click="deleteQuestion(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -141,6 +141,7 @@
               qoname:'',
               qoicon:''
             };
+            this.imageUrl = '';
             break;
           case 'dialogQaVisible':
             this.question_form.quest = '';
@@ -185,7 +186,6 @@
                   }
                 }
               }
-
               this.$refs.tableQaType.setCurrentRow(this.orderType[a]);
               this.currentRowName = this.orderType[a].qoname;
               this.orderQa = this.orderType[a].question;
@@ -225,9 +225,23 @@
       },
       // /上传问题类型
       typeSure(){
-        this.dialogQaTypeVisible = false;
+        if(this.type_form.qoname == ''){
+          this.$message({
+            type: 'error',
+            message: '请填写问题类型名称 '
+          });
+          return false;
+        }
+        if(this.type_form.qoicon == ''){
+          this.$message({
+            type: 'error',
+            message: '请上传问题类型图标 '
+          });
+          return false;
+        }
         axios.post(api.add_questoutline+'?token='+localStorage.getItem('token'),this.type_form).then(res => {
             if(res.data.status == 200){
+              this.dialogQaTypeVisible = false;
               this.$notify.success(res.data.message);
               this.getQuestion();
             }else{
@@ -252,9 +266,70 @@
             });
           }
         })
+      },
+      //删除问题类型
+      deleteType(item){
+        let params = [];
+        params.push(item.qoid);
+        let that = this;
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axios.post(api.delete_questoutline +'?token='+localStorage.getItem('token'),{
+            qolist:params
+          }).then(res => {
+            if(res.data.status == 200){
+              that.getQuestion();
+              that.$notify.success(res.data.message)
+            }else{
+              that.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
+      },
+      //删除问题类型
+      deleteQuestion(item){
+        let params = [];
+        params.push(item.quid);
+        let that = this;
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axios.post(api.delete_question +'?token='+localStorage.getItem('token'),{
+            qulist:params
+          }).then(res => {
+            if(res.data.status == 200){
+              that.getQuestion();
+              that.$notify.success(res.data.message)
+            }else{
+              that.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
       }
     },
-
     mounted() {
       this.getQuestion();
     },
