@@ -24,6 +24,8 @@ import Layout from '../views/layout/Layout'
     noCache: true                if true ,the page will no be cached(default is false)
   }
  **/
+const commonLayout = r => require.ensure([], () => r(require('../views/common/commonLayout')), 'commonLayout');
+
 export const constantRouterMap = [
   { path: '/', component: () => import('../views/login/index'),   redirect: 'login', hidden: true },
   { path: '/login', component: () => import('../views/login/index'), hidden: true },
@@ -140,14 +142,14 @@ export const constantRouterMap = [
   },
   {
     path: '/transaction',
-    component: Layout,
-    redirect: '',
-    children: [{
-      path: '',
-      component: () => import('../views/transaction/index'),
-      name: 'transaction',
-      meta: { title: 'transaction', icon: 'transaction', noCache: true }
-    }
+    component: commonLayout,
+    redirect: 'transaction/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('src/views/transaction/index'),
+        meta: {},
+      }
     ],
   },
   {
@@ -234,20 +236,28 @@ export const constantRouterMap = [
   },
   {
     path: '/activity',
-    component: Layout,
-    redirect: '',
-    children: [{
-      path: '',
-      component: () => import('../views/activity/index'),
-      name: 'activity',
-      meta: { title: 'activity', icon: 'activity', noCache: true }
-    },{
-      path: 'trialProductEdit',
-      component: () => import('../views/activity/trialProductEdit'),
-      name: 'trialProductEdit',
-      meta: { noCache: true }
-    },],
-  } ,
+    component: commonLayout,
+    redirect: '/activity/guess',
+    children: [
+      {
+        path: 'guess',
+        component: () => import('src/views/activity/guess'),
+        meta: {}
+      }, {
+        path: 'magicGiftBox',
+        component: () => import('src/views/activity/magicGiftBox'),
+        meta: {}
+      },{
+        path: 'trialProduct',
+        component: () => import('src/views/activity/trialProduct'),
+        meta: {}
+      },{
+        path: 'firstOrder',
+        component: () => import('src/views/activity/firstOrder'),
+        meta: {}
+      },
+    ],
+  },
   {
     path: '/set',
     component: Layout,
