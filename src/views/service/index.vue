@@ -155,11 +155,13 @@
         this.question_form.qoid = currentRow.qoid;
         this.select_type = currentRow;
       },
+      //编辑问题类型
       editType(item){
         this.dialogQaTypeVisible = true;
         this.type_form = item;
         this.handleTypeCurrentChange(item);
       },
+      //编辑问题
       editQuestion(item){
         this.dialogQaVisible = true;
         this.question_form.answer = item.answer;

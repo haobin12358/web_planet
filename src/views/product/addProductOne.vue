@@ -270,8 +270,8 @@
       },
         methods: {
           changeRoute(v){
-            // this.$router.push(v)
-            console.log(this.form)
+            this.$router.push(v)
+            // console.log(this.form)
           },
         //  获取类目
           getCategory(i,id,item){
