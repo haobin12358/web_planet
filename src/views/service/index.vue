@@ -225,7 +225,6 @@
       },
       // /上传问题类型
       typeSure(){
-
         if(this.type_form.qoname == ''){
           this.$message({
             type: 'error',
