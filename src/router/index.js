@@ -255,8 +255,12 @@ export const constantRouterMap = [
       component: () => import('../views/activity/index'),
       name: 'activity',
       meta: { title: 'activity', icon: 'activity', noCache: true }
-    }
-    ],
+    },{
+      path: 'trialProductEdit',
+      component: () => import('../views/activity/trialProductEdit'),
+      name: 'trialProductEdit',
+      meta: { noCache: true }
+    },],
   } ,
   {
     path: '/set',

@@ -1,14 +1,7 @@
 <template>
   <div class="container">
-    <h3 class="m-part-title m-flex-between">
-      <div class="m-flex-start">
-        <span class="m-part-title-icon"></span>
-        <span>竞猜设置</span>
-      </div>
-    </h3>
-
-    <el-form label-width="120px">
-      <el-form-item label="商品图">
+    <el-form label-width="100px">
+      <el-form-item label="商品图:">
         <el-upload class="avatar-uploader" :show-file-list="false" accept="image/*" action="asd">
           <img v-if="imageUrl" v-lazy="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -18,11 +11,11 @@
           </div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="规则">
+      <el-form-item label="规则:">
         <el-input type="textarea"></el-input>
       </el-form-item>
 
-      <el-form-item label="封面图">
+      <el-form-item label="封面图:">
         <el-upload class="avatar-uploader" :show-file-list="false" accept="image/*" action="asd">
           <img v-if="imageUrl" v-lazy="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -32,7 +25,7 @@
           </div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="持续时间">
+      <el-form-item label="持续时间:">
         <el-date-picker
           style="height: .6rem;"
           v-model="value6"

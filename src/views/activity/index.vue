@@ -30,15 +30,15 @@
       return {
         nav_list:[
           {
-            name:'竞猜',
+            name:'每日竞猜',
             value:'guess',
             active:true
           }, {
-            name:'魔术礼盒',
+            name:'好友魔盒',
             value:'magicGiftBox',
             active:false
           }, {
-            name:'试用款',
+            name:'免费试用',
             value:'trialProduct',
             active:false
           }, {
@@ -48,7 +48,7 @@
           },
         ],
         select:{
-          name:'推文编辑',
+          name:'每日竞猜',
           value:'guess',
           active:true
         }
@@ -65,7 +65,9 @@
     },
 
     created(){
-
+      if(this.$route.query.index){
+        this.navClick(this.$route.query.index);
+      }
     },
   }
 </script>
