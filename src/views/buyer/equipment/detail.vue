@@ -22,7 +22,7 @@
           <ul class="m-side-ul">
             <li v-for="(item,index) in icon_list" :class="item.active?'active':''" @click="sideClick(index)">
               <img :src="item.pcpic"  alt="">
-              <span>{{item.pcname}}</span>
+              <span class="m-ft-24">{{item.pcname}}</span>
             </li>
           </ul>
         </div>
@@ -50,82 +50,80 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api'
-    export default {
-        name: "detail",
-      data(){
-          return{
-            head_src:null,
-            head_name:'',
-            category_list:[],
-            icon_list:null
-        }
-      },
-      mounted(){
-        common.changeTitle('装备单类');
-        this.head_src = this.$route.query.head;
-        this.head_name = this.$route.query.name;
-        this.getCategory();
-      },
-      methods:{
-        changeRoute(v,item){
-          if(item){
-            this.$router.push({path: v,query:{
-                pcid:item.pcid
-              }})
-          }else{
-            this.$router.push({path: v})
-          }
 
-        },
-        getCategoryList(id){
-          axios.get(api.category_list,{
-            params:{
-              up:id,
-              deep:1
-            }
-          }).then(res => {
-            if(res.data.status == 200){
-              this.category_list = [].concat(res.data.data)
-            }
-          })
-        },
-        //获取装备信息
-        getCategory(){
-          axios.get(api.category_list).then(res => {
-            if(res.data.status == 200){
-              for(let i=0;i<res.data.data.length;i++){
-                res.data.data[i].active = false;
-                if(this.$route.query.pcid && this.$route.query.pcid == res.data.data[i].pcid){
-                  res.data.data[i].active = true;
-                }
-              }
-              if(!this.$route.query.pcid){
-                res.data.data[0].active = true;
-              }
-              this.icon_list = [].concat(res.data.data);
-              if(this.$route.query.pcid){
-                this.getCategoryList(this.$route.query.pcid);
-              }else{
-                this.getCategoryList(this.icon_list[0].pcid);
-              }
-            }
-          })
-        },
-        //装备点击
-        sideClick(index){
-          if(this.icon_list[index].active){
-            return false;
-          }
-          let arr = [].concat(this.icon_list);
-          for(let i=0;i<arr.length;i++){
-            arr[i].active = false;
-          }
-          arr[index].active = true;
-          this.icon_list = [].concat(arr);
-          this.getCategoryList(this.icon_list[index].pcid);
+  export default {
+    name: "detail",
+    data(){
+      return{
+        head_src:null,
+        head_name:'',
+        category_list:[],
+        icon_list:null
+    }
+    },
+    mounted(){
+      common.changeTitle('装备单类');
+      this.head_src = this.$route.query.head;
+      this.head_name = this.$route.query.name;
+      this.getCategory();
+    },
+    methods:{
+      // 跳转页面
+      changeRoute(v,item){
+        if(item){
+          this.$router.push({path: v,query:{
+              pcid:item.pcid
+            }})
+        }else{
+          this.$router.push({path: v})
         }
+      },
+      // 获取装备分类下的商品
+      getCategoryList(id){
+        axios.get(api.category_list,{ params:{ up:id, deep:1}}).then(res => {
+          if(res.data.status == 200){
+            this.category_list = [].concat(res.data.data);
+          }
+        })
+      },
+      // 获取装备信息
+      getCategory() {
+        axios.get(api.category_list).then(res => {
+          if(res.data.status == 200){
+            console.log(res.data.data);
+            for(let i=0;i<res.data.data.length;i++){
+              res.data.data[i].active = false;
+              if(this.$route.query.pcid && this.$route.query.pcid == res.data.data[i].pcid){
+                res.data.data[i].active = true;
+              }
+            }
+            if(!this.$route.query.pcid){
+              res.data.data[0].active = true;
+            }
+            this.icon_list = [].concat(res.data.data);
+            if(this.$route.query.pcid){
+              this.getCategoryList(this.$route.query.pcid);
+            }else{
+              this.getCategoryList(this.icon_list[0].pcid);
+            }
+          }
+        })
+      },
+      //装备点击
+      sideClick(index){
+        if(this.icon_list[index].active){
+          return false;
+        }
+        let arr = [].concat(this.icon_list);
+        for(let i=0;i<arr.length;i++){
+          arr[i].active = false;
+        }
+        arr[index].active = true;
+        this.icon_list = [].concat(arr);
+        this.getCategoryList(this.icon_list[index].pcid);
       }
     }
+  }
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
@@ -189,11 +187,10 @@
             vertical-align: middle;
           }
         }
-
       }
       .m-side-scroll{
         position: absolute;
-        width: 280px;
+        width: 240px;
         overflow-y: auto;
         background-color: #fff;
         box-shadow:5px 0 10px rgba(0,0,0,0.16);
@@ -207,18 +204,17 @@
           }
           img{
             display: inline-block;
-            width: 120px;
-            height: 120px;
-            margin-left: 15px;
+            width: 100px;
+            height: 100px;
             margin-right: 5px;
             vertical-align: middle;
-            /*box-shadow:5px 5px 10px rgba(0,0,0,0.16);*/
             border-radius: 50%;
           }
         }
       }
       .m-equipment-detail-content{
         padding: 50px 0 50px 300px;
+        margin-right: -2px;
         .m-equipment-detail-product{
           .flex-row(flex-start);
           flex-wrap: wrap;
