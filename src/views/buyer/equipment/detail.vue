@@ -200,7 +200,7 @@
           line-height: 130px;
           padding: 5px 0;
           &.active{
-            background-color: rgba(252,211,22,0.51);
+            background-color: @mainColor;
           }
           img{
             display: inline-block;

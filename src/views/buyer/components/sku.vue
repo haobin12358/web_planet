@@ -113,6 +113,7 @@
 
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
+
   .m-sku{
     position: fixed;
     top: 0;
@@ -188,7 +189,7 @@
                 margin-right: 30px;
                 margin-bottom: 20px;
                 &.active{
-                  background-color: #FCD316;
+                  background-color: @mainColor;
                   color: #333333;
                 }
               }
@@ -208,7 +209,7 @@
             border-radius: 10px;
             text-align: center;
             &.active{
-              background-color: #fcd316;
+              background-color: @mainColor;
             }
           }
         }

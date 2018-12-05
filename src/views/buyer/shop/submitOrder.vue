@@ -369,7 +369,7 @@
           display: inline-block;
           width: 5px;
           height:50px;
-          background:linear-gradient(180deg,rgba(255,251,223,1) 0%,rgba(252,211,22,1) 100%);
+          background:linear-gradient(180deg, @subColor 0%, @mainColor 100%);
           vertical-align: middle;
           margin-right: 15px;
         }
@@ -453,7 +453,7 @@
     .m-gift-popup-btn {
       width: 120px;
       color: #ffffff;
-      background-color: #FCD316;
+      background-color: @mainColor;
       padding: 15px 70px;
       margin-left: 220px;
       border-radius: 10px;
@@ -469,7 +469,7 @@
       width: 700px;
       height:106px;
       line-height: 106px;
-      background: rgba(252,211,22,1);
+      background: @mainColor;
       box-shadow: 0 5px 6px rgba(0,0,0,0.16);
       border-radius: 10px;
       font-weight: bold;

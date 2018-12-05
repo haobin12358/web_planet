@@ -254,7 +254,7 @@
             text-align: center;
           }
           .m-btn-yellow {
-            background-color: #FCD316;
+            background-color: @mainColor;
           }
           .m-btn-red {
             background-color: #C70000;

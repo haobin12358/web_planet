@@ -199,7 +199,7 @@
         letter-spacing: 2px;
         padding: 10px 65px;
         border-radius: 30px;
-        background: linear-gradient(90deg,rgba(245,236,178,1) 0%,rgba(252,211,22,1) 100%);
+        background: linear-gradient(90deg, @subColor 0%, @mainColor 100%);
       }
     }
   }

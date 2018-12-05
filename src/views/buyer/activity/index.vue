@@ -72,7 +72,7 @@
     .m-activity-top-bg {
       width: 750px;
       height: 350px;
-      background: linear-gradient(180deg,rgba(252,211,22,1) 0%,rgba(239,232,197,1) 100%);
+      background: linear-gradient(180deg, @mainColor 0%, @subColor 100%);
     }
     .m-activity-box {
       position: absolute;
@@ -114,7 +114,7 @@
           justify-content: center;
           font-weight: bold;
           padding: 20px 25px;
-          background: linear-gradient(180deg,rgba(255,235,148,1) 0%,rgba(252,211,22,1) 100%);
+          background: linear-gradient(180deg, @subColor 0%, @mainColor 100%);
           box-shadow: 0 5px 10px rgba(0,0,0,0.16);
           border-radius: 50px;
           position: absolute;

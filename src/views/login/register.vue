@@ -42,6 +42,8 @@
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/index";
+
   .m-login{
     background-color: #9fd0bf;
     min-height: 100%;
@@ -83,10 +85,10 @@
       line-height: 100px;
       border-radius: 10px;
       box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
-      background-color: #fcd316;
+      background-color: @mainColor;
     }
     .m-login-y{
-      color: #fcd316;
+      color: @mainColor;
     }
     .m-login-p{
       font-size: 24px;

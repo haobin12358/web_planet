@@ -117,7 +117,7 @@
       letter-spacing: 3px;
       padding: 15px 270px;
       border-radius: 60px;
-      background: linear-gradient(90deg,rgba(251,232,145,1) 0%,rgba(255,204,1,1) 100%);
+      background: linear-gradient(90deg, @subColor 0%, @mainColor 100%);
       position: absolute;
       bottom: 100px;
       left: 30px;

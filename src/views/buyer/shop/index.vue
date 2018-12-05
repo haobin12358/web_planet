@@ -382,7 +382,7 @@
     .m-shop-bg{
       width: 100%;
       height: 450px;
-      background:linear-gradient(180deg,rgba(252,211,22,1) 0%,rgba(239,232,197,1) 100%);
+      background:linear-gradient(180deg, @mainColor 0%, @subColor 100%);
       position: absolute;
       top:0;
       left: 0;
@@ -497,7 +497,7 @@
       color: #999999;
       line-height: 60px;
       .m-red{
-        color: @mainColor;
+        color: @priceColor;
         font-size: 30px;
         margin: 0 10px;
       }
@@ -505,11 +505,11 @@
         display: inline-block;
         width: 193px;
         height: 60px;
-        line-height: 70px;
-        background:linear-gradient(90deg,rgba(245,236,178,1) 0%,rgba(252,211,22,1) 100%);
+        line-height: 62px;
+        background:linear-gradient(90deg, @subColor 0%, @mainColor 100%);
         border-radius: 30px;
         font-size: 30px;
-        color: #333;
+        color: #ffffff;
       }
     }
     .m-icon-radio{

@@ -303,7 +303,7 @@
             margin-bottom: 20px;
             border-bottom: 1px #C1C1C1 solid;
             .m-out-RMB {
-              color: #FCD316;
+              color: @mainColor;
               font-size: 50px;
               font-weight: bold;
             }
@@ -359,7 +359,7 @@
             width: 120px;
             white-space: nowrap;
             color: #ffffff;
-            background-color: #FCD316;
+            background-color: @mainColor;
             font-size: 30px;
             font-weight: bold;
             padding: 15px 60px;

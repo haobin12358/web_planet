@@ -18,10 +18,12 @@
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../../common/css/index";
+
  .m-bottomService-foot{
   width: 700px;
   border-radius: 10px;
-  background-color: #FCD316;
+  background-color: @mainColor;
   height: 86px;
   line-height: 86px;
   margin: 150px 25px 50px 25px;

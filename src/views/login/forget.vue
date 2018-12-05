@@ -32,6 +32,8 @@
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/index";
+
 .m-forget{
   /*min-height: 100%;*/
   height: 100%;
@@ -73,7 +75,7 @@
         width: 140px;
         height: 40px;
         line-height: 40px;
-        background-color: #fcd316;
+        background-color: @mainColor;
         color: #fff;
         font-family: ComicSansMS;
         font-size: 21px;
@@ -89,7 +91,7 @@
     line-height: 105px;
     border-radius: 10px;
     box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #fcd316;
+    background-color: @mainColor;
     font-size: 38px;
     margin-top: 500px;
     font-weight: bold;

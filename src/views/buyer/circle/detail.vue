@@ -558,7 +558,7 @@
         .m-input-sure{
           padding: 0 10px ;
           line-height: 100px;
-          color: #fcd316;
+          color: @mainColor;
           margin-left: 10px;
           font-size: 24px;
         }

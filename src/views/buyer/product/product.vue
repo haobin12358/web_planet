@@ -375,7 +375,7 @@
             border-top-left-radius: 30px;
             border-bottom-left-radius: 30px;
             &.active{
-              background-color: #fcd316;
+              background-color: @mainColor;
               margin-left: -8px;
               border-top-left-radius: 0;
               border-bottom-left-radius: 0;

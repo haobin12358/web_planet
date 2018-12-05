@@ -320,7 +320,7 @@
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
         &.active{
-          background-color: #fcd316;
+          background-color: @mainColor;
           margin-left: -8px;
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;

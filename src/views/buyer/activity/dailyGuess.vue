@@ -480,7 +480,7 @@
               line-height: 35px;
               padding: 10px;
               margin: 0 30px 30px 30px;
-              background-color: #FCD316;
+              background-color: @mainColor;
               border-radius: 50%;
             }
           }
@@ -503,7 +503,7 @@
         background: url("/static/images/activity/icon-success-bg.png") no-repeat;
         background-size: 100% 100%;
         .m-success-text {
-          color: #FCD316;
+          color: @mainColor;
           &.margin {
             margin-top: 46px;
           }
@@ -527,7 +527,7 @@
         height: 70px;
         line-height: 80px;
         color: #ffffff;
-        background: #FCD316;
+        background: @mainColor;
         box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
         border-radius: 10px;
       }

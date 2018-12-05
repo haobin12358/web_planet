@@ -126,7 +126,7 @@
       background-color: #845AFA;
       z-index: 1;
       .m-box-tip {
-        color: #FCD316;
+        color: @mainColor;
         padding-top: 23px;
       }
       .m-gift-one {
@@ -205,7 +205,7 @@
       .m-product-img {
         width: 383px;
         height: 383px;
-        border: 20px solid rgba(255,255,255,1);
+        border: 20px solid #ffffff;
         box-shadow: 10px 10px 20px rgba(0,0,0,0.16);
         border-radius: 20px;
         position: absolute;
@@ -253,7 +253,7 @@
       white-space: nowrap;
       color: #AF3300;
       padding: 16px 40px;
-      background: linear-gradient(180deg,rgba(255,235,148,1) 0%,rgba(252,211,22,1) 100%);
+      background: linear-gradient(180deg, @subColor 0%, @mainColor 100%);
       box-shadow: 0 5px 10px rgba(0,0,0,0.16);
       border-radius: 50px;
     }
@@ -333,7 +333,7 @@
             line-height: 35px;
             padding: 10px;
             margin: 0 30px 30px 30px;
-            background-color: #FCD316;
+            background-color: @mainColor;
             border-radius: 50%;
           }
         }
@@ -368,7 +368,7 @@
         line-height: 75px;
         margin: 160px 0 0 225px;
         color: #ffffff;
-        background-color: #FCD316;
+        background-color: @mainColor;
         box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
         border-radius: 10px;
       }

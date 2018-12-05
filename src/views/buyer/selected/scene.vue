@@ -216,7 +216,7 @@
         margin-right: 30px;
         border-radius: 10px;
         &.active{
-          background-color: #fcd316;
+          background-color: @mainColor;
           color: #fff;
         }
       }

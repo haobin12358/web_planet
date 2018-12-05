@@ -178,6 +178,8 @@
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../../common/css/index";
+
 .m-editCircle{
   color: #999;
   text-align: left;
@@ -275,7 +277,7 @@
       width: 700px;
       height: 106px;
       border-radius: 10px;
-      background-color: #FCD316;
+      background-color: @mainColor;
       line-height: 106px;
       font-size: 38px;
       font-weight: bold;

@@ -135,6 +135,7 @@
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/index";
 
   .m-login{
     min-height: 100vh;
@@ -170,7 +171,7 @@
         margin-left: 40px;
         padding: 6px 18px;
         border-radius: 10px;
-        background-color: #FCD316;
+        background-color: @mainColor;
         font-size: 21px;
         color: #fff;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16);
@@ -204,7 +205,7 @@
       line-height: 100px;
       border-radius: 10px;
       box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
-      background-color: #fcd316;
+      background-color: @mainColor;
     }
     .m-wei-box{
       margin-top: 158px;

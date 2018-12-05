@@ -271,7 +271,7 @@
               display: block;
               width: 5px;
               height: 50px;
-              background:linear-gradient(180deg,rgba(255,251,223,1) 0%,rgba(252,211,22,1) 100%);
+              background:linear-gradient(180deg, @subColor 0%, @mainColor 100%);
               margin-right: 15px;
             }
             .m-ft-18{
@@ -331,7 +331,7 @@
         width: 700px;
         height: 106px;
         border-radius: 10px;
-        background-color: #FCD316;
+        background-color: @mainColor;
         line-height: 106px;
         font-size: 38px;
         font-weight: bold;

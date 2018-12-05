@@ -217,7 +217,7 @@
         margin-left: 50px;
         padding: 11px 220px;
         border-radius: 10px;
-        background-color: #FCD316;
+        background-color: @mainColor;
       }
     }
   }

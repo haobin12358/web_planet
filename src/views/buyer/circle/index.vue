@@ -273,7 +273,7 @@
           /*height: 43px;*/
           /*line-height: 43px;*/
           /*padding: 0 25px;*/
-          /*background-color: #fcd316;*/
+          /*background-color: @mainColor;*/
           /*border-radius: 40px;*/
           /*box-shadow: 3px 5px 6px 0 rgba(0, 0, 0, 0.16);*/
           /*}*/

@@ -245,7 +245,7 @@
     .m-IDCard-bg {
       width: 750px;
       height: 371px;
-      background: linear-gradient(180deg,rgba(252,211,22,1) 0%,rgba(239,232,197,1) 100%);
+      background: linear-gradient(180deg, @mainColor 0%, @subColor 100%);
     }
     .m-content {
       position: absolute;
