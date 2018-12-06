@@ -7,8 +7,9 @@
         <span class="m-icon-search"></span>
         <span>搜索圈子关键词</span>
       </div>
-      <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
+      <span class="m-icon-share"></span>
     </div>
+    <span class="m-add-img" @click="changeRoute('/circle/editCircle')"></span>
     <!--轮播图-->
     <div class="m-swipe">
       <mt-swipe :auto="3000" v-if="swipe_list">
@@ -247,6 +248,16 @@
   .m-circle{
     min-height: 100vh;
     overflow-x: hidden;
+    .m-add-img {
+      width: 55px;
+      height: 55px;
+      background: url("/static/images/icon-add.png") no-repeat;
+      background-size: 100% 100%;
+      position: fixed;
+      left: 40px;
+      bottom: 140px;
+      z-index: 2;
+    }
     .m-swipe{
       padding: 0 33px;
     }

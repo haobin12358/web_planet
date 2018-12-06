@@ -11,8 +11,7 @@
             <div @click="circlePopup = false">取消</div>
             <div @click="circleDone">确认</div>
           </div>
-          <mt-checklist class="m-checklist" v-model="circleList"
-                        :options="options"></mt-checklist>
+          <mt-checklist class="m-checklist" v-model="circleList" :options="options"></mt-checklist>
         </mt-popup>
 
         <div class="m-input m-one m-ft-24">
@@ -69,7 +68,10 @@
         img_box: [],            // 上传图片集合
         upload_img: [],
         video_box: [],
-        video: {}
+        video: {},
+        usLevel: "",
+        page_num: 1,
+        page_size: 10,
       }
     },
     components: {},
@@ -98,6 +100,47 @@
             }
           }
         }
+      },
+      // 获取当前用户是否是店主
+      getUserLevel() {
+        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            this.usLevel = res.data.data.uslevel;
+          }
+        });
+      },
+      // 获取优惠券列表
+      getUserCoupon() {
+        let params = {
+          token: localStorage.getItem('token'),
+          itid: 'news_bind_coupon',
+          page_num : this.page_num,
+          page_size : this.page_size
+        };
+        axios.get(api.coupon_list, { params: params }).then(res => {
+          if(res.data.status == 200) {
+            this.isScroll = true;
+            if(res.data.data.length > 0) {
+              if(this.page_num > 1) {     // 把新数据给list续上
+                this.couponList = this.couponList.concat(res.data.data);
+              }else{
+                this.couponList = res.data.data;
+              }
+              this.page_num = this.page_num + 1;
+              this.total_count = res.data.total_count;
+            }
+            for(let i = 0; i < this.couponList.length; i ++) {
+              if(this.couponList[i].title_subtitle.left_text.length > 8) {
+                this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substring(0, 8) + "..";
+              }
+            }
+          }else{
+            this.couponList = [];
+            this.page_num = 1;
+            this.total_count = 0;
+            return false;
+          }
+        });
       },
       //上传图片
       uploadImg(e) {
@@ -173,6 +216,7 @@
     mounted() {
       common.changeTitle('发布圈子');
       this.getNav();                 // 获取导航
+      this.getUserLevel();           // 获取当前用户是否是店主
     }
   }
 </script>

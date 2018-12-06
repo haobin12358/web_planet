@@ -85,7 +85,6 @@ const api={
   get_activity: title + 'activity/get',                          // 魔盒礼盒与竞猜活动详情
   create_order: title + 'commodity/create_order',                // 试用商品下单
 
-  list_coupon: title + 'coupon/list',                            // 获取下单优惠券
   upload_file: title + 'file/upload',                            // 上传图片
 };
 
