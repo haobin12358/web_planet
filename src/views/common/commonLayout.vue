@@ -85,7 +85,10 @@
             }
 
             .main-view {
-                padding-bottom: 1rem;
+              .two-level-tabs{
+                padding-bottom: .6rem;
+
+              }
             }
         }
     }
@@ -188,11 +191,11 @@
                 <span class="version">
                     <!--开发版本:2018.11.27-->
                 </span>
-                <!--<el-autocomplete prefix-icon="el-icon-menu" placeholder="请输入菜单名" v-model="searchTxt"-->
-                                 <!--value-key="title"  :fetch-suggestions="querySearch" @select="selectMenu">-->
-                <!--</el-autocomplete>-->
+                <el-autocomplete prefix-icon="el-icon-menu" placeholder="请输入菜单名" v-model="searchTxt"
+                                 value-key="title"  :fetch-suggestions="querySearch" @select="selectMenu">
+                </el-autocomplete>
               <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
-                <span >hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
+                <!--<span>hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>-->
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="passward">修改密码</el-dropdown-item>
                   <el-dropdown-item command="admin">管理员管理</el-dropdown-item>
@@ -224,7 +227,7 @@
             </header>
 
             <main class="main-view">
-                <el-tabs v-if="showTabPane" :value="secondIndex" @tab-click="handleClick">
+                <el-tabs class="two-level-tabs" v-if="showTabPane" :value="secondIndex" @tab-click="handleClick">
                     <el-tab-pane v-for="item in defaultPage.children" :label="item.title"
                                  :name="item.path" :key="item.path">
                     </el-tab-pane>
