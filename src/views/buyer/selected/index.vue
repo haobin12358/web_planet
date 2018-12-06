@@ -291,7 +291,7 @@
         changeRoute(v, item) {
           switch(v) {
             case '/giftBox':
-              axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+              /*axios.get(api.get_home + '?token=' + localStorage.getItem('token')).then(res => {
                 if(res.data.status == 200){
                   if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包购买页
                     this.$router.push({path:v});
@@ -301,7 +301,7 @@
                     this.$router.push("/storekeeper/applyOwner");
                   }
                 }
-              });
+              });*/
               break;
             case 'equipment/detail':
               if(item){

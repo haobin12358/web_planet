@@ -36,13 +36,13 @@
       buyerStore() {
         if(this.selected == this.$store.state.tabbar_buyer[0].name) {       // 目前在买家版首页
           axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
-            if(res.data.status == 200){
-              if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去店主申请页面
-                this.$router.push("storekeeper/applyOwner");
+            if(res.data.status == 200) {
+              if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包list页面
+                this.$router.push("/giftBox");
               }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去卖家版首页
                 this.tabbar = this.$store.state.tabbar_store;
                 this.selected = this.tabbar[0].name;
-                this.$router.push("material");
+                this.$router.push("material/circle");
               }else if(res.data.data.uslevel == "3") {      // 3 - 申请成为卖家中
                 this.$router.push("storekeeper/applyOwner");
               }
@@ -51,15 +51,25 @@
         }else if(this.selected == this.$store.state.tabbar_store[0].name) {     // 目前在卖家版首页
           this.tabbar = this.$store.state.tabbar_buyer;
           this.selected = this.tabbar[0].name;
-          this.$router.push("selected");
+          this.$router.push("/selected");
         }
       }
     },
     mounted() {
+      // 如果是买家版的精选或者店主版的素材页，则显示身份切换的左上角按钮
       if(window.location.hash.indexOf("material/circle") == 2 || window.location.hash.indexOf("selected") == 2) {
         this.buyer_store = true;
       }else {
         this.buyer_store = false;
+      }
+      for(let i = 0; i < this.$store.state.tabbar_buyer.length; i ++) {
+        // 当前在买家版
+        if(this.selected == this.$store.state.tabbar_buyer[i].name) {
+          this.tabbar = this.$store.state.tabbar_buyer;
+        }else {
+          // 当前在卖家版
+          this.tabbar = this.$store.state.tabbar_store;
+        }
       }
     },
     computed:{

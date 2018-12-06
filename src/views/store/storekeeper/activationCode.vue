@@ -7,7 +7,7 @@
           <p class="m-title m-ft-32">打款信息</p>
           <div class="m-IDCard-row">
             <div class="m-row-title">姓名</div>
-            <input type="text" class="m-row-input m-width-220" v-model="name" placeholder="请填写姓名">
+            <input type="text" class="m-row-input m-width-450" v-model="name" placeholder="请填写姓名">
           </div>
           <div class="m-IDCard-row">
             <div class="m-row-title">银行卡号</div>
@@ -41,14 +41,35 @@
         <!--规则弹窗-->
         <mt-popup class="m-rule-popup" v-model="rulePopup" pop-transition="popup-fade">
           <div class="m-rule-title m-ft-32">规 则</div>
-          <div class="m-rule-text-box m-ft-28">规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则</div>
+          <div class="m-rule-text-box m-ft-28">规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则规则</div>
+          <div class="m-rule-row">
+            <div class="m-rule-left">卡号</div>
+            <div class="m-rule-right" @click="copyText('622394354582957258234')">622394354582957258234</div>
+          </div>
+          <div class="m-rule-row">
+            <div class="m-rule-left">开户行</div>
+            <div class="m-rule-right" @click="copyText('中国工商银行 萧山支行')">中国工商银行 萧山支行</div>
+          </div>
+          <div class="m-rule-row">
+            <div class="m-rule-left">开户人</div>
+            <div class="m-rule-right" @click="copyText('张三')">张三</div>
+          </div>
           <div class="m-rule-row">
             <div class="m-rule-left">电话</div>
-            <div class="m-rule-right">15700000000</div>
+            <div class="m-rule-right" @click="copyText('17777777777')">17777777777</div>
           </div>
           <div class="m-rule-row">
             <div class="m-rule-left">地址</div>
-            <div class="m-rule-right">杭州市萧山区宁围镇</div>
+            <div class="m-rule-right" @click="copyText('杭州市萧山区宁围镇')">杭州市萧山区宁围镇</div>
+          </div>
+          <div class="m-rule">
+            <img class="m-agree-img" v-if="!agree" src="/static/images/icon-radio.png" @click="agree = true">
+            <img class="m-agree-img" v-if="agree" src="/static/images/icon-radio-active.png" @click="agree = false">
+            <p class="m-rule-text">我已阅读并同意以上规则</p>
+          </div>
+          <div class="m-rule-row">
+            <div class="m-rule-left m-ft-22"><span style="color: red">* </span>以上打款信息可点击复制</div>
+            <div class="m-rule-right"></div>
           </div>
         </mt-popup>
         <!--提交成功弹窗-->
@@ -87,7 +108,7 @@
       return {
         submitPopup: false,
         auditPopup: false,
-        rulePopup: false,
+        rulePopup: true,
         name: "",
         bankNo: "",
         bank: "",
@@ -97,6 +118,13 @@
       }
     },
     methods: {
+      // 复制文本
+      copyText(text) {
+        // let text = document.getElementById(v).innerText;
+        this.$copyText(text).then(function (e) {
+          Toast({ message: '已复制到剪切板', position: 'bottom' });
+        });
+      },
       //上传正面图片
       uploadFrontImg(e){
         let files = e.target.files || e.dataTransfer.files;
@@ -203,8 +231,7 @@
       top: 25px;
       .m-IDCard {
         width: 600px;
-        height: 950px;
-        padding: 60px 50px;
+        padding: 60px 50px 30px 50px;
         margin: 0 0 260px 25px;
         border-radius: 10px;
         background-color: #ffffff;
@@ -260,6 +287,7 @@
         }
         .m-rule {
           display: flex;
+          padding-bottom: 10px;
           .m-agree-img {
             width: 35px;
             height: 35px;
@@ -306,16 +334,17 @@
         }
         .m-rule-popup {
           width: 620px;
-          height: 680px;
-          margin: -300px 0 0 25px;
+          height: 820px;
+          margin: -480px 0 0 25px;
           border-radius: 30px;
-          padding: 60px 40px;
+          padding: 40px 40px 60px 40px;
           .m-rule-title {
 
           }
           .m-rule-text-box {
             text-align: left;
-            margin: 40px 0 80px 0;
+            text-indent: 2em;
+            margin: 40px 0 70px 0;
           }
           .m-rule-row {
             font-size: 28px;
