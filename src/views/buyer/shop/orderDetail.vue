@@ -51,7 +51,8 @@
             <span class="m-store-name">{{order_info.pbname}}</span>
             <span class="m-icon-more"></span>
           </div>
-          <span class="m-red">{{order_info.omstatus_zh}}</span>
+          <span class="m-red" v-if="refund">{{refund.orastate_zh}}</span>
+          <span class="m-red" v-else>{{order_info.omstatus_zh}}</span>
         </div>
         <div class="m-product-box" v-for="(item, index) in order_info.order_part">
           <div class="m-order-product-ul">
@@ -321,7 +322,7 @@
       }
       .m-user-text{
         text-align: left;
-        padding: 35px 0;
+        padding: 25px 0;
         border-bottom: 1px solid @borderColor;
         &:last-child{
           border-bottom: none;
