@@ -67,18 +67,15 @@
       for(let i = 0; i < this.$store.state.tabbar_buyer.length; i ++) {
         if(this.selected == this.$store.state.tabbar_buyer[i].name) {
           this.tabbar = this.$store.state.tabbar_buyer;
-          console.log(1);
         }
       }
       // 当前在卖家版
       for(let i = 0; i < this.$store.state.tabbar_store.length; i ++) {
         if(this.selected == this.$store.state.tabbar_store[i].name){
           this.tabbar = this.$store.state.tabbar_store;
-          console.log(2);
         }
       }
       for(let i = 0; i < this.tabbar.length; i ++) {
-        console.log(this.tabbar[i].name);
       }
     },
     computed:{
