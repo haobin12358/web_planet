@@ -63,6 +63,7 @@ const api={
   favorite_comment: title +'news/favorite_comment',              // 评论点赞
   del_comment: title + 'news/del_comment',                       // 删除评论
   get_news_comment: title + 'news/get_news_comment',             // 获取资讯评论
+  news_banner: title + 'news/banner',                            // 获取素材页轮播（店主）
 
   list_with_group: title + 'brand/list_with_group',              // 获取品牌列表
   get_one_brand: title + 'brand/get',                            // 获取一个品牌

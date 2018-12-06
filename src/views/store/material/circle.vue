@@ -13,7 +13,7 @@
     <div class="m-swipe">
       <mt-swipe :auto="3000" v-if="swipe_list">
         <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
-          <img :src="item.ibpic" class="img" alt="" >
+          <img :src="item.mainpic" class="img" @click="changeRoute('/circle/detail', item)">
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -30,7 +30,8 @@
 
             <h3>{{items.netitle}}</h3>
             <div class="m-video-box" v-if="items.showtype == 'video'">
-              <video :src="items.video" class="m-video"></video>
+              <video src="" class="m-video"></video>
+              <!--<video :src="items.video" class="m-video"></video>-->
               <img :src="items.videothumbnail" class="m-video-img" alt="">
               <span class="m-video-time">{{items.videoduration}}</span>
               <span class="m-icon-video"></span>
@@ -116,8 +117,8 @@
     },
     methods: {
       /*获取轮播图*/
-      getSwipe(){
-        axios.get(api.list_banner_index).then(res => {
+      getSwipe() {
+        axios.get(api.news_banner).then(res => {
           if(res.data.status == 200){
             this.swipe_list = res.data.data;
           }

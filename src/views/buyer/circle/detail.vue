@@ -179,7 +179,6 @@
           }
         }).then(res => {
           if(res.data.status == 200){
-            console.log(res.data.data.product);
             this.news_info = res.data.data;
             if(res.data.data.commentnumber > 99) {
               this.news_info.commentnumber = "99+";

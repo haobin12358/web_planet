@@ -21,7 +21,8 @@
 
             <h3>{{items.netitle}}</h3>
             <div class="m-video-box" v-if="items.showtype == 'video'">
-              <video :src="items.video" class="m-video"></video>
+              <video src="" class="m-video"></video>
+              <!--<video :src="items.video" class="m-video"></video>-->
               <img :src="items.videothumbnail" class="m-video-img" alt="">
               <span class="m-video-time">{{items.videoduration}}</span>
               <span class="m-icon-video"></span>
