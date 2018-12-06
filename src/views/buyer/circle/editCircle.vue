@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="m-bottom-btn">
+      <div class="m-bottom-btn-box">
         <span @click="createNews">确认发布</span>
       </div>
     </div>
@@ -269,9 +269,9 @@
       margin-right: 15px;
     }
   }
-  .m-bottom-btn{
+  .m-bottom-btn-box {
     text-align: center;
-    padding: 50px 0;
+    padding: 0 0 50px 0;
     span{
       display: inline-block;
       width: 700px;
