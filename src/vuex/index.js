@@ -7,6 +7,9 @@ Vue.use(Vuex);
 
 let store= new Vuex.Store({
 	state: {
+	  role:{
+	    adname:''
+    },
     menu: [
       {
         title:"概况",

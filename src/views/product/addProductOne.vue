@@ -175,7 +175,7 @@
             <!--</div>-->
           <!--</div>-->
         </el-form-item>
-        <el-form-item label="标签选择：" >
+        <el-form-item label="标签选择："  >
           <el-select v-model="form.items" multiple class="m-input-m" placeholder="请选择">
             <el-option
               v-for="item in items_list"

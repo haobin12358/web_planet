@@ -59,7 +59,7 @@
 
         .right-content {
             flex: 1;
-            padding-left: .2rem;
+            padding-left: .6rem;
             padding-right: .4rem;
             overflow-y: scroll;
             /*overflow: scroll;*/
@@ -192,7 +192,7 @@
                                  <!--value-key="title"  :fetch-suggestions="querySearch" @select="selectMenu">-->
                 <!--</el-autocomplete>-->
               <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
-                <span>hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
+                <span >hello,{{$store.state.role.adname}}<i class="icon-person-navbar icon"></i></span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="passward">修改密码</el-dropdown-item>
                   <el-dropdown-item command="admin">管理员管理</el-dropdown-item>

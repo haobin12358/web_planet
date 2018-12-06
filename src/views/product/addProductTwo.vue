@@ -15,10 +15,10 @@
           <span>基本信息</span>
         </h3>
         <el-form-item label="商品名称：" required>
-          <el-input v-model="input" class="m-input-m" placeholder="请输入内容"></el-input>
+          <el-input v-model="form.prtitle" class="m-input-m" placeholder="请输入内容"></el-input>
         </el-form-item>
         <el-form-item label="添加描述：" required>
-          <el-input v-model="input" class="m-input-m" placeholder="请输入内容"></el-input>
+          <el-input v-model="form.prdesc" class="m-input-m" placeholder="请输入内容"></el-input>
           <p class="m-alert-text">建议描述文字在36字以内</p>
         </el-form-item>
         <el-form-item label="商品图片："  required>
@@ -29,7 +29,7 @@
             :on-remove="handleRemove">
             <span class="m-upload-img"></span>
           </el-upload>
-          <p class="m-alert-text">建议尺寸：700*700像素，可以通过拖动图片调整前后顺序，最多上传5张商品图片</p>
+          <p class="m-alert-text">建议尺寸：700*700像素,最多上传1张商品图片</p>
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="dialogImageUrl" alt="">
           </el-dialog>
@@ -39,39 +39,105 @@
           <span>商品价格/库存</span>
         </h3>
         <el-form-item label="商品价格：" required>
-          <el-radio v-model="radio" label="1">统一规格</el-radio>
-          <el-radio v-model="radio" label="2">不同规格</el-radio>
+          <el-radio v-model="allPrice" label="1">统一规格</el-radio>
+          <el-radio v-model="allPrice" label="2">不同规格</el-radio>
         </el-form-item>
+
+        <div class="m-different-price-box" v-if="allPrice == '2'">
+          <div class="m-search-box">
+            <div>
+              <template v-for="(item,index) in form.prattribute">
+                <el-input v-model="form.prattribute[index]" class="m-input-xxs" placeholder="规格1"></el-input>
+              </template>
+              <span class="m-btn m-search-btn" @click="addSku">
+              <span class="m-btn-icon m-add"></span>
+              <span>添加商品规格</span>
+            </span>
+            </div>
+            <div>
+            <span class="m-btn active" @click="addOne">
+              <span class="m-btn-icon m-add"></span>
+              <span>添加商品属性</span>
+            </span>
+            </div>
+          </div>
+          <el-table
+            :data="form.skus"
+            style="width: 100%">
+            <el-table-column
+              label="图片">
+              <template slot-scope="scope">
+                <el-upload
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  list-type="picture-card"
+                  class="m-upload-s m-inline-block"
+                  :on-preview="handlePictureCardPreview"
+                  :on-remove="handleRemove">
+                  <span class="m-upload-img"></span>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="价格">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.skuprice" class="m-input-xxs"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="库存">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.skustock" class="m-input-xxs"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column
+              :label="form.prattribute[index]" v-for="(item,index) in form.prattribute" :key="index">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.skuattritedetail[scope.$index]" class="m-input-xxs"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作">
+              <template slot-scope="scope">
+                <span class="m-table-link" @click="deleteOne(scope.$index)">删除</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
         <el-form-item label="价格：" >
-          <el-input v-model="input" class="m-input-s" placeholder="￥"></el-input>
+          <el-input v-model="form.prprice" class="m-input-s" placeholder="￥"></el-input>
           <span>元</span>
         </el-form-item>
         <el-form-item label="商品库存：" required>
-          <el-input v-model="input" class="m-input-s" placeholder=""></el-input>
+          <el-input v-model="form.prstocks" class="m-input-s" placeholder=""></el-input>
           <span>件</span>
         </el-form-item>
 
-        <h3 class="m-form-part-title">
-          <span class="m-part-title-icon"></span>
-          <span>其它</span>
-        </h3>
-        <el-form-item label="上架时间：" required>
-          <p>
-            <el-radio v-model="radio" label="1">立即上架售卖</el-radio>
-          </p>
-          <p>
-            <el-radio v-model="radio" label="2">自定义上架时间</el-radio>
-            <el-date-picker
-              v-model="value8"
-              type="date"
-              placeholder="选择日期">
-            </el-date-picker>
-          </p>
-          <p  class="m-alert-text">需等待管理员审批完成，上架时间请选择24小时以后</p>
-        </el-form-item>
+        <!--<h3 class="m-form-part-title">-->
+          <!--<span class="m-part-title-icon"></span>-->
+          <!--<span>其它</span>-->
+        <!--</h3>-->
+        <!--<el-form-item label="上架时间：" required>-->
+          <!--<p>-->
+            <!--<el-radio v-model="radio" label="1">立即上架售卖</el-radio>-->
+          <!--</p>-->
+          <!--<p>-->
+            <!--<el-radio v-model="radio" label="2">自定义上架时间</el-radio>-->
+            <!--<el-date-picker-->
+              <!--v-model="value8"-->
+              <!--type="date"-->
+              <!--placeholder="选择日期">-->
+            <!--</el-date-picker>-->
+          <!--</p>-->
+          <!--<p  class="m-alert-text">需等待管理员审批完成，上架时间请选择24小时以后</p>-->
+        <!--</el-form-item>-->
       </el-form>
 
       <div class="m-form-btn-box">
+        <span class="m-form-btn active" @click="changeRoute('-1')">上一步</span>
         <span class="m-form-btn active" @click="changeRoute('/product/addProductThree')">下一步</span>
       </div>
     </div>
@@ -83,9 +149,20 @@
         data() {
             return {
               form:{
-                resource:'',
-                date1:'',
-                name:''
+                prtitle:'',
+                prdesc:'',
+                prprice:'',
+                prstocks:'',
+                prmainpic:'',
+                prattribute:[''],
+                skus: [
+                  {
+                    skupic: "",
+                    skuprice: 0,
+                    skustock: 0,
+                    skuattritedetail: ['']
+                  }
+                ]
               },
               rules:{
                 PRname:[
@@ -110,9 +187,27 @@
               }],
               value8: '',
               input:'',
-              radio:1,
+              allPrice:'1',
               dialogVisible:false,
               dialogImageUrl:null,
+              tableData7: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+              }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1517 弄'
+              }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1519 弄'
+              }, {
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1516 弄'
+              }],
+              search: ''
             }
         },
         components: {},
@@ -124,8 +219,29 @@
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
           },
+          //添加规格
+          addSku(){
+            this.form.prattribute.push('');
+          },
           changeRoute(v){
-            this.$router.push(v)
+            if(v == '-1'){
+              this.$router.go(-1)
+            }else{
+              this.$router.push(v)
+            }
+          },
+          //添加一个商品属性
+          addOne(){
+            this.form.skus.push({
+              skupic: "",
+              skuprice: 0,
+              skustock: 0,
+              skuattritedetail: new Array(this.form.prattribute.length)
+            });
+          },
+          //删除一个商品属性
+          deleteOne(index){
+            this.form.skus.splice(index,1)
           }
         },
         created() {
@@ -166,6 +282,15 @@
     }
     .m-form-btn-box{
       margin-top: 1.6rem;
+    }
+    .m-inline-block{
+      display: inline-block;
+    }
+    .m-search-box{
+     padding-top: 0;
+    }
+    .m-different-price-box{
+      padding: 0 0 0.2rem 1.2rem;
     }
   }
 </style>

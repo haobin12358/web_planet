@@ -40,6 +40,7 @@
     </el-form>
 
     <div class="m-form-btn-box">
+      <span class="m-form-btn active" @click="changeRoute('-1')">上一步</span>
       <span class="m-form-btn active" @click="changeRoute('/product/addProductThree')">下一步</span>
     </div>
   </div>
@@ -74,6 +75,13 @@
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
+      },
+      changeRoute(v){
+        if(v == '-1'){
+          this.$router.go(-1)
+        }else{
+          this.$router.push(v)
+        }
       }
     },
     created() {
