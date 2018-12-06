@@ -251,7 +251,7 @@
       text-align: center;
       line-height: 55px;
       white-space: nowrap;
-      color: #AF3300;
+      color: #ffffff;
       padding: 16px 40px;
       background: linear-gradient(180deg, @subColor 0%, @mainColor 100%);
       box-shadow: 0 5px 10px rgba(0,0,0,0.16);
