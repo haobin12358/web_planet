@@ -39,14 +39,6 @@ Vue.prototype.$moment = moment;
 // 引入animate.css
 import animate from 'animate.css'
 
-
-// let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MzU2MDc3MSwiZXhwIjoxNTQ0MTY1NTcxfQ.eyJpZCI6IjhlNTlhOTAwLWY0NmMtMTFlOC04YzI3LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.Nl2rXzvgYjpY4JqXp0Bx-Adu9PdtVdCn-t8tJt3wiJE';
-// let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0MzM4Mzk0OCwiZXhwIjoxNTQzOTg4NzQ4fQ.eyJpZCI6ImRiNzA2N2E4LWYyZDAtMTFlOC04MGJjLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.ezUBV2leJNvhua-5SQr447lMs0ihQa6SX73GzhwzJKY';
-// let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Mzk3ODgwNCwiZXhwIjoxNTQ0NTgzNjA0fQ.eyJpZCI6ImI5ODkxYTU2LWU3YjEtMTFlOC04NjRlLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoyfQ.VNmHhpphtpVD0Ix-oAHsIVgIv_Rylf3WQESADHT30cg';
-let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Mzk3ODk3NSwiZXhwIjoxNTQ0NTgzNzc1fQ.eyJpZCI6ImRiNzA2N2E4LWYyZDAtMTFlOC04MGJjLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.9KavtDqhipvWUDdDScyNdgexa1qq-Rxng-Xk64sVrDs';
-localStorage.setItem('token', token);
-
-
 Vue.prototype.$http = axios;
 //拦截器、
 // import { Loading, Message, MessageBox  } from 'element-ui'

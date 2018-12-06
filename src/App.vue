@@ -25,6 +25,8 @@ export default {
   mounted(){
     // alert(common.GetQueryString('code'))
 
+    let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Mzk3ODk3NSwiZXhwIjoxNTQ0NTgzNzc1fQ.eyJpZCI6ImRiNzA2N2E4LWYyZDAtMTFlOC04MGJjLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.9KavtDqhipvWUDdDScyNdgexa1qq-Rxng-Xk64sVrDs';
+    localStorage.setItem('token', token);
   },
   methods:{
     returnClick(){
