@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/activity?index=2'}" replace>试用商品首页</el-breadcrumb-item>
+      <el-breadcrumb-item to="trialProduct" replace>试用商品首页</el-breadcrumb-item>
       <el-breadcrumb-item>商品编辑</el-breadcrumb-item>
     </el-breadcrumb>
 

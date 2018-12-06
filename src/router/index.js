@@ -264,6 +264,10 @@ export const constantRouterMap = [
         component: () => import('src/views/activity/trialProduct'),
         meta: {}
       },{
+        path: 'trialProductEdit',
+        component: () => import('src/views/activity/trialProductEdit'),
+        meta: {}
+      },{
         path: 'firstOrder',
         component: () => import('src/views/activity/firstOrder'),
         meta: {}
