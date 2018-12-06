@@ -1,77 +1,63 @@
 <template>
-    <div class="m-orderList" @touchmove.stop="touchMove">
-      <div class="m-nav">
-        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
-      </div>
-      <div class="m-no-coupon" v-if="order_list.length == 0">
-        <span class="m-no-img m-order-no-img"></span>
-        <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
-      </div>
-
-      <div class="m-orderList-content" v-else>
-        <template v-for="(items,index) in order_list">
-          <div class="m-one-part"  @click.stop="changeRoute('/orderDetail',items)">
-            <div class="m-order-store-tile" >
-              <div @click.stop="changeRoute('/brandDetail',items)">
-                <span class="m-icon-store"></span>
-                <span class="m-store-name">{{items.pbname}}</span>
-                <span class="m-icon-more"></span>
-              </div>
-              <span class="m-red">{{items.omstatus_zh}}</span>
-            </div>
-            <div class="m-order-product-ul">
-              <template v-for="(item, i) in items.order_part">
-                <div class="m-product-info">
-                  <div>
-                    <img class="m-product-img" :src="item.prmainpic" alt="">
-                  </div>
-                  <div>
-                    <p class="m-flex-between">
-                      <span class="m-product-name">{{item.prtitle}}</span>
-                      <span class="m-price">￥{{item.skuprice | money}}</span>
-                    </p>
-                    <p class="m-flex-between">
-                      <span class="m-product-label">
-                        <template v-for="(key,k) in item.skuattritedetail" >
-                        <span >{{key}}</span>
-                        <span v-if="k < item.skuattritedetail.length-1">；</span>
-                      </template>
-                      </span>
-                      <span >x{{item.opnum}}</span>
-                    </p>
-                  </div>
-                </div>
-              </template>
-
-              <ul class="m-order-btn-ul">
-                <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">
-                  退款
-                </li>
-                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35 ">
-                  查看物流
-                </li>
-                <li v-if=" items.omstatus == -40" @click.stop="deleteOrder(items)">
-                  删除订单
-                </li>
-                <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">
-                  取消订单
-                </li>
-                <li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35 ">
-                  评价
-                </li>
-                <li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">
-                  确认收货
-                </li>
-                <li class="active" v-if="items.omstatus == 0">
-                  立即付款
-                </li>
-              </ul>
-            </div>
-          </div>
-        </template>
-      </div>
-      <bottom-line v-if="bottom_show"></bottom-line>
+  <div class="m-orderList" @touchmove.stop="touchMove">
+    <div class="m-nav">
+      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
     </div>
+    <div class="m-no-coupon" v-if="order_list.length == 0">
+      <span class="m-no-img m-order-no-img"></span>
+      <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
+    </div>
+
+    <div class="m-orderList-content" v-else>
+      <template v-for="(items,index) in order_list">
+        <div class="m-one-part"  @click.stop="changeRoute('/orderDetail',items)">
+          <div class="m-order-store-tile" >
+            <div @click.stop="changeRoute('/brandDetail',items)">
+              <span class="m-icon-store"></span>
+              <span class="m-store-name">{{items.pbname}}</span>
+              <span class="m-icon-more"></span>
+            </div>
+            <span class="m-red">{{items.omstatus_zh}}</span>
+          </div>
+          <div class="m-order-product-ul">
+            <template v-for="(item, i) in items.order_part">
+              <div class="m-product-info">
+                <div>
+                  <img class="m-product-img" :src="item.prmainpic" alt="">
+                </div>
+                <div>
+                  <p class="m-flex-between">
+                    <span class="m-product-name">{{item.prtitle}}</span>
+                    <span class="m-price">￥{{item.skuprice | money}}</span>
+                  </p>
+                  <p class="m-flex-between">
+                    <span class="m-product-label">
+                      <template v-for="(key,k) in item.skuattritedetail" >
+                      <span >{{key}}</span>
+                      <span v-if="k < item.skuattritedetail.length-1">；</span>
+                    </template>
+                    </span>
+                    <span >x{{item.opnum}}</span>
+                  </p>
+                </div>
+              </div>
+            </template>
+
+            <ul class="m-order-btn-ul">
+              <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>
+              <li v-if="items.omstatus==20 || items.omstatus==35" @click.stop="changeRoute('/logisticsInformation',items)">查看物流</li>
+              <li v-if=" items.omstatus==-40" @click.stop="deleteOrder(items)">删除订单</li>
+              <li v-if="items.omstatus==0" @click.stop="cancelOrder(items)">取消订单</li>
+              <li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment')">评价</li>
+              <li class="active" v-if="items.omstatus==20">确认收货</li>
+              <li class="active" v-if="items.omstatus==0">立即付款</li>
+            </ul>
+          </div>
+        </div>
+      </template>
+    </div>
+    <bottom-line v-if="bottom_show"></bottom-line>
+  </div>
 </template>
 
 <script>
