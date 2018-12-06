@@ -110,7 +110,7 @@
     },
     components: { navList, bottomLine },
     mounted() {
-      common.changeTitle('圈子');
+      common.changeTitle('素材');
       this.getNav();
       this.getNews();
       this.getSwipe();

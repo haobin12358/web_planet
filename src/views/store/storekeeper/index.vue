@@ -158,42 +158,47 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-      data() {
-        return {
-          name: '',
-          outPopup: false,
-          outSubmit: false,
-          bankPopup: false,
-          slots: [{ values: ['中国银行', '中国工商银行', '交通银行', '中国建设银行'] }],
-          bank: "",
-          moneyNum: "0.00"
+  import common from '../../../common/js/common';
+
+  export default {
+    data() {
+      return {
+        name: '',
+        outPopup: false,
+        outSubmit: false,
+        bankPopup: false,
+        slots: [{ values: ['中国银行', '中国工商银行', '交通银行', '中国建设银行'] }],
+        bank: "",
+        moneyNum: "0.00"
+      }
+    },
+    components: {},
+    methods: {
+      // 跳转其他页面的方法
+      changeRoute(v) {
+        this.$router.push(v)
+      },
+      // 提现的选择银行确定按钮
+      bankDone() {
+        this.bankPopup = false;
+      },
+      // 提现的提交按钮
+      outBtn(where) {
+        if(where == "submit") {
+          this.outSubmit = true;
+        }else if(where == "know") {
+          this.outPopup = false;
         }
       },
-      components: {},
-      methods: {
-        // 跳转其他页面的方法
-        changeRoute(v) {
-          this.$router.push(v)
-        },
-        // 提现的选择银行确定按钮
-        bankDone() {
-          this.bankPopup = false;
-        },
-        // 提现的提交按钮
-        outBtn(where) {
-          if(where == "submit") {
-            this.outSubmit = true;
-          }else if(where == "know") {
-            this.outPopup = false;
-          }
-        },
-        // picker选择的银行改变
-        bankChange(picker, values) {
-          this.bank = values[0];
-        }
+      // picker选择的银行改变
+      bankChange(picker, values) {
+        this.bank = values[0];
       }
+    },
+    mounted() {
+      common.changeTitle('店主');
     }
+  }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";

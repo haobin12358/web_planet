@@ -116,6 +116,7 @@
       },
       components: { sku, bottomLine },
       mounted(){
+        common.changeTitle('购物车');
         this.getCart();
       },
       methods: {
