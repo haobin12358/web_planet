@@ -352,7 +352,7 @@
     height: 60px;
     border-radius: 50px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    background-image: linear-gradient(to right, #fbea7d, @mainColor);
+    background-image: linear-gradient(to right, @subColor, @mainColor);
     .flex-row(space-between);
     .m-selected-label-left{
       text-align: left;

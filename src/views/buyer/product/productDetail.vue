@@ -315,7 +315,7 @@
         display: inline-block;
         width: 271px;
         text-align: center;
-        background-color: #fbe891;
+        background-color: @subColor;
         margin: 0;
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;

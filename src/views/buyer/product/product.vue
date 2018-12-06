@@ -370,7 +370,7 @@
             display: inline-block;
             width: 171px;
             text-align: center;
-            background-color: #fbe891;
+            background-color: @subColor;
             margin: 0;
             border-top-left-radius: 30px;
             border-bottom-left-radius: 30px;

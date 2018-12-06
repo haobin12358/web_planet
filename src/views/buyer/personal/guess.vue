@@ -43,7 +43,6 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
 
   export default {
     data() {

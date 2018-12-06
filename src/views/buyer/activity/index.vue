@@ -106,7 +106,8 @@
         }
         .m-activity-btn {
           width: 300px;
-          color: #AF3300;
+          color: #ffffff;
+          /*color: #AF3300;*/
           font-size: 38px;
           height: 60px;
           display: flex;
