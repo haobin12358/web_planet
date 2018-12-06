@@ -34,7 +34,7 @@
       <ul>
         <li class="m-person-info" v-for="item in person">
           <div class="m-img-name-time">
-            <div>
+            <div class="m-img-box">
               <img class="m-img" :src="item.img" alt="">
             </div>
             <div class="m-name-time">
@@ -223,12 +223,15 @@
         padding: 0 40px 50px 40px;
         .m-img-name-time {
           display: flex;
-
-          .m-img {
+          .m-img-box {
             width: 97px;
             height: 97px;
             margin-right: 30px;
             background-color: #EEEEEE;
+            .m-img {
+              width: 97px;
+              height: 97px;
+            }
           }
           .m-name-time {
             text-align: left;
