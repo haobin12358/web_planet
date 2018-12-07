@@ -123,7 +123,7 @@
         <span v-if="order_info.omstatus == -40" @click="cancelOrder">删除订单</span>
         <span v-if="order_info.omstatus == 0 " @click="cancelOrder">取消订单</span>
         <span class="active" v-if="order_info.omstatus == 10 || order_info.omstatus == 20">确认收货</span>
-        <span class="active" v-if="order_info.omstatus == 0">立即付款</span>
+        <span class="active" v-if="order_info.omstatus == 0" @click="payBtn">立即付款</span>
       </div>
       <bottom></bottom>
     </div>
@@ -134,7 +134,7 @@
   import bottom from '../components/bottomService';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { MessageBox } from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
 
   export default {
     data() {
@@ -239,6 +239,49 @@
         }).catch(() => {
 
         });
+      },
+      // 请求微信支付参数
+      payBtn() {
+        let params = { omid: this.$route.query.omid, omclient: '0', opaytype: '0' };
+        axios.post(api.order_pay + '?token='+ localStorage.getItem('token'), params).then(res => {
+          if(res.data.status == 200) {
+            this.wxPay(res.data.data.args);
+          }
+        });
+      },
+      // 调起微信支付
+      wxPay(data) {
+        let that = this;
+        function onBridgeReady() {      // 微信支付接口
+          WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+              "appId": data.appId,                 // 公众号名称，由商户传入
+              "timeStamp": data.timeStamp,         // 时间戳，自1970年以来的秒数
+              "nonceStr": data.nonceStr,           // 随机串
+              "package": data.package,             // 统一下单接口返回的prepay_id参数值
+              "signType": data.signType,           // 微信签名方式
+              "paySign": data.sign                 // 微信签名
+            },
+            function(res){
+              if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
+                this.getOrderInfo();
+              }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
+                Toast('支付已取消');
+              }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
+                Toast('支付失败');
+              }
+            });
+        }
+        if (typeof WeixinJSBridge == "undefined"){
+          if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+          }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+          }
+        }else{
+          onBridgeReady();
+        }
       }
     }
   }

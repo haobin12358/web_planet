@@ -50,7 +50,7 @@
               <li v-if="items.omstatus==0" @click.stop="cancelOrder(items)">取消订单</li>
               <li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment')">评价</li>
               <li class="active" v-if="items.omstatus==20">确认收货</li>
-              <li class="active" v-if="items.omstatus==0">立即付款</li>
+              <li class="active" v-if="items.omstatus==0" @click.stop="payBtn(items)">立即付款</li>
             </ul>
           </div>
         </div>
@@ -65,7 +65,7 @@
   import navList from '../../../components/common/navlist';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { MessageBox } from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
 
     export default {
@@ -120,6 +120,29 @@
           this.nav_list = [].concat(arr);
           this.getOrderList(arr[index].status);
         },
+        // 获取各状态的订单数量
+        getOrderNum() {
+          axios.get(api.order_count + "?token=" + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              for(let i = 0; i < res.data.data.length; i ++) {
+                res.data.data[i].active = false;
+              }
+              this.nav_list = [].concat(res.data.data);
+
+              // 显示哪个类型的订单
+              for(let i = 0; i < this.nav_list.length; i ++) {
+                this.nav_list[i].active = false;
+              }
+              let which = this.$route.query.which;
+              if(which) {
+                this.navClick(which);
+              }else {
+                this.nav_list[0].active = true;
+                this.getOrderList();
+              }
+            }
+          })
+        },
         // 获取订单列表
         getOrderList(omstatus) {
           let params = {
@@ -144,29 +167,6 @@
                 this.page_info.page_num = 1;
                 this.total_count = 0;
                 return false;
-              }
-            }
-          })
-        },
-        // 获取各状态的订单数量
-        getOrderNum() {
-          axios.get(api.order_count + "?token=" + localStorage.getItem('token')).then(res => {
-            if(res.data.status == 200) {
-              for(let i = 0; i < res.data.data.length; i ++) {
-                res.data.data[i].active = false;
-              }
-              this.nav_list = [].concat(res.data.data);
-
-              // 显示哪个类型的订单
-              for(let i = 0; i < this.nav_list.length; i ++) {
-                this.nav_list[i].active = false;
-              }
-              let which = this.$route.query.which;
-              if(which) {
-                this.navClick(which);
-              }else {
-                this.nav_list[0].active = true;
-                this.getOrderList();
               }
             }
           })
@@ -214,6 +214,50 @@
           }).catch(() => {
 
           });
+        },
+        // 请求微信支付参数
+        payBtn(items) {
+          let params = { omid: items.omid, omclient: '0', opaytype: '0' };
+          axios.post(api.order_pay + '?token='+ localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200) {
+              this.wxPay(res.data.data.args, items.omid);
+            }
+          });
+        },
+        // 调起微信支付
+        wxPay(data, omid) {
+          let that = this;
+          function onBridgeReady() {      // 微信支付接口
+            WeixinJSBridge.invoke(
+              'getBrandWCPayRequest', {
+                "appId": data.appId,                 // 公众号名称，由商户传入
+                "timeStamp": data.timeStamp,         // 时间戳，自1970年以来的秒数
+                "nonceStr": data.nonceStr,           // 随机串
+                "package": data.package,             // 统一下单接口返回的prepay_id参数值
+                "signType": data.signType,           // 微信签名方式
+                "paySign": data.sign                 // 微信签名
+              },
+              function(res){
+                // console.log(res);
+                if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
+                  this.$router.push({ path: '/orderDetail', query: { omid: omid }});
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
+                  Toast('支付已取消');
+                }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
+                  Toast('支付失败');
+                }
+              });
+          }
+          if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+              document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }else if (document.attachEvent){
+              document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+              document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+          }else{
+            onBridgeReady();
+          }
         }
       }
     }
