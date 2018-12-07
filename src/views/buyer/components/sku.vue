@@ -178,7 +178,7 @@
               justify-content: flex-start;
               flex-wrap: wrap;
               list-style: none;
-              padding: 0;
+              margin: 10px 0 0 0;
               overflow-y: scroll;
               li{
                 height: 25px;

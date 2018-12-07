@@ -14,7 +14,7 @@
           <span class="m-red">￥{{product_info.prprice | money}}</span>
         </h3>
         <div class="m-info-list">
-          <span>快递：{{product_info.prfreight}}</span>
+          <span>快递：{{product_info.prfreight | money}} 元</span>
           <span>月销：{{product_info.month_sale_value}}</span>
           <span>
             {{product_info.brand.pbname}}
@@ -25,7 +25,6 @@
         <div>
           <span class="m-label">规格</span>
           <span class="m-select m-black">选择
-
             <template  v-if="select_value">
                <span v-for="(item,index) in select_value.skuattritedetail">{{product_info.prattribute[index]}} {{item}}</span>
             </template>
@@ -256,7 +255,7 @@
     justify-content: space-between;
     padding: 24px 30px;
     color: #999999;
-    box-shadow: 3px 6px rgba(0,0,0,0.16);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     .m-label{
       display: inline-block;
       margin-right: 30px;
