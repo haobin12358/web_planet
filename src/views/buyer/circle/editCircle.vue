@@ -43,6 +43,17 @@
         </div>
       </div>
 
+      <!--选择商品类别-->
+      <mt-popup class="m-product-popup" v-model="productPopup" position="bottom">
+        <div class="m-popup-btn">
+          <div @click="productPopup = false">取消</div>
+          <div @click="circleDone">确认</div>
+        </div>
+        <div class="m-product-box">
+
+        </div>
+      </mt-popup>
+
       <div class="m-bottom-btn-box">
         <span @click="createNews">确认发布</span>
       </div>
@@ -70,6 +81,7 @@
         video_box: [],
         video: {},
         usLevel: "",
+        productPopup: true,
         page_num: 1,
         page_size: 10,
       }
@@ -109,7 +121,7 @@
           }
         });
       },
-      // 获取优惠券列表
+      // 获取发布圈子时可选择的
       getUserCoupon() {
         let params = {
           token: localStorage.getItem('token'),
@@ -347,6 +359,16 @@
   .m-checklist {
     padding: 50px 0;
     text-align: center;
+  }
+}
+.m-product-popup {
+  width: 750px;
+  .m-popup-btn {
+    color: #333333;
+    display: flex;
+    justify-content: space-between;
+    font-size: 28px;
+    padding: 20px 40px 0 40px;
   }
 }
 
