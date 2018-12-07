@@ -5,38 +5,42 @@
       </el-table-column>
       <el-table-column type="expand" width="30">
         <template slot-scope="scope">
-          <el-table class="demo-table-expand" :data="scope.row.order_item" border style="width: 100%" stripe size="mini">
-            <el-table-column align="center" prop="PBimage" label="商品图片">
+          <el-table class="demo-table-expand" :data="scope.row.order_part" border style="width: 100%" stripe size="mini">
+            <el-table-column align="center" prop="prmainpic" label="商品图片">
               <template slot-scope="scope">
-                <img  :src="scope.row.PBimage" alt="" style="width: 0.5rem;height: 0.5rem">
+                <img  :src="scope.row.prmainpic" alt="" style="width: 0.5rem;height: 0.5rem">
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="PRname" label="商品名称">
+            <el-table-column align="center" prop="prtitle" label="商品名称">
             </el-table-column>
-            <el-table-column align="center" prop="PBprice" label="单价">
+            <el-table-column align="center" prop="opsubtotal" label="小计">
             </el-table-column>
-            <el-table-column align="center" prop="PRnumber" label="数量">
+            <el-table-column align="center" prop="opnum" label="数量">
             </el-table-column>
-            <el-table-column align="center" prop="PBunit" label="价格单位">
-            </el-table-column>
-            <el-table-column align="center" prop="PRinfo" label="商品简介">
-            </el-table-column>
-            <el-table-column align="center" prop="PRtype" label="商品类型">
-            </el-table-column>
-            <el-table-column align="center" prop="PRbrand" label="商品分类">
-            </el-table-column>
+            <!--<el-table-column align="center" prop="PBunit" label="价格单位">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column align="center" prop="PRinfo" label="商品简介">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column align="center" prop="PRtype" label="商品类型">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column align="center" prop="PRbrand" label="商品分类">-->
+            <!--</el-table-column>-->
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="订单号" prop="OMid" width="320">
+      <el-table-column align="center" label="订单号" prop="omid" width="320">
       </el-table-column>
-      <el-table-column align="center" label="订单状态" prop="OMstatus" width="100">
+      <el-table-column align="center" label="订单状态" prop="omstatus_zh" width="100">
       </el-table-column>
-      <el-table-column align="center" label="订单价格" prop="OMprice" width="90">
+      <el-table-column align="center" label="订单价格" prop="ommount" width="90">
       </el-table-column>
-      <el-table-column align="center" label="下单时间" prop="OMtime" width="200">
+      <el-table-column align="center" label="收件人" prop="omrecvname" width="90">
       </el-table-column>
-      <el-table-column align="center" label="订单备注" prop="OMabo">
+      <el-table-column align="center" label="收件人联系方式" prop="omrecvphone" width="120">
+      </el-table-column>
+      <el-table-column align="center" label="下单时间" prop="omtime" width="200">
+      </el-table-column>
+      <el-table-column align="center" label="订单备注" prop="ommessage">
       </el-table-column>
       <el-table-column align="center" label="操作" width="150" fixed="right">
         <template slot-scope="scope">
@@ -76,9 +80,10 @@
       },
       // 接收数据并赋值给 this.orderList
       getOrderList(data) {
-        this.orderList = data.OrderMains
+        this.orderList = data.data;
+        console.log(data)
         // console.log(this.orderList)
-        this.total_page = Math.ceil(data.count / data.page_size);
+        this.total_page = data.total_page;
       },
       // 分页组件的提示
       pageChange(v){

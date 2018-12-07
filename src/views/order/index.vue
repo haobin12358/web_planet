@@ -47,7 +47,8 @@
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <div v-for="item in tabList">
-            <el-tab-pane :label="item" :name="item.slice(0, 3)" :lazy="lazyStatus">
+            <el-tab-pane :label="item.name" :name="item.name" :value="item.status" :lazy="lazyStatus">
+              <span slot="label"> {{item.name}}({{item.count}})</span>
               <all-order-table ref="child" :order="order" @toPage="getData"></all-order-table>
             </el-tab-pane>
           </div>
@@ -66,7 +67,7 @@
     data() {
       return {
         name: '所有订单',
-        activeName: '全 部',
+        activeName: '全部',
         form:{
           user:''
         },
@@ -89,11 +90,16 @@
         OMstatus: '',
         OMstartTime: '',
         OMendTime: '',
-        tabList: ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中'],
+        tabList:[],
+        // tabList: ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中'],
         index: 0
       }
     },
     components: {  allOrderTable },
+    mounted(){
+      this.getStatus();
+      this.getData(1)
+    },
     methods: {
       // 页面刷新
       freshClick(){
@@ -107,46 +113,41 @@
         }else {
           this.index = parseInt(tab.index) + 1
         }
-        // 判断需要的订单状态
-        if(tab.name == '全 部') {
-          this.OMstatus = ''
-        }else {
-          this.OMstatus = tab.name
-        }
+
         // this.tabList = ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
         // tab.label含"0"则不调用接口
-        if(tab.label.indexOf("0") == -1) {
-          this.getData(1)
-        }
+        // if(tab.label.indexOf("0") == -1) {
+          this.getData(1,tab.$attrs.value)
+        // }
       },
       // 获取订单数据
-      getData(v){
+      getData(v,status){
         let params = {
           token: localStorage.getItem('token'),
-          OMstatus: this.OMstatus,
+          omstatus: status,
           page_num: v,
           page_size: this.page_size,
-          OMid: '',
-          OMlogisticsName: '',
-          PRname: '',
-          OMstartTime: '',
-          OMendTime: ''
+          // OMid: '',
+          // OMlogisticsName: '',
+          // PRname: '',
+          // OMstartTime: '',
+          // OMendTime: ''
         }
-        if(this.search != '') {
-          params.OMid =  this.search.OMid
-          params.OMlogisticsName =  this.search.OMlogisticsName
-          params.PRname =  this.search.PRname
-          params.OMstartTime = this.search.OMstartTime
-          params.OMendTime =  this.search.OMendTime
-        }
+        // if(this.search != '') {
+        //   params.OMid =  this.search.OMid
+        //   params.OMlogisticsName =  this.search.OMlogisticsName
+        //   params.PRname =  this.search.PRname
+        //   params.OMstartTime = this.search.OMstartTime
+        //   params.OMendTime =  this.search.OMendTime
+        // }
         axios.get(api.get_all_order,{params:params}).then(res => {
           if(res.data.status == 200) {
-            this.orderList = res.data.data.OrderMains;
-            this.order = res.data.data
+            this.orderList = res.data;
+            this.order = res.data;
             // 仅在查询和点击“全部”Tab标签时，对tabList进行一次添加数量操作
-            if(this.tabList[0].length == 3) {
-              this.getTabs(this.order.OMcount)
-            }
+            // if(this.tabList[0].length == 3) {
+            //   this.getTabs(this.order.OMcount)
+            // }
           }else{
             this.$message.error(res.data.message);
           }
@@ -160,6 +161,19 @@
           i = (j-1)*7
           this.tabList[j] = this.tabList[j]+'('+OMcount[i]+')'
         }
+      },
+      //获取订单状态数量
+      getStatus(){
+        axios.get(api.order_count,{
+          params:{
+            token:localStorage.getItem('token'),
+            extentions:'refund'
+          }
+        }).then(res => {
+          if(res.data.status === 200){
+            this.tabList = res.data.data;
+          }
+        })
       },
       // 头部查询条件
       topSearch() {
@@ -205,6 +219,8 @@
     watch: {
       // 依据order变化来传递对应的新的order给对应的this.index的子组件，并调用该子组件的getOrderList方法
       order(newValue, oldValue) {
+        console.log(newValue,'asdasd')
+        console.log(this.$refs.child[this.index])
         this.$refs.child[this.index].getOrderList(newValue)
       }
     }
