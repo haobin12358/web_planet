@@ -167,7 +167,7 @@
         let that = this;
         let form = new FormData();
         form.append("file", files[0]);
-        axios.post(api.upload_file+'?type=circle&token='+localStorage.getItem('token'),form).then(res => {
+        axios.post(api.upload_file+'?type=news&token='+localStorage.getItem('token'),form).then(res => {
           if(res.data.status == 200){
             let img = { niimg: res.data.data, nisort: this.img_box.length + 1 };
             this.upload_img.push(img);
