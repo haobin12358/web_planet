@@ -133,7 +133,7 @@
 
                 this.$router.push({ path: '/personal/editInput', query: { name: 'new', passwd: '1234' }});
               }else {
-                this.$router.push('/');
+                this.$router.push('/selected');
               }
             }
           });

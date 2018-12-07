@@ -44,7 +44,9 @@ Vue.prototype.$http = axios;
 // import { Loading, Message, MessageBox  } from 'element-ui'
 import { Indicator,Toast} from 'mint-ui';
 // 超时时间
-axios.defaults.timeout = 600000
+axios.defaults.timeout = 60000;
+
+
 //http请求拦截器
 var loadinginstace
 axios.interceptors.request.use(config => {
@@ -71,25 +73,11 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   if(data.data.status != 200) {
     Toast(data.data.message);
   }
-
-  if(data.data.status_code == 403001 ){
-    axios.get(api.get_config,{
-      params:{
-        url: window.location.href
-      }
-    } ).then((res) => {
-      if(res.data.status == 200){
-        const id = res.data.data.appId
-        const url = window.location.origin + '/#/index/index';
-        // const  url = 'https://daaiti.cn/WeiDian/#/login';
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-          +  id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
-      }
-
-    }).catch((error) => {
-      console.log(error ,'1111')
-    })
+  // token有问题
+  if(data.data.status_code == 405007) {
+    this.$router.push(window.location.origin + '/#/login');
   }
+
   Indicator.close();
   return data
 }, error => {
@@ -100,7 +88,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   // loadinginstace.close()
   Indicator.close();
   return Promise.reject(error)
-})
+});
 import store from './vuex';
 
 //引入微信
