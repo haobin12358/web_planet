@@ -81,7 +81,7 @@
         video_box: [],
         video: {},
         usLevel: "",
-        productPopup: true,
+        productPopup: false,
         page_num: 1,
         page_size: 10,
       }
