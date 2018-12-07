@@ -1,7 +1,7 @@
 <template>
   <div class="m-login">
     <!--<p>登录</p>-->
-    <img src="" class="m-login-logo" alt="">
+    <img class="m-login-logo" src="/static/images/logo.png" alt="">
     <div  class="m-login-input" >
       <input type="text" v-model="ustelphone" placeholder="请输入手机号码">
       <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
@@ -46,7 +46,7 @@
           const TIME_COUNT = 60;
           axios.get(api.get_inforcode + "?ustelphone=" + this.ustelphone).then(res => {
             if(res.data.status ==200){
-              console.log(res.data.data);
+              // console.log(res.data.data);
             }
           });
           if(!this.timer) {
@@ -97,6 +97,7 @@
           return false;
         }
       },
+      // 获取微信参数
       login() {
         let params = {
           url: window.location.href,
@@ -117,16 +118,23 @@
     },
     mounted() {
       common.changeTitle('登录');
+
       if(this.isWeiXin()){    //是来自微信内置浏览器
         // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
-        if(common.GetQueryString('code')){
-          // alert(common.GetQueryString('code'))
+        if(common.GetQueryString('code')) {
+          // console.log(common.GetQueryString('code'));
           window.localStorage.setItem("code",common.GetQueryString('code'));
           axios.post(api.wx_login, { code: common.GetQueryString('code') }).then(res => {
             if(res.data.status == 200){
               window.localStorage.setItem("token",res.data.data.token);
-              window.localStorage.setItem("openid",res.data.data.openid);
-              this.$router.push('/');
+              window.localStorage.setItem("openid",res.data.data.user.openid);
+              if(res.data.data.is_new) {
+                this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
+
+                this.$router.push({ path: '/personal/editInput', query: { name: 'new', passwd: '1234' }});
+              }else {
+                this.$router.push('/');
+              }
             }
           });
         }
@@ -139,7 +147,7 @@
 
   .m-login{
     min-height: 100vh;
-    background: url("/static/images/login-bc.png") no-repeat;
+    background: url("/static/images/login-bg.png") no-repeat;
     background-size: 100% 100%;
     text-align: center;
     color: #fff;

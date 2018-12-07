@@ -36,7 +36,7 @@
                 <span class="m-icon-more"></span>
               </div>
             </li>
-            <li @click="changeRoute('/personal/editInput')">
+            <li @click="changeRoute('/personal/editInput', 'phone')">
               <div>
                 <span>手机号</span>
               </div>
@@ -45,7 +45,7 @@
                 <span class="m-icon-more"></span>
               </div>
             </li>
-            <li @click="changeRoute('/personal/editInput')">
+            <li @click="changeRoute('/personal/editInput', 'passwd')">
               <div>
                 <span>支付密码</span>
               </div>
@@ -76,8 +76,12 @@
     components: {},
     methods: {
       // 跳转页面
-      changeRoute(v){
-        this.$router.push(v)
+      changeRoute(v, where) {
+        if(where) {
+          this.$router.push({ path: v, query: { from: where }});
+        }else {
+          this.$router.push(v);
+        }
       },
       // 获取个人信息
       getUser() {

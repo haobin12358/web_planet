@@ -4,52 +4,55 @@
       <div class="m-personal-body">
         <div class="m-one-part">
           <ul class="m-edit-ul">
-            <li>
+            <li v-if="from == 'new' || from == 'phone'">
               <div>
                 <span>手机号</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input" v-model="ustelphone">
+                <input type="text" class="m-edit-input m-input-border" v-model="ustelphone">
               </div>
             </li>
-            <li>
+            <li v-if="from == 'new' || from == 'phone'">
               <div>
                 <span>验证码</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input-s" v-model="identifyingcode" maxlength="6">
+                <input type="text" class="m-edit-input-s m-input-border" v-model="identifyingcode" maxlength="6">
                 <span class="m-get-code active" v-if="!getCode" @click="getInforcode">获取验证码</span>
                 <span class="m-get-code" v-if="getCode">{{ count }} 秒后再次获取</span>
               </div>
             </li>
-            <li>
+            <li v-if="from == 'passwd'">
               <div>
                 <span>新支付密码</span>
               </div>
               <div>
-                <input type="password" class="m-edit-input" v-model="uspaycode">
+                <input type="password" class="m-edit-input m-input-border" v-model="uspaycode">
               </div>
             </li>
-            <li>
+            <li v-if="from == 'passwd'">
               <div>
                 <span>确认支付密码</span>
               </div>
               <div>
-                <input type="password" class="m-edit-input" v-model="uspaycodeAgain">
+                <input type="password" class="m-edit-input m-input-border" v-model="uspaycodeAgain">
               </div>
             </li>
           </ul>
         </div>
-        <div class="m-editInput-alert">
-          <p>提示：</p>
-          <!--<p>支付密码必须6位数。</p>-->
-          <p>支付密码用于装币/积分等支付验证</p>
-          <p>让您的资金账户更加安全</p>
+        <div class="m-editInput-alert" v-if="from == 'passwd'">
+          <p class="m-ft-28">提示：</p>
+          <p class="m-ft-24">支付密码用于装币/积分等支付验证</p>
+          <p class="m-ft-24">让您的资金账户更加安全</p>
+        </div>
+        <div class="m-editInput-alert" v-if="from == 'new'">
+          <p class="m-ft-28">提示：</p>
+          <p class="m-ft-24">微信新登录用户请绑定手机号后再使用</p>
         </div>
       </div>
     </div>
     <div class="m-foot-btn">
-      <span @click="saveUser">确  认</span>
+      <span @click="saveUser">确 认</span>
     </div>
   </div>
 
@@ -70,7 +73,8 @@
         uspaycode: '',                // 支付密码
         uspaycodeAgain: '',           // 确认支付密码
         timer: null,                  // 倒计时
-        count: ""                     // 倒计时
+        count: "",                    // 倒计时
+        from: ''                      // 从哪个页面进入此页面的
       }
     },
     components: {},
@@ -108,61 +112,86 @@
       },
       // 保存信息
       saveUser() {
-        if(!this.ustelphone){
-          Toast("请先输入手机号码");
-          return false;
-        }else if(!this.identifyingcode){
-          Toast("请先输入验证码");
-          return false;
-        }else if(!this.uspaycode){
-          Toast("请先输入支付密码");
-          return false;
-        }else if(!this.uspaycodeAgain){
-          Toast("请再次输入支付密码");
-          return false;
-        }else if(this.uspaycode != this.uspaycodeAgain){
-          Toast("两次输入的支付密码不一致");
-          return false;
+        // 更换手机号或者新人绑定手机号
+        if(this.from == 'new' || this.from == 'phone') {
+          if(!this.ustelphone){
+            Toast("请先输入手机号码");
+            return false;
+          }
+          if(!this.identifyingcode){
+            Toast("请先输入验证码");
+            return false;
+          }
+        }
+        if(this.from == 'passwd') {
+          if(!this.uspaycode){
+            Toast("请先输入支付密码");
+            return false;
+          }
+          if(!this.uspaycodeAgain){
+            Toast("请再次输入支付密码");
+            return false;
+          }
+          if(this.uspaycode != this.uspaycodeAgain){
+            Toast("两次输入的支付密码不一致");
+            return false;
+          }
         }
         let params = {
           ustelphone: this.ustelphone,
-          identifyingcode: this.identifyingcode,
-          uspaycode: this.uspaycode,
-          uspaycodeAgain: this.uspaycodeAgain
+          identifyingcode: this.identifyingcode
         };
+        if(this.from == 'passwd') {
+          params.uspaycode = this.uspaycode;
+          params.uspaycodeAgain = this.uspaycodeAgain;
+        }
         axios.post(api.update_user + '?token=' + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
-            Toast(res.data.message);
-            this.$router.go(-1);
+            if(this.from == 'new') {
+              Toast('绑定成功');
+              this.$router.push('/selected');
+            }else {
+              Toast(res.data.message);
+              this.$router.go(-1);
+            }
           }
         });
       }
     },
     mounted() {
-      common.changeTitle('安全中心');
+      this.from = this.$route.query.from;
+      if(this.from == 'new') {
+        common.changeTitle('绑定账号');
+      }else if(this.from == 'phone' || this.from == 'passwd') {
+        common.changeTitle('安全中心');
+      }
     }
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/personal";
   .m-editInput{
-    .m-edit-input-s{
+    .m-edit-input-s {
       display: inline-block;
-      width: 200px;
+      width: 170px;
       height: 42px;
       line-height: 42px;
       font-size: 28px;
     }
-    .m-edit-input{
+    .m-edit-input {
       display: inline-block;
-      width: 320px;
+      width: 310px;
       height: 42px;
       line-height: 42px;
+    }
+    .m-input-border {
+      border: 2px #EEEEEE solid !important;
+      border-radius: 30px;
+      padding: 0 20px;
     }
     .m-editInput-alert{
       padding: 33px 55px;
       color: #999999;
-      font-size: 30px;
     }
     .m-get-code{
       display: inline-block;
