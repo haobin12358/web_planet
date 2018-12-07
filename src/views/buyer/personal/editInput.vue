@@ -51,11 +51,10 @@
         </div>
       </div>
     </div>
-    <div class="m-foot-btn">
+    <div class="m-foot-btn-save">
       <span @click="saveUser">确 认</span>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -145,17 +144,22 @@
           params.uspaycode = this.uspaycode;
           params.uspaycodeAgain = this.uspaycodeAgain;
         }
-        axios.post(api.update_user + '?token=' + localStorage.getItem('token'), params).then(res => {
-          if(res.data.status == 200){
-            if(this.from == 'new') {
+        if(this.from == 'new') {
+          axios.post(api.bing_telphone + '?token=' + localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200){
               Toast('绑定成功');
+              localStorage.setItem('token', res.data.data.token);
               this.$router.push('/selected');
-            }else {
+            }
+          });
+        }else if(this.from == 'phone' || this.from == 'passwd') {
+          axios.post(api.update_user + '?token=' + localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200){
               Toast(res.data.message);
               this.$router.go(-1);
             }
-          }
-        });
+          });
+        }
       }
     },
     mounted() {
@@ -173,21 +177,22 @@
   .m-editInput{
     .m-edit-input-s {
       display: inline-block;
-      width: 170px;
+      width: 150px;
       height: 42px;
       line-height: 42px;
       font-size: 28px;
     }
     .m-edit-input {
       display: inline-block;
-      width: 310px;
+      width: 290px;
       height: 42px;
       line-height: 42px;
     }
     .m-input-border {
+      text-align: left !important;
       border: 2px #EEEEEE solid !important;
       border-radius: 30px;
-      padding: 0 20px;
+      padding: 0 30px;
     }
     .m-editInput-alert{
       padding: 33px 55px;
