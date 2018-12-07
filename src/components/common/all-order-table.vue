@@ -44,8 +44,8 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="150" fixed="right">
         <template slot-scope="scope">
-          <el-button size="mini" class="order-details" @click="orderDetails(scope.row)">订单详情
-          </el-button>
+          <span class="m-table-link" @click="orderDetails(scope.row)">详情</span>
+          <span class="m-table-link">退款</span>
         </template>
       </el-table-column>
     </el-table>
@@ -75,8 +75,8 @@
     methods: {
       // 去往订单详情 orderDetails
       orderDetails(order) {
-        let OMid = order.OMid
-        this.$router.push({path: '/order/orderDetails', query: {OMid}});
+        let omid = order.omid
+        this.$router.push({path: '/order/orderDetail', query: {omid}});
       },
       // 接收数据并赋值给 this.orderList
       getOrderList(data) {
@@ -114,6 +114,12 @@
       background-color: @btnActiveColor;
       color: @bgMainColor;
       font-size: 14px;
+    }
+    .m-table-link{
+      color: #0051BB;
+      display: inline-block;
+      padding: 0 0.18rem;
+      cursor: pointer;
     }
   }
 

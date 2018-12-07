@@ -109,32 +109,32 @@
               </span>
               </el-dialog>
               <!--判断订单状态后显示相应的操作按钮-->
-              <div v-if="order.OMstatus=='已取消'">
+              <div v-if="order.omstatus_zh=='已取消'">
                 <div style="height: 0.3rem">用户已取消订单</div>
               </div>
-              <div v-if="order.OMstatus=='未支付'">
+              <div v-if="order.omstatus_zh=='未支付'">
                 <div style="height: 0.3rem">等待用户支付</div>
               </div>
-              <div v-if="order.OMstatus=='支付中'">
+              <div v-if="order.omstatus_zh=='支付中'">
                 <div style="height: 0.3rem">等待支付款项到账</div>
               </div>
-              <div v-if="order.OMstatus=='已支付'">
+              <div v-if="order.omstatus_zh=='已支付'">
                 <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
                 <!--<el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>-->
               </div>
-              <div v-if="order.OMstatus=='已发货'">
+              <div v-if="order.omstatus_zh=='已发货'">
                 <el-button class="right-button" @click="searchWhere=true">查看物流进度</el-button>
               </div>
-              <div v-if="order.OMstatus=='已收货'">
+              <div v-if="order.omstatus_zh=='已收货'">
                 <div style="height: 0.3rem">用户已收货</div>
               </div>
-              <div v-if="order.OMstatus=='已完成'">
+              <div v-if="order.omstatus_zh=='已完成'">
                 <div style="height: 0.3rem">该订单已完成</div>
               </div>
-              <div v-if="order.OMstatus=='已评价'">
+              <div v-if="order.omstatus_zh=='已评价'">
                 <div style="height: 0.3rem">用户已评价该订单</div>
               </div>
-              <div v-if="order.OMstatus=='退款中'">
+              <div v-if="order.omstatus_zh=='退款中'">
                 <div style="height: 0.3rem">该订单正在退款中</div>
               </div>
             </div>
@@ -225,7 +225,7 @@
       getData(OMid){
         let params = {
           token: localStorage.getItem('token'),
-          OMid: OMid
+          omid: OMid
         };
         axios.get(api.get_order_by_LOid,{params:params}).then(res => {
           if(res.data.status == 200) {
@@ -242,16 +242,16 @@
       // 将已支付的订单发货，使之变成已发货
       toSend() {
         this.toSendForm = false
-        if(this.order.OMstatus == '已支付') {
+        if(this.order.omstatus == '已支付') {
           let token = localStorage.getItem('token')
           let params = {
-            OMid: this.order.OMid,
-            OMstatus: '已发货'
+            omid: this.order.omid,
+            omstatus: '已发货'
           }
           axios.post(api.update_order_status+'?token='+token,params).then(res=>{
             if(res.data.status == 200){
-              this.order.OMstatus = '已发货'
-              this.orderStatus = this.order.OMstatus
+              this.order.omstatus_zh = '已发货'
+              this.orderStatus = this.order.omstatus_zh
               this.setStep()
               this.$message({ message: res.data.message, type: 'success' });
             }else{
@@ -264,76 +264,76 @@
       },
       // 依据订单状态设置页面上部的step步骤条
       setStep() {
-        if(this.order.OMstatus == '已取消') {
+        if(this.order.omstatus_zh == '已取消') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '订单已取消', active:false, next:false },
             { name:'商家发货', time: '订单已取消', active:false, next:false },
             { name:'交易完成', time: '未完成', active:false, next:false }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '未支付') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '未支付') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '待支付', active:false, next:false },
             { name:'商家发货', time: '待发货', active:false, next:false },
             { name:'交易完成', time: '未完成', active:false, next:false }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '支付中') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '支付中') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '支付中', active:true, next:true },
             { name:'商家发货', time: '待发货', active:false, next:false },
             { name:'交易完成', time: '未完成', active:false, next:false }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '已支付') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '已支付') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '已支付', active:true, next:true },
             { name:'商家发货', time: '待发货', active:false, next:false },
             { name:'交易完成', time: '未完成', active:false, next:false }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '已发货') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '已发货') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '已支付', active:true, next:true },
             { name:'商家发货', time: '已发货', active:true, next:true },
             { name:'交易完成', time: '未完成', active:false, next:false }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '已收货') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '已收货') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '已支付', active:true, next:true },
             { name:'买家收货', time: '已收货', active:true, next:true },
             { name:'交易完成', time: '未完成', active:false, next:false }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '已完成') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '已完成') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '已支付', active:true, next:true },
             { name:'买家收货', time: '已收货', active:true, next:true },
             { name:'交易完成', time: '已完成', active:true, next:true }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '已评价') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '已评价') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '已支付', active:true, next:true },
             { name:'交易完成', time: '已完成', active:true, next:true },
             { name:'填写评价', time: '已评价', active:true, next:true }]
-          this.orderStatus = this.order.OMstatus
-        }else if(this.order.OMstatus == '退款中') {
+          this.orderStatus = this.order.omstatus_zh
+        }else if(this.order.omstatus_zh == '退款中') {
           this.step = [
             { name:'买家下单', time: this.order.OMtime, active:true, next:true },
             { name:'买家支付', time: '已支付', active:true, next:true },
             { name:'买家收货', time: '已收货', active:true, next:true },
             { name:'退款完成', time: '退款中', active:false, next:true }]
-          this.orderStatus = this.order.OMstatus
+          this.orderStatus = this.order.omstatus_zh
         }
       }
     },
     created() {
       // this.order = this.$route.query.order;
-      this.OMid = this.$route.query.OMid;
-      this.getData(this.OMid)
+      this.omid = this.$route.query.omid;
+      this.getData(this.omid)
       // console.log(this.OMid)
     }
   }

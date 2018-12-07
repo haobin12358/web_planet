@@ -10,23 +10,22 @@
       <div class="all-order-search m-flex-between">
         <div class="m-search-input-box">
           <div>
-            <el-select v-model="form.user" class="m-input-xs" placeholder="活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="form.omstatus" class="m-input-xs" placeholder="活动状态">
+              <el-option v-for="(item,index) in tabList" :label="item.name" :key="index" :value="item.status"></el-option>
             </el-select>
-            <el-input v-model="form.user" class="m-input-xs" placeholder="审批人"></el-input>
-            <el-input v-model="form.user" class="m-input-xs" placeholder="审批人"></el-input>
+            <el-input v-model="form.user" class="m-input-xs" placeholder="订单编号"></el-input>
+            <el-input v-model="form.user" class="m-input-xs" placeholder="商品名称"></el-input>
             <el-date-picker
               v-model="value"
               type="date"
-              placeholder="选择日期">
+              placeholder="下单时间">
             </el-date-picker>
           </div>
           <div class="m-mr-top">
-            <el-input v-model="form.user" class="m-input-xs" placeholder="审批人"></el-input>
-            <el-input v-model="form.user" class="m-input-xs" placeholder="审批人"></el-input>
-            <el-input v-model="form.user" class="m-input-xs" placeholder="审批人"></el-input>
-            <el-input v-model="form.user" class="m-input-xs" placeholder="审批人"></el-input>
+            <el-input v-model="form.user" class="m-input-xs" placeholder="物流单号"></el-input>
+            <el-input v-model="form.user" class="m-input-xs" placeholder="买家退回物流单号"></el-input>
+            <el-input v-model="form.user" class="m-input-xs" placeholder="收件人"></el-input>
+            <el-input v-model="form.user" class="m-input-xs" placeholder="收件人联系方式"></el-input>
           </div>
         </div>
         <div class="tr">
@@ -69,12 +68,8 @@
         name: '所有订单',
         activeName: '全部',
         form:{
-          user:''
-        },
-        rules:{
-          PRname:[
-            { required: true, message: '请输入商品名称', trigger: 'blur' }
-          ]
+          omstatus:'',
+
         },
 
         OMtime: null,

@@ -17,6 +17,11 @@ Vue.use(ElementUI);
 import filter from './filter'
 filter(Vue);
 
+//拖拽
+import VueDND from 'awe-dnd'
+
+Vue.use(VueDND)
+
 //图表
 import echarts from 'echarts';
 Vue.prototype.echarts = echarts;

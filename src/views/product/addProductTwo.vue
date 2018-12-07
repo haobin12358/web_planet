@@ -47,13 +47,24 @@
           <div class="m-different-price-box" >
             <div class="m-search-box">
               <div>
-                <template v-for="(item,index) in form.prattribute">
-                  <el-input v-model="form.prattribute[index]" class="m-input-xxs" placeholder="规格1"></el-input>
-                </template>
-                <span class="m-btn m-search-btn" @click="addSku">
-              <span class="m-btn-icon m-add"></span>
-              <span>添加商品规格</span>
-            </span>
+                  <el-tag
+                    :key="tag"
+                    v-for="tag in form.prattribute"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleClose(tag)" style="margin-right: 0.1rem;">
+                    {{tag}}
+                  </el-tag>
+                  <el-input
+                    class="m-input-xs"
+                    v-if="inputVisible"
+                    v-model="inputValue"
+                    ref="saveTagInput"
+                    @keyup.enter.native="handleInputConfirm"
+                    @blur="handleInputConfirm"
+                  >
+                  </el-input>
+                  <el-button v-else class="button-new-tag" size="small" @click="showInput">+添加商品规格名称</el-button>
               </div>
               <div>
             <span class="m-btn active" @click="addOne">
@@ -110,7 +121,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                :label="form.prattribute[index]" v-for="(item,index) in form.prattribute" :key="index">
+                :label="item" v-for="(item,index) in form.prattribute" :key="index">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.skuattritedetail[index]" class="m-input-xxs"></el-input>
                 </template>
@@ -122,6 +133,36 @@
                 </template>
               </el-table-column>
             </el-table>
+            <div class="m-table-btn" v-if="form.skus.length>1">
+              <el-popover
+                placement="right"
+                width="400"
+                trigger="click">
+                <div class="m-drag-box">
+                  <p>
+                    <span class="m-label">规  格：</span>
+                    <span v-for="(item,index) in form.prattribute" :key="index" class="el-tag" style="margin-right: 0.1rem;" @click="skuSelect(index)">{{item}}</span>
+                  </p>
+                  <p>
+                    <span class="m-label">规格属性：</span>
+                    <span class="m-alert">拖动可改变规格顺序</span>
+                  </p>
+                  <div class="m-drag">
+                    <div
+                      class="drag-item"
+                      v-for="(item,index) in sku_list[sku_index]" v-dragging="{ item: item, list: sku_list[sku_index], group: 'color' }"
+                      :key="item"
+                    >{{item}}</div>
+                  </div>
+
+                </div>
+
+                <!--<el-button slot="reference">click 激活</el-button>-->
+                <span class="m-btn" slot="reference" @click="sortChange">规格排序</span>
+              </el-popover>
+
+            </div>
+
           </div>
         </el-form-item>
 
@@ -168,13 +209,16 @@
     export default {
         data() {
             return {
+              inputVisible: false,
+              inputValue: '',
               form:{
                 prtitle:'',
                 prdesc:'',
                 prprice:'',
                 prstocks:'',
                 prmainpic:'',
-                prattribute:[''],
+                prattribute:[],
+                pskuvalue:[],
                 skus: [
                   {
                     skupic: "",
@@ -200,11 +244,71 @@
               },
               allPrice:'1',
               imageUrl:'',
-              dialogVisible:false
+              dialogVisible:false,
+              sku_list:[],
+              sku_index:0
             }
         },
         components: {},
+        mounted(){
+          this.$dragging.$on('dragged', ({ value }) => {
+            console.log(value.item)
+            console.log(value.list)
+            console.log(value.otherData)
+          })
+          this.$dragging.$on('dragend', () => {
+
+          })
+        },
         methods: {
+          //
+          sortChange(){
+            let arr = [];
+            for(let i=0;i<this.form.skus.length;i++){
+              for(let j=0;j<this.form.skus[i].skuattritedetail.length;j++){
+                if(arr[j]){
+                  arr[j].push(this.form.skus[i].skuattritedetail[j]);
+                }else{
+                  arr[j] = [];
+                  arr[j].push(this.form.skus[i].skuattritedetail[j]);
+                }
+              }
+            }
+            //去重
+            for(let a=0;a<arr.length;a++){
+             let x = new Set(arr[a]);
+              arr[a] = [...x];
+            }
+            this.sku_list = [].concat(arr);
+            // this.sku_select = [].concat(this.sku_list[0]);
+            this.sku_index = 0;
+          },
+          //
+          skuSelect(index){
+            this.sku_index = index
+            // this.sku_select = [].concat(this.sku_list[index]);
+          },
+          //删除规格名称
+          handleClose(tag) {
+            this.form.prattribute.splice(this.form.prattribute.indexOf(tag), 1);
+          },
+          //显示规格输入框
+          showInput() {
+            this.inputVisible = true;
+            this.$nextTick(_ => {
+              this.$refs.saveTagInput.$refs.input.focus();
+            });
+          },
+          //规格名称确定
+          handleInputConfirm() {
+            let inputValue = this.inputValue;
+            if (inputValue) {
+              this.form.prattribute.push(inputValue);
+            }
+            this.inputVisible = false;
+            this.inputValue = '';
+          },
+
           handleAvatarSuccess(res, file) {
             this.form.prmainpic = URL.createObjectURL(file.raw);
           },
@@ -221,7 +325,7 @@
             form.append("file", params.file);
             let reader = new FileReader();
             let that = this;
-            axios.post(api.upload_file,form).then(res => {
+            axios.post(api.upload_file + '?token=' +localStorage.getItem('token'),form).then(res => {
               if(res.data.status == 200){
                 that.form.prmainpic= res.data.data;
                 reader.readAsDataURL(params.file);
@@ -248,10 +352,7 @@
             this.imageUrl = file.url;
             this.dialogVisible = true;
           },
-          //添加规格
-          addSku(){
-            this.form.prattribute.push('');
-          },
+
           changeRoute(v){
             if(v == '-1'){
               this.$router.go(-1)
@@ -282,8 +383,9 @@
                       }
                     }
                   }
-                  console.log(that.$route.query.form)
-                  this.$router.push({path:v,query:{form:Object.assign(that.form,that.$route.query.form)}})
+                  that.form.pskuvalue = [].concat(that.sku_list);
+                  console.log(that.form,'adadasda')
+                  // this.$router.push({path:v,query:{form:Object.assign(that.form,that.$route.query.form)}})
                 }
               })
 
@@ -324,7 +426,7 @@
             }
             let form = new FormData();
             form.append("file", event.target.files[0]);
-            axios.post(api.upload_file,form).then(res => {
+            axios.post(api.upload_file + '?token=' +localStorage.getItem('token'),form).then(res => {
               if(res.data.status == 200){
                 this.form.skus[index].skupic = res.data.data;
                 var file = document.getElementById(index);
@@ -458,5 +560,6 @@
       line-height: 1.2rem;
       cursor: pointer;
     }
+
   }
 </style>
