@@ -82,7 +82,7 @@
         axios.post(api.login, { params: params }).then(res => {
           if(res.data.status == 200){
             localStorage.setItem('token', res.data.data.token);
-            this.$router.push('/');
+            this.$router.push('/selected');
           }
         });
       },
