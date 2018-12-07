@@ -202,30 +202,32 @@
         },
         // 获取提交订单时候可以使用的优惠券
         getCoupon() {
-          for(let i = 0; i < this.product_info.length; i ++) {
-            this.product_info[i].params = {
-              pbid: this.product_info[i].pb.pbid,
-              skus: []
-            };
-            for(let j = 0; j < this.product_info[i].cart.length; j ++) {
-              let sku = {
-                skuid: this.product_info[i].cart[j].sku.skuid,
-                nums: this.product_info[i].cart[j].canums
+          if(this.product_info) {
+            for(let i = 0; i < this.product_info.length; i ++) {
+              this.product_info[i].params = {
+                pbid: this.product_info[i].pb.pbid,
+                skus: []
               };
-              this.product_info[i].params.skus.push(sku);
-            }
-            axios.post(api.order_coupons + '?token=' + localStorage.getItem('token'), this.product_info[i].params).then(res => {
-              if(res.data.status == 200) {
-                for(let n = 0; n < res.data.data.length; n ++) {
-                  if(res.data.data[n].coupon.title_subtitle.left_text.length > 8) {
-                    res.data.data[n].coupon.title_subtitle.left_text = res.data.data[n].coupon.title_subtitle.left_text.substr(0, 8) + "..";
-                  }
-                  res.data.data[n].coupon.reduce = res.data.data[n].reduce;
-                  this.product_info[i].couponList.push(res.data.data[n].coupon);
-                  this.product_info = this.product_info.concat();
-                }
+              for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+                let sku = {
+                  skuid: this.product_info[i].cart[j].sku.skuid,
+                  nums: this.product_info[i].cart[j].canums
+                };
+                this.product_info[i].params.skus.push(sku);
               }
-            });
+              axios.post(api.order_coupons + '?token=' + localStorage.getItem('token'), this.product_info[i].params).then(res => {
+                if(res.data.status == 200) {
+                  for(let n = 0; n < res.data.data.length; n ++) {
+                    if(res.data.data[n].coupon.title_subtitle.left_text.length > 8) {
+                      res.data.data[n].coupon.title_subtitle.left_text = res.data.data[n].coupon.title_subtitle.left_text.substr(0, 8) + "..";
+                    }
+                    res.data.data[n].coupon.reduce = res.data.data[n].reduce;
+                    this.product_info[i].couponList.push(res.data.data[n].coupon);
+                    this.product_info = this.product_info.concat();
+                  }
+                }
+              });
+            }
           }
         },
         // 选择优惠券
