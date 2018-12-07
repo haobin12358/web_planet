@@ -76,7 +76,8 @@
         }
         let params = {
           ustelphone: this.ustelphone,
-          identifyingcode: this.identifyingcode
+          identifyingcode: this.identifyingcode,
+          app_from: window.location.origin.substr(7, window.location.origin.length)
         };
         axios.post(api.login, { params: params }).then(res => {
           if(res.data.status == 200){
