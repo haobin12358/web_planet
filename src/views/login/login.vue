@@ -7,7 +7,7 @@
       <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
       <span class="m-code cancel" v-else>{{count}}秒后重新发送</span>
     </div>
-    <div type="text" class="m-login-input" >
+    <div type="text" class="m-login-input">
       <input type="text" v-model="identifyingcode" placeholder="请输入验证码">
     </div>
     <!--<p class="m-login-forget" @click="forgetClick">忘记密码？</p>-->
@@ -101,7 +101,7 @@
       login() {
         let params = {
           url: window.location.href,
-          app_from: window.location.origin
+          app_from: window.location.origin.substr(7, window.location.origin.length)
         };
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
           if(res.data.status == 200){
@@ -124,14 +124,17 @@
         if(common.GetQueryString('code')) {
           // console.log(common.GetQueryString('code'));
           window.localStorage.setItem("code",common.GetQueryString('code'));
-          axios.post(api.wx_login, { code: common.GetQueryString('code') }).then(res => {
+          let params = {
+            app_from: window.location.origin.substr(7, window.location.origin.length),
+            code: common.GetQueryString('code'),
+            // ussupper: ''
+          };
+          axios.post(api.wx_login, params).then(res => {
             if(res.data.status == 200){
               window.localStorage.setItem("token",res.data.data.token);
               window.localStorage.setItem("openid",res.data.data.user.openid);
               if(res.data.data.is_new) {
                 this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
-
-                this.$router.push({ path: '/personal/editInput', query: { name: 'new', passwd: '1234' }});
               }else {
                 this.$router.push('/selected');
               }

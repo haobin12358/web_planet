@@ -19,7 +19,7 @@
               <div>
                 <input type="text" class="m-edit-input-s m-input-border" v-model="identifyingcode" maxlength="6">
                 <span class="m-get-code active" v-if="!getCode" @click="getInforcode">获取验证码</span>
-                <span class="m-get-code" v-if="getCode">{{ count }} 秒后再次获取</span>
+                <span class="m-get-code" v-if="getCode">{{ count }} 秒后重发</span>
               </div>
             </li>
             <li v-if="from == 'passwd'">
@@ -194,6 +194,8 @@
       color: #999999;
     }
     .m-get-code{
+      width: 110px;
+      white-space: nowrap;
       display: inline-block;
       padding: 4px 15px;
       border-radius: 10px;
