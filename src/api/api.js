@@ -16,6 +16,7 @@ const api={
   brand_list: title + 'brand/list',//获取品牌
   scene_list: title + 'scene/list',//获取场景
   items_list: title + 'items/list',//获取标签
+  create_product: title +'product/create',//添加商品
 
 
   get_order_situation: title + 'order/get_order_situation',//获取订单概况

@@ -11,17 +11,17 @@
       </div>
 
       <el-form ref="form" :model="form" :rules="rules" label-width="1.3rem" label-position="left" class="demo-ruleForm">
-        <el-form-item label="快速选择：">
-          <el-select v-model="value8" class="m-input-m" filterable placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="商品类目" >
+        <!--<el-form-item label="快速选择：">-->
+          <!--<el-select v-model="value8" class="m-input-m" filterable placeholder="请选择">-->
+            <!--<el-option-->
+              <!--v-for="item in options"-->
+              <!--:key="item.value"-->
+              <!--:label="item.label"-->
+              <!--:value="item.value">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
+        <el-form-item label="商品类目"  prop="pcid">
           <div class="m-category-content">
             <p>当前选择类目：<span class="m-category-select">
               <template v-for="(items,index) in select_category">
@@ -105,7 +105,7 @@
              <!--</div>-->
           <!--</div>-->
         <!--</div>-->
-        <el-form-item label="品牌选择：" >
+        <el-form-item label="品牌选择：" prop="pbid">
           <el-select v-model="form.pbid" class="m-input-m" placeholder="请选择">
             <el-option
               v-for="item in brand_list"
@@ -175,7 +175,7 @@
             <!--</div>-->
           <!--</div>-->
         </el-form-item>
-        <el-form-item label="标签选择："  >
+        <el-form-item label="标签选择："  prop="items">
           <el-select v-model="form.items" multiple class="m-input-m" placeholder="请选择">
             <el-option
               v-for="item in items_list"
@@ -216,10 +216,17 @@
                 pbid:'',
                 psid:[],
                 items:[],
+                pcid:''
               },
               rules:{
-                PRname:[
-                  { required: true, message: '请输入商品名称', trigger: 'blur' }
+                pbid:[
+                  { required: true, message: '请选择品牌', trigger: 'blur' }
+                ],
+                pcid:[
+                  { required: true, message: '请选择类目', trigger: 'blur' }
+                ],
+                items:[
+                  { required: true, message: '请选择标签', trigger: 'blur' }
                 ]
               },
               //类目
@@ -235,29 +242,7 @@
               //标签
               items_list:[],
               show_items:false,
-              options: [
-                {
-                value: '选项1',
-                label: '黄金糕'
-              }, {
-                value: '选项2',
-                label: '双皮奶'
-              }, {
-                value: '选项3',
-                label: '蚵仔煎'
-              }, {
-                value: '选项4',
-                label: '龙须面'
-              }, {
-                value: '选项5',
-                label: '北京烤鸭'
-              }],
-              value8: '',
-              tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-              }]
+
             }
         },
         components: {},
@@ -270,15 +255,24 @@
       },
         methods: {
           changeRoute(v){
-            this.$router.push(v)
-            // console.log(this.form)
+            this.form.pcid = this.select_category[this.select_category.length-1].pcid;
+            let arr =[],_form=null;
+            for(let i=0;i<this.form.items.length;i++){
+              arr.push({itid:this.form.items[i]})
+            }
+            _form = JSON.parse(JSON.stringify(this.form));
+            _form.items = [].concat(arr);
+            this.$refs['form'].validate((valid) => {
+              if (valid) {
+                this.$router.push({path:v,query:{form:_form}});
+              }
+            })
           },
         //  获取类目
           getCategory(i,id,item){
             let _select = [].concat(this.select_category);
             _select[i] = item;
             this.select_category = [].concat(_select);
-
             if(i == 2){
               this.$notify({
                 title: '警告',
@@ -334,7 +328,11 @@
           },
           //  获取标签
           getItem(){
-            axios.get(api.items_list).then(res => {
+            axios.get(api.items_list,{
+              params:{
+                ittype:0
+              }
+            }).then(res => {
               if(res.data.status == 200){
                 this.items_list = res.data.data;
               }

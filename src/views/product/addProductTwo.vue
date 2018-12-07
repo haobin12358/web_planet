@@ -5,7 +5,7 @@
         <span>发布商品</span>
       </h3>
       <div class="m-addProduct-step">
-        <span>1.选择商品分类</span>
+        <span >1.选择商品分类</span>
         <span class="active">2.编辑基本信息</span>
         <span>3.编辑商品详情</span>
       </div>
@@ -14,104 +14,122 @@
           <span class="m-part-title-icon"></span>
           <span>基本信息</span>
         </h3>
-        <el-form-item label="商品名称：" required>
+        <el-form-item label="商品名称：" prop="prtitle" required>
           <el-input v-model="form.prtitle" class="m-input-m" placeholder="请输入内容"></el-input>
         </el-form-item>
-        <el-form-item label="添加描述：" required>
+        <el-form-item label="添加描述：" prop="prdesc" required>
           <el-input v-model="form.prdesc" class="m-input-m" placeholder="请输入内容"></el-input>
           <p class="m-alert-text">建议描述文字在36字以内</p>
         </el-form-item>
-        <el-form-item label="商品图片："  required>
+        <el-form-item label="商品图片：" prop="prmainpic"  required>
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
+            :limit="1"
+            :http-request="imgUploadAbo"
+            :on-success="handleAvatarSuccess"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove">
             <span class="m-upload-img"></span>
           </el-upload>
-          <p class="m-alert-text">建议尺寸：700*700像素,最多上传1张商品图片</p>
           <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
+            <img width="100%" v-if="imageUrl" :src="imageUrl" >
+            <img width="100%" v-else-if="form.prmainpic" :src="form.prmainpic" >
           </el-dialog>
+          <p class="m-alert-text">建议尺寸：700*700像素,最多上传1张商品图片</p>
+
         </el-form-item>
         <h3 class="m-form-part-title">
           <span class="m-part-title-icon"></span>
           <span>商品价格/库存</span>
         </h3>
-        <el-form-item label="商品价格：" required>
-          <el-radio v-model="allPrice" label="1">统一规格</el-radio>
-          <el-radio v-model="allPrice" label="2">不同规格</el-radio>
-        </el-form-item>
-
-        <div class="m-different-price-box" v-if="allPrice == '2'">
-          <div class="m-search-box">
-            <div>
-              <template v-for="(item,index) in form.prattribute">
-                <el-input v-model="form.prattribute[index]" class="m-input-xxs" placeholder="规格1"></el-input>
-              </template>
-              <span class="m-btn m-search-btn" @click="addSku">
+        <el-form-item label="商品规格：" required>
+          <div class="m-different-price-box" >
+            <div class="m-search-box">
+              <div>
+                <template v-for="(item,index) in form.prattribute">
+                  <el-input v-model="form.prattribute[index]" class="m-input-xxs" placeholder="规格1"></el-input>
+                </template>
+                <span class="m-btn m-search-btn" @click="addSku">
               <span class="m-btn-icon m-add"></span>
               <span>添加商品规格</span>
             </span>
-            </div>
-            <div>
+              </div>
+              <div>
             <span class="m-btn active" @click="addOne">
               <span class="m-btn-icon m-add"></span>
               <span>添加商品属性</span>
             </span>
+              </div>
             </div>
+            <el-table
+              :data="form.skus"
+              :fit="true"
+              style="width: 100%">
+              <el-table-column
+                label="图片" width="300">
+                <template slot-scope="scope">
+                  <!--<el-upload-->
+                  <!--class="avatar-uploader"-->
+                  <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+                  <!--:show-file-list="false"-->
+                  <!--:http-request="imgUploadAbo"-->
+                  <!--:on-success="handleAvatarSuccess"-->
+                  <!--&gt;-->
+                  <!--<span class="m-upload-img"></span>-->
+                  <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+                  <!--<img v-else-if="scope.row.skupic" :src="scope.row.skupic" class="avatar">-->
+                  <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                  <!--</el-upload>-->
+                  <div class="m-up-img-box">
+                    <div class="inputbg m-img-xl el-upload-list--picture-card" v-if="scope.row.skupic">
+                      <img :src="scope.row.skupic" style="width: 1.5rem;height:1.5rem;"/>
+                      <span class="el-upload-list__item-actions">
+                      <span class="el-upload-list__item-preview" @click="CardPreview(scope.$index)">
+                        <i class="el-icon-zoom-in"></i>
+                      </span>
+                      <span class="el-upload-list__item-delete" @click="imgRemove(scope.$index)">
+                        <i class="el-icon-delete"></i>
+                      </span>
+                    </span>
+                    </div>
+                    <div class="inputbg m-img-xl"><span>+添加图片</span><input type="file" :id="scope.$index" accept="image/*" @change="imgUploadDetail($event,scope.$index)"></div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="价格">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.skuprice" class="m-input-xxs"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="库存">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.skustock" class="m-input-xxs"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                :label="form.prattribute[index]" v-for="(item,index) in form.prattribute" :key="index">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.skuattritedetail[index]" class="m-input-xxs"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="操作">
+                <template slot-scope="scope">
+                  <span class="m-table-link" @click="deleteOne(scope.$index)">删除</span>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
-          <el-table
-            :data="form.skus"
-            style="width: 100%">
-            <el-table-column
-              label="图片">
-              <template slot-scope="scope">
-                <el-upload
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  list-type="picture-card"
-                  class="m-upload-s m-inline-block"
-                  :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove">
-                  <span class="m-upload-img"></span>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="">
-                </el-dialog>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="价格">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.skuprice" class="m-input-xxs"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="库存">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.skustock" class="m-input-xxs"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column
-              :label="form.prattribute[index]" v-for="(item,index) in form.prattribute" :key="index">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.skuattritedetail[scope.$index]" class="m-input-xxs"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="操作">
-              <template slot-scope="scope">
-                <span class="m-table-link" @click="deleteOne(scope.$index)">删除</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+        </el-form-item>
 
-        <el-form-item label="价格：" >
+        <el-form-item label="价格：" required prop="prprice">
           <el-input v-model="form.prprice" class="m-input-s" placeholder="￥"></el-input>
           <span>元</span>
         </el-form-item>
-        <el-form-item label="商品库存：" required>
+        <el-form-item label="商品库存：" >
           <el-input v-model="form.prstocks" class="m-input-s" placeholder=""></el-input>
           <span>件</span>
         </el-form-item>
@@ -145,6 +163,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import axios from 'axios';
+  import api from '../../api/api'
     export default {
         data() {
             return {
@@ -165,58 +185,67 @@
                 ]
               },
               rules:{
-                PRname:[
+                prtitle:[
                   { required: true, message: '请输入商品名称', trigger: 'blur' }
-                ]
+                ],
+                prdesc:[
+                  { required: true, message: '请输入商品描述', trigger: 'blur' }
+                ],
+                prmainpic:[
+                  { required: true, message: '请输入商品图片', trigger: 'blur' }
+                ],
+                prprice:[
+                  { required: true, message: '请输入商品价格', trigger: 'blur' }
+                ],
               },
-              options: [{
-                value: '选项1',
-                label: '黄金糕'
-              }, {
-                value: '选项2',
-                label: '双皮奶'
-              }, {
-                value: '选项3',
-                label: '蚵仔煎'
-              }, {
-                value: '选项4',
-                label: '龙须面'
-              }, {
-                value: '选项5',
-                label: '北京烤鸭'
-              }],
-              value8: '',
-              input:'',
               allPrice:'1',
-              dialogVisible:false,
-              dialogImageUrl:null,
-              tableData7: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-              }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-              }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-              }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-              }],
-              search: ''
+              imageUrl:'',
+              dialogVisible:false
             }
         },
         components: {},
         methods: {
+          handleAvatarSuccess(res, file) {
+            this.form.prmainpic = URL.createObjectURL(file.raw);
+          },
+          /*商品详情大图上传重定向*/
+          imgUploadAbo(params){
+            if(this.form.prmainpic){
+              this.$message({
+                type:'warning',
+                message:'只能上传一张照片'
+              });
+              return false;
+            }
+            let form = new FormData();
+            form.append("file", params.file);
+            let reader = new FileReader();
+            let that = this;
+            axios.post(api.upload_file,form).then(res => {
+              if(res.data.status == 200){
+                that.form.prmainpic= res.data.data;
+                reader.readAsDataURL(params.file);
+                reader.onload = function(e) {
+                  that.imageUrl = this.result;
+                }
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            })
+          },
           handleRemove(file, fileList) {
-            console.log(file, fileList);
+            this.form.prmainpic = '';
           },
           handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
+            this.imageUrl = file.url;
             this.dialogVisible = true;
           },
           //添加规格
@@ -227,7 +256,37 @@
             if(v == '-1'){
               this.$router.go(-1)
             }else{
-              this.$router.push(v)
+              let that = this;
+
+              this.$refs['form'].validate((valid) => {
+                if (valid) {
+                  for(let i = 0;i<that.form.prattribute.length;i++){
+                    if(that.form.prattribute[i] == ''){
+                      this.$message({
+                        type:'warning',
+                        duration:800,
+                        message:'请先设置商品规格'
+                      });
+                      return false;
+                    }
+                  }
+                  for(let i = 0;i<that.form.skus.length;i++){
+                    for(let key in that.form.skus[i]){
+                      if(!that.form.skus[i][key]){
+                        this.$message({
+                          type:'warning',
+                          duration:800,
+                          message:'请先设置商品具体属性'
+                        });
+                        return false;
+                      }
+                    }
+                  }
+                  console.log(that.$route.query.form)
+                  this.$router.push({path:v,query:{form:Object.assign(that.form,that.$route.query.form)}})
+                }
+              })
+
             }
           },
           //添加一个商品属性
@@ -242,7 +301,47 @@
           //删除一个商品属性
           deleteOne(index){
             this.form.skus.splice(index,1)
-          }
+          },
+          /*商品样式图片删除*/
+          imgRemove(index){
+            this.form.skus[index].skupic = '';
+            var file = document.getElementById(index);
+            file.value ='';
+          },
+          /*商品样式图片大图显示*/
+          CardPreview(index){
+            this.imageUrl =  this.form.skus[index].skupic;
+            this.dialogVisible = true;
+          },
+          /*商品样式图片上传重定向*/
+          imgUploadDetail(event,index){
+            if(this.form.skus[index].skupic.length > 0){
+              this.$message({
+                type:'warning',
+                message:'一个类型只能上传一张照片'
+              });
+              return false;
+            }
+            let form = new FormData();
+            form.append("file", event.target.files[0]);
+            axios.post(api.upload_file,form).then(res => {
+              if(res.data.status == 200){
+                this.form.skus[index].skupic = res.data.data;
+                var file = document.getElementById(index);
+                file.value ='';
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            })
+          },
         },
         created() {
 
@@ -290,7 +389,74 @@
      padding-top: 0;
     }
     .m-different-price-box{
-      padding: 0 0 0.2rem 1.2rem;
+      padding: 0 0 0.2rem 0;
+    }
+    .el-upload-list--picture-card .el-upload-list__item-actions:hover {
+      opacity: 1;
+    }
+    .m-up-img-box{
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: flex-start;
+      .el-upload-list__item-actions {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        cursor: default;
+        text-align: center;
+        color: #fff;
+        opacity: 0;
+        font-size: 20px;
+        background-color: rgba(0,0,0,.5);
+        -webkit-transition: opacity .3s;
+        transition: opacity .3s;
+        border-radius: 6px;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: center;
+        span {
+          cursor: pointer;
+        }
+      }
+    }
+    .inputbg{
+      margin-left: 10px;
+      color: #97ADCB;
+      border: 1px solid #eeeeee;
+      background-color: #fbfdff;
+      border-radius: 6px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      position: relative;
+      width: 1.2rem;
+      height: 1.2rem;
+      line-height: 1.2rem;
+      text-align: center;
+      &.m-img-l{
+        width: 1.1rem;
+        height: 1.1rem;
+        line-height: 1.1rem;
+        input{
+          width: 1.1rem;
+          height: 1.1rem;
+          line-height: 1.1rem;
+        }
+      }
+    }
+    .inputbg input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity:0;
+      filter:alpha(opacity=0);
+      width: 1.2rem;
+      height: 1.2rem;
+      line-height: 1.2rem;
+      cursor: pointer;
     }
   }
 </style>

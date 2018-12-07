@@ -232,9 +232,10 @@
                                  :name="item.path" :key="item.path">
                     </el-tab-pane>
                 </el-tabs>
-                <router-view>
+              <keep-alive>
+                <router-view></router-view>
+              </keep-alive>
 
-                </router-view>
             </main>
         </section>
     </div>

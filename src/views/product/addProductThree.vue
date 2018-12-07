@@ -10,15 +10,13 @@
       <span  class="active">3.编辑商品详情</span>
     </div>
     <el-form ref="form" :model="form" :rules="rules"  label-position="right" class="demo-ruleForm">
-      <h3 class="m-form-part-title">
-        <span class="m-part-title-icon"></span>
-        <span>商品简介</span>
-      </h3>
-      <el-form-item  required>
-        <el-input v-model="input" type="textarea" class="m-input-m" placeholder="请输入商品简介"></el-input>
-      </el-form-item>
-
-
+      <!--<h3 class="m-form-part-title">-->
+        <!--<span class="m-part-title-icon"></span>-->
+        <!--<span>商品简介</span>-->
+      <!--</h3>-->
+      <!--<el-form-item  required>-->
+        <!--<el-input v-model="input" type="textarea" class="m-input-m" placeholder="请输入商品简介"></el-input>-->
+      <!--</el-form-item>-->
       <h3 class="m-form-part-title">
         <span class="m-part-title-icon"></span>
         <span>商品详情</span>
@@ -27,6 +25,10 @@
         <el-upload
           action="https://jsonplaceholder.typicode.com/posts/"
           list-type="picture-card"
+          :limit="5"
+          :file-list="form.images"
+          :http-request="imgUploadAbo"
+          :on-success="handleAvatarSuccess"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">
           <span class="m-upload-img"></span>
@@ -41,24 +43,24 @@
 
     <div class="m-form-btn-box">
       <span class="m-form-btn active" @click="changeRoute('-1')">上一步</span>
-      <span class="m-form-btn active" @click="changeRoute('/product/addProductThree')">下一步</span>
+      <span class="m-form-btn active" @click="submitSure">确定</span>
     </div>
   </div>
 
 </template>
 
 <script type="text/ecmascript-6">
+  import axios from 'axios';
+  import api from '../../api/api'
   export default {
     data() {
       return {
         form:{
-          resource:'',
-          date1:'',
-          name:''
+          images:[]
         },
         rules:{
-          PRname:[
-            { required: true, message: '请输入商品名称', trigger: 'blur' }
+          images:[
+            { required: true, message: '请输入商品详情图片', trigger: 'blur' }
           ]
         },
         dialogVisible:false,
@@ -68,9 +70,36 @@
       }
     },
     components: {},
+    mounted(){
+    },
     methods: {
+      handleAvatarSuccess(res, file) {
+        this.form.images.push(URL.createObjectURL(file.raw));
+      },
+      /*商品详情大图上传重定向*/
+      imgUploadAbo(params){
+        let form = new FormData();
+        form.append("file", params.file);
+        let reader = new FileReader();
+        let that = this;
+        axios.post(api.upload_file,form).then(res => {
+          if(res.data.status == 200){
+            that.form.images.push(res.data.data);
+          }else{
+            this.$message({
+              type: 'error',
+              message: '服务器请求失败，请稍后再试 '
+            });
+          }
+        },error =>{
+          this.$message({
+            type: 'error',
+            message: '服务器请求失败，请稍后再试 '
+          });
+        })
+      },
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        this.form.images = fileList;
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
@@ -82,6 +111,22 @@
         }else{
           this.$router.push(v)
         }
+      },
+      submitSure(){
+        let arr = [];
+        for(let i=0;i<this.form.images.length;i++){
+          arr.push({pipic:this.form.images[i],pisort:i})
+        }
+        // let _form = this.form;
+        this.form.images = arr;
+        let params = Object.assign(this.form,this.$route.query.form);
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            axios.post(api.create_product + '?token='+localStorage.getItem('token'),params).then(res => {
+
+            })
+          }
+        })
       }
     },
     created() {
