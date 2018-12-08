@@ -76,29 +76,15 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   }
   // token有问题
   if(data.data.status_code == 405007) {
-    // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
-    /*if(common.GetQueryString('code')) {
-      // console.log(common.GetQueryString('code'));
-      window.localStorage.setItem("code",common.GetQueryString('code'));
-      let params = {
-        app_from: window.location.origin,
-        code: common.GetQueryString('code'),
-        // ussupper: ''
-      };
-      axios.post(api.wx_login, params).then(res => {
-        if(res.data.status == 200){
-          window.localStorage.setItem("token",res.data.data.token);
-          window.localStorage.setItem("openid",res.data.data.user.openid);
-          if(res.data.data.is_new) {
-            this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
-
-            this.$router.push({ path: '/personal/editInput', query: { name: 'new', passwd: '1234' }});
-          }else {
-            this.$router.push('/selected');
-          }
-        }
-      });
-    }*/
+    // router.push('/selected');
+    // router.push('/login');
+    window.location.href = window.location.origin + '/#/login';
+  }
+  // 用户不存在
+  if(data.data.status_code == 405004) {
+    // console.log(window.location.href);
+    // console.log(window.location.origin);
+    window.location.href = window.location.origin + '/#/login';
   }
 
   Indicator.close();

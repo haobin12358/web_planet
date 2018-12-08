@@ -17,7 +17,7 @@
       <p >
         <span class="m-icon-wei" @click="login"></span>
       </p>
-      <p>微信快速登录</p>
+      <p class="m-ft-24">微信快速登录</p>
     </div>
   </div>
 </template>
@@ -77,7 +77,7 @@
         let params = {
           ustelphone: this.ustelphone,
           identifyingcode: this.identifyingcode,
-          app_from: window.location.origin.substr(7, window.location.origin.length)
+          app_from: window.location.origin.substr(8, window.location.origin.length)
         };
         axios.post(api.login, { params: params }).then(res => {
           if(res.data.status == 200){
@@ -102,19 +102,25 @@
       login() {
         let params = {
           url: window.location.href,
-          app_from: window.location.origin.substr(7, window.location.origin.length)
+          app_from: window.location.origin.substr(8, window.location.origin.length)
         };
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
           if(res.data.status == 200){
             const id = res.data.data.appId;
             const url = window.location.href;
-            // const  url = 'https://daaiti.cn/WeiDian/#/login';
             window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
               + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
           }
         }).catch((error) => {
           console.log(error ,'1111');
         });
+      }
+    },
+    beforeDestroy() {
+      if(localStorage.getItem('is_new')) {
+
+      }else {
+        this.$router.push('/selected');
       }
     },
     mounted() {
@@ -126,15 +132,19 @@
           // console.log(common.GetQueryString('code'));
           window.localStorage.setItem("code",common.GetQueryString('code'));
           let params = {
-            app_from: window.location.origin.substr(7, window.location.origin.length),
-            code: common.GetQueryString('code'),
-            // ussupper: ''
+            app_from: window.location.origin.substr(8, window.location.origin.length),
+            code: common.GetQueryString('code')
           };
+          if(localStorage.getItem('secret_usid')) {
+            params.ussupper = localStorage.getItem('secret_usid');
+          }
           axios.post(api.wx_login, params).then(res => {
             if(res.data.status == 200){
+              localStorage.removeItem('secret_usid');
               window.localStorage.setItem("token",res.data.data.token);
               window.localStorage.setItem("openid",res.data.data.user.openid);
               if(res.data.data.is_new) {
+                localStorage.setItem('is_new', res.data.data.is_new);
                 this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
               }else {
                 this.$router.push('/selected');
@@ -225,8 +235,8 @@
       font-size: 18px;
       .m-icon-wei{
         display: inline-block;
-        width: 65px;
-        height: 65px;
+        width: 75px;
+        height: 75px;
         background: url("/static/images/icon-wei.png") no-repeat;
         background-size: 100% 100%;
       }

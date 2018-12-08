@@ -23,10 +23,10 @@ export default {
     }
   },
   mounted(){
-    // alert(common.GetQueryString('code'))
+    // alert(common.GetQueryString('code'));
 
-    let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDE2NDkzOCwiZXhwIjoxNTQ0NzY5NzM4fQ.eyJpZCI6IjRmMzdmMjVlLWY5ZTktMTFlOC05OTg0LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjowfQ.BETsibBxKnsBTV9v3jgmgmZ2j9NUn-CMNg3saia3M7k';
-    localStorage.setItem('token', token);
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDE3NjY2MiwiZXhwIjoxNTQ0NzgxNDYyfQ.eyJpZCI6IjJjMDA1ZGRlLWZhMDMtMTFlOC1iY2M4LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjowfQ.FFpNDJlre-4Orq8NVpjAplCO_3GnWO59P4drOmQWib0';
+    // localStorage.setItem('token', token);
   },
   methods:{
     returnClick(){

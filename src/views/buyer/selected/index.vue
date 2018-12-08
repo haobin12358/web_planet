@@ -250,6 +250,11 @@
         this.getBrand();
         this.getScene();
         this.getCategory();
+
+        // 将分享的usid保存
+        if(this.$route.query.secret_usid) {
+          localStorage.setItem('secret_usid', this.$route.query.secret_usid);
+        }
       },
       methods: {
         /*获取轮播图*/

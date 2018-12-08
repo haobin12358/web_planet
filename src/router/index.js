@@ -6,13 +6,13 @@ Vue.use(Router)
 
 
 export const constantRouterMap = [
-  { path: '/', component: () => import('../views/login/login'), hidden: true },
-  {path: '/register', component: () => import('../views/login/register'),hidden: true  },
-  {path: '/forget', component: () => import('../views/login/forget'),hidden: true  },
+  { path: '/login', component: () => import('../views/login/login'), hidden: true },
+  { path: '/register', component: () => import('../views/login/register'),hidden: true  },
+  { path: '/forget', component: () => import('../views/login/forget'),hidden: true  },
   { path: '/first', component: () => import('../views/login/first'), hidden: true },
   { path: '/search', component: () => import('../views/search/search'), hidden: true },
   {
-    path: '/selected',
+    path: '/',
     component: Layout,
     redirect: 'selected',
     children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
