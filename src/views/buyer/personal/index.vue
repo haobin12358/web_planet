@@ -99,7 +99,7 @@
           </p>
           <div class="m-activity-subtitle">账户余额</div>
           <div class="m-activity-money">
-            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">500.00</span></div>
+            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">0.00</span></div>
             <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
           </div>
           <ul class="m-part-icon-ul m-use">
