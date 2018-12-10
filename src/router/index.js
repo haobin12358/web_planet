@@ -114,7 +114,7 @@ export const constantRouterMap = [
     ],
   },
   { path: '/submitOrder', component: () => import('../views/buyer/shop/submitOrder'), hidden: true },
-  { path: '/orderList', component: () => import('../views/buyer/shop/orderList'), hidden: true },
+  { path: '/orderList', component: () => import('../views/buyer/shop/orderList'), meta: { keepAlive: true }, hidden: true },
   { path: '/addComment', component: () => import('../views/buyer/product/addComment'), hidden: true },
   { path: '/logisticsInformation', component: () => import('../views/buyer/shop/logisticsInformation'), hidden: true },
   { path: '/orderDetail', component: () => import('../views/buyer/shop/orderDetail'), hidden: true },

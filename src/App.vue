@@ -1,7 +1,16 @@
+<!--<template>
+  <div id="app">
+    &lt;!&ndash;<span class="m-return" @click.stop="returnClick">返回</span>&ndash;&gt;
+    <router-view v-if="isRouterAlive"/>
+  </div>
+</template>-->
+
+
 <template>
   <div id="app">
-    <!--<span class="m-return" @click.stop="returnClick">返回</span>-->
-    <router-view v-if="isRouterAlive"/>
+    <keep-alive>
+      <router-view v-if="isRouterAlive"></router-view>
+    </keep-alive>
   </div>
 </template>
 
