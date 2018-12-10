@@ -25,7 +25,8 @@
           <div class="m-product-description">{{item.tcdescription}}</div>
           <!--<div class="m-return-time">返还时间：<span class="m-yellow-text">2018-12-30前</span></div>-->
           <div class="m-price-share">
-            <div class="m-product-price">押金：<span class="m-price-time">{{item.zh_remarks}}</span></div>
+            <div class="m-product-price" v-if="item.zh_remarks">押金：<span class="m-price-time">{{item.zh_remarks}}</span></div>
+            <div class="m-product-price" v-if="item.prprice"><span class="m-price-time">￥{{item.prprice | money}}</span></div>
             <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare">
             <div class="m-share-text" @click="productShare">分享</div>
           </div>
@@ -61,7 +62,12 @@
     methods: {
       // 跳转页面
       changeRoute(v, item) {
-        this.$router.push({ path: v, query: { tcid: item.tcid }});
+        let which = this.$route.query.which;
+        if(which == "new") {
+          this.$router.push({ path: v, query: { fmfpid: item.fmfpid, which: this.$route.query.which }});
+        }else if(which == "try") {
+          this.$router.push({ path: v, query: { tcid: item.tcid, which: this.$route.query.which }});
+        }
       },
       // 商品分享按钮
       productShare() {
@@ -72,21 +78,43 @@
         let which = this.$route.query.which;
         if(which == "new") {
           this.title = "新人首单";
+          let params = {
+            token: localStorage.getItem('token'),
+            page_num: this.page_num,
+            page_size: this.page_size
+          };
+          axios.get(api.fresh_man_list, { params: params }).then(res => {
+            if(res.data.status == 200){
+              this.banner = res.data.data.actopPic;
+              this.remarks = res.data.data.acdesc;
+              this.productList = res.data.data.fresh_man;
+              this.productList = [];
+              for(let i = 0; i < res.data.data.fresh_man.length; i ++) {
+                let product = {};
+                product.tcmainpic = res.data.data.fresh_man[i].prmainpic;
+                product.tctitle = res.data.data.fresh_man[i].prtitle;
+                product.tcdescription = res.data.data.fresh_man[i].prdescription;
+                product.prprice = res.data.data.fresh_man[i].prprice;
+                product.fmfpid = res.data.data.fresh_man[i].fmfpid;
+                this.productList.push(product);
+              }
+            }
+          });
         }else if(which == "try") {
           this.title = "试用商品";
+          let params = {
+            token: localStorage.getItem('token'),
+            page_num: this.page_num,
+            page_size: this.page_size
+          };
+          axios.get(api.get_commodity, { params: params }).then(res => {
+            if(res.data.status == 200){
+              this.banner = res.data.data.banner;
+              this.productList = res.data.data.commodity;
+              this.remarks = res.data.data.remarks;
+            }
+          });
         }
-        let params = {
-          token: localStorage.getItem('token'),
-          page_num: this.page_num,
-          page_size: this.page_size
-        };
-        axios.get(api.get_commodity, { params: params }).then(res => {
-          if(res.data.status == 200){
-            this.banner = res.data.data.banner;
-            this.productList = res.data.data.commodity;
-            this.remarks = res.data.data.remarks;
-          }
-        });
       },
       // 获取时间
       getDate() {

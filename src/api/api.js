@@ -85,6 +85,9 @@ const api={
   activity_list: title + 'activity/list',                        // 获取正在进行中的活动
   get_activity: title + 'activity/get',                          // 魔盒礼盒与竞猜活动详情
   create_order: title + 'commodity/create_order',                // 试用商品下单
+  fresh_man_list: title + 'fresh_man/list',                      // 获取新人首单商品列表
+  fresh_man_get: title + 'fresh_man/get',                        // 新人首单商品详情
+  add_order: title + 'fresh_man/add_order',                      // 购买新人商品(返回支付参数)
 
   upload_file: title + 'file/upload',                            // 上传图片
 };

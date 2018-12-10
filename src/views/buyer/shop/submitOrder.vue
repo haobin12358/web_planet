@@ -24,7 +24,7 @@
         <span class="m-icon-more"></span>
       </div>
       <div class="m-one-part" v-for="(items, index) in product_info">
-        <h3>{{items.pb.pbname}}</h3>
+        <h3 v-if="items.pb">{{items.pb.pbname}}</h3>
         <div class="m-product" v-for="(item, i) in items.cart">
           <div>
             <img :src="item.sku.skupic" class="m-product-img" alt="">
@@ -100,10 +100,8 @@
       </mt-popup>
 
       <div class="m-order-btn">
-        <!--试用商品-->
-        <span v-if="from === 'activityProduct'" @click="submitOrderActivityProduct">提交订单</span>
-        <!--<span v-else-if="from === ''" @click="submitOrder">提交订单</span>-->
-        <!--<span v-else-if="from === ''" @click="submitOrder">提交订单</span>-->
+        <!--试用商品、新人商品-->
+        <span v-if="from == 'new' || from == 'try'" @click="submitOrderActivity">提交订单</span>
         <!--购物车或直接下单-->
         <span v-else @click="submitOrder">提交订单</span>
       </div>
@@ -172,7 +170,7 @@
         }
         this.from = this.$route.query.from;
         this.uaid = localStorage.getItem("uaid");
-        if(this.from !== 'activityProduct') {
+        if(this.from != 'new' && this.from != 'try') {
           this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
         }
         this.getOneAddress();
@@ -246,25 +244,40 @@
           }
         },
         // 试用商品
-        submitOrderActivityProduct() {
+        submitOrderActivity() {
           if(!this.uaid) {
             Toast("请先选择收货地址");
             return false;
           }
-          let params = {
-            tcid: this.product_info[0].cart[0].sku.tcid,
-            pbid: this.product_info[0].pb.pbid,
-            skuid: this.product_info[0].cart[0].sku.skuid,
-            omclient: 0,
-            uaid: this.uaid,
-            opaytype: 0,
-            ommessage: this.product_info[0].ommessage || ""
-          };
-          axios.post(api.create_order + "?token=" + localStorage.getItem('token'), params).then(res => {
-            if(res.data.status == 200){
-
-            }
-          });
+          if(this.from == 'try') {
+            let params = {
+              tcid: this.product_info[0].cart[0].sku.tcid,
+              pbid: this.product_info[0].pb.pbid,
+              skuid: this.product_info[0].cart[0].sku.skuid,
+              omclient: 0,
+              uaid: this.uaid,
+              opaytype: 0,
+              ommessage: this.product_info[0].ommessage || ""
+            };
+            axios.post(api.create_order + "?token=" + localStorage.getItem('token'), params).then(res => {
+              if(res.data.status == 200){
+                this.wxPay(res.data.data.args);
+              }
+            });
+          }else if(this.from == 'new') {
+            let params = {
+              skuid: this.product_info[0].cart[0].sku.skuid,
+              omclient: 0,
+              uaid: this.uaid,
+              opaytype: 0,
+              ommessage: this.product_info[0].ommessage || ""
+            };
+            axios.post(api.add_order + "?token=" + localStorage.getItem('token'), params).then(res => {
+              if(res.data.status == 200){
+                this.wxPay(res.data.data.args);
+              }
+            });
+          }
         },
         // 购物车或直接购买时创建订单并调起支付
         submitOrder() {
@@ -502,6 +515,7 @@
     width: 700px;
     margin-top: 100px;
     span{
+      color: #ffffff;
       display: inline-block;
       width: 700px;
       height:106px;

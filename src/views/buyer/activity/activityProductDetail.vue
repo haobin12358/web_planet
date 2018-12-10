@@ -1,6 +1,6 @@
 <template>
   <div class="m-activity-product-detail">
-    <div class="m-member-swipe">
+    <div class="m-member-swipe" v-if="product.image">
       <mt-swipe :auto="0">
         <mt-swipe-item v-for="item in product.image" :key="item.tciid">
           <img :src="item.tcipic" class="m-swipe-img" alt="">
@@ -11,11 +11,12 @@
     <div class="m-detail-text">
       <div class="m-text-row">
         <div class="m-text-name">{{product.tctitle}}</div>
-        <div class="m-text-price">押金：￥{{product.tcdeposit}}</div>
+        <div class="m-text-price" v-if="product.tcdeposit">押金：￥{{product.tcdeposit | money}}</div>
+        <div class="m-text-price" v-if="product.prprice">￥{{product.prprice | money}}</div>
       </div>
       <div class="m-text-row">
         <div class="m-text-description">{{product.tcdescription}}</div>
-        <div class="m-text-time">（<span class="m-time-bold">{{product.zh_deadline}}</span>）</div>
+        <div class="m-text-time" v-if="product.zh_deadline">（<span class="m-time-bold">{{product.zh_deadline}}</span>）</div>
       </div>
       <div class="m-text-row">
         <div class="m-text-courier">快递：{{product.tcfreight}} 元</div>
@@ -26,9 +27,9 @@
 
     <div class="m-text-row m-sku-row" @click="changeModal('show_sku', true)">
       <div class="m-text-courier">规格</div>
-      <div class="m-text-description">选择
+      <div class="m-text-description">
         <template v-if="select_value">
-          <span v-for="(item, index) in select_value.skuattritedetail">{{product.tcattribute[index]}} {{item}}</span>
+          <span v-for="(item, index) in select_value.skuattritedetail">{{product.tcattribute[index]}} <span v-if="item">:</span> {{item}} </span>
         </template>
         <template v-else>
           <span v-for="item in product.tcattribute">{{item}} </span>
@@ -51,7 +52,6 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
   import sku from '../components/sku';
 
   let scroll = (function (className) {
@@ -80,6 +80,7 @@
         select_value: null,
         canums: 1,
         cart_buy: null,
+        which: ''
       }
     },
     components: { sku },
@@ -95,24 +96,47 @@
       },
       // 获取商品详情
       getProductDetail() {
-        let params = {
-          token: localStorage.getItem('token'),
-          tcid: this.$route.query.tcid
-        };
-        axios.get(api.get_commodity_detail, { params: params }).then(res => {
-          if(res.data.status == 200){
-            // console.log(res.data.data);
-            this.product = res.data.data;
-            this.product.prmainpic = res.data.data.tcmainpic;
-            this.product.prprice = res.data.data.tcdeposit;
-          }
-        });
+        this.which = this.$route.query.which;
+        if(this.which == "new") {
+          let params = {
+            token: localStorage.getItem('token'),
+            fmfpid: this.$route.query.fmfpid
+          };
+          axios.get(api.fresh_man_get, { params: params }).then(res => {
+            if(res.data.status == 200){
+              this.product = res.data.data;
+              this.product.tctitle = res.data.data.prtitle;
+              this.product.tcfreight = res.data.data.prfreight;
+              this.product.tcdesc = res.data.data.prdesc;
+              this.product.tcid = res.data.data.prid;
+              this.product.tcattribute = res.data.data.prattribute;
+              if(this.product.image) {
+                for(let i = 0; i < this.product.image.length; i ++) {
+                  this.product.image[i].tciid = this.product.image[i].piid;
+                  this.product.image[i].tcipic = this.product.image[i].pipic;
+                }
+              }
+            }
+          });
+        }else if(this.which == "try") {
+          let params = {
+            token: localStorage.getItem('token'),
+            tcid: this.$route.query.tcid
+          };
+          axios.get(api.get_commodity_detail, { params: params }).then(res => {
+            if(res.data.status == 200){
+              this.product = res.data.data;
+              this.product.prmainpic = res.data.data.tcmainpic;
+              this.product.prprice = res.data.data.tcdeposit;
+            }
+          });
+        }
       },
       // sku确定
-      sureClick(item, num){
+      sureClick(item, num) {
         this.canums = num;
         this.select_value = item;
-        if(this.cart_buy == 'buy'){
+        if(this.cart_buy == 'buy') {
           this.buy();
           this.cart_buy = null;
         }
@@ -127,7 +151,7 @@
           product.cart.push({ product: { prtitle: this.product.tctitle }, sku: this.select_value, canums: "1", prid: this.product.tcid});
           let arr = [];
           arr.push(product);
-          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: 'activityProduct' }});
+          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: this.which }});
         }else {
           this.changeModal('show_sku', true);
           this.cart_buy = 'buy';
@@ -193,13 +217,14 @@
       box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     }
     .m-detail-img-box {
-      margin-bottom: 80px;
+      margin: 10px 0 80px 0;
       .m-detail-img {
         width: 750px;
         margin-bottom: -5px;
       }
     }
     .m-detail-btn-box {
+      width: 750px;
       display: flex;
       align-items: center;
       padding: 20px 17px 20px 55px;
@@ -214,6 +239,7 @@
         background-size: 100% 100%;
       }
       .m-buy-btn {
+        color: #ffffff;
         margin-left: 50px;
         padding: 11px 220px;
         border-radius: 10px;
