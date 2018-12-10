@@ -127,7 +127,6 @@
             if(res.data.status == 200){
               this.product = res.data.data;
               this.product.prmainpic = res.data.data.tcmainpic;
-              this.product.prprice = res.data.data.tcdeposit;
             }
           });
         }
