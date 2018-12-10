@@ -183,14 +183,14 @@
               li{
                 height: 25px;
                 line-height: 28px;
-                padding: 5px 56px;
+                padding: 8px 40px;
                 background-color: #D5D5D5;
                 border-radius: 30px;
                 margin-right: 30px;
                 margin-bottom: 20px;
                 &.active{
                   background-color: @mainColor;
-                  color: #333333;
+                  color: #ffffff;
                 }
               }
             }

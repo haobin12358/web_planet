@@ -311,20 +311,17 @@
       height: 62px;
       line-height: 62px;
       span{
+        color: #ffffff;
         display: inline-block;
         width: 271px;
         text-align: center;
         background-color: @subColor;
         margin: 0;
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
+        border-radius: 10px 0 0 10px;
         &.active{
           background-color: @mainColor;
           margin-left: -8px;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-          border-top-right-radius: 10px;
-          border-bottom-right-radius: 10px;
+          border-radius: 0 10px 10px 0;
         }
       }
     }
