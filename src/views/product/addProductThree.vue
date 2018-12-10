@@ -26,7 +26,7 @@
           action="https://jsonplaceholder.typicode.com/posts/"
           list-type="picture-card"
           :limit="5"
-          :file-list="form.images"
+          :file-list="form.prdesc"
           :http-request="imgUploadAbo"
           :on-success="handleAvatarSuccess"
           :on-preview="handlePictureCardPreview"
@@ -56,7 +56,7 @@
     data() {
       return {
         form:{
-          images:[]
+          prdesc:[]
         },
         rules:{
           images:[
@@ -74,32 +74,31 @@
     },
     methods: {
       handleAvatarSuccess(res, file) {
-        this.form.images.push(URL.createObjectURL(file.raw));
+        this.form.prdesc.push(URL.createObjectURL(file.raw));
       },
       /*商品详情大图上传重定向*/
       imgUploadAbo(params){
         let form = new FormData();
         form.append("file", params.file);
-        let reader = new FileReader();
         let that = this;
-        axios.post(api.upload_file,form).then(res => {
+        axios.post(api.upload_file + '?token=' + localStorage.getItem('token'),form).then(res => {
           if(res.data.status == 200){
-            that.form.images.push(res.data.data);
+            that.form.prdesc.push(res.data.data);
           }else{
             this.$message({
               type: 'error',
-              message: '服务器请求失败，请稍后再试 '
+              message: res.data.message
             });
           }
         },error =>{
           this.$message({
             type: 'error',
-            message: '服务器请求失败，请稍后再试 '
+            message: error.data.message
           });
         })
       },
       handleRemove(file, fileList) {
-        this.form.images = fileList;
+        this.form.prdesc = fileList;
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
@@ -113,17 +112,19 @@
         }
       },
       submitSure(){
-        let arr = [];
-        for(let i=0;i<this.form.images.length;i++){
-          arr.push({pipic:this.form.images[i],pisort:i})
-        }
-        // let _form = this.form;
-        this.form.images = arr;
         let params = Object.assign(this.form,this.$route.query.form);
         this.$refs['form'].validate((valid) => {
           if (valid) {
             axios.post(api.create_product + '?token='+localStorage.getItem('token'),params).then(res => {
-
+              if(res.data.status == 200){
+                this.$notify.success(res.data.message);
+                this.$router.push('/product');
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: res.data.message
+                });
+              }
             })
           }
         })

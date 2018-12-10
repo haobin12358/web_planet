@@ -77,7 +77,7 @@
         <el-table-column align="center" prop="prstocks" sortable label="库存" ></el-table-column>
         <el-table-column align="center" width="180" label="操作" >
           <template slot-scope="scope">
-            <span class="m-table-link m-bd">编辑</span>
+            <span class="m-table-link m-bd" @click="editProduct(scope.row)">编辑</span>
             <span class="m-table-link" @click="deleteProduct(scope.row,'one')">删除</span>
           </template>
         </el-table-column>
@@ -210,6 +210,10 @@
       pageChange(num){
         this.page = num;
         this.getProduct(num);
+      },
+      editProduct(item){
+        console.log(item)
+        this.$router.push({path:'/product/addProductOne',query:{prid:item.prid}});
       }
     }
   }

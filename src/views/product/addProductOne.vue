@@ -242,20 +242,49 @@
               //标签
               items_list:[],
               show_items:false,
+              product_info:null
 
             }
         },
         components: {},
       mounted(){
+
           this.getCategory(-1);
           this.getAllCategory();
           this.getBrand();
           this.getScene();
           this.getItem();
+        if(this.$route.query.prid){
+          this.getProduct();
+        }
       },
         methods: {
+          //获取商品信息
+          getProduct(){
+            axios.get(api.product_get,{
+              params:{
+                prid:this.$route.query.prid
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                console.log(res.data.data)
+                this.form.pbid = res.data.data.pbid;
+                // this.form.psid = res.data.data.psid;
+                this.form.pcid = res.data.data.pcid;
+                let arr =[];
+                for(let i = 0;i<res.data.data.items.length;i++){
+                  arr.push(res.data.data.items[i].itid);
+                }
+                this.form.items = [].concat(arr);
+                this.product_info = res.data.data;
+              }
+            })
+          },
           changeRoute(v){
-            this.form.pcid = this.select_category[this.select_category.length-1].pcid;
+            if(this.select_category){
+              this.form.pcid = this.select_category[this.select_category.length-1].pcid;
+            }
+
             let arr =[],_form=null;
             for(let i=0;i<this.form.items.length;i++){
               arr.push({itid:this.form.items[i]})
@@ -264,7 +293,7 @@
             _form.items = [].concat(arr);
             this.$refs['form'].validate((valid) => {
               if (valid) {
-                this.$router.push({path:v,query:{form:_form}});
+                this.$router.push({path:v,query:{form:_form,product:JSON.stringify(this.product_info)}});
               }
             })
           },

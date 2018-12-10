@@ -17,26 +17,60 @@
         <el-form-item label="商品名称：" prop="prtitle" required>
           <el-input v-model="form.prtitle" class="m-input-m" placeholder="请输入内容"></el-input>
         </el-form-item>
-        <el-form-item label="添加描述：" prop="prdesc" required>
-          <el-input v-model="form.prdesc" class="m-input-m" placeholder="请输入内容"></el-input>
+        <el-form-item label="添加描述：" prop="prdescription" required>
+          <el-input v-model="form.prdescription" class="m-input-m" placeholder="请输入内容"></el-input>
           <p class="m-alert-text">建议描述文字在36字以内</p>
         </el-form-item>
-        <el-form-item label="商品图片：" prop="prmainpic"  required>
+        <el-form-item label="商品主图：" prop="prmainpic"  required>
+          <!--<el-upload-->
+            <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+            <!--list-type="picture-card"-->
+            <!--:limit="1"-->
+            <!--:file-list="form.prmainpic"-->
+            <!--:http-request="imgUploadAbo"-->
+            <!--:on-success="handleAvatarSuccess"-->
+            <!--:on-preview="handlePictureCardPreview"-->
+            <!--:on-remove="handleRemove">-->
+            <!--<span class="m-upload-img"></span>-->
+          <!--</el-upload>-->
+          <!--<el-dialog :visible.sync="dialogVisible">-->
+            <!--<img width="100%" v-if="imageUrl" :src="imageUrl" >-->
+            <!--<img width="100%" v-else-if="form.prmainpic" :src="form.prmainpic" >-->
+          <!--</el-dialog>-->
+          <div class="m-up-img-box">
+            <div class="inputbg m-img-xl el-upload-list--picture-card" v-if="form.prmainpic">
+              <img :src="form.prmainpic"   style="width: 1.2rem;height:1.2rem;"/>
+              <span class="el-upload-list__item-actions">
+                      <span class="el-upload-list__item-preview" @click="CardPreviewMain">
+                        <i class="el-icon-zoom-in"></i>
+                      </span>
+                      <span class="el-upload-list__item-delete" @click="imgRemoveMain">
+                        <i class="el-icon-delete"></i>
+                      </span>
+                    </span>
+            </div>
+            <div class="inputbg m-img-xl"><span>+添加图片</span><input type="file" id="main" accept="image/*" @change="imgUploadDetailMain"></div>
+          </div>
+          <p class="m-alert-text">建议尺寸：700*700像素,最多上传1张商品图片</p>
+
+        </el-form-item>
+        <el-form-item label="商品轮播：" prop="prmainpic"  required>
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :limit="1"
-            :http-request="imgUploadAbo"
-            :on-success="handleAvatarSuccess"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
-            <span class="m-upload-img"></span>
+          action="https://jsonplaceholder.typicode.com/posts/"
+          list-type="picture-card"
+          :limit="5"
+          :file-list="form.images"
+          :http-request="imgUploadAbo"
+          :on-success="handleAvatarSuccess"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove">
+          <span class="m-upload-img"></span>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" v-if="imageUrl" :src="imageUrl" >
-            <img width="100%" v-else-if="form.prmainpic" :src="form.prmainpic" >
           </el-dialog>
-          <p class="m-alert-text">建议尺寸：700*700像素,最多上传1张商品图片</p>
+
+          <p class="m-alert-text">建议尺寸：700*700像素,最多上传5张商品图片</p>
 
         </el-form-item>
         <h3 class="m-form-part-title">
@@ -80,21 +114,9 @@
               <el-table-column
                 label="图片" width="300">
                 <template slot-scope="scope">
-                  <!--<el-upload-->
-                  <!--class="avatar-uploader"-->
-                  <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-                  <!--:show-file-list="false"-->
-                  <!--:http-request="imgUploadAbo"-->
-                  <!--:on-success="handleAvatarSuccess"-->
-                  <!--&gt;-->
-                  <!--<span class="m-upload-img"></span>-->
-                  <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-                  <!--<img v-else-if="scope.row.skupic" :src="scope.row.skupic" class="avatar">-->
-                  <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-                  <!--</el-upload>-->
                   <div class="m-up-img-box">
                     <div class="inputbg m-img-xl el-upload-list--picture-card" v-if="scope.row.skupic">
-                      <img :src="scope.row.skupic" style="width: 1.5rem;height:1.5rem;"/>
+                      <img :src="scope.row.skupic"  style="width: 1.2rem;height:1.2rem;"/>
                       <span class="el-upload-list__item-actions">
                       <span class="el-upload-list__item-preview" @click="CardPreview(scope.$index)">
                         <i class="el-icon-zoom-in"></i>
@@ -111,13 +133,13 @@
               <el-table-column
                 label="价格">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.skuprice" class="m-input-xxs"></el-input>
+                  <el-input v-model="scope.row.skuprice" type="number" class="m-input-xxs"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="库存">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.skustock" class="m-input-xxs"></el-input>
+                  <el-input v-model="scope.row.skustock" type="number" class="m-input-xxs"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -167,11 +189,11 @@
         </el-form-item>
 
         <el-form-item label="价格：" required prop="prprice">
-          <el-input v-model="form.prprice" class="m-input-s" placeholder="￥"></el-input>
+          <el-input v-model="form.prprice" type="number" class="m-input-s" placeholder="￥"></el-input>
           <span>元</span>
         </el-form-item>
         <el-form-item label="商品库存：" >
-          <el-input v-model="form.prstocks" class="m-input-s" placeholder=""></el-input>
+          <el-input v-model="form.prstocks" type="number" class="m-input-s" placeholder=""></el-input>
           <span>件</span>
         </el-form-item>
 
@@ -213,12 +235,13 @@
               inputValue: '',
               form:{
                 prtitle:'',
-                prdesc:'',
+                prdescription:'',
                 prprice:'',
                 prstocks:'',
                 prmainpic:'',
                 prattribute:[],
                 pskuvalue:[],
+                images:[],
                 skus: [
                   {
                     skupic: "",
@@ -251,6 +274,22 @@
         },
         components: {},
         mounted(){
+          if(this.$route.query.product){
+            let _product = JSON.parse(this.$route.query.product);
+            console.log(_product)
+            this.form ={
+               prtitle: _product.prtitle,
+              prdescription: _product.prdescription,
+                prprice:_product.prprice,
+                prstocks:_product.prstocks,
+                prmainpic:_product.prmainpic,
+                prattribute: [].concat(_product.prattribute),
+                pskuvalue:[],
+                skus: [].concat(_product.skus),
+                images:[]
+            }
+          }
+
           this.$dragging.$on('dragged', ({ value }) => {
             console.log(value.item)
             console.log(value.list)
@@ -299,6 +338,48 @@
               this.$refs.saveTagInput.$refs.input.focus();
             });
           },
+
+          /*商品主图片删除*/
+          imgRemoveMain(){
+            this.form.prmainpic = '';
+            var file = document.getElementById('main');
+            file.value ='';
+          },
+          /*商品主图片大图显示*/
+          CardPreviewMain(){
+            this.imageUrl =  this.form.prmainpic;
+            this.dialogVisible = true;
+          },
+          /*商品主图片上传重定向*/
+          imgUploadDetailMain(event,index){
+            if(this.form.prmainpic.length > 0){
+              this.$message({
+                type:'warning',
+                message:'一个类型只能上传一张照片'
+              });
+              return false;
+            }
+            let form = new FormData();
+            form.append("file", event.target.files[0]);
+            axios.post(api.upload_file + '?token=' +localStorage.getItem('token'),form).then(res => {
+              if(res.data.status == 200){
+                this.form.prmainpic = res.data.data;
+                var file = document.getElementById(index);
+                file.value ='';
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            })
+          },
+
           //规格名称确定
           handleInputConfirm() {
             let inputValue = this.inputValue;
@@ -310,28 +391,18 @@
           },
 
           handleAvatarSuccess(res, file) {
-            this.form.prmainpic = URL.createObjectURL(file.raw);
+            this.form.images.push(URL.createObjectURL(file.raw));
           },
-          /*商品详情大图上传重定向*/
+          /*商品轮播图上传重定向*/
           imgUploadAbo(params){
-            if(this.form.prmainpic){
-              this.$message({
-                type:'warning',
-                message:'只能上传一张照片'
-              });
-              return false;
-            }
+
             let form = new FormData();
             form.append("file", params.file);
-            let reader = new FileReader();
             let that = this;
             axios.post(api.upload_file + '?token=' +localStorage.getItem('token'),form).then(res => {
               if(res.data.status == 200){
-                that.form.prmainpic= res.data.data;
-                reader.readAsDataURL(params.file);
-                reader.onload = function(e) {
-                  that.imageUrl = this.result;
-                }
+                console.log(that.form)
+                that.form.images.push(res.data.data);
               }else{
                 this.$message({
                   type: 'error',
@@ -346,7 +417,7 @@
             })
           },
           handleRemove(file, fileList) {
-            this.form.prmainpic = '';
+            this.form.images = fileList;
           },
           handlePictureCardPreview(file) {
             this.imageUrl = file.url;
@@ -383,9 +454,14 @@
                       }
                     }
                   }
-                  that.form.pskuvalue = [].concat(that.sku_list);
-                  console.log(that.form,'adadasda')
-                  // this.$router.push({path:v,query:{form:Object.assign(that.form,that.$route.query.form)}})
+                  let arr = [];
+                  for(let i = 0;i<that.form.images.length;i++){
+                   arr.push({pipic:that.form.images[i],pisort:i})
+                  }
+                  let _form  = JSON.parse(JSON.stringify(this.form));
+                  _form.pskuvalue = [].concat(that.sku_list);
+                  _form.images = [].concat(arr);
+                  this.$router.push({path:v,query:{form:Object.assign(_form,that.$route.query.form)}})
                 }
               })
 
