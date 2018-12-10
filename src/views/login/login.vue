@@ -116,13 +116,6 @@
         });
       }
     },
-    /*beforeDestroy() {
-      if(localStorage.getItem('is_new')) {
-
-      }else {
-        this.$router.push('/selected');
-      }
-    },*/
     mounted() {
       common.changeTitle('登录');
 
@@ -141,10 +134,10 @@
           axios.post(api.wx_login, params).then(res => {
             if(res.data.status == 200){
               localStorage.removeItem('secret_usid');
+              localStorage.removeItem('toLogin');
               window.localStorage.setItem("token",res.data.data.token);
               window.localStorage.setItem("openid",res.data.data.user.openid);
               if(res.data.data.is_new) {
-                // localStorage.setItem('is_new', res.data.data.is_new);
                 this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
               }else {
                 this.$router.push('/selected');

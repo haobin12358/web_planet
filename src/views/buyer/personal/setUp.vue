@@ -37,21 +37,21 @@
              <li @click="clearCache">
                <div>
                  <span class="m-icon m-icon-delete"></span>
-                 <span>清楚缓存</span>
+                 <span>清除缓存</span>
                </div>
                <div>
-                 <span>{{cache}} M</span>
                  <span class="m-icon-more"></span>
                </div>
              </li>
              <li>
                <div>
                  <span class="m-icon m-icon-about"></span>
-                 <span>关于大行星</span>
+                 <!--<span>关于大行星</span>-->
+                 <span>大行星版本</span>
                </div>
                <div>
                  <span>1.0</span>
-                 <span class="m-icon-more"></span>
+                 <!--<span class="m-icon-more"></span>-->
                </div>
              </li>
            </ul>
@@ -69,14 +69,13 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
 
   export default {
     data() {
       return {
         name: '',
         user: {},              // 个人信息
-        cache: 1.5,
       }
     },
     components: {},
@@ -95,12 +94,12 @@
       },
       // 清除缓存
       clearCache() {
-        if(this.cache != 0) {
-          Toast("清除成功");
-          this.cache = 0;
-        }else {
-          Toast("暂无缓存，无需清理");
-        }
+        MessageBox.confirm('之后您可能需要重新登录，是否继续', '清除缓存').then(() => {
+          localStorage.removeItem('token');
+          Toast({ message: '清除成功', duration: 1000 });
+        }).catch(() => {
+          Toast({ message: '取消清除', duration: 1000 });
+        });
       }
     },
     mounted() {
