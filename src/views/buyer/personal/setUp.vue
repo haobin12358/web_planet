@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="m-foot-btn">
-      <span>退出登录</span>
+      <span @click="clearCache">退出登录</span>
     </div>
   </div>
 
@@ -94,11 +94,11 @@
       },
       // 清除缓存
       clearCache() {
-        MessageBox.confirm('之后您可能需要重新登录，是否继续', '清除缓存').then(() => {
+        MessageBox.confirm('之后您可能需要重新登录，是否继续').then(() => {
           localStorage.removeItem('token');
-          Toast({ message: '清除成功', duration: 1000 });
+          this.$router.push('/login');
         }).catch(() => {
-          Toast({ message: '取消清除', duration: 1000 });
+
         });
       }
     },
