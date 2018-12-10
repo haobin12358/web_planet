@@ -95,7 +95,8 @@
       // 清除缓存
       clearCache() {
         MessageBox.confirm('之后您可能需要重新登录，是否继续').then(() => {
-          localStorage.removeItem('token');
+          // localStorage.removeItem('token');
+          localStorage.clear();
           this.$router.push('/login');
         }).catch(() => {
 

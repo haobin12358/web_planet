@@ -147,7 +147,7 @@
         if(this.from == 'new') {
           axios.post(api.bing_telphone + '?token=' + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200){
-              Toast('绑定成功');
+              Toast({ message: '绑定成功', duration: 1500 });
               localStorage.setItem('token', res.data.data.token);
               this.$router.push('/selected');
             }

@@ -484,7 +484,7 @@
         margin-left: 40px;
         &.active{
           background-color: @mainColor;
-          color: #333;
+          color: #ffffff;
           border: 1px solid @mainColor;
         }
         &:last-child{
