@@ -63,19 +63,18 @@
         this.buyer_store = false;
       }
       this.selected = document.title;
+      let selectedUrl = window.location.href.split('#/')[1];
       // 当前在买家版
       for(let i = 0; i < this.$store.state.tabbar_buyer.length; i ++) {
-        if(this.selected == this.$store.state.tabbar_buyer[i].name) {
+        if(selectedUrl == this.$store.state.tabbar_buyer[i].url) {
           this.tabbar = this.$store.state.tabbar_buyer;
         }
       }
       // 当前在卖家版
       for(let i = 0; i < this.$store.state.tabbar_store.length; i ++) {
-        if(this.selected == this.$store.state.tabbar_store[i].name){
+        if(selectedUrl == this.$store.state.tabbar_store[i].url){
           this.tabbar = this.$store.state.tabbar_store;
         }
-      }
-      for(let i = 0; i < this.tabbar.length; i ++) {
       }
     },
     computed:{
