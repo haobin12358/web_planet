@@ -149,6 +149,13 @@
         }
       },
       components: { coupon },
+      created() {
+        // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
+        if(sessionStorage.getItem('use') == 'used') {
+          this.$router.go(-1);
+          sessionStorage.removeItem('use');
+        }
+      },
       mounted() {
         common.changeTitle('提交订单');
         if(this.$route.query.product) {
@@ -243,7 +250,7 @@
             this.couponList = this.product_info[this.index].couponList;
           }
         },
-        // 试用商品
+        // 试用商品 - 新人首单时创建订单并调起支付
         submitOrderActivity() {
           if(!this.uaid) {
             Toast("请先选择收货地址");
@@ -339,6 +346,8 @@
               },
               function(res){
                 // console.log(res);
+                // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
+                sessionStorage.setItem('use', 'used');
                 if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
                   that.$router.push("/orderList?which=2");
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
