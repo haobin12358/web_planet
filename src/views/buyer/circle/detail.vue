@@ -143,6 +143,11 @@
     components: { bottomLine, couponCard, product },
     mounted() {
       this.getNewsDetail();
+      // 从圈子首页点击单条的评论图标
+      if(sessionStorage.getItem('showComments') == 'show') {
+        this.changeModal('show_modal',true);
+        sessionStorage.removeItem('showComments');
+      }
     },
     methods: {
       // 播放视频
@@ -169,6 +174,7 @@
         if(v == 'show_modal'){
           this.getComment();
         }
+        this.show_comment = true;
       },
       /*获取资讯详情*/
       getNewsDetail(){
@@ -244,7 +250,11 @@
         this.comment_index = index;
       },
       //点击评论确定
-      sureComment(){
+      sureComment() {
+        if(!this.comment_content) {
+          Toast({ message: '请先输入评论', duration: 1000 });
+          return false;
+        }
         axios.post(api.create_comment + '?token=' + localStorage.getItem('token'),{
           neid:this.$route.query.neid,
           nctext:this.comment_content,

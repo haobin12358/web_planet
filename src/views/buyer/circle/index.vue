@@ -36,7 +36,7 @@
                 <span class="m-icon-like " :class="items.is_favorite?'active':''"></span>
                 <span>{{items.favoritnumber}}</span>
               </li>
-              <li class="m-border">
+              <li class="m-border" @click.stop="changeRoute('/circle/detail', items, 'comments')">
                 <span class="m-icon-comment"></span>
                 <span>{{items.commentnumber}}</span>
               </li>
@@ -108,8 +108,14 @@
       /*跳转路由*/
       changeRoute(v,params,value){
         if(v == '/circle/detail'){
-          this.$router.push({path:v,query:{neid:params.neid}});
-          return false;
+          if(value == 'comments') {
+            sessionStorage.setItem('showComments', 'show');
+            this.$router.push({path:v,query:{neid:params.neid}});
+            return false;
+          }else {
+            this.$router.push({path:v,query:{neid:params.neid}});
+            return false;
+          }
         }
         if(params == 'shtype'){
           this.$router.push({path:v,query:{shtype:value}})
