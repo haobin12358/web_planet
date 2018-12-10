@@ -22,6 +22,7 @@
 
  .m-bottomService-foot{
   width: 700px;
+   color: #ffffff;
   border-radius: 10px;
   background-color: @mainColor;
   height: 86px;

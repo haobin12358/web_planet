@@ -126,6 +126,7 @@
       background-color: @mainColor;
       .m-serviceCenter-btn{
         width: 50%;
+        color: #ffffff;
         text-align: center;
         .flex-row(center);
         line-height: 36px;
