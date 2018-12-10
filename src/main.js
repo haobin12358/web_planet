@@ -72,19 +72,36 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
 
   // 返回状态码不是200时统一报错
   if(data.data.status != 200) {
-    Toast(data.data.message);
-  }
-  // token有问题
-  if(data.data.status_code == 405007) {
-    // router.push('/selected');
-    // router.push('/login');
-    window.location.href = window.location.origin + '/#/login';
-  }
-  // 用户不存在
-  if(data.data.status_code == 405004) {
-    // console.log(window.location.href);
-    // console.log(window.location.origin);
-    window.location.href = window.location.origin + '/#/login';
+    // token有问题
+    if(data.data.status_code == 405007) {
+      if(localStorage.getItem('toLogin')) {
+        Toast(data.data.message);
+      }else {
+        router.push('/login');
+        localStorage.setItem('toLogin', 'toLogin');
+        // 倒计时60秒*10
+        const TIME_COUNT = 60*10;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            localStorage.setItem('toLogin', '');
+            clearInterval(time);
+          }
+        }, 1000);
+      }
+    }
+    // 用户不存在
+    else if(data.data.status_code == 405004) {
+      // console.log(window.location.href);
+      // console.log(window.location.origin);
+      // window.location.href = window.location.origin + '/#/login';
+      // let href = window.location.href.split('#/')[1];
+      Toast(data.data.message);
+    }else {
+      Toast(data.data.message);
+    }
   }
 
   Indicator.close();

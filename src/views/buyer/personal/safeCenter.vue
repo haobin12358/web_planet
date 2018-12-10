@@ -5,13 +5,14 @@
     </div>
     <div class="m-personal-content m-setUp">
       <div class="m-personal-info">
-        <img :src="user.usheader" class="m-personal-head-portrait" alt="">
+        <img class="m-personal-head-portrait" :src="user.usheader">
         <div class="m-personal-info-box">
           <div class="m-personal-info-text">
             <div>
               <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity">{{user.usidname}}</span>
+                <span class="m-personal-identity animated rubberBand" v-if="user.usidname == '登录 / 注册'" @click="changeRoute('/login')">{{user.usidname}}</span>
+                <span class="m-personal-identity active" v-else>{{user.usidname}}</span>
               </p>
             </div>
           </div>
@@ -70,7 +71,7 @@
   export default {
     data() {
       return {
-        user: {}                     // 个人信息
+        user: { usheader: '/static/images/logo.png', usidname: '登录 / 注册'},               // 个人信息
       }
     },
     components: {},

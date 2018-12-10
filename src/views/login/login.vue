@@ -116,13 +116,13 @@
         });
       }
     },
-    beforeDestroy() {
+    /*beforeDestroy() {
       if(localStorage.getItem('is_new')) {
 
       }else {
         this.$router.push('/selected');
       }
-    },
+    },*/
     mounted() {
       common.changeTitle('登录');
 
@@ -144,7 +144,7 @@
               window.localStorage.setItem("token",res.data.data.token);
               window.localStorage.setItem("openid",res.data.data.user.openid);
               if(res.data.data.is_new) {
-                localStorage.setItem('is_new', res.data.data.is_new);
+                // localStorage.setItem('is_new', res.data.data.is_new);
                 this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
               }else {
                 this.$router.push('/selected');

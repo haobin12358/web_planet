@@ -14,10 +14,11 @@
             <div>
               <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity">{{user.usidname}}</span>
+                <span class="m-personal-identity animated rubberBand" v-if="user.usidname == '登录 / 注册'" @click="changeRoute('/login')">{{user.usidname}}</span>
+                <span class="m-personal-identity active" v-else>{{user.usidname}}</span>
               </p>
             </div>
-            <img class="m-code-img" :src="user.usqrcode" @click="changeRoute('/personal/code')">
+            <img class="m-code-img" v-if="user.usqrcode" :src="user.usqrcode" @click="changeRoute('/personal/code')">
           </div>
           <ul class="m-personal-ul">
             <li @click="changeRoute('/personal/coupon')">
@@ -164,8 +165,6 @@
             <mt-picker :slots="slots" @change="bankChange"></mt-picker>
           </mt-popup>
         </div>
-
-
       </div>
     </div>
   </div>
@@ -182,7 +181,7 @@
     data() {
       return {
         name: '',
-        user: {},               // 个人信息
+        user: { usheader: '/static/images/logo.png', usidname: '登录 / 注册'},               // 个人信息
         pay: "0",               // 待付款
         send: "0",              // 待发货
         receive: "0",           // 待收货
@@ -227,6 +226,7 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
+            this.getOrderCount();       // 获取订单数量
           }
         })
       },
@@ -254,7 +254,6 @@
     mounted() {
       common.changeTitle('我的');
       this.getUser();             // 获取个人信息
-      this.getOrderCount();       // 获取订单数量
     }
   }
 </script>

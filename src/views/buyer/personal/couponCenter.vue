@@ -12,8 +12,6 @@
           <div class="m-rule-text">{{integral.integralrule}}</div>
         </mt-popup>
 
-
-
         <p class="m-couponCenter-top-p">累计积分：{{integral.usintegral}}</p>
         <div class="m-couponCenter-day">
           <span>已连续签到</span>
