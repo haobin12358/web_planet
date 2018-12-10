@@ -31,7 +31,7 @@
         </div>
         <div class="m-sku-btn">
           <span  class="active" v-if="select_value && select_value.skustock > 0" @click.stop="sureClick">确 定</span>
-          <span v-else>确定</span>
+          <span v-else>确 定</span>
         </div>
       </div>
     </div>
@@ -209,6 +209,7 @@
             border-radius: 10px;
             text-align: center;
             &.active{
+              color: #ffffff;
               background-color: @mainColor;
             }
           }

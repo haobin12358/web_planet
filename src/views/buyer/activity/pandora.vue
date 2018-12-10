@@ -126,7 +126,7 @@
       background-color: #845AFA;
       z-index: 1;
       .m-box-tip {
-        color: @mainColor;
+        color: #ffffff;
         padding-top: 23px;
       }
       .m-gift-one {

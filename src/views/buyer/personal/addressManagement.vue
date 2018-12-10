@@ -144,6 +144,7 @@
     text-align: center;
     margin-top: 153px;
     span{
+      color: #ffffff;
       display: inline-block;
       width: 700px;
       height: 106px;
