@@ -32,7 +32,6 @@ const wxApi = {
     }
   },
   wxRegister (callback) {
-    // let data = {params: {reqUrl: window.location.href}}
     axios.get(api.get_wxconfig,{
       params:{
         url: window.location.href
