@@ -5,30 +5,33 @@
       <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
     </div>
 
-    <div class="m-order-box" v-else>
-      <div class="m-order-item" v-for="item in order">
-        <div class="m-store-box" @click.stop="changeRoute('/brandDetail', item)">
-          <img class="m-store-img" src="/static/images/icon-store.png" alt="">
-          <div class="m-store-name m-ft-24">{{item.pbname}}</div>
-          <img class="m-more-img" src="/static/images/icon-more.png" alt="">
-        </div>
-        <div class="m-product-box" @click.stop="changeRoute('/backDetail', item)" v-for="product in item.order_part">
-          <div>
-            <img class="m-product-img" :src="product.prmainpic" alt="">
+    <div class="m-order-box" v-else  @touchmove.stop="touchMove">
+      <mt-loadmore :top-method="loadTop">
+        <div class="m-order-item" v-for="item in order">
+          <div class="m-store-box" @click.stop="changeRoute('/brandDetail', item)">
+            <img class="m-store-img" src="/static/images/icon-store.png" alt="">
+            <div class="m-store-name m-ft-24">{{item.pbname}}</div>
+            <img class="m-more-img" src="/static/images/icon-more.png" alt="">
           </div>
-          <div class="m-product-text-box">
-            <div class="m-product-text m-ft-24">{{product.prtitle}}</div>
-            <div class="m-product-text m-ft-21">规格：
-              <span v-for="(sku, index) in product.skuattritedetail">{{product.prattribute[index]}}：{{sku}} </span>
+          <div class="m-product-box" @click.stop="changeRoute('/backDetail', item)" v-for="product in item.order_part">
+            <div>
+              <img class="m-product-img" :src="product.prmainpic" alt="">
+            </div>
+            <div class="m-product-text-box">
+              <div class="m-product-text m-ft-24">{{product.prtitle}}</div>
+              <div class="m-product-text m-ft-21">规格：
+                <span v-for="(sku, index) in product.skuattritedetail">{{product.prattribute[index]}}：{{sku}} </span>
+              </div>
             </div>
           </div>
+          <div class="m-btn-box">
+            <img class="m-after-sales-img" src="/static/images/icon-order-after-sale.png" alt="">
+            <div class="m-after-sales-text m-ft-22">{{item.order_refund_apply.orastate_zh}} {{item.order_refund_apply.orastatus_zh}}</div>
+            <div class="m-after-sales-btn" @click.stop="changeRoute('/backDetail', item)">查看详情</div>
+          </div>
         </div>
-        <div class="m-btn-box">
-          <img class="m-after-sales-img" src="/static/images/icon-order-after-sale.png" alt="">
-          <div class="m-after-sales-text m-ft-22">{{item.order_refund_apply.orastate_zh}} {{item.order_refund_apply.orastatus_zh}}</div>
-          <div class="m-after-sales-btn" @click.stop="changeRoute('/backDetail', item)">查看详情</div>
-        </div>
-      </div>
+        <bottom-line v-if="bottom_show"></bottom-line>
+      </mt-loadmore>
     </div>
   </div>
 
@@ -37,7 +40,7 @@
 <script type="text/ecmascript-6">
   import common from '../../../common/js/common';
   import api from '../../../api/api'
-  import { Toast } from 'mint-ui';
+  import bottomLine from '../../../components/common/bottomLine';
   import axios from 'axios';
 
   export default {
@@ -45,11 +48,15 @@
       return {
         name: '',
         page_num: 1,
-        page_size: 20,
+        page_size: 5,
         order: [],
+        isScroll: true,
+        total_count: 0,
+        bottom_show: false,
       }
     },
-    components: {},
+    inject: ['reload'],
+    components: { bottomLine },
     methods: {
       // 跳转页面
       changeRoute(v, item) {
@@ -75,9 +82,43 @@
         };
         axios.get(api.order_list, { params: params }).then(res => {
           if(res.data.status == 200) {
-            this.order = res.data.data;
+            this.isScroll = true;
+            if(res.data.data.length > 0){
+              if(this.page_num > 1){
+                this.order = this.order.concat(res.data.data);
+              }else{
+                this.order = res.data.data;
+              }
+              this.page_num = this.page_num + 1;
+              this.total_count = res.data.total_count;
+            }else{
+              this.order = [];
+              this.page_num = 1;
+              this.total_count = 0;
+              return false;
+            }
           }
         })
+      },
+      //滚动加载更多
+      touchMove(e) {
+        let scrollTop = common.getScrollTop();
+        let scrollHeight = common.getScrollHeight();
+        let ClientHeight = common.getClientHeight();
+        if (scrollTop + ClientHeight  >= scrollHeight -10) {
+          if(this.isScroll){
+            this.isScroll = false;
+            if(this.order.length == this.total_count) {
+              this.bottom_show = true;
+            }else{
+              this.getOrderList();
+            }
+          }
+        }
+      },
+      // 下拉刷新
+      loadTop() {
+        this.reload();
       }
     },
     mounted() {
