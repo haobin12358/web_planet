@@ -123,8 +123,9 @@
         <span v-if="order_info.omstatus == 0 " @click="cancelOrder">取消订单</span>
         <span v-if="order_info.omstatus == 10 || order_info.omstatus == 20" @click="changeRoute('/selectBack', 'order')">退款</span>
         <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
-        <span class="active" v-if="order_info.omstatus == 20" @click="orderConfirm">确认收货</span>
         <span class="active" v-if="order_info.omstatus == 0" @click="payBtn">立即付款</span>
+        <span class="active" v-if="order_info.omstatus == 20" @click="orderConfirm">确认收货</span>
+        <span class="active" v-if="order_info.omstatus == 35" @click="changeRoute('/addComment')">评价</span>
       </div>
       <bottom></bottom>
     </div>
@@ -174,6 +175,9 @@
               break;
             case '/logisticsInformation':
               this.$router.push({ path: v, query: { omid: this.order_info.omid }});
+              break;
+            case '/addComment':
+              this.$router.push({ path: v, query: { product: JSON.stringify(this.order_info) }});
               break;
             default:
               this.$router.push(v);

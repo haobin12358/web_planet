@@ -188,7 +188,7 @@
         let that = this;
         let form = new FormData();
         form.append("file", files[0]);
-        axios.post(api.upload_file+'?type=circleVideo&token='+localStorage.getItem('token'),form).then(res => {
+        axios.post(api.upload_file+'?type=video&token='+localStorage.getItem('token'),form).then(res => {
           if(res.data.status == 200){
             this.video.nvurl = res.data.data;
             this.video.nvthum = res.data.video_thum;

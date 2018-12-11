@@ -35,6 +35,7 @@ const api={
   list_dispute_type: title + 'refund/list_dispute_type',         // 获取退款原因
   refund_cancel: title + 'refund/cancle',                        // 取消(撤销)售后申请
   order_confirm: title + 'order/confirm',                        // 订单确认收货
+  create_evaluation: title + 'order/create_evaluation',          // 订单评价
 
   items_list: title + 'items/list',                              // 获取标签列表
   scene_list: title + 'scene/list',                              // 获取场景列表

@@ -13,7 +13,7 @@
               <div class="m-evaluate-start">
                 <div>
                   <span class="m-label">评价</span>
-                  <span class="m-icon-start " v-for="(a,b) in star" :class="b<= item.oescore?'active':''"></span>
+                  <span class="m-icon-start" v-for="(a, b) in star" :class="b < item.oescore ? 'active' : ''"></span>
                 </div>
                 <span>{{item.zh_oescore}}</span>
               </div>
@@ -40,7 +40,6 @@
           </div>
         </template>
       </div>
-
     </div>
 </template>
 
@@ -144,8 +143,8 @@
         }
         .m-icon-start{
           display: inline-block;
-          width: 40px;
-          height: 40px;
+          width: 35px;
+          height: 35px;
           background: url("/static/images/icon-evaluate-star.png") no-repeat;
           background-size: 100% 100%;
           vertical-align: text-bottom;
