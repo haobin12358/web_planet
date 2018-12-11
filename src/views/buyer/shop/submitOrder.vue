@@ -241,6 +241,13 @@
           this.show_coupon = false;
           this.product_info[this.index].total = this.product_info[this.index].total - item.reduce;
           this.total_money = this.total_money - item.reduce;
+          // 使用无门槛优惠券后付款金额不小于0.01
+          if(this.product_info[this.index].total < 0.01) {
+            this.product_info[this.index].total = 0.01;
+          }
+          if(this.total_money < 0.01) {
+            this.total_money = 0.01;
+          }
         },
         /*改变模态框*/
         changeModel(v, bool, index) {
