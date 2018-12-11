@@ -73,11 +73,13 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   // 返回状态码不是200时统一报错
   if(data.data.status != 200) {
     // token有问题
-    if(data.data.status_code == 405007) {
+    if(data.data.status_code == 405007 || data.data.message == '用户不存在') {
       if(localStorage.getItem('toLogin')) {
         Toast(data.data.message);
       }else {
-        router.push('/login');
+        // 避免code影响
+        // router.push('/login');
+        window.location.href = window.location.origin + '/#/login';
         localStorage.setItem('toLogin', 'toLogin');
         // 倒计时60秒*10
         const TIME_COUNT = 60*10;
