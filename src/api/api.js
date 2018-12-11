@@ -83,13 +83,15 @@ const api={
   get_commodity: title + 'commodity/get',                        // 获取试用商品列表
   get_commodity_detail: title + 'commodity/get_commodity',       // 获取试用商品详情
   activity_list: title + 'activity/list',                        // 获取正在进行中的活动
-  get_activity: title + 'activity/get',                          // 魔盒礼盒与竞猜活动详情
+  get_activity: title + 'activity/get',                          // 魔盒礼盒与竞猜活动详情 - 规则
+  join_magicbox: title + 'magicbox/join',                        // 参与魔盒活动(获取分享所需的url参数)
   create_order: title + 'commodity/create_order',                // 试用商品下单
   fresh_man_list: title + 'fresh_man/list',                      // 获取新人首单商品列表
   fresh_man_get: title + 'fresh_man/get',                        // 新人首单商品详情
   add_order: title + 'fresh_man/add_order',                      // 购买新人商品(返回支付参数)
 
   upload_file: title + 'file/upload',                            // 上传图片
+  get_share_params: title + 'shareparams/get',                   // 获取微信分享参数
 };
 
 export default api

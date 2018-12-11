@@ -9,45 +9,35 @@
       <div class="m-cloud-two"></div>
       <div class="m-cloud-three"></div>
       <div class="m-cloud-four" :class="!record ? 'active' : ''"></div>
-      <img class="m-product-img animated bounceIn" :src="rule.prpic">
+      <img class="m-product-img animated bounceIn" :src="box.prpic">
     </div>
     <div class="m-product-detail">
-      <div class="m-buy-product">
-        <div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥345.00</div>
+      <div class="m-buy-product" v-if="box.infos.current_price">
+        <div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{box.infos.current_price | money}}</div>
         <div class="m-box-btn m-ft-38 m-ft-b">点击购买</div>
       </div>
-      <div class="m-product-name m-ft-38 m-ft-b tl">魔术礼盒</div>
+      <div class="m-product-name m-ft-38 m-ft-b tl">{{box.acname}}</div>
       <div class="m-product-price">
-        <div class="m-price-two">原价：￥{{rule.infos.skuprice}}</div>
-        <div class="m-price-three m-red">最低价：￥{{rule.infos.skuminprice}}</div>
+        <div class="m-price-two">原价：￥{{box.infos.skuprice | money}}</div>
+        <div class="m-price-three m-red">最低价：￥{{box.infos.skuminprice | money}}</div>
       </div>
     </div>
     <div class="m-share-rule tl">
-      <div class="m-rule-text">第一档：随机减少<span class="m-red">{{rule.infos.gearsone[0]}}</span>元</div>
-      <div class="m-rule-text">第二档：随机减少<span class="m-red">{{rule.infos.gearstwo[0]}}</span>元或增加<span class="m-red">{{rule.infos.gearstwo[1]}}</span>元</div>
-      <div class="m-rule-text">第三档：随机减少<span class="m-red">{{rule.infos.gearsthree[0]}}</span>元或增加<span class="m-red">{{rule.infos.gearsthree[1]}}</span>元</div>
-      <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse" @click="share">点击分享好友</div>
+      <div class="m-rule-text">第一档：随机减少<span class="m-red">{{box.infos.gearsone[0]}}</span>元</div>
+      <div class="m-rule-text">第二档：随机减少<span class="m-red">{{box.infos.gearstwo[0]}}</span>元或增加<span class="m-red">{{box.infos.gearstwo[1]}}</span>元</div>
+      <div class="m-rule-text">第三档：随机减少<span class="m-red">{{box.infos.gearsthree[0]}}</span>元或增加<span class="m-red">{{box.infos.gearsthree[1]}}</span>元</div>
+      <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse" @click="share">点击分享</div>
     </div>
+    <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
 
     <div class="m-record-text" :class="record ? 'active' : ''" v-if="record">
       <div class="m-rule-icon"></div>
       <div class="m-text-bg">
-        <div class="m-rule-title">拆盒记录</div>
-        <div class="m-rule-row">
-          <div class="m-rule-no">1</div>
-          <div>居居拆盒并分享，减少5元</div>
-        </div>
-        <div class="m-rule-row">
-          <div class="m-rule-no">2</div>
-          <div>小甜甜帮居居拆盒，减少10元</div>
-        </div>
-        <div class="m-rule-row">
-          <div class="m-rule-no">3</div>
-          <div>咕咕帮居居拆盒，增加10元</div>
-        </div>
-        <div class="m-rule-row">
-          <div class="m-rule-no">4</div>
-          <div>啾啾帮居居拆盒，减少20元</div>
+        <div class="m-rule-title" v-if="history">拆盒记录</div>
+        <div class="m-rule-title" v-else>暂无拆盒记录</div>
+        <div class="m-rule-row" v-for="(item, index) in history">
+          <div class="m-rule-no">{{index + 1}}</div>
+          <div>{{item.msg}}</div>
         </div>
         <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
       </div>
@@ -75,7 +65,10 @@
         name: '',
         boxPopup: false,            // 点击魔盒的popup
         record: true,
-        rule: { infos: { skuprice: "", gearsone: [], gearstwo: [], gearsthree: [] }}
+        box: { infos: { current_price: '', skuprice: '', skuminprice: '', gearsone: [], gearstwo: [], gearsthree: [] }},
+        history: [],
+        mbaid: '',
+        show_invite: false,
       }
     },
     mixins: [wxapi],
@@ -84,34 +77,63 @@
       pandora() {
         this.boxPopup = true;
       },
-      // 点击分享好友
-      share() {
-        const url = window.location.href;
-        let opstion = {
-          title: '大行星', // 分享标题
-          link: url,      // 分享链接
-          imgUrl: 'http://dummyimage.com/200x200',// 分享图标
-          success: function () {
-            console.log('分享成功');
-          },
-          error: function () {
-            console.log('分享失败');
-          }
-        };
-        wxapi.ShareTimeline(opstion);
+      // 分享
+      wxRegCallback () {
+        this.wxShare()
       },
-      // 获取该活动的规则
-      getRule() {
+      // 点击分享
+      share() {
+        // wxapi.wxRegister();
+        // this.wxShare();
+
+        this.show_invite = true;
+        this.wxShare();
+      },
+      wxShare () {
+        let options = {
+          title: '魔法礼盒',
+          desc: '快来帮您的好友拆开魔法礼盒吧',
+          imgUrl: this.box.prpic
+        };
+        // 参与魔盒活动(获取分享所需的url参数)
+        axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
+          if(res.data.status == 200) {
+            options.link = window.location.origin + '/#/pandora?mbjid=' + res.data.data.mbjid;
+          }
+        });
+        wxapi.onMenuShareAppMessage(options);
+        // wxapi.updateAppMessageShareData(options);
+      },
+      // 获取该活动
+      getBox() {
         axios.get(api.get_activity + "?actype=2").then(res => {
           if(res.data.status == 200){
-            this.rule = res.data.data;
+            this.box = res.data.data;
+            this.history = res.data.data.open_history;
+            this.mbaid = res.data.data.infos.mbaid;
+            if(this.history) {
+              for(let i = 0; i < this.history.length; i ++) {
+                this.history[i].msg = this.history[i].usname;
+                if(this.history[i].mbohasshare) {
+                  this.history[i].msg += '拆盒并分享，';
+                }else {
+                  this.history[i].msg += '拆盒，';
+                }
+                if(this.history[i].mboresult > 0) {
+                  this.history[i].msg += '增加了' + this.history[i].mboresult + '元';
+                }else {
+                  this.history[i].msg += '减少了' + this.history[i].mboresult + '元';
+                }
+              }
+            }
           }
         });
       }
     },
     mounted() {
       common.changeTitle('魔法礼盒');
-      this.getRule();                 // 获取该活动的规则
+      this.getBox();                 // 获取该活动的规则
+      // wxapi.wxRegister(this.wxRegCallback)
     }
   }
 </script>
@@ -233,6 +255,7 @@
         padding: 25px 0 30px 0;
       }
       .m-product-price {
+        width: 670px;
         display: flex;
         justify-content: space-between;
         font-size: 30px;
@@ -271,6 +294,14 @@
         color: #999999;
         font-size: 24px;
       }
+    }
+    .m-invite-course {
+      position: fixed;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
     }
     .m-cloud-five {
       width: 750px;
