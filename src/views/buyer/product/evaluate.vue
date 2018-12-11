@@ -1,10 +1,6 @@
 <template>
     <div class="m-evaluate">
-      <!--<div class="m-product-title">-->
-        <!--<span class="m-icon-back" @click="changeRoute"></span>-->
-        <!--<h3>商品列表</h3>-->
-      <!--</div>-->
-      <div class="m-evaluate-content">
+      <div class="m-evaluate-content" v-if="evaluate_list.length > 0">
         <template v-for="(item,index) in evaluate_list">
           <div class="m-evaluate-one">
             <img :src="item.user.usheader" class="m-evaluate-portrait" alt="">
@@ -28,9 +24,9 @@
                   <img :src="k.oeimg" alt="">
                 </li>
                 <li>
-                  <div class="m-video-box" v-if="item.video" v-on:click="playVideo()">
-                    <img :src="item.video[0].oevthumbnail" class="m-video-img" alt="">
-                    <video :src="item.video[0].oevideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
+                  <div class="m-video-box" v-if="item.video.length > 0" v-on:click="playVideo()">
+                    <img v-if="item.video[0].oevthumbnail" :src="item.video[0].oevthumbnail" class="m-video-img" alt="">
+                    <video v-if="item.video[0].oevideo" :src="item.video[0].oevideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
                     <span class="m-video-time" v-if="item.video[0].oeduration">{{item.video[0].oeduration}}</span>
                     <span class="m-icon-video"></span>
                   </div>
@@ -42,6 +38,9 @@
             </div>
           </div>
         </template>
+      </div>
+      <div class="m-no-comments" v-else>
+        暂无评价
       </div>
     </div>
 </template>
@@ -60,7 +59,7 @@
             isScroll:true,
             total_count:0,
             bottom_show:false,
-            evaluate_list:null,
+            evaluate_list: [],
             star:['','','','','']
           }
         },
@@ -114,6 +113,10 @@
   .m-evaluate-content{
     background-color: #EEEEEE;
     padding-bottom: 20px;
+  }
+  .m-no-comments {
+    font-size: 30px;
+    padding: 80px 0;
   }
   .m-evaluate-one{
     background-color: #fff;
