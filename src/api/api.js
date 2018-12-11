@@ -34,6 +34,8 @@ const api={
   cancle_order: title + 'order/cancle',                          // 取消订单
   list_dispute_type: title + 'refund/list_dispute_type',         // 获取退款原因
   refund_cancel: title + 'refund/cancle',                        // 取消(撤销)售后申请
+  refund_send: title + 'refund/send',                            // 买家发货(申请退货退款审核通过后,买家发货)
+  list_company: title + 'logistic/list_company',                 // 获取快递公司列表
   order_confirm: title + 'order/confirm',                        // 订单确认收货
   create_evaluation: title + 'order/create_evaluation',          // 订单评价
 

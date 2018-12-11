@@ -87,6 +87,7 @@
             <span @click="changeRoute('/selectBack', item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
           </p>
         </div>
+        <div class="m-total-money">合计：<span class="m-price">￥{{order_info.omtruemount | money}}</span></div>
       </div>
       <div class="m-order-one-part m-box-shadow">
         <p>
@@ -141,7 +142,7 @@
   export default {
     data() {
       return {
-        order_info: '',
+        order_info: { omtruemount: '' },
         logistic_info: null,
         from: "",
         refund: null
@@ -453,6 +454,10 @@
             }
           }
         }
+      }
+      .m-total-money {
+        text-align: right;
+        margin-top: 20px;
       }
       .m-back-btn{
         text-align: right;

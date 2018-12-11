@@ -42,7 +42,7 @@
                 </div>
               </div>
             </template>
-
+            <div class="m-total-money">合计：<span class="m-price">￥{{items.omtruemount | money}}</span></div>
             <ul class="m-order-btn-ul" v-if="!items.ominrefund">
               <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>
               <li v-if="items.omstatus==20 || items.omstatus==35" @click.stop="changeRoute('/logisticsInformation',items)">查看物流</li>
@@ -352,6 +352,9 @@
               color: #999999;
               font-size: 21px;
             }
+          }
+          .m-total-money {
+            text-align: right;
           }
           .m-order-btn-ul{
             text-align: right;

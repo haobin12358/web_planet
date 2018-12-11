@@ -104,7 +104,7 @@
             }
           }).then(res => {
             if(res.data.status == 200){
-              console.log(res.data.data);
+              // console.log(res.data.data);
               this.logistic_info = res.data.data.oldata;
             }
           })

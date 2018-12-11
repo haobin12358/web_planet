@@ -56,7 +56,7 @@
           <template v-for="(item,index) in img_box">
             <img :src="item" alt="">
           </template>
-          <div class="m-selectBack-camera">
+          <div class="m-selectBack-camera" v-if="img_box.length < 4">
             <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg" ref="imgUpload">
           </div>
         </div>
