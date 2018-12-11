@@ -13,6 +13,7 @@
       <div class="m-author-box">
         <img class="m-author-img" :src="news_info.author.usheader" alt="">
         <div class="m-author-name m-ft-20">{{news_info.author.usname}}</div>
+        <div>{{news_info.createtime}}</div>
       </div>
       <template v-if="news_info.image" v-for="(item,index) in news_info.image">
         <img :src="item.niimage" class="m-circle-img" alt="">
@@ -374,7 +375,7 @@
   .m-author-box {
     display: flex;
     align-items: center;
-    margin: 25px 0 20px 40px;
+    margin: 25px 40px;
     .m-author-img {
       width: 30px;
       height: 30px;
@@ -382,8 +383,9 @@
       margin-right: 18px;
     }
     .m-author-name {
+      flex: 1;
+      text-align: left;
       color: #999999;
-
     }
   }
   .m-circle-img{
