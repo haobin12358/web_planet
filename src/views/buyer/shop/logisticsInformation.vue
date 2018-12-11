@@ -30,7 +30,7 @@
       <div class="m-one-part" >
         <p class="m-flex-between" v-if="logistic_info">
           <span>物流：{{logistic_info.expName}}</span>
-          <span class="m-ft-20">物流单号：{{logistic_info.olexpressno}}</span>
+          <span class="m-ft-20">物流单号：{{logistic_info.number}}</span>
         </p>
         <p class="m-flex-between m-mt-15">
           <span>收货人：{{order_info.omrecvname}}</span>
@@ -68,50 +68,51 @@
   import api from '../../../api/api';
   import {Toast} from 'mint-ui';
     export default {
-        data() {
-            return {
-              order_info:'',
-              logistic_info :null
-            }
-        },
-        components: {},
-        mounted(){
-          common.changeTitle('物流信息');
-          this.getOrderInfo();
-        },
-        methods: {
-          //获取订单详情
-          getOrderInfo(){
-            axios.get(api.order_get,{
-              params:{
-                token:localStorage.getItem('token'),
-                omid:this.$route.query.omid
-              }
-            }).then(res => {
-              if(res.data.status == 200){
-                this.order_info = res.data.data;
-                if(res.data.data.omstatus >= 20){
-                  this.getLogistic();
-                }
-              }
-            })
-          },
-          //  获取物流信息
-          getLogistic(){
-            axios.get(api.get_logistic,{
-              params:{
-                omid:this.$route.query.omid
-              }
-            }).then(res => {
-              if(res.data.status == 200){
-                this.logistic_info = res.data.data.oldata;
-              }
-            })
-          }
-        },
-        created() {
-
+      data() {
+        return {
+          order_info:'',
+          logistic_info :null
         }
+      },
+      components: {},
+      mounted(){
+        common.changeTitle('物流信息');
+        this.getOrderInfo();
+      },
+      methods: {
+        //获取订单详情
+        getOrderInfo(){
+          axios.get(api.order_get,{
+            params:{
+              token:localStorage.getItem('token'),
+              omid:this.$route.query.omid
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              this.order_info = res.data.data;
+              if(res.data.data.omstatus >= 20){
+                this.getLogistic();
+              }
+            }
+          })
+        },
+        //  获取物流信息
+        getLogistic(){
+          axios.get(api.get_logistic,{
+            params:{
+              omid:this.$route.query.omid
+            }
+          }).then(res => {
+            if(res.data.status == 200){
+              console.log(res.data.data);
+              this.logistic_info = res.data.data.oldata;
+            }
+          })
+        }
+      },
+      created() {
+
+      }
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>

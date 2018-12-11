@@ -30,7 +30,7 @@
       </div>
       <div class="m-back-product">
         <h3>退款信息</h3>
-        <div class="m-back-product-info" v-for="item in order_info.order_part">
+        <div class="m-back-product-info" v-for="item in order_info.order_part" v-if="item.order_refund_apply">
           <div>
             <img :src="item.prmainpic">
           </div>
@@ -85,8 +85,23 @@
             if(res.data.data.order_refund_apply) {
               this.refund = res.data.data.order_refund_apply;
             }
+            this.getProductRefund();
           }
         })
+      },
+      // 当一个订单中有多个商品时，退掉其中一个，则以该商品的售后信息显示
+      getProductRefund() {
+        if(this.$route.query.allOrder) {
+
+        }else {
+          if(this.order_info.order_part) {
+            for(let i = 0; i < this.order_info.order_part.length; i ++) {
+              if(this.order_info.order_part[i].order_refund_apply) {
+                this.refund = this.order_info.order_part[i].order_refund_apply;
+              }
+            }
+          }
+        }
       },
       // 撤销售后申请
       cancelRefund() {

@@ -83,8 +83,8 @@
             <span>实付款（含运费）</span>
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
-          <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund">
-            <span @click="changeRoute('/selectBack',item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
+          <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund && !item.order_refund_apply">
+            <span @click="changeRoute('/selectBack', item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
           </p>
         </div>
       </div>
@@ -119,10 +119,11 @@
       </div>
 
       <div class="m-align-right" v-if="from !== 'activityProduct' && from !== 'afterSales' && !order_info.ominrefund">
-        <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
-        <span v-if="order_info.omstatus == -40" @click="cancelOrder">删除订单</span>
+        <span v-if="order_info.omstatus == -40" @click="deleteOrder">删除订单</span>
         <span v-if="order_info.omstatus == 0 " @click="cancelOrder">取消订单</span>
-        <span class="active" v-if="order_info.omstatus == 10 || order_info.omstatus == 20">确认收货</span>
+        <span v-if="order_info.omstatus == 10 || order_info.omstatus == 20" @click="changeRoute('/selectBack', 'order')">退款</span>
+        <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
+        <span class="active" v-if="order_info.omstatus == 20" @click="orderConfirm">确认收货</span>
         <span class="active" v-if="order_info.omstatus == 0" @click="payBtn">立即付款</span>
       </div>
       <bottom></bottom>
@@ -163,9 +164,13 @@
               this.$router.push({ path: v, query: { prid: item.prid }});
               break;
             case '/selectBack':
-              let arr = [] ;
-              arr.push(item);
-              this.$router.push({ path: v, query: { product: JSON.stringify(arr) }});
+              if(item != 'order') {
+                let arr = [] ;
+                arr.push(item);
+                this.$router.push({ path: v, query: { product: JSON.stringify(arr) }});
+              }else {
+                this.$router.push({ path: v, query: { product: JSON.stringify(this.order_info), allOrder: 1 }});
+              }
               break;
             case '/logisticsInformation':
               this.$router.push({ path: v, query: { omid: this.order_info.omid }});
@@ -224,6 +229,18 @@
               this.reload();
             }
           })
+        }).catch(() => {
+
+        });
+      },
+      // 确认收货
+      orderConfirm() {
+        MessageBox.confirm('是否确认该订单的收货？').then(() => {
+          axios.post(api.order_confirm + '?token='+ localStorage.getItem('token'), { omid: this.$route.query.omid }).then(res => {
+            if(res.data.status == 200){
+              this.reload();
+            }
+          });
         }).catch(() => {
 
         });

@@ -44,12 +44,12 @@
 
 <script>
     export default {
-        data(){
-          return{
-            product_info:''
-          }
-        },
-      mounted(){
+      data(){
+        return{
+          product_info:''
+        }
+      },
+      mounted() {
         if(this.$route.query.allOrder){
           this.product_info = JSON.parse(this.$route.query.product).order_part;
         }else{
@@ -78,6 +78,7 @@
       display: flex;
       flex-flow: row;
       width: 100%;
+      box-sizing: border-box;
       background-color: #fff;
       padding: 34px 25px 20px;
       text-align: left;

@@ -42,7 +42,10 @@
             </span>
           </li>
         </ul>
-        <p class="m-selectBack-num">退款金额：<span class="m-price">￥{{total_money | money}}</span></p>
+        <p class="m-selectBack-num">退款金额：￥
+          <input class="m-price" type="text" v-model="refund_money" :placeholder="total_money | money">
+        </p>
+        <!--<p class="m-selectBack-num">退款金额：<span class="m-price">￥{{total_money | money}}</span></p>-->
       </div>
       <div class="m-one-select">
         <div>
@@ -56,14 +59,13 @@
           <div class="m-selectBack-camera">
             <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg" ref="imgUpload">
           </div>
-
         </div>
       </div>
       <div class="m-foot-btn">
-        <span @click="submitRefund">提交</span>
+        <span @click="submitRefund">提 交</span>
       </div>
     </div>
-    <picker :show_picker="show_picker"  :slots="slots" @pickerSave="pickerSave" ></picker>
+    <picker :show_picker="show_picker" :slots="slots" @pickerSave="pickerSave" ></picker>
   </div>
 </template>
 
@@ -106,12 +108,13 @@
         refund_select:null,
         order:null,
         oraaddtion:'',
+        refund_money: '', // 退款金额
         showProduct: true
       }
     },
     components: { picker},
     mounted(){
-      if(this.$route.query.allOrder){
+      if(this.$route.query.allOrder) {
         this.order = JSON.parse(this.$route.query.product);
         this.total_money = JSON.parse(this.$route.query.product).omtruemount;
         this.product_info = JSON.parse(this.$route.query.product).order_part;
@@ -119,6 +122,7 @@
         this.product_info = JSON.parse(this.$route.query.product);
         this.total_money = JSON.parse(this.$route.query.product)[0].opsubtotal;
       }
+      this.refund_money = this.total_money;
 
       this.oraproductstatus = Number(this.$route.query.oraproductstatus);
       // 判断是否显示货物状态
@@ -134,25 +138,32 @@
       changeRoute(v){
         this.$router.push(v)
       },
-      //显示选择
+      // 显示选择
       showPicker(v,i){
+        if(v == 'refund_slot') {
+          if(!this.picker_select && this.showProduct) {
+            Toast('请先选择货物状态');
+            return false;
+          }
+        }
         this.show_picker = false;
         this.show_picker = true;
         this.slots = this[v];
         this.picker_select = i
       },
-      //picker确定
+      // picker确定
       pickerSave(v,bool,select){
         if(select){
           this[this.picker_select] = select[0];
           this.oraproductstatus = select[0].value;
         }
         this[v] = bool;
-        // 获取退货原因
-        this.getBack();
-        console.log(this.refund_slot[0].values);
+        if(this.picker_select == 'status_select') {
+          // 获取退货原因
+          this.getBack();
+        }
       },
-      //上传图片
+      // 上传图片
       uploadImg(e) {
        if(this.img_box && this.img_box.length == 4) {
          Toast('最多只可上传4张图片');
@@ -176,7 +187,7 @@
           }
         })
       },
-    //  获取退款原因
+      // 获取退款原因
       getBack() {
         axios.get(api.list_dispute_type,{
           params:{
@@ -191,7 +202,7 @@
           }
         })
       },
-    //  申请退款
+      // 申请退款
       submitRefund() {
         if(this.oraproductstatus == 0 && !this.status_select){
           Toast("请先选择货物状态");
@@ -199,6 +210,10 @@
         }
         if(!this.refund_select){
           Toast("请先选择退货原因");
+          return false;
+        }
+        if(this.refund_money > this.total_money) {
+          Toast("退款金额不大于支付金额");
           return false;
         }
         axios.post(api.refund_create + '?token=' + localStorage.getItem('token'),{
@@ -209,10 +224,11 @@
           oraaddtion: this.oraaddtion,
           oraddtionvoucher: this.upload_img,
           orastate: this.oraproductstatus,
-          oramount: this.total_money
+          oramount: this.refund_money
         }).then(res => {
           if(res.data.status == 200){
-            this.$router.push('/backDetail');
+            Toast(res.data.message);
+            this.$router.push({ path: '/backDetail', query: { omid: this.product_info[0].omid, allOrder: this.$route.query.allOrder }});
           }
         })
       }
@@ -288,8 +304,7 @@
           }
         }
         .m-selectBack-num{
-          padding-left: 20px;
-          margin-bottom: 30px;
+          padding: 20px;
         }
         textarea{
           display: inline-block;
@@ -307,9 +322,8 @@
             background: url('/static/images/icon-camera-text.png') no-repeat;
             background-size: 100% 100%;
             display: inline-block;
-            margin-right: 15px;
             position: relative;
-            margin-bottom: 20px;
+            margin: 20px 15px 20px 0;
           }
           img{
             display: inline-block;
@@ -327,6 +341,7 @@
       text-align: center;
       padding: 100px 0;
       span{
+        color: #ffffff;
         display: inline-block;
         width: 700px;
         height: 106px;
@@ -335,7 +350,6 @@
         line-height: 106px;
         font-size: 38px;
         font-weight: bold;
-        color: #333;
       }
     }
   }

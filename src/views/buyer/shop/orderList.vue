@@ -49,7 +49,7 @@
               <li v-if="items.omstatus==-40" @click.stop="deleteOrder(items)">删除订单</li>
               <li v-if="items.omstatus==0" @click.stop="cancelOrder(items)">取消订单</li>
               <li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment')">评价</li>
-              <li class="active" v-if="items.omstatus==20">确认收货</li>
+              <li class="active" v-if="items.omstatus==20" @click.stop="orderConfirm(items)">确认收货</li>
               <li class="active" v-if="items.omstatus==0" @click.stop="payBtn(items)">立即付款</li>
             </ul>
           </div>
@@ -207,6 +207,18 @@
         deleteOrder(item) {
           MessageBox.confirm('是否删除该订单？').then(() => {
             axios.post(api.order_delete + '?token='+ localStorage.getItem('token'), { omid: item.omid }).then(res => {
+              if(res.data.status == 200){
+                this.reload();
+              }
+            });
+          }).catch(() => {
+
+          });
+        },
+        // 确认收货
+        orderConfirm(items) {
+          MessageBox.confirm('是否确认该订单的收货？').then(() => {
+            axios.post(api.order_confirm + '?token='+ localStorage.getItem('token'), { omid: items.omid }).then(res => {
               if(res.data.status == 200){
                 this.reload();
               }
