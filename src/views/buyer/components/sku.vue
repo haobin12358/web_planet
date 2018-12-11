@@ -8,8 +8,8 @@
           <img :src="product.prmainpic"  v-else alt="">
         </div>
         <div class="m-center">
-          <span class="m-red" v-if="select_value">￥{{select_value.skuprice | money}}</span>
-          <span class="m-red" v-else>￥{{product.prprice | money}}</span>
+          <span class="m-red" v-if="select_value">￥{{select_value.skuprice}}</span>
+          <span class="m-red" v-else>￥{{product.prprice}}</span>
         </div>
         <div class="m-scroll">
           <ul class="m-sku-box">

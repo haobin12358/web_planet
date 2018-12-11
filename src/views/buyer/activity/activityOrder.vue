@@ -48,7 +48,7 @@
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
                 <!--<li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35">评价</li>-->
                 <!--<li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">确认收货</li>-->
-                <li class="active" v-if="items.omstatus == 0">立即付款</li>
+                <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
               </ul>
             </div>
           </div>
@@ -64,7 +64,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import bottomLine from '../../../components/common/bottomLine';
-  import { MessageBox } from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
 
     export default {
       data() {
@@ -175,6 +175,50 @@
                 }
               }
             }
+          }
+        },
+        // 请求微信支付参数
+        payBtn(items) {
+          let params = { omid: items.omid, omclient: '0', opaytype: '0' };
+          axios.post(api.order_pay + '?token='+ localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200) {
+              this.wxPay(res.data.data.args, items.omid);
+            }
+          });
+        },
+        // 调起微信支付
+        wxPay(data, omid) {
+          let that = this;
+          function onBridgeReady() {      // 微信支付接口
+            WeixinJSBridge.invoke(
+              'getBrandWCPayRequest', {
+                "appId": data.appId,                 // 公众号名称，由商户传入
+                "timeStamp": data.timeStamp,         // 时间戳，自1970年以来的秒数
+                "nonceStr": data.nonceStr,           // 随机串
+                "package": data.package,             // 统一下单接口返回的prepay_id参数值
+                "signType": data.signType,           // 微信签名方式
+                "paySign": data.sign                 // 微信签名
+              },
+              function(res){
+                // console.log(res);
+                if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
+                  that.$router.push({ path: '/orderDetail', query: { omid: omid, from:'activityProduct' }});
+                }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
+                  Toast('支付已取消');
+                }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
+                  Toast('支付失败');
+                }
+              });
+          }
+          if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+              document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }else if (document.attachEvent){
+              document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+              document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+          }else{
+            onBridgeReady();
           }
         },
         // 取消订单
@@ -288,8 +332,8 @@
               border-radius: 30px;
               margin-left: 15px;
               &.active{
+                color: #ffffff;
                 background-color: @mainColor;
-                color: #333;
                 border: 1px solid @mainColor;
               }
             }

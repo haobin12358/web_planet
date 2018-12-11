@@ -83,7 +83,7 @@
             <span>实付款（含运费）</span>
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
-          <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct'">
+          <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund">
             <span @click="changeRoute('/selectBack',item)" v-if="order_info.omstatus != -40 && order_info.omstatus != 0">退款</span>
           </p>
         </div>
@@ -118,7 +118,7 @@
         </div>
       </div>
 
-      <div class="m-align-right" v-if="from !== 'activityProduct' && from !== 'afterSales'">
+      <div class="m-align-right" v-if="from !== 'activityProduct' && from !== 'afterSales' && !order_info.ominrefund">
         <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
         <span v-if="order_info.omstatus == -40" @click="cancelOrder">删除订单</span>
         <span v-if="order_info.omstatus == 0 " @click="cancelOrder">取消订单</span>

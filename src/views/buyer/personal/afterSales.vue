@@ -12,7 +12,7 @@
           <div class="m-store-name m-ft-24">{{item.pbname}}</div>
           <img class="m-more-img" src="/static/images/icon-more.png" alt="">
         </div>
-        <div class="m-product-box" @click.stop="changeRoute('/orderDetail', item)" v-for="product in item.order_part">
+        <div class="m-product-box" @click.stop="changeRoute('/backDetail', item)" v-for="product in item.order_part">
           <div>
             <img class="m-product-img" :src="product.prmainpic" alt="">
           </div>
@@ -26,7 +26,7 @@
         <div class="m-btn-box">
           <img class="m-after-sales-img" src="/static/images/icon-order-after-sale.png" alt="">
           <div class="m-after-sales-text m-ft-22">{{item.order_refund_apply.orastate_zh}} {{item.order_refund_apply.orastatus_zh}}</div>
-          <div class="m-after-sales-btn" @click.stop="changeRoute('/orderDetail', item)">查看详情</div>
+          <div class="m-after-sales-btn" @click.stop="changeRoute('/backDetail', item)">查看详情</div>
         </div>
       </div>
     </div>
@@ -60,8 +60,8 @@
           case '/orderDetail':
             this.$router.push({ path: v, query: { omid: item.omid, from: 'afterSales' }});
             break;
-          case '/product/detail':
-            this.$router.push({ path: v, query: { prid: item.prid }});
+          case '/backDetail':
+            this.$router.push({ path: v, query: { omid: item.omid }});
             break;
         }
       },
