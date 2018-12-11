@@ -27,14 +27,17 @@
                 <li v-for="(k,j) in item.image">
                   <img :src="k.oeimg" alt="">
                 </li>
-                <!--<li v-for="(k,j) in item.video">-->
-                  <!--<div class="m-video-box">-->
-                    <!--<video :src="k.oevideo" ></video>-->
-                  <!--</div>-->
-                <!--</li>-->
+                <li>
+                  <div class="m-video-box" v-if="item.video" v-on:click="playVideo()">
+                    <img :src="item.video[0].oevthumbnail" class="m-video-img" alt="">
+                    <video :src="item.video[0].oevideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
+                    <span class="m-video-time" v-if="item.video[0].oeduration">{{item.video[0].oeduration}}</span>
+                    <span class="m-icon-video"></span>
+                  </div>
+                </li>
               </ul>
               <p class="m-product-label">
-                <span v-for="(key,i) in item.skuattritedetail">{{key}}  </span>
+                <span v-for="(key,i) in item.skuattritedetail">{{key}} </span>
               </p>
             </div>
           </div>
@@ -82,6 +85,11 @@
             }
           })
         },
+        // 播放视频
+        playVideo() {
+          let vdo = document.getElementById("videoPlay");
+          vdo.play();
+        }
       }
     }
 </script>
@@ -179,18 +187,41 @@
             height: 170px;
             background-color: #9fd0bf;
           }
-          .m-video-box{
-            display: block;
-            width: 170px;
-            height: 170px;
-            background-color: #9fd0bf;
-            video{
-              display: block;
-              width: 170px;
-              height: 170px;
-              background-color: #9fd0bf;
-            }
-          }
+        }
+        .m-video-box{
+           position: relative;
+           padding-bottom: 200px;
+           .m-video{
+             display: block;
+             width: 170px;
+             height: 170px;
+             border-radius: 10px;
+             margin-bottom: 20px;
+           }
+           .m-video-img{
+             position: absolute;
+             top:0;
+             left: 0;
+             width: 170px;
+             height: 170px;
+             margin-top: 30px;
+           }
+           .m-icon-video{
+             display: block;
+             width: 109px;
+             height: 109px;
+             position: absolute;
+             top: 30px;
+             left: 30px;
+             background: url("/static/images/icon-video.png") no-repeat;
+             background-size: 100% 100%;
+           }
+           .m-video-time{
+             position: absolute;
+             bottom: -150px;
+             right: 13px;
+             color: #fff;
+           }
         }
       }
       .m-product-label{
