@@ -40,7 +40,8 @@
       <div class="m-product-detail-more" @click="changeRoute('/evaluate')">
         <div>
           <span class="m-label">评价</span>
-          <span class="m-start " v-for="(a,b) in star" :class="b<= product_info.praveragescore -1?'active':((b< product_info.praveragescore && b>product_info.praveragescore)?'half':'')"></span>
+          <span class="m-start" v-for="(a, b) in star" :class="b <= product_info.praveragescore - 1 ?
+           'active' : ((b < product_info.praveragescore && b > product_info.praveragescore - 1) ? 'half' : '')"></span>
         </div>
         <div>
           <span class="m-ft-20">查看详情</span>
