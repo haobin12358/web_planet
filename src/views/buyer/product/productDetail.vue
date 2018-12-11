@@ -10,6 +10,10 @@
       </div>
       <div class="m-product-detail-info">
         <h3>
+          <span class="m-profict-title">预计赚</span>
+          <span class="m-red">￥{{product_info.profict | money}}</span>
+        </h3>
+        <h3>
           <span class="m-product-title">{{product_info.prtitle}}</span>
           <span class="m-red">￥{{product_info.prprice | money}}</span>
         </h3>
@@ -224,18 +228,18 @@
     h3{
       display: flex;
       flex-flow: row;
-      align-items: flex-start;
-      justify-content: space-between;
+      justify-content: flex-end;
       font-size: 30px;
       font-weight: bold;
       color: #666666;
       margin-bottom: 40px;
       .m-product-title{
-        /*width: 625px;*/
-        /*overflow: hidden;*/
-        /*text-overflow: ellipsis;*/
-        /*white-space: nowrap;*/
         text-align: left;
+        margin-right: 20px;
+      }
+      .m-profict-title {
+        text-align: right;
+        margin-right: 20px;
       }
       .m-red{
         color: #EF9B2D;
