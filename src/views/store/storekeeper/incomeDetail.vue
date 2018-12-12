@@ -20,7 +20,7 @@
       <!--本月总计-->
       <div class="m-total-text-box">
         <div class="m-total-text">本月总计</div>
-        <div class="m-total-num">￥6666.66</div>
+        <div class="m-total-num">￥{{income.usercommission_mount | money}}</div>
       </div>
       <!--nav滑动选项-->
       <div class="m-nav">
@@ -29,23 +29,25 @@
     </div>
     <!--收益详情-->
     <div class="m-income-detail-box">
-      <div class="m-detail-item" v-for="item in detailList">
+      <div class="m-detail-item" v-if="detailList.length != 0" v-for="item in detailList">
         <div class="m-detail-item-left">
-          <div class="m-product-name">{{item.name}}</div>
-          <div class="m-product-time">{{item.time}}</div>
+          <div class="m-product-name">{{item.ucname}}</div>
+          <div class="m-product-time">{{item.createtime}}</div>
         </div>
-        <div class="m-detail-item-right">+{{item.num}}</div>
+        <div class="m-detail-item-right">+{{item.uccommission | money}}</div>
       </div>
-      <!--<div>
+      <div v-if="detailList.length == 0">
         <img class="m-detail-img" src="/static/images/icon-no-income.png" alt="">
         <div class="m-detail-text">暂无收益，请加油哦~</div>
-      </div>-->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import common from '../../../common/js/common';
+  import axios from 'axios';
+  import api from '../../../api/api';
   import navList from '../../../components/common/navlist';
 
   export default {
@@ -56,44 +58,13 @@
         navList: [
           { name: "普 通", active: true }, { name: "爆 款", active: false }
         ],
-        detailList: [
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-          { name: "健身套装2", time: "2018.07.30 19:27:15", num: "120.00" },
-        ],
+        income: { usercommission_mount: '' },
+        detailList: [],
         popupVisible: false,
         slots: [
           {
             flex: 1,
-            values: ['2018', '2019', '2020'],
+            values: ['2018', '2019', '2020', '2021', '2022', '2023'],
             className: 'slot1',
             textAlign: 'right'
           }, {
@@ -108,7 +79,6 @@
             textAlign: 'left'
           }
         ],
-
         // 和group类似的页面
         timeValue: []
       }
@@ -129,18 +99,36 @@
       },
       // 时间选择器的确认按钮
       timeDone() {
-        this.now = this.timeValue[0] + "年" + this.timeValue[1] + "月";
-        console.log(this.now);
+        this.now = this.timeValue[0] + "-" + this.timeValue[1];
+        this.getIncomeList();         // 获取店主收益详情
         this.popupVisible = false;
       },
       // navList的点击事件
-      navClick(index){
+      navClick(index) {
         let arr = [].concat(this.navList);
         for(let i = 0; i < arr.length; i ++){
           arr[i].active = false;
         }
         arr[index].active = true;
         this.navList = [].concat(arr);
+        if(index === 0) {         // 普通
+          this.detailList = this.income.usercommission_common_list;
+        }else if(index === 1) {   // 爆款
+          this.detailList = this.income.usercommission_popular_list;
+        }
+      },
+      // 获取店主收益详情
+      getIncomeList() {
+        let params = {
+          token: localStorage.getItem('token'),
+          date: this.now
+        };
+        axios.get(api.get_agent_commission, { params: params }).then(res => {
+          if(res.data.status == 200){
+            this.income = res.data.data;
+            this.navClick(0);
+          }
+        });
       }
     },
     mounted() {
@@ -148,9 +136,9 @@
 
       // 设置当前时间 - 年月
       let now = new Date();
-      this.now = now.getFullYear() + "年" + (now.getMonth() + 1) + "月";
-      console.log(this.now);
+      this.now = now.getFullYear() + "-" + (now.getMonth() + 1);
       this.slots[2].defaultIndex = now.getMonth();          // 默认当前月份
+      this.getIncomeList();         // 获取店主收益详情
     }
   }
 </script>
