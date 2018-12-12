@@ -4,7 +4,7 @@
        <span class="m-icon-bg"></span>
      </div>
       <div class="m-shop-content" @touchmove="touchMove">
-        <h3 class="m-shop-title">orderList
+        <h3 class="m-shop-title">
           <span class="m-title">购物车</span>
           <span class="m-ft-26" v-if="!isManage" @click="changeManage">管理</span>
           <span class="m-ft-26" v-if="isManage" @click="changeManage">完成</span>
