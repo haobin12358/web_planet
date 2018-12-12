@@ -147,8 +147,7 @@
             }
           }
           if(caid.length > 0) {
-            this.$router.push({ path: '/submitOrder',
-              query: { product: JSON.stringify(caid), from: 0 }});
+            this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(caid), from: 0 }});
           }else {
             Toast('请先选择商品');
           }
@@ -515,8 +514,8 @@
     }
     .m-icon-radio{
       display: inline-block;
-      width: 30px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       background: url("/static/images/icon-radio.png") no-repeat;
       background-size: 100% 100%;
       vertical-align: text-top;
