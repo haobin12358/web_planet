@@ -1,6 +1,6 @@
 <template>
   <div class="m-gift-box">
-    商家礼包集合
+    <product :list="giftList"></product>
   </div>
 </template>
 
@@ -8,6 +8,7 @@
   import common from '../../../common/js/common';
   import api from '../../../api/api';
   import axios from 'axios';
+  import product from '../components/product';
 
   export default {
     data() {
@@ -16,6 +17,7 @@
         giftList: []
       }
     },
+    components: { product },
     methods: {
       // 跳转页面
       changeRoute(item) {
@@ -28,11 +30,25 @@
             this.giftList = res.data.data;
           }
         });
-      }
+      },
+      // 获取商家礼包列表
+      getProduct() {
+        let params = {
+          itid: 'upgrade_product',
+          page_num: 1,
+          page_size: 200
+        };
+        axios.get(api.product_list, { params: params }).then(res => {
+          if(res.data.status == 200) {
+            this.giftList = res.data.data;
+          }
+        });
+      },
     },
     mounted() {
       common.changeTitle('购买礼包');
       // this.getGift();            // 获取商家礼包详情
+      this.getProduct();            // 获取商家礼包列表
     }
   }
 </script>
