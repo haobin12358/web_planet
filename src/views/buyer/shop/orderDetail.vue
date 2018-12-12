@@ -83,8 +83,9 @@
             <span>实付款（含运费）</span>
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>
-          <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund && !item.order_refund_apply">
-            <span @click="changeRoute('/selectBack', item)" v-if="order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35">退款</span>
+          <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund">
+            <span @click="changeRoute('/selectBack', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35) && !item.order_refund_apply">退款</span>
+            <span @click="changeRoute('/backDetail', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35) && item.order_refund_apply">查看退款</span>
           </p>
         </div>
         <div class="m-total-money">合计：<span class="m-price">￥{{order_info.omtruemount | money}}</span></div>
@@ -122,7 +123,7 @@
       <div class="m-align-right" v-if="from !== 'activityProduct' && from !== 'afterSales' && !order_info.ominrefund">
         <span v-if="order_info.omstatus == -40" @click="deleteOrder">删除订单</span>
         <span v-if="order_info.omstatus == 0 " @click="cancelOrder">取消订单</span>
-        <span v-if="order_info.omstatus == 10 || order_info.omstatus == 20" @click="changeRoute('/selectBack', 'order')">退款</span>
+        <span v-if="(order_info.omstatus == 10 || order_info.omstatus == 20) && !part_refund" @click="changeRoute('/selectBack', 'order')">退款</span>
         <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
         <span class="active" v-if="order_info.omstatus == 0" @click="payBtn">立即付款</span>
         <span class="active" v-if="order_info.omstatus == 20" @click="orderConfirm">确认收货</span>
@@ -145,7 +146,8 @@
         order_info: { omtruemount: '' },
         logistic_info: null,
         from: "",
-        refund: null
+        refund: null,
+        part_refund: false
       }
     },
     components: { bottom },
@@ -175,6 +177,9 @@
               }
               break;
             case '/logisticsInformation':
+              this.$router.push({ path: v, query: { omid: this.order_info.omid }});
+              break;
+            case '/backDetail':
               this.$router.push({ path: v, query: { omid: this.order_info.omid }});
               break;
             case '/addComment':
@@ -210,6 +215,12 @@
             // 售后信息
             if(res.data.data.order_refund_apply) {
               this.refund = res.data.data.order_refund_apply;
+            }
+            // 判断订单中是否有商品在售后状态中
+            for(let i = 0; i < res.data.data.order_part.length; i ++) {
+              if(res.data.data.order_part[i].order_refund_apply) {
+                this.part_refund = true;
+              }
             }
           }
         })

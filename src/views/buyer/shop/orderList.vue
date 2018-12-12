@@ -46,7 +46,7 @@
               </template>
               <div class="m-total-money">合计：<span class="m-price">￥{{items.omtruemount | money}}</span></div>
               <ul class="m-order-btn-ul" v-if="!items.ominrefund">
-                <li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>
+                <li v-if="items.omstatus==10 && !items.part_refund" @click.stop="changeRoute('/selectBack',items)">退款</li>
                 <li v-if="items.omstatus==20 || items.omstatus==35" @click.stop="changeRoute('/logisticsInformation',items)">查看物流</li>
                 <li v-if="items.omstatus==-40" @click.stop="deleteOrder(items)">删除订单</li>
                 <li v-if="items.omstatus==0" @click.stop="cancelOrder(items)">取消订单</li>
@@ -79,7 +79,7 @@
           isScroll: true,
           total_count: 0,
           bottom_show: false,
-          order_list: []
+          order_list: [],
         }
       },
       inject: ['reload'],
@@ -173,6 +173,13 @@
                 this.page_info.page_num = 1;
                 this.total_count = 0;
                 return false;
+              }
+              for(let i = 0; i < this.order_list.length; i ++) {
+                for(let j = 0; j < this.order_list[i].order_part.length; j ++) {
+                  if(this.order_list[i].order_part[j].opisinora) {
+                    this.order_list[i].part_refund = true;
+                  }
+                }
               }
             }
           })
