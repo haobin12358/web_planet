@@ -194,7 +194,7 @@
     .m-input-border {
       text-align: left !important;
       border: 2px #EEEEEE solid !important;
-      border-radius: 30px;
+      border-radius: 10px;
       padding: 0 30px;
     }
     .m-right-62 {
