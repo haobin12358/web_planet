@@ -36,7 +36,7 @@
         </div>
         <!--按钮-->
         <div class="m-foot-btn">
-          <span @click="submitUser">提交申请</span>
+          <span :class="!agree ? 'not-agree':''" @click="submitUser">提交申请</span>
         </div>
         <!--规则弹窗-->
         <mt-popup class="m-rule-popup" v-model="rulePopup" pop-transition="popup-fade">
@@ -307,6 +307,7 @@
           bottom: 50px;
           left: 25px;
           span{
+            color: #ffffff;
             display: inline-block;
             width: 700px;
             height: 106px;
@@ -316,6 +317,10 @@
             font-weight: bold;
             border-radius: 10px;
             box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+          }
+          .not-agree {
+            color: #999999;
+            background-color: #EEEEEE;
           }
         }
         .m-submit-popup {
