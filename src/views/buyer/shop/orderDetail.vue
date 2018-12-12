@@ -189,7 +189,7 @@
               this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
             case '/product/detail':
-              this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid }});
+              this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid, which: 'try' }});
               break;
           }
         }

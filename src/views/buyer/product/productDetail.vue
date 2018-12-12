@@ -9,7 +9,7 @@
         <span class="m-icon-back" @click="changeBack"></span>
       </div>
       <div class="m-product-detail-info">
-        <h3>
+        <h3 v-if="user.uslevel == 2">
           <span class="m-profict-title">预计赚</span>
           <span class="m-red">￥{{product_info.profict | money}}</span>
         </h3>
@@ -98,7 +98,8 @@
             select_value:null,
             canums:1,
             cart_buy:null,
-            star:['','','','','']
+            star:['','','','',''],
+            user: {}
           }
         },
       components:{
@@ -107,8 +108,17 @@
       mounted(){
         common.changeTitle('商品详情');
         this.getInfo();
+        this.getUser();
       },
       methods:{
+        // 获取个人信息
+        getUser() {
+          axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200){
+              this.user = res.data.data;
+            }
+          });
+        },
          // 改变模态框
          changeModal(v,bool) {
            this[v] = bool;

@@ -17,7 +17,8 @@
                 <span class="m-store-name">{{items.pbname}}</span>
                 <span class="m-icon-more"></span>
               </div>
-              <span class="m-red">{{items.omstatus_zh}}</span>
+              <span class="m-red" v-if="items.omstatus != 35">{{items.omstatus_zh}}</span>
+              <span class="m-red" v-else>已完成</span>
             </div>
             <div class="m-order-product-ul">
               <template v-for="(item,i) in items.order_part">
@@ -39,16 +40,16 @@
                     </p>
                   </div>
                 </div>
+                <p class="m-end-time">押金返还时间：{{items.deposit_expires}}</p>
               </template>
-
               <ul class="m-order-btn-ul">
                 <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
                 <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35">查看物流</li>
                 <!--<li v-if=" items.omstatus == -40">删除订单</li>-->
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
-                <!--<li class="active" @click.stop="changeRoute('/addComment')" v-if="items.omstatus == 35">评价</li>-->
-                <!--<li class="active" v-if="items.omstatus == 10 || items.omstatus == 20">确认收货</li>-->
                 <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
+                <li class="active" v-if="items.omstatus == 20" @click.stop="orderConfirm(items)">确认收货</li>
+                <!--<li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment', items)">评价</li>-->
               </ul>
             </div>
           </div>
@@ -95,6 +96,9 @@
             case '/selectBack':
               this.$router.push({ path: v, query: { product: JSON.stringify(item), allOrder: 1 }});
               break;
+            /*case '/addComment':
+              this.$router.push({path:v,query:{product:JSON.stringify(item)}});
+              break;*/
             default:
               this.$router.push(v)
           }
@@ -221,6 +225,18 @@
             onBridgeReady();
           }
         },
+        // 确认收货
+        orderConfirm(items) {
+          MessageBox.confirm('是否确认该订单的收货？').then(() => {
+            axios.post(api.order_confirm + '?token='+ localStorage.getItem('token'), { omid: items.omid }).then(res => {
+              if(res.data.status == 200){
+                this.reload();
+              }
+            });
+          }).catch(() => {
+
+          });
+        },
         // 取消订单
         cancelOrder(item) {
           MessageBox.confirm('是否取消该订单？').then(() => {
@@ -273,6 +289,9 @@
         border-radius: 10px;
         box-shadow:0 5px 6px rgba(0,0,0,0.16);
         margin-bottom: 20px;
+        .m-end-time {
+          text-align: right;
+        }
         .m-order-store-tile{
           .flex-row(space-between);
           .m-icon-store{

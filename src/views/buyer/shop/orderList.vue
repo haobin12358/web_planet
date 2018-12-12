@@ -49,9 +49,9 @@
                 <li v-if="items.omstatus==20 || items.omstatus==35" @click.stop="changeRoute('/logisticsInformation',items)">查看物流</li>
                 <li v-if="items.omstatus==-40" @click.stop="deleteOrder(items)">删除订单</li>
                 <li v-if="items.omstatus==0" @click.stop="cancelOrder(items)">取消订单</li>
-                <li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment', items)">评价</li>
                 <li class="active" v-if="items.omstatus==20" @click.stop="orderConfirm(items)">确认收货</li>
                 <li class="active" v-if="items.omstatus==0" @click.stop="payBtn(items)">立即付款</li>
+                <li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment', items)">评价</li>
               </ul>
             </div>
           </div>

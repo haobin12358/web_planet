@@ -115,25 +115,25 @@
             </div>
             <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
               <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
-              <div class="m-one-product-text">
+              <!--<div class="m-one-product-text">
                 <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
                 <p v-if="hot_list[0].prlineprice">￥{{hot_list[0].prlineprice | money}}</p>
-              </div>
+              </div>-->
             </div>
             <div>
               <div class="m-one-product " v-if="hot_list[1]" @click.stop="productClick(hot_list[1])">
                 <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
-                <div class="m-one-product-text">
+                <!--<div class="m-one-product-text">
                   <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
                   <p v-if="hot_list[1].prlineprice">￥{{hot_list[1].prlineprice | money}}</p>
-                </div>
+                </div>-->
               </div>
               <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
                 <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
-                <div class="m-one-product-text">
+                <!--<div class="m-one-product-text">
                   <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
                   <p v-if="hot_list[2].prlineprice">￥{{hot_list[2].prlineprice | money}}</p>
-                </div>
+                </div>-->
               </div>
             </div>
           </div>
@@ -212,10 +212,10 @@
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between">
             <span>为您精选</span>
-            <span class="m-selected-title-more">
+            <!--<span class="m-selected-title-more">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
-            </span>
+            </span>-->
           </h3>
           <product :list="recommend_for_you_list"></product>
         </div>
