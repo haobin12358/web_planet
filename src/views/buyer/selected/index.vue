@@ -40,7 +40,7 @@
               </li>
             </ul>
           </div>
-          <div class="m-selected-label-right">
+          <div class="m-selected-label-right" @click="changeRoute('personal/couponCenter')">
             <span class="m-icon-gift"></span>
             <span>签到有礼！</span>
           </div>

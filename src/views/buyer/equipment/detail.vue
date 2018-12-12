@@ -8,15 +8,17 @@
           <span>搜索商品/分类</span>
         </div>
       </div>
-      <h3 class="m-equipment-h3">装备分类</h3>
+      <h3 class="m-equipment-h3"></h3>
+      <!--<h3 class="m-equipment-h3">装备分类</h3>-->
       <section>
-        <div class="m-equipment-info">
-          <img src="" class="m-equipment-img" alt="">
-          <!--<span class="m-equipment-bg"></span>-->
-          <!--<div class="m-equipment-detail-name">-->
-          <!--<img :src="head_src" class="m-equipment-head-portrait" alt="">-->
-          <!--<span>{{head_name}}</span>-->
-          <!--</div>-->
+        <div class="m-equipment-info" v-for="item in icon_list" v-if="item.active">
+          <img class="m-equipment-img" :src="item.pctoppic" alt="">
+          <!--圆弧-->
+          <!--<span class="m-equipment-bg"></span>
+          <div class="m-equipment-detail-name">
+          <img :src="head_src" class="m-equipment-head-portrait" alt="">
+          <span>{{head_name}}</span>
+          </div>-->
         </div>
         <div class="m-side-scroll">
           <ul class="m-side-ul">
@@ -90,7 +92,7 @@
       getCategory() {
         axios.get(api.category_list).then(res => {
           if(res.data.status == 200){
-            console.log(res.data.data);
+            // console.log(res.data.data);
             for(let i=0;i<res.data.data.length;i++){
               res.data.data[i].active = false;
               if(this.$route.query.pcid && this.$route.query.pcid == res.data.data[i].pcid){
@@ -143,7 +145,8 @@
       text-align: left;
       padding: 14px 0 0 33px;
       color: #333;
-      margin-top: 100px;
+      /*margin-top: 100px;*/
+      margin-top: 60px;
     }
     section{
       position: relative;
@@ -163,6 +166,7 @@
           width: 100%;
           height: 330px;
           background-color: #9fd0bf;
+          box-shadow: 0 5px 6px rgba(0,0,0,0.16);
         }
         .m-equipment-bg{
           position: absolute;
@@ -190,12 +194,13 @@
       }
       .m-side-scroll{
         position: absolute;
-        width: 240px;
+        width: 220px;
         overflow-y: auto;
         background-color: #fff;
-        box-shadow:5px 0 10px rgba(0,0,0,0.16);
+        box-shadow: 5px 0 10px rgba(0,0,0,0.16);
         top: 0;
         min-height: 100%;
+        margin-top: 330px;
         li{
           line-height: 130px;
           padding: 5px 0;
@@ -204,8 +209,8 @@
           }
           img{
             display: inline-block;
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             margin-right: 5px;
             vertical-align: middle;
             border-radius: 50%;
@@ -213,8 +218,8 @@
         }
       }
       .m-equipment-detail-content{
-        padding: 50px 0 50px 300px;
-        margin-right: -2px;
+        padding: 50px 0 50px 260px;
+        margin-right: 10px;
         .m-equipment-detail-product{
           .flex-row(flex-start);
           flex-wrap: wrap;
