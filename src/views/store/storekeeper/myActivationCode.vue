@@ -70,6 +70,7 @@
   .m-my-code {
     min-height: 100%;
     background-color: #ffffff;
+    margin-top: -20px;
     .m-cell-box {
       .m-code-item {
         display: flex;
@@ -79,6 +80,9 @@
         padding: 20px 0;
         border-bottom: 1px #CCCCCC solid;
         font-size: 24px;
+        &:first-child {
+          padding-top: 40px;
+        }
         .m-code-text {
 
         }
