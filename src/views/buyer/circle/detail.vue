@@ -390,8 +390,8 @@
   }
   .m-circle-img{
     display: block;
-    width: 100%;
-    height: 450px;
+    width: 750px;
+    height: 100%;
     background-color: #9fd0bf;
     margin: 14px 0 30px ;
   }
