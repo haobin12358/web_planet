@@ -10,7 +10,7 @@
       </div>
       <div class="m-product-detail-info">
         <h3 v-if="user.uslevel == 2">
-          <span class="m-profict-title">预计赚</span>
+          <span class="m-profict-title">预计赚：</span>
           <span class="m-red">￥{{product_info.profict | money}}</span>
         </h3>
         <h3>
@@ -238,18 +238,17 @@
     h3{
       display: flex;
       flex-flow: row;
-      justify-content: flex-end;
+      justify-content: space-between;
       font-size: 30px;
       font-weight: bold;
       color: #666666;
       margin-bottom: 40px;
       .m-product-title{
-        text-align: left;
         margin-right: 20px;
       }
       .m-profict-title {
-        text-align: right;
-        margin-right: 20px;
+        white-space: nowrap;
+        margin-left: 420px;
       }
       .m-red{
         color: #EF9B2D;
