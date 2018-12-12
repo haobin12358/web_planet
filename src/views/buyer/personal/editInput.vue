@@ -9,7 +9,7 @@
                 <span>手机号</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input m-input-border" v-model="ustelphone">
+                <input type="text" class="m-edit-input m-input-border m-width-220 m-right-190" v-model="ustelphone">
               </div>
             </li>
             <li v-if="from == 'new' || from == 'phone'">
@@ -17,7 +17,7 @@
                 <span>验证码</span>
               </div>
               <div>
-                <input type="text" class="m-edit-input-s m-input-border" v-model="identifyingcode" maxlength="6">
+                <input type="text" class="m-edit-input-s m-input-border m-right-62" v-model="identifyingcode" maxlength="6">
                 <span class="m-get-code active" v-if="!getCode" @click="getInforcode">获取验证码</span>
                 <span class="m-get-code" v-if="getCode">{{ count }} 秒后重发</span>
               </div>
@@ -177,7 +177,7 @@
   .m-editInput{
     .m-edit-input-s {
       display: inline-block;
-      width: 150px;
+      width: 220px;
       height: 42px;
       line-height: 42px;
       font-size: 28px;
@@ -188,17 +188,27 @@
       height: 42px;
       line-height: 42px;
     }
+    .m-width-220 {
+      width: 220px;
+    }
     .m-input-border {
       text-align: left !important;
       border: 2px #EEEEEE solid !important;
       border-radius: 30px;
       padding: 0 30px;
     }
+    .m-right-62 {
+      margin-right: 62px;
+    }
+    .m-right-190 {
+      margin-right: 190px;
+    }
     .m-editInput-alert{
       padding: 33px 55px;
       color: #999999;
     }
     .m-get-code{
+      margin-right: -20px;
       width: 110px;
       white-space: nowrap;
       display: inline-block;
