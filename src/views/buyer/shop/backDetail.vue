@@ -136,7 +136,8 @@
             if(res.data.status == 200) {
               Toast(res.data.message);
               // this.getOrderInfo();            // 获取订单详情
-              this.$router.push('/personal/afterSales');
+              // this.$router.push('/personal/afterSales');
+              this.$router.go(-3);
             }
           });
         }).catch(() => {
@@ -241,7 +242,7 @@
       }
     }
     .m-back-info-btn{
-      padding: 34px 0 55px;
+      padding: 34px 0 55px 30px;
       text-align: right;
       span{
         display: inline-block;
