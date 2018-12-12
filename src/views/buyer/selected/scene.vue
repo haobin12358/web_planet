@@ -1,5 +1,5 @@
 <template>
-    <div class="m-scene" id="header" @touchmove.stop="touchMove">
+    <div class="m-scene" id="header" @touchmove="touchMove">
       <div class="m-scroll m-margin">
         <ul class="m-selected-scene-ul">
           <li v-for="(item,index) in scene_list" @click="sceneClick(index)">

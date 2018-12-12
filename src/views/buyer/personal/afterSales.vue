@@ -5,7 +5,7 @@
       <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
     </div>
 
-    <div class="m-order-box" v-else  @touchmove.stop="touchMove">
+    <div class="m-order-box" v-else @touchmove="touchMove">
       <mt-loadmore :top-method="loadTop">
         <div class="m-order-item" v-for="item in order">
           <div class="m-store-box" @click.stop="changeRoute('/brandDetail', item)">
@@ -48,7 +48,7 @@
       return {
         name: '',
         page_num: 1,
-        page_size: 5,
+        page_size: 10,
         order: [],
         isScroll: true,
         total_count: 0,

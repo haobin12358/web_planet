@@ -1,5 +1,6 @@
 <template>
-  <div class="m-orderList" @touchmove.stop="touchMove">
+  <!--<div class="m-orderList">-->
+  <div class="m-orderList" @touchmove="touchMove">
     <div class="m-nav">
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
     </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="m-product" @touchmove.stop="touchMove">
+    <div class="m-product" @touchmove="touchMove">
       <!--<div class="m-product-title">-->
         <!--<span class="m-icon-back" @click="changeRoute"></span>-->
         <!--<h3>商品列表</h3>-->

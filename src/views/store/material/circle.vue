@@ -1,5 +1,5 @@
 <template>
-  <div class="m-circle" @touchmove.stop="touchMove">
+  <div class="m-circle" @touchmove="touchMove">
     <!--搜索-->
     <div class="m-selected-search">
       <span class="m-icon-home"></span>

@@ -1,5 +1,5 @@
 <template>
-  <div class="m-coupon" @touchmove.stop="touchMove">
+  <div class="m-coupon" @touchmove="touchMove">
     <mt-loadmore :top-method="loadTop">
       <div class="m-nav">
         <nav-list :navlist="nav_list" :isScroll="false" @navClick="navClick"></nav-list>

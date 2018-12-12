@@ -1,5 +1,5 @@
 <template>
-    <div class="m-brandDetail" v-if="brand_info" @touchmove.stop="touchMove">
+    <div class="m-brandDetail" v-if="brand_info" @touchmove="touchMove">
       <div class="m-brand-info">
         <img :src="brand_info.pbbackgroud" class="m-brand-img" alt="">
         <span class="m-icon-bg"></span>

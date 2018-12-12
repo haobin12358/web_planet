@@ -57,7 +57,7 @@
         <span class="m-icon-close" @click="changeModal('show_modal',false)"></span>
         <div class="m-modal-content">
            <h3>全部 {{comment_count}} 条评论</h3>
-          <div class="m-scroll" ref="comment" @touchmove.stop="touchMove">
+          <div class="m-scroll" ref="comment" @touchmove="touchMove">
             <ul class="m-comment-ul">
               <li v-for="(items,index) in comment_list">
                 <img :src="items.user.usheader" class="m-user-img" alt="">

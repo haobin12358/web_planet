@@ -1,5 +1,6 @@
 <template>
-  <div class="m-circle" @touchmove.stop="touchMove">
+  <div class="m-circle" @touchmove="touchMove">
+  <!--<div class="m-circle" @touchmove.stop="touchMove">-->
     <!--搜索-->
     <div class="m-selected-search">
       <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">

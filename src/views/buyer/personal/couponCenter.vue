@@ -1,5 +1,5 @@
 <template>
-  <div class="m-couponCenter" @touchmove.stop="touchMove">
+  <div class="m-couponCenter" @touchmove="touchMove">
     <mt-loadmore :top-method="loadTop">
       <div class="m-couponCenter-top">
         <span class="m-couponCenter-rule" @click="rulePopup = true">积分规则</span>
