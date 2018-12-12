@@ -7,8 +7,10 @@
     <div class="m-month-earnings">本月收益<span class="m-month-earnings-text">{{user.mounth_count | money}}</span>元</div>
     <div class="m-total-jump-box m-earnings-detail">
       <div class="m-earnings-out m-text-bottom" @click="outPopup = true">提现</div>
-      <div class="m-text-bottom" @click="changeRoute('/storekeeper/incomeDetail')">收益详情</div>
-      <img class="m-jump-img" src="/static/images/icon-more-black.png" @click="changeRoute('/storekeeper/incomeDetail')">
+      <div class="m-detail-box" @click="changeRoute('/storekeeper/incomeDetail')">
+        <div class="m-text-bottom">收益详情</div>
+        <img class="m-jump-img" src="/static/images/icon-more-black.png">
+      </div>
     </div>
 
     <!--提现-->
@@ -348,6 +350,7 @@
     .m-total-jump-box {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 25px 25px 25px 50px;
       .m-jump-title {
         flex: 1;
@@ -359,8 +362,12 @@
         font-size: 24px;
       }
       .m-earnings-out {
-        flex: 1;
+        /*flex: 1;*/
         text-align: left;
+      }
+      .m-detail-box {
+        display: flex;
+        align-items: center;
       }
       .m-text-bottom {
         text-decoration: underline;
