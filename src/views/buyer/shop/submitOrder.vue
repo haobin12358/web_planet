@@ -160,21 +160,25 @@
         common.changeTitle('提交订单');
         if(this.$route.query.product) {
           this.product_info = JSON.parse(this.$route.query.product);
-          let total = 0;
-          for(let i = 0; i < this.product_info.length; i ++) {
-            this.product_info[i].total = 0;
-            this.product_info[i].couponList = [];
-            this.product_info[i].coupon_info = { caid: [] };
-            for(let j = 0; j < this.product_info[i].cart.length; j ++) {
-              this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
-            }
-            this.total_money = this.total_money + this.product_info[i].total;
-          }
-          // 判断是否是从商家大礼包来结算的
-          if(this.$route.query.gift) {
-            this.fromGift = true;
-          }
+        }else {
+          this.product_info = JSON.parse(localStorage.getItem('product'));
+          localStorage.removeItem('product');
         }
+        let total = 0;
+        for(let i = 0; i < this.product_info.length; i ++) {
+          this.product_info[i].total = 0;
+          this.product_info[i].couponList = [];
+          this.product_info[i].coupon_info = { caid: [] };
+          for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+            this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
+          }
+          this.total_money = this.total_money + this.product_info[i].total;
+        }
+        // 判断是否是从商家大礼包来结算的
+        if(this.$route.query.gift) {
+          this.fromGift = true;
+        }
+
         this.from = this.$route.query.from;
         this.uaid = localStorage.getItem("uaid");
         if(this.from != 'new' && this.from != 'try') {
