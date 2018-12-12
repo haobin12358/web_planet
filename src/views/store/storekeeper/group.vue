@@ -3,11 +3,11 @@
     <!--顶部图片-->
     <img class="m-storekeeper-bg" src="/static/images/icon-integral-bg.png" alt="">
     <!--顶部文字-->
-    <div class="m-date-box" @click="datePopup = !datePopup">
+    <!--<div class="m-date-box" @click="datePopup = !datePopup">
       <div class="m-date-text m-ft-32 m-ft-b">{{date}}</div>
       <img class="m-date-img" src="/static/images/icon-down-open.png" v-if="datePopup">
       <img class="m-date-img" src="/static/images/icon-down-close.png" v-if="!datePopup">
-    </div>
+    </div>-->
     <!--时间选择popup-->
     <mt-popup class="m-date-popup" v-model="datePopup" position="bottom">
       <p class="m-picker-text">
@@ -17,13 +17,17 @@
       <mt-picker :slots="slots"  @change="onValuesChange" :visibleItemCount="7"></mt-picker>
     </mt-popup>
     <div class="m-total-text">
-      {{total_text}}<span class="m-ft-90"> {{total_money | money}} </span>元
+      {{total_text}}<span class="m-ft-90"> {{group.usvamout | money}} </span>元
     </div>
     <!--搜索-->
     <div class="m-selected-search">
-      <div class="m-search-input-box" @click="changeRoute('/search')">
+      <!--<div class="m-search-input-box" @click="changeRoute('/search')">
         <span class="m-icon-search"></span>
         <span>搜索粉丝/下级店主</span>
+      </div>-->
+      <div class="m-input-search">
+        <input class="m-search-input" v-model="search" type="text" :placeholder="searchTip">
+        <span @click="searchPerson">查询</span>
       </div>
     </div>
     <div class="m-nav">
@@ -32,18 +36,19 @@
     <!--人员信息-->
     <div class="m-person">
       <ul>
-        <li class="m-person-info" v-for="item in person">
+        <li class="m-person-info" v-if="person.length > 0" v-for="item in person">
           <div class="m-img-name-time">
             <div class="m-img-box">
-              <img class="m-img" :src="item.img" alt="">
+              <img class="m-img" :src="item.USheader" alt="">
             </div>
             <div class="m-name-time">
-              <div class="m-name m-ft-28 m-ft-b">{{item.name}}</div>
-              <div class="m-time m-ft-24">{{item.time}}</div>
+              <div class="m-name m-ft-28 m-ft-b">{{item.USname}}</div>
+              <!--<div class="m-time m-ft-24">{{item.time}}</div>-->
             </div>
           </div>
-          <div class="m-money m-ft-24">￥{{item.money | money}}</div>
+          <div class="m-money m-ft-26">￥{{item.USsalesvolume | money}}</div>
         </li>
+        <li class="m-ft-28" v-if="person.length == 0">暂无数据</li>
       </ul>
     </div>
   </div>
@@ -78,23 +83,14 @@
           }
         ],
         dateValue: [],                  // 暂存日期
-        total_text: "团队粉丝销售额",
-        total_money: "333.00",
+        total_text: "",
+        search: "",
+        searchTip: "",
         nav_list: [
-          { active: true, name: '粉丝', count: '123' }, { active: false, name: '下级店主', count: '156' }
+          { active: true, name: '粉丝', count: '0' }, { active: false, name: '下级店主', count: '0' }
         ],
-        person: [
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          { img: '', name: '咕咕', time: '2018-09-12 23:51:23', money: '1542' },
-          // 记得分页
-        ]
+        person: [],
+        group: { usvamout: '' },
       }
     },
     components: { navList },
@@ -106,15 +102,20 @@
       // 导航点击
       navClick(index) {
         let arr = [].concat(this.nav_list);
-        if(arr[index].active) {
-          return false;
-        }
         for(let i = 0; i < arr.length; i ++) {
           arr[i].active = false;
         }
         arr[index].active = true;
         this.nav_list = [].concat(arr);
-        this.getInfo();               // 获取人员信息
+        if(index === 0) {         // 粉丝
+          this.person = this.group.fens_detail;
+          this.total_text = '团队粉丝总销售额';
+          this.searchTip = '搜索粉丝';
+        }else if(index === 1) {   // 下级店主
+          this.person = this.group.sub_detail;
+          this.total_text = '团队下级店主总销售额';
+          this.searchTip = '搜索下级店主';
+        }
       },
       // 时间popup确认按钮
       dateDone() {
@@ -127,23 +128,37 @@
           this.dateValue = values;
         }
       },
-      // 获取人员信息
-      getInfo() {
-        /*let params = {
-          token: localStorage.getItem('token'),
-          year : this.dateValue[0],
-          month : this.dateValue[1]
-        };
-        axios.get(api.history_join, { params: params }).then(res => {
-          if(res.data.status == 200) {
-            this.number = res.data.correct_count;
-            this.recordList = res.data.data;
-            // 商品名称显示优化
-            for(let i = 0; i < this.recordList.length; i ++) {
-              this.recordList[i].product.prtitle = this.recordList[i].product.prtitle.substring(0, 12) + "..";
+      // 获取团队销售额
+      getGroup() {
+        axios.get(api.get_salesvolume_all + '?token=' + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200){
+            this.group = res.data.data;
+            this.navClick(0);
+            this.nav_list[0].count = res.data.data.fens_detail.length;
+            this.nav_list[1].count = res.data.data.sub_detail.length;
+          }
+        });
+      },
+      // 查询粉丝、下级店主
+      searchPerson() {
+        for(let i = 0; i < this.nav_list.length; i ++) {
+          if(this.nav_list[i].active) {
+            this.person = [];
+            if(i === 0) {         // 粉丝
+              for(let j = 0; j < this.group.fens_detail.length; j ++) {
+                if(this.group.fens_detail[j].USname.indexOf(this.search) > -1) {
+                  this.person.push(this.group.fens_detail[j]);
+                }
+              }
+            }else if(i === 1) {   // 下级店主
+              for(let j = 0; j < this.group.sub_detail.length; j ++) {
+                if(this.group.sub_detail[j].USname.indexOf(this.search) > -1) {
+                  this.person.push(this.group.sub_detail[j]);
+                }
+              }
             }
           }
-        });*/
+        }
       },
       // 设置可选择的年份
       setYear() {
@@ -158,8 +173,8 @@
     },
     mounted() {
       common.changeTitle('我的团队');
-      this.setYear();                  // 设置可选择的年份
-      this.getInfo();                  // 获取人员信息
+      // this.setYear();                  // 设置可选择的年份
+      this.getGroup();                    // 获取团队销售额
     }
   }
 </script>
@@ -208,8 +223,39 @@
       top: 210px;
       left: 90px;
     }
-    .m-search-input-box {
-      width: 680px;
+    .m-selected-search {
+      .m-search-input-box {
+        width: 680px;
+      }
+      .m-input-search {
+        width: 630px;
+        display: flex;
+        justify-content: space-between;
+        .m-search-input {
+          margin-left: 30px;
+          display: inline-block;
+          width: 430px;
+          height: 42px;
+          line-height: 42px;
+          font-size: 24px;
+          border-radius: 10px;
+          padding: 2px 20px;
+          border: 1px #CCCCCC solid;
+        }
+        span {
+          width: 80px;
+          white-space: nowrap;
+          display: inline-block;
+          padding: 4px 15px;
+          border-radius: 10px;
+          background-color: @mainColor;
+          color: #fff;
+          box-shadow:0 3px 6px rgba(0,0,0,0.16);
+          font-size: 24px;
+          line-height: 40px;
+          margin-right: -30px;
+        }
+      }
     }
     .m-nav {
       width: 500px;
@@ -220,7 +266,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 40px 50px 40px;
+        padding: 0 60px 50px 60px;
         .m-img-name-time {
           display: flex;
           .m-img-box {
