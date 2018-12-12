@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
-        <h1 class="title">title</h1>
-    </div>
+  <div class="container">
+    <h1 class="title">title</h1>
+  </div>
 </template>
 
 <script>
@@ -25,9 +25,11 @@
 </script>
 
 <style lang="less" scoped>
-    .container {
-      .title{
-        font-weight: bold;
-      }
+  @import "../../styles/myIndex";
+
+  .container {
+    .title {
+      font-weight: bold;
     }
+  }
 </style>

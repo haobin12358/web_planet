@@ -25,7 +25,9 @@
 </script>
 
 <style lang="less" scoped>
-    .container {
+  @import "../../styles/myIndex";
+
+  .container {
 
     }
 </style>

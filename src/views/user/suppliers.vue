@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
-      供应商
-    </div>
+  <div class="container">
+    供应商
+  </div>
 </template>
 
 <script>
@@ -25,7 +25,9 @@
 </script>
 
 <style lang="less" scoped>
-    .container {
+  @import "../../styles/myIndex";
 
-    }
+  .container {
+
+  }
 </style>

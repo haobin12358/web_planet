@@ -1,10 +1,11 @@
 <template>
-    <div class="container">
-        商品
-    </div>
+  <div class="container">
+    商品
+  </div>
 </template>
 
 <script>
+
   export default {
     name: 'ProductIndex',
 
@@ -25,8 +26,9 @@
 </script>
 
 <style lang="less" scoped>
+  @import "../../styles/myIndex";
 
-    .container {
+  .container {
 
-    }
+  }
 </style>

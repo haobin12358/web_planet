@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
   export default {
     name: 'ProductTag',
 
@@ -25,7 +26,9 @@
 </script>
 
 <style lang="less" scoped>
-    .container {
+  @import "../../styles/myIndex";
+
+  .container {
 
     }
 </style>
