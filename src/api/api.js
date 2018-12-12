@@ -9,6 +9,7 @@ const api={
   get_wxconfig: title + 'user/get_wxconfig',                     // 获取微信参数
   get_inforcode: title + 'user/get_inforcode',                   // 获取验证码
   bing_telphone: title + 'user/bing_telphone',                   // 绑定手机号
+  auth_fresh: title + 'auth/fresh',                              // 刷新token
 
   category_list: title + 'category/list',                        // 获取分类-装备首页商品列表页
   product_get: title + 'product/get',                            // 获取单条商品-商品详情
@@ -97,6 +98,11 @@ const api={
 
   upload_file: title + 'file/upload',                            // 上传图片
   get_share_params: title + 'shareparams/get',                   // 获取微信分享参数
+
+  get_agent_center: title + 'user/get_agent_center',             // 获取卖家版个人中心
+  apply_cash: title + 'user/apply_cash',                         // 提现申请
+  get_bankname: title + 'user/get_bankname',                     // 根据卡号获取银行名称
+  get_salesvolume_all: title + 'user/get_salesvolume_all',       // 获取团队销售额
 };
 
 export default api

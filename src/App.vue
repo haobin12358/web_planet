@@ -33,7 +33,7 @@ export default {
   mounted(){
     // alert(common.GetQueryString('code'));
 
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDQyNjkxMCwiZXhwIjoxNTQ1MDMxNzEwfQ.eyJpZCI6IjFmMTc3NTcwLWZjNGQtMTFlOC05YzA0LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxfQ.ttzzrlkuRK2uWPblptlTtM8TM41EfKlAVvzsv7ogFJQ';
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDYwMTc5MSwiZXhwIjoxNTQ1MjA2NTkxfQ.eyJpZCI6IjBmNWUyZjE0LWZkNTgtMTFlOC05ZTFkLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoyfQ.8O6P-6YEOCPlUUEJxcuUOiy0xASsEhUHKLhuwUgdf_o';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },
