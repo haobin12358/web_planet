@@ -6,7 +6,7 @@
           <span class="m-select-more"></span>
         </div>
         <!--圈子类别-->
-        <mt-popup class="m-gender-popup" v-model="circlePopup" position="bottom">
+        <mt-popup class="m-circle-popup" v-model="circlePopup" position="bottom">
           <div class="m-popup-btn">
             <div @click="circlePopup = false">取消</div>
             <div @click="circleDone">确认</div>
@@ -39,20 +39,43 @@
               </div>
             </div>
           </div>
-          <!--<span>预览</span>-->
+        </div>
+        <!--店主版选择商品或优惠券-->
+        <div class="m-product-coupon" v-if="usLevel == '2'">
+          <div class="m-input-box" @click="getProduct">
+            <div class="m-input-text">选择商品</div>
+            <img class="m-input-icon" v-if="productList.length == 0" src="/static/images/icon-down-active.png">
+            <img class="m-input-icon" v-else src="/static/images/icon-up.png">
+          </div>
+          <div class="m-scroll-box">
+            <div class="m-scroll">
+              <ul class="m-selected-brand-product-ul">
+                <li v-for="(item, index) in productList">
+                  <img class="m-cancel-icon" v-if="!item.choose" src="/static/images/icon-radio.png" @click="productCouponCancel('product', index)">
+                  <img class="m-cancel-icon" v-else src="/static/images/icon-radio-active.png" @click="productCouponCancel('product', index)">
+                  <img :src="item.prmainpic" class="m-selected-brand-product-img">
+                  <div class="m-selected-brand-product-text">
+                    <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
+                    <p class="m-flex-between m-ft-18">
+                      <span>￥{{item.prprice | money}}</span>
+                      <s class="m-grey m-ft-18" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="m-input-box" @click="getUserCoupon">
+            <div class="m-input-text">选择优惠券</div>
+            <img class="m-input-icon" v-if="couponList.length == 0" src="/static/images/icon-down-active.png">
+            <img class="m-input-icon" v-else src="/static/images/icon-up.png">
+          </div>
+          <div class="m-coupon-box">
+            <coupon-card :couponList="couponList" :circle="circleCoupon" @productCouponCancel="productCouponCancel"></coupon-card>
+            <div class="m-no-coupon" v-if="couponList.length == 0 && getCoupon">暂无优惠券</div>
+          </div>
         </div>
       </div>
-
-      <!--选择商品类别-->
-      <mt-popup class="m-product-popup" v-model="productPopup" position="bottom">
-        <div class="m-popup-btn">
-          <div @click="productPopup = false">取消</div>
-          <div @click="circleDone">确认</div>
-        </div>
-        <div class="m-product-box">
-
-        </div>
-      </mt-popup>
 
       <div class="m-bottom-btn-box">
         <span @click="createNews">确认发布</span>
@@ -65,6 +88,8 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
+  import product from '../components/product';
+  import couponCard from '../components/couponCard';
 
   export default {
     name: "edit-circle",
@@ -72,7 +97,7 @@
       return {
         circlePopup: false,
         options: [],
-        circle: "请选择",
+        circle: "请选择标签",
         circleList: [],
         title: "",
         content: "",
@@ -81,14 +106,16 @@
         video_box: [],
         video: {},
         usLevel: "",
-        productPopup: false,
-        page_num: 1,
-        page_size: 10,
+        product_list: [],       // 选中的商品
+        productList: [],        // 可选择的商品
+        couponList: [],         // 可选择的优惠券
+        circleCoupon: true,     // 是在圈子页的优惠券
+        getCoupon: false        // 是否请求过获取优惠券的接口
       }
     },
-    components: {},
+    components: { product, couponCard },
     methods: {
-      // 获取导航
+      // 获取圈子所在的标签
       getNav() {
         axios.get(api.items_list + "?ittype=10").then(res => {
           if(res.data.status == 200){
@@ -121,36 +148,25 @@
           }
         });
       },
-      // 获取发布圈子时可选择的
+      // 获取发布圈子时可选择的优惠券
       getUserCoupon() {
         let params = {
           token: localStorage.getItem('token'),
           itid: 'news_bind_coupon',
-          page_num : this.page_num,
-          page_size : this.page_size
+          page_num : 1,
+          page_size : 200
         };
         axios.get(api.coupon_list, { params: params }).then(res => {
           if(res.data.status == 200) {
-            this.isScroll = true;
-            if(res.data.data.length > 0) {
-              if(this.page_num > 1) {     // 把新数据给list续上
-                this.couponList = this.couponList.concat(res.data.data);
-              }else{
-                this.couponList = res.data.data;
-              }
-              this.page_num = this.page_num + 1;
-              this.total_count = res.data.total_count;
-            }
+            this.couponList = res.data.data;
+            this.getCoupon = true;
+            // 名称优化、选择优惠券
             for(let i = 0; i < this.couponList.length; i ++) {
+              this.couponList[i].choose = false;
               if(this.couponList[i].title_subtitle.left_text.length > 8) {
                 this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substring(0, 8) + "..";
               }
             }
-          }else{
-            this.couponList = [];
-            this.page_num = 1;
-            this.total_count = 0;
-            return false;
           }
         });
       },
@@ -198,17 +214,36 @@
               that.video_box.push(window.location.origin + res.data.video_thum);
             };
           }
-        })
+        });
       },
-      createNews() {
+      //获取商品列表
+      getProduct() {
         let params = {
-          items: this.circleList,
-          netitle: this.title,
-          netext: this.content,
-          images: this.upload_img,
-          video: this.video,
-          source: "h5"
-        };
+          itid: 'news_bind_product',
+          page_num: 1,
+          page_size: 200
+        }
+        axios.get(api.product_list, { params: params }).then(res => {
+          if(res.data.status == 200) {
+            this.productList = res.data.data;
+            for(let i = 0; i < this.productList.length; i ++) {
+              this.productList[i].choose = false;
+            }
+          }
+        });
+      },
+      // 取消商品或优惠券的选择
+      productCouponCancel(which, index) {
+        if(which == 'product') {
+          this.productList[index].choose = !this.productList[index].choose;
+          this.productList = this.productList.concat();
+        }else if(which == 'circle') {
+          this.couponList[index].choose = !this.couponList[index].choose;
+          this.couponList = this.couponList.concat();
+        }
+      },
+      // 发布圈子资讯
+      createNews() {
         if(this.title == "") {
           Toast("请输入标题");
           return false;
@@ -216,6 +251,26 @@
         if(this.content == "") {
           Toast("请输入内容");
           return false;
+        }
+        let params = {
+          items: this.circleList,
+          netitle: this.title,
+          netext: this.content,
+          images: this.upload_img,
+          video: this.video,
+          source: "h5",
+        };
+        params.coupon = [];
+        params.product = [];
+        for(let i = 0; i < this.productList.length; i ++) {
+          if(this.productList[i].choose) {
+            params.product.push(this.productList[i].prid);
+          }
+        }
+        for(let i = 0; i < this.couponList.length; i ++) {
+          if(this.couponList[i].choose) {
+            params.coupon.push(this.couponList[i].coid);
+          }
         }
         axios.post(api.create_news + "?token=" + localStorage.getItem("token"), params).then(res => {
           if(res.data.status == 200){
@@ -227,7 +282,7 @@
     },
     mounted() {
       common.changeTitle('发布圈子');
-      this.getNav();                 // 获取导航
+      this.getNav();                 // 获取圈子所在的标签
       this.getUserLevel();           // 获取当前用户是否是店主
     }
   }
@@ -235,141 +290,173 @@
 
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
+  @import "../../../common/css/scroll";
 
-.m-editCircle{
-  color: #999;
-  text-align: left;
-  font-size: 21px;
-  .m-editCircle-content{
-    padding: 40px 50px 0 50px;
-  }
-  .m-one{
-    border-radius: 30px;
-    border: 1px solid #999;
-    margin-bottom: 40px;
-    padding: 11px 30px 11px 30px;
-  }
-  .m-select{
-    /*width: 284px;*/
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-    align-items: center;
-    .m-select-more{
-      display: block;
-      width: 22px;
-      height: 22px;
-      margin-top: -10px;
-      background: url("/static/images/icon-up.png") no-repeat;
-      transform: rotate(180deg);
-      background-size: 100% 100%;
+  .m-editCircle{
+    color: #999;
+    text-align: left;
+    font-size: 21px;
+    .m-editCircle-content{
+      padding: 40px 50px 0 50px;
     }
-  }
-  .m-input{
-    input{
-      border: none;
-      width: 100%;
+    .m-one{
+      border-radius: 30px;
+      border: 1px solid #999;
+      margin-bottom: 40px;
+      padding: 11px 30px 11px 30px;
+    }
+    .m-select{
+      /*width: 284px;*/
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+      align-items: center;
+      .m-select-more{
+        display: block;
+        width: 22px;
+        height: 22px;
+        margin-top: -10px;
+        background: url("/static/images/icon-up.png") no-repeat;
+        transform: rotate(180deg);
+        background-size: 100% 100%;
+      }
+    }
+    .m-input{
+      input{
+        border: none;
+        width: 100%;
+        color: #999;
+        font-size: 24px;
+      }
+    }
+    .m-textarea{
+      textarea{
+        display: block;
+        width: 100%;
+        height: 580px;
+        border: none;
+        font-size: 24px;
+      }
+    }
+    .m-upload-box{
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 58px;
+    }
+    .m-selectBack-img-box{
+      margin-bottom: 30px;
+      .m-selectBack-camera{
+        width: 186px;
+        height: 186px;
+        background: url('/static/images/icon-upload-img.png') no-repeat;
+        background-size: 100% 100%;
+        display: inline-block;
+        margin: 0 15px 15px 0;
+        position: relative;
+      }
+      .m-selectBack-video{
+        width: 186px;
+        height: 186px;
+        background: url('/static/images/icon-upload-video.png') no-repeat;
+        background-size: 100% 100%;
+        display: inline-block;
+        margin: 0 15px 15px 0;
+        position: relative;
+      }
+      .m-upload-input{
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 186px;
+        height: 186px;
+      }
+      img{
+        display: inline-block;
+        width: 186px;
+        height: 186px;
+        margin-bottom: 20px;
+        margin-right: 15px;
+      }
+    }
+    .m-product-coupon {
+      .m-input-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px #707070 solid;
+        border-radius: 50px;
+        width: 310px;
+        padding: 10px 30px 10px 60px;
+        margin-bottom: 30px;
+        .m-input-text {
+          color: #999999;
+          font-size: 21px;
+        }
+        .m-input-icon {
+          width: 22px;
+          height: 22px;
+        }
+      }
+      .m-scroll-box {
+        margin: 0 30px 0 -60px;
+      }
+      .m-coupon-box {
+        margin: 0 0 60px -50px;
+        .m-no-coupon {
+          margin-left: 60px;
+        }
+      }
+    }
+    .m-bottom-btn-box {
+      text-align: center;
+      padding: 0 0 50px 0;
+      span{
+        display: inline-block;
+        width: 700px;
+        height: 106px;
+        border-radius: 10px;
+        background-color: @mainColor;
+        line-height: 106px;
+        font-size: 38px;
+        font-weight: bold;
+        color: #ffffff;
+      }
+    }
+    input::-webkit-input-placeholder{
       color: #999;
-      font-size: 24px;
+    }
+    textarea::-webkit-input-placeholder{
+      color: #999;
     }
   }
-  .m-textarea{
-    textarea{
-      display: block;
-      width: 100%;
-      height: 580px;
-      border: none;
-      font-size: 24px;
+  .m-circle-popup {
+    width: 750px;
+    .m-popup-btn {
+      color: #333333;
+      display: flex;
+      justify-content: space-between;
+      font-size: 28px;
+      padding: 20px 40px 0 40px;
+    }
+    .m-checklist {
+      padding: 50px 0;
+      text-align: center;
     }
   }
-  .m-upload-box{
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-top: 58px;
-  }
-  .m-selectBack-img-box{
-    margin-bottom: 30px;
-    .m-selectBack-camera{
-      width: 186px;
-      height: 186px;
-      background: url('/static/images/icon-upload-img.png') no-repeat;
-      background-size: 100% 100%;
-      display: inline-block;
-      margin: 0 15px 15px 0;
-      position: relative;
+/*  .m-product-popup {
+    width: 750px;
+    .m-popup-btn {
+      color: #333333;
+      display: flex;
+      justify-content: space-between;
+      font-size: 28px;
+      padding: 20px 40px 0 40px;
     }
-    .m-selectBack-video{
-      width: 186px;
-      height: 186px;
-      background: url('/static/images/icon-upload-video.png') no-repeat;
-      background-size: 100% 100%;
-      display: inline-block;
-      margin: 0 15px 15px 0;
-      position: relative;
+    .m-product-box {
+      height: 800px;
     }
-    .m-upload-input{
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      width: 186px;
-      height: 186px;
-    }
-    img{
-      display: inline-block;
-      width: 186px;
-      height: 186px;
-      margin-bottom: 20px;
-      margin-right: 15px;
-    }
-  }
-  .m-bottom-btn-box {
-    text-align: center;
-    padding: 0 0 50px 0;
-    span{
-      display: inline-block;
-      width: 700px;
-      height: 106px;
-      border-radius: 10px;
-      background-color: @mainColor;
-      line-height: 106px;
-      font-size: 38px;
-      font-weight: bold;
-      color: #333;
-    }
-  }
-  input::-webkit-input-placeholder{
-    color: #999;
-  }
-  textarea::-webkit-input-placeholder{
-    color: #999;
-  }
-}
-.m-gender-popup {
-  width: 750px;
-  .m-popup-btn {
-    color: #333333;
-    display: flex;
-    justify-content: space-between;
-    font-size: 28px;
-    padding: 20px 40px 0 40px;
-  }
-  .m-checklist {
-    padding: 50px 0;
-    text-align: center;
-  }
-}
-.m-product-popup {
-  width: 750px;
-  .m-popup-btn {
-    color: #333333;
-    display: flex;
-    justify-content: space-between;
-    font-size: 28px;
-    padding: 20px 40px 0 40px;
-  }
-}
-
+  }*/
 </style>
