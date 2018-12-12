@@ -118,7 +118,6 @@
           if(res.data.status == 200){
             let img = { oeimg: res.data.data, oeisort: this.productList[this.No].img_box.length + 1 };
             this.productList[this.No].image.push(img);
-            console.log(this.productList[this.No].image);
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.productList[that.No].img_box.push(this.result);
@@ -161,9 +160,17 @@
             return false;
           }
         }
-        let params = {
-          omid: this.order_info.omid,
-          evaluation: this.productList
+        let params = { omid: this.order_info.omid };
+        params.evaluation = [];
+        for(let i = 0; i < this.productList.length; i ++) {
+          let comments = {
+            opid: this.productList[i].opid,
+            oetext: this.productList[i].oetext,
+            oescore: this.productList[i].oescore,
+            image: this.productList[i].image,
+            video: this.productList[i].video,
+          };
+          params.evaluation.push(comments);
         }
         // console.log(params);
         axios.post(api.create_evaluation + '?token='+ localStorage.getItem('token'), params).then(res => {
