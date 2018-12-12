@@ -106,7 +106,7 @@
         let scrollHeight = common.getScrollHeight();
         let ClientHeight = common.getClientHeight();
         if (scrollTop + ClientHeight  >= scrollHeight -10) {
-          if(this.isScroll){
+          if(this.isScroll) {
             this.isScroll = false;
             if(this.order.length == this.total_count) {
               this.bottom_show = true;

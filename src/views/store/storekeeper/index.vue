@@ -47,7 +47,7 @@
         </div>
         <div class="m-out-box" v-if="outSubmit">
           <img class="m-out-know-img" src="/static/images/icon-out-know.png" alt="">
-          <div class="m-ut-know-title">提交成功</div>
+          <div class="m-out-know-title">提交成功</div>
           <div class="m-out-know-text">已成功提交提现申请，我们将在3个工作日内完成审核，请及时关注您的账户余额。</div>
           <div class="m-out-btn" @click="outBtn('know')">我知道了</div>
         </div>
@@ -351,14 +351,16 @@
           .m-out-know-img {
             width: 85px;
             height: 85px;
+            padding: 40px;
           }
-          .m-ut-know-title {
+          .m-out-know-title {
             font-size: 30px;
             font-weight: bold;
             padding: 20px 0 35px 0;
           }
-          .m-ut-know-text {
+          .m-out-know-text {
             font-size: 24px;
+            padding-bottom: 140px;
           }
           .m-out-btn {
             width: 120px;
