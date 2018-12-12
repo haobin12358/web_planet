@@ -307,7 +307,7 @@
                   arr[index].active = arr[index].cart[i].active;
                 }
               }else{
-                if(length > 0 && length < arr[index].cart.length ){
+                if(length > 0 && length <= arr[index].cart.length ){
                   this.allRadio = false;
                   arr[index].active = false;
                 }
