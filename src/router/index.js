@@ -70,6 +70,8 @@ export const constantRouterMap = [
   { path: '/storekeeper/group', component: () => import('../views/store/storekeeper/group'), hidden: true },
   // 店主版 - 店主 - 购买激活码
   { path: '/storekeeper/activationCode', component: () => import('../views/store/storekeeper/activationCode'), hidden: true },
+  // 店主版 - 店主 - 我的激活码
+  { path: '/storekeeper/myActivationCode', component: () => import('../views/store/storekeeper/myActivationCode'), hidden: true },
 
 
   {

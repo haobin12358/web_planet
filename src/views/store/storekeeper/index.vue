@@ -157,6 +157,14 @@
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
     </div>
+    <!--我的邀请码-->
+    <div class="m-border-radius">
+      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/myActivationCode')">
+        <div class="m-jump-title">我的激活码</div>
+        <div class="m-jump-text"></div>
+        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
+      </div>
+    </div>
   </div>
 </template>
 

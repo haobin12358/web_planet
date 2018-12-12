@@ -104,6 +104,7 @@ const api={
   get_bankname: title + 'user/get_bankname',                     // 根据卡号获取银行名称
   get_salesvolume_all: title + 'user/get_salesvolume_all',       // 获取团队销售额
   get_agent_commission: title + 'user/get_agent_commission_list',// 获取店主收益详情
+  list_act_code: title + 'act_code/list_act_code',               // 获取个人激活码列表
 };
 
 export default api
