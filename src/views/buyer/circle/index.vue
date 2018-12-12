@@ -1,6 +1,6 @@
 <template>
   <div class="m-circle" @touchmove="touchMove">
-  <!--<div class="m-circle" @touchmove.stop="touchMove">-->
+    <!--<div class="m-circle" @touchmove.stop="touchMove">-->
     <!--搜索-->
     <div class="m-selected-search">
       <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
@@ -24,11 +24,15 @@
             <div class="m-video-box" v-if="items.showtype == 'video'">
               <video src="" class="m-video"></video>
               <!--<video :src="items.video" class="m-video"></video>-->
-              <img :src="items.videothumbnail" class="m-video-img" alt="">
+              <div class="m-img-box">
+                <img :src="items.videothumbnail" class="m-img">
+              </div>
               <span class="m-video-time">{{items.videoduration}}</span>
               <span class="m-icon-video"></span>
             </div>
-            <img :src="items.mainpic" class="m-img"  v-else-if="items.showtype == 'picture'">
+            <div class="m-img-box" v-else-if="items.showtype == 'picture'">
+              <img :src="items.mainpic" class="m-img">
+            </div>
             <p class="m-text" v-else>
               {{items.netext}}
             </p>
@@ -101,9 +105,9 @@
     },
     components: { navList, bottomLine },
     mounted() {
-       common.changeTitle('圈子');
-       this.getNav();
-       this.getNews();
+      common.changeTitle('圈子');
+      this.getNav();
+      this.getNews();
     },
     methods: {
       /*跳转路由*/
@@ -231,7 +235,7 @@
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
-@import "../../../common/css/index";
+  @import "../../../common/css/index";
   .m-circle{
     min-height: 100vh;
     overflow-x: hidden;
@@ -252,7 +256,6 @@
           li{
             display: inline-block;
             padding: 5px;
-            /*width: 150px!important;*/
             height: 34px;
             line-height: 34px;
             margin-right: 62px;
@@ -268,23 +271,11 @@
         .m-video-one{
           position: relative;
           width: 700px;
-          /*height: 260px;*/
           border-radius: 10px;
           box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
           margin-bottom: 30px;
           background-color: #fff;
           padding-bottom: 26px;
-          /*.m-video-label{*/
-          /*position: absolute;*/
-          /*top:-21px;*/
-          /*left:16px;*/
-          /*height: 43px;*/
-          /*line-height: 43px;*/
-          /*padding: 0 25px;*/
-          /*background-color: @mainColor;*/
-          /*border-radius: 40px;*/
-          /*box-shadow: 3px 5px 6px 0 rgba(0, 0, 0, 0.16);*/
-          /*}*/
           .m-mark-label{
             position: absolute;
             top:10px;
@@ -313,14 +304,9 @@
               display: block;
               width: 700px;
               height: 360px;
-              /*background-color: #9fd0bf;*/
-            }
-            .m-video-img{
-             position: absolute;
+              position: absolute;
               top:0;
               left: 0;
-              width: 700px;
-              height: 360px;
             }
             .m-icon-video{
               display: block;
@@ -339,12 +325,21 @@
               color: #fff;
             }
           }
-
-          .m-img{
-            display: block;
+          .m-img-box {
             width: 700px;
             height: 360px;
-            background-color: #9fd0bf;
+            position: relative;
+            /*background-color: #9fd0bf;*/
+            .m-img {
+              max-width: 700px;
+              max-height: 360px;
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              margin: auto;
+            }
           }
           .m-text{
             text-align: left;
@@ -420,10 +415,8 @@
             color: #C70000;
             font-size: 18px;
           }
-
         }
       }
-
     }
   }
 </style>

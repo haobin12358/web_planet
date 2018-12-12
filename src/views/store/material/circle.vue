@@ -33,11 +33,15 @@
             <div class="m-video-box" v-if="items.showtype == 'video'">
               <video src="" class="m-video"></video>
               <!--<video :src="items.video" class="m-video"></video>-->
-              <img :src="items.videothumbnail" class="m-video-img" alt="">
+              <div class="m-img-box">
+                <img :src="items.videothumbnail" class="m-img">
+              </div>
               <span class="m-video-time">{{items.videoduration}}</span>
               <span class="m-icon-video"></span>
             </div>
-            <img :src="items.mainpic" class="m-img"  v-else-if="items.showtype == 'picture'">
+            <div class="m-img-box" v-else-if="items.showtype == 'picture'">
+              <img :src="items.mainpic" class="m-img">
+            </div>
             <p class="m-text" v-else>
               {{items.netext}}
             </p>
@@ -328,14 +332,10 @@
               display: block;
               width: 700px;
               height: 360px;
-              /*background-color: #9fd0bf;*/
-            }
-            .m-video-img{
-             position: absolute;
+              position: absolute;
               top:0;
               left: 0;
-              width: 700px;
-              height: 360px;
+              /*background-color: #9fd0bf;*/
             }
             .m-icon-video{
               display: block;
@@ -354,11 +354,21 @@
               color: #fff;
             }
           }
-          .m-img{
-            display: block;
+          .m-img-box {
             width: 700px;
             height: 360px;
-            background-color: #9fd0bf;
+            position: relative;
+            /*background-color: #9fd0bf;*/
+            .m-img {
+              max-width: 700px;
+              max-height: 360px;
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              margin: auto;
+            }
           }
           .m-text{
             text-align: left;
