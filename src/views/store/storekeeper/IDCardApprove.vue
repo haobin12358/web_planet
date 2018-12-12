@@ -207,8 +207,17 @@
         if(!this.user.usrealname){
           Toast("请输入真实姓名");
           return false;
-        }else if(!this.user.usidentification){
+        }
+        if(!this.user.usidentification){
           Toast("请输入身份证号");
+          return false;
+        }
+        if(!this.user.umfront){
+          Toast("请上传身份证照片");
+          return false;
+        }
+        if(!this.user.umback){
+          Toast("请上传身份证照片");
           return false;
         }
         let params = {
@@ -358,6 +367,7 @@
           bottom: 50px;
           left: 25px;
           span{
+            color: #ffffff;
             display: inline-block;
             width: 700px;
             height: 106px;
