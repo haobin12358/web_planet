@@ -1,7 +1,6 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
-      <!-- or name="fade" -->
+    <transition name="fade" mode="out-in">
       <!-- <router-view :key="key"></router-view> -->
       <router-view/>
     </transition>
@@ -25,5 +24,7 @@ export default {
   min-height: calc(100vh - 50px);
   position: relative;
   overflow: hidden;
+  padding: 20px 40px;
+  box-sizing: border-box;
 }
 </style>

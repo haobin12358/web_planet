@@ -43,7 +43,6 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      console.log('action login');
       return new Promise((resolve, reject) => {
         login(userInfo.username, userInfo.password).then(response => {
           if(response.data.status == 200){
