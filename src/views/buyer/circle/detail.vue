@@ -1,22 +1,14 @@
 <template>
   <div class="m-circle-detail">
-    <!--搜索-->
-    <!--<div class="m-selected-search">
-      <span class="m-icon-back" @click="changeRoute('/circle')"></span>
-      <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
-        <span class="m-icon-search"></span>
-        <span>搜索圈子关键词</span>
-      </div>
-    </div>-->
     <div class="m-circle-content" v-if="news_info">
       <h3 class="m-circle-title">{{news_info.netitle}}</h3>
       <div class="m-author-box">
         <img class="m-author-img" :src="news_info.author.usheader">
-        <div class="m-author-name m-ft-20">{{news_info.author.usname}}</div>
+        <div class="m-author-name">{{news_info.author.usname}}</div>
         <div>{{news_info.createtime}}</div>
       </div>
       <template v-if="news_info.image" v-for="(item,index) in news_info.image">
-        <img :src="item.niimage" class="m-circle-img" alt="">
+        <img class="m-circle-img" :src="item.niimage" alt="">
       </template>
       <div class="m-content">
         <p>{{news_info.netext}}</p>
@@ -381,9 +373,10 @@
     display: flex;
     align-items: center;
     margin: 25px 40px;
+    font-size: 24px;
     .m-author-img {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       margin-right: 18px;
       background: url("/static/images/logo.png") no-repeat;
@@ -398,7 +391,7 @@
   .m-circle-img{
     display: block;
     width: 750px;
-    height: 100%;
+    min-height: 100%;
     background-color: #9fd0bf;
     margin: 14px 0 30px ;
   }
