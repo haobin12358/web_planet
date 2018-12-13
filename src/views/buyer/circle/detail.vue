@@ -149,6 +149,11 @@
         this.changeModal('show_modal',true);
         sessionStorage.removeItem('showComments');
       }
+      sessionStorage.setItem('neid', this.$route.query.neid);
+    },
+    beforeDestroy() {
+      this.changeModal('show_modal',false);
+      sessionStorage.removeItem('neid');
     },
     methods: {
       // 播放视频
@@ -218,7 +223,7 @@
       getComment(){
         axios.get(api.get_news_comment,{
           params:{
-            neid:this.$route.query.neid,
+            neid: sessionStorage.getItem('neid'),
             token:localStorage.getItem('token'),
             page_num:this.page_info.page_num,
             page_size: this.page_info.page_size
@@ -422,7 +427,7 @@
         width: 109px;
         height: 109px;
         position: absolute;
-        top: 148px;
+        top: 130px;
         left: 275px;
         background: url("/static/images/icon-video.png") no-repeat;
         background-size: 100% 100%;

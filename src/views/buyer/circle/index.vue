@@ -313,7 +313,7 @@
               width: 109px;
               height: 109px;
               position: absolute;
-              top: 148px;
+              top: 125px;
               left: 298px;
               background: url("/static/images/icon-video.png") no-repeat;
               background-size: 100% 100%;
@@ -329,7 +329,7 @@
             width: 700px;
             height: 360px;
             position: relative;
-            /*background-color: #9fd0bf;*/
+            background-color: #000000;
             .m-img {
               max-width: 700px;
               max-height: 360px;
