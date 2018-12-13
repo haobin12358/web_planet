@@ -17,6 +17,7 @@
     <div class="m-out-popup-box">
       <mt-popup class="m-out-popup" v-model="outPopup">
         <div class="m-out-box" v-if="!outSubmit">
+          <div class="m-popup-close m-ft-26" @click="outPopup = false">X</div>
           <div class="m-out-title m-ft-30">提现金额</div>
           <div class="m-out-num-box">
             <div class="m-out-RMB">￥</div>
@@ -402,6 +403,10 @@
         border-radius: 30px;
         .m-out-box {
           padding: 60px;
+          .m-popup-close {
+            text-align: right;
+            margin: -40px -20px 0 0;
+          }
           .m-out-title {
             text-align: left;
             margin-bottom: 60px;
