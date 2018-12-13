@@ -274,7 +274,7 @@
             this.getComment();
             this.comment_content = '';
             // this.comment_one.comment = false;
-            this.show_comment = !this.show_comment;
+            // this.show_comment = !this.show_comment;      // 注释后评论成功继续显示评论框
           }
         })
       },
