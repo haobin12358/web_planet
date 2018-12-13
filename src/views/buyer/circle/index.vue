@@ -321,7 +321,7 @@
             .m-video-time{
               position: absolute;
               bottom: 4px;
-              right: 13px;
+              right: 40px;
               color: #fff;
             }
           }
@@ -329,7 +329,7 @@
             width: 700px;
             height: 360px;
             position: relative;
-            background-color: #000000;
+            background-color: #ffffff;
             .m-img {
               max-width: 700px;
               max-height: 360px;
