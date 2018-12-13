@@ -94,6 +94,7 @@
             <span>付款方式</span>
             <div>
               <span @click="payPopup = true">{{payType.name}}</span>
+              <span class="m-icon-more"></span>
             </div>
           </li>
           <li class="m-flex-between" v-if="payType.opaytype == 20">
@@ -580,6 +581,7 @@
       display: flex;
       flex-flow: row;
       textarea{
+        font-size: 24px;
         display: block;
         min-height: 50px;
         width: 400px;

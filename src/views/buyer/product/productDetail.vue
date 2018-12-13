@@ -245,6 +245,7 @@
       margin-bottom: 40px;
       .m-product-title{
         margin-right: 20px;
+        text-align: left;
       }
       .m-profict-title {
         white-space: nowrap;
