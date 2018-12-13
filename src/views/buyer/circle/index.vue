@@ -110,6 +110,9 @@
     mounted() {
       common.changeTitle('圈子');
       this.getNav();
+      if(!localStorage.getItem('circleIndex')) {
+        localStorage.setItem('circleIndex', 0)
+      }
     },
     watch: {
       $route(oldValue, newValue) {
@@ -169,7 +172,7 @@
             if(res.data.data.length == 0){
               this.nav_list = this.nav_list.concat([])
             }else{
-              let arr=this.nav_list.concat( res.data.data);
+              let arr=this.nav_list.concat(res.data.data);
               for(let i=0;i<arr.length;i++){
                 arr[i].active = false;
               }
@@ -241,8 +244,8 @@
         let scrollHeight = common.getScrollHeight();
         let ClientHeight = common.getClientHeight();
         // console.log(scrollTop);
-        // console.log(scrollHeight);
-        // console.log(ClientHeight);
+        console.log(scrollHeight);
+        console.log(ClientHeight);
         if (scrollTop + ClientHeight  >= scrollHeight -10) {
           if(this.isScroll){
             this.isScroll = false;
