@@ -22,14 +22,15 @@
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
       <product :list="product_list"></product>
       <bottom-line v-if="bottom_show"></bottom-line>
-      <div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">
+      <!--<div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">-->
+      <div class="m-modal-select" v-if="show_modal">
         <div class="m-modal-state">
           <div class="m-state-content">
             <template v-for="(items,index) in category_list">
               <div class="m-one-select" v-if="items.subs">
                 <p >{{items.pcname}}</p>
-                <div class="m-sku-list" v-if="items.subs">
-                  <span class="m-one-sku" v-for="(item,i) in items.subs" @click.stop="categoryClick(index,i)">{{item.pcname}}</span>
+                <div class="m-sku-list">
+                  <span class="m-one-sku" :class="item.active?'active':''" v-for="(item,i) in items.subs" @click.stop="categoryClick(index,i)">{{item.pcname}}</span>
                 </div>
               </div>
             </template>
@@ -41,12 +42,11 @@
                 <!--<input type="text" placeholder="最低价">-->
               <!--</div>-->
             <!--</div>-->
-
           </div>
           <div class="m-state-foot">
             <div class="m-product-detail-btn">
-              <span>重置</span>
-              <span class="active">确定</span>
+              <span @click="resetPrid">重 置</span>
+              <span class="active" @click="searchProduct">确 定</span>
             </div>
           </div>
         </div>
@@ -108,8 +108,10 @@
               desc_asc:true
             }
           ],
-          show_modal:false,
+          pcid: '',
+          show_modal: false,
           // brand_info:null,
+          pcidList:[],
           product_list:[],
           page_info:{
             page_num:1,
@@ -149,7 +151,6 @@
                }
              }
            }
-
          }
        },
        // 页面跳转
@@ -189,7 +190,7 @@
        },
        //获取商品列表
        getProduct(start,desc_asc){
-         let _pcid = this.$route.query.pcid || '';
+         let _pcid = this.$route.query.pcid || this.pcid;
          let _kw = this.$route.query.kw || '';
          axios.get(api.product_list,{
            params:{
@@ -221,17 +222,49 @@
        },
        //获取装备信息
        getCategory(){
-         axios.get(api.category_list,{params:{
-           deep:2
-           }}).then(res => {
+         axios.get(api.category_list + '?deep=2').then(res => {
            if(res.data.status == 200){
              this.category_list = res.data.data;
+             this.resetPrid();
            }
          })
        },
-     //  筛选点击
-       categoryClick(index,i){
-
+       // 重置二级分类
+       resetPrid() {
+         for(let i = 0; i < this.category_list.length; i ++) {
+           if(this.category_list[i].subs) {
+             for(let j = 0; j < this.category_list[i].subs.length; j ++) {
+               this.category_list[i].subs[j].active = false;
+               this.category_list = this.category_list.concat();
+             }
+           }
+         }
+       },
+      // 筛选点击
+      categoryClick(index,i){
+        this.category_list[index].subs[i].active = !this.category_list[index].subs[i].active;
+        this.category_list = this.category_list.concat();
+      },
+       // 确定按钮
+       searchProduct() {
+         this.pcid = '';
+         this.pcidList = [];
+         for(let i = 0; i < this.category_list.length; i ++) {
+           if(this.category_list[i].subs) {
+             for(let j = 0; j < this.category_list[i].subs.length; j ++) {
+               if(this.category_list[i].subs[j].active) {
+                 this.pcidList.push(this.category_list[i].subs[j].pcid);
+               }
+             }
+           }
+         }
+         for(let i = 0; i < this.pcidList.length; i ++) {
+           this.pcid = this.pcid + this.pcidList[i] + '|';
+         }
+         this.pcid = this.pcid.substr(0, this.pcid.length - 1);
+         this.getProduct(1,'sale_value|asc');
+         this.pcidList = [];
+         this.show_modal = false;
        }
      }
     }
@@ -355,6 +388,10 @@
             border-radius: 10px;
             margin-right: 20px;
             margin-top: 20px;
+            &.active {
+              color: #ffffff;
+              background-color: @mainColor;
+            }
           }
         }
       }
@@ -367,6 +404,7 @@
           height: 62px;
           line-height: 62px;
           span{
+            color: #ffffff;
             display: inline-block;
             width: 171px;
             text-align: center;
@@ -377,10 +415,7 @@
             &.active{
               background-color: @mainColor;
               margin-left: -8px;
-              border-top-left-radius: 0;
-              border-bottom-left-radius: 0;
-              border-top-right-radius: 30px;
-              border-bottom-right-radius: 30px;
+              border-radius: 0 30px 30px 0;
             }
           }
         }
