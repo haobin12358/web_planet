@@ -23,15 +23,18 @@
         <div class="m-total-num">￥{{income.usercommission_mount | money}}</div>
       </div>
       <!--nav滑动选项-->
-      <div class="m-nav">
+      <!--<div class="m-nav">
         <navList :navlist="navList" :isScroll="false" @navClick="navClick"></navList>
-      </div>
+      </div>-->
     </div>
     <!--收益详情-->
     <div class="m-income-detail-box">
       <div class="m-detail-item" v-if="detailList.length != 0" v-for="item in detailList">
         <div class="m-detail-item-left">
-          <div class="m-product-name">{{item.ucname}}</div>
+          <img class="m-product-img" :src="item.skupic" alt="">
+        </div>
+        <div class="m-detail-item-middle">
+          <div class="m-product-name">{{item.prname}}</div>
           <div class="m-product-time">{{item.createtime}}</div>
         </div>
         <div class="m-detail-item-right">+{{item.uccommission | money}}</div>
@@ -126,7 +129,14 @@
         axios.get(api.get_agent_commission, { params: params }).then(res => {
           if(res.data.status == 200){
             this.income = res.data.data;
-            this.navClick(0);
+            this.detailList = this.income.usercommission_common_list;
+            for(let i = 0; i < this.detailList.length; i ++) {
+              this.detailList[i].prname = this.detailList[i].prtitle.substr(0, 27);
+              if(this.detailList[i].prtitle.length > 27) {
+                this.detailList[i].prname = this.detailList[i].prname + '...';
+              }
+            }
+            // this.navClick(0);
           }
         });
       }
@@ -202,17 +212,28 @@
       }
     }
     .m-income-detail-box {
-      margin: 310px 70px 0 90px;
+      margin: 260px 70px 0 90px;
       .m-detail-item {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 50px;
         .m-detail-item-left {
+          .m-product-img {
+            width: 97px;
+            height: 97px;
+          }
+        }
+        .m-detail-item-middle {
+          flex: 1;
+          height: 100px;
           display: flex;
           flex-direction: column;
+          justify-content: space-between;
+          text-align: left;
+          margin: 0 25px;
           .m-product-name {
-
+            font-size: 24px;
+            line-height: 28px;
           }
           .m-product-time {
             color: #999999;
