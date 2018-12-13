@@ -11,7 +11,7 @@
     <div class="m-circle-content" v-if="news_info">
       <h3 class="m-circle-title">{{news_info.netitle}}</h3>
       <div class="m-author-box">
-        <img class="m-author-img" :src="news_info.author.usheader" alt="">
+        <img class="m-author-img" :src="news_info.author.usheader">
         <div class="m-author-name m-ft-20">{{news_info.author.usname}}</div>
         <div>{{news_info.createtime}}</div>
       </div>
@@ -386,6 +386,8 @@
       height: 30px;
       border-radius: 50%;
       margin-right: 18px;
+      background: url("/static/images/logo.png") no-repeat;
+      background-size: 100% 100%;
     }
     .m-author-name {
       flex: 1;
@@ -502,8 +504,9 @@
               width: 96px;
               height: 96px;
               border-radius: 50%;
-              background-color: #9fd0bf;
               margin-right: 20px;
+              background: url("/static/images/logo.png") no-repeat;
+              background-size: 100% 100%;
             }
             .m-user-name{
               font-weight: bold;
