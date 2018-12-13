@@ -111,16 +111,24 @@
         });
       },
       // 分享
-      wxRegCallback () {
-        this.wxShare()
+      wxRegCallback() {
+        this.wxShare();
       },
       // 点击分享
       share() {
-        // wxapi.wxRegister();
-        // this.wxShare();
-
-        this.show_invite = true;
         this.wxShare();
+        this.show_invite = true;
+        // 倒计时
+        const TIME_COUNT = 3;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            this.show_invite = false;
+            clearInterval(time);
+          }
+        }, 1000);
       },
       wxShare () {
         let options = {
@@ -128,14 +136,22 @@
           desc: '快来帮您的好友拆开魔法礼盒吧',
           imgUrl: this.box.prpic
         };
-        // 参与魔盒活动(获取分享所需的url参数)
+        /*if(!localStorage.getItem('mbjid')) {
+          // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
+          axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
+            if(res.data.status == 200) {
+              localStorage.setItem('mbjid', res.data.data.mbjid);
+            }
+          });
+        }*/
+        // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
         axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
           if(res.data.status == 200) {
-            options.link = window.location.origin + '/#/pandora?mbjid=' + res.data.data.mbjid;
+            localStorage.setItem('mbjid', res.data.data.mbjid);
           }
         });
+        options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
         wxapi.onMenuShareAppMessage(options);
-        // wxapi.updateAppMessageShareData(options);
       },
       // 获取该活动
       getBox() {
@@ -144,6 +160,7 @@
             this.box = res.data.data;
             this.history = res.data.data.open_history;
             this.mbaid = res.data.data.infos.mbaid;
+            localStorage.setItem('mbaid', this.mbaid);
             if(this.history) {
               for(let i = 0; i < this.history.length; i ++) {
                 this.history[i].msg = this.history[i].usname;
@@ -165,10 +182,11 @@
       // 点击购买
       buyNow() {
         if(!this.uaid) {
+          sessionStorage.setItem('choose', true);
           this.$router.push({ path: '/personal/addressManagement', query: { from: 'choose' }});
         }else {
           let params = {
-            mbaid: this.box.infos.mbaid,
+            mbaid: localStorage.getItem('mbaid'),
             uaid: this.uaid,
             omclient: 0,
             opaytype: 0
@@ -197,13 +215,13 @@
               // console.log(res);
               // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
               if(res.err_msg == "get_brand_wcpay_request:ok"){             // 支付成功
-                // this.$router.push('/activityOrder');
+                // that.$router.push('/activityOrder');
               }else if(res.err_msg == "get_brand_wcpay_request:cancel"){   // 支付过程中用户取消
                 Toast('支付已取消');
               }else if(res.err_msg == "get_brand_wcpay_request:fail"){     // 支付失败
                 Toast('支付失败');
               }
-              this.$router.push('/activityOrder');
+              that.$router.push('/activityOrder');
             });
         }
         if (typeof WeixinJSBridge == "undefined"){
@@ -218,6 +236,13 @@
         }
       }
     },
+    beforeDestroy() {
+      // 如果不是去选择地址，则把product的localstorage去除
+      if(!sessionStorage.getItem('choose')) {
+        localStorage.removeItem('mbaid');
+        sessionStorage.removeItem('choose');
+      }
+    },
     mounted() {
       common.changeTitle('魔法礼盒');
       this.getBox();                 // 获取该活动的规则
@@ -226,7 +251,7 @@
         localStorage.removeItem('uaid');
         this.buyNow();      // 点击购买
       }
-      // wxapi.wxRegister(this.wxRegCallback)
+      wxapi.wxRegister(this.wxRegCallback);
     }
   }
 </script>
