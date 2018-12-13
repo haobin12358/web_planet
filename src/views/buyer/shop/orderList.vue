@@ -88,6 +88,19 @@
         common.changeTitle('订单列表');
         this.getOrderNum();               // 获取各状态的订单数量
       },
+      beforeDestroy() {
+        for(let i = 0; i < this.nav_list.length; i ++) {
+          if(this.nav_list[i].active) {
+            localStorage.setItem('orderList', i);
+          }
+        }
+        if(this.$route.path == '/orderDetail') {
+          localStorage.setItem('orderListDetail', 1);
+        }else {
+          localStorage.setItem('orderListDetail', 0);
+          localStorage.removeItem('orderList');
+        }
+      },
       methods:{
         changeRoute(v,item) {
           switch (v){
@@ -139,7 +152,16 @@
               for(let i = 0; i < this.nav_list.length; i ++) {
                 this.nav_list[i].active = false;
               }
-              let which = this.$route.query.which;
+              let which = '';
+              if(localStorage.getItem('orderListDetail') != 0) {
+                if(localStorage.getItem('orderList')) {
+                  which = localStorage.getItem('orderList');
+                }else {
+                  which = this.$route.query.which;
+                }
+              }else {
+                which = this.$route.query.which;
+              }
               if(which) {
                 this.navClick(which);
               }else {
