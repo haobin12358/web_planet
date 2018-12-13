@@ -150,25 +150,30 @@
       },
       // 获取发布圈子时可选择的优惠券
       getUserCoupon() {
-        let params = {
-          token: localStorage.getItem('token'),
-          itid: 'news_bind_coupon',
-          page_num : 1,
-          page_size : 200
-        };
-        axios.get(api.coupon_list, { params: params }).then(res => {
-          if(res.data.status == 200) {
-            this.couponList = res.data.data;
-            this.getCoupon = true;
-            // 名称优化、选择优惠券
-            for(let i = 0; i < this.couponList.length; i ++) {
-              this.couponList[i].choose = false;
-              if(this.couponList[i].title_subtitle.left_text.length > 8) {
-                this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substring(0, 8) + "..";
+        if(this.couponList.length > 0) {
+          this.getCoupon = false;
+          this.couponList = [];
+        }else {
+          let params = {
+            token: localStorage.getItem('token'),
+            itid: 'news_bind_coupon',
+            page_num : 1,
+            page_size : 200
+          };
+          axios.get(api.coupon_list, { params: params }).then(res => {
+            if(res.data.status == 200) {
+              this.couponList = res.data.data;
+              this.getCoupon = true;
+              // 名称优化、选择优惠券
+              for(let i = 0; i < this.couponList.length; i ++) {
+                this.couponList[i].choose = false;
+                if(this.couponList[i].title_subtitle.left_text.length > 8) {
+                  this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substring(0, 8) + "..";
+                }
               }
             }
-          }
-        });
+          });
+        }
       },
       //上传图片
       uploadImg(e) {
@@ -218,19 +223,23 @@
       },
       //获取商品列表
       getProduct() {
-        let params = {
-          itid: 'news_bind_product',
-          page_num: 1,
-          page_size: 200
-        }
-        axios.get(api.product_list, { params: params }).then(res => {
-          if(res.data.status == 200) {
-            this.productList = res.data.data;
-            for(let i = 0; i < this.productList.length; i ++) {
-              this.productList[i].choose = false;
-            }
+        if(this.productList.length > 0) {
+          this.productList = [];
+        }else {
+          let params = {
+            itid: 'news_bind_product',
+            page_num: 1,
+            page_size: 200
           }
-        });
+          axios.get(api.product_list, { params: params }).then(res => {
+            if(res.data.status == 200) {
+              this.productList = res.data.data;
+              for(let i = 0; i < this.productList.length; i ++) {
+                this.productList[i].choose = false;
+              }
+            }
+          });
+        }
       },
       // 取消商品或优惠券的选择
       productCouponCancel(which, index) {
