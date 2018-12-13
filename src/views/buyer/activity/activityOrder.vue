@@ -1,13 +1,14 @@
 <template>
-    <div class="m-orderList" @touchmove="touchMove">
-      <div class="m-nav">
-        <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
-      </div>
+  <div class="m-orderList" @touchmove="touchMove">
+    <div class="m-nav">
+      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+    </div>
+
+    <mt-loadmore :top-method="loadTop">
       <div class="m-no-coupon" v-if="order_list.length == 0">
         <span class="m-no-img m-order-no-img"></span>
         <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
       </div>
-
       <div class="m-orderList-content" v-else>
         <template v-for="(items,index) in order_list">
           <div class="m-one-part"  @click.stop="changeRoute('/orderDetail',items)">
@@ -56,7 +57,8 @@
         </template>
       </div>
       <bottom-line v-if="bottom_show"></bottom-line>
-    </div>
+    </mt-loadmore>
+  </div>
 </template>
 
 <script>
@@ -180,6 +182,10 @@
               }
             }
           }
+        },
+        // 下拉刷新
+        loadTop() {
+          this.reload();
         },
         // 请求微信支付参数
         payBtn(items) {
