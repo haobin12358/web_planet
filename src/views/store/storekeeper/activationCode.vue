@@ -11,11 +11,12 @@
           </div>
           <div class="m-IDCard-row">
             <div class="m-row-title">银行卡号</div>
-            <input type="text" class="m-row-input m-width-450" v-model="bankNo" maxlength="18" placeholder="请填写银行卡号">
+            <input type="text" class="m-row-input m-width-450" v-model="bankNo" maxlength="20" placeholder="请填写银行卡号">
           </div>
           <div class="m-IDCard-row">
             <div class="m-row-title">开户行</div>
-            <input type="text" class="m-row-input m-width-450" v-model="bank" maxlength="18" placeholder="请选择银行">
+            <!--<input type="text" class="m-row-input m-width-450" v-model="bank" maxlength="18" placeholder="请选择银行">-->
+            <div @click="getBankName">{{bank}}</div>
           </div>
           <div class="m-IDCard-row">
             <div class="m-row-title">打款凭证</div>
@@ -108,13 +109,15 @@
       return {
         submitPopup: false,
         auditPopup: false,
-        rulePopup: true,
+        rulePopup: false,
         name: "",
         bankNo: "",
-        bank: "",
+        bank: "请选择银行",
         agree: false,
         umfrontTemp: "",                      // 暂存正面
         umbackTemp: "",                       // 暂存反面
+        umfront: "",                      // 图片1
+        umback: "",                       // 图片2
       }
     },
     methods: {
@@ -127,6 +130,7 @@
       },
       //上传正面图片
       uploadFrontImg(e){
+        console.log(1);
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
@@ -136,7 +140,7 @@
         form.append("file", files[0]);
         axios.post(api.upload_file + '?type=avatar&token=' + localStorage.getItem('token'), form).then(res => {
           if(res.data.status == 200) {
-            this.user.umfront = res.data.data;
+            this.umfront = res.data.data;
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.umfrontTemp = this.result;
@@ -155,10 +159,26 @@
         form.append("file", files[0]);
         axios.post(api.upload_file + '?type=avatar&token=' + localStorage.getItem('token'), form).then(res => {
           if(res.data.status == 200) {
-            this.user.umback = res.data.data;
+            this.umback = res.data.data;
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.umbackTemp = this.result;
+            }
+          }
+        })
+      },
+      // 获取银行名称
+      getBankName() {
+        if(this.bankNo.length < 16) {
+          Toast('请先输入正确的银行卡号');
+          return false;
+        }
+        axios.get(api.get_bankname + "?cncardno=" + this.bankNo).then(res => {
+          if(res.data.status == 200) {
+            if(!res.data.data.validated) {
+              Toast('该银行卡已失效');
+            }else {
+              this.bank = res.data.data.cnbankname;
             }
           }
         })
@@ -182,6 +202,10 @@
       },
       // 提交认证按钮
       submitUser() {
+        if(!this.agree){
+          // Toast("请阅读并勾选同意购买激活码的规则");
+          return false;
+        }
         if(!this.name){
           Toast("请填写姓名");
           return false;
@@ -190,22 +214,24 @@
           Toast("请填写银行卡号");
           return false;
         }
-        if(!this.bank){
+        if(!this.bank || this.bank == '请选择银行'){
           Toast("请选择银行");
           return false;
         }
-        if(!this.agree){
-          Toast("请阅读并勾选同意购买激活码的规则");
-          return false;
-        }
-        axios.post(api.upgrade_agent + "?token=" + localStorage.getItem('token'), params).then(res => {
+        let params = {
+
+        };
+        console.log(this.name, this.bankNo, this.bank);
+        console.log(this.umfront);
+        console.log(this.umback);
+        /*axios.post(api.upgrade_agent + "?token=" + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
             Toast(res.data.message);
             // 申请提交成功则返回上一页
             this.$router.go(-1);
             this.submitPopup = true;
           }
-        });
+        });*/
       }
     },
     mounted() {
@@ -269,6 +295,7 @@
           }
         }
         .m-IDCard-img {
+          position: relative;
           text-align: left;
           width: 377px;
           height: 247px;
