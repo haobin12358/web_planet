@@ -420,8 +420,8 @@
                 sessionStorage.setItem('use', 'used');
                 if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
                   // 是从商家大礼包来结算的则弹出popup
-                  if(this.fromGift) {
-                    this.giftPopup = true;
+                  if(that.fromGift) {
+                    that.giftPopup = true;
                   }else {     // 去待发货页
                     that.$router.push("/orderList?which=2");
                   }

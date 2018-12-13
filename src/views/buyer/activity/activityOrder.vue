@@ -212,7 +212,7 @@
               function(res){
                 // console.log(res);
                 if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
-                  that.$router.push({ path: '/orderDetail', query: { omid: omid, from:'activityProduct' }});
+                  that.$router.push({ path: '/orderDetail', query: { omid: omid, from: 'activityProduct' }});
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
                   Toast('支付已取消');
                 }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
