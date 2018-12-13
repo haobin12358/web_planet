@@ -17,7 +17,8 @@
       <span class="m-no-img"></span>
       <div class="m-no-text m-ft-26 m-ft-b">暂无竞猜记录</div>
     </div>
-    <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList" :class="item.result == 'correct' ? 'active' : ''">
+    <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList"
+         :class="item.result == 'correct' ? 'active' : ''" @click="changeRoute('/dailyGuess', item)">
       <div class="m-record-item">
         <img class="m-product-img" :src="item.product.prmainpic" alt="">
         <div class="m-text-box">
@@ -25,7 +26,10 @@
           <div class="m-text-row" :class="item.result == 'correct' ? 'm-red' : ''">我的答案：{{item.gnnum}}</div>
           <div class="m-text-row" v-if="item.correct_num" :class="item.result == 'correct' ? 'm-red' : ''">正确答案：{{item.correct_num.cnnum}}</div>
         </div>
-        <div class="m-date-text">{{item.gndate}}</div>
+        <div class="m-date-text">
+          <p v-if="item.result == 'correct'">点击去购买</p>
+          <p>{{item.gndate}}</p>
+        </div>
       </div>
     </div>
     <!--时间选择popup-->
@@ -47,7 +51,7 @@
   export default {
     data() {
       return {
-        datePopup: false,                 // 时间选择popup
+        datePopup: false,         // 时间选择popup
         slots: [
           {
             flex: 1,
@@ -73,6 +77,13 @@
     },
     components: {},
     methods: {
+      // 跳转其他页面的方法
+      changeRoute(v, item) {
+        if(item.result == 'correct') {
+          localStorage.removeItem('tipDate');
+          this.$router.push(v);
+        }
+      },
       // 时间popup确认按钮
       dateDone() {
         this.datePopup = false;

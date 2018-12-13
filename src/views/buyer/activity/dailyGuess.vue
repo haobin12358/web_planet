@@ -60,7 +60,10 @@
         <img class="m-guess-icon" src="/static/images/activity/guess-success.png" alt="">
         <div class="m-success-text m-ft-30 m-ft-b">恭喜您竞猜正确！</div>
         <div class="m-success-text margin m-ft-24">以￥{{record.price | money}}的价格购买此商品吧！！</div>
-        <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b" @click="changeRoute('/product/detail')">去购买</div>
+        <div class="m-btn-box">
+          <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b" @click="chooseAddress">选择地址</div>
+          <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b" @click="successDone()">去购买</div>
+        </div>
       </div>
     </mt-popup>
     <!--竞猜失败-->
@@ -93,7 +96,8 @@
         hour: false,           // 当前的小时是否在竞猜时间内
         rule: { acdesc: [] },
         today: '',
-        record: { price: '' }
+        record: { price: '' },
+        uaid: ''
       }
     },
     components: {},
@@ -103,9 +107,67 @@
         this.failPopup = false;
         localStorage.setItem('tipDate', this.today);
       },
-      changeRoute(v) {
-        this.$router.push({ path: v, query: { prid: this.record.product.prid }});
+      // 选择地址
+      chooseAddress() {
+        this.$router.push({ path: '/personal/addressManagement', query: { from: 'choose' }});
+      },
+      // 昨日中奖的去购买
+      successDone() {
+        if(!this.uaid) {
+          Toast({ message: '请先选择地址', position: 'bottom' });
+          return false;
+        }
+        let params = {
+          gnid: this.record.gnid,
+          skuid: this.record.skuid,
+          omclient: 0,
+          uaid: this.uaid,
+          opaytype: 0
+        };
+        axios.post(api.recv_award + '?token='+ localStorage.getItem('token'), params).then(res => {
+          if(res.data.status == 200) {
+            this.successPopup = false;
+            this.wxPay(res.data.data.args);
+          }
+        });
         localStorage.setItem('tipDate', this.today);
+      },
+      // 调起微信支付
+      wxPay(data) {
+        let that = this;
+        function onBridgeReady() {      // 微信支付接口
+          WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+              "appId": data.appId,                 // 公众号名称，由商户传入
+              "timeStamp": data.timeStamp,         // 时间戳，自1970年以来的秒数
+              "nonceStr": data.nonceStr,           // 随机串
+              "package": data.package,             // 统一下单接口返回的prepay_id参数值
+              "signType": data.signType,           // 微信签名方式
+              "paySign": data.sign                 // 微信签名
+            },
+            function(res){
+              // console.log(res);
+              // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
+              if(res.err_msg == "get_brand_wcpay_request:ok"){             // 支付成功
+                localStorage.setItem('tipDate', this.today);
+                this.$router.push('/activityOrder');
+              }else if(res.err_msg == "get_brand_wcpay_request:cancel"){   // 支付过程中用户取消
+                Toast('支付已取消');
+              }else if(res.err_msg == "get_brand_wcpay_request:fail"){     // 支付失败
+                Toast('支付失败');
+              }
+            });
+        }
+        if (typeof WeixinJSBridge == "undefined"){
+          if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+          }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+          }
+        }else{
+          onBridgeReady();
+        }
       },
       // 数字面板的点击事件
       numClick(v) {
@@ -210,6 +272,8 @@
     mounted() {
       common.changeTitle('每日竞猜');
       this.today = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString();
+      this.uaid = localStorage.getItem('uaid');
+      localStorage.removeItem('uaid');
       this.timeOut();                    // 闪动光标 - 倒计时
       this.getGuess();                   // 获取今日参与记录
       this.getGuess(this.today);         // 获取昨日参与记录
@@ -531,8 +595,14 @@
             margin-top: 46px;
           }
         }
+        .m-btn-box {
+          margin: 100px 50px 0 50px;
+          width: 600px;
+          display: flex;
+          justify-content: space-between;
+        }
         .m-success-btn {
-          margin: 100px 0 0 225px;
+          /*margin: 100px 0 0 65px;*/
         }
       }
       .m-guess-fail {
