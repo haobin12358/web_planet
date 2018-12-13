@@ -100,7 +100,7 @@
           </p>
           <div class="m-activity-subtitle">账户余额</div>
           <div class="m-activity-money">
-            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">0.00</span></div>
+            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">{{moneyNum | money}}</span></div>
             <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
           </div>
           <ul class="m-part-icon-ul m-use">
@@ -119,32 +119,33 @@
         <div class="m-out-popup-box">
           <mt-popup class="m-out-popup" v-model="outPopup">
             <div class="m-out-box" v-if="!outSubmit">
+              <div class="m-popup-close m-ft-26" @click="outPopup = false">X</div>
               <div class="m-out-title m-ft-30">提现金额</div>
               <div class="m-out-num-box">
                 <div class="m-out-RMB">￥</div>
-                <input type="text" v-model="moneyNum" class="m-out-num-input">
+                <input class="m-out-num-input" type="text" v-model="moneyNum">
                 <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0.00'">
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">姓名</div>
                 <div class="m-row-right">
-                  <input type="text" class="m-row-input m-width-200">
+                  <input type="text" v-model="realName" class="m-row-input m-width-200">
                 </div>
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">银行卡号</div>
                 <div class="m-row-right">
-                  <input type="text" class="m-row-input m-width-320">
+                  <input type="text" v-model="bankNo" class="m-row-input m-width-320">
                 </div>
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">银行</div>
-                <div class="m-row-right" @click="bankPopup = true">{{bank}}</div>
+                <div class="m-row-right" @click="getBankName">{{bank}}</div>
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">开户行</div>
                 <div class="m-row-right">
-                  <input type="text" class="m-row-input m-width-320">
+                  <input type="text" v-model="bankName" class="m-row-input m-width-320">
                 </div>
               </div>
               <div class="m-out-btn" @click="outBtn('submit')">提 交</div>
@@ -191,8 +192,11 @@
         outSubmit: false,
         bankPopup: false,
         moneyNum: "0.00",
-        slots: [{ values: ['中国银行', '中国工商银行', '交通银行', '中国建设银行'] }],
-        bank: ""
+        slots: [{ values: ['请点击选择银行'] }],
+        realName: "",
+        bankName: "",
+        bank: "",
+        bankNo: ""
       }
     },
     components: {},
@@ -205,12 +209,83 @@
           this.$router.push(v);
         }
       },
+      getBankName() {
+        if(this.bankNo.length < 16) {
+          Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
+          return false;
+        }
+        this.bankPopup = true;
+        axios.get(api.get_bankname + "?cncardno=" + this.bankNo).then(res => {
+          if(res.data.status == 200) {
+            if(!res.data.data.validated) {
+              Toast('该银行卡已失效');
+            }else {
+              this.slots[0].values = ['请点击选择银行', res.data.data.cnbankname];
+            }
+            this.validated = res.data.data.validated;
+          }
+        })
+      },
       // 提现的提交按钮
       outBtn(where) {
         if(where == "submit") {
-          this.outSubmit = true;
+          if(this.moneyNum > this.user.usbalance) {
+            Toast({ message: '提现金额应不大于可用余额', position: 'bottom' });
+            return false;
+          }
+          if(!this.realName) {
+            Toast({ message: '请先输入姓名', position: 'bottom' });
+            return false;
+          }
+          if(this.bankNo.length < 16) {
+            Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
+            return false;
+          }
+          if(this.bank == '请点击选择银行' || !this.bank) {
+            Toast({ message: '请先选择银行', position: 'bottom' });
+            return false;
+          }
+          if(!this.bankName) {
+            Toast({ message: '请先输入开户行', position: 'bottom' });
+            return false;
+          }
+          if(!this.validated) {
+            Toast({ message: '该银行卡已失效', position: 'bottom' });
+            return false;
+          }
+          let params = {
+            cncashnum: this.moneyNum,
+            cncardno: this.bankNo,
+            cncardname: this.realName,
+            cnbankname: this.bank,
+            cnbankdetail: this.bankName
+          };
+          axios.post(api.apply_cash + '?token='+ localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200) {
+              this.msg = res.data.message;
+              this.outSubmit = true;
+
+              this.realName = '';
+              this.bankNo = '';
+              this.bank = '';
+              this.bankName = '';
+              this.slots[0].values = ['请点击选择银行'];
+            }
+          });
         }else if(where == "know") {
+          this.getUser();           // 获取用户信息
           this.outPopup = false;
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if (count > 0 && count <= TIME_COUNT) {
+              count --;
+            } else {
+              this.outSubmit = false;
+              clearInterval(time);
+            }
+          }, 1000);
         }
       },
       // 提现的选择银行确定按钮
@@ -226,6 +301,7 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
+            this.moneyNum = this.user.usbalance;
             this.getOrderCount();       // 获取订单数量
           }
         })
