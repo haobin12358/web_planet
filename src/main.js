@@ -101,7 +101,16 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       // window.location.href = window.location.origin + '/#/login';
       // let href = window.location.href.split('#/')[1];
       Toast(data.data.message);
-    }else {
+    }
+    // 店主版块显示无权限 - 刷新token
+    else if(data.data.status_code == 405003 && data.data.message == '无权限') {
+      axios.get(api.auth_fresh + '?token=' + localStorage.getItem('token')).then(res => {
+        if(res.data.status == 200){
+          localStorage.setItem('token', res.data.data);
+        }
+      })
+    }
+    else {
       Toast(data.data.message);
     }
   }
