@@ -4,11 +4,12 @@
       <!--<mt-cell-swipe v-for="item in codeList" :key="item.uacid"
                      :right="rightButtons" :title="item.uaccode">
       </mt-cell-swipe>-->
-      <div class="m-code-item" v-for="(item, index) in codeList">
+      <div class="m-code-item" v-if="codeList.length > 0" v-for="(item, index) in codeList">
         <div class="m-code-text">激活码：{{item.uaccode}}</div>
         <div class="m-code-status">{{item.uacstatus_zh}}</div>
         <div class="m-code-copy-btn" :class="item.uacstatus == 10 ? 'un-active' : ''" @click="copyText(index)">复制</div>
       </div>
+      <p class="m-no-data" v-if="codeList.length == 0">暂无数据</p>
     </div>
   </div>
 </template>
@@ -100,6 +101,10 @@
             background-color: #CCCCCC;
           }
         }
+      }
+      .m-no-data {
+        margin-top: 100px;
+        font-size: 28px;
       }
     }
   }
