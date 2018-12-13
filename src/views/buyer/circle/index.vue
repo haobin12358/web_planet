@@ -239,13 +239,9 @@
       },
       //滚动加载更多
       touchMove(e){
-        // ClientHeight
         let scrollTop = common.getScrollTop();
         let scrollHeight = common.getScrollHeight();
         let ClientHeight = common.getClientHeight();
-        // console.log(scrollTop);
-        console.log(scrollHeight);
-        console.log(ClientHeight);
         if (scrollTop + ClientHeight  >= scrollHeight -10) {
           if(this.isScroll){
             this.isScroll = false;
