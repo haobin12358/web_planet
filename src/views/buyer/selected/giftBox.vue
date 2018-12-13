@@ -1,6 +1,6 @@
 <template>
   <div class="m-gift-box">
-    <product :list="giftList"></product>
+    <product :list="giftList" :gift="true"></product>
   </div>
 </template>
 

@@ -83,13 +83,31 @@
               ￥{{total_money | money}}
             </div>
           </li>
-          <li class="m-flex-between">
+          <li class="m-flex-between" v-if="!fromGift">
             <span>付款方式</span>
             <div>
               <span>微信</span>
             </div>
           </li>
+          <li class="m-flex-between" v-else>
+            <span>付款方式</span>
+            <div>
+              <span @click="payPopup = true">{{payType.name}}</span>
+            </div>
+          </li>
+          <li class="m-flex-between" v-if="payType.opaytype == 20">
+            <span>激活码</span>
+            <input class="m-code-input" v-model="code" type="text" placeholder="请填写激活码">
+          </li>
         </ul>
+        <!--付款方式picker-->
+        <mt-popup class="m-pay-popup" v-model="payPopup" position="bottom">
+          <div class="m-popup-btn">
+            <div @click="payPopup = false">取消</div>
+            <div @click="payDone">确认</div>
+          </div>
+          <mt-picker :slots="paySlots" valueKey="name" @change="payChange"></mt-picker>
+        </mt-popup>
       </div>
       <!--商家大礼包支付成功的popup-->
       <mt-popup class="m-gift-popup" v-model="giftPopup" pop-transition="popup-fade">
@@ -102,7 +120,7 @@
       <div class="m-order-btn">
         <!--试用商品、新人商品-->
         <span v-if="from == 'new' || from == 'try'" @click="submitOrderActivity">提交订单</span>
-        <!--购物车或直接下单-->
+        <!--开店大礼包、购物车或直接下单-->
         <span v-else @click="submitOrder">提交订单</span>
       </div>
 
@@ -111,9 +129,7 @@
           <coupon :couponList="couponList" :order="true" @couponClick="couponClick"></coupon>
         </div>
       </mt-popup>
-
     </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -145,7 +161,12 @@
           couponList: [],           // 优惠券list
           fromGift: false,          // 是否是商家大礼包的结算页面
           giftPopup: false,         // 商家大礼包支付后的popup
-          from: ""                  // undefined是立即购买，0是从购物车结算，activityProduct是试用商品
+          from: "",                 // undefined是立即购买，0是从购物车结算，activityProduct是试用商品
+          payPopup: false,                   // 支付方式picker
+          paySlots: [{ values: [{ name: "微信", opaytype: 0 }, { name: "激活码", opaytype: 20 }]}],
+          pay: "",                           // 暂存支付方式
+          payType: { name: '微信' },          // 支付方式
+          code: ''                            // 激活码
         }
       },
       components: { coupon },
@@ -187,6 +208,18 @@
         this.getOneAddress();
       },
       methods: {
+        // 付款方式picker的确认按钮
+        payDone() {
+          this.payPopup = false;
+          this.payType = this.pay;
+          if(this.payType.opaytype == 20) {
+
+          }
+        },
+        // picker选择的付款方式
+        payChange(picker, values) {
+          this.pay = values[0];
+        },
         // 跳转其他页面的方法
         changeRoute(v, where) {
           if(where) {
@@ -303,16 +336,23 @@
             Toast("请先选择收货地址");
             return false;
           }
-          // 是从商家大礼包来结算的则弹出popup
-          if(this.fromGift) {
-            this.giftPopup = true;
-          }
           let params = {
             omclient: 0,
             uaid: this.uaid,
-            opaytype: 0,
             info: []
           };
+          if(this.payType.opaytype) {
+            params.opaytype = this.payType.opaytype;
+            if(this.payType.opaytype ==20) {
+              if(!this.code) {
+                Toast('请填写激活码或更换付款方式');
+                return false;
+              }
+              params.activation_code = this.code;
+            }
+          }else {
+            params.opaytype = 0;
+          }
           if(this.$route.query.from === undefined) {
             params.omfrom = 10;
           }else {
@@ -360,7 +400,12 @@
                 // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
                 sessionStorage.setItem('use', 'used');
                 if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
-                  that.$router.push("/orderList?which=2");
+                  // 是从商家大礼包来结算的则弹出popup
+                  if(this.fromGift) {
+                    this.giftPopup = true;
+                  }else {     // 去待发货页
+                    that.$router.push("/orderList?which=2");
+                  }
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
                   Toast('支付已取消');
                   that.$router.push("/orderList?which=1");
@@ -494,6 +539,22 @@
         &:last-child{
           border-bottom: none;
         }
+        .m-code-input {
+          text-align: right;
+          border: 2px #EEEEEE solid !important;
+          border-radius: 10px;
+          padding: 0 30px;
+          line-height: 50px;
+        }
+      }
+    }
+    .m-pay-popup {
+      width: 750px;
+      .m-popup-btn {
+        display: flex;
+        justify-content: space-between;
+        font-size: 28px;
+        padding: 20px 40px 0 40px;
       }
     }
     .m-message{

@@ -21,7 +21,6 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
 
   export default {
     data() {
@@ -48,30 +47,6 @@
         let arr = [];
         arr.push(product);
         this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), gift: true }});
-
-        /*// 将商家大礼包加入到购物车
-        let params = { skuid: this.gift.skus[0].skuid, canums: 1 };
-        axios.post(api.cart_create + '?token=' + localStorage.getItem('token'), params).then(res => {
-          if(res.data.status == 200){
-            // 获取最新的购物车，拿到商家大礼包的信息
-            let params = { token: localStorage.getItem('token'), page_size: 1, page_num: 1 };
-            axios.get(api.cart_list, { params: params}).then(res => {
-              if(res.data.status == 200){
-                res.data.data[0].cart.splice(1, (res.data.data[0].cart.length - 1));
-                let caid = res.data.data;
-                // 将购物车中商家大礼包的数量改为 1
-                caid[0].cart[0].canums = 1;
-                let params = { caid: caid[0].cart[0].caid, skuid: caid[0].cart[0].sku.skuid, canums: 1 };
-                axios.post(api.cart_update +'?token=' + localStorage.getItem('token'), params).then(res => {
-                  if(res.data.status == 200){
-                    // 去创建订单页
-                    this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(caid), gift: true }});
-                  }
-                });
-              }
-            });
-          }
-        });*/
       },
     },
     mounted() {
@@ -112,6 +87,7 @@
       }
     }
     .m-gift-btn {
+      color: #ffffff;
       width: 150px;
       font-size: 30px;
       letter-spacing: 3px;
