@@ -21,7 +21,7 @@
         <span class="m-icon-order-status m-send"></span>
       </div>
       <div class="m-order-one-part">
-        <div class="m-user-text" v-if="logistic_info" @click="changeRoute('/logisticsInformation')">
+        <div class="m-user-text" v-if="logistic_info && order_info.omlogistictype != 10" @click="changeRoute('/logisticsInformation')">
           <span class="m-icon-wuliu m-done"></span>
           <div class="m-flex-between">
             <div>
@@ -77,7 +77,7 @@
           </div>
           <p class="m-flex-between m-ft-22">
             <span>运费</span>
-            <span>￥0.00</span>
+            <span>￥{{order_info.omfreight | money}}</span>
           </p>
           <p class="m-flex-between m-ft-22">
             <span>实付款（含运费）</span>
@@ -143,7 +143,7 @@
   export default {
     data() {
       return {
-        order_info: { omtruemount: '' },
+        order_info: { omtruemount: '', omfreight: '' },
         logistic_info: null,
         from: "",
         refund: null,
@@ -165,7 +165,11 @@
               this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
             case '/product/detail':
-              this.$router.push({ path: v, query: { prid: item.prid }});
+              if(this.order_info.omlogistictype == 10) {
+                this.$router.push({ path: '/gift', query: { prid: item.prid }});
+              }else {
+                this.$router.push({ path: v, query: { prid: item.prid }});
+              }
               break;
             case '/selectBack':
               if(item != 'order') {
@@ -332,6 +336,9 @@
       width: 100%;
       height: 220px;
       background-color: @mainColor;
+      span {
+        color: #ffffff;
+      }
       .m-icon-order-status{
         display: block;
         width: 288px;
