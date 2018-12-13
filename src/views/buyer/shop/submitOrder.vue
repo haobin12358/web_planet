@@ -54,7 +54,7 @@
             <span>配送方式</span>
             <div @click="changeModel('show_picker',true)">
               <span v-if="items.prfreight > 0">快递：￥{{items.prfreight | money}}元</span>
-              <span v-else>快递:包邮</span>
+              <span v-else>快递：包邮</span>
               <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
