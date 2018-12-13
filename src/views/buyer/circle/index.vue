@@ -2,16 +2,16 @@
   <div class="m-circle" @touchmove="touchMove">
     <!--<div class="m-circle" @touchmove.stop="touchMove">-->
     <!--搜索-->
-    <div class="m-selected-search">
-      <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
-        <span class="m-icon-search"></span>
-        <span>搜索圈子关键词</span>
+    <mt-loadmore :top-method="loadTop">
+      <div class="m-selected-search">
+        <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
+          <span class="m-icon-search"></span>
+          <span>搜索圈子关键词</span>
+        </div>
+        <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
       </div>
-      <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
-    </div>
-    <div class="m-circle-content">
-      <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
-      <mt-loadmore :top-method="loadTop">
+      <div class="m-circle-content">
+        <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
         <div class="m-circle-body">
           <template v-for="(items,index) in news_list">
             <div class="m-video-one" @click="changeRoute('/circle/detail',items)">
@@ -57,8 +57,8 @@
           </template>
           <bottom-line v-if="bottom_show"></bottom-line>
         </div>
-      </mt-loadmore>
-    </div>
+      </div>
+    </mt-loadmore>
   </div>
 </template>
 
@@ -110,7 +110,20 @@
     mounted() {
       common.changeTitle('圈子');
       this.getNav();
-      this.getNews();
+    },
+    watch: {
+      $route(oldValue, newValue) {
+        // console.log(oldValue.path);
+        // console.log(newValue.path);
+      }
+    },
+    beforeDestroy() {
+      if(this.$route.path == '/circle/detail') {
+        localStorage.setItem('circleDetail', 1);
+      }else {
+        localStorage.setItem('circleDetail', 0);
+        localStorage.removeItem('circleIndex');
+      }
     },
     methods: {
       /*跳转路由*/
@@ -133,6 +146,7 @@
       },
       /*导航切换*/
       navClick(index){
+        localStorage.setItem('circleIndex', index);
         let arr = [].concat(this.nav_list);
         for(let i=0;i<arr.length;i++){
           arr[i].active = false;
@@ -159,10 +173,16 @@
               for(let i=0;i<arr.length;i++){
                 arr[i].active = false;
               }
-              arr[0].active = true;
+              arr[localStorage.getItem('circleIndex')].active = true;
               this.nav_list = [].concat(arr);
             }
-            this.select_nav = this.nav_list[0];
+            this.select_nav = this.nav_list[localStorage.getItem('circleIndex')];
+
+            if(localStorage.getItem('circleDetail') == 1) {
+              this.navClick(localStorage.getItem('circleIndex'));
+            }else {
+              this.navClick(0);
+            }
           }
         })
       },
@@ -216,9 +236,13 @@
       },
       //滚动加载更多
       touchMove(e){
+        // ClientHeight
         let scrollTop = common.getScrollTop();
         let scrollHeight = common.getScrollHeight();
         let ClientHeight = common.getClientHeight();
+        // console.log(scrollTop);
+        // console.log(scrollHeight);
+        // console.log(ClientHeight);
         if (scrollTop + ClientHeight  >= scrollHeight -10) {
           if(this.isScroll){
             this.isScroll = false;

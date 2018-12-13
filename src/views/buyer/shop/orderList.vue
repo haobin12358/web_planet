@@ -89,11 +89,6 @@
         this.getOrderNum();               // 获取各状态的订单数量
       },
       beforeDestroy() {
-        for(let i = 0; i < this.nav_list.length; i ++) {
-          if(this.nav_list[i].active) {
-            localStorage.setItem('orderList', i);
-          }
-        }
         if(this.$route.path == '/orderDetail') {
           localStorage.setItem('orderListDetail', 1);
         }else {
@@ -125,6 +120,7 @@
         },
         // 导航点击
         navClick(index) {
+          localStorage.setItem('orderList', index);
           this.page_info.page_num = 1;
           this.total_count = 0;
           this.bottom_show = false;
