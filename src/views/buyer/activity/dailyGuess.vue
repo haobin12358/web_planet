@@ -149,13 +149,13 @@
               // console.log(res);
               // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
               if(res.err_msg == "get_brand_wcpay_request:ok"){             // 支付成功
-                localStorage.setItem('tipDate', this.today);
+                localStorage.setItem('tipDate', that.today);
               }else if(res.err_msg == "get_brand_wcpay_request:cancel"){   // 支付过程中用户取消
                 Toast('支付已取消');
               }else if(res.err_msg == "get_brand_wcpay_request:fail"){     // 支付失败
                 Toast('支付失败');
               }
-              this.$router.push('/activityOrder');
+              that.$router.push('/activityOrder');
             });
         }
         if (typeof WeixinJSBridge == "undefined"){
