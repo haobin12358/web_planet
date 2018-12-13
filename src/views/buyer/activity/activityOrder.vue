@@ -40,7 +40,7 @@
                     </p>
                   </div>
                 </div>
-                <p class="m-end-time">押金返还时间：{{items.deposit_expires}}</p>
+                <p class="m-end-time" v-if="items.deposit_expires">押金返还时间：{{items.deposit_expires}}</p>
               </template>
               <ul class="m-order-btn-ul">
                 <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
