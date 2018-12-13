@@ -18,7 +18,7 @@
       <div class="m-no-text m-ft-26 m-ft-b">暂无竞猜记录</div>
     </div>
     <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList"
-         :class="item.result == 'correct' ? 'active' : ''" @click="changeRoute('/dailyGuess', item)">
+         :class="item.result == 'correct' ? 'active' : ''" @click="changeRoute('/activityOrder', item)">
       <div class="m-record-item">
         <img class="m-product-img" :src="item.product.prmainpic" alt="">
         <div class="m-text-box">
@@ -27,7 +27,7 @@
           <div class="m-text-row" v-if="item.correct_num" :class="item.result == 'correct' ? 'm-red' : ''">正确答案：{{item.correct_num.cnnum}}</div>
         </div>
         <div class="m-date-text">
-          <p v-if="item.result == 'correct'">点击去购买</p>
+          <p v-if="item.result == 'correct'" @click.stop="changeRoute('/dailyGuess')">点击去购买</p>
           <p>{{item.gndate}}</p>
         </div>
       </div>
@@ -79,10 +79,10 @@
     methods: {
       // 跳转其他页面的方法
       changeRoute(v, item) {
-        if(item.result == 'correct') {
+        if(!item) {
           localStorage.removeItem('tipDate');
-          this.$router.push(v);
         }
+        this.$router.push(v);
       },
       // 时间popup确认按钮
       dateDone() {
