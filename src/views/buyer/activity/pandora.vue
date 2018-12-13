@@ -1,10 +1,11 @@
 <template>
   <div class="m-pandora">
     <div class="m-box-product">
-      <div class="m-box-tip m-ft-28 m-ft-b">您的好友为您打开了魔力盒子！</div>
-      <div class="m-gift-one animated bounceInLeft" @click="pandora"></div>
-      <div class="m-gift-two animated bounceInDown" @click="pandora"></div>
-      <div class="m-gift-three animated bounceInUp" @click="pandora"></div>
+      <div class="m-box-tip m-ft-28 m-ft-b" v-if="history">您的好友为您打开了魔法礼盒！</div>
+      <div class="m-box-tip m-ft-28 m-ft-b" v-else>分享给好友帮您打开魔法礼盒！</div>
+      <div class="m-gift-one animated bounceInLeft" @click="pandora(1)"></div>
+      <div class="m-gift-two animated bounceInDown" @click="pandora(2)"></div>
+      <div class="m-gift-three animated bounceInUp" @click="pandora(3)"></div>
       <div class="m-cloud-one"></div>
       <div class="m-cloud-two"></div>
       <div class="m-cloud-three"></div>
@@ -14,7 +15,9 @@
     <div class="m-product-detail">
       <div class="m-buy-product" v-if="box.infos.current_price">
         <div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{box.infos.current_price | money}}</div>
-        <div class="m-box-btn m-ft-38 m-ft-b">点击购买</div>
+      <!--<div class="m-buy-product">-->
+        <!--<div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{2325 | money}}</div>-->
+        <div class="m-box-btn m-ft-38 m-ft-b" @click="buyNow">点击购买</div>
       </div>
       <div class="m-product-name m-ft-38 m-ft-b tl">{{box.acname}}</div>
       <div class="m-product-price">
@@ -47,8 +50,11 @@
     <!--点击魔盒的popup-->
     <mt-popup class="m-box-popup" v-model="boxPopup" pop-transition="popup-fade">
       <div class="m-gift-icon"></div>
-      <div class="m-popup-text m-ft-30 m-ft-b">您为您的好友减少了<span class="m-red">5元</span>购买金额！</div>
-      <div class="m-popup-btn m-ft-30 m-ft-b">告诉好友</div>
+      <div class="m-popup-title m-ft-30 m-ft-b">当前价格：<span class="m-red">{{price.final_price | money}}元</span></div>
+      <div class="m-popup-text m-ft-30 m-ft-b">您为您的好友{{change}}了
+        <span class="m-red m-ft-44"> {{price.final_reduce_now | money}}元 </span>购买金额！
+      </div>
+      <!--<div class="m-popup-btn m-ft-30 m-ft-b">告诉好友</div>-->
     </mt-popup>
   </div>
 </template>
@@ -58,6 +64,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import wxapi from '../../../common/js/mixins';
+  import { Toast } from 'mint-ui';
 
   export default {
     data() {
@@ -69,13 +76,39 @@
         history: [],
         mbaid: '',
         show_invite: false,
+        price: { final_reduce_now: '', final_price: '' },
+        change: '',
+        uaid: ''
       }
     },
     mixins: [wxapi],
     methods: {
       // 点击魔盒
-      pandora() {
-        this.boxPopup = true;
+      pandora(level) {
+        if(!this.$route.query.mbjid) {
+          Toast('仅可打开好友分享的魔盒');
+          return false;
+        }
+        let params = {
+          level: level,
+          mbjid: this.$route.query.mbjid
+        };
+        // 参与魔盒活动(获取分享所需的url参数)
+        axios.post(api.open_magicbox + '?token='+ localStorage.getItem('token'), params).then(res => {
+          if(res.data.status == 200) {
+            res.data.data.final_reduce_now = res.data.data.final_reduce;
+            if(res.data.data.final_reduce > 0) {
+              this.change = '增加';
+            }else if(res.data.data.final_reduce < 0) {
+              this.change = '减少';
+              res.data.data.final_reduce_now = 0 - res.data.data.final_reduce;
+            }else if(res.data.data.final_reduce == 0) {
+              this.change = '变化';
+            }
+            this.price = res.data.data;
+            this.boxPopup = true;
+          }
+        });
       },
       // 分享
       wxRegCallback () {
@@ -106,7 +139,7 @@
       },
       // 获取该活动
       getBox() {
-        axios.get(api.get_activity + "?actype=2").then(res => {
+        axios.get(api.get_activity + "?actype=2&token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.box = res.data.data;
             this.history = res.data.data.open_history;
@@ -128,11 +161,71 @@
             }
           }
         });
+      },
+      // 点击购买
+      buyNow() {
+        if(!this.uaid) {
+          this.$router.push({ path: '/personal/addressManagement', query: { from: 'choose' }});
+        }else {
+          let params = {
+            mbaid: this.box.infos.mbaid,
+            uaid: this.uaid,
+            omclient: 0,
+            opaytype: 0
+          };
+          axios.post(api.magicbox_recv_award + '?token='+ localStorage.getItem('token'), params).then(res => {
+            if(res.data.status == 200) {
+              this.wxPay(res.data.data.args);
+            }
+          });
+        }
+      },
+      // 调起微信支付
+      wxPay(data) {
+        let that = this;
+        function onBridgeReady() {      // 微信支付接口
+          WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+              "appId": data.appId,                 // 公众号名称，由商户传入
+              "timeStamp": data.timeStamp,         // 时间戳，自1970年以来的秒数
+              "nonceStr": data.nonceStr,           // 随机串
+              "package": data.package,             // 统一下单接口返回的prepay_id参数值
+              "signType": data.signType,           // 微信签名方式
+              "paySign": data.sign                 // 微信签名
+            },
+            function(res){
+              // console.log(res);
+              // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
+              if(res.err_msg == "get_brand_wcpay_request:ok"){             // 支付成功
+                // this.$router.push('/activityOrder');
+              }else if(res.err_msg == "get_brand_wcpay_request:cancel"){   // 支付过程中用户取消
+                Toast('支付已取消');
+              }else if(res.err_msg == "get_brand_wcpay_request:fail"){     // 支付失败
+                Toast('支付失败');
+              }
+              this.$router.push('/activityOrder');
+            });
+        }
+        if (typeof WeixinJSBridge == "undefined"){
+          if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+          }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+          }
+        }else{
+          onBridgeReady();
+        }
       }
     },
     mounted() {
       common.changeTitle('魔法礼盒');
       this.getBox();                 // 获取该活动的规则
+      this.uaid = localStorage.getItem('uaid');
+      if(this.uaid) {
+        localStorage.removeItem('uaid');
+        this.buyNow();      // 点击购买
+      }
       // wxapi.wxRegister(this.wxRegCallback)
     }
   }
@@ -269,20 +362,20 @@
       }
     }
     .m-box-btn {
-      width: 230px;
+      width: 200px;
       height: 51px;
       text-align: center;
       line-height: 55px;
       white-space: nowrap;
       color: #ffffff;
-      padding: 16px 40px;
+      padding: 16px 30px;
       background: linear-gradient(180deg, @subColor 0%, @mainColor 100%);
       box-shadow: 0 5px 10px rgba(0,0,0,0.16);
       border-radius: 50px;
     }
     .m-share-btn {
-      width: 300px;
-      margin: 35px 0 0 145px;
+      width: 240px;
+      margin: 35px 0 0 175px;
     }
     .m-share-rule {
       padding: 33px 40px;
@@ -390,8 +483,11 @@
         top: -90px;
         left: 1px;
       }
+      .m-popup-title {
+        margin-top: 220px;
+      }
       .m-popup-text {
-        margin-top: 230px;
+        margin-top: 20px;
       }
       .m-popup-btn {
         width: 250px;

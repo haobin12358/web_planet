@@ -92,6 +92,8 @@ const api={
   activity_list: title + 'activity/list',                        // 获取正在进行中的活动
   get_activity: title + 'activity/get',                          // 魔盒礼盒与竞猜活动详情 - 规则
   join_magicbox: title + 'magicbox/join',                        // 参与魔盒活动(获取分享所需的url参数)
+  open_magicbox: title + 'magicbox/open',                        // 好友帮拆魔盒
+  magicbox_recv_award: title + 'magicbox/recv_award',            // 领取魔术礼盒奖品
   create_order: title + 'commodity/create_order',                // 试用商品下单
   fresh_man_list: title + 'fresh_man/list',                      // 获取新人首单商品列表
   fresh_man_get: title + 'fresh_man/get',                        // 新人首单商品详情
