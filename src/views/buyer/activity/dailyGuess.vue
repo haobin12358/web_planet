@@ -59,16 +59,16 @@
       <div class="m-guess-success">
         <img class="m-guess-icon" src="/static/images/activity/guess-success.png" alt="">
         <div class="m-success-text m-ft-30 m-ft-b">恭喜您竞猜正确！</div>
-        <div class="m-success-text margin m-ft-24">以该价格购买此商品吧！！</div>
-        <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b">去购买</div>
+        <div class="m-success-text margin m-ft-24">以￥{{record.price | money}}的价格购买此商品吧！！</div>
+        <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b" @click="changeRoute('/product/detail')">去购买</div>
       </div>
     </mt-popup>
     <!--竞猜失败-->
     <mt-popup class="m-guess-popup" v-model="failPopup" pop-transition="popup-fade">
       <div class="m-guess-fail">
         <img class="m-guess-icon" src="/static/images/activity/guess-fail.png" alt="">
-        <div class="m-ft-30 m-ft-b">很遗憾，回答错误，请明天再来吧！</div>
-        <div class="m-guess-btn m-fail-btn m-ft-30 m-ft-b">知道了</div>
+        <div class="m-ft-30 m-ft-b">很遗憾，昨日回答错误，请再接再厉吧！</div>
+        <div class="m-guess-btn m-fail-btn m-ft-30 m-ft-b" @click="failDone">知道了</div>
       </div>
     </mt-popup>
   </div>
@@ -91,11 +91,22 @@
         successPopup: false,   // 猜对啦
         failPopup: false,      // 猜错啦
         hour: false,           // 当前的小时是否在竞猜时间内
-        rule: { acdesc: [] }
+        rule: { acdesc: [] },
+        today: '',
+        record: { price: '' }
       }
     },
     components: {},
     methods: {
+      // 昨日未中奖的知道了
+      failDone() {
+        this.failPopup = false;
+        localStorage.setItem('tipDate', this.today);
+      },
+      changeRoute(v) {
+        this.$router.push({ path: v, query: { prid: this.record.product.prid }});
+        localStorage.setItem('tipDate', this.today);
+      },
       // 数字面板的点击事件
       numClick(v) {
         if(!this.submit) {
@@ -162,16 +173,26 @@
         }
       },
       // 获取今日参与记录
-      getGuess() {
+      getGuess(date) {
         let params = {
           token: localStorage.getItem('token'),
-          date: new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + new Date().getDate().toString()
+          date: '' || date
         };
         axios.get(api.get_guess_num, { params: params }).then(res => {
           if(res.data.status == 200){
             if(res.data.data.gnnum) {
               this.num = res.data.data.gnnum;
               this.submit = true;
+            }
+            if(date && localStorage.getItem('tipDate') != this.today) {
+              this.record = res.data.data;
+              if(res.data.data.result == 'uncorrect') {
+                this.failPopup = true;        // 猜错啦
+              }else if(res.data.data.result == 'correct') {
+                this.successPopup = true;     // 猜对啦
+              }else if(res.data.data.result == 'not_open') {
+                Toast('昨日未开奖');
+              }
             }
           }
         });
@@ -188,8 +209,10 @@
     },
     mounted() {
       common.changeTitle('每日竞猜');
+      this.today = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString();
       this.timeOut();                    // 闪动光标 - 倒计时
       this.getGuess();                   // 获取今日参与记录
+      this.getGuess(this.today);         // 获取昨日参与记录
       this.getTime();                    // 获取当前时间
       this.getRule();                    // 获取该活动的规则
     }
@@ -499,35 +522,36 @@
       border-radius: 30px;
       .m-guess-success {
         width: 700px;
-        height: 600px;
+        height: 602px;
         background: url("/static/images/activity/icon-success-bg.png") no-repeat;
         background-size: 100% 100%;
         .m-success-text {
-          color: @mainColor;
+          color: #FCD316;
           &.margin {
             margin-top: 46px;
           }
         }
         .m-success-btn {
-          margin: 110px 0 0 225px;
+          margin: 100px 0 0 225px;
         }
       }
       .m-guess-fail {
         .m-fail-btn {
-          margin: 180px 0 0 225px;
+          background-color: @mainColor;
+          margin: 160px 0 0 225px;
         }
       }
       .m-guess-icon {
-        width: 85px;
-        height: 85px;
-        margin: 130px 0 30px 0;
+        width: 100px;
+        height: 100px;
+        margin: 110px 0 30px 0;
       }
       .m-guess-btn {
         width: 250px;
         height: 70px;
-        line-height: 80px;
+        line-height: 73px;
         color: #ffffff;
-        background: @mainColor;
+        background-color: #FCD316;
         box-shadow: 2px 8px 8px rgba(0,0,0,0.16);
         border-radius: 10px;
       }
