@@ -145,11 +145,11 @@
     mounted() {
       this.getNewsDetail();
       // 从圈子首页点击单条的评论图标
+      sessionStorage.setItem('neid', this.$route.query.neid);
       if(sessionStorage.getItem('showComments') == 'show') {
         this.changeModal('show_modal',true);
         sessionStorage.removeItem('showComments');
       }
-      sessionStorage.setItem('neid', this.$route.query.neid);
     },
     beforeDestroy() {
       this.changeModal('show_modal',false);
