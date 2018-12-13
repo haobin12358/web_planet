@@ -53,7 +53,8 @@
           <li class="m-flex-between">
             <span>配送方式</span>
             <div @click="changeModel('show_picker',true)">
-              <span>快递:包邮</span>
+              <span v-if="items.prfreight > 0">快递：￥{{items.prfreight | money}}元</span>
+              <span v-else>快递:包邮</span>
               <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
@@ -170,6 +171,12 @@
         }
       },
       components: { coupon },
+      beforeDestroy() {
+        // 如果不是去选择地址，则把product的localstorage去除
+        if(!sessionStorage.getItem('choose')) {
+          localStorage.removeItem('product');
+        }
+      },
       created() {
         // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
         if(sessionStorage.getItem('use') == 'used') {
@@ -181,16 +188,17 @@
         common.changeTitle('提交订单');
         if(this.$route.query.product) {
           this.product_info = JSON.parse(this.$route.query.product);
-        }else {
+        }else {           // 从购物车来
           this.product_info = JSON.parse(localStorage.getItem('product'));
-          localStorage.removeItem('product');
         }
         let total = 0;
         for(let i = 0; i < this.product_info.length; i ++) {
           this.product_info[i].total = 0;
+          this.product_info[i].prfreight = 0;
           this.product_info[i].couponList = [];
           this.product_info[i].coupon_info = { caid: [] };
           for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+            this.product_info[i].prfreight += this.product_info[i].cart[j].product.prfreight;
             this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
           }
           this.total_money = this.total_money + this.product_info[i].total;
@@ -223,6 +231,7 @@
         // 跳转其他页面的方法
         changeRoute(v, where) {
           if(where) {
+            sessionStorage.setItem('choose', true);
             this.$router.push({ path: v, query: { from: where }});
           }else {
             this.$router.push(v);
@@ -378,7 +387,16 @@
           }
           axios.post(api.order_create + "?token=" + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
-              this.wxPay(res.data.data.args);
+              if(this.payType.opaytype ==20) {
+                Toast(res.data.message);
+                this.giftPopup = true;
+                // this.$router.push("/orderList?which=1");
+                // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
+                sessionStorage.setItem('use', 'used');
+              }else {
+                this.wxPay(res.data.data.args);
+                localStorage.removeItem('product');
+              }
             }
           });
         },
@@ -545,6 +563,7 @@
           border-radius: 10px;
           padding: 0 30px;
           line-height: 50px;
+          font-size: 24px;
         }
       }
     }
