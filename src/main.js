@@ -52,8 +52,10 @@ var loadinginstace
 axios.interceptors.request.use(config => {
   // 每次请求的时候判断是否是新人即没有验证手机号
   if(localStorage.getItem('is_new')) {
-    // 避免code影响
-    window.location.href = window.location.origin + '/#/personal/editInput?from=new';
+    if(config.url.indexOf('bing_telphone') < 0) {
+      // 避免code影响
+      window.location.href = window.location.origin + '/#/personal/editInput?from=new';
+    }
   }
 
   Indicator.open({ text: '加载中...', spinnerType: 'fading-circle' });

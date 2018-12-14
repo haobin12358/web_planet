@@ -32,7 +32,11 @@ const wxApi = {
     }
   },
   wxRegister(callback) {
-    axios.get(api.get_wxconfig, { params: { url: (window.location.origin + '/#/pandora') }}).then((res) => {
+    let url = window.location.origin + '/#/pandora';
+    if(window.localStorage.getItem('mbjid')) {
+      url = window.location.origin + '/#/pandora?mbjid' + localStorage.getItem('mbjid');
+    }
+    axios.get(api.get_wxconfig, { params: { url: url }}).then((res) => {
       if(res.data.status == 200) {
         wx.config({
           debug: false,

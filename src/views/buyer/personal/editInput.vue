@@ -47,7 +47,7 @@
         </div>
         <div class="m-editInput-alert" v-if="from == 'new'">
           <p class="m-ft-28">提示：</p>
-          <p class="m-ft-24">微信新登录用户请绑定手机号后使用</p>
+          <p class="m-ft-24">微信登录用户请绑定手机号后使用</p>
         </div>
       </div>
     </div>
@@ -168,6 +168,9 @@
               localStorage.setItem('token', res.data.data.token);
               localStorage.removeItem('is_new');
               this.$router.push('/selected');
+            }else {
+              // 避免code影响
+              window.location.href = window.location.origin + '/#/personal/editInput?from=new';
             }
           });
         }else if(this.from == 'phone' || this.from == 'passwd') {

@@ -136,14 +136,6 @@
           desc: '快来帮您的好友拆开魔法礼盒吧',
           imgUrl: this.box.prpic
         };
-        /*if(!localStorage.getItem('mbjid')) {
-          // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
-          axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
-            if(res.data.status == 200) {
-              localStorage.setItem('mbjid', res.data.data.mbjid);
-            }
-          });
-        }*/
         // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
         axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
           if(res.data.status == 200) {
