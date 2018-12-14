@@ -43,7 +43,7 @@
                  <span class="m-icon-more"></span>
                </div>
              </li>
-             <li>
+             <li @click="changeRoute('/personal/about')">
                <div>
                  <span class="m-icon m-icon-about"></span>
                  <!--<span>关于大行星</span>-->
@@ -51,7 +51,7 @@
                </div>
                <div>
                  <span>1.0</span>
-                 <!--<span class="m-icon-more"></span>-->
+                 <span class="m-icon-more"></span>
                </div>
              </li>
            </ul>
