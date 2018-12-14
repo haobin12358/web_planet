@@ -51,8 +51,14 @@
             <span class="m-store-name">{{order_info.pbname}}</span>
             <span class="m-icon-more"></span>
           </div>
-          <span class="m-red" v-if="refund">{{refund.orastate_zh}}</span>
-          <span class="m-red" v-else>{{order_info.omstatus_zh}}</span>
+          <span class="m-red" v-if="from == 'activityProduct'">
+            <span v-if="order_info.omstatus == 35">已完成</span>
+            <span class="m-red" v-else>{{order_info.omstatus_zh}}</span>
+          </span>
+          <span v-else>
+            <span class="m-red" v-if="refund">{{refund.orastate_zh}}</span>
+            <span class="m-red" v-else>{{order_info.omstatus_zh}}</span>
+          </span>
         </div>
         <div class="m-product-box" v-for="(item, index) in order_info.order_part">
           <div class="m-order-product-ul">
@@ -199,6 +205,9 @@
               break;
             case '/product/detail':
               this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid, which: 'try' }});
+              break;
+            case '/logisticsInformation':
+              this.$router.push({ path: v, query: { omid: this.order_info.omid }});
               break;
           }
         }
