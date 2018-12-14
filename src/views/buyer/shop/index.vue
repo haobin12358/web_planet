@@ -117,6 +117,9 @@
       components: { sku, bottomLine },
       mounted(){
         common.changeTitle('购物车');
+      },
+      activated() {
+        this.page_info.page_num = 1;
         this.getCart();
       },
       methods: {

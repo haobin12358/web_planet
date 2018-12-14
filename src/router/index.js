@@ -112,7 +112,8 @@ export const constantRouterMap = [
     path: '/shop',
     component: Layout,
     redirect: 'shop',
-    children: [{ path: '/shop', component: () => import('../views/buyer/shop/index'), hidden: true }
+    children: [
+      { path: '/shop', component: () => import('../views/buyer/shop/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/submitOrder', component: () => import('../views/buyer/shop/submitOrder'), hidden: true },
@@ -161,7 +162,7 @@ export const constantRouterMap = [
   { path: '/freeTrial', component: () => import('../views/buyer/activity/freeTrial'), hidden: true },          // 免费试用
   { path: '/activityProduct', component: () => import('../views/buyer/activity/activityProduct'), hidden: true },      // 免费试用 - 商品
   { path: '/activityProductDetail', component: () => import('../views/buyer/activity/activityProductDetail'), hidden: true },        // 免费试用 - 商品详情
-  { path: '/activityOrder', component: () => import('../views/buyer/activity/activityOrder'), hidden: true },        // 活动订单
+  { path: '/activityOrder', component: () => import('../views/buyer/activity/activityOrder'), meta: { keepAlive: true }, hidden: true },        // 活动订单
 ];
 
 export default new Router({

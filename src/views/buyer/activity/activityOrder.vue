@@ -24,7 +24,7 @@
             <div class="m-order-product-ul">
               <template v-for="(item,i) in items.order_part">
                 <div class="m-product-info" >
-                  <img src="" class="m-product-img" alt="">
+                  <img :src="item.prmainpic" class="m-product-img">
                   <div>
                     <p class="m-flex-between">
                       <span class="m-product-name">{{item.prtitle}}</span>
@@ -45,7 +45,8 @@
               </template>
               <ul class="m-order-btn-ul">
                 <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
-                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20 || items.omstatus == 35">查看物流</li>
+                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20
+                || items.omstatus == 30 || items.omstatus == 35">查看物流</li>
                 <!--<li v-if=" items.omstatus == -40">删除订单</li>-->
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
                 <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
@@ -83,6 +84,11 @@
       },
       inject: ['reload'],
       components: { navList, bottomLine },
+      mounted() {
+        common.changeTitle('订单列表');
+        this.getOrderNum();             // 获取各状态的订单数量
+        this.getOrderList();
+      },
       methods: {
         changeRoute(v, item) {
           switch (v){
@@ -257,11 +263,6 @@
 
           });
         }
-      },
-      mounted() {
-        common.changeTitle('订单列表');
-        this.getOrderNum();             // 获取各状态的订单数量
-        this.getOrderList();
       }
     }
 </script>
