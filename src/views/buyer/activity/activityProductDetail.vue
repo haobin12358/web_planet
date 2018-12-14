@@ -216,7 +216,7 @@
       box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     }
     .m-detail-img-box {
-      margin: 10px 0 80px 0;
+      margin: 10px 0 100px 0;
       .m-detail-img {
         width: 750px;
         margin-bottom: -5px;
