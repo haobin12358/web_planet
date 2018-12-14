@@ -150,7 +150,7 @@
         axios.get(api.get_activity + "?actype=2&token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.box = res.data.data;
-            this.history = res.data.data.open_history;
+            this.history = res.data.data.infos.open_history;
             this.mbaid = res.data.data.infos.mbaid;
             localStorage.setItem('mbaid', this.mbaid);
             if(this.history) {
@@ -163,10 +163,13 @@
                 }
                 if(this.history[i].mboresult > 0) {
                   this.history[i].msg += '增加了' + this.history[i].mboresult + '元';
+                }else if(this.history[i].mboresult < 0) {
+                  this.history[i].msg += '减少了' + (-this.history[i].mboresult) + '元';
                 }else {
-                  this.history[i].msg += '减少了' + this.history[i].mboresult + '元';
+                  this.history[i].msg += '变化了' + (-this.history[i].mboresult) + '元';
                 }
               }
+              this.history = this.history.concat();
             }
           }
         });
