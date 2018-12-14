@@ -10,6 +10,7 @@ const api={
   get_inforcode: title + 'user/get_inforcode',                   // 获取验证码
   bing_telphone: title + 'user/bing_telphone',                   // 绑定手机号
   auth_fresh: title + 'auth/fresh',                              // 刷新token
+  secret_usid: title + 'user/secret_usid',                       // 获取base64编码后的usid
 
   category_list: title + 'category/list',                        // 获取分类-装备首页商品列表页
   product_get: title + 'product/get',                            // 获取单条商品-商品详情

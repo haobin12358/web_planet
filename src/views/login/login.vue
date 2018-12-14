@@ -101,7 +101,8 @@
       // 获取微信参数
       login() {
         let params = {
-          url: window.location.href,
+          url: window.location.href.split('#')[0],
+          // url: window.location.href,
           app_from: window.location.origin.substr(8, window.location.origin.length)
         };
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
@@ -132,7 +133,7 @@
               code: common.GetQueryString('code')
             };
             if(localStorage.getItem('secret_usid')) {
-              params.ussupper = localStorage.getItem('secret_usid');
+              params.secret_usid = localStorage.getItem('secret_usid');
             }
             axios.post(api.wx_login, params).then(res => {
               if(res.data.status == 200){

@@ -15,7 +15,7 @@
     <div class="m-product-detail">
       <div class="m-buy-product" v-if="box.infos.current_price">
         <div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{box.infos.current_price | money}}</div>
-      <!--<div class="m-buy-product">-->
+        <!--<div class="m-buy-product">-->
         <!--<div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{2325 | money}}</div>-->
         <div class="m-box-btn m-ft-38 m-ft-b" @click="buyNow">点击购买</div>
       </div>
@@ -40,7 +40,7 @@
         <div class="m-rule-title" v-else>暂无拆盒记录</div>
         <div class="m-rule-row" v-for="(item, index) in history">
           <div class="m-rule-no">{{index + 1}}</div>
-          <div>{{item.msg}}</div>
+          <div class="m-ft-30">{{item.msg}}</div>
         </div>
         <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
       </div>
@@ -54,7 +54,7 @@
       <div class="m-popup-text m-ft-30 m-ft-b">您为您的好友{{change}}了
         <span class="m-red m-ft-44"> {{price.final_reduce_now | money}}元 </span>购买金额！
       </div>
-      <!--<div class="m-popup-btn m-ft-30 m-ft-b">告诉好友</div>-->
+      <div class="m-popup-btn m-ft-30 m-ft-b" @click="getBox">知道了</div>
     </mt-popup>
   </div>
 </template>
@@ -64,6 +64,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
   import { Toast } from 'mint-ui';
 
   export default {
@@ -110,10 +111,6 @@
           }
         });
       },
-      // 分享
-      wxRegCallback() {
-        this.wxShare();
-      },
       // 点击分享
       share() {
         this.wxShare();
@@ -141,12 +138,30 @@
           if(res.data.status == 200) {
             localStorage.setItem('mbjid', res.data.data.mbjid);
             options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
-            wxapi.onMenuShareAppMessage(options);
+
+            // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+            if(wx.updateAppMessageShareData) {
+              wx.updateAppMessageShareData(options);
+            }
+            // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+            if(wx.updateTimelineShareData) {
+              wx.updateTimelineShareData(options);
+            }
+            // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+            if(wx.onMenuShareAppMessage) {
+              console.log(options);
+              wx.onMenuShareAppMessage(options);
+            }
+            // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+            if(wx.onMenuShareTimeline) {
+              wx.onMenuShareTimeline(options);
+            }
           }
         });
       },
       // 获取该活动
       getBox() {
+        this.boxPopup = false;
         axios.get(api.get_activity + "?actype=2&token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.box = res.data.data;
@@ -155,10 +170,19 @@
             localStorage.setItem('mbaid', this.mbaid);
             if(this.history) {
               for(let i = 0; i < this.history.length; i ++) {
-                this.history[i].msg = this.history[i].usname;
                 if(this.history[i].mbohasshare) {
+                  if(this.history[i].usname.length > 5) {
+                    this.history[i].msg = this.history[i].usname.substr(0, 5) + '...';
+                  }else {
+                    this.history[i].msg = this.history[i].usname;
+                  }
                   this.history[i].msg += '拆盒并分享，';
                 }else {
+                  if(this.history[i].usname.length > 8) {
+                    this.history[i].msg = this.history[i].usname.substr(0, 8) + '...';
+                  }else {
+                    this.history[i].msg = this.history[i].usname;
+                  }
                   this.history[i].msg += '拆盒，';
                 }
                 if(this.history[i].mboresult > 0) {
@@ -240,13 +264,14 @@
     },
     mounted() {
       common.changeTitle('魔法礼盒');
+      localStorage.setItem('mbjid', this.$route.query.mbjid);
       this.getBox();                 // 获取该活动的规则
       this.uaid = localStorage.getItem('uaid');
       if(this.uaid) {
         localStorage.removeItem('uaid');
         this.buyNow();      // 点击购买
       }
-      wxapi.wxRegister(this.wxRegCallback);
+      wxapi.wxRegister();
     }
   }
 </script>
@@ -470,11 +495,11 @@
         .m-rule-row {
           display: flex;
           .m-rule-no {
-            width: 30px;
-            height: 30px;
-            font-size: 30px;
+            width: 25px;
+            height: 25px;
+            font-size: 26px;
             font-weight: bold;
-            line-height: 35px;
+            line-height: 30px;
             padding: 10px;
             margin: 0 30px 30px 30px;
             background-color: @mainColor;
@@ -513,7 +538,7 @@
         width: 250px;
         height: 70px;
         line-height: 75px;
-        margin: 160px 0 0 225px;
+        margin: 100px 0 0 225px;
         color: #ffffff;
         background-color: @mainColor;
         box-shadow: 2px 8px 8px rgba(0,0,0,0.16);

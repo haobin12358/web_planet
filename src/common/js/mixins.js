@@ -31,12 +31,9 @@ const wxApi = {
       }
     }
   },
-  wxRegister(callback) {
-    let url = window.location.origin + '/#/pandora';
-    if(window.localStorage.getItem('mbjid')) {
-      url = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
-    }
-    axios.get(api.get_wxconfig, { params: { url: url }}).then((res) => {
+  wxRegister() {
+    // axios.get(api.get_wxconfig, { params: { url: window.location.href }}).then((res) => {
+    axios.get(api.get_wxconfig, { params: { url: window.location.href.split('#')[0] }}).then((res) => {
       if(res.data.status == 200) {
         wx.config({
           debug: false,
@@ -49,75 +46,49 @@ const wxApi = {
         });
       }
     }).catch((error) => {
-      console.log(error ,'1111')
+      console.log(error)
     });
+    // 需在用户可能点击分享按钮前就先调用
     wx.ready(function() {
+      // 获取微信分享参数
       axios.get(api.get_share_params).then(res => {
-        if(res.data.status == 200){
-          let imgUrl = 'https://planet.daaiti.cn/img/news/2018/12/13/LjqHqnWB1iUHulPnNl1S0118b970-fa0a-11e8-9f20-00163e08d30f.jpeg_186x198.jpeg';
-          wx.onMenuShareAppMessage({
-            title: res.data.data.title, // 分享标题
-            desc: res.data.data.content, // 分享描述
-            link: res.data.data.img, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: imgUrl, // 分享图标
-            success () {
-              console.log('分享成功ready');
+        if(res.data.status == 200) {
+          let params = res.data.data;
+          // 获取base64编码后的usid 用于默认分享
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              let link = window.location.origin + '/#/selected?secret_usid=' + res.data.data.secret_usid;
+              // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+              if(wx.updateAppMessageShareData) {
+                wx.updateAppMessageShareData({
+                  title: params.title, // 分享标题
+                  desc: params.content, // 分享描述
+                  link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  imgUrl: params.img, // 分享图标
+                  success: function () {
+                    // 设置成功
+                  }
+                });
+              }
+              // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+              if(wx.updateTimelineShareData) {
+                wx.updateTimelineShareData({
+                  title: params.title, // 分享标题
+                  link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  imgUrl: params.img, // 分享图标
+                  success: function () {
+                    // 设置成功
+                  }
+                });
+              }
             }
           });
         }
       });
     });
   },
-  // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
-  onMenuShareAppMessage(options) {
-    wx.ready(()=> {
-      wx.onMenuShareAppMessage({
-        title: options.title, // 分享标题
-        desc: options.desc, // 分享描述
-        link: options.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: options.imgUrl, // 分享图标
-        success() {
-          console.log(options);
-          console.log('分享给朋友');
-        }
-      });
-    })
-  },
-  // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
-  onMenuShareTimeline(options) {
-    wx.onMenuShareTimeline({
-      title: options.title, // 分享标题
-      link: options.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      imgUrl: options.imgUrl, // 分享图标
-      success () {
-        console.log(options);
-        console.log('分享到朋友圈');
-      }
-    });
-  },
-  // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
-  updateTimelineShareData(options) {
-    wx.updateTimelineShareData({
-      title: 'title', // 分享标题
-      link: 'link', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      imgUrl: 'imgUrl', // 分享图标
-      success () {
-        console.log('分享成功');
-      }
-    });
-  },
-  // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
-  updateAppMessageShareData(options) {
-    wx.updateAppMessageShareData({
-      title: options.title, // 分享标题
-      desc: options.desc, // 分享描述
-      link: options.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      imgUrl: options.imgUrl, // 分享图标
-      success () {
-        console.log('分享成功');
-      }
-    });
-  },
+
+
   // 预览图片
   previewImage(options) {
     wx.previewImage({
