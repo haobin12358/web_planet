@@ -13,9 +13,9 @@
     <!--<p class="m-login-forget" @click="forgetClick">忘记密码？</p>-->
     <div class="m-login-btn" @click="loginClick">登  录</div>
 
-    <div class="m-wei-box">
+    <div class="m-wei-box" @click="login">
       <p >
-        <span class="m-icon-wei" @click="login"></span>
+        <span class="m-icon-wei"></span>
       </p>
       <p class="m-ft-24">微信快速登录</p>
     </div>
@@ -107,7 +107,8 @@
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
           if(res.data.status == 200){
             const id = res.data.data.appId;
-            const url = window.location.href;
+            const url = window.location.origin + '/#/login';
+            // const url = window.location.href;
             window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
               + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
           }
@@ -138,6 +139,7 @@
               window.localStorage.setItem("token",res.data.data.token);
               window.localStorage.setItem("openid",res.data.data.user.openid);
               if(res.data.data.is_new) {
+                localStorage.setItem('is_new', res.data.data.is_new);
                 this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
               }else {
                 this.$router.push('/selected');
