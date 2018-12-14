@@ -8,7 +8,8 @@
         <span class="m-icon-set" @click="changeRoute('/personal/setUp')"></span>
       </p>
       <div class="m-personal-info">
-        <img class="m-personal-head-portrait" :src="user.usheader" alt="">
+        <img class="m-personal-head-portrait" v-if="user.usheader" :src="user.usheader" alt="">
+        <img class="m-personal-head-portrait" v-else src="/static/images/logo.png" alt="">
         <div class="m-personal-info-box">
           <div class="m-personal-info-text">
             <div>
@@ -188,7 +189,7 @@
     data() {
       return {
         name: '',
-        user: { usheader: '/static/images/logo.png', usidname: '登录 / 注册'},               // 个人信息
+        user: { usheader: '', usidname: '登录 / 注册'},               // 个人信息
         pay: "0",               // 待付款
         send: "0",              // 待发货
         receive: "0",           // 待收货
