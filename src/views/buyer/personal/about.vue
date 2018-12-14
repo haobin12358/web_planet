@@ -56,6 +56,7 @@
       line-height: 30px;
       .m-icon-copy-right {
         display: inline-block;
+        margin-top: -5px;
         width: 25px;
         height: 25px;
         background: url("/static/images/icon-copyright.png") no-repeat;
