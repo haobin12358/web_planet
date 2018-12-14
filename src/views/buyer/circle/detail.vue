@@ -8,7 +8,7 @@
         <div>{{news_info.createtime}}</div>
       </div>
       <template v-if="news_info.image" v-for="(item,index) in news_info.image">
-        <img class="m-circle-img" :src="item.niimage" alt="">
+        <img class="m-circle-img" :src="item.niimage" @click="previewImage(index, news_info.image)">
       </template>
       <div class="m-content">
         <p>{{news_info.netext}}</p>
@@ -95,6 +95,7 @@
   import bottomLine from '../../../components/common/bottomLine';
   import couponCard from '../components/couponCard';
   import product from '../components/product';
+  import wxapi from '../../../common/js/mixins';
 
   var scroll = (function (className) {
     var scrollTop;
@@ -133,6 +134,7 @@
         timeOutEvent:null
       }
     },
+    mixins: [wxapi],
     components: { bottomLine, couponCard, product },
     mounted() {
       this.getNewsDetail();
@@ -148,6 +150,18 @@
       sessionStorage.removeItem('neid');
     },
     methods: {
+      // 预览图片
+      previewImage(index, image) {
+        let images = [];
+        for(let i = 0; i < image.length; i ++) {
+          images.push(image[i].niimage);
+        }
+        let options = {
+          current: image[index].niimage, // 当前显示图片的http链接
+          urls: images,                  // 当前预览图片的list
+        };
+        wxapi.previewImage(options);
+      },
       // 播放视频
       playVideo() {
         let vdo = document.getElementById("videoPlay");
