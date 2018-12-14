@@ -148,10 +148,10 @@
         axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
           if(res.data.status == 200) {
             localStorage.setItem('mbjid', res.data.data.mbjid);
+            options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
+            wxapi.onMenuShareAppMessage(options);
           }
         });
-        options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
-        wxapi.onMenuShareAppMessage(options);
       },
       // 获取该活动
       getBox() {
