@@ -47,7 +47,7 @@
         </div>
         <div class="m-editInput-alert" v-if="from == 'new'">
           <p class="m-ft-28">提示：</p>
-          <p class="m-ft-24">微信新登录用户请绑定手机号后再使用</p>
+          <p class="m-ft-24">微信新登录用户请绑定手机号后使用</p>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
 
   export default {
     data() {
@@ -77,6 +77,26 @@
       }
     },
     components: {},
+    mounted() {
+      this.from = this.$route.query.from;
+      if(this.from == 'new') {
+        common.changeTitle('绑定账号');
+      }else if(this.from == 'phone' || this.from == 'passwd') {
+        common.changeTitle('安全中心');
+      }
+    },
+    beforeDestroy() {
+      if(this.from == 'new') {
+        // console.log(localStorage.getItem('is_new'));
+        if(localStorage.getItem('is_new')) {
+          MessageBox.confirm('微信新登录用户请绑定手机号后使用').then(() => {
+            this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
+          }).catch(() => {
+            localStorage.removeItem('token');
+          });
+        }
+      }
+    },
     methods: {
       // 跳转页面
       changeRoute(v){
@@ -149,6 +169,7 @@
             if(res.data.status == 200){
               Toast({ message: '绑定成功', duration: 1500 });
               localStorage.setItem('token', res.data.data.token);
+              localStorage.removeItem('is_new');
               this.$router.push('/selected');
             }
           });
@@ -160,14 +181,6 @@
             }
           });
         }
-      }
-    },
-    mounted() {
-      this.from = this.$route.query.from;
-      if(this.from == 'new') {
-        common.changeTitle('绑定账号');
-      }else if(this.from == 'phone' || this.from == 'passwd') {
-        common.changeTitle('安全中心');
       }
     }
   }

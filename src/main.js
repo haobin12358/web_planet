@@ -74,6 +74,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   if(data.data.status != 200) {
     // token有问题
     if(data.data.status_code == 405007 || data.data.message == '用户不存在') {
+      localStorage.removeItem('token');
       if(localStorage.getItem('toLogin')) {
         Toast(data.data.message);
       }else {
@@ -94,13 +95,13 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
         }, 1000);
       }
     }
-    // 用户不存在
-    else if(data.data.status_code == 405004) {
-      // console.log(window.location.href);
-      // console.log(window.location.origin);
-      // window.location.href = window.location.origin + '/#/login';
-      // let href = window.location.href.split('#/')[1];
-      Toast(data.data.message);
+    // 微信登录失败
+    else if(data.data.status_code == 405012 || data.data.message == '微信登录失败') {
+      localStorage.removeItem('openid');
+      localStorage.removeItem('token');
+      localStorage.removeItem('code');
+      // 避免code影响
+      window.location.href = window.location.origin + '/#/login';
     }
     // 店主版块显示无权限 - 刷新token
     else if(data.data.status_code == 405003 && data.data.message == '无权限') {

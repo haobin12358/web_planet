@@ -123,8 +123,11 @@
       if(this.isWeiXin()){    //是来自微信内置浏览器
         // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
         if(common.GetQueryString('code')) {
-          // console.log(common.GetQueryString('code'));
-          window.localStorage.setItem("code",common.GetQueryString('code'));
+          if(localStorage.getItem('is_new')) {
+            localStorage.removeItem('code');
+          }else {
+            window.localStorage.setItem("code",common.GetQueryString('code'));
+          }
           let params = {
             app_from: window.location.origin.substr(8, window.location.origin.length),
             code: common.GetQueryString('code')
