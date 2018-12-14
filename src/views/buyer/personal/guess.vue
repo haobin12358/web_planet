@@ -1,9 +1,9 @@
 <template>
   <div class="m-guess">
-    <div class="m-date-box">
+    <div class="m-date-box" @click="datePopup = !datePopup">
       <div class="m-date-text m-ft-30 m-ft-b">{{date}}</div>
-      <img class="m-date-img" src="/static/images/icon-down-open.png" v-if="datePopup" @click="datePopup = false">
-      <img class="m-date-img" src="/static/images/icon-down-close.png" v-if="!datePopup" @click="datePopup = true">
+      <img class="m-date-img" src="/static/images/icon-down-open.png" v-if="datePopup">
+      <img class="m-date-img" src="/static/images/icon-down-close.png" v-if="!datePopup">
     </div>
     <div class="m-guess-row">
       <div class="m-text-left">本月总计</div>
@@ -137,7 +137,8 @@
   .m-guess{
     min-height: 100%;
     .m-date-box {
-      width: 100%;
+      width: 26%;
+      margin-left: 37%;
       display: flex;
       justify-content: center;
       align-items: center;
