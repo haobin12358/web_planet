@@ -127,36 +127,37 @@
       select: function (val) {
         this.selected = this.$store.state.tabbar_select
       },
+      // 监听路由变化
       $route: {
         handler: function(val, oldVal){
-          switch (val.name){
-            case 'material':
-              this.selected = '素材';
-              common.changeTitle('素材');
-              break;
-            case 'member':
-              this.selected = '会员';
-              common.changeTitle('会员');
-              break;
-            case 'storekeeper':
-              this.selected = '店主';
-              common.changeTitle('店主');
-              break;
-            case 'selected':
+          switch (val.path) {
+            case '/selected':
               this.selected = '精选';
-              common.changeTitle('精选');
+              this.tabbar = this.$store.state.tabbar_buyer;
               break;
-            case 'circle':
+            case '/circle':
               this.selected = '圈子';
-              common.changeTitle('圈子');
+              this.tabbar = this.$store.state.tabbar_buyer;
               break;
-            case 'shop':
+            case '/activity':
+              this.selected = '活动';
+              this.tabbar = this.$store.state.tabbar_buyer;
+              break;
+            case '/shop':
               this.selected = '购物车';
-              common.changeTitle('购物车');
+              this.tabbar = this.$store.state.tabbar_buyer;
               break;
-            case 'personal':
+            case '/personal':
               this.selected = '我的';
-              common.changeTitle('我的');
+              this.tabbar = this.$store.state.tabbar_buyer;
+              break;
+            case '/material/circle':
+              this.selected = '素材';
+              this.tabbar = this.$store.state.tabbar_store;
+              break;
+            case '/storekeeper':
+              this.selected = '店主';
+              this.tabbar = this.$store.state.tabbar_store;
               break;
           }
         },
