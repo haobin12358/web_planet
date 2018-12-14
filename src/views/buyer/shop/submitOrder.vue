@@ -422,6 +422,8 @@
                   // 是从商家大礼包来结算的则弹出popup
                   if(that.fromGift) {
                     that.giftPopup = true;
+                  }else if(that.from == 'new' || that.from == 'try') {
+                    that.$router.push('/activityOrder');
                   }else {     // 去待发货页
                     that.$router.push("/orderList?which=2");
                   }
