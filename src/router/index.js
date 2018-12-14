@@ -113,7 +113,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'shop',
     children: [
-      { path: '/shop', component: () => import('../views/buyer/shop/index'), meta: { keepAlive: true }, hidden: true }
+      { path: '/shop', component: () => import('../views/buyer/shop/index'), meta: { keepAlive: false }, hidden: true }
     ],
   },
   { path: '/submitOrder', component: () => import('../views/buyer/shop/submitOrder'), hidden: true },

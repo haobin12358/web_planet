@@ -73,7 +73,6 @@
   export default {
     data() {
       return {
-        name: '',
         nav_list: [
           {
             itdesc: "我是描述",
