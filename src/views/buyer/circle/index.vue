@@ -2,7 +2,6 @@
   <div class="m-circle" @touchmove="touchMove">
     <!--<div class="m-circle" @touchmove.stop="touchMove">-->
     <!--搜索-->
-    <mt-loadmore :top-method="loadTop">
       <div class="m-selected-search">
         <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
           <span class="m-icon-search"></span>
@@ -12,6 +11,7 @@
       </div>
       <div class="m-circle-content">
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
+        <!--<mt-loadmore :top-method="loadTop">-->
         <div class="m-circle-body">
           <template v-for="(items,index) in news_list">
             <div class="m-video-one" @click="changeRoute('/circle/detail',items)">
@@ -57,8 +57,8 @@
           </template>
           <bottom-line v-if="bottom_show"></bottom-line>
         </div>
+          <!--</mt-loadmore>-->
       </div>
-    </mt-loadmore>
   </div>
 </template>
 
@@ -114,13 +114,11 @@
         localStorage.setItem('circleIndex', 0)
       }
     },
-    watch: {
-      $route(oldValue, newValue) {
-        // console.log(oldValue.path);
-        // console.log(newValue.path);
-      }
+    activated() {
+
     },
-    beforeDestroy() {
+    // 引入keepAlive后代替beforeDestroy
+    deactivated() {
       if(this.$route.path == '/circle/detail') {
         localStorage.setItem('circleDetail', 1);
       }else {

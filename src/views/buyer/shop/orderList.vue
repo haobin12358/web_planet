@@ -88,8 +88,12 @@
         common.changeTitle('订单列表');
         this.getOrderNum();               // 获取各状态的订单数量
       },
-      beforeDestroy() {
-        if(this.$route.path == '/orderDetail') {
+      activated() {
+
+      },
+      // 引入keepAlive后代替beforeDestroy
+      deactivated() {
+        if(this.$route.path == '/orderDetail' || this.$route.path == '/logisticsInformation') {
           localStorage.setItem('orderListDetail', 1);
         }else {
           localStorage.setItem('orderListDetail', 0);

@@ -146,7 +146,7 @@
       }
     },
     beforeDestroy() {
-      this.changeModal('show_modal',false);
+      this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
     },
     methods: {
@@ -175,7 +175,7 @@
           this.$router.push({path:v})
         }
       },
-      changeModal(v,bool){
+      changeModal(v,bool,i){
         this[v] = bool;
         if(bool){
           scroll.afterOpen();
@@ -183,7 +183,7 @@
           scroll.beforeClose();
           this.comment_one = null;
         }
-        if(v == 'show_modal'){
+        if(v == 'show_modal' && !i) {
           this.getComment();
         }
         this.show_comment = true;
@@ -322,7 +322,7 @@
         }
       },
       gtouchstart(item,index,i){
-        let that = this
+        let that = this;
         this.timeOutEvent = setTimeout(function(){
           that.longPress(item,index,i)
         },500);//这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适

@@ -25,7 +25,7 @@ export const constantRouterMap = [
     redirect: 'material/circle',
     children: [
       { path: '/material', component: () => import('../views/store/material/index'), hidden: true },
-      { path: '/material/circle', component: () => import('../views/store/material/circle'), hidden: true }
+      { path: '/material/circle', component: () => import('../views/store/material/circle'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   // 店主版 - 会员
@@ -91,7 +91,7 @@ export const constantRouterMap = [
     path: '/circle',
     component: Layout,
     redirect: 'circle',
-    children: [{ path: '/circle', component: () => import('../views/buyer/circle/index'), hidden: true }
+    children: [{ path: '/circle', component: () => import('../views/buyer/circle/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/circle/detail', component: () => import('../views/buyer/circle/detail'), hidden: true },

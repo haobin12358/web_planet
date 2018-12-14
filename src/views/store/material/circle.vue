@@ -116,9 +116,23 @@
     components: { navList, bottomLine },
     mounted() {
       common.changeTitle('素材');
-      this.getNav();
-      this.getNews();
       this.getSwipe();
+      this.getNav();
+      if(!localStorage.getItem('circleIndex')) {
+        localStorage.setItem('circleIndex', 0)
+      }
+    },
+    activated() {
+
+    },
+    // 引入keepAlive后代替beforeDestroy
+    deactivated() {
+      if(this.$route.path == '/circle/detail') {
+        localStorage.setItem('circleDetail', 1);
+      }else {
+        localStorage.setItem('circleDetail', 0);
+        localStorage.removeItem('circleIndex');
+      }
     },
     methods: {
       /*获取轮播图*/
@@ -165,14 +179,20 @@
             if(res.data.data.length == 0){
               this.nav_list = this.nav_list.concat([])
             }else{
-              let arr=this.nav_list.concat( res.data.data);
+              let arr=this.nav_list.concat(res.data.data);
               for(let i=0;i<arr.length;i++){
                 arr[i].active = false;
               }
-              arr[0].active = true;
+              arr[localStorage.getItem('circleIndex')].active = true;
               this.nav_list = [].concat(arr);
             }
-            this.select_nav = this.nav_list[0];
+            this.select_nav = this.nav_list[localStorage.getItem('circleIndex')];
+
+            if(localStorage.getItem('circleDetail') == 1) {
+              this.navClick(localStorage.getItem('circleIndex'));
+            }else {
+              this.navClick(0);
+            }
           }
         })
       },

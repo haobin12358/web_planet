@@ -1,17 +1,18 @@
-<template>
-  <div id="app">
-    <!--<span class="m-return" @click.stop="returnClick">返回</span>-->
-    <router-view v-if="isRouterAlive"/>
-  </div>
-</template>
-
 <!--<template>
   <div id="app">
-    <keep-alive>
-      <router-view v-if="isRouterAlive"></router-view>
-    </keep-alive>
+    &lt;!&ndash;<span class="m-return" @click.stop="returnClick">返回</span>&ndash;&gt;
+    <router-view v-if="isRouterAlive"/>
   </div>
 </template>-->
+
+<template>
+  <div id="app">
+    <keep-alive>
+      <router-view v-if="isRouterAlive && $route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="isRouterAlive && !$route.meta.keepAlive"></router-view>
+  </div>
+</template>
 
 <script>
   import common from './common/js/common';
