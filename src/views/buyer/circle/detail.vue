@@ -46,7 +46,7 @@
 
     <div class="m-comment-modal" v-if="show_modal">
       <div class="m-modal-state">
-        <span class="m-icon-close" @click="changeModal('show_modal',false)"></span>
+        <span class="m-icon-close" @click="changeModal('show_modal',false, 1)"></span>
         <div class="m-modal-content">
            <h3>全部 {{comment_count}} 条评论</h3>
           <div class="m-scroll" ref="comment" @touchmove="touchMove">
@@ -389,10 +389,12 @@
     margin: 25px 40px;
     font-size: 24px;
     .m-author-img {
+      display: block;
       width: 40px;
       height: 40px;
       border-radius: 50%;
       margin-right: 18px;
+      border: none;
       background: url("/static/images/logo.png") no-repeat;
       background-size: 100% 100%;
     }
