@@ -407,7 +407,7 @@
     width: 750px;
     min-height: 100%;
     background-color: #9fd0bf;
-    margin: 14px 0 30px ;
+    /*margin: 14px 0 30px ;*/
   }
   .m-content{
     padding: 46px 46px 200px 46px;
