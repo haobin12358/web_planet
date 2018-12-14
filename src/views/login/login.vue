@@ -8,7 +8,7 @@
       <span class="m-code cancel" v-else>{{count}}秒后重新发送</span>
     </div>
     <div type="text" class="m-login-input">
-      <input type="text" v-model="identifyingcode" placeholder="请输入验证码">
+      <input type="text" v-model="identifyingcode" maxlength="6" placeholder="请输入验证码">
     </div>
     <!--<p class="m-login-forget" @click="forgetClick">忘记密码？</p>-->
     <div class="m-login-btn" @click="loginClick">登  录</div>
@@ -79,7 +79,7 @@
           identifyingcode: this.identifyingcode,
           app_from: window.location.origin.substr(8, window.location.origin.length)
         };
-        axios.post(api.login, { params: params }).then(res => {
+        axios.post(api.login, params).then(res => {
           if(res.data.status == 200){
             localStorage.setItem('token', res.data.data.token);
             this.$router.push('/selected');
