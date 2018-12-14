@@ -129,23 +129,23 @@
               <div class="m-out-row">
                 <div class="m-row-left">姓名</div>
                 <div class="m-row-right">
-                  <input type="text" v-model="realName" class="m-row-input m-width-200">
+                  <input type="text" v-model="realName" class="m-row-input m-width-180">
                 </div>
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">银行卡号</div>
                 <div class="m-row-right">
-                  <input type="text" v-model="bankNo" class="m-row-input m-width-320">
+                  <input type="text" v-model="bankNo" class="m-row-input m-width-300">
                 </div>
               </div>
               <div class="m-out-row">
-                <div class="m-row-left">银行</div>
+                <div class="m-row-left">银行名称</div>
                 <div class="m-row-right" @click="getBankName">{{bank}}</div>
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">开户行</div>
                 <div class="m-row-right">
-                  <input type="text" v-model="bankName" class="m-row-input m-width-320">
+                  <input type="text" v-model="bankName" class="m-row-input m-width-300">
                 </div>
               </div>
               <div class="m-out-btn" @click="outBtn('submit')">提 交</div>
@@ -162,6 +162,12 @@
             <div class="m-popup-btn">
               <div @click="bankPopup = false">取消</div>
               <div @click="bankDone">确认</div>
+            </div>
+            <div class="m-out-row m-out-bank">
+              <div class="m-row-left">银行名称</div>
+              <div class="m-row-right">
+                <input type="text" v-model="bankResult" class="m-row-input m-width-300">
+              </div>
             </div>
             <mt-picker :slots="slots" @change="bankChange"></mt-picker>
           </mt-popup>
@@ -195,6 +201,7 @@
         slots: [{ values: ['请点击选择银行'] }],
         realName: "",
         bankName: "",
+        bankResult: "",
         bank: "",
         bankNo: ""
       }
@@ -210,25 +217,32 @@
         }
       },
       getBankName() {
-        if(this.bankNo.length < 16) {
+        if(this.bankNo.length < 10) {
           Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
           return false;
         }
         this.bankPopup = true;
         axios.get(api.get_bankname + "?cncardno=" + this.bankNo).then(res => {
           if(res.data.status == 200) {
-            if(!res.data.data.validated) {
+            this.slots[0].values = ['可输入银行名称', res.data.data.cnbankname];
+            /*if(!res.data.data.validated) {
               Toast('该银行卡已失效');
             }else {
               this.slots[0].values = ['请点击选择银行', res.data.data.cnbankname];
-            }
+            }*/
             this.validated = res.data.data.validated;
+          }else {
+            this.slots[0].values = ['可输入银行名称'];
           }
         })
       },
       // 提现的提交按钮
       outBtn(where) {
         if(where == "submit") {
+          if(this.moneyNum < 0.01) {
+            Toast({ message: '提现金额应大于0', position: 'bottom' });
+            return false;
+          }
           if(this.moneyNum > this.user.usbalance) {
             Toast({ message: '提现金额应不大于可用余额', position: 'bottom' });
             return false;
@@ -237,11 +251,11 @@
             Toast({ message: '请先输入姓名', position: 'bottom' });
             return false;
           }
-          if(this.bankNo.length < 16) {
+          if(this.bankNo.length < 10) {
             Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
             return false;
           }
-          if(this.bank == '请点击选择银行' || !this.bank) {
+          if((this.bank == '请点击选择银行' || this.bank == '可输入银行名称' || !this.bank) && !this.bankResult) {
             Toast({ message: '请先选择银行', position: 'bottom' });
             return false;
           }
@@ -249,10 +263,10 @@
             Toast({ message: '请先输入开户行', position: 'bottom' });
             return false;
           }
-          if(!this.validated) {
+          /*if(!this.validated) {
             Toast({ message: '该银行卡已失效', position: 'bottom' });
             return false;
-          }
+          }*/
           let params = {
             cncashnum: this.moneyNum,
             cncardno: this.bankNo,
@@ -290,6 +304,9 @@
       },
       // 提现的选择银行确定按钮
       bankDone() {
+        if(this.bankResult) {
+          this.bank = this.bankResult;
+        }
         this.bankPopup = false;
       },
       // picker选择的银行改变
