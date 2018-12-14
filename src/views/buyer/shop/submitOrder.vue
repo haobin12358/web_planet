@@ -429,10 +429,18 @@
                   }
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
                   Toast('支付已取消');
-                  that.$router.push("/orderList?which=1");
+                  if(that.from == 'new' || that.from == 'try') {
+                    that.$router.push('/activityOrder');
+                  }else {     // 去待付款页
+                    that.$router.push("/orderList?which=1");
+                  }
                 }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
                   Toast('支付失败');
-                  that.$router.push("/orderList?which=1");
+                  if(that.from == 'new' || that.from == 'try') {
+                    that.$router.push('/activityOrder');
+                  }else {     // 去待付款页
+                    that.$router.push("/orderList?which=1");
+                  }
                 }
               });
           }
