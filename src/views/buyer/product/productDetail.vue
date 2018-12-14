@@ -99,7 +99,7 @@
             canums:1,
             cart_buy:null,
             star:['','','','',''],
-            user: {}
+            user: { uslevel: '1' }
           }
         },
       components:{
@@ -113,11 +113,13 @@
       methods:{
         // 获取个人信息
         getUser() {
-          axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
-            if(res.data.status == 200){
-              this.user = res.data.data;
-            }
-          });
+          if(localStorage.getItem('token')) {
+            axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+              if(res.data.status == 200){
+                this.user = res.data.data;
+              }
+            });
+          }
         },
          // 改变模态框
          changeModal(v,bool) {
@@ -292,7 +294,7 @@
     img{
       display: block;
       width: 750px;
-      height: 100%;
+      min-height: 100%;
     }
   }
   .m-product-detail-foot{

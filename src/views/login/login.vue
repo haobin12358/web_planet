@@ -107,51 +107,51 @@
         axios.get(api.get_wxconfig, { params: params }).then((res) => {
           if(res.data.status == 200){
             const id = res.data.data.appId;
-            const url = window.location.origin + '/#/login';
-            // const url = window.location.href;
+            // const url = window.location.origin + '/#/login';
+            const url = window.location.href;
             window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
               + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
           }
         }).catch((error) => {
           console.log(error ,'1111');
         });
-      }
+      },
     },
     mounted() {
       common.changeTitle('登录');
 
       if(this.isWeiXin()){    //是来自微信内置浏览器
-        // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
         if(common.GetQueryString('code')) {
           if(localStorage.getItem('is_new')) {
-            localStorage.removeItem('code');
+
           }else {
-            window.localStorage.setItem("code",common.GetQueryString('code'));
-          }
-          let params = {
-            app_from: window.location.origin.substr(8, window.location.origin.length),
-            code: common.GetQueryString('code')
-          };
-          if(localStorage.getItem('secret_usid')) {
-            params.ussupper = localStorage.getItem('secret_usid');
-          }
-          axios.post(api.wx_login, params).then(res => {
-            if(res.data.status == 200){
-              localStorage.removeItem('secret_usid');
-              localStorage.removeItem('toLogin');
-              window.localStorage.setItem("token",res.data.data.token);
-              window.localStorage.setItem("openid",res.data.data.user.openid);
-              if(res.data.data.is_new) {
-                localStorage.setItem('is_new', res.data.data.is_new);
-                this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
-              }else {
-                this.$router.push('/selected');
-              }
+            // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
+            window.localStorage.setItem("code", common.GetQueryString('code'));
+            let params = {
+              app_from: window.location.origin.substr(8, window.location.origin.length),
+              code: common.GetQueryString('code')
+            };
+            if(localStorage.getItem('secret_usid')) {
+              params.ussupper = localStorage.getItem('secret_usid');
             }
-          });
+            axios.post(api.wx_login, params).then(res => {
+              if(res.data.status == 200){
+                localStorage.removeItem('secret_usid');
+                localStorage.removeItem('toLogin');
+                window.localStorage.setItem("token",res.data.data.token);
+                window.localStorage.setItem("openid",res.data.data.user.openid);
+                if(res.data.data.is_new) {
+                  localStorage.setItem('is_new', res.data.data.is_new);
+                  this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
+                }else {
+                  this.$router.push('/selected');
+                }
+              }
+            });
+          }
         }
       }
-    }
+    },
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>

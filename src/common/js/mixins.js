@@ -32,7 +32,7 @@ const wxApi = {
     }
   },
   wxRegister(callback) {
-    axios.get(api.get_wxconfig, { params: { url: window.location.href }}).then((res) => {
+    axios.get(api.get_wxconfig, { params: { url: (window.location.origin + '/#/pandora') }}).then((res) => {
       if(res.data.status == 200) {
         wx.config({
           debug: false,

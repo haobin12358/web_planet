@@ -50,9 +50,12 @@ axios.defaults.timeout = 60000;
 //http请求拦截器
 var loadinginstace
 axios.interceptors.request.use(config => {
-  // element ui Loading方法
-  // loadinginstace = Loading.service({ fullscreen: true });
-  // console.log(loadinginstace)
+  // 每次请求的时候判断是否是新人即没有验证手机号
+  if(localStorage.getItem('is_new')) {
+    // 避免code影响
+    window.location.href = window.location.origin + '/#/personal/editInput?from=new';
+  }
+
   Indicator.open({ text: '加载中...', spinnerType: 'fading-circle' });
   return config
 }, error => {
@@ -97,9 +100,6 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
     }
     // 微信登录失败
     else if(data.data.status_code == 405012 || data.data.message == '微信登录失败') {
-      localStorage.removeItem('openid');
-      localStorage.removeItem('token');
-      localStorage.removeItem('code');
       // 避免code影响
       window.location.href = window.location.origin + '/#/login';
     }

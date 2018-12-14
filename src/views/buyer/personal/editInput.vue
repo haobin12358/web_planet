@@ -83,17 +83,14 @@
         common.changeTitle('绑定账号');
       }else if(this.from == 'phone' || this.from == 'passwd') {
         common.changeTitle('安全中心');
+      }else {
+        common.changeTitle('安全中心');
       }
     },
     beforeDestroy() {
       if(this.from == 'new') {
-        // console.log(localStorage.getItem('is_new'));
         if(localStorage.getItem('is_new')) {
-          MessageBox.confirm('微信新登录用户请绑定手机号后使用').then(() => {
-            this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
-          }).catch(() => {
-            localStorage.removeItem('token');
-          });
+          Toast('微信登录用户请绑定手机号');
         }
       }
     },
