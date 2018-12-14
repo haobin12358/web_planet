@@ -52,8 +52,8 @@
           <span class="m-more"></span>
         </div>
       </div>
-      <div class="m-product-detail-img-box">
-        <img :src="product_info.prdesc"  alt="">
+      <div class="m-product-detail-img-box" v-if="product_info.prdesc">
+        <img v-for="item in product_info.prdesc" :src="item">
       </div>
       <div class="m-product-detail-foot">
         <span class="m-icon-car" @click.stop="changeRoute('/shop')"></span>
@@ -288,10 +288,11 @@
     }
   }
   .m-product-detail-img-box{
-    margin: 10px 0;
+    margin-bottom: 15px;
     img{
       display: block;
-      width: 100%;
+      width: 750px;
+      height: 100%;
     }
   }
   .m-product-detail-foot{
