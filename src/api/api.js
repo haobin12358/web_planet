@@ -40,6 +40,7 @@ const api={
   list_company: title + 'logistic/list_company',                 // 获取快递公司列表
   order_confirm: title + 'order/confirm',                        // 订单确认收货
   create_evaluation: title + 'order/create_evaluation',          // 订单评价
+  del_evaluation: title + 'order/del_evaluation',                // 删除订单评价
 
   items_list: title + 'items/list',                              // 获取标签列表
   scene_list: title + 'scene/list',                              // 获取场景列表

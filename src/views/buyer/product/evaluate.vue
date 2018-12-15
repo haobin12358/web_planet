@@ -1,6 +1,6 @@
 <template>
     <div class="m-evaluate">
-      <div class="m-evaluate-content" v-if="evaluate_list.length > 0" @touchmove="touchMove">
+      <div class="m-evaluate-content" v-if="evaluate_list" @touchmove="touchMove">
         <mt-loadmore :top-method="loadTop">
           <template v-for="(item,index) in evaluate_list">
             <div class="m-evaluate-one">
@@ -21,9 +21,6 @@
                </span>
                 </p>
                 <ul class="m-evaluate-img-ul">
-                  <li v-for="(k,j) in item.image">
-                    <img :src="k.oeimg" @click="previewImage(j, item.image)">
-                  </li>
                   <li>
                     <div class="m-video-box" v-if="item.video.length > 0" v-on:click="playVideo()">
                       <img v-if="item.video[0].oevthumbnail" :src="item.video[0].oevthumbnail" class="m-video-img" alt="">
@@ -31,6 +28,9 @@
                       <span class="m-video-time" v-if="item.video[0].oeduration">{{item.video[0].oeduration}}</span>
                       <span class="m-icon-video"></span>
                     </div>
+                  </li>
+                  <li v-for="(k,j) in item.image">
+                    <img :src="k.oeimg" @click="previewImage(j, item.image)">
                   </li>
                 </ul>
                 <p class="m-product-label">
@@ -61,7 +61,7 @@
         return{
           page_info: {
             page_num: 1,
-            page_size: 30
+            page_size: 10
           },
           bottom_show: false,
           isScroll: true,
@@ -248,6 +248,7 @@
           }
         }
         .m-video-box{
+          width: 170px;
            position: relative;
            padding-bottom: 200px;
            .m-video{
