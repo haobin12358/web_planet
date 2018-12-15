@@ -112,22 +112,7 @@
         });
       },
       // 点击分享
-      share() {
-        this.wxShare();
-        this.show_invite = true;
-        // 倒计时
-        const TIME_COUNT = 3;
-        let count = TIME_COUNT;
-        let time = setInterval(() => {
-          if (count > 0 && count <= TIME_COUNT) {
-            count --;
-          } else {
-            this.show_invite = false;
-            clearInterval(time);
-          }
-        }, 1000);
-      },
-      wxShare () {
+      share () {
         let options = {
           title: '魔法礼盒',
           desc: '快来帮您的好友拆开魔法礼盒吧',
@@ -138,6 +123,21 @@
           if(res.data.status == 200) {
             localStorage.setItem('mbjid', res.data.data.mbjid);
             options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
+
+            // 点击分享
+            this.show_invite = true;
+            // 倒计时
+            const TIME_COUNT = 3;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.show_invite = false;
+                clearInterval(time);
+              }
+            }, 1000);
+
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
