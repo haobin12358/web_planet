@@ -1,9 +1,9 @@
 <template>
     <div class="m-product-detail" v-if="product_info">
       <div class="m-product-swipe">
-        <mt-swipe :auto="2000" >
-          <mt-swipe-item v-for="item in product_info.images" v-bind:key="item.piid">
-            <img :src="item.pipic" class="m-swipe-img" alt="">
+        <mt-swipe :auto="3000">
+          <mt-swipe-item class="product-swipe" v-for="item in product_info.images" v-bind:key="item.piid">
+            <img :src="item.pipic" class="product-img" alt="">
           </mt-swipe-item>
         </mt-swipe>
         <span class="m-icon-back" @click="changeBack"></span>
@@ -294,7 +294,7 @@
     img{
       display: block;
       width: 750px;
-      min-height: 100%;
+      max-height: 100%;
     }
   }
   .m-product-detail-foot{

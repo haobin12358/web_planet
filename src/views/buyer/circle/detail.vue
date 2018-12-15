@@ -407,7 +407,7 @@
   .m-circle-img{
     display: block;
     width: 750px;
-    min-height: 100%;
+    max-height: 100%;
     background-color: #9fd0bf;
     /*margin: 14px 0 30px ;*/
   }
