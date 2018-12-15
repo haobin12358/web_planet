@@ -184,6 +184,9 @@
           this.comment_one = null;
         }
         if(v == 'show_modal' && !i) {
+          if(!bool) {
+            this.page_info.page_num = 1;
+          }
           this.getComment();
         }
         this.show_comment = true;
