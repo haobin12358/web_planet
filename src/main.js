@@ -4,7 +4,7 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+// import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
 
@@ -15,12 +15,14 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI)
 
 import axios from 'src/utils/myAxios';
 Vue.prototype.$http = axios;
 import api from 'src/api/api'
 Vue.prototype.$api = api;
+import auth from 'src/utils/auth'
+Vue.prototype.$auth = auth;
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {loading:"/src/icons/svg/spinner.svg" });
 import BlockTitle from "src/components/BlockTitle";

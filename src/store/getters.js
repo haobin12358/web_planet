@@ -8,5 +8,6 @@ const getters = {
   size: state => state.app.size,
   errorLogs: state => state.errorLog.logs,
   userInfo: state => state.user.userInfo,
+  cachedViews: state => state.tagsView.cachedViews,
 }
 export default getters

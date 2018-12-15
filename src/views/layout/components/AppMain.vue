@@ -1,19 +1,26 @@
 <template>
   <section class="app-main">
     <transition name="fade" mode="out-in">
-      <!-- <router-view :key="key"></router-view> -->
-      <router-view/>
+      <keep-alive :include="cachedViews">
+       <!--<router-view :key="key"></router-view>todo -->
+       <router-view ></router-view>
+      </keep-alive>
+      <!--<router-view/>-->
     </transition>
   </section>
 </template>
 
 <script>
-export default {
+  import {mapGetters} from "vuex";
+
+
+  export default {
   name: 'AppMain',
   computed: {
-    // key() {
-    //   return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
-    // }
+    ...mapGetters(['cachedViews']),
+    key() {
+      return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
+    }
   }
 }
 </script>

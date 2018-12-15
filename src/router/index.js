@@ -22,6 +22,17 @@ import Layout from '../views/layout/Layout'
   }
  **/
 export const constantRouterMap = [
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component: () => import('src/views/redirect/index')
+      }
+    ]
+  },
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
@@ -48,7 +59,7 @@ export const constantRouterMap = [
         path: 'profile',
         name: 'ProfileIndex',
         component: () => import('src/views/profile/index'),
-        meta: { title: '概况', icon: 'gailan' }
+        meta: { title: '概况', icon: 'gailan' ,noCache: true}
       }
     ]
   },
@@ -57,28 +68,37 @@ export const constantRouterMap = [
     path: '/product',
     component: Layout,
     redirect: '/product/index',
+    name: 'Product',  //  有二级菜单的时候加下,面包屑就会显示 概览/一级菜单/二级
     meta: { title: '商品', icon: 'shangpin' },
     children: [
       {
         path: 'index',
         name: 'ProductIndex',
         component: () => import('src/views/product/index'),
-        meta: { title: '所有商品' }
+        meta: { title: '所有商品',noCache: true }
       }, {
+        path: 'productEdit',
+        name: 'ProductEdit',
+        hidden: true,
+        component: () => import('src/views/product/productEdit'),
+        meta: { title: '商品编辑', noCache: true}
+      },
+
+      {
         path: 'productCategory',
         name: 'ProductCategory',
         component: () => import('src/views/product/productCategory'),
-        meta: { title: '商品分类' }
+        meta: { title: '商品分类',noCache: true  }
       }, {
         path: 'productBrand',
         name: 'ProductBrand',
         component: () => import('src/views/product/productBrand'),
-        meta: { title: '商品品牌' }
+        meta: { title: '商品品牌',noCache: true  }
       }, {
         path: 'productTag',
         name: 'ProductTag',
         component: () => import('src/views/product/productTag'),
-        meta: { title: '场景和标签' }
+        meta: { title: '场景和标签' ,noCache: true }
       }
     ]
   },
@@ -101,6 +121,7 @@ export const constantRouterMap = [
     path: '/user',
     component: Layout,
     redirect: '/user/index',
+    name: 'User',
     meta: { title: '用户', icon: 'huiyuan' },
     children: [
       {
@@ -135,6 +156,7 @@ export const constantRouterMap = [
     path: '/marketing',
     component: Layout,
     redirect: '/marketing/coupon',
+    name: 'Marketing',
     meta: { title: '营销', icon: 'yingxiaoshezhi' },
     children: [
       {
@@ -169,6 +191,7 @@ export const constantRouterMap = [
     path: '/approval',
     component: Layout,
     redirect: '/approval/withdraw',
+    name: 'Approval',
     meta: { title: '审批', icon: 'shenpi' },
     children: [
       {
@@ -190,7 +213,7 @@ export const constantRouterMap = [
         path: 'productAudit',
         name: 'ProductAudit',
         component: () => import('src/views/approval/productAudit'),
-        meta: { title: '商品上架' }
+        meta: { title: '供应商商品审批' }
       },{
         path: 'tweetAudit',
         name: 'TweetAudit',
@@ -218,6 +241,7 @@ export const constantRouterMap = [
     path: '/activity',
     component: Layout,
     redirect: '/activity/index',
+    name: 'Activity',
     meta: { title: '活动', icon: 'huodong' },
     children: [
       {
@@ -253,6 +277,7 @@ export const constantRouterMap = [
     path: '/setting',
     component: Layout,
     redirect: '/setting/index',
+    name: 'Setting',
     meta: { title: '配置', icon: 'shezhi' },
     children: [
       {

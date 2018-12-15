@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import elDragDialog from 'src/directive/el-dragDialog' // base on element-ui
+import elDragDialog from 'src/directive/el-dragDialog'
 
 export default {
   name: 'DragDialogDemo',
@@ -36,13 +36,13 @@ export default {
       },
       rules: {
         password_old: [
-          {required: true, message: '请输入旧密码', trigger: 'blur'}
+          {required: true, message: '旧密码', trigger: 'blur'}
         ],
         password_new: [
-          {required: true, message: '请输入新密码', trigger: 'blur'}
+          {required: true, message: '新密码', trigger: 'blur'}
         ],
         password_repeat: [
-          {required: true, message: '请确认新密码', trigger: 'blur'}
+          {required: true, message: '新密码确认', trigger: 'blur'}
         ],
       }
     }

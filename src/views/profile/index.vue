@@ -5,30 +5,30 @@
       <div class="todo-line"></div>
 
       <ul class="todo-list">
-        <li class="todo-item">
+        <router-link tag="li" to="/approval/withdrawAudit" class="todo-item">
           <span class="label">提现审批</span>
           <span class="num">21</span>
-        </li>
-        <li class="todo-item return-prod">
+        </router-link>
+        <router-link tag="li" to="/approval/returnProductAudit" class="todo-item return-prod">
           <span class="label">退货审批</span>
           <span class="num">21</span>
-        </li>
-        <li class="todo-item agent-audit">
+        </router-link>
+        <router-link tag="li" to="/approval/agentAudit" class="todo-item agent-audit">
           <span class="label">代理商审批</span>
           <span class="num">21</span>
-        </li>
-        <li class="todo-item prod-audit">
+        </router-link>
+        <router-link tag="li" to="/approval/productAudit" class="todo-item prod-audit">
           <span class="label">商品上架</span>
           <span class="num">21</span>
-        </li>
-        <li class="todo-item tweet">
+        </router-link>
+        <router-link tag="li" to="/approval/tweetAudit" class="todo-item tweet">
           <span class="label">推文审核</span>
           <span class="num">21</span>
-        </li>
-        <li class="todo-item activity">
+        </router-link>
+        <router-link tag="li" to="/approval/withdraw" class="todo-item activity">
           <span class="label">活动审核</span>
           <span class="num">21</span>
-        </li>
+        </router-link>
       </ul>
     </section>
 
@@ -214,6 +214,7 @@
         flex-wrap: wrap;
 
         .todo-item {
+          cursor: pointer;
           .sc(20px, white);
           padding: 20px 40px;
           box-sizing: border-box;

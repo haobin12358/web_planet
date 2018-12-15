@@ -1,5 +1,7 @@
 // const title = 'http://10.0.0.197:7443/sharp/manager/';
 // const title = 'http://120.79.182.43:7443/sharp/manager/';
+import {getToken} from "src/utils/auth";
+
 const title = 'https://planet.daaiti.cn/api/v1/'
 
 const api = {
@@ -33,7 +35,7 @@ const api = {
   product_get: title + 'product/get',                                     //获取商品详情
   delete_questoutline: title + 'qa/delete_questoutline',                  //删除问题分类
   delete_question: title + 'qa/delete_question',                          //删除问题
-  upload_file: title + 'file/upload'                                       //上传图片
+  upload_file: title + 'file/upload?token='                               //上传图片
 
 }
 

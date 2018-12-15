@@ -26,7 +26,32 @@ export function validateUpperCase(str) {
 }
 
 /* 大小写字母*/
-export function validatAlphabets(str) {
+export function validateAlphabets(str) {
   const reg = /^[A-Za-z]+$/
   return reg.test(str)
 }
+
+/* 可为0的金额*/
+export function validateCanZeroMoney(str) {
+  const reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
+  return reg.test(str)
+}
+/* 大于0的金额*/
+export function validateMoney(str) {
+  const reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/
+  return reg.test(str)
+}
+
+
+/* 正数*/
+export function validatePositiveNumber(str) {
+  const reg = /^([1-9]\d*)$/
+  return reg.test(str)
+}
+
+/* 自然数*/
+export function validateNatureNumber(str) {
+  const reg = /^(\d*)$/
+  return reg.test(str)
+}
+
