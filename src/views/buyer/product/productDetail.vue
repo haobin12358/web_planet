@@ -2,8 +2,8 @@
     <div class="m-product-detail" v-if="product_info">
       <div class="m-product-swipe">
         <mt-swipe :auto="3000">
-          <mt-swipe-item class="product-swipe" v-for="item in product_info.images" v-bind:key="item.piid">
-            <img :src="item.pipic" class="product-img" alt="">
+          <mt-swipe-item class="product-swipe" v-for="(item, index) in product_info.images" v-bind:key="item.piid">
+            <img class="product-img" :src="item.pipic" @click="previewImage(index, product_info.images)">
           </mt-swipe-item>
         </mt-swipe>
         <span class="m-icon-back" @click="changeBack"></span>
@@ -74,6 +74,8 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import {Toast} from 'mint-ui'
+  import wxapi from '../../../common/js/mixins';
+
   var scroll = (function (className) {
     var scrollTop;
     return {
@@ -102,9 +104,8 @@
             user: { uslevel: '1' }
           }
         },
-      components:{
-          sku
-      },
+      mixins: [wxapi],
+      components: { sku },
       mounted(){
         common.changeTitle('商品详情');
         this.getInfo();
@@ -137,6 +138,18 @@
            }else{
              this.$router.push(v);
            }
+        },
+        // 预览图片
+        previewImage(index, image) {
+          let images = [];
+          for(let i = 0; i < image.length; i ++) {
+            images.push(image[i].pipic);
+          }
+          let options = {
+            current: image[index].pipic, // 当前显示图片的http链接
+            urls: images,                  // 当前预览图片的list
+          };
+          wxapi.previewImage(options);
         },
         //返回{
         changeBack(){
@@ -223,7 +236,7 @@
   .m-product-swipe{
     position: relative;
     width: 100%;
-    height: 784px;
+    height: 750px;
     .m-icon-back{
       position: absolute;
       top: 30px;
