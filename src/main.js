@@ -55,6 +55,7 @@ axios.interceptors.request.use(config => {
     if(config.url.indexOf('bing_telphone') < 0) {
       // 避免code影响
       window.location.href = window.location.origin + '/#/personal/editInput?from=new';
+      return false;
     }
   }
 
@@ -87,8 +88,8 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
         // router.push('/login');
         window.location.href = window.location.origin + '/#/login';
         localStorage.setItem('toLogin', 'toLogin');
-        // 倒计时60秒*10
-        const TIME_COUNT = 60*10;
+        // 倒计时60秒*5再提醒一次
+        const TIME_COUNT = 60*5;
         let count = TIME_COUNT;
         let time = setInterval(() => {
           if (count > 0 && count <= TIME_COUNT) {

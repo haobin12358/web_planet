@@ -138,6 +138,11 @@
           if(res.data.status == 200) {
             localStorage.setItem('mbjid', res.data.data.mbjid);
             options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
+            axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+              if(res.data.status == 200) {
+                options.link += '&secret_usid=' + res.data.data.secret_usid;
+              }
+            });
 
             // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
             if(wx.updateAppMessageShareData) {
@@ -162,6 +167,15 @@
       // 获取该活动
       getBox() {
         this.boxPopup = false;
+        let params = {
+          actype: 2,
+        };
+        // 有mbjid说明是好友分享过来的，这个时候不带token请求则获取好友这个魔盒的拆盒历史
+        if(this.$route.query.mbjid) {
+          params.mbjid = this.$route.query.mbjid;
+        }else {
+          params.token = localStorage.getItem('token');
+        }
         axios.get(api.get_activity + "?actype=2&token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.box = res.data.data;
@@ -176,14 +190,14 @@
                   }else {
                     this.history[i].msg = this.history[i].usname;
                   }
-                  this.history[i].msg += '拆盒并分享，';
+                  this.history[i].msg += ' 拆盒并分享，';
                 }else {
                   if(this.history[i].usname.length > 8) {
                     this.history[i].msg = this.history[i].usname.substr(0, 8) + '...';
                   }else {
                     this.history[i].msg = this.history[i].usname;
                   }
-                  this.history[i].msg += '拆盒，';
+                  this.history[i].msg += ' 拆盒，';
                 }
                 if(this.history[i].mboresult > 0) {
                   this.history[i].msg += '增加了' + this.history[i].mboresult + '元';
@@ -264,14 +278,21 @@
     },
     mounted() {
       common.changeTitle('魔法礼盒');
-      localStorage.setItem('mbjid', this.$route.query.mbjid);
+      if(localStorage.getItem('mbjid')) {
+        localStorage.setItem('mbjid', this.$route.query.mbjid);
+      }
+      if(localStorage.getItem('secret_usid')) {
+        localStorage.setItem('secret_usid', this.$route.query.secret_usid);
+      }
       this.getBox();                 // 获取该活动的规则
       this.uaid = localStorage.getItem('uaid');
       if(this.uaid) {
         localStorage.removeItem('uaid');
         this.buyNow();      // 点击购买
       }
-      wxapi.wxRegister();
+      if(localStorage.getItem('token')) {
+        wxapi.wxRegister();
+      }
     }
   }
 </script>
@@ -529,7 +550,7 @@
         left: 1px;
       }
       .m-popup-title {
-        margin-top: 220px;
+        margin-top: 200px;
       }
       .m-popup-text {
         margin-top: 20px;

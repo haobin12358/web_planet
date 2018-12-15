@@ -80,9 +80,14 @@
           app_from: window.location.origin.substr(8, window.location.origin.length)
         };
         axios.post(api.login, params).then(res => {
-          if(res.data.status == 200){
-            localStorage.setItem('token', res.data.data.token);
-            this.$router.push('/selected');
+          if(res.data.status == 200) {
+            if(res.data.data.openid) {
+              localStorage.setItem('token', res.data.data.token);
+              this.$router.push('/selected');
+            }else {
+              Toast({ message: '检测到您未进行过微信登录，请点击下方微信快速登录进入', duration: 3000 });
+              localStorage.setItem('ustelphone', this.ustelphone);
+            }
           }
         });
       },
@@ -231,11 +236,10 @@
     .m-wei-box{
       margin-top: 158px;
       color: #fff;
-      font-size: 18px;
       .m-icon-wei{
         display: inline-block;
-        width: 75px;
-        height: 75px;
+        width: 90px;
+        height: 90px;
         background: url("/static/images/icon-wei.png") no-repeat;
         background-size: 100% 100%;
       }

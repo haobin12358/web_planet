@@ -32,8 +32,12 @@ const wxApi = {
     }
   },
   wxRegister() {
-    // axios.get(api.get_wxconfig, { params: { url: window.location.href }}).then((res) => {
-    axios.get(api.get_wxconfig, { params: { url: window.location.href.split('#')[0] }}).then((res) => {
+    let params = {
+      url: window.location.href.split('#')[0],
+      // url: window.location.href,
+      app_from: window.location.origin.substr(8, window.location.origin.length)
+    };
+    axios.get(api.get_wxconfig, { params: params }).then((res) => {
       if(res.data.status == 200) {
         wx.config({
           debug: false,
@@ -87,7 +91,6 @@ const wxApi = {
       });
     });
   },
-
 
   // 预览图片
   previewImage(options) {

@@ -81,6 +81,10 @@
       this.from = this.$route.query.from;
       if(this.from == 'new') {
         common.changeTitle('绑定账号');
+        if(localStorage.getItem('ustelphone')) {
+          this.ustelphone = localStorage.getItem('ustelphone');
+          localStorage.removeItem('ustelphone');
+        }
       }else if(this.from == 'phone' || this.from == 'passwd') {
         common.changeTitle('安全中心');
       }else {
