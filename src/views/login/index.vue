@@ -20,11 +20,18 @@
           <svg-icon icon-class="eye"/>
         </span>
       </el-form-item>
+
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" type="primary" style="width: 100%;" @click.native.prevent="handleLogin">
           登录
         </el-button>
       </el-form-item>
+
+      <el-radio-group v-model="radio">
+        <el-radio label="1" border>管理员</el-radio>
+        <el-radio label="2" border>供应商</el-radio>
+      </el-radio-group>
+
       <div class="tips">
       </div>
     </el-form>
@@ -39,13 +46,15 @@
     name: 'Login',
     data() {
       return {
+        radio: '1',
+
         loginForm: {
           username: Cookie.get('username'),
-          password: ''
+          password: '',
         },
         loginRules: {
-          username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-          password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+          username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+          password: [{required: true, message: '请输入密码', trigger: 'blur'}]
         },
         loading: false,
         pwdType: 'password',
@@ -54,7 +63,7 @@
     },
     watch: {
       $route: {
-        handler: function(route) {
+        handler: function (route) {
           this.redirect = route.query && route.query.redirect
         },
         immediate: true
@@ -76,19 +85,19 @@
             Cookie.set('username', this.loginForm.username);
             this.$store.dispatch('Login', this.loginForm).then(() => {
               this.loading = false
-              this.$router.push({ path: this.redirect || '/' })
+              this.$router.push({path: this.redirect || '/'})
             }).catch(() => {
               this.loading = false
             })
           } else {
-            this.$message.warning('请填写用户名和密码');
+            // this.$message.warning('请填写用户名和密码');
             return false
           }
         })
       }
     },
 
-    created(){
+    created() {
       // console.log(this.$http, this.$api);
     }
   }

@@ -75,13 +75,13 @@ export const constantRouterMap = [
         path: 'index',
         name: 'ProductIndex',
         component: () => import('src/views/product/index'),
-        meta: { title: '所有商品',noCache: true }
+        meta: { title: '所有商品',noCache: false }
       }, {
         path: 'productEdit',
         name: 'ProductEdit',
         hidden: true,
         component: () => import('src/views/product/productEdit'),
-        meta: { title: '商品编辑', noCache: true}
+        meta: { title: '商品编辑', noCache: false}
       },
 
       {
@@ -282,7 +282,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'index',
-        name: 'ActivityIndex',
+        name: 'SettingIndex',
         component: () => import('src/views/setting/index'),
         meta: { title: '激活码' }
       },{

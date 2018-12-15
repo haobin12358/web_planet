@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="修改密码" @dragDialog="handleDrag">
+    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="修改密码">
       <el-form :model="pwdForm" :rules="rules" ref="pwdForm" label-width="120px">
         <el-form-item label="请输入旧密码" prop="password_old">
           <el-input type="password" class="m-input-pwd"
@@ -16,6 +16,10 @@
         </el-form-item>
       </el-form>
 
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doConfirm">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -48,12 +52,13 @@ export default {
     }
   },
   methods: {
-    // v-el-drag-dialog onDrag callback function
-    handleDrag() {
-      this.$refs.select.blur()
-    },
+    //  给外部调用的显示
     showDialog(){
         this.dialogTableVisible = true;
+    },
+
+    doConfirm(){
+        // this.$messageBox.confirm()
     },
   }
 }

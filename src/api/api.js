@@ -12,6 +12,7 @@ const api = {
   update_admin: title + 'user/update_admin',                              //更新管理员
   update_admin_password: title + 'user/update_admin_password',            //修改密码
   product_list: title + 'product/list',                                   //获取商品列表
+  product_get: title + 'product/get',                                     //获取商品详情
   delete_product: title + 'product/delete_list',                          //删除商品
   supplizer_list: title + 'supplizer/list',                               //获取供应商列表
   category_list: title + 'category/list',                                 //获取类目
@@ -19,6 +20,7 @@ const api = {
   scene_list: title + 'scene/list',                                       //获取场景
   items_list: title + 'items/list',                                       //获取标签
   create_product: title + 'product/create',                               //添加商品
+  update_product: title + 'product/update',                               //修改商品
 
   get_order_situation: title + 'order/get_order_situation',               //获取订单概况
   get_all_order: title + 'order/list',                                    //获取所有订单
@@ -32,7 +34,6 @@ const api = {
   get_all_qa: title + 'qa/get_all',                                       //获取所有问题
   add_questanswer: title + 'qa/add_questanswer',                          //添加问题
   add_questoutline: title + 'qa/add_questoutline',                        //添加问题类型
-  product_get: title + 'product/get',                                     //获取商品详情
   delete_questoutline: title + 'qa/delete_questoutline',                  //删除问题分类
   delete_question: title + 'qa/delete_question',                          //删除问题
   upload_file: title + 'file/upload?token='                               //上传图片

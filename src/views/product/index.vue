@@ -14,13 +14,14 @@
     </section>
 
 
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" height="800px">
+    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column
         type="index"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
-          <img v-lazy="scope.row.prmainpic" :key="scope.row.prmainpic" class="table-pic"/>
+          <!--<img v-lazy="scope.row.prmainpic" :key="scope.row.prmainpic" class="table-pic"/>-->
+          <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prtitle" label="商品名" width="280"></el-table-column>
@@ -73,12 +74,16 @@
 
 <script>
   import {getToken} from "src/utils/auth";
+  import TableCellImg from "src/components/TableCellImg";
+
 
 
   export default {
     name: 'ProductIndex',
 
-    components: {},
+    components: {
+      TableCellImg
+    },
 
     data() {
       return {
@@ -136,9 +141,9 @@
       },
       doEdit(product) {
         this.$router.push({
-          path: '/product/index',
+          path: '/product/productEdit',
           query: {
-            prid: 1
+            prid: product.prid
           }
         })
       },

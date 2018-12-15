@@ -18,7 +18,7 @@
                          @change="handlePcidChange"
                          v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
             </el-cascader>
-            <router-link tag="span" to="/product/productCategory" class="form-item-end-tip">分类不全?去新增</router-link>
+            <router-link tag="span" to="/product/productCategory" class="form-item-end-tip">分类不全?去新增 ></router-link>
           </el-form-item>
 
           <el-form-item label="所属品牌" prop="pbid">
@@ -28,11 +28,11 @@
                 <img v-lazy="item.pblogo" style="float: right;width: 32px;height: 32px;padding: 2px;" alt="">
               </el-option>
             </el-select>
-            <router-link tag="span" to="/product/productBrand" class="form-item-end-tip">品牌不全?去新增</router-link>
+            <router-link tag="span" to="/product/productBrand" class="form-item-end-tip">品牌不全?去新增 ></router-link>
           </el-form-item>
 
           <el-form-item label="关联标签" prop="items">
-            <el-select v-model="formData.items" style="width: 500px;" multiple filterable placeholder="可多选,可搜索">
+            <el-select v-model="items" style="width: 500px;" multiple filterable placeholder="可多选,可搜索">
               <el-option
                 v-for="item in tagsOptions"
                 :key="item.itid"
@@ -40,7 +40,7 @@
                 :value="item.itid">
               </el-option>
             </el-select>
-            <router-link tag="span" to="/product/productTag" class="form-item-end-tip">标签不全?去新增</router-link>
+            <router-link tag="span" to="/product/productTag" class="form-item-end-tip">标签不全?去新增 ></router-link>
           </el-form-item>
 
           <!--<block-title title="基本信息"></block-title>-->
@@ -169,7 +169,7 @@
               </div>
             </el-upload>
           </el-form-item>
-          <el-form-item label="商品详情顶部轮播图" prop="images">
+          <el-form-item label="顶部轮播图(最多9张)" prop="images">
             <el-upload
               class="swiper-uploader"
               :action="uploadUrl"
@@ -180,14 +180,14 @@
               :before-upload="beforeImgsUpload"
               :on-remove="handleImagesRemove"
               :http-request="uploadImages"
-              :limit="5"
+              :limit="9"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.
               </div>
             </el-upload>
           </el-form-item>
-          <el-form-item label="底部长图" prop="prdesc">
+          <el-form-item label="底部长图(最多20张)" prop="prdesc">
             <el-upload
               class="swiper-uploader"
               :action="uploadUrl"
@@ -214,14 +214,19 @@
     </el-row>
 
     <section class="tool-tip-wrap pin-right-bottom">
-      <el-button type="primary" @click="checkFormData">保存商品</el-button>
+      <el-button type="primary" @click="checkFormData(true)">保存并跳转</el-button>
+      <el-button type="primary" @click="checkFormData(false)">保存不跳转</el-button>
     </section>
 
     <!--规格排序dialog-->
     <el-dialog :visible.sync="dialogSkuSortVisible" width="80%" title="确认规格顺序(拖动排序)">
       <section style="display: flex;align-items:flex-start;flex-wrap: wrap;">
-        <kan-ban v-for="(item,index) in formData.pskuvalue" :key="index" :list="item" :options="{group: 'color'}"
+        <kan-ban v-for="(item,index) in formData.pskuvalue" :key="index" :list="item"
                  class="kanban" :header-text="formData.prattribute[index]"/>
+
+        <!--<draggable v-for="(item,index) in formData.pskuvalue" :key="index" element="ul" v-model="item">-->
+          <!--<li v-for="item in list">{{item.name}}</li>-->
+        <!--</draggable>-->
       </section>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSkuSortVisible = false">取 消</el-button>
@@ -238,6 +243,7 @@
 
 <script>
   import KanBan from 'src/components/Kanban'
+  import draggable from 'vuedraggable'
 
 
   const canZeroMoneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
@@ -249,27 +255,37 @@
     name: "ProductEdit",
 
     components: {
-      KanBan
+      KanBan,
+      draggable
     },
 
     watch: {
-      'formData.skus'(val) {
-        console.log(val);
-      },
-
-      selectedOption(val) {
+      selectedOption(val){
         this.formData.pcid = val[2];
+      },
+      items(val){
+        this.formData.items = this.items.map(item => {
+          return {
+            itid: item
+          }
+        });
       },
       imagesUrl(val) {
         this.formData.images = val.map((item, index) => {
           return {
             pipic: item.url,
             pisort: index,
+            piid: item.piid,
           }
         });
       },
       prDescUrl(val) {
         this.formData.prdesc = val.map(item => item.url);
+      },
+      dialogSkuSortVisible(val){
+        if(!val){
+          this.goToIndexAfterSave = false;
+        }
       },
     },
 
@@ -286,7 +302,11 @@
       };
 
       return {
+        goToIndexAfterSave: false,
+
         formData: {
+          prid: '',
+
           pcid: "",
           pbid: "",
           items: [],
@@ -356,7 +376,6 @@
           label: 'pcname',
           children: 'subs',
         },
-        selectedOption: [], //  完整的三个分类id
 
         // 品牌
         brandOptions: [],
@@ -375,7 +394,10 @@
         //  大图预览
         dialogImageUrl: '',
         dialogVisible: false,
-        //  图片上传显示用
+
+        //  配合element组件,编辑用,需在init和watch中转换下
+        selectedOption: [], //  完整的三个分类id
+        items: [], //  item
         prMainPicUrl: '', //  主图
         imagesUrl: [],    //  详情页顶部轮播图
         prDescUrl: [],       //  详情长图
@@ -545,7 +567,7 @@
           }
         }
 
-        this.formData.pskuvalue = rst;
+        this.$set(this.formData, 'pskuvalue', rst);
       },
 
       //  预览图
@@ -584,7 +606,9 @@
         return isLt15M;
       },
       handleImagesRemove(file, fileList) {
-        this.formData.images = fileList;
+        this.imagesUrl =  this.imagesUrl.filter(
+          item => item.uid != file.uid
+        )
       },
       uploadImages(file) {
         let formData = new FormData();
@@ -641,36 +665,74 @@
         )
       },
 
+      //  配合的data转换成接口要求的 还是得放watch里配合校验信息
+      convertToSave(){
+        // this.formData.pcid = this.selectedOption[2];
+        // this.formData.items = this.items.map(item => {
+        //   return {
+        //     itid: item
+        //   }
+        // });
+      },
+
       //  保存
       doSaveProd() {
-        this.formData.items = this.formData.items.map(item => {
-          return {
-            itid: item
-          }
-        })
-        this.$http.post(this.$api.create_product, this.formData, {
-          params: {
-            token: this.$auth.getToken()
-          }
-        }).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-
-
-              this.$notify({
-                title: '商品保存成功',
-                message: `商品名:${this.formData.prtitle}`,
-                type: 'success'
-              });
+        if(this.formData.prid){ //  编辑
+          this.$http.post(this.$api.update_product, this.formData, {
+            params: {
+              token: this.$auth.getToken()
             }
-          }
-        )
+          }).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
+                    data = res.data.data;
+
+                if(this.goToIndexAfterSave){
+                  this.$router.push('/product');
+                }
+
+                this.$notify({
+                  title: '商品编辑成功',
+                  message: `商品名:${this.formData.prtitle}`,
+                  type: 'success'
+                });
+                this.reset();
+                this.dialogSkuSortVisible = false;
+              }
+            }
+          )
+        }else{
+          this.$http.post(this.$api.create_product, this.formData, {
+            params: {
+              token: this.$auth.getToken()
+            }
+          }).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
+                    data = res.data.data;
+
+                if(this.goToIndexAfterSave){
+                  this.$router.push('/product');
+                }
+
+
+                this.$notify({
+                  title: '商品新增成功',
+                  message: `商品名:${this.formData.prtitle}`,
+                  type: 'success'
+                });
+                this.reset();
+                this.dialogSkuSortVisible = false;
+              }
+            }
+          )
+        }
       },
       //  formData.skuvalue(规格属性排序)干扰因素过多,所以需要用户最后确认
       //  该方法是确认前对其他参数的校验,最后在排序面板点确认触发doSaveProd
-      checkFormData() {
+      checkFormData(goToIndexAfterSave) {
         this.$refs.prodForm.validate(
           valid => {
             if (valid) {
@@ -679,6 +741,9 @@
               if (checkSkuRst) {
                 this.$message.warning(checkSkuRst)
                 return
+              }
+              if(goToIndexAfterSave){
+                this.goToIndexAfterSave = true;
               }
 
               this.showSkuSortDlg()
@@ -727,18 +792,90 @@
           return '请先添加商品规格!'
         }
       },
+
+      //  编辑时,已保存的商品数据转换成组件要的
+      convertFromEdit(data){
+        this.selectedOption = data.pcids;
+        this.items = data.items.map(item => item.itid);
+
+        this.prMainPicUrl = data.prmainpic;
+        this.imagesUrl = data.images.map(item => {
+          return {
+            url: item.pipic,
+            piid: item.piid,
+          }
+        });
+        this.prDescUrl = data.prdesc.map(item => {
+          return {
+            url: item
+          }
+        });
+
+      },
+      //  抽离出来的初始化
+      init(){
+        this.setCategory();
+        this.setBrand();
+        this.setTags();
+
+        if(this.$route.query.prid){ //  编辑
+          //  编辑更换的商品或之前是新增,数据替换
+          if(this.$route.query.prid!=this.formData.prid){
+            this.$http.get(this.$api.product_get,{
+              params: {
+                prid: this.$route.query.prid,
+                token: this.$auth.getToken()
+              }
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.convertFromEdit(data);
+                  this.formData = data;
+                  this.$refs.prodForm.clearValidate();
+                }
+              }
+            )
+          }else{
+
+          }
+        }else{  //  新增
+          //  编辑到新增
+          if(this.formData.prid){
+            this.reset();
+          }
+        }
+
+        this.$refs.prodForm.clearValidate();
+        this.$message({
+          type: 'info',
+          message: `当前是商品${this.$route.query.prid? '编辑':'新增'}状态`,
+          duration: '2000'
+        });
+      },
+      //  重置(新增状态)
+      reset(){
+          this.formData = {};
+          this.selectedOption = [];
+          this.items = [];
+          this.prMainPicUrl = '';
+          this.imagesUrl = [];
+          this.prDescUrl = [];
+      },
     },
 
+    //  新增编辑共用一个,光新增和prid不变时不会重置数据,
     activated() {
       //  todo  编辑时回显
+      this.init();
     },
 
+    //  当前keepAlive bug: 当还没打开过该页面时,打开会执行 created和activated
+    //  除了多调一遍接口,问题不大
     created() {
-      this.setCategory();
-      this.setBrand();
-      this.setTags();
-
-      console.log(this.$route.query);
+      this.init();
     }
     ,
   }
@@ -792,7 +929,17 @@
       right: 3rem;
       bottom: 2rem;
       font-size: .22rem;
+      .fjc();
+      align-items: center;
 
+      .el-button{
+        margin: 0;
+        margin-bottom: 20px;
+
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
     }
   }
 </style>
