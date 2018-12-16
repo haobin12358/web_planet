@@ -27,9 +27,9 @@
         </el-button>
       </el-form-item>
 
-      <el-radio-group v-model="radio">
-        <el-radio label="1" border>管理员</el-radio>
-        <el-radio label="2" border>供应商</el-radio>
+      <el-radio-group v-model="loginForm.userType">
+        <el-radio label="1" name="userType" border>管理员</el-radio>
+        <el-radio label="2" name="userType" border>供应商</el-radio>
       </el-radio-group>
 
       <div class="tips">
@@ -40,17 +40,17 @@
 
 <script>
   import Cookie from 'js-cookie'
+  import {mapGetters} from "vuex";
 
 
   export default {
     name: 'Login',
     data() {
       return {
-        radio: '1',
-
         loginForm: {
           username: Cookie.get('username'),
           password: '',
+          userType: Cookie.get('userType') || 1,
         },
         loginRules: {
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
@@ -69,6 +69,9 @@
         immediate: true
       }
     },
+    computed: {
+      ...mapGetters(['userInfo'])
+    },
     methods: {
       showPwd() {
         if (this.pwdType === 'password') {
@@ -83,9 +86,31 @@
             this.loading = true
 
             Cookie.set('username', this.loginForm.username);
+            Cookie.set('userType', this.loginForm.userType);
+
             this.$store.dispatch('Login', this.loginForm).then(() => {
               this.loading = false
               this.$router.push({path: this.redirect || '/'})
+
+              let roleZh = '';
+
+              switch (this.userInfo.level) {
+                case 'supplizer':
+                  roleZh = '供应商';
+                  break;
+                case 'admin':
+                  roleZh = '管理员';
+                  break;
+                case 'super':
+                  roleZh = '超级管理员';
+                  break;
+              }
+
+              this.$notify({
+                title: '登录成功',
+                message: `身份:${roleZh}`,
+                type: 'success'
+              });
             }).catch(() => {
               this.loading = false
             })

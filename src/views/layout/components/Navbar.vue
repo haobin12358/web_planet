@@ -20,7 +20,7 @@
       <el-dropdown class="avatar-container" trigger="click" @command="handleCommand">
         <div class="avatar-wrapper">
           <!--<img v-lazy="userInfo.adheader" class="user-avatar">-->
-          <span>{{userInfo.adname}}</span>
+          <span>{{userInfo.username}}</span>
 
           <i class="el-icon-caret-bottom"/>
         </div>

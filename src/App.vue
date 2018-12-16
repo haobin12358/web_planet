@@ -18,7 +18,7 @@ export default {
   },
 
   created(){
-    this.$store.commit('InitInfo');
+    // this.$store.commit('InitInfo');
   }
 }
 </script>

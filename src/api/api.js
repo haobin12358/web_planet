@@ -22,6 +22,8 @@ const api = {
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
 
+  supplizer_login: title + 'user/supplizer_login',                        //供应商登录
+
   get_order_situation: title + 'order/get_order_situation',               //获取订单概况
   get_all_order: title + 'order/list',                                    //获取所有订单
   get_order_by_LOid: title + 'order/get',                                 //获取订单详情

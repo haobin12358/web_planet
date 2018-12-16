@@ -9,3 +9,13 @@ export const login = (adname, adpassword) => axios(api.login, {
     adpassword,
   },
 });
+
+export const supplizerLogin = (mobile, password) => axios(api.supplizer_login, {
+  noLoading: true,
+  method: 'post',
+  data: {
+    mobile,
+    password,
+  },
+});
+
