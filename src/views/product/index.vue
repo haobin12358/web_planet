@@ -108,7 +108,6 @@
         this.$http(this.$api.product_list, {
           noLoading: true,
           params: {
-            token: getToken(),
             page_size: this.pageSize,
             page_num: this.currentPage,
           }

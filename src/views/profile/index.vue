@@ -112,8 +112,8 @@
       </ul>
     </section>
 
+    <block-title title="订单趋势"></block-title>
     <echarts :id="id" :option="option" :width="1300"></echarts>
-
 
 
   </div>

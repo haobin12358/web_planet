@@ -18,7 +18,7 @@
                          @change="handlePcidChange"
                          v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
             </el-cascader>
-            <router-link tag="span" to="/product/productCategory" class="form-item-end-tip">分类不全?去新增 ></router-link>
+            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productCategory" class="form-item-end-tip">分类不全?去新增 ></router-link>
           </el-form-item>
 
           <el-form-item label="所属品牌" prop="pbid">
@@ -28,7 +28,7 @@
                 <img v-lazy="item.pblogo" style="float: right;width: 32px;height: 32px;padding: 2px;" alt="">
               </el-option>
             </el-select>
-            <router-link tag="span" to="/product/productBrand" class="form-item-end-tip">品牌不全?去新增 ></router-link>
+            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand" class="form-item-end-tip">品牌不全?去新增 ></router-link>
           </el-form-item>
 
           <el-form-item label="关联标签" prop="items">
@@ -40,7 +40,7 @@
                 :value="item.itid">
               </el-option>
             </el-select>
-            <router-link tag="span" to="/product/productTag" class="form-item-end-tip">标签不全?去新增 ></router-link>
+            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag" class="form-item-end-tip">标签不全?去新增 ></router-link>
           </el-form-item>
 
           <!--<block-title title="基本信息"></block-title>-->
@@ -244,6 +244,8 @@
 <script>
   import KanBan from 'src/components/Kanban'
   import draggable from 'vuedraggable'
+  import permission from 'src/directive/permission/index.js' // 权限判断指令
+  import {level2} from "src/router";
 
 
   const canZeroMoneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
@@ -258,6 +260,8 @@
       KanBan,
       draggable
     },
+
+    directives: { permission },
 
     watch: {
       selectedOption(val){
@@ -874,7 +878,7 @@
 
     //  当前keepAlive bug: 当还没打开过该页面时,打开会执行 created和activated
     //  除了多调一遍接口,问题不大
-    created() {
+    mounted() {
       this.init();
     }
     ,

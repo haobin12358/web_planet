@@ -50,7 +50,7 @@
         loginForm: {
           username: Cookie.get('username'),
           password: '',
-          userType: Cookie.get('userType') || 1,
+          userType: Cookie.get('userType') || '1',
         },
         loginRules: {
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],

@@ -1,5 +1,6 @@
 import { Loading, Message, MessageBox } from 'element-ui'
 import axios from 'axios'
+import store from "../store";
 
 // 超时时间
 axios.defaults.timeout = 60000
@@ -8,6 +9,9 @@ let loadinginstace
 axios.interceptors.request.use(config => {
   if (!config.noLoading) {
     loadinginstace = Loading.service({ fullscreen: true })
+  }
+  if(store.getters.token){
+    config.params.token = store.getters.token;
   }
   return config
 }, error => {
