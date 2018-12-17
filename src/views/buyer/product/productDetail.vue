@@ -59,8 +59,8 @@
         <span class="m-icon-car" @click.stop="changeRoute('/shop')"></span>
         <span class="m-icon-service"></span>
         <div class="m-product-detail-btn">
-          <span @click="addCart">加入购物车</span>
-          <span class="active" @click="buyNow">立即购买</span>
+          <span class="active" @click="addCart">加入购物车</span>
+          <span @click="buyNow">立即购买</span>
         </div>
       </div>
 
@@ -203,11 +203,12 @@
         },
       //  加入购物车
         addCart(){
-           if(this.select_value){
+           /*if(this.select_value){
                this.postCart();
            }else{
              this.show_sku = true;
-           }
+           }*/
+          this.show_sku = true;
            this.cart_buy = 'cart';
         },
         //立即购买
@@ -346,13 +347,13 @@
         display: inline-block;
         width: 271px;
         text-align: center;
-        background-color: @subColor;
+        background-color: @mainColor;
         margin: 0;
-        border-radius: 10px 0 0 10px;
+        border-radius: 0 10px 10px 0;
         &.active{
           background-color: @mainColor;
-          margin-left: -8px;
-          border-radius: 0 10px 10px 0;
+          margin-right: -5px;
+          border-radius: 10px 0 0 10px;
         }
       }
     }

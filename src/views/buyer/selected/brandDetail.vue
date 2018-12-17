@@ -22,7 +22,7 @@
           <span v-else @click="foldClick">点击收起 <span class="m-icon-packup"></span></span>
         </p>
       </div>
-      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+      <nav-list class="m-width" :navlist="nav_list" @navClick="navClick"></nav-list>
 
       <product :list="product_list"></product>
       <bottom-line v-if="bottom_show"></bottom-line>
@@ -210,6 +210,10 @@
       }
     }
   }
+  .m-width {
+    width: 600px;
+    margin: 0 75px;
+  }
   .m-brand-text{
     padding: 0 36px;
     text-align: left;
@@ -252,8 +256,9 @@
   }
   .m-nav-list{
     .flex-row(space-around);
-    box-shadow:0px 3px 6px rgba(0,0,0,0.16);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     padding: 6px 0;
+
   }
 }
 </style>

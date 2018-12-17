@@ -19,7 +19,7 @@
         <!--</div>-->
         <!--<div></div>-->
       <!--</div>-->
-      <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
+      <nav-list style="width: 350px; margin: 0 30px" :navlist="nav_list" @navClick="navClick"></nav-list>
       <product :list="product_list"></product>
       <bottom-line v-if="bottom_show"></bottom-line>
       <!--<div class="m-modal-select" v-if="show_modal" @click="changeModal('show_modal',false)">-->
@@ -92,6 +92,7 @@
               name:'新品',
               params:'time',
               active:false,
+              icon:true,
               desc_asc:true
             },
             {
@@ -345,7 +346,7 @@
     }
   }
   .m-nav-list{
-    padding: 0 64px;
+    padding: 0 75px;
   }
   .m-modal-select{
     position: fixed;

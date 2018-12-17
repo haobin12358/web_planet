@@ -114,7 +114,7 @@
       padding-left: 35px;
       padding-top: 10px;
       width: 715px;
-      box-shadow:0 3px 6px rgba(0,0,0,0.16);
+      /*box-shadow:0 3px 6px rgba(0,0,0,0.16);*/
       padding-bottom: 10px;
       margin: 0 0 48px;
       background-color: #fff;

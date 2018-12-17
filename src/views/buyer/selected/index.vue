@@ -78,7 +78,7 @@
               </li>
             </ul>
           </div>
-          <div class="m-scroll ">
+          <div class="m-scroll">
             <ul class="m-selected-brand-product-ul">
               <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
                 <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >

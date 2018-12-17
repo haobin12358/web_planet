@@ -1,8 +1,9 @@
 <template>
   <div class="m-pandora">
     <div class="m-box-product">
-      <div class="m-box-tip m-ft-28 m-ft-b" v-if="history">您的好友为您打开了魔法礼盒！</div>
-      <div class="m-box-tip m-ft-28 m-ft-b" v-else>分享给好友帮您打开魔法礼盒！</div>
+      <div class="m-box-tip m-ft-28 m-ft-b" v-if="history && !mbjid">您的好友为您打开了魔法礼盒！</div>
+      <div class="m-box-tip m-ft-28 m-ft-b" v-if="!history && !mbjid">分享给好友帮您打开魔法礼盒！</div>
+      <div class="m-box-tip m-ft-28 m-ft-b" v-if="mbjid">点击任意一个盒子，为好友助力吧！</div>
       <div class="m-gift-one animated bounceInLeft" @click="pandora(1)"></div>
       <div class="m-gift-two animated bounceInDown" @click="pandora(2)"></div>
       <div class="m-gift-three animated bounceInUp" @click="pandora(3)"></div>
@@ -50,10 +51,10 @@
     <!--点击魔盒的popup-->
     <mt-popup class="m-box-popup" v-model="boxPopup" pop-transition="popup-fade">
       <div class="m-gift-icon"></div>
-      <div class="m-popup-title m-ft-30 m-ft-b">当前价格：<span class="m-red">{{price.final_price | money}}元</span></div>
-      <div class="m-popup-text m-ft-30 m-ft-b">您为您的好友{{change}}了
+      <div class="m-popup-text m-ft-30 m-ft-b">您为好友{{change}}了
         <span class="m-red m-ft-44"> {{price.final_reduce_now | money}}元 </span>购买金额！
       </div>
+      <div class="m-popup-title m-ft-30 m-ft-b">当前价格：<span class="m-red">{{price.final_price | money}}元</span></div>
       <div class="m-popup-btn m-ft-30 m-ft-b" @click="getBox">知道了</div>
     </mt-popup>
   </div>
@@ -79,7 +80,8 @@
         show_invite: false,
         price: { final_reduce_now: '', final_price: '' },
         change: '',
-        uaid: ''
+        uaid: '',
+        mbjid: ''
       }
     },
     mixins: [wxapi],
@@ -278,6 +280,7 @@
     },
     mounted() {
       common.changeTitle('魔法礼盒');
+      this.mbjid = this.$route.query.mbjid;
       if(localStorage.getItem('mbjid')) {
         localStorage.setItem('mbjid', this.$route.query.mbjid);
       }
@@ -550,10 +553,10 @@
         left: 1px;
       }
       .m-popup-title {
-        margin-top: 200px;
+        margin-top: 20px;
       }
       .m-popup-text {
-        margin-top: 20px;
+        margin-top: 200px;
       }
       .m-popup-btn {
         width: 250px;

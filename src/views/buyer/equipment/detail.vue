@@ -218,7 +218,7 @@
         }
       }
       .m-equipment-detail-content{
-        padding: 50px 0 50px 260px;
+        padding: 0 0 50px 260px;
         margin-right: 10px;
         .m-equipment-detail-product{
           .flex-row(flex-start);
@@ -232,9 +232,9 @@
             border-radius:10px;
             line-height: 63px;
             margin: 0 35px 20px 0;
-            &:nth-child(3n){
+            /*&:nth-child(3n){
               margin-right: 0;
-            }
+            }*/
             img{
               display: block;
               width: 100%;
