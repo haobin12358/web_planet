@@ -119,7 +119,7 @@
       // 获取时间
       getDate() {
         this.dayNum = new Date().getDate();
-        this.monthNum = new Date().toString().substr(4, 3);
+        this.monthNum = new Date().toString().substr(4, 4);
 
         // 判断星期几
         switch(new Date().getDay()) {
@@ -193,7 +193,7 @@
     mounted() {
       common.changeTitle('活动商品');
       this.getProduct();               // 获取商品
-      this.getDate();                   // 获取时间
+      this.getDate();                  // 获取时间
     }
   }
 </script>
