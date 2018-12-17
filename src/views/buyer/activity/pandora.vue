@@ -180,7 +180,7 @@
         }else {
           params.token = localStorage.getItem('token');
         }
-        axios.get(api.get_activity + "?actype=2&token=" + localStorage.getItem('token')).then(res => {
+        axios.get(api.get_activity + "?actype=2", { params: params }).then(res => {
           if(res.data.status == 200){
             this.box = res.data.data;
             this.history = res.data.data.infos.open_history;
@@ -295,9 +295,16 @@
         localStorage.removeItem('uaid');
         this.buyNow();      // 点击购买
       }
-      if(localStorage.getItem('token')) {
-        wxapi.wxRegister();
-      }
+      /*if(localStorage.getItem('token')) {
+        // 获取base64编码后的usid 用于默认分享
+        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            let link = encodeURIComponent(window.location.origin + '/#/selected?secret_usid=' + res.data.data.secret_usid);
+            wxapi.wxRegister(link);
+          }
+        });
+      }*/
+      wxapi.wxRegister(window.location.href);
     }
   }
 </script>

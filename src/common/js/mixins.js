@@ -31,10 +31,10 @@ const wxApi = {
       }
     }
   },
-  wxRegister() {
+  wxRegister(link) {
     let params = {
-      url: window.location.href.split('#')[0],
       // url: window.location.href,
+      url: link,
       app_from: window.location.origin.substr(8, window.location.origin.length)
     };
     axios.get(api.get_wxconfig, { params: params }).then((res) => {
@@ -58,35 +58,29 @@ const wxApi = {
       axios.get(api.get_share_params).then(res => {
         if(res.data.status == 200) {
           let params = res.data.data;
-          // 获取base64编码后的usid 用于默认分享
-          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
-            if(res.data.status == 200) {
-              let link = window.location.origin + '/#/selected?secret_usid=' + res.data.data.secret_usid;
-              // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
-              if(wx.updateAppMessageShareData) {
-                wx.updateAppMessageShareData({
-                  title: params.title, // 分享标题
-                  desc: params.content, // 分享描述
-                  link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                  imgUrl: params.img, // 分享图标
-                  success: function () {
-                    // 设置成功
-                  }
-                });
+          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+          if(wx.updateAppMessageShareData) {
+            wx.updateAppMessageShareData({
+              title: params.title, // 分享标题
+              desc: params.content, // 分享描述
+              link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: params.img, // 分享图标
+              success: function () {
+                // 设置成功
               }
-              // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
-              if(wx.updateTimelineShareData) {
-                wx.updateTimelineShareData({
-                  title: params.title, // 分享标题
-                  link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                  imgUrl: params.img, // 分享图标
-                  success: function () {
-                    // 设置成功
-                  }
-                });
+            });
+          }
+          // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+          if(wx.updateTimelineShareData) {
+            wx.updateTimelineShareData({
+              title: params.title, // 分享标题
+              link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: params.img, // 分享图标
+              success: function () {
+                // 设置成功
               }
-            }
-          });
+            });
+          }
         }
       });
     });

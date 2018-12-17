@@ -47,9 +47,10 @@
                   <span>{{items.commentnumber}}</span>
                 </li>
                 <li>
-                  <span class="m-icon-transmit"></span>
+                  <span class="m-icon-transmit" @click.stop="shareCircle(items)"></span>
                 </li>
               </ul>
+              <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
               <div class="m-refuse-reason" v-if="select_nav.itid == 'mynews' && items.nestatus == 'refuse'">
                 {{items.refuse_info}}
               </div>
@@ -68,6 +69,8 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
+  import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
   import bottomLine from '../../../components/common/bottomLine';
 
   export default {
@@ -102,14 +105,19 @@
         isScroll: true,
         total_count: 0,
         bottom_show: false,
+        show_invite: false
       }
     },
+    mixins: [wxapi],
     inject: ['reload'],
     components: { navList, bottomLine },
     mounted() {
       common.changeTitle('圈子');
       if(!localStorage.getItem('circleIndex')) {
-        localStorage.setItem('circleIndex', 0)
+        localStorage.setItem('circleIndex', 0);
+      }
+      if(localStorage.getItem('token')) {
+        wxapi.wxRegister(window.location.href);
       }
     },
     activated() {
@@ -125,6 +133,48 @@
       }
     },
     methods: {
+      // 分享圈子
+      shareCircle(items) {
+        // console.log(items);
+        // console.log(items.neid);
+        let options = {
+          title: '圈子',
+          desc: '快来查看您的好友分享的圈子乐趣吧',
+          imgUrl: 'https://planet.daaiti.cn/img/news/2018/12/13/LjqHqnWB1iUHulPnNl1S0118b970-fa0a-11e8-9f20-00163e08d30f.jpeg_186x198.jpeg',
+          // imgUrl: this.items.usheader,       // 初步考虑用用户头像
+          link: window.location.origin + '/#/circle/detail?neid=' + items.neid
+        };
+        // 点击分享
+        this.show_invite = true;
+        // 倒计时
+        const TIME_COUNT = 3;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            this.show_invite = false;
+            clearInterval(time);
+          }
+        }, 1000);
+
+        // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+        if(wx.updateAppMessageShareData) {
+          wx.updateAppMessageShareData(options);
+        }
+        // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+        if(wx.updateTimelineShareData) {
+          wx.updateTimelineShareData(options);
+        }
+        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareAppMessage) {
+          wx.onMenuShareAppMessage(options);
+        }
+        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareTimeline) {
+          wx.onMenuShareTimeline(options);
+        }
+      },
       /*跳转路由*/
       changeRoute(v,params,value){
         if(v == '/circle/detail'){
@@ -432,6 +482,14 @@
               background: url("/static/images/icon-transmit.png") no-repeat;
               background-size: 100% 100%;
             }
+          }
+          .m-invite-course {
+            position: fixed;
+            top:0;
+            left:0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
           }
           .m-refuse-reason{
             padding: 14px 0;
