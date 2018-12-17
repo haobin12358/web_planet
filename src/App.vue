@@ -31,6 +31,22 @@ export default {
       isRouterAlive:true
     }
   },
+  created() {
+    if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
+      this.$router.push('/pandora?' + location.href.substr(location.href.indexOf('mbjid'), location.href.length - 2));
+    }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
+      this.$router.push('/activityProductDetail?' + location.href.substr(location.href.indexOf('fmfpid'), location.href.length - 2));
+    }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
+      this.$router.push('/activityProductDetail?' + location.href.substr(location.href.indexOf('tcid'), location.href.length - 2));
+    }else if(location.href.indexOf('neid') > 0) {           // 圈子详情
+      this.$router.push('/circle/detail?' + location.href.substr(location.href.indexOf('tcid'), location.href.length - 2));
+    }
+    if(!localStorage.getItem('token')) {
+      if(this.$route.query.secret_usid) {
+        localStorage.setItem('secret_usid', this.$route.query.secret_usid);
+      }
+    }
+  },
   mounted(){
     // alert(common.GetQueryString('code'));
 

@@ -126,7 +126,8 @@
         axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
           if(res.data.status == 200) {
             localStorage.setItem('mbjid', res.data.data.mbjid);
-            options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
+            options.link = window.location.href.split('#')[0] + '?mbjid=' + localStorage.getItem('mbjid');
+            // options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
 
             // 点击分享
             this.show_invite = true;
@@ -141,7 +142,6 @@
                 clearInterval(time);
               }
             }, 1000);
-
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
@@ -158,7 +158,6 @@
             }
             // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
             if(wx.onMenuShareAppMessage) {
-              console.log(options);
               wx.onMenuShareAppMessage(options);
             }
             // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
@@ -286,25 +285,13 @@
       if(localStorage.getItem('mbjid')) {
         localStorage.setItem('mbjid', this.$route.query.mbjid);
       }
-      if(localStorage.getItem('secret_usid')) {
-        localStorage.setItem('secret_usid', this.$route.query.secret_usid);
-      }
       this.getBox();                 // 获取该活动的规则
       this.uaid = localStorage.getItem('uaid');
       if(this.uaid) {
         localStorage.removeItem('uaid');
         this.buyNow();      // 点击购买
       }
-      /*if(localStorage.getItem('token')) {
-        // 获取base64编码后的usid 用于默认分享
-        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
-          if(res.data.status == 200) {
-            let link = encodeURIComponent(window.location.origin + '/#/selected?secret_usid=' + res.data.data.secret_usid);
-            wxapi.wxRegister(link);
-          }
-        });
-      }*/
-      wxapi.wxRegister(window.location.href);
+      wxapi.wxRegister(location.href.split('#')[0]);
     }
   }
 </script>

@@ -31,9 +31,10 @@ const wxApi = {
       }
     }
   },
+
+
   wxRegister(link) {
     let params = {
-      // url: window.location.href,
       url: link,
       app_from: window.location.origin.substr(8, window.location.origin.length)
     };

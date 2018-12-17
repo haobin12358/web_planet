@@ -28,8 +28,9 @@
             <div class="m-product-price" v-if="item.zh_remarks">押金：<span class="m-price-time">{{item.zh_remarks}}</span></div>
             <div class="m-product-price" v-if="item.prprice"><span class="m-price-time">￥{{item.prprice | money}}</span></div>
             <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare">
-            <div class="m-share-text" @click="productShare">分享</div>
+            <div class="m-share-text" @click.stop="productShare(item)">分享</div>
           </div>
+          <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
         </div>
       </div>
     </div>
@@ -41,6 +42,8 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
+  import wx from 'weixin-js-sdk';
+  import wxapi from '../../../common/js/mixins';
 
   export default {
     data() {
@@ -56,8 +59,10 @@
         month: "",
         dayNum: "",
         monthNum: "",
+        show_invite: false,
       }
     },
+    mixins: [wxapi],
     components: {},
     methods: {
       // 跳转页面
@@ -70,8 +75,60 @@
         }
       },
       // 商品分享按钮
-      productShare() {
+      productShare(item) {
+        let options = {};
+        let which = this.$route.query.which;
+        if(which == "new") {
+          options = {
+            title: '新人首单',
+            desc: '分享给好友购买, 享受优惠, 可返原价',
+            imgUrl: item.prmainpic,
+            link: window.location.href.split('#')[0] + '?fmfpid=' + item.fmfpid + '&which=new'
+          };
+        }else if(which == "try") {
+          options = {
+            title: '试用商品',
+            desc: '试用商品的体验专区',
+            imgUrl: item.tcmainpic,
+            link: window.location.href.split('#')[0] + '?tcid=' + item.tcid + '&which=try'
+          };
+        }
+        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            options.link += '&secret_usid=' + res.data.data.secret_usid;
+            // 点击分享
+            this.show_invite = true;
+          }
+        });
 
+        // 倒计时
+        const TIME_COUNT = 3;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            this.show_invite = false;
+            clearInterval(time);
+          }
+        }, 1000);
+
+        // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+        if(wx.updateAppMessageShareData) {
+          wx.updateAppMessageShareData(options);
+        }
+        // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+        if(wx.updateTimelineShareData) {
+          wx.updateTimelineShareData(options);
+        }
+        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareAppMessage) {
+          wx.onMenuShareAppMessage(options);
+        }
+        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareTimeline) {
+          wx.onMenuShareTimeline(options);
+        }
       },
       // 获取商品
       getProduct() {
@@ -194,6 +251,7 @@
       common.changeTitle('活动商品');
       this.getProduct();               // 获取商品
       this.getDate();                  // 获取时间
+      wxapi.wxRegister(location.href.split('#')[0]);
     }
   }
 </script>

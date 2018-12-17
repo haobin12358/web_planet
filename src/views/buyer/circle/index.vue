@@ -116,9 +116,7 @@
       if(!localStorage.getItem('circleIndex')) {
         localStorage.setItem('circleIndex', 0);
       }
-      if(localStorage.getItem('token')) {
-        wxapi.wxRegister(window.location.href);
-      }
+      wxapi.wxRegister(location.href.split('#')[0]);
     },
     activated() {
       this.getNav();
@@ -136,16 +134,21 @@
       // 分享圈子
       shareCircle(items) {
         // console.log(items);
-        // console.log(items.neid);
         let options = {
           title: '圈子',
           desc: '快来查看您的好友分享的圈子乐趣吧',
           imgUrl: 'https://planet.daaiti.cn/img/news/2018/12/13/LjqHqnWB1iUHulPnNl1S0118b970-fa0a-11e8-9f20-00163e08d30f.jpeg_186x198.jpeg',
           // imgUrl: this.items.usheader,       // 初步考虑用用户头像
-          link: window.location.origin + '/#/circle/detail?neid=' + items.neid
+          link: window.location.href.split('#')[0] + '?neid=' + items.neid
         };
-        // 点击分享
-        this.show_invite = true;
+        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            options.link += '&secret_usid=' + res.data.data.secret_usid;
+            // 点击分享
+            this.show_invite = true;
+          }
+        });
+
         // 倒计时
         const TIME_COUNT = 3;
         let count = TIME_COUNT;

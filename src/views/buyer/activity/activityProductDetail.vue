@@ -171,9 +171,18 @@
         }
       }
     },
+    beforeDestroy() {
+      this.which = this.$route.query.which;
+      if(this.which == "new") {
+        this.$router.push('/activityProduct?which=new');
+      }else if(this.which == "try") {
+        this.$router.push('/activityProduct?which=try');
+      }
+    },
     mounted() {
       common.changeTitle('活动商品详情');
       this.getProductDetail();              // 获取商品详情
+      wxapi.wxRegister(location.href.split('#')[0]);
     }
   }
 </script>

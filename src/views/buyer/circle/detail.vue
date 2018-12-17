@@ -144,10 +144,12 @@
         this.changeModal('show_modal',true);
         sessionStorage.removeItem('showComments');
       }
+      // wxapi.wxRegister(location.href.split('#')[0]);
     },
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
+      this.$router.push('/circle');
     },
     methods: {
       // 预览图片

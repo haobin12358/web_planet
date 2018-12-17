@@ -15,7 +15,7 @@
             <div>
               <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity" v-if="user.usidname == '登录 / 注册'" @click="changeRoute('/login')">{{user.usidname}}</span>
+                <span class="m-personal-identity animated rubberBand" v-if="user.usidname == '登录 / 注册'" @click="changeRoute('/login')">{{user.usidname}}</span>
                 <span class="m-personal-identity active" v-else>{{user.usidname}}</span>
               </p>
             </div>
@@ -120,7 +120,7 @@
         <div class="m-out-popup-box">
           <mt-popup class="m-out-popup" v-model="outPopup">
             <div class="m-out-box" v-if="!outSubmit">
-              <div class="m-popup-close m-ft-26" @click="outPopup = false">X</div>
+              <div class="m-popup-close m-ft-28" @click="outPopup = false">X</div>
               <div class="m-out-title m-ft-30">提现金额</div>
               <div class="m-out-num-box">
                 <div class="m-out-RMB">￥</div>
