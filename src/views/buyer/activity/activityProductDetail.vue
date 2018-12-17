@@ -1,9 +1,9 @@
 <template>
   <div class="m-activity-product-detail">
     <div class="m-member-swipe" v-if="product.image">
-      <mt-swipe :auto="0">
-        <mt-swipe-item v-for="item in product.image" :key="item.tciid">
-          <img :src="item.tcipic" class="m-swipe-img" alt="">
+      <mt-swipe :auto="3000">
+        <mt-swipe-item class="product-swipe" v-for="(item, index) in product.image" v-bind:key="item.tciid">
+          <img class="product-img" :src="item.tcipic" @click="previewImage(index, product.image)">
         </mt-swipe-item>
       </mt-swipe>
     </div>
@@ -53,6 +53,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import sku from '../components/sku';
+  import wxapi from '../../../common/js/mixins';
 
   let scroll = (function (className) {
     let scrollTop;
@@ -83,8 +84,21 @@
         which: ''
       }
     },
+    mixins: [wxapi],
     components: { sku },
     methods: {
+      // 预览图片
+      previewImage(index, image) {
+        let images = [];
+        for(let i = 0; i < image.length; i ++) {
+          images.push(image[i].pipic);
+        }
+        let options = {
+          current: image[index].pipic, // 当前显示图片的http链接
+          urls: images,                  // 当前预览图片的list
+        };
+        wxapi.previewImage(options);
+      },
       // 改变模态框 - 商品sku
       changeModal(v,bool) {
         this[v] = bool;
@@ -167,10 +181,30 @@
   @import "../../../common/css/index";
 
   .m-activity-product-detail {
+    .mint-swipe{
+      width: 750px;
+      height: 750px;
+    }
+    .product-swipe {
+      width: 750px;
+      height: 750px;
+    }
+    .product-img{
+      display: block;
+      background-color: #EEEEEE;
+      max-width: 750px;
+      max-height: 750px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+    }
     .m-member-swipe{
       position: relative;
       width: 750px;
-      height: 700px;
+      height: 750px;
     }
     .m-detail-text {
       padding: 25px 25px 15px 30px;
