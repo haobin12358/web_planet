@@ -121,7 +121,8 @@
           isScroll:true,
           total_count:0,
           bottom_show:false,
-          category_list:null
+          category_list:null,
+          temp: []
         }
       },
       components:{
@@ -227,8 +228,12 @@
            if(res.data.status == 200){
              this.category_list = res.data.data;
              this.resetPrid();
+             for(let i = 0; i < this.temp.length; i ++) {
+               this.category_list[this.temp[i][0]].subs[this.temp[i][1]].active = true;
+               this.category_list = this.category_list.concat();
+             }
            }
-         })
+         });
        },
        // 重置二级分类
        resetPrid() {
@@ -242,18 +247,22 @@
          }
        },
       // 筛选点击
-      categoryClick(index,i){
+      categoryClick(index,i) {
         this.category_list[index].subs[i].active = !this.category_list[index].subs[i].active;
         this.category_list = this.category_list.concat();
       },
        // 确定按钮
        searchProduct() {
          this.pcid = '';
+         this.temp = [];
          this.pcidList = [];
          for(let i = 0; i < this.category_list.length; i ++) {
            if(this.category_list[i].subs) {
+             let temp = [];
              for(let j = 0; j < this.category_list[i].subs.length; j ++) {
                if(this.category_list[i].subs[j].active) {
+                 temp = [i, j];
+                 this.temp.push(temp);
                  this.pcidList.push(this.category_list[i].subs[j].pcid);
                }
              }
