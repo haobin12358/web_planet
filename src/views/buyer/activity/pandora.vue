@@ -3,13 +3,15 @@
     <div class="m-box-product">
       <div class="m-box-tip m-ft-28 m-ft-b" v-if="history && !mbjid">您的好友为您打开了魔法礼盒！</div>
       <div class="m-box-tip m-ft-28 m-ft-b" v-if="!history && !mbjid">分享给好友帮您打开魔法礼盒！</div>
-      <div class="m-box-tip m-ft-28 m-ft-b" v-if="mbjid">点击任意一个盒子，为好友助力吧！</div>
-      <div class="m-gift-one animated bounceInLeft" @click="pandora(1)"></div>
-      <div class="m-gift-two animated bounceInDown" @click="pandora(2)"></div>
-      <div class="m-gift-three animated bounceInUp" @click="pandora(3)"></div>
-      <div class="m-cloud-one"></div>
-      <div class="m-cloud-two"></div>
-      <div class="m-cloud-three"></div>
+      <!--<div class="m-box-tip m-ft-28 m-ft-b" v-if="mbjid">点击任意一个盒子，为好友助力吧！</div>-->
+      <div class="m-cloud-text" v-if="mbjid"></div>
+      <div class="m-gift-one-one animated bounceInLeft" @click="pandora(1)"></div>
+      <div class="m-gift-two-two animated bounceInDown" @click="pandora(2)"></div>
+      <div class="m-gift-three-three animated bounceInUp" @click="pandora(3)"></div>
+      <!--<div class="m-cloud-one"></div>-->
+      <!--<div class="m-cloud-two"></div>-->
+      <!--<div class="m-cloud-three"></div>-->
+      <div class="m-cloud-bg"></div>
       <div class="m-cloud-four" :class="!record ? 'active' : ''"></div>
       <img class="m-product-img animated bounceIn" :src="box.prpic">
     </div>
@@ -303,15 +305,19 @@
   @import "../../../common/css/index";
 
   .m-pandora {
-    /*position: relative;*/
+    position: relative;
     .m-box-product {
       position: relative;
       height: 500px;
       background-color: #845AFA;
       z-index: 1;
       .m-box-tip {
+        position: absolute;
+        top: 10px;
+        left: 150px;
         color: #ffffff;
         padding-top: 23px;
+        z-index: 10;
       }
       .m-gift-one {
         width: 184px;
@@ -342,6 +348,56 @@
         top: 453px;
         right: 58px;
         z-index: 10;
+      }
+      .m-gift-one-one {
+        width: 217px;
+        height: 229px;
+        background: url("/static/images/activity/gift-one-one.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 200px;
+        left: 90px;
+        z-index: 10;
+      }
+      .m-gift-two-two {
+        width: 209px;
+        height: 225px;
+        background: url("/static/images/activity/gift-two-two.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 160px;
+        right: 118px;
+        z-index: 10;
+      }
+      .m-gift-three-three {
+        width: 213px;
+        height: 234px;
+        background: url("/static/images/activity/gift-three-three.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 453px;
+        right: 58px;
+        z-index: 10;
+      }
+      .m-cloud-text {
+        width: 545px;
+        height: 80px;
+        background: url("/static/images/activity/cloud-text.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 40px;
+        left: 110px;
+        z-index: 10;
+      }
+      .m-cloud-bg {
+        width: 750px;
+        height: 1421px;
+        background: url("/static/images/activity/cloud-bg.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
       }
       .m-cloud-one {
         width: 750px;
@@ -389,7 +445,7 @@
       .m-product-img {
         width: 383px;
         height: 383px;
-        border: 20px solid #ffffff;
+        border: 12px solid #ffffff;
         box-shadow: 10px 10px 20px rgba(0,0,0,0.16);
         border-radius: 20px;
         position: absolute;
