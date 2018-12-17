@@ -134,9 +134,6 @@
     background-color: #fff;
     min-height: 100%;
     .m-selected-search{
-      position: fixed;
-      top:0;
-      left: 0;
       border-bottom: 1px solid #f0f0f0;
       width: 100%;
       box-sizing: border-box;
@@ -145,8 +142,7 @@
       text-align: left;
       padding: 14px 0 0 33px;
       color: #333;
-      /*margin-top: 100px;*/
-      margin-top: 60px;
+      margin-top: -35px;
     }
     section{
       position: relative;
