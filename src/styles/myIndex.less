@@ -5,9 +5,22 @@
 
 @mainBlueColor: #409EFF;
 @successColor: #67C23A;
-@wraningColor: #E6A23C;
+@warningColor: #E6A23C;
 @dangerColor: #F56C6C;
 @infoColor: #909399;
+
+.success-text{
+  color: @successColor;
+}
+.warning-text{
+  color: @warningColor;
+}
+.danger-text{
+  color: @dangerColor;
+}
+.info-text{
+  color: @infoColor;
+}
 
 .wl(@width,@height) {
   width: @width;
@@ -63,9 +76,8 @@
   font-size: 16px;
 }
 
-.danger-text{
-  color: @dangerColor;
-}
+
+
 
 .avatar-uploader .el-upload {
   cursor: pointer;

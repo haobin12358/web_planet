@@ -1,7 +1,3 @@
-// const title = 'http://10.0.0.197:7443/sharp/manager/';
-// const title = 'http://120.79.182.43:7443/sharp/manager/';
-import {getToken} from "src/utils/auth";
-
 const title = 'https://planet.daaiti.cn/api/v1/'
 
 const api = {
@@ -13,6 +9,7 @@ const api = {
   update_admin_password: title + 'user/update_admin_password',            //修改密码
   product_list: title + 'product/list',                                   //获取商品列表
   product_get: title + 'product/get',                                     //获取商品详情
+  off_shelves_product: title + 'product/off_shelves',                     //下架单个商品
   delete_product: title + 'product/delete_list',                          //删除商品
   supplizer_list: title + 'supplizer/list',                               //获取供应商列表
   category_list: title + 'category/list',                                 //获取类目

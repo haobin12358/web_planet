@@ -39,8 +39,8 @@
 </template>
 
 <script>
-  import Cookie from 'js-cookie'
   import {mapGetters} from "vuex";
+  import {getStore, setStore} from "src/utils/index";
 
 
   export default {
@@ -48,9 +48,9 @@
     data() {
       return {
         loginForm: {
-          username: Cookie.get('username'),
+          username: getStore('username'),
           password: '',
-          userType: Cookie.get('userType') || '1',
+          userType: getStore('userType') || '1',
         },
         loginRules: {
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
@@ -85,8 +85,8 @@
           if (valid) {
             this.loading = true
 
-            Cookie.set('username', this.loginForm.username);
-            Cookie.set('userType', this.loginForm.userType);
+            setStore('username', this.loginForm.username);
+            setStore('userType', this.loginForm.userType);
 
             this.$store.dispatch('Login', this.loginForm).then(() => {
               this.loading = false

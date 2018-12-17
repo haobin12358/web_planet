@@ -1,11 +1,14 @@
 <template>
   <div class="table-cell-img">
     <el-popover
+      v-if="src"
       placement="left"
-      trigger="hover">
+      trigger="hover"
+      :open-delay="500"	>
       <img style="width: 350px;max-height: 100%;" :src="src" alt="">
       <img slot="reference" class="small" v-lazy="src" alt="">
     </el-popover>
+    <div v-else>无</div>
   </div>
 </template>
 

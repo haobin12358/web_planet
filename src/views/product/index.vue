@@ -14,7 +14,7 @@
     </section>
 
 
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
+    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column
         type="index"></el-table-column>
@@ -47,14 +47,17 @@
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="doRemove(scope.row)">下架</el-button>
+          <el-button v-if="scope.row.prstatus != 60" type="text" class="warning-text"
+                     @click="doUnShelveOne(scope.row)">下架</el-button>
+          <el-button v-if="scope.row.prstatus == 60" type="text" class="success-text"
+                     @click="doOnShelveOne(scope.row)">上架</el-button>
         </template>
       </el-table-column>
     </el-table>
     <section class="table-bottom">
       <section class="actions-block">
-        <el-button type="warning">批量下架</el-button>
-        <el-button type="danger">批量删除</el-button>
+        <el-button type="warning" :disabled="selectedRows.length == 0" @click="doUnShelveSelect">批量下架</el-button>
+        <el-button type="danger" :disabled="selectedRows.length == 0" @click="doDeleteSelect">批量删除</el-button>
       </section>
 
       <el-pagination
@@ -73,10 +76,7 @@
 </template>
 
 <script>
-  import {getToken} from "src/utils/auth";
   import TableCellImg from "src/components/TableCellImg";
-
-
 
   export default {
     name: 'ProductIndex',
@@ -94,9 +94,11 @@
         prstatusFilter: [
           {text: '上架中', value: '上架中'},
           {text: '审核中', value: '审核中'},
-          {text: '已下架', value: '已下架'}
+          {text: '已下架', value: '已下架'},
         ],
         tableData: [],
+
+        selectedRows: [],
       }
     },
 
@@ -105,7 +107,7 @@
     methods: {
       getProduct() {
         this.loading = true;
-        this.$http(this.$api.product_list, {
+        this.$http.get(this.$api.product_list, {
           noLoading: true,
           params: {
             page_size: this.pageSize,
@@ -146,8 +148,82 @@
           }
         })
       },
-      doRemove() {
 
+      //  下架1个
+      doUnShelveOne(row){
+        this.doOneShelveAction(row, false);
+      },
+
+      //  上架1个
+      doOnShelveOne(row){
+        this.doOneShelveAction(row, true);
+      },
+
+      /**
+       * 上下架一个商品
+       * @param prid
+       * @param shelve  是否上架
+       */
+      doOneShelveAction(row,shelve) {
+        let type = shelve ? '上架' : '下架',
+            status = shelve ? 0 : 60;2
+
+        this.$confirm(`确认${type}商品(${row.prtitle})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.off_shelves_product,{
+              "prid": row.prid,
+              "status": status
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.getProduct();
+                  this.$notify({
+                    title: `商品已${type}`,
+                    message: `商品名:${row.prtitle}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+      doUnShelveSelect(){
+        let prids = this.selectedRows.map(item => item.prid);
+
+        console.log(prids);
+      },
+      doDeleteSelect(){
+        let prids = this.selectedRows.map(item => item.prid),
+            prtitles = this.selectedRows.map(item => item.prtitle).join(' , ');
+
+        this.$confirm(`确认删除商品(${prtitles})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.delete_product,{
+              prids
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.getProduct();
+                  this.$notify({
+                    title: '商品下架成功',
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+
+      handleSelectionChange(val){
+        this.selectedRows = val;
       },
     },
 

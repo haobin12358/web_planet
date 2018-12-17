@@ -161,7 +161,7 @@
               :on-success="handleMainPicSuccess"
               :before-upload="beforeMainPicUpload"
             >
-              <img v-if="prMainPicUrl" v-lazy="prMainPicUrl" class="avatar">
+              <img v-if="formData.prmainpic" v-lazy="formData.prmainpic" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">
@@ -245,7 +245,7 @@
   import KanBan from 'src/components/Kanban'
   import draggable from 'vuedraggable'
   import permission from 'src/directive/permission/index.js' // 权限判断指令
-  import {level2} from "src/router";
+  import {getStore, setStore} from "src/utils/index";
 
 
   const canZeroMoneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
@@ -294,17 +294,6 @@
     },
 
     data() {
-      //  三级分类id校验
-      const pcidValidator = (rule, value, callback) => {
-        if (!this.selectedOption.length) {
-          callback(new Error('请选择分类'));
-        } else if (this.selectedOption.length < 3) {
-          callback(new Error('请选择最后一级分类'));
-        } else {
-          callback();
-        }
-      };
-
       return {
         goToIndexAfterSave: false,
 
@@ -402,7 +391,6 @@
         //  配合element组件,编辑用,需在init和watch中转换下
         selectedOption: [], //  完整的三个分类id
         items: [], //  item
-        prMainPicUrl: '', //  主图
         imagesUrl: [],    //  详情页顶部轮播图
         prDescUrl: [],       //  详情长图
       }
@@ -410,7 +398,7 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + this.$auth.getToken()
+        return this.$api.upload_file + getStore('token')
       },
     },
 
@@ -582,7 +570,6 @@
       //  主图上传
       handleMainPicSuccess(res, file) {
         this.formData.prmainpic = res.data;
-        this.prMainPicUrl = URL.createObjectURL(file.raw);
       },
       beforeMainPicUpload(file) {
         const isLt15M = file.size / 1024 / 1024 < 15;
@@ -591,10 +578,6 @@
           this.$message.error('上传商品图片大小不能超过 15MB!');
         }
 
-        if (isLt15M) {
-          //  替换之前上传的
-          this.prMainPicUrl = '';
-        }
 
         return isLt15M;
       },
@@ -684,7 +667,6 @@
         if(this.formData.prid){ //  编辑
           this.$http.post(this.$api.update_product, this.formData, {
             params: {
-              token: this.$auth.getToken()
             }
           }).then(
             res => {
@@ -709,7 +691,6 @@
         }else{
           this.$http.post(this.$api.create_product, this.formData, {
             params: {
-              token: this.$auth.getToken()
             }
           }).then(
             res => {
@@ -802,7 +783,6 @@
         this.selectedOption = data.pcids;
         this.items = data.items.map(item => item.itid);
 
-        this.prMainPicUrl = data.prmainpic;
         this.imagesUrl = data.images.map(item => {
           return {
             url: item.pipic,
@@ -828,7 +808,6 @@
             this.$http.get(this.$api.product_get,{
               params: {
                 prid: this.$route.query.prid,
-                token: this.$auth.getToken()
               }
             }).then(
               res => {
@@ -861,10 +840,30 @@
       },
       //  重置(新增状态)
       reset(){
-          this.formData = {};
+          this.formData = {
+            prid: '',
+
+            pcid: "",
+            pbid: "",
+            items: [],
+
+            prtitle: "",
+            prdescription: "",
+            prprice: 0,
+            prlineprice: 0,
+            prfreight: 0,
+            prstocks: 0,
+
+            prattribute: [],
+            skus: [],
+            pskuvalue: [],
+
+            prmainpic: "",
+            images: [],
+            prdesc: [],
+          };
           this.selectedOption = [];
           this.items = [];
-          this.prMainPicUrl = '';
           this.imagesUrl = [];
           this.prDescUrl = [];
       },

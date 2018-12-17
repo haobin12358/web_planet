@@ -2,16 +2,16 @@
   <div class="components-container">
     <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="修改密码">
       <el-form :model="pwdForm" :rules="rules" ref="pwdForm" label-width="120px">
-        <el-form-item label="请输入旧密码" prop="password_old">
-          <el-input type="password" class="m-input-pwd"
+        <el-form-item label="旧密码" prop="password_old">
+          <el-input type="password" class="m-input-pwd" v-model="pwdForm.password_old"
                     placeholder=""></el-input>
         </el-form-item>
-        <el-form-item label="请输入新密码" prop="password_new">
-          <el-input type="password" class="m-input-pwd"
+        <el-form-item label="新密码" prop="password_new">
+          <el-input type="password" class="m-input-pwd" v-model="pwdForm.password_new"
                     placeholder=""></el-input>
         </el-form-item>
-        <el-form-item label="请确认新密码" prop="password_repeat">
-          <el-input type="password" class="m-input-pwd"
+        <el-form-item label="确认新密码" prop="password_repeat">
+          <el-input type="password" class="m-input-pwd" v-model="pwdForm.password_repeat"
                     placeholder=""></el-input>
         </el-form-item>
       </el-form>
@@ -31,6 +31,16 @@ export default {
   name: 'DragDialogDemo',
   directives: { elDragDialog },
   data() {
+    const consistentPwd = (rule, value, callback) => {
+      if(!value )  {
+        callback(new Error('请再次确认新密码!'))
+      }else if(value != this.pwdForm.password_new)  {
+        callback(new Error('请确认两次密码输入一致!'))
+      }else{
+        callback();
+      }
+    }
+
     return {
       dialogTableVisible: false,
       pwdForm: {
@@ -40,13 +50,13 @@ export default {
       },
       rules: {
         password_old: [
-          {required: true, message: '旧密码', trigger: 'blur'}
+          {required: true, message: '请输入旧密码', trigger: 'blur'}
         ],
         password_new: [
-          {required: true, message: '新密码', trigger: 'blur'}
+          {required: true, message: '请输入新密码', trigger: 'blur'}
         ],
         password_repeat: [
-          {required: true, message: '新密码确认', trigger: 'blur'}
+          {validator: consistentPwd, trigger: 'blur'},
         ],
       }
     }
@@ -58,8 +68,30 @@ export default {
     },
 
     doConfirm(){
-        // this.$messageBox.confirm()
+        this.$confirm('提示', '修改成功需要重新登录').then(
+          ()=>{
+            //  todo  等整合供应商修改密码
+            return
+            this.$http.get(this.$api.update_admin_password,{
+              noLoading: true,
+              params: {
+
+              }
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                }
+              }
+            )
+          }
+        )
     },
-  }
+  },
+  created(){
+      // console.log(this.$confirm);
+  },
 }
 </script>

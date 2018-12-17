@@ -11,6 +11,10 @@ axios.interceptors.request.use(config => {
     loadinginstace = Loading.service({ fullscreen: true })
   }
   if(store.getters.token){
+    if(!config.params){
+      config.params = {};
+    }
+
     config.params.token = store.getters.token;
   }
   return config

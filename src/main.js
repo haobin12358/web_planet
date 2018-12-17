@@ -21,8 +21,6 @@ import axios from 'src/utils/myAxios';
 Vue.prototype.$http = axios;
 import api from 'src/api/api'
 Vue.prototype.$api = api;
-import auth from 'src/utils/auth'
-Vue.prototype.$auth = auth;
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {loading:"/src/icons/svg/spinner.svg" });
 import BlockTitle from "src/components/BlockTitle";

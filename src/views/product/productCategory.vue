@@ -1,27 +1,27 @@
 <template>
   <div class="container">
     <!--工具栏-->
-    <el-form :inline="true">
-      <el-form-item label="分类名">
-        <el-input></el-input>
-      </el-form-item>
+    <section class="tool-bar space-between">
+      <el-form :inline="true">
+        <el-form-item label="分类名">
+          <el-input></el-input>
+        </el-form-item>
+        <el-button type="primary">查询</el-button>
+      </el-form>
 
-      <el-button type="primary">查询</el-button>
-      <div class="separator">|</div>
       <el-button type="primary" icon="el-icon-plus" @click="doAdd">新增</el-button>
-    </el-form>
-
+    </section>
     <!--三级分类树表-->
     <tree-table :data="data" :columns="columns" v-loading="loading" :eval-func="func" :expand-all="expandAll"
                 border>
       <el-table-column label="图片" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.pcpic" alt="" class="table-pic">
+          <table-cell-img :src="scope.row.pcpic" :key="scope.row.pcpic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="顶部图片" align="center">
         <template slot-scope="scope">
-          <img v-if="scope.row.pctoppic" :src="scope.row.pctoppic" alt="" class="table-pic">
+          <table-cell-img :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
@@ -33,15 +33,18 @@
     </tree-table>
 
     <!--编辑dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" :modal="true" title="分类编辑">
-      <el-form :model="categroyForm" :rules="rules" ref="pwdForm" label-width="120px">
+    <el-dialog v-el-drag-dialog  :visible.sync="dialogVisible" top="5vh" title="分类编辑">
+      <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
         <el-form-item label="所属分类">
           <el-cascader :options="options" :props="cascaderProps" :clearable="true" :change-on-select="true"
-                       v-model="categroyForm.parentpcid" placeholder="添加一级分类时为空" >
+                       v-model="selectParentPcId" placeholder="添加一级分类时为空">
           </el-cascader>
         </el-form-item>
         <el-form-item label="分类名" prop="pcname">
-          <el-input></el-input>
+          <el-input v-model="categroyForm.pcname"></el-input>
+        </el-form-item>
+        <el-form-item label="描述" prop="pcdesc">
+          <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="pcpic">
           <el-upload
@@ -50,25 +53,40 @@
             :show-file-list="false"
             accept="image/*"
             :on-success="handlePcpicSuccess"
-            :before-upload="beforePcpicUpload"
+            :before-upload="beforePicUpload"
           >
-            <img v-if="prPicUrl" v-lazy="prPicUrl" class="avatar">
+            <img v-if="categroyForm.pcpic" v-lazy="categroyForm.pcpic" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
             <div slot="tip" class="el-upload__tip">
-              建议为方形,大小不要超过10M,上传成功后会显示,上传大图请耐心等待
+              建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待
             </div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="顶部图片(一级)" prop="pctoppic" v-if="!categroyForm.parentpcid.length">
-          <el-input type="password" class="m-input-pwd"
-                    placeholder=""></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="pcdesc">
-          <el-input v-model="categroyForm.pcdesc"></el-input>
+
+        <el-form-item label="一级分类顶部图片" prop="pctoppic">
+          <el-upload
+            class="avatar-uploader"
+            :action="$api.upload_file"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handlePctoppicSuccess"
+            :before-upload="beforePicUpload"
+          >
+            <img v-if="categroyForm.pctoppic" v-lazy="categroyForm.pctoppic" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon avatar-uploader-icon-top"></i>
+
+            <div slot="tip" class="el-upload__tip">
+              建议宽高为750/265(2.83),大小不要超过15M,上传成功后会显示,上传大图请耐心等待
+            </div>
+          </el-upload>
         </el-form-item>
       </el-form>
 
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="doSave">确 定</el-button>
+        </span>
     </el-dialog>
   </div>
 </template>
@@ -77,11 +95,17 @@
   import treeTable from 'src/components/TreeTable'
   import treeToArray from './customEval'
   import elDragDialog from 'src/directive/el-dragDialog'
+  import TableCellImg from "src/components/TableCellImg";
+  import {beforePicUpload} from "src/utils/validate";
+
 
   export default {
     name: 'ProductCategory',
 
-    components: {treeTable},
+    components: {
+      treeTable,
+      TableCellImg
+    },
 
     directives: {elDragDialog},
 
@@ -101,6 +125,7 @@
         // args: [null, null, 'timeLine'],
 
         dialogVisible: false,
+        selectParentPcId: [],
         categroyForm: {
           parentpcid: [],
           pcname: '',
@@ -109,16 +134,20 @@
           pctoppic: ''
         },
         rules: {
-          pcname: [
-            {required: true, message: '请输入分类名', trigger: 'blur'}
+          parentpcid: [
+            // {required: true, message: '请输入分类名', trigger: 'blur'}
           ],
+          pcname: [
+            {required: true, message: '分类名必填', trigger: 'blur'}
+          ],
+
+          pcdesc: [],
           pcpic: [
-            {required: true, message: '请输入新密码', trigger: 'blur'}
+            {required: true, message: '图片必传', trigger: 'blur'}
           ],
           pctoppic: [
-            {required: true, message: '请确认新密码', trigger: 'blur'}
+            // {}
           ],
-          pcdesc: [],
         },
 
         //  商品分类选项
@@ -129,9 +158,13 @@
           children: 'subs',
         },
 
-        //上传显示用
-        prPicUrl: '',
-        prTopPicUrl: '',
+      }
+    },
+    watch: {
+      selectParentPcId(val) {
+        if (val.length) {
+          this.categroyForm.parentpcid = val[val.length - 1];
+        }
       }
     },
     methods: {
@@ -188,7 +221,6 @@
               let resData = res.data,
                 data = res.data.data;
 
-              console.log(data);
               this.options = data;
             }
           });
@@ -201,26 +233,32 @@
         console.log('doEdit');
       },
 
+      doSave(){
+          this.$refs.categroyForm.validate(
+            valid => {
+              if(valid){
+
+              }
+            }
+          )
+      },
+
       //  分类主图上传
       handlePcpicSuccess(res, file) {
-        this.categroyForm.Pcpic = res.data;
-        this.prPicUrl = URL.createObjectURL(file.raw);
+        this.categroyForm.pcpic = res.data;
       },
-      beforePcpicUpload(file) {
+      beforePicUpload(file) {
         const isLt15M = file.size / 1024 / 1024 < 15;
 
         if (!isLt15M) {
-          this.$message.error('上传商品图片大小不能超过 15MB!');
-        }
-
-        if (isLt15M) {
-          //  替换之前上传的
-          this.prPicUrl = '';
-          //  删除之前上传的
-          // this.clearUploadedImg();
+          this.$message.error('上传图片大小不能超过 15MB!');
         }
 
         return isLt15M;
+      },
+
+      handlePctoppicSuccess(res, file) {
+        this.categroyForm.pctoppic = res.data;
       },
 
       doRemove() {
@@ -231,7 +269,6 @@
 
     created() {
       this.setCategory();
-      // console.log(this.$api.upload_file);
     }
   }
 </script>
@@ -241,6 +278,8 @@
   @import "../../styles/myIndex";
 
   .container {
-
+    .avatar-uploader-icon-top{
+      width: 447.14px;
+    }
   }
 </style>

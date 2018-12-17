@@ -1,13 +1,12 @@
 import {  logout, getInfo } from 'src/api/login'
-import { getToken, setToken, removeToken } from 'src/utils/auth'
 import {login,supplizerLogin} from 'src/service/index'
-import Cookies from 'js-cookie'
+import {getStore, setStore,removeStore} from "src/utils/index";
 
 
 const user = {
   state: {
     userInfo: {},
-    token: getToken(),
+    token: getStore('token'),
     name: '',
     avatar: '',
     roles: []
@@ -32,7 +31,7 @@ const user = {
     },
 
     INIT_USER_INFO:(state)=>{
-      let saveUserInfo = Cookies.get('User-Info');
+      let saveUserInfo = getStore('User-Info');
 
       if (saveUserInfo){
         state.userInfo = JSON.parse(saveUserInfo);
@@ -53,7 +52,7 @@ const user = {
               let resData = response.data,
                 data = resData.data;
 
-              setToken(data.token)
+              setStore('token',data.token);
               commit('SET_TOKEN', data.token)
 
               let cookieUserInfo = {
@@ -62,7 +61,7 @@ const user = {
                 avatar: data.admin.adheader,
                 level: data.admin.adlevel == '超级管理员'?'super':'admin'
               }
-              Cookies.set('User-Info',cookieUserInfo)
+              setStore('User-Info',cookieUserInfo)
               commit('SET_USER_INFO', cookieUserInfo)
               resolve()
             }else{
@@ -77,7 +76,7 @@ const user = {
               let resData = response.data,
                 data = resData.data;
 
-              setToken(data.token)
+              setStore('token',data.token);
               commit('SET_TOKEN', data.token)
 
               let cookieUserInfo = {
@@ -86,7 +85,7 @@ const user = {
                 avatar: data.supplizer.suheader,
                 level: 'supplizer'
               }
-              Cookies.set('User-Info',cookieUserInfo)
+              setStore('User-Info',cookieUserInfo)
               commit('SET_USER_INFO', cookieUserInfo)
               resolve()
             }else{
@@ -124,7 +123,7 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
-          removeToken()
+          removeStore('token')
           resolve()
         }).catch(error => {
           reject(error)
