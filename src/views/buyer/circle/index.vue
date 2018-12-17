@@ -108,13 +108,12 @@
     components: { navList, bottomLine },
     mounted() {
       common.changeTitle('圈子');
-      this.getNav();
       if(!localStorage.getItem('circleIndex')) {
         localStorage.setItem('circleIndex', 0)
       }
     },
     activated() {
-
+      this.getNav();
     },
     // 引入keepAlive后代替beforeDestroy
     deactivated() {

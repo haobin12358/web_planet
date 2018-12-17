@@ -46,7 +46,7 @@
 
     <div class="m-comment-modal" v-if="show_modal">
       <div class="m-modal-state">
-        <span class="m-icon-close" @click="changeModal('show_modal',false, 1)"></span>
+        <span class="m-icon-close" @click="changeModal('show_modal',false, 0)"></span>
         <div class="m-modal-content">
            <h3>全部 {{comment_count}} 条评论</h3>
           <div class="m-scroll" ref="comment" @touchmove="touchMove">
@@ -184,11 +184,12 @@
           this.comment_one = null;
         }
         if(v == 'show_modal' && !i) {
-          if(!bool) {
-            this.page_info.page_num = 1;
-          }
           this.getComment();
         }
+        if(v == 'show_modal' && !bool && i == 0) {
+          this.getNewsDetail();
+        }
+        this.page_info.page_num = 1;
         this.show_comment = true;
       },
       /*获取资讯详情*/
