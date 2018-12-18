@@ -86,10 +86,9 @@
       components: { navList, bottomLine },
       mounted(){
         common.changeTitle('订单列表');
-        this.getOrderNum();               // 获取各状态的订单数量
       },
       activated() {
-
+        this.getOrderNum();               // 获取各状态的订单数量
       },
       // 引入keepAlive后代替beforeDestroy
       deactivated() {
