@@ -35,7 +35,7 @@
   .block-title{
     .fj(flex-start);
     align-items: center;
-    margin-bottom: 25px;
+    margin: 25px 0;
 
     img{
       .wl(20px, 20px);

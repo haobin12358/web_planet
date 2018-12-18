@@ -24,6 +24,8 @@
           <table-cell-img :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
         </template>
       </el-table-column>
+      <el-table-column label="排序" align="center" width="150" prop="pcsort">
+      </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
@@ -33,12 +35,15 @@
     </tree-table>
 
     <!--编辑dialog-->
-    <el-dialog v-el-drag-dialog  :visible.sync="dialogVisible" top="5vh" title="分类编辑">
+    <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh"
+               :title="categroyForm.pcid?'分类编辑':'分类新增'">
       <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
-        <el-form-item label="所属分类">
+        <el-form-item label="所属分类" prop="parentpcid">
           <el-cascader :options="options" :props="cascaderProps" :clearable="true" :change-on-select="true"
-                       v-model="selectParentPcId" placeholder="添加一级分类时为空">
+                       v-model="selectParentPcId" @change="selectParentPcIdChange" placeholder="添加一级分类时为空"
+                       :disabled="categroyForm.pcid != ''">
           </el-cascader>
+          <span class="form-item-end-tip">例:新增第三级分类,请选第二级分类</span>
         </el-form-item>
         <el-form-item label="分类名" prop="pcname">
           <el-input v-model="categroyForm.pcname"></el-input>
@@ -46,10 +51,14 @@
         <el-form-item label="描述" prop="pcdesc">
           <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
+        <el-form-item label="排序" prop="pcsort">
+          <el-input v-model="categroyForm.pcsort"></el-input>
+        </el-form-item>
+
         <el-form-item label="图片" prop="pcpic">
           <el-upload
             class="avatar-uploader"
-            :action="$api.upload_file"
+            :action="uploadUrl"
             :show-file-list="false"
             accept="image/*"
             :on-success="handlePcpicSuccess"
@@ -67,13 +76,14 @@
         <el-form-item label="一级分类顶部图片" prop="pctoppic">
           <el-upload
             class="avatar-uploader"
-            :action="$api.upload_file"
+            :action="uploadUrl"
             :show-file-list="false"
             accept="image/*"
             :on-success="handlePctoppicSuccess"
             :before-upload="beforePicUpload"
+            :on-preview="handlePictureCardPreview"
           >
-            <img v-if="categroyForm.pctoppic" v-lazy="categroyForm.pctoppic" class="avatar">
+            <img v-if="categroyForm.pctoppic" v-lazy="categroyForm.pctoppic" class="avatar avatar-top">
             <i v-else class="el-icon-plus avatar-uploader-icon avatar-uploader-icon-top"></i>
 
             <div slot="tip" class="el-upload__tip">
@@ -97,8 +107,9 @@
   import elDragDialog from 'src/directive/el-dragDialog'
   import TableCellImg from "src/components/TableCellImg";
   import {beforePicUpload} from "src/utils/validate";
+  import {getStore, setStore} from "src/utils/index";
 
-
+  const natureNumberReg = /^(\d*)$/;   //  自然数
   export default {
     name: 'ProductCategory',
 
@@ -109,11 +120,34 @@
 
     directives: {elDragDialog},
 
+    computed: {
+      uploadUrl() {
+        return this.$api.upload_file + getStore('token')
+      },
+    },
+
     data() {
+      const paidValidator = (rule, value, callback) => {
+        console.log(!value && !this.categroyForm.pctoppic);
+        if (!value && !this.categroyForm.pctoppic) {
+          callback(new Error('请选所属分类或上传顶部图片!'))
+        } else {
+          callback();
+        }
+      };
+      const toppicValidator = (rule, value, callback) => {
+
+        if (!value && !this.categroyForm.parentpcid) {
+          callback(new Error('请选所属分类或上传顶部图片!'))
+        } else {
+          callback();
+        }
+      };
+
       return {
         func: treeToArray,
         loading: false,
-        expandAll: false,
+        expandAll: true,
         data: {},
         columns: [
           {
@@ -127,26 +161,33 @@
         dialogVisible: false,
         selectParentPcId: [],
         categroyForm: {
-          parentpcid: [],
+          pcid: '',
+          parentpcid: '',
           pcname: '',
           pcdesc: '',
+          pcsort: 1,
           pcpic: '',
           pctoppic: ''
         },
         rules: {
           parentpcid: [
-            // {required: true, message: '请输入分类名', trigger: 'blur'}
+            {validator: paidValidator, trigger: 'change'},
           ],
           pcname: [
             {required: true, message: '分类名必填', trigger: 'blur'}
           ],
-
-          pcdesc: [],
+          pcdesc: [
+            {required: true, message: '描述必填', trigger: 'blur'}
+          ],
+          pcsort: [
+            {required: true, message: '排序必填', trigger: 'blur'},
+            {pattern: natureNumberReg, message: '请输入合理的数字(>=0)', trigger: 'blur'},
+          ],
           pcpic: [
-            {required: true, message: '图片必传', trigger: 'blur'}
+            {required: true, message: '图片必传', trigger: 'change'}
           ],
           pctoppic: [
-            // {}
+            {validator: toppicValidator, trigger: 'change'},
           ],
         },
 
@@ -209,6 +250,20 @@
         )
       },
 
+      //  初始化表单
+      resetDlgForm(){
+        this.categroyForm = {
+          pcid: '',
+          parentpcid: '',
+          pcname: '',
+          pcdesc: '',
+          pcsort: 1,
+          pcpic: '',
+          pctoppic: ''
+        };
+        this.selectParentPcId = [];
+        this.setDialogCategory();
+      },
       setDialogCategory() {
         this.$http.get(this.$api.category_list, {
           params: {
@@ -222,27 +277,93 @@
                 data = res.data.data;
 
               this.options = data;
-            }
-          });
+            }});
+      },
+      selectParentPcIdChange(val) {
+        if (this.selectParentPcId.length) {
+          this.categroyForm.parentpcid = '';
+        } else {
+          this.categroyForm.parentpcid = this.selectParentPcId[this.selectParentPcId.length - 1];
+        }
       },
       doAdd() {
         this.dialogVisible = true;
-        this.setDialogCategory();
+        this.resetDlgForm();
       },
-      doEdit() {
-        console.log('doEdit');
+      doEdit(row) {
+        this.resetDlgForm();
+        this.dialogVisible = true;
+
+        let select = [],
+            self = row;
+        while (self.parent){
+          select.push(self.parent.id);
+          self = self.parent;
+        }
+
+        this.selectParentPcId = select.reverse();
+        this.categroyForm = {
+          pcid: row.pcid,
+          parentpcid: row.parentpcid,
+          pcname: row.pcname,
+          pcdesc: row.pcdesc,
+          pcsort: row.pcsort,
+          pcpic: row.pcpic,
+          pctoppic: row.pctoppic
+        };
       },
+      doSave() {
+        this.$refs.categroyForm.validate(
+          valid => {
+            if (valid) {
+              let type = this.categroyForm.pcid == '' ? '新增' : '编辑';
 
-      doSave(){
-          this.$refs.categroyForm.validate(
-            valid => {
-              if(valid){
+              if(this.categroyForm.pcid){ //  编辑
+                this.$http.post(this.$api.update_category, this.categroyForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                          data = res.data.data;
 
+                      this.$notify({
+                        title: `分类${type}成功`,
+                        message: `分类名:${this.categroyForm.pcname}`,
+                        type: 'success'
+                      });
+                      this.dialogVisible = false;
+                      this.setCategory();
+                    }
+                  }
+                )
+              }else{
+                this.$http.post(this.$api.create_category, this.categroyForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.$notify({
+                        title: `分类${type}成功`,
+                        message: `分类名:${this.categroyForm.pcname}`,
+                        type: 'success'
+                      });
+                      this.dialogVisible = false;
+                      this.setCategory();
+                    }
+                  }
+                )
               }
+            } else {
+              this.$message.warning('请根据校验信息完善表单!');
             }
-          )
+          }
+        )
       },
 
+
+      handlePictureCardPreview(file) {
+
+      },
       //  分类主图上传
       handlePcpicSuccess(res, file) {
         this.categroyForm.pcpic = res.data;
@@ -261,8 +382,32 @@
         this.categroyForm.pctoppic = res.data;
       },
 
-      doRemove() {
-        console.log('doRemove');
+      doRemove(row) {
+        if (!row.children || row._level == 3) { //  下面是否有子级分类
+          this.$confirm(`确认删除分类(${row.pcname}),其分类下的品牌也会一并下架?`, '提示').then(
+            () => {
+              this.$http.post(this.$api.delete_category, {
+                pcid: row.pcid
+              }).then(
+                res => {
+                  if (res.data.status == 200) {
+                    let resData = res.data,
+                      data = res.data.data;
+
+                    this.setCategory();
+                    this.$notify({
+                      title: '分类删除成功',
+                      message: `分类名:${row.pcname}`,
+                      type: 'success'
+                    });
+                  }
+                }
+              )
+            }
+          );
+        } else {
+          this.$message.warning(`请先删除(${row.pcname})下面的分类`);
+        }
 
       },
     },
@@ -278,7 +423,10 @@
   @import "../../styles/myIndex";
 
   .container {
-    .avatar-uploader-icon-top{
+    .avatar-top {
+      width: 447.14px;
+    }
+    .avatar-uploader-icon-top {
       width: 447.14px;
     }
   }

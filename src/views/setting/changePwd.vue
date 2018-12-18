@@ -25,58 +25,56 @@
 </template>
 
 <script>
-import elDragDialog from 'src/directive/el-dragDialog'
+  import elDragDialog from 'src/directive/el-dragDialog'
 
-export default {
-  name: 'DragDialogDemo',
-  directives: { elDragDialog },
-  data() {
-    const consistentPwd = (rule, value, callback) => {
-      if(!value )  {
-        callback(new Error('请再次确认新密码!'))
-      }else if(value != this.pwdForm.password_new)  {
-        callback(new Error('请确认两次密码输入一致!'))
-      }else{
-        callback();
+  export default {
+    name: 'DragDialogDemo',
+    directives: {elDragDialog},
+    data() {
+      const consistentPwd = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请再次确认新密码!'))
+        } else if (value != this.pwdForm.password_new) {
+          callback(new Error('请确认两次密码输入一致!'))
+        } else {
+          callback();
+        }
       }
-    }
 
-    return {
-      dialogTableVisible: false,
-      pwdForm: {
-        password_old: '',
-        password_new: '',
-        password_repeat: ''
-      },
-      rules: {
-        password_old: [
-          {required: true, message: '请输入旧密码', trigger: 'blur'}
-        ],
-        password_new: [
-          {required: true, message: '请输入新密码', trigger: 'blur'}
-        ],
-        password_repeat: [
-          {validator: consistentPwd, trigger: 'blur'},
-        ],
+      return {
+        dialogTableVisible: false,
+        pwdForm: {
+          password_old: '',
+          password_new: '',
+          password_repeat: ''
+        },
+        rules: {
+          password_old: [
+            {required: true, message: '请输入旧密码', trigger: 'blur'}
+          ],
+          password_new: [
+            {required: true, message: '请输入新密码', trigger: 'blur'}
+          ],
+          password_repeat: [
+            {validator: consistentPwd, trigger: 'blur'},
+          ],
+        }
       }
-    }
-  },
-  methods: {
-    //  给外部调用的显示
-    showDialog(){
-        this.dialogTableVisible = true;
     },
+    methods: {
+      //  给外部调用的显示
+      showDialog() {
+        this.dialogTableVisible = true;
+      },
 
-    doConfirm(){
+      doConfirm() {
         this.$confirm('提示', '修改成功需要重新登录').then(
-          ()=>{
+          () => {
             //  todo  等整合供应商修改密码
             return
-            this.$http.get(this.$api.update_admin_password,{
+            this.$http.get(this.$api.update_admin_password, {
               noLoading: true,
-              params: {
-
-              }
+              params: {}
             }).then(
               res => {
                 if (res.data.status == 200) {
@@ -88,10 +86,10 @@ export default {
             )
           }
         )
+      },
     },
-  },
-  created(){
+    created() {
       // console.log(this.$confirm);
-  },
-}
+    },
+  }
 </script>

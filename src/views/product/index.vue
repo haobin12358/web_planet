@@ -14,13 +14,13 @@
     </section>
 
 
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%"
+              @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column
         type="index"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
-          <!--<img v-lazy="scope.row.prmainpic" :key="scope.row.prmainpic" class="table-pic"/>-->
           <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
         </template>
       </el-table-column>
@@ -41,16 +41,18 @@
           <el-tag :type="scope.row.supplizer === '平台' ? 'primary' : 'success'">{{scope.row.supplizer}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="userName" label="场景" width="180"></el-table-column>
+
       <el-table-column align="center" prop="prstocks" sortable label="库存"></el-table-column>
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
-          <el-button v-if="scope.row.prstatus != 60" type="text" class="warning-text"
-                     @click="doUnShelveOne(scope.row)">下架</el-button>
+          <el-button v-if="scope.row.prstatus == 0" type="text" class="warning-text"
+                     @click="doUnShelveOne(scope.row)">下架
+          </el-button>
           <el-button v-if="scope.row.prstatus == 60" type="text" class="success-text"
-                     @click="doOnShelveOne(scope.row)">上架</el-button>
+                     @click="doOnShelveOne(scope.row)">上架
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,9 +79,12 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import permission from 'src/directive/permission/index.js' // 权限判断指令
 
   export default {
     name: 'ProductIndex',
+
+    directives: {permission},
 
     components: {
       TableCellImg
@@ -122,7 +127,7 @@
           }
         })
       },
-      filterPrStatus(value, row, column){
+      filterPrStatus(value, row, column) {
         const property = column['property'];
         return row[property] === value;
       },
@@ -150,39 +155,41 @@
       },
 
       //  下架1个
-      doUnShelveOne(row){
-        this.doOneShelveAction(row, false);
+      doUnShelveOne(row) {
+        this.doOneShelveAction([row], false);
       },
 
       //  上架1个
-      doOnShelveOne(row){
-        this.doOneShelveAction(row, true);
+      doOnShelveOne(row) {
+        this.doOneShelveAction([row], true);
       },
 
       /**
-       * 上下架一个商品
+       * 批量上下架商品
        * @param prid
        * @param shelve  是否上架
        */
-      doOneShelveAction(row,shelve) {
+      doOneShelveAction(rows, shelve) {
         let type = shelve ? '上架' : '下架',
-            status = shelve ? 0 : 60;2
+            status = shelve ? 0 : 60;
+        let tip = rows[0].prtitle + (rows.length > 1 ? `等${rows.length}件商品` : ''),
+          prids = rows.map(item => item.prid);
 
-        this.$confirm(`确认${type}商品(${row.prtitle})?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.off_shelves_product,{
-              "prid": row.prid,
+        this.$confirm(`确认${type}商品(${tip})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.off_shelves_product, {
+              prids,
               "status": status
             }).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.getProduct();
                   this.$notify({
                     title: `商品已${type}`,
-                    message: `商品名:${row.prtitle}`,
+                    message: `商品名:${tip}`,
                     type: 'success'
                   });
                 }
@@ -191,18 +198,18 @@
           }
         )
       },
-      doUnShelveSelect(){
+      doUnShelveSelect() {
         let prids = this.selectedRows.map(item => item.prid);
 
         console.log(prids);
       },
-      doDeleteSelect(){
+      doDeleteSelect() {
         let prids = this.selectedRows.map(item => item.prid),
-            prtitles = this.selectedRows.map(item => item.prtitle).join(' , ');
+          prtitles = this.selectedRows.map(item => item.prtitle).join(' , ');
 
-        this.$confirm(`确认删除商品(${prtitles})?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.delete_product,{
+        this.$confirm(`确认删除商品(${prtitles})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.delete_product, {
               prids
             }).then(
               res => {
@@ -222,11 +229,14 @@
         )
       },
 
-      handleSelectionChange(val){
+      handleSelectionChange(val) {
         this.selectedRows = val;
       },
     },
 
+    activated() {
+      this.getProduct()
+    },
     created() {
       this.getProduct()
     }

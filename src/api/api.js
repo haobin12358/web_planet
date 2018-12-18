@@ -7,17 +7,23 @@ const api = {
   get_admin_all_type: title + 'user/get_admin_all_type',                  //获取管理员身份
   update_admin: title + 'user/update_admin',                              //更新管理员
   update_admin_password: title + 'user/update_admin_password',            //修改密码
+
   product_list: title + 'product/list',                                   //获取商品列表
   product_get: title + 'product/get',                                     //获取商品详情
-  off_shelves_product: title + 'product/off_shelves',                     //下架单个商品
+  off_shelves_product: title + 'product/off_shelves_list',                //批量下架商品
   delete_product: title + 'product/delete_list',                          //删除商品
   supplizer_list: title + 'supplizer/list',                               //获取供应商列表
-  category_list: title + 'category/list',                                 //获取类目
   brand_list: title + 'brand/list',                                       //获取品牌
   scene_list: title + 'scene/list',                                       //获取场景
-  items_list: title + 'items/list',                                       //获取标签
+  items_list: title + 'items/list',                                       //获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
+
+  category_list: title + 'category/list',                                 //获取类目
+  create_category: title + 'category/create',                             //新增类目
+  update_category: title + 'category/update',                             //修改类目
+  delete_category: title + 'category/delete',                             //删除类目
+
 
   supplizer_login: title + 'user/supplizer_login',                        //供应商登录
 
@@ -27,6 +33,9 @@ const api = {
   order_count: title + 'order/count',                                     //获取订单数量
   get_omfilter: title + 'order/get_omfilter',                             //获取订单filter
   update_order_status: title + 'order/update_order_status',               //更新订单状态
+
+  //  审批
+  agree_product: title + 'product/agree_product',                         // 同意上架商品
 
   update_activity: title + 'activity/update',                             //  修改活动基础信息
   add_commodity: title + 'commodity/add',                                 //  添加试用商品

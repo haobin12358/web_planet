@@ -115,7 +115,7 @@
 }
 
 .money-cell{
-  color: @moneyColor;
+  color: @moneyColor!important;
 }
 
 .separator{
@@ -131,16 +131,25 @@
 }
 
 .tool-bar{
-  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px dotted grey;
+  border-radius: 10px;
+  margin-bottom: 10px;
 
   &.space-between{
     .fj();
     align-items: flex-start;
   }
+
+  &.end{
+    align-items: flex-end;
+
+  }
 }
 
 .table-bottom{
   margin-top: 20px;
+  .fj(center);
 }
 
 .tool-tip-wrap{
@@ -149,4 +158,5 @@
   border-radius: .1rem;
   margin-bottom: .2rem;
 }
+
 

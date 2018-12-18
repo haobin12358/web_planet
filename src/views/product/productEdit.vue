@@ -60,9 +60,6 @@
           <el-form-item label="运费" prop="prfreight">
             <el-input v-model.number="formData.prfreight" style="width: 200px;"></el-input>
           </el-form-item>
-          <el-form-item label="库存" prop="prstocks">
-            <el-input v-model.number="formData.prstocks" style="width: 200px;"></el-input>
-          </el-form-item>
 
           <el-form-item label="商品规格" required>
             <!--工具栏-->
@@ -251,7 +248,7 @@
   const canZeroMoneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
-  const natureNumberReg = /^(\d*)$/;   //  正整数
+  const natureNumberReg = /^(\d*)$/;   //  自然数
 
   export default {
     name: "ProductEdit",
@@ -309,7 +306,6 @@
           prprice: 0,
           prlineprice: 0,
           prfreight: 0,
-          prstocks: 0,
 
           prattribute: [],
           skus: [],
@@ -345,10 +341,10 @@
             {required: true, message: '运费必填', trigger: 'blur'},
             {pattern: canZeroMoneyReg, message: '请输入合理的运费(至多2位小数)', trigger: 'blur'}
           ],
-          prstocks: [
-            {required: true, message: '库存必填', trigger: 'blur'},
-            {pattern: positiveNumberReg, message: '请输入合理的库存', trigger: 'blur'}
-          ],
+          // prstocks: [
+          //   {required: true, message: '库存必填', trigger: 'blur'},
+          //   {pattern: positiveNumberReg, message: '请输入合理的库存', trigger: 'blur'}
+          // ],
 
           prmainpic: [
             {required: true, message: '商品主图必传', trigger: 'change'},
@@ -434,7 +430,6 @@
       setBrand() {
         this.$http.get(this.$api.brand_list, {
           params: {
-            page_size: 200, //todo
             pbstatus: 'upper',
           }
         }).then(
@@ -852,7 +847,6 @@
             prprice: 0,
             prlineprice: 0,
             prfreight: 0,
-            prstocks: 0,
 
             prattribute: [],
             skus: [],

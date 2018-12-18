@@ -95,17 +95,20 @@ export const asyncRouterMap = [
         name: 'ProductCategory',
         component: () => import('src/views/product/productCategory'),
         meta: {title: '商品分类', noCache: true, roles: level2}
-      }, {
-        path: 'productBrand',
-        name: 'ProductBrand',
-        component: () => import('src/views/product/productBrand'),
-        meta: {title: '商品品牌', noCache: true, roles: level2}
-      }, {
+      },
+      {
         path: 'productTag',
         name: 'ProductTag',
         component: () => import('src/views/product/productTag'),
-        meta: {title: '场景和标签', noCache: true, roles: level2}
-      }
+        meta: {title: '场景和商品标签', noCache: true, roles: level2}
+      },
+
+       {
+        path: 'productBrand',
+        name: 'ProductBrand',
+        component: () => import('src/views/product/productBrand'),
+        meta: {title: '品牌和标签', noCache: true, roles: level2}
+      },
     ]
   },
 
@@ -119,7 +122,7 @@ export const asyncRouterMap = [
         path: 'order',
         name: 'OrderIndex',
         component: () => import('src/views/order/index'),
-        meta: {title: '订单', icon: 'dingdan', roles: level2}
+        meta: {title: '订单',noCache: true, icon: 'dingdan', roles: level2}
       }
     ]
   },
@@ -135,12 +138,12 @@ export const asyncRouterMap = [
         path: 'distributor',
         name: 'Distributor',
         component: () => import('src/views/user/distributor'),
-        meta: {title: '分销商', roles: level2}
+        meta: {title: '分销商', noCache: true,roles: level2}
       }, {
         path: 'suppliers',
         name: 'Suppliers',
         component: () => import('src/views/user/suppliers'),
-        meta: {title: '供应商', roles: level2}
+        meta: {title: '供应商',noCache: true, roles: level2}
       },
     ]
   },
@@ -155,7 +158,7 @@ export const asyncRouterMap = [
         path: 'tweet',
         name: 'TweetIndex',
         component: () => import('src/views/tweet/index'),
-        meta: {title: '推文', icon: 'article', roles: level2}
+        meta: {title: '推文',noCache: true, icon: 'article', roles: level2}
       }
     ]
   },
@@ -171,12 +174,12 @@ export const asyncRouterMap = [
         path: 'coupon',
         name: 'Coupon',
         component: () => import('src/views/marketing/coupon'),
-        meta: {title: '优惠券', roles: level2}
+        meta: {title: '优惠券', noCache: true,roles: level2}
       }, {
         path: 'attendance',
         name: 'Attendance',
         component: () => import('src/views/marketing/attendance'),
-        meta: {title: '签到设置', roles: level2}
+        meta: {title: '签到设置', noCache: true,roles: level2}
       },
     ]
   },
@@ -191,7 +194,7 @@ export const asyncRouterMap = [
         path: 'commission',
         name: 'CommissionIndex',
         component: () => import('src/views/commission/index'),
-        meta: {title: '佣金', icon: 'yongjin', roles: level2}
+        meta: {title: '佣金', noCache: true,icon: 'yongjin', roles: level2}
       }
     ]
   },
@@ -207,27 +210,27 @@ export const asyncRouterMap = [
         path: 'withdrawAudit',
         name: 'WithdrawAudit',
         component: () => import('src/views/approval/withdrawAudit'),
-        meta: {title: '提现审批', roles: level2}
+        meta: {title: '提现审批',noCache: true, roles: level2}
       }, {
         path: 'returnProductAudit',
         name: 'ReturnProductAudit',
         component: () => import('src/views/approval/returnProductAudit'),
-        meta: {title: '退货审批', roles: level2}
+        meta: {title: '退货审批', noCache: true,roles: level2}
       }, {
         path: 'agentAudit',
         name: 'AgentAudit',
         component: () => import('src/views/approval/agentAudit'),
-        meta: {title: '代理商审批', roles: level2}
+        meta: {title: '代理商审批',noCache: true, roles: level2}
       }, {
         path: 'productAudit',
         name: 'ProductAudit',
         component: () => import('src/views/approval/productAudit'),
-        meta: {title: '供应商商品审批', roles: level2}
+        meta: {title: '供应商商品审批',noCache: true, roles: level2}
       }, {
         path: 'tweetAudit',
         name: 'TweetAudit',
         component: () => import('src/views/approval/tweetAudit'),
-        meta: {title: '推文审核', roles: level2}
+        meta: {title: '推文审核',noCache: true, roles: level2}
       },
     ]
   },
@@ -242,7 +245,7 @@ export const asyncRouterMap = [
         path: 'service',
         name: 'serviceIndex',
         component: () => import('src/views/service/index'),
-        meta: {title: '客服', icon: 'kefu', roles: level2}
+        meta: {title: '客服', noCache: true,icon: 'kefu', roles: level2}
       }
     ]
   },
@@ -258,27 +261,27 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'ActivityIndex',
         component: () => import('src/views/activity/index'),
-        meta: {title: '活动管理', roles: level2}
+        meta: {title: '活动管理',noCache: true, roles: level2}
       }, {
         path: 'guess',
         name: 'Guess',
         component: () => import('src/views/activity/guess'),
-        meta: {title: '每日竞猜', roles: level2}
+        meta: {title: '每日竞猜',noCache: true, roles: level2}
       }, {
         path: 'magicGiftBox',
         name: 'MagicGiftBox',
         component: () => import('src/views/activity/magicGiftBox'),
-        meta: {title: '魔术礼盒', roles: level2}
+        meta: {title: '魔术礼盒',noCache: true, roles: level2}
       }, {
         path: 'trialProduct',
         name: 'TrialProduct',
         component: () => import('src/views/activity/trialProduct'),
-        meta: {title: '试用商品', roles: level2}
+        meta: {title: '试用商品',noCache: true, roles: level2}
       }, {
         path: 'firstOrder',
         name: 'FirstOrder',
         component: () => import('src/views/activity/firstOrder'),
-        meta: {title: '新人首单', roles: level2}
+        meta: {title: '新人首单',noCache: true, roles: level2}
       },
     ]
   },
@@ -294,17 +297,17 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'SettingIndex',
         component: () => import('src/views/setting/index'),
-        meta: {title: '激活码', roles: level2}
+        meta: {title: '激活码',noCache: true, roles: level2}
       }, {
         path: 'manager',
         name: 'Manager',
         component: () => import('src/views/setting/manager'),
-        meta: {title: '管理员', roles: level2}
+        meta: {title: '管理员',noCache: true, roles: level2}
       }, {
         path: 'approvalSetting',
         name: 'ApprovalSetting',
         component: () => import('src/views/setting/approvalSetting'),
-        meta: {title: '审批流', roles: level2}
+        meta: {title: '审批流',noCache: true, roles: level2}
       }
     ]
   },

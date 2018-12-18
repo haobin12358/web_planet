@@ -6,6 +6,7 @@
     <div class="right-menu-wrap">
 
       <template v-if="device!=='mobile'">
+        <el-input placeholder="搜索菜单"></el-input>
         <error-log class="errLog-container right-menu-item"/>
 
         <el-tooltip content="全屏" effect="dark" placement="bottom">
