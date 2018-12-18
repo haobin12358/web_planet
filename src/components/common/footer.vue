@@ -92,21 +92,10 @@
     },
     watch: {
       selected: function (val, oldVal) {
+        
         if(val == "精选" || val == "素材") {
           this.buyer_store = true;
         }else {
-          if(val == "活动") {
-            if(this.$route.query.app) {
-              localStorage.setItem('is_app', true);
-              this.is_app = true;
-            }else {
-              if(localStorage.getItem('is_app')) {
-                this.is_app = true;
-              }
-            }
-          }else {
-            this.is_app = false;
-          }
           this.buyer_store = false;
         }
         this.$store.state.tabbar_select = val;
@@ -146,7 +135,21 @@
       },
       // 监听路由变化
       $route: {
-        handler: function(val, oldVal){
+        handler: function(val, oldVal) {
+          if(val.path == "/activity") {
+            if(this.$route.query.app) {
+              localStorage.setItem('is_app', true);
+              this.is_app = true;
+            }else {
+              if(localStorage.getItem('is_app')) {
+                this.is_app = true;
+              }
+            }
+          }else {
+            localStorage.removeItem('is_app');
+            this.is_app = false;
+          }
+
           switch (val.path) {
             case '/selected':
               this.selected = '精选';
