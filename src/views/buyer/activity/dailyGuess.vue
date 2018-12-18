@@ -275,9 +275,11 @@
       this.uaid = localStorage.getItem('uaid');
       localStorage.removeItem('uaid');
       this.timeOut();                    // 闪动光标 - 倒计时
-      this.getGuess();                   // 获取今日参与记录
-      if(localStorage.getItem('tipDate') != this.today) {
-        this.getGuess(this.today);         // 获取昨日参与记录
+      if(localStorage.getItem('token')) {
+        this.getGuess();                   // 获取今日参与记录
+        if(localStorage.getItem('tipDate') != this.today) {
+          this.getGuess(this.today);         // 获取昨日参与记录
+        }
       }
       this.getTime();                    // 获取当前时间
       this.getRule();                    // 获取该活动的规则

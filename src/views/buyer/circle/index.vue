@@ -84,6 +84,7 @@
             itrecommend: true,
             itsort: null,
             ittype: 10,
+            active: false,
             psid: ""
           },
           {
@@ -93,6 +94,7 @@
             itrecommend: true,
             itsort: null,
             ittype: 10,
+            active: false,
             psid: ""
           }
         ],
@@ -137,9 +139,8 @@
         let options = {
           title: '圈子',
           desc: '快来查看您的好友分享的圈子乐趣吧',
-          imgUrl: 'https://planet.daaiti.cn/img/news/2018/12/13/LjqHqnWB1iUHulPnNl1S0118b970-fa0a-11e8-9f20-00163e08d30f.jpeg_186x198.jpeg',
-          // imgUrl: this.items.usheader,       // 初步考虑用用户头像
-          link: window.location.href.split('#')[0] + '?neid=' + items.neid
+          imgUrl: this.items.usheader,       // 初步考虑用用户头像
+          link: location.href.split('#')[0] + '?neid=' + items.neid
         };
         axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200) {
@@ -225,7 +226,9 @@
               for(let i=0;i<arr.length;i++){
                 arr[i].active = false;
               }
-              arr[localStorage.getItem('circleIndex')].active = true;
+              if(localStorage.getItem('circleIndex')) {
+                arr[localStorage.getItem('circleIndex')].active = true;
+              }
               this.nav_list = [].concat(arr);
             }
             this.select_nav = this.nav_list[localStorage.getItem('circleIndex')];

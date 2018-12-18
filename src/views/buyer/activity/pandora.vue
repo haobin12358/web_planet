@@ -16,11 +16,11 @@
       <img class="m-product-img animated bounceIn" :src="box.prpic">
     </div>
     <div class="m-product-detail">
-      <div class="m-buy-product" v-if="box.infos.current_price">
-        <div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{box.infos.current_price | money}}</div>
+      <div class="m-buy-product">
+        <div class="m-price-one m-ft-38 m-ft-b m-red" v-if="box.infos.current_price">预设价格：￥{{box.infos.current_price | money}}</div>
         <!--<div class="m-buy-product">-->
         <!--<div class="m-price-one m-ft-38 m-ft-b m-red">预设价格：￥{{2325 | money}}</div>-->
-        <div class="m-box-btn m-ft-38 m-ft-b" @click="buyNow">点击购买</div>
+        <div class="m-box-btn m-ft-38 m-ft-b" v-if="box.infos.can_buy" @click="buyNow">点击购买</div>
       </div>
       <div class="m-product-name m-ft-38 m-ft-b tl">{{box.acname}}</div>
       <div class="m-product-price">
@@ -76,7 +76,7 @@
         name: '',
         boxPopup: false,            // 点击魔盒的popup
         record: true,
-        box: { infos: { current_price: '', skuprice: '', skuminprice: '', gearsone: [], gearstwo: [], gearsthree: [] }},
+        box: { infos: { can_buy: false, current_price: '', skuprice: '', skuminprice: '', gearsone: [], gearstwo: [], gearsthree: [] }},
         history: [],
         mbaid: '',
         show_invite: false,
@@ -176,11 +176,11 @@
         // 有mbjid说明是好友分享过来的，这个时候不带token请求则获取好友这个魔盒的拆盒历史
         if(this.$route.query.mbjid) {
           params.mbjid = this.$route.query.mbjid;
-        }else {
+        }else if(localStorage.getItem('token')) {
           params.token = localStorage.getItem('token');
         }
-        axios.get(api.get_activity + "?actype=2", { params: params }).then(res => {
-          if(res.data.status == 200){
+        axios.get(api.get_activity, { params: params }).then(res => {
+          if(res.data.status == 200) {
             this.box = res.data.data;
             this.history = res.data.data.infos.open_history;
             this.mbaid = res.data.data.infos.mbaid;

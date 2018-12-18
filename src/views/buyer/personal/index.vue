@@ -15,7 +15,7 @@
             <div>
               <p>{{user.usname}}</p>
               <p>
-                <span class="m-personal-identity animated rubberBand" v-if="user.usidname == '登录 / 注册'" @click="changeRoute('/login')">{{user.usidname}}</span>
+                <span class="m-personal-identity animated infinite pulse" v-if="user.usidname == '登录 / 注册'" @click="changeRoute('/login')">{{user.usidname}}</span>
                 <span class="m-personal-identity active" v-else>{{user.usidname}}</span>
               </p>
             </div>

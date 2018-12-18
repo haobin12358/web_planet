@@ -1,8 +1,9 @@
 <template>
   <div>
+    <!--顶部左上角买家、店主身份切换-->
     <span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>
 
-    <mt-tabbar v-model="selected" :fixed="true">
+    <mt-tabbar v-model="selected" :fixed="true" v-if="is_h5">
       <template v-for="(item,index) in tabbar" >
         <mt-tab-item :id="item.name" >
           <img slot="icon" :src="item.active_icon" v-if="item.name == selected">
@@ -27,7 +28,8 @@
         selected: this.$store.state.tabbar_select,
         tabbar: this.$store.state.tabbar_buyer,
         // tabbar: this.$store.state.tabbar_store,
-        buyer_store: true
+        buyer_store: true,
+        is_h5: true
       }
     },
     components: {},
@@ -90,6 +92,11 @@
         if(val == "精选" || val == "素材") {
           this.buyer_store = true;
         }else {
+          if(val == "活动") {
+            if(this.$route.query.app) {
+              this.is_h5 = false;
+            }
+          }
           this.buyer_store = false;
         }
         this.$store.state.tabbar_select = val;

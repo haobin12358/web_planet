@@ -32,24 +32,29 @@ export default {
     }
   },
   created() {
+    let url = location.href.split('&from')[0];
     if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
-      this.$router.push('/pandora?' + location.href.substr(location.href.indexOf('mbjid'), location.href.length - 2));
+      location.href = url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1];
+      // alert(url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1]);
     }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
-      this.$router.push('/activityProductDetail?' + location.href.substr(location.href.indexOf('fmfpid'), location.href.length - 2));
+      location.href = url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1];
+      // alert(url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1]);
     }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
-      this.$router.push('/activityProductDetail?' + location.href.substr(location.href.indexOf('tcid'), location.href.length - 2));
+      location.href = url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1];
+      // alert(url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1]);
     }else if(location.href.indexOf('neid') > 0) {           // 圈子详情
-      this.$router.push('/circle/detail?' + location.href.substr(location.href.indexOf('tcid'), location.href.length - 2));
+      location.href = url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1];
+      // alert(url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1]);
     }
+    // 将邀请人的usid保存，等注册的时候使用
     if(!localStorage.getItem('token')) {
-      if(this.$route.query.secret_usid) {
-        localStorage.setItem('secret_usid', this.$route.query.secret_usid);
+      // alert(location.href);
+      if(location.href.indexOf('secret_usid') > 0) {
+        localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1]);
       }
     }
   },
   mounted(){
-    // alert(common.GetQueryString('code'));
-
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDg5MDM1MywiZXhwIjoxNTQ1NDk1MTUzfQ.eyJpZCI6IjNiMTI1YzY0LTAwODQtMTFlOS1hYTE4LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NWJhMlx1NWI5ODg4MjAifQ.4ETC7t7tyavuxajtP-UpRB3YiDGbefiVhANTq4BqYPI';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
