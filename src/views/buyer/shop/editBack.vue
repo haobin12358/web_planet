@@ -96,6 +96,7 @@
         status_select:null,
         picker_select:'',
         oraproductstatus:0,
+        orastate:0,
         total_money:0,
         img_box:[],//上传图片集合
         upload_img:[],
@@ -124,9 +125,9 @@
       }
       this.refund_money = this.total_money;
 
-      this.oraproductstatus = Number(this.$route.query.oraproductstatus);
+      this.orastate = Number(this.$route.query.oraproductstatus);
       // 判断是否显示货物状态
-      if(this.oraproductstatus) {
+      if(this.orastate) {
         this.showProduct = false;
       }else {
         this.showProduct = true;
@@ -216,16 +217,22 @@
           Toast("退款金额不大于支付金额");
           return false;
         }
-        axios.post(api.refund_create + '?token=' + localStorage.getItem('token'),{
+        let params = {
           omid: (this.order && this.order.omid ) || '',
           opid: (!this.order && this.product_info[0].opid) || '' ,
           orareason: this.refund_select,
-          oraproductstatus:  (this.status_select && this.status_select.value) || 0 ,
           oraaddtion: this.oraaddtion,
           oraddtionvoucher: this.upload_img,
-          orastate: this.oraproductstatus,
+          orastate: this.orastate,
           oramount: this.refund_money
-        }).then(res => {
+        };
+        if(this.status_select) {
+          params.oraproductstatus = this.status_select.value;
+        }else {
+          params.oraproductstatus = 10;
+        }
+        return false;
+        axios.post(api.refund_create + '?token=' + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
             Toast(res.data.message);
             this.$router.push({ path: '/backDetail', query: { omid: this.product_info[0].omid, allOrder: this.$route.query.allOrder }});
