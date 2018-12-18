@@ -3,7 +3,7 @@
     <!--顶部左上角买家、店主身份切换-->
     <span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>
 
-    <mt-tabbar v-model="selected" :fixed="true" v-if="is_h5">
+    <mt-tabbar v-model="selected" :fixed="true" v-if="!is_app">
       <template v-for="(item,index) in tabbar" >
         <mt-tab-item :id="item.name" >
           <img slot="icon" :src="item.active_icon" v-if="item.name == selected">
@@ -29,7 +29,7 @@
         tabbar: this.$store.state.tabbar_buyer,
         // tabbar: this.$store.state.tabbar_store,
         buyer_store: true,
-        is_h5: true
+        is_app: false
       }
     },
     components: {},
@@ -78,6 +78,9 @@
           this.tabbar = this.$store.state.tabbar_store;
         }
       }
+      if(localStorage.getItem('is_app')) {
+        this.is_app = true;
+      }
     },
     computed:{
       select(){
@@ -94,8 +97,15 @@
         }else {
           if(val == "活动") {
             if(this.$route.query.app) {
-              this.is_h5 = false;
+              localStorage.setItem('is_app', true);
+              this.is_app = true;
+            }else {
+              if(localStorage.getItem('is_app')) {
+                this.is_app = true;
+              }
             }
+          }else {
+            this.is_app = false;
           }
           this.buyer_store = false;
         }
