@@ -5,8 +5,8 @@
           <p class="m-alert m-ft-28" v-if="refund.orastatus == '-20'">售后申请{{refund.orastatus_zh}}</p>
           <p class="m-alert m-ft-28" v-if="refund.orastatus == '-10'">商家{{refund.orastatus_zh}}，请稍后处理</p>
           <p class="m-alert m-ft-28" v-if="refund.orastatus == '0'">商家{{refund.orastatus_zh}}，请等待商家处理</p>
-          <p class="m-alert m-ft-28" v-if="refund.orastatus == '10'">商家{{refund.orastatus_zh}}，
-            <span v-if="order_refund.orstatus_zh">{{order_refund.orstatus_zh}}</span>
+          <p class="m-alert m-ft-28" v-if="refund.orastatus == '10'">商家{{refund.orastatus_zh}}
+            <span v-if="order_refund.orstatus_zh && refund.orastate != 10">，{{order_refund.orstatus_zh}}</span>
           </p>
         </div>
         <span class="m-icon-order-status "></span>
@@ -15,10 +15,10 @@
         <p class="m-back-info" v-if="refund.orastatus == '-20'">您已取消售后申请。</p>
         <p class="m-back-info" v-if="refund.orastatus == '-10'">您的售后申请被拒绝，请稍后处理。</p>
         <p class="m-back-info" v-if="refund.orastatus == '0'">您的退款申请在审核中，请耐心等待商家处理。</p>
-        <p class="m-back-info" v-if="refund.orastatus == '10'">商家已经同意您的退款申请，
-          <span v-if="order_refund.orstatus_zh">{{order_refund.orstatus_zh}}。</span>
+        <p class="m-back-info" v-if="refund.orastatus == '10'">商家已经同意您的退款申请
+          <span v-if="order_refund.orstatus_zh && refund.orastate != 10">，{{order_refund.orstatus_zh}}。</span>
         </p>
-        <div class="m-product-text" v-if="refund.orastatus == '10'">
+        <div class="m-product-text" v-if="refund.orastatus == '10' && refund.orastate != 10">
           <p>收货人：{{order_refund.orrecvname}}</p>
           <p>收货电话：{{order_refund.orrecvphone}}</p>
           <p>收货地址：{{order_refund.orrecvaddress}}</p>

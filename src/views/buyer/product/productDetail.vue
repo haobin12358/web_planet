@@ -352,7 +352,7 @@
         border-radius: 0 10px 10px 0;
         &.active{
           background-color: @mainColor;
-          margin-right: -5px;
+          margin-right: -3px;
           border-radius: 10px 0 0 10px;
         }
       }
