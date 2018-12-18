@@ -135,11 +135,11 @@
     methods: {
       // 分享圈子
       shareCircle(items) {
-        // console.log(items);
+        console.log(items);
         let options = {
           title: '圈子',
           desc: '快来查看您的好友分享的圈子乐趣吧',
-          imgUrl: this.items.usheader,       // 初步考虑用用户头像
+          imgUrl: items.usheader,       // 初步考虑用用户头像
           link: location.href.split('#')[0] + '?neid=' + items.neid
         };
         axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
