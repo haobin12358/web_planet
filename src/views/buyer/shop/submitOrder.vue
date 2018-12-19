@@ -322,6 +322,7 @@
             };
             axios.post(api.create_order + "?token=" + localStorage.getItem('token'), params).then(res => {
               if(res.data.status == 200){
+                localStorage.setItem('activityOrderNo', 3);
                 this.wxPay(res.data.data.args);
               }
             });
@@ -335,6 +336,7 @@
             };
             axios.post(api.add_order + "?token=" + localStorage.getItem('token'), params).then(res => {
               if(res.data.status == 200){
+                localStorage.setItem('activityOrderNo', 0);
                 this.wxPay(res.data.data.args);
               }
             });

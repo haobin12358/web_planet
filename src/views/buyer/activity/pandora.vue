@@ -229,6 +229,7 @@
           };
           axios.post(api.magicbox_recv_award + '?token='+ localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
+              localStorage.setItem('activityOrderNo', 2);
               this.wxPay(res.data.data.args);
             }
           });

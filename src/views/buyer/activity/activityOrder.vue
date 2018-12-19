@@ -86,8 +86,14 @@
       components: { navList, bottomLine },
       mounted() {
         common.changeTitle('订单列表');
+      },
+      activated() {
         this.getOrderNum();             // 获取各状态的订单数量
-        this.getOrderList();
+        if(localStorage.getItem('activityOrderNo')) {
+          this.navClick(localStorage.getItem('activityOrderNo'));                // 导航点击
+        }else {
+          this.navClick(0);                // 导航点击
+        }
       },
       methods: {
         changeRoute(v, item) {

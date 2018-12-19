@@ -138,7 +138,7 @@
               Toast(res.data.message);
               // this.getOrderInfo();            // 获取订单详情
               // this.$router.push('/personal/afterSales');
-              this.$router.go(-3);
+              this.$router.go(-2);
             }
           });
         }).catch(() => {

@@ -127,6 +127,7 @@
         axios.post(api.recv_award + '?token='+ localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200) {
             this.successPopup = false;
+            localStorage.setItem('activityOrderNo', 1);
             this.wxPay(res.data.data.args);
           }
         });
