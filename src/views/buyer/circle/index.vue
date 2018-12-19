@@ -9,7 +9,7 @@
         </div>
         <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
       </div>
-      <div class="m-circle-content" style="height: 1100px">
+      <div class="m-circle-content">
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
         <!--<mt-loadmore :top-method="loadTop" ref="loadmore">-->
           <div class="m-circle-body">
@@ -181,7 +181,7 @@
       },
       /*跳转路由*/
       changeRoute(v,params,value){
-        /*if(v == '/circle/detail'){
+        if(v == '/circle/detail'){
           if(value == 'comments') {
             sessionStorage.setItem('showComments', 'show');
             this.$router.push({path:v,query:{neid:params.neid}});
@@ -195,7 +195,7 @@
           this.$router.push({path:v,query:{shtype:value}})
         }else{
           this.$router.push({path:v})
-        }*/
+        }
       },
       /*导航切换*/
       navClick(index){

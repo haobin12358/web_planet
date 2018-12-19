@@ -11,13 +11,6 @@ export const constantRouterMap = [
   { path: '/forget', component: () => import('../views/login/forget'),hidden: true  },
   { path: '/first', component: () => import('../views/login/first'), hidden: true },
   { path: '/search', component: () => import('../views/search/search'), hidden: true },
-  {
-    path: '/',
-    component: Layout,
-    redirect: 'selected',
-    children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
-    ],
-  },
   // 店主版 - 素材
   {
     path: '/material/circle',
@@ -75,7 +68,7 @@ export const constantRouterMap = [
 
 
   {
-    path: '/selected',
+    path: '/',
     component: Layout,
     redirect: 'selected',
     children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), meta: { keepAlive: true }, hidden: true }
@@ -91,7 +84,8 @@ export const constantRouterMap = [
     path: '/circle',
     component: Layout,
     redirect: 'circle',
-    children: [{ path: '/circle', component: () => import('../views/buyer/circle/index'), meta: { keepAlive: true }, hidden: true }
+    children: [
+      { path: '/circle', component: () => import('../views/buyer/circle/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/circle/detail', component: () => import('../views/buyer/circle/detail'), hidden: true },
