@@ -92,6 +92,7 @@
           <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund">
             <span @click="changeRoute('/selectBack', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35) && !item.order_refund_apply">退款</span>
             <span @click="changeRoute('/backDetail', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35) && item.order_refund_apply">查看退款</span>
+            <span @click="changeRoute('/storekeeper/IDCardApprove')" v-if="order_info.omlogistictype == 10 && order_info.omstatus == 30">身份认证</span>
           </p>
         </div>
         <div class="m-total-money">合计：<span class="m-price">￥{{order_info.omtruemount | money}}</span></div>
