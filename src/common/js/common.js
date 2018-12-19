@@ -25,6 +25,15 @@ const common = {
       document.body.appendChild(i);
     };//ios
   },
+  // 是否是微信浏览器
+  isWeixin() {
+    let is_weixin = (function() {return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1})();
+    if(is_weixin) {
+      return true;
+    }else{
+      return false;
+    }
+  },
   GetQueryString(name) {
     var url = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var newUrl = window.location.search.substr(1).match(url);

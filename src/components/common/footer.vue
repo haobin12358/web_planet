@@ -3,7 +3,7 @@
     <!--顶部左上角买家、店主身份切换-->
     <span class="m-icon-home" @click="buyerStore" v-if="buyer_store"></span>
 
-    <mt-tabbar v-model="selected" :fixed="true" v-if="!is_app">
+    <mt-tabbar v-model="selected" :fixed="true" v-if="is_weixin">
       <template v-for="(item,index) in tabbar" >
         <mt-tab-item :id="item.name" >
           <img slot="icon" :src="item.active_icon" v-if="item.name == selected">
@@ -29,7 +29,7 @@
         tabbar: this.$store.state.tabbar_buyer,
         // tabbar: this.$store.state.tabbar_store,
         buyer_store: true,
-        is_app: false
+        is_weixin: true
       }
     },
     components: {},
@@ -78,9 +78,6 @@
           this.tabbar = this.$store.state.tabbar_store;
         }
       }
-      if(localStorage.getItem('is_app')) {
-        this.is_app = true;
-      }
     },
     computed:{
       select(){
@@ -92,7 +89,6 @@
     },
     watch: {
       selected: function (val, oldVal) {
-        
         if(val == "精选" || val == "素材") {
           this.buyer_store = true;
         }else {
@@ -136,20 +132,9 @@
       // 监听路由变化
       $route: {
         handler: function(val, oldVal) {
-          if(val.path == "/activity") {
-            if(this.$route.query.app) {
-              localStorage.setItem('is_app', true);
-              this.is_app = true;
-            }else {
-              if(localStorage.getItem('is_app')) {
-                this.is_app = true;
-              }
-            }
-          }else {
-            localStorage.removeItem('is_app');
-            this.is_app = false;
+          if(val.path == '/activity') {
+            this.is_weixin = common.isWeixin();
           }
-
           switch (val.path) {
             case '/selected':
               this.selected = '精选';
