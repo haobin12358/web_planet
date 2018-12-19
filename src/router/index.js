@@ -78,7 +78,7 @@ export const constantRouterMap = [
     path: '/selected',
     component: Layout,
     redirect: 'selected',
-    children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), hidden: true }
+    children: [{ path: '/selected', component: () => import('../views/buyer/selected/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/gift', component: () => import('../views/buyer/selected/gift'), hidden: true },
@@ -135,7 +135,7 @@ export const constantRouterMap = [
   // 竞猜记录
   { path: '/personal/guess', component: () => import('../views/buyer/personal/guess'), hidden: true },
   // 售后
-  { path: '/personal/afterSales', component: () => import('../views/buyer/personal/afterSales'), hidden: true },
+  { path: '/personal/afterSales', component: () => import('../views/buyer/personal/afterSales'), meta: { keepAlive: true }, hidden: true },
   { path: '/personal/about', component: () => import('../views/buyer/personal/about'), hidden: true },
   { path: '/personal/setUp', component: () => import('../views/buyer/personal/setUp'), hidden: true },
   { path: '/personal/personalInfo', component: () => import('../views/buyer/personal/personalInfo'), hidden: true },
