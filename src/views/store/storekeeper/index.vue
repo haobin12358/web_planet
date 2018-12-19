@@ -21,8 +21,8 @@
           <div class="m-out-title m-ft-30">提现金额</div>
           <div class="m-out-num-box">
             <div class="m-out-RMB">￥</div>
-            <input type="text" class="m-out-num-input" v-model="moneyNum">
-            <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0.00'">
+            <input type="text" class="m-out-num-input" v-model="moneyNum" @focus="moneyFocus">
+            <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0'">
           </div>
           <div class="m-out-row">
             <div class="m-row-left">姓名</div>
@@ -61,6 +61,12 @@
         <div class="m-popup-btn">
           <div @click="bankPopup = false">取消</div>
           <div @click="bankDone">确认</div>
+        </div>
+        <div class="m-out-row m-out-bank">
+          <div class="m-row-left">银行名称</div>
+          <div class="m-row-right">
+            <input type="text" v-model="bankResult" class="m-row-input m-width-300">
+          </div>
         </div>
         <mt-picker :slots="slots" @change="bankChange"></mt-picker>
       </mt-popup>
@@ -187,6 +193,7 @@
         user: { uc_count: '', mounth_count: '' },
         realName: '',
         bankName: '',
+        bankResult: "",
         moneyNum: '',
         bankNo: '',
         msg: '',
@@ -201,11 +208,18 @@
       },
       // 提现的选择银行确定按钮
       bankDone() {
+        if(this.bankResult) {
+          this.bank = this.bankResult;
+        }
         this.bankPopup = false;
       },
       // 提现的提交按钮
       outBtn(where) {
         if(where == "submit") {
+          if(this.moneyNum < 0.01) {
+            Toast({ message: '提现金额应大于0', position: 'bottom' });
+            return false;
+          }
           if(this.moneyNum > this.user.usbalance) {
             Toast({ message: '提现金额应不大于可用余额', position: 'bottom' });
             return false;
@@ -214,11 +228,11 @@
             Toast({ message: '请先输入姓名', position: 'bottom' });
             return false;
           }
-          if(this.bankNo.length < 16) {
+          if(this.bankNo.length < 10) {
             Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
             return false;
           }
-          if(this.bank == '请点击选择银行' || !this.bank) {
+          if((this.bank == '请点击选择银行' || this.bank == '可输入银行名称' || !this.bank) && !this.bankResult) {
             Toast({ message: '请先选择银行', position: 'bottom' });
             return false;
           }
@@ -226,10 +240,10 @@
             Toast({ message: '请先输入开户行', position: 'bottom' });
             return false;
           }
-          if(!this.validated) {
+          /*if(!this.validated) {
             Toast({ message: '该银行卡已失效', position: 'bottom' });
             return false;
-          }
+          }*/
           let params = {
             cncashnum: this.moneyNum,
             cncardno: this.bankNo,
@@ -264,6 +278,13 @@
           }, 1000);
         }
       },
+      // 提现金额输入框获取焦点
+      moneyFocus() {
+        if(this.moneyNum == '0') {
+          this.moneyNum = '';
+        }
+      },
+      // 获取银行名称
       getBankName() {
         if(this.bankNo.length < 16) {
           Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
@@ -272,12 +293,15 @@
         this.bankPopup = true;
         axios.get(api.get_bankname + "?cncardno=" + this.bankNo).then(res => {
           if(res.data.status == 200) {
-            if(!res.data.data.validated) {
+            /*if(!res.data.data.validated) {
               Toast('该银行卡已失效');
             }else {
               this.slots[0].values = ['请点击选择银行', res.data.data.cnbankname];
-            }
+            }*/
+            this.slots[0].values = ['可输入银行名称', res.data.data.cnbankname];
             this.validated = res.data.data.validated;
+          }else {
+            this.slots[0].values = ['可输入银行名称'];
           }
         })
       },
@@ -434,31 +458,6 @@
               height: 40px;
             }
           }
-          .m-out-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 28px;
-            padding: 20px 0 10px 0;
-            text-align: right;
-            .m-row-left {
-
-            }
-            .m-row-right {
-              .m-row-input {
-                height: 40px;
-                border: 1px #999999 solid;
-                border-radius: 10px;
-                font-size: 24px;
-                padding: 0 0 0 20px;
-              }
-              .m-width-200 {
-                width: 200px;
-              }
-              .m-width-320 {
-                width: 320px;
-              }
-            }
-          }
           .m-out-know-img {
             width: 85px;
             height: 85px;
@@ -486,6 +485,36 @@
             margin: 50px 0 0 170px;
           }
         }
+      }
+      .m-out-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 28px;
+        padding: 20px 0 10px 0;
+        text-align: right;
+        .m-row-left {
+
+        }
+        .m-row-right {
+          .m-row-input {
+            text-align: right;
+            height: 40px;
+            border: 1px #999999 solid;
+            border-radius: 10px;
+            font-size: 24px;
+            padding: 3px 20px;
+          }
+          .m-width-200 {
+            width: 200px;
+          }
+          .m-width-320 {
+            width: 320px;
+          }
+        }
+      }
+      .m-out-bank {
+        align-items: center;
+        margin: 60px 120px -20px 120px;
       }
       .m-bank-popup {
         width: 750px;

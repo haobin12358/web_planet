@@ -124,8 +124,8 @@
               <div class="m-out-title m-ft-30">提现金额</div>
               <div class="m-out-num-box">
                 <div class="m-out-RMB">￥</div>
-                <input class="m-out-num-input" type="text" v-model="moneyNum">
-                <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0.00'">
+                <input class="m-out-num-input" type="text" v-model="moneyNum" @focus="moneyFocus">
+                <img class="m-out-num-clean" src="/static/images/icon-close.png" @click="moneyNum = '0'">
               </div>
               <div class="m-out-row">
                 <div class="m-row-left">姓名</div>
@@ -198,7 +198,7 @@
         outPopup: false,
         outSubmit: false,
         bankPopup: false,
-        moneyNum: "0.00",
+        moneyNum: "0",
         slots: [{ values: ['请点击选择银行'] }],
         realName: "",
         bankName: "",
@@ -236,6 +236,12 @@
             this.slots[0].values = ['可输入银行名称'];
           }
         })
+      },
+      // 提现金额输入框获取焦点
+      moneyFocus() {
+        if(this.moneyNum == '0') {
+          this.moneyNum = '';
+        }
       },
       // 提现的提交按钮
       outBtn(where) {
