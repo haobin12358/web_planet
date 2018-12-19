@@ -9,55 +9,55 @@
         </div>
         <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
       </div>
-      <div class="m-circle-content">
+      <div class="m-circle-content" style="height: 1100px">
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
-        <!--<mt-loadmore :top-method="loadTop">-->
-        <div class="m-circle-body">
-          <template v-for="(items,index) in news_list">
-            <div class="m-video-one" @click="changeRoute('/circle/detail',items)">
-              <template v-if="select_nav.itid == 'mynews'">
-                <span class="m-mark-label active" v-if="items.nestatus == 'refuse'">未通过</span>
-                <span class="m-mark-label" v-else-if="items.nestatus == 'usual'">审核通过</span>
-                <span class="m-mark-label" v-else>审核中</span>
-              </template>
+        <!--<mt-loadmore :top-method="loadTop" ref="loadmore">-->
+          <div class="m-circle-body">
+            <template v-for="(items,index) in news_list">
+              <div class="m-video-one" @click="changeRoute('/circle/detail',items)">
+                <template v-if="select_nav.itid == 'mynews'">
+                  <span class="m-mark-label active" v-if="items.nestatus == 'refuse'">未通过</span>
+                  <span class="m-mark-label" v-else-if="items.nestatus == 'usual'">审核通过</span>
+                  <span class="m-mark-label" v-else>审核中</span>
+                </template>
 
-              <h3>{{items.netitle}}</h3>
-              <div class="m-video-box" v-if="items.showtype == 'video'">
-                <video src="" class="m-video"></video>
-                <!--<video :src="items.video" class="m-video"></video>-->
-                <div class="m-img-box">
-                  <img :src="items.videothumbnail" class="m-img">
+                <h3>{{items.netitle}}</h3>
+                <div class="m-video-box" v-if="items.showtype == 'video'">
+                  <video src="" class="m-video"></video>
+                  <!--<video :src="items.video" class="m-video"></video>-->
+                  <div class="m-img-box">
+                    <img :src="items.videothumbnail" class="m-img">
+                  </div>
+                  <span class="m-video-time">{{items.videoduration}}</span>
+                  <span class="m-icon-video"></span>
                 </div>
-                <span class="m-video-time">{{items.videoduration}}</span>
-                <span class="m-icon-video"></span>
+                <div class="m-img-box" v-else-if="items.showtype == 'picture'">
+                  <img :src="items.mainpic" class="m-img">
+                </div>
+                <p class="m-text" v-else>
+                  {{items.netext}}
+                </p>
+                <ul class="m-video-icon-ul">
+                  <li @click.stop="likeClick(index)">
+                    <span class="m-icon-like " :class="items.is_favorite?'active':''"></span>
+                    <span>{{items.favoritnumber}}</span>
+                  </li>
+                  <li class="m-border" @click.stop="changeRoute('/circle/detail', items, 'comments')">
+                    <span class="m-icon-comment"></span>
+                    <span>{{items.commentnumber}}</span>
+                  </li>
+                  <li>
+                    <span class="m-icon-transmit" @click.stop="shareCircle(items)"></span>
+                  </li>
+                </ul>
+                <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
+                <div class="m-refuse-reason" v-if="select_nav.itid == 'mynews' && items.nestatus == 'refuse'">
+                  {{items.refuse_info}}
+                </div>
               </div>
-              <div class="m-img-box" v-else-if="items.showtype == 'picture'">
-                <img :src="items.mainpic" class="m-img">
-              </div>
-              <p class="m-text" v-else>
-                {{items.netext}}
-              </p>
-              <ul class="m-video-icon-ul">
-                <li @click.stop="likeClick(index)">
-                  <span class="m-icon-like " :class="items.is_favorite?'active':''"></span>
-                  <span>{{items.favoritnumber}}</span>
-                </li>
-                <li class="m-border" @click.stop="changeRoute('/circle/detail', items, 'comments')">
-                  <span class="m-icon-comment"></span>
-                  <span>{{items.commentnumber}}</span>
-                </li>
-                <li>
-                  <span class="m-icon-transmit" @click.stop="shareCircle(items)"></span>
-                </li>
-              </ul>
-              <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
-              <div class="m-refuse-reason" v-if="select_nav.itid == 'mynews' && items.nestatus == 'refuse'">
-                {{items.refuse_info}}
-              </div>
-            </div>
-          </template>
-          <bottom-line v-if="bottom_show"></bottom-line>
-        </div>
+            </template>
+            <bottom-line v-if="bottom_show"></bottom-line>
+          </div>
           <!--</mt-loadmore>-->
       </div>
   </div>
@@ -181,7 +181,7 @@
       },
       /*跳转路由*/
       changeRoute(v,params,value){
-        if(v == '/circle/detail'){
+        /*if(v == '/circle/detail'){
           if(value == 'comments') {
             sessionStorage.setItem('showComments', 'show');
             this.$router.push({path:v,query:{neid:params.neid}});
@@ -195,7 +195,7 @@
           this.$router.push({path:v,query:{shtype:value}})
         }else{
           this.$router.push({path:v})
-        }
+        }*/
       },
       /*导航切换*/
       navClick(index){
@@ -311,7 +311,13 @@
       },
       // 下拉刷新
       loadTop() {
-        this.reload();
+        this.page_info.page_num = 1;
+        for(let i = 0; i < this.nav_list.length; i ++) {
+          if(this.nav_list[i].active) {
+            this.getNews(this.nav_list[i].itid);          // 获取订单列表
+          }
+        }
+        this.$refs.loadmore.onTopLoaded();
       }
     }
   }

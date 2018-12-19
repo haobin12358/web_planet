@@ -141,7 +141,7 @@
         let that = this;
         let form = new FormData();
         form.append("file", files[0]);
-        axios.post(api.upload_file + '?type=avatar&token=' + localStorage.getItem('token'), form).then(res => {
+        axios.post(api.upload_file + '?type=idcard&token=' + localStorage.getItem('token'), form).then(res => {
           if(res.data.status == 200) {
             this.user.umfront = res.data.data;
             reader.readAsDataURL(files[0]);
@@ -160,7 +160,7 @@
         let that = this;
         let form = new FormData();
         form.append("file", files[0]);
-        axios.post(api.upload_file + '?type=avatar&token=' + localStorage.getItem('token'), form).then(res => {
+        axios.post(api.upload_file + '?type=idcard&token=' + localStorage.getItem('token'), form).then(res => {
           if(res.data.status == 200) {
             this.user.umback = res.data.data;
             reader.readAsDataURL(files[0]);

@@ -5,7 +5,7 @@
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
     </div>
 
-    <mt-loadmore :top-method="loadTop">
+    <mt-loadmore :top-method="loadTop" ref="loadmore">
       <div class="m-no-coupon" v-if="order_list.length == 0">
         <span class="m-no-img m-order-no-img"></span>
         <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
@@ -86,6 +86,7 @@
       components: { navList, bottomLine },
       mounted(){
         common.changeTitle('订单列表');
+        // this.getOrderNum();               // 获取各状态的订单数量
       },
       activated() {
         this.getOrderNum();               // 获取各状态的订单数量
@@ -227,7 +228,13 @@
         },
         // 下拉刷新
         loadTop() {
-          this.reload();
+          this.page_info.page_num = 1;
+          for(let i = 0; i < this.nav_list.length; i ++) {
+            if(this.nav_list[i].active) {
+              this.getOrderList(this.nav_list[i].status);          // 获取订单列表
+            }
+          }
+          this.$refs.loadmore.onTopLoaded();
         },
         // 取消订单
         cancelOrder(item) {

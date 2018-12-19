@@ -4,7 +4,7 @@
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
     </div>
 
-    <mt-loadmore :top-method="loadTop">
+    <mt-loadmore :top-method="loadTop" ref="loadmore">
       <div class="m-no-coupon" v-if="order_list.length == 0">
         <span class="m-no-img m-order-no-img"></span>
         <p>暂无订单哦,<span class="m-red">去下单</span>吧~</p>
@@ -89,11 +89,6 @@
       },
       activated() {
         this.getOrderNum();             // 获取各状态的订单数量
-        if(localStorage.getItem('activityOrderNo')) {
-          this.navClick(localStorage.getItem('activityOrderNo'));                // 导航点击
-        }else {
-          this.navClick(0);                // 导航点击
-        }
       },
       methods: {
         changeRoute(v, item) {
@@ -119,6 +114,7 @@
         },
         // 导航点击
         navClick(index) {
+          console.log(this.nav_list);
           this.page_info.page_num = 1;
           this.total_count = 0;
           this.bottom_show = false;
@@ -172,6 +168,12 @@
               }
               res.data.data[0].active = true;
               this.nav_list = [].concat(res.data.data);
+
+              if(localStorage.getItem('activityOrderNo')) {
+                this.navClick(localStorage.getItem('activityOrderNo'));         // 导航点击
+              }else {
+                this.navClick(0);                // 导航点击
+              }
             }
           })
         },
@@ -197,7 +199,14 @@
         },
         // 下拉刷新
         loadTop() {
-          this.reload();
+          this.page_info.page_num = 1;
+          for(let i = 0; i < this.nav_list.length; i ++) {
+            if(this.nav_list[i].active) {
+              this.omfrom = this.nav_list[i].omfrom;
+              this.getOrderNum();             // 获取各状态的订单数量
+            }
+          }
+          this.$refs.loadmore.onTopLoaded();
         },
         // 请求微信支付参数
         payBtn(items) {
