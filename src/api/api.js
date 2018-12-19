@@ -3,19 +3,19 @@ const title = 'https://planet.daaiti.cn/api/v1/'
 const api = {
   login: title + 'user/admin_login',                                      //用户登录
   get_admin_list: title + 'user/get_admin_list',                          //获取管理员列表
-  add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        //添加啊管理员
+  add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        //添加管理员
   get_admin_all_type: title + 'user/get_admin_all_type',                  //获取管理员身份
   update_admin: title + 'user/update_admin',                              //更新管理员
   update_admin_password: title + 'user/update_admin_password',            //修改密码
+
+  supplizer_login: title + 'user/supplizer_login',                        //供应商登录
 
   product_list: title + 'product/list',                                   //获取商品列表
   product_get: title + 'product/get',                                     //获取商品详情
   off_shelves_product: title + 'product/off_shelves_list',                //批量下架商品
   delete_product: title + 'product/delete_list',                          //删除商品
   supplizer_list: title + 'supplizer/list',                               //获取供应商列表
-  brand_list: title + 'brand/list',                                       //获取品牌
   scene_list: title + 'scene/list',                                       //获取场景
-  items_list: title + 'items/list',                                       //获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
 
@@ -24,8 +24,16 @@ const api = {
   update_category: title + 'category/update',                             //修改类目
   delete_category: title + 'category/delete',                             //删除类目
 
+  brand_list: title + 'brand/list',                                       //获取品牌
+  create_brand: title + 'brand/create',                                   //新增品牌
+  update_brand: title + 'brand/update',                                   //修改品牌
+  off_shelves_brand: title + 'brand/off_shelves',                         //下架品牌
 
-  supplizer_login: title + 'user/supplizer_login',                        //供应商登录
+
+  items_list: title + 'items/list',                                       //获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
+  create_items: title + 'items/create',                                   //创建标签
+
+
 
   get_order_situation: title + 'order/get_order_situation',               //获取订单概况
   get_all_order: title + 'order/list',                                    //获取所有订单

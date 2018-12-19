@@ -32,8 +32,9 @@
                        :filter-method="filterPrStatus">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.prstatus_zh=='上架中'">{{scope.row.prstatus_zh}}</el-tag>
-          <el-tag v-else-if="scope.row.prstatus_zh=='审核中'" type="info">{{scope.row.prstatus_zh}}</el-tag>
-          <el-tag v-if="scope.row.prstatus_zh=='已下架'" type="danger">{{scope.row.prstatus_zh}}</el-tag>
+          <el-tag v-else-if="scope.row.prstatus_zh=='审核中'" type="warning">{{scope.row.prstatus_zh}}</el-tag>
+          <el-tag v-else-if="scope.row.prstatus_zh=='已下架'" type="danger">{{scope.row.prstatus_zh}}</el-tag>
+          <el-tag v-else type="info">{{scope.row.prstatus_zh}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">

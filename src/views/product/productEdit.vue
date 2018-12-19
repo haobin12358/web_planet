@@ -18,7 +18,9 @@
                          @change="handlePcidChange"
                          v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
             </el-cascader>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productCategory" class="form-item-end-tip">分类不全?去新增 ></router-link>
+            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productCategory"
+                         class="form-item-end-tip">分类不全?去新增 >
+            </router-link>
           </el-form-item>
 
           <el-form-item label="所属品牌" prop="pbid">
@@ -28,7 +30,9 @@
                 <img v-lazy="item.pblogo" style="float: right;width: 32px;height: 32px;padding: 2px;" alt="">
               </el-option>
             </el-select>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand" class="form-item-end-tip">品牌不全?去新增 ></router-link>
+            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand"
+                         class="form-item-end-tip">品牌不全?去新增 >
+            </router-link>
           </el-form-item>
 
           <el-form-item label="关联标签" prop="items">
@@ -40,7 +44,9 @@
                 :value="item.itid">
               </el-option>
             </el-select>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag" class="form-item-end-tip">标签不全?去新增 ></router-link>
+            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag"
+                         class="form-item-end-tip">标签不全?去新增 >
+            </router-link>
           </el-form-item>
 
           <!--<block-title title="基本信息"></block-title>-->
@@ -180,7 +186,9 @@
               :limit="9"
               :multiple="true">
               <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.
+              <div slot="tip" class="el-upload__tip">
+                <span>可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
               </div>
             </el-upload>
           </el-form-item>
@@ -198,8 +206,12 @@
               :limit="5"
               :multiple="true">
               <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.
+              <div slot="tip" class="el-upload__tip">
+                <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
               </div>
+
+
             </el-upload>
           </el-form-item>
 
@@ -220,10 +232,6 @@
       <section style="display: flex;align-items:flex-start;flex-wrap: wrap;">
         <kan-ban v-for="(item,index) in formData.pskuvalue" :key="index" :list="item"
                  class="kanban" :header-text="formData.prattribute[index]"/>
-
-        <!--<draggable v-for="(item,index) in formData.pskuvalue" :key="index" element="ul" v-model="item">-->
-          <!--<li v-for="item in list">{{item.name}}</li>-->
-        <!--</draggable>-->
       </section>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSkuSortVisible = false">取 消</el-button>
@@ -239,7 +247,8 @@
 </template>
 
 <script>
-  import KanBan from 'src/components/Kanban'
+  import KanBan from 'src/components/Kanban/index'
+  import ImgsDragSort from 'src/components/ImgsDragSort/index'
   import draggable from 'vuedraggable'
   import permission from 'src/directive/permission/index.js' // 权限判断指令
   import {getStore, setStore} from "src/utils/index";
@@ -255,16 +264,17 @@
 
     components: {
       KanBan,
-      draggable
+      draggable,
+      ImgsDragSort,
     },
 
-    directives: { permission },
+    directives: {permission},
 
     watch: {
-      selectedOption(val){
+      selectedOption(val) {
         this.formData.pcid = val[2];
       },
-      items(val){
+      items(val) {
         this.formData.items = this.items.map(item => {
           return {
             itid: item
@@ -283,8 +293,8 @@
       prDescUrl(val) {
         this.formData.prdesc = val.map(item => item.url);
       },
-      dialogSkuSortVisible(val){
-        if(!val){
+      dialogSkuSortVisible(val) {
+        if (!val) {
           this.goToIndexAfterSave = false;
         }
       },
@@ -588,7 +598,7 @@
         return isLt15M;
       },
       handleImagesRemove(file, fileList) {
-        this.imagesUrl =  this.imagesUrl.filter(
+        this.imagesUrl = this.imagesUrl.filter(
           item => item.uid != file.uid
         )
       },
@@ -648,7 +658,7 @@
       },
 
       //  配合的data转换成接口要求的 还是得放watch里配合校验信息
-      convertToSave(){
+      convertToSave() {
         // this.formData.pcid = this.selectedOption[2];
         // this.formData.items = this.items.map(item => {
         //   return {
@@ -659,17 +669,16 @@
 
       //  保存
       doSaveProd() {
-        if(this.formData.prid){ //  编辑
+        if (this.formData.prid) { //  编辑
           this.$http.post(this.$api.update_product, this.formData, {
-            params: {
-            }
+            params: {}
           }).then(
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                    data = res.data.data;
+                  data = res.data.data;
 
-                if(this.goToIndexAfterSave){
+                if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
                 }
 
@@ -683,17 +692,16 @@
               }
             }
           )
-        }else{
+        } else {
           this.$http.post(this.$api.create_product, this.formData, {
-            params: {
-            }
+            params: {}
           }).then(
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                    data = res.data.data;
+                  data = res.data.data;
 
-                if(this.goToIndexAfterSave){
+                if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
                 }
 
@@ -722,10 +730,11 @@
                 this.$message.warning(checkSkuRst)
                 return
               }
-              if(goToIndexAfterSave){
+              if (goToIndexAfterSave) {
                 this.goToIndexAfterSave = true;
               }
 
+              console.log(this.imagesUrl);
               this.showSkuSortDlg()
             } else {
               this.$message.warning('请根据校验信息完善表单!');
@@ -774,7 +783,7 @@
       },
 
       //  编辑时,已保存的商品数据转换成组件要的
-      convertFromEdit(data){
+      convertFromEdit(data) {
         this.selectedOption = data.pcids;
         this.items = data.items.map(item => item.itid);
 
@@ -792,15 +801,15 @@
 
       },
       //  抽离出来的初始化
-      init(){
+      init() {
         this.setCategory();
         this.setBrand();
         this.setTags();
 
-        if(this.$route.query.prid){ //  编辑
+        if (this.$route.query.prid) { //  编辑
           //  编辑更换的商品或之前是新增,数据替换
-          if(this.$route.query.prid!=this.formData.prid){
-            this.$http.get(this.$api.product_get,{
+          if (this.$route.query.prid != this.formData.prid) {
+            this.$http.get(this.$api.product_get, {
               params: {
                 prid: this.$route.query.prid,
               }
@@ -816,12 +825,12 @@
                 }
               }
             )
-          }else{
+          } else {
 
           }
-        }else{  //  新增
+        } else {  //  新增
           //  编辑到新增
-          if(this.formData.prid){
+          if (this.formData.prid) {
             this.reset();
           }
         }
@@ -829,37 +838,37 @@
         this.$refs.prodForm.clearValidate();
         this.$message({
           type: 'info',
-          message: `当前是商品${this.$route.query.prid? '编辑':'新增'}状态`,
+          message: `当前是商品${this.$route.query.prid ? '编辑' : '新增'}状态`,
           duration: '2000'
         });
       },
       //  重置(新增状态)
-      reset(){
-          this.formData = {
-            prid: '',
+      reset() {
+        this.formData = {
+          prid: '',
 
-            pcid: "",
-            pbid: "",
-            items: [],
+          pcid: "",
+          pbid: "",
+          items: [],
 
-            prtitle: "",
-            prdescription: "",
-            prprice: 0,
-            prlineprice: 0,
-            prfreight: 0,
+          prtitle: "",
+          prdescription: "",
+          prprice: 0,
+          prlineprice: 0,
+          prfreight: 0,
 
-            prattribute: [],
-            skus: [],
-            pskuvalue: [],
+          prattribute: [],
+          skus: [],
+          pskuvalue: [],
 
-            prmainpic: "",
-            images: [],
-            prdesc: [],
-          };
-          this.selectedOption = [];
-          this.items = [];
-          this.imagesUrl = [];
-          this.prDescUrl = [];
+          prmainpic: "",
+          images: [],
+          prdesc: [],
+        };
+        this.selectedOption = [];
+        this.items = [];
+        this.imagesUrl = [];
+        this.prDescUrl = [];
       },
     },
 
@@ -929,11 +938,11 @@
       .fjc();
       align-items: center;
 
-      .el-button{
+      .el-button {
         margin: 0;
         margin-bottom: 20px;
 
-        &:last-child{
+        &:last-child {
           margin-bottom: 0;
         }
       }

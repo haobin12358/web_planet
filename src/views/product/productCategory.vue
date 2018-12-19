@@ -52,7 +52,7 @@
           <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="pcsort">
-          <el-input v-model="categroyForm.pcsort"></el-input>
+          <el-input v-model.number="categroyForm.pcsort"></el-input>
         </el-form-item>
 
         <el-form-item label="图片" prop="pcpic">
@@ -94,9 +94,9 @@
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="doSave">确 定</el-button>
-        </span>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSave">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
