@@ -13,7 +13,10 @@
       <div class="m-content">
         <p>{{news_info.netext}}</p>
         <div class="m-video-box" v-if="news_info.video" v-on:click="playVideo()">
-          <img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">
+          <!--<img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">-->
+          <div class="m-img-box">
+            <img :src="news_info.video.nvthumbnail" class="m-img">
+          </div>
           <video :src="news_info.video.nvvideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
           <span class="m-video-time">{{news_info.video.nvduration}}</span>
           <span class="m-icon-video"></span>
@@ -418,11 +421,26 @@
     /*margin: 14px 0 30px ;*/
   }
   .m-content{
-    padding: 46px 46px 200px 46px;
+    padding: 46px 46px 150px 46px;
     text-align: left;
     .m-video-box{
       position: relative;
-      padding-bottom: 200px;
+      .m-img-box {
+        width: 700px;
+        height: 360px;
+        position: relative;
+        background-color: #ffffff;
+        .m-img {
+          max-width: 700px;
+          max-height: 360px;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin: auto;
+        }
+      }
       .m-video{
         display: block;
         width: 100%;
