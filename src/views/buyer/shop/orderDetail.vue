@@ -194,7 +194,9 @@
               this.$router.push({ path: v, query: { omid: this.order_info.omid }});
               break;
             case '/addComment':
-              this.$router.push({ path: v, query: { product: JSON.stringify(this.order_info) }});
+              localStorage.setItem('productComment', JSON.stringify(this.order_info));
+              this.$router.push(v);
+              // this.$router.push({ path: v, query: { product: JSON.stringify(this.order_info) }});
               break;
             default:
               this.$router.push(v);

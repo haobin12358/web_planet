@@ -64,7 +64,9 @@
     methods: {
       // 将订单中的商品展开
       getProduct() {
-        this.order_info = JSON.parse(this.$route.query.product);
+        this.order_info = JSON.parse(localStorage.getItem('productComment'));
+        localStorage.removeItem('productComment');
+        // this.order_info = JSON.parse(this.$route.query.product);
         this.productList = [];
         for(let i = 0; i < this.order_info.order_part.length; i ++) {
           let product = {

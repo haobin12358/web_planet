@@ -116,7 +116,9 @@
               this.$router.push({path:v,query:{product:JSON.stringify(item),allOrder:1}});
               break;
             case '/addComment':
-              this.$router.push({path:v,query:{product:JSON.stringify(item)}});
+              localStorage.setItem('productComment', JSON.stringify(item));
+              this.$router.push(v);
+              // this.$router.push({path:v,query:{product:JSON.stringify(item)}});
               break;
             default:
               this.$router.push(v)

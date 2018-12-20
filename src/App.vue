@@ -15,10 +15,6 @@
 </template>
 
 <script>
-  import common from './common/js/common';
-  import axios from 'axios';
-  import api from './api/api';
-  import {Toast} from 'mint-ui';
 export default {
   name: 'App',
   provide(){
@@ -35,16 +31,12 @@ export default {
     let url = location.href.split('&from')[0];
     if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
       location.href = url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1];
-      // alert(url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1]);
     }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
       location.href = url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1];
-      // alert(url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1]);
     }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
       location.href = url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1];
-      // alert(url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1]);
     }else if(location.href.indexOf('neid') > 0) {           // 圈子详情
       location.href = url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1];
-      // alert(url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1]);
     }
     // 将邀请人的usid保存，等注册的时候使用
     if(!localStorage.getItem('token')) {
@@ -55,7 +47,7 @@ export default {
     }
   },
   mounted(){
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDg5MDM1MywiZXhwIjoxNTQ1NDk1MTUzfQ.eyJpZCI6IjNiMTI1YzY0LTAwODQtMTFlOS1hYTE4LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NWJhMlx1NWI5ODg4MjAifQ.4ETC7t7tyavuxajtP-UpRB3YiDGbefiVhANTq4BqYPI';
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NTMxMDM2OCwiZXhwIjoxNTQ1OTE1MTY4fQ.eyJpZCI6ImFkMTliNWFlLTAyMjktMTFlOS04ZmQ1LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.y_i8mnyJd6bwRHJpyG4xdwoQ-XkaRzpFSC_jKF5aLJw';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },
