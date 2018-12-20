@@ -227,6 +227,5 @@
 
 <style lang="less" scoped>
   .container {
-
   }
 </style>

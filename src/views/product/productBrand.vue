@@ -14,7 +14,7 @@
 
       <el-button type="primary" icon="el-icon-plus" @click="doAddBrand">新增</el-button>
     </section>
-    <el-table v-loading="brandLoading" :data="brandTableData">
+    <el-table v-loading="brandLoading" :data="brandTableData" height="600">
       <el-table-column label="品牌logo" align="center" prop="pblogo" width="160">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.pblogo" :key="scope.row.pblogo"></table-cell-img>
@@ -26,18 +26,19 @@
         </template>
       </el-table-column>
       <el-table-column label="品牌名称" align="center" prop="pbname" width="160"></el-table-column>
-      <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column label="品牌所属供应商" prop="supplizer.suname" align="center" width="160"></el-table-column>
       <el-table-column label="关联标签" align="center" width="300">
         <template slot-scope="scope">
           <el-tag style="margin: 0 5px 5px 0;" v-for="item in scope.row.items" :key="item.itid">{{item.itname}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="100" align="center" show-overflow-tooltip>
+      <el-table-column label="状态" width="100" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.pbstatus == 0">上架中</el-tag>
+          <el-tag  v-if="scope.row.pbstatus == 0">上架中</el-tag>
           <el-tag v-if="scope.row.pbstatus == 1" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="品牌描述" align="center" prop="pbdesc" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditBrand(scope.row)">编辑</el-button>
@@ -97,10 +98,10 @@
         </el-form-item>
 
         <el-form-item label="品牌名" prop="pbname">
-          <el-input v-model="brandForm.pbname"></el-input>
+          <el-input v-model.trim="brandForm.pbname"></el-input>
         </el-form-item>
         <el-form-item label="品牌描述" prop="pbdesc">
-          <el-input v-model="brandForm.pbdesc" type="textarea"></el-input>
+          <el-input v-model.trim="brandForm.pbdesc" type="textarea"></el-input>
         </el-form-item>
         <el-form-item label="关联标签" prop="itids">
           <el-select
@@ -110,7 +111,7 @@
             default-first-option
             placeholder="可多选" style="width: 500px">
             <el-option
-              v-for="item in itemTableData"
+              v-for="item in itemOptions"
               :key="item.itid"
               :label="item.itname"
               :value="item.itid">
@@ -118,7 +119,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="官网">
-          <el-input v-model="brandForm.pblinks"></el-input>
+          <el-input v-model.trim="brandForm.pblinks"></el-input>
         </el-form-item>
       </el-form>
 
@@ -142,7 +143,7 @@
 
       <el-button type="primary" icon="el-icon-plus" @click="doAddItem">新增</el-button>
     </section>
-    <el-table v-loading="itemLoading" :data="itemTableData" height="300" size="mini">
+    <el-table v-loading="itemLoading" :data="itemTableData"  size="mini">
       <el-table-column label="标签名" align="center" prop="itname" width="300"></el-table-column>
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
       <!--<el-table-column label="关联品牌" align="center"></el-table-column>-->
@@ -154,18 +155,18 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="itemDlgVisible" width="700px" top="10vh" :title="brandForm.pbid ? '品牌编辑': '品牌新增'">
+    <el-dialog :visible.sync="itemDlgVisible" width="700px"  :title="itemForm.itid ? '标签编辑': '标签新增'">
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
-        <el-form-item label="品牌名" prop="pbname">
-          <el-input v-model="brandForm.pbname"></el-input>
+        <el-form-item label="标签名" prop="itname">
+          <el-input v-model.trim="itemForm.itname"></el-input>
         </el-form-item>
-        <el-form-item label="品牌描述" prop="pbdesc">
-          <el-input v-model="brandForm.pbdesc" type="textarea"></el-input>
+        <el-form-item label="标签描述" prop="itdesc">
+          <el-input v-model.trim="itemForm.itdesc" type="textarea"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="brandDlgVisible = false">取 消</el-button>
-        <el-button type="primary" @click="doSaveBrand">确 定</el-button>
+        <el-button @click="itemDlgVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSaveItem">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -194,10 +195,9 @@
         },
         itemRules: {
           itname: [
-            {required: true, message: '名字必填', trigger: 'blur'}
+            {required: true, message: '标签名字必填', trigger: 'blur'}
           ],
           itdesc: [
-            {required: true, message: '描述必填', trigger: 'blur'}
           ],
         },
 
@@ -208,6 +208,7 @@
         totalBrand: 0,
 
         brandDlgVisible: false,
+        itemOptions: [],
         brandForm: {
           pblogo: "",
           pbbackgroud: '',
@@ -268,10 +269,66 @@
       },
       doAddItem() {
         console.log('doAddItem');
+        this.itemDlgVisible = true;
       },
       doEditItem(row) {
-        console.log('doEditItem');
+        this.itemDlgVisible = true;
+        this.itemForm = {
+          itname: row.itname,
+          itdesc: row.itdesc,
+        };
       },
+      doSaveItem(){
+        this.$refs.itemForm.validate(
+          valid => {
+            if (valid) {
+              let type = this.itemForm.itid ? '标签修改' : '标签新增';
+              this.itemForm.ittype = 40;
+
+              if (this.itemForm.itid) {
+                return
+                this.$http.post(this.$api.update_brand, this.itemForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.$notify({
+                        title: `${type}成功`,
+                        message: `品牌名:${this.itemForm.pbname}`,
+                        type: 'success'
+                      });
+                      this.brandDlgVisible = false;
+                      this.init();
+                    }
+                  }
+                );
+              } else {
+                this.$http.post(this.$api.create_items, this.itemForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.$notify({
+                        title: `${type}成功`,
+                        message: `标签名:${this.itemForm.itname}`,
+                        type: 'success'
+                      });
+                      this.itemDlgVisible = false;
+                      this.init();
+                    }
+                  }
+                );
+              }
+
+            } else {
+              this.$message.warning('请根据校验信息完善表单!');
+            }
+          }
+        )
+      },
+
       doRemoveItem(row) {
         console.log('doRemoveItem');
       },
@@ -326,8 +383,7 @@
         return isLt15M;
       },
 
-      doAddBrand() {
-        this.brandDlgVisible = true;
+      resetBrandForm(){
         this.brandForm = {
           pblogo: "",
           pbbackgroud: '',
@@ -336,8 +392,30 @@
           pblinks: "",
           itids: [],
         };
+        this.$http.get(this.$api.items_list, {
+          params: {
+            ittype: 40
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.itemOptions = data
+            }
+          }
+        )
+      },
+      doAddBrand() {
+        this.brandDlgVisible = true;
+        this.resetBrandForm();
+
+
       },
       doEditBrand(row) {
+        this.resetBrandForm();
+
         this.brandDlgVisible = true;
         this.brandForm = {
           pbid: row.pbid,

@@ -81,33 +81,33 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'ProductIndex',
         component: () => import('src/views/product/index'),
-        meta: {title: '所有商品', noCache: false, roles: level1}
+        meta: {title: '所有商品',icon: 'yes', noCache: false, roles: level1}
       }, {
         path: 'productEdit',
         name: 'ProductEdit',
         hidden: true,
         component: () => import('src/views/product/productEdit'),
-        meta: {title: '商品编辑', noCache: false, roles: level1}
+        meta: {title: '商品编辑',icon: 'yes', noCache: false, roles: level1}
       },
 
       {
         path: 'productCategory',
         name: 'ProductCategory',
         component: () => import('src/views/product/productCategory'),
-        meta: {title: '商品分类', noCache: true, roles: level2}
+        meta: {title: '商品分类',icon: 'yes', noCache: true, roles: level2}
       },
       {
         path: 'productTag',
         name: 'ProductTag',
         component: () => import('src/views/product/productTag'),
-        meta: {title: '场景和商品标签', noCache: true, roles: level2}
+        meta: {title: '场景和商品标签',icon: 'yes', noCache: true, roles: level2}
       },
 
        {
         path: 'productBrand',
         name: 'ProductBrand',
         component: () => import('src/views/product/productBrand'),
-        meta: {title: '品牌和标签', noCache: true, roles: level2}
+        meta: {title: '品牌和标签',icon: 'yes', noCache: true, roles: level2}
       },
     ]
   },
@@ -130,7 +130,7 @@ export const asyncRouterMap = [
   {
     path: '/user',
     component: Layout,
-    redirect: '/user/index',
+    redirect: '/user/distributor',
     name: 'User',
     meta: {title: '用户', icon: 'huiyuan', roles: level2},
     children: [
@@ -139,11 +139,19 @@ export const asyncRouterMap = [
         name: 'Distributor',
         component: () => import('src/views/user/distributor'),
         meta: {title: '分销商', noCache: true,roles: level2}
-      }, {
+      },
+
+      {
         path: 'suppliers',
         name: 'Suppliers',
         component: () => import('src/views/user/suppliers'),
-        meta: {title: '供应商',noCache: true, roles: level2}
+        meta: {title: '供应商',icon: 'yes',noCache: true, roles: level2}
+      },{
+        path: 'supplierEdit',
+        name: 'SupplierEdit',
+        hidden: true,
+        component: () => import('src/views/user/supplierEdit'),
+        meta: {title: '供应商编辑',noCache: true, roles: level2}
       },
     ]
   },
@@ -232,7 +240,7 @@ export const asyncRouterMap = [
         path: 'productAudit',
         name: 'ProductAudit',
         component: () => import('src/views/approval/productAudit'),
-        meta: {title: '供应商商品审批',noCache: true, roles: level2}
+        meta: {title: '供应商商品审批',noCache: true,icon: 'yes', roles: level2}
       }, {
         path: 'circleAudit',
         name: 'CircleAudit',
