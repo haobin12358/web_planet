@@ -1,12 +1,12 @@
 <template>
-    <div class="container">
-        推文
-    </div>
+  <div class="container">
+     圈子审核
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'index',
+    name: 'CircleAudit',
 
     components: {},
 
