@@ -11,9 +11,9 @@
           <el-button icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
-
-      <el-button type="primary" icon="el-icon-plus" @click="doAddItem">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="doAddScene">新增</el-button>
     </section>
+    <!--场景table-->
     <el-table v-loading="sceneLoading" :data="sceneTableData">
       <el-table-column label="图片" align="center" prop="pspic" width="120">
         <template slot-scope="scope">
@@ -28,11 +28,44 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="text">编辑</el-button>
+          <el-button type="text"  @click="doEditScene">编辑</el-button>
           <el-button type="text" class="danger-text">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <!--场景编辑dialog-->
+    <el-dialog :visible.sync="sceneDlgVisible" width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'">
+      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-width="120px">
+        <el-form-item label="场景名称" prop="psname">
+          <el-input v-model.trim="sceneForm.psname"></el-input>
+        </el-form-item>
+        <el-form-item label="图片" prop="pspic">
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadUrl"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handlePsPicSuccess"
+            :before-upload="beforePicUpload"
+          >
+            <img v-if="sceneForm.pspic" v-lazy="sceneForm.pspic" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+
+            <div slot="tip" class="el-upload__tip">
+              建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待
+            </div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="排序" prop="pssort">
+          <el-input v-model.number="sceneForm.pssort"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="sceneDlgVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSaveScene">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <block-title title="商品标签"></block-title>
     <section class="tool-bar space-between">
@@ -48,10 +81,15 @@
 
       <el-button type="primary" icon="el-icon-plus" @click="doAddItem">新增</el-button>
     </section>
+    <!--商品标签dialog-->
     <el-table v-loading="itemLoading" :data="itemTableData" height="300" size="mini">
       <el-table-column label="标签名" align="center" prop="itname" width="300"></el-table-column>
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
-      <!--<el-table-column label="关联品牌" align="center"></el-table-column>-->
+      <el-table-column label="所属场景" align="center" width="300">
+        <template slot-scope="scope">
+          <el-tag v-for="item in scope.row.prscene" style="margin: 0 10px 2px 0;">{{item.psname}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text">编辑</el-button>
@@ -59,11 +97,43 @@
         </template>
       </el-table-column>
     </el-table>
+    <!--商品标签编辑dialog-->
+    <el-dialog :visible.sync="itemDlgVisible" width="700px"  :title="itemForm.itid ? '标签编辑': '标签新增'">
+      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
+        <el-form-item label="标签名" prop="itname">
+          <el-input v-model.trim="itemForm.itname"></el-input>
+        </el-form-item>
+        <el-form-item label="关联场景" prop="psid">
+          <el-select
+            v-model="itemForm.psid"
+            multiple
+            filterable
+            default-first-option
+            placeholder="可多选" style="width: 500px">
+            <el-option
+              v-for="item in psOptions"
+              :key="item.psid"
+              :label="item.psname"
+              :value="item.psid">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="标签描述" prop="itdesc">
+          <el-input v-model.trim="itemForm.itdesc" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="itemDlgVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSaveItem">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import {getStore, setStore} from "src/utils/index";
 
   export default {
     name: 'ProductTag',
@@ -77,12 +147,46 @@
         itemLoading: false,
         itemTableData: [],
 
+        itemDlgVisible: false,
+        itemForm: {
+          itid: '',
+          itname: "",
+          psid: [],
+          itdesc: "",
+        },
+        itemRules: {
+          itname: [
+            {required: true, message: '标签名字必填', trigger: 'blur'}
+          ],
+          psid: [
+            {required: true, message: '所属场景必选', trigger: 'change'}
+          ],
+          itdesc: [
+          ],
+        },
+        psOptions: [],
+
+        sceneDlgVisible: false,
+        sceneForm: {
+          psid: '',
+          psname: '',
+          pspic: '',
+          pssort: 1,
+        },
+        sceneRules: {
+
+        },
+
         sceneLoading: false,
         sceneTableData: [],
       }
     },
 
-    computed: {},
+    computed: {
+      uploadUrl() {
+        return this.$api.upload_file + getStore('token')
+      },
+    },
 
     methods: {
       setItemList() {
@@ -105,8 +209,94 @@
           }
         )
       },
+
+      resetItemForm(){
+        this.itemForm = {
+          itid:'',
+          psid: [],
+          itname: "",
+          itdesc: "",
+        };
+        this.$http.get(this.$api.scene_list, {
+          params: {
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.psOptions = data;
+            }
+          }
+        )
+
+      },
       doAddItem() {
-        console.log('doAddItem');
+        this.resetItemForm();
+        this.itemDlgVisible = true;
+      },
+      doEditItem(row) {
+        this.resetItemForm();
+        this.itemDlgVisible = true;
+        this.itemForm = {
+          itname: row.itname,
+          itdesc: row.itdesc,
+        };
+      },
+      doSaveItem(){
+        this.$refs.itemForm.validate(
+          valid => {
+            if (valid) {
+              let type = this.itemForm.itid ? '标签修改' : '标签新增';
+
+              console.log('doSaveItem');
+              if (this.itemForm.itid) {
+                return
+                this.$http.post(this.$api.update_brand, this.itemForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.$notify({
+                        title: `${type}成功`,
+                        message: `品牌名:${this.itemForm.pbname}`,
+                        type: 'success'
+                      });
+                      this.brandDlgVisible = false;
+                      this.init();
+                    }
+                  }
+                );
+              } else {
+                this.$http.post(this.$api.create_items, this.itemForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                          data = res.data.data;
+
+                      this.$notify({
+                        title: `${type}成功`,
+                        message: `标签名:${this.itemForm.itname}`,
+                        type: 'success'
+                      });
+                      this.itemDlgVisible = false;
+                      this.init();
+                    }
+                  }
+                );
+              }
+
+            } else {
+              this.$message.warning('请根据校验信息完善表单!');
+            }
+          }
+        )
+      },
+
+      doRemoveItem(row) {
+        console.log('doRemoveItem');
       },
 
       setSceneList() {
@@ -130,11 +320,82 @@
           }
         )
       },
+      doAddScene(){
+        this.sceneDlgVisible = true;
+      },
+      doEditScene(){
+        this.sceneDlgVisible = true;
+
+      },
+      doSaveScene(){
+        this.$refs.sceneForm.validate(
+          valid => {
+            if (valid) {
+              let type = this.sceneForm.psid ? '修改' : '品牌新增';
+
+              if (this.sceneForm.psid) {
+                this.$http.post(this.$api.update_brand, this.sceneForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.$notify({
+                        title: `${type}成功`,
+                        message: `品牌名:${this.sceneForm.psname}`,
+                        type: 'success'
+                      });
+                      this.brandDlgVisible = false;
+                    }
+                  }
+                );
+              } else {
+                this.$http.post(this.$api.create_scene, this.sceneForm).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.$notify({
+                        title: `${type}成功`,
+                        message: `场景名称:${this.sceneForm.psname}`,
+                        type: 'success'
+                      });
+                      this.sceneDlgVisible = false;
+                    }
+                  }
+                );
+              }
+
+            }else{
+              this.$message.warning('请根据校验信息完善表单!');
+            }
+          }
+        )
+      },
+
+      handlePsPicSuccess(res, file) {
+        this.sceneForm.pspic = res.data;
+      },
+      beforePicUpload(file) {
+        const isLt15M = file.size / 1024 / 1024 < 15;
+
+        if (!isLt15M) {
+          this.$message.error('上传图片大小不能超过 15MB!');
+        }
+
+        return isLt15M;
+      },
+
+      init(){
+        this.setItemList();
+        this.setSceneList();
+      }
     },
 
     created() {
-      this.setItemList();
-      this.setSceneList();
+
+      this.init();
     }
   }
 </script>

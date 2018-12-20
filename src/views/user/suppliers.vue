@@ -26,7 +26,7 @@
               <span>{{props.row.subankname}}</span>
             </el-form-item>
             <el-form-item label="登录账号">
-              <span>suloginphone</span>
+              <span>{{props.row.suloginphone}}</span>
             </el-form-item>
             <el-form-item label="卡号">
               <span>{{props.row.subanksn}}</span>
@@ -43,8 +43,8 @@
 
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
       <el-table-column align="center" prop="sulinkphone" label="手机号" width="280"></el-table-column>
-      <el-table-column align="center" prop="suaddress" label="地址" width="180"></el-table-column>
-      <el-table-column align="center" prop="sustatus" label="状态" >
+      <el-table-column align="center" prop="suaddress" label="地址" ></el-table-column>
+      <el-table-column align="center" prop="sustatus" label="状态" width="180">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>
           <el-tag v-if="scope.row.sustatus == -10" type="danger">禁用</el-tag>
@@ -121,6 +121,7 @@
                   data = res.data.data;
 
               this.tableData = data;
+              this.total = resData.total_count;
             }
           }
         )
@@ -189,6 +190,7 @@
       .wl(300px, auto);
       max-height: 100%;
       margin-right: 30px;
+      border: 1px solid black;
     }
   }
 </style>

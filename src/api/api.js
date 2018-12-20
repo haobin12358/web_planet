@@ -14,7 +14,6 @@ const api = {
   product_get: title + 'product/get',                                     //获取商品详情
   off_shelves_product: title + 'product/off_shelves_list',                //批量下架商品
   delete_product: title + 'product/delete_list',                          //删除商品
-  scene_list: title + 'scene/list',                                       //获取场景
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
 
@@ -22,6 +21,10 @@ const api = {
   create_category: title + 'category/create',                             //新增类目
   update_category: title + 'category/update',                             //修改类目
   delete_category: title + 'category/delete',                             //删除类目
+
+  scene_list: title + 'scene/list',                                       //获取场景
+  create_scene: title + 'scene/create',                                   //编辑场景
+
 
   brand_list: title + 'brand/list',                                       //获取品牌
   create_brand: title + 'brand/create',                                   //新增品牌
