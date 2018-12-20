@@ -1,35 +1,251 @@
 <template>
   <div class="circle-index">
-    <el-table v-loading="activityLoading" :data="activityList" stripe>
-      <el-table-column label="活动首图" align="center" prop="acbackground">
+    <block-title title="圈子资讯"></block-title>
+    <section class="tool-bar space-between">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="标题/作者/摘要">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search">查询</el-button>
+          <el-button icon="el-icon-refresh">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" icon="el-icon-plus" @click="itemDialog = true">新增</el-button>
+    </section>
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item index="usual">已上架</el-menu-item>
+      <el-menu-item index="auditing">审核中</el-menu-item>
+      <el-menu-item index="refuse">已下架</el-menu-item>
+    </el-menu>
+    <el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">
+      <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
+      <el-table-column label="点赞数" align="center" prop="favoritnumber"></el-table-column>
+      <el-table-column label="评论数" align="center" prop="commentnumber"></el-table-column>
+      <el-table-column label="预览" align="center" fixed="right">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
-        </template>
-      </el-table-column>
-      <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>
-      <el-table-column label="类别" align="center" prop="actype_zh"></el-table-column>
-      <el-table-column label="商品数" align="center" prop="pblogo"></el-table-column>
-      <el-table-column label="开启/关闭" align="center" prop="pblogo">
-        <template slot-scope="scope">
-          <el-switch v-model="scope.row.acshow" @change="showActivity(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
-          </el-switch>
+          <!--<el-button type="text" @click="preview(scope.row)">列表预览</el-button>
+          <el-button type="text" @click="preview(scope.row)">详情预览</el-button>-->
+          <preview-circle :circle="scope.row"></preview-circle>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+                   :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="sizeChange" @current-change="pageChange">
+    </el-pagination>
+
+
+    <block-title title="圈子标签管理"></block-title>
+    <el-table v-loading="itemLoading" :data="itemList" stripe>
+      <el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>
+      <el-table-column label="标签名称" align="center" prop="itname"></el-table-column>
+      <el-table-column label="标签描述" align="center" prop="itdesc"></el-table-column>
+      <el-table-column label="推荐" align="center" prop="itrecommend">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.itrecommend" @change="recommend(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="deleteItem(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!--编辑dialog-->
+    <el-dialog v-el-drag-dialog :visible.sync="itemDialog" width="700px" top="20vh"
+               :title="itemForm.itid?'编辑圈子标签':'新增圈子标签'">
+      <el-form :model="itemForm" :rules="rules" ref="itemForm" size="medium" label-width="120px">
+        <el-form-item label="标签名称" prop="itname">
+          <el-input v-model="itemForm.itname"></el-input>
+        </el-form-item>
+        <el-form-item label="标签描述" prop="itdesc">
+          <el-input v-model="itemForm.itdesc"></el-input>
+        </el-form-item>
+        <el-form-item label="推荐" prop="itrecommend">
+          <el-switch v-model="itemForm.itrecommend" active-color="#409EFF" inactive-color="#DBDCDC">
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="itemDialog = false">取 消</el-button>
+        <el-button type="primary" @click="saveItem">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'index',
-    data() {
-      return {}
-    },
-    components: {},
-    mounted() {
+  import elDragDialog from 'src/directive/el-dragDialog'
+  import previewCircle from './components/previewCircle'
 
+  export default {
+    name: 'CircleIndex',
+    data() {
+      return {
+        circleLoading: false,
+        circleList: [],
+        itemLoading: false,
+        itemList: [],
+        itemDialog: false,
+        itemForm: {
+          itid: '',
+          itname: '',
+          itdesc: '',
+          itrecommend: false,
+          ittype: '10'
+        },
+        rules: {
+          itname: [
+            { required: true, message: '标签名称必填', trigger: 'blur' }
+          ]
+        },
+        activeIndex: 'usual',
+        page_num: 1,
+        page_size: 10,
+        total: 10,
+        kw: '',
+        nestatus: ''
+      }
     },
-    methods: {}
+    directives: { elDragDialog },
+    components: { previewCircle },
+    mounted() {
+      this.getItem();                       // 获取标签列表
+      this.handleSelect(this.activeIndex);  // 获取不同状态的圈子资讯内容
+    },
+    watch: {
+      // 圈子标签diaolog关闭时重置itemForm
+      itemDialog(newValue, oldValue) {
+        if(!newValue) {
+          this.itemForm = {
+            itid: '',
+            itname: '',
+            itdesc: '',
+            itrecommend: false,
+            ittype: '10'
+          }
+        }
+      }
+    },
+    methods: {
+      // 获取不同状态的圈子资讯内容
+      handleSelect(nestatus) {
+        this.nestatus = nestatus;
+        this.circleLoading = true;
+        this.$http.get(this.$api.get_all_news, {
+          noLoading: true,
+          params: {
+            page_num: this.page_num,
+            page_size: this.page_size,
+            kw: this.kw || '',
+            nestatus: nestatus
+          }}).then(res => {
+          if (res.data.status == 200) {
+            this.circleList = res.data.data;
+            this.total = res.data.total_count;
+            this.circleLoading = false;
+          }
+        })
+      },
+      sizeChange(val) {
+        this.page_size = val;
+        this.handleSelect(this.nestatus);
+      },
+      pageChange(val) {
+        this.page_num = val;
+        this.handleSelect(this.nestatus);
+      },
+      // 预览圈子内容
+      preview(row) {
+        console.log(row);
+      },
+      // 获取标签列表
+      getItem() {
+        this.itemLoading = true;
+        this.$http.get(this.$api.items_list, {
+          noLoading: true,
+          params: {
+            ittype: 10
+          }}).then(res => {
+          if (res.data.status == 200) {
+            this.itemList = res.data.data;
+            this.itemLoading = false;
+          }
+        })
+      },
+      // 推荐该标签
+      recommend(row) {
+        /*let params = {
+          actype: row.actype,
+          acshow: row.acshow
+        };
+        let title = '';
+        if(row.acshow) {
+          title = '开启';
+        }else {
+          title = '关闭';
+        }
+        this.$http.post(this.$api.activity_update, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: `${title}成功`,
+                message: `${row.acname}${title}成功`,
+                type: 'success'
+              });
+            }
+          }
+        );*/
+      },
+      // 标签dialog的保存按钮
+      saveItem() {
+        this.$refs.itemForm.validate(valid => {
+          if(valid) {
+            let type = this.itemForm.itid == '' ? '新增' : '编辑';
+            if(this.itemForm.itid){ //  编辑
+              this.$http.post(this.$api.update_category, this.itemForm).then(res => {
+                  if (res.data.status == 200) {
+                    this.$notify({
+                      title: `圈子标签${ type }成功`,
+                      message: `标签名称：${this.itemForm.itname}`,
+                      type: 'success'
+                    });
+                    this.itemDialog = false;
+                    this.getItem();         // 获取标签列表
+                  }
+                }
+              )
+            }else{
+              this.itemForm.itsort = this.itemList.length + 1;
+              this.$http.post(this.$api.create_items, this.itemForm).then(res => {
+                if (res.data.status == 200) {
+                  this.$notify({
+                    title: `圈子标签${ type }成功`,
+                    message: `标签名称：${this.itemForm.itname}`,
+                    type: 'success'
+                  });
+                  this.itemDialog = false;
+                  this.getItem();         // 获取标签列表
+                }
+              })
+            }
+          }else {
+            this.$message.warning('请根据校验信息完善表单!');
+          }
+        })
+      },
+      // 编辑标签
+      editItem(row) {
+        this.itemDialog = true;
+        this.itemForm = row;
+      },
+      // 删除标签
+      deleteItem(row) {
+
+      }
+    }
   }
 </script>
 
@@ -37,6 +253,9 @@
   @import "../../styles/myIndex";
 
   .circle-index {
-
+    .page-box {
+      text-align: right;
+      padding: 20px;
+    }
   }
 </style>

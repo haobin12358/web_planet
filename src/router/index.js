@@ -166,13 +166,14 @@ export const asyncRouterMap = [
         path: 'circle',
         name: 'CircleIndex',
         component: () => import('src/views/circle/index'),
-        meta: {title: '圈子',noCache: true, icon: 'article', roles: level2}
+        meta: {title: '圈子', noCache: true, icon: 'article', roles: level2}
       },
       {
         path: 'editCircle',
-        name: 'editCircle',
+        name: 'EditCircle',
+        hidden: true,
         component: () => import('src/views/circle/editCircle'),
-        meta: {title: '新增圈子',noCache: true, icon: 'article', roles: level2}
+        meta: {title: '新增圈子', noCache: true, roles: level2 }
       }
     ]
   },
