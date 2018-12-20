@@ -58,10 +58,10 @@
     },
     mounted() {
       common.changeTitle('活动');
-      this.getActivit();                // 获取活动list
       if(this.$route.query.token) {
         localStorage.setItem('token', this.$route.query.token);
       }
+      this.getActivit();                // 获取活动list
     }
   }
 </script>
