@@ -14,7 +14,6 @@ const api = {
   product_get: title + 'product/get',                                     //获取商品详情
   off_shelves_product: title + 'product/off_shelves_list',                //批量下架商品
   delete_product: title + 'product/delete_list',                          //删除商品
-  supplizer_list: title + 'supplizer/list',                               //获取供应商列表
   scene_list: title + 'scene/list',                                       //获取场景
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
@@ -41,6 +40,14 @@ const api = {
   order_count: title + 'order/count',                                     //获取订单数量
   get_omfilter: title + 'order/get_omfilter',                             //获取订单filter
   update_order_status: title + 'order/update_order_status',               //更新订单状态
+
+
+  supplizer_list: title + 'supplizer/list',                               //供应商列表
+  create_supplizer: title + 'supplizer/create',                           //新增
+  update_supplizer: title + 'supplizer/update',                           //修改
+  get_supplizer: title + 'supplizer/get',                                 //获取供应商
+
+
 
   //  审批
   agree_product: title + 'product/agree_product',                         // 同意上架商品

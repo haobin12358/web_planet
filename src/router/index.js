@@ -130,7 +130,7 @@ export const asyncRouterMap = [
   {
     path: '/user',
     component: Layout,
-    redirect: '/user/index',
+    redirect: '/user/distributor',
     name: 'User',
     meta: {title: '用户', icon: 'huiyuan', roles: level2},
     children: [
@@ -139,11 +139,19 @@ export const asyncRouterMap = [
         name: 'Distributor',
         component: () => import('src/views/user/distributor'),
         meta: {title: '分销商', noCache: true,roles: level2}
-      }, {
+      },
+
+      {
         path: 'suppliers',
         name: 'Suppliers',
         component: () => import('src/views/user/suppliers'),
         meta: {title: '供应商',noCache: true, roles: level2}
+      },{
+        path: 'supplierEdit',
+        name: 'SupplierEdit',
+        hidden: true,
+        component: () => import('src/views/user/supplierEdit'),
+        meta: {title: '供应商编辑',noCache: true, roles: level2}
       },
     ]
   },

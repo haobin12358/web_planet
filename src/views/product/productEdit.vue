@@ -210,8 +210,6 @@
                 <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
                 <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
               </div>
-
-
             </el-upload>
           </el-form-item>
 
@@ -734,7 +732,6 @@
                 this.goToIndexAfterSave = true;
               }
 
-              console.log(this.imagesUrl);
               this.showSkuSortDlg()
             } else {
               this.$message.warning('请根据校验信息完善表单!');

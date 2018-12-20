@@ -21,8 +21,8 @@
         type="index"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
-        </template>
+        <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
+      </template>
       </el-table-column>
       <el-table-column align="center" prop="prtitle" label="商品名" width="280"></el-table-column>
       <el-table-column align="center" prop="prprice" label="价格" width="120"></el-table-column>

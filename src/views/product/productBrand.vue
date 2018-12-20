@@ -268,6 +268,7 @@
       },
       doAddItem() {
         console.log('doAddItem');
+        this.itemDlgVisible = true;
       },
       doEditItem(row) {
         console.log('doEditItem');
