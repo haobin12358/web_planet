@@ -54,6 +54,7 @@
   import api from '../../../api/api';
   import sku from '../components/sku';
   import wxapi from '../../../common/js/mixins';
+  import { Toast } from 'mint-ui';
 
   let scroll = (function (className) {
     let scrollTop;
@@ -164,7 +165,11 @@
           product.cart.push({ product: { prtitle: this.product.tctitle }, sku: this.select_value, canums: "1", prid: this.product.tcid});
           let arr = [];
           arr.push(product);
-          this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: this.which }});
+          if(localStorage.getItem('token')) {
+            this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: this.which }});
+          }else {
+            Toast('请登录后再试');
+          }
         }else {
           this.changeModal('show_sku', true);
           this.cart_buy = 'buy';

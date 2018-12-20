@@ -128,7 +128,11 @@
           if(res.data.status == 200) {
             this.successPopup = false;
             localStorage.setItem('activityOrderNo', 1);
-            this.wxPay(res.data.data.args);
+            if(common.isWeixin()) {
+              this.wxPay(res.data.data.args);
+            }else {
+              Toast('请在活动订单页查看详情');
+            }
           }
         });
         localStorage.setItem('tipDate', this.today);

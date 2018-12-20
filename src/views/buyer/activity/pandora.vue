@@ -117,55 +117,59 @@
       },
       // 点击分享
       share () {
-        let options = {
-          title: '魔法礼盒',
-          desc: '快来帮您的好友拆开魔法礼盒吧',
-          imgUrl: this.box.prpic
-        };
-        // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
-        axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
-          if(res.data.status == 200) {
-            localStorage.setItem('mbjid', res.data.data.mbjid);
-            options.link = window.location.href.split('#')[0] + '?mbjid=' + localStorage.getItem('mbjid');
-            // options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
+        if(localStorage.getItem('token')) {
+          let options = {
+            title: '魔法礼盒',
+            desc: '快来帮您的好友拆开魔法礼盒吧',
+            imgUrl: this.box.prpic
+          };
+          // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
+          axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
+            if(res.data.status == 200) {
+              localStorage.setItem('mbjid', res.data.data.mbjid);
+              options.link = window.location.href.split('#')[0] + '?mbjid=' + localStorage.getItem('mbjid');
+              // options.link = window.location.origin + '/#/pandora?mbjid=' + localStorage.getItem('mbjid');
 
-            // 点击分享
-            this.show_invite = true;
-            // 倒计时
-            const TIME_COUNT = 3;
-            let count = TIME_COUNT;
-            let time = setInterval(() => {
-              if (count > 0 && count <= TIME_COUNT) {
-                count --;
-              } else {
-                this.show_invite = false;
-                clearInterval(time);
-              }
-            }, 1000);
-            axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
-              if(res.data.status == 200) {
-                options.link += '&secret_usid=' + res.data.data.secret_usid;
-              }
-            });
+              // 点击分享
+              this.show_invite = true;
+              // 倒计时
+              const TIME_COUNT = 3;
+              let count = TIME_COUNT;
+              let time = setInterval(() => {
+                if (count > 0 && count <= TIME_COUNT) {
+                  count --;
+                } else {
+                  this.show_invite = false;
+                  clearInterval(time);
+                }
+              }, 1000);
+              axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+                if(res.data.status == 200) {
+                  options.link += '&secret_usid=' + res.data.data.secret_usid;
+                }
+              });
 
-            // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
-            if(wx.updateAppMessageShareData) {
-              wx.updateAppMessageShareData(options);
+              // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+              if(wx.updateAppMessageShareData) {
+                wx.updateAppMessageShareData(options);
+              }
+              // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+              if(wx.updateTimelineShareData) {
+                wx.updateTimelineShareData(options);
+              }
+              // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+              if(wx.onMenuShareAppMessage) {
+                wx.onMenuShareAppMessage(options);
+              }
+              // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+              if(wx.onMenuShareTimeline) {
+                wx.onMenuShareTimeline(options);
+              }
             }
-            // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
-            if(wx.updateTimelineShareData) {
-              wx.updateTimelineShareData(options);
-            }
-            // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
-            if(wx.onMenuShareAppMessage) {
-              wx.onMenuShareAppMessage(options);
-            }
-            // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
-            if(wx.onMenuShareTimeline) {
-              wx.onMenuShareTimeline(options);
-            }
-          }
-        });
+          });
+        }else {
+          Toast('请登录后再试');
+        }
       },
       // 获取该活动
       getBox() {
@@ -230,7 +234,11 @@
           axios.post(api.magicbox_recv_award + '?token='+ localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
               localStorage.setItem('activityOrderNo', 2);
-              this.wxPay(res.data.data.args);
+              if(common.isWeixin()) {
+                this.wxPay(res.data.data.args);
+              }else {
+                Toast('请在活动订单页查看详情');
+              }
             }
           });
         }
@@ -249,7 +257,6 @@
               "paySign": data.sign                 // 微信签名
             },
             function(res){
-              // console.log(res);
               // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
               if(res.err_msg == "get_brand_wcpay_request:ok"){             // 支付成功
                 // that.$router.push('/activityOrder');
