@@ -157,16 +157,22 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/tweet',
+    path: '/circle',
     component: Layout,
-    redirect: 'tweet',
-    meta: {title: '推文', icon: 'article', roles: level2},
+    redirect: 'circle',
+    meta: {title: '圈子', icon: 'article', roles: level2},
     children: [
       {
-        path: 'tweet',
-        name: 'TweetIndex',
-        component: () => import('src/views/tweet/index'),
-        meta: {title: '推文',noCache: true, icon: 'article', roles: level2}
+        path: 'circle',
+        name: 'CircleIndex',
+        component: () => import('src/views/circle/index'),
+        meta: {title: '圈子',noCache: true, icon: 'article', roles: level2}
+      },
+      {
+        path: 'editCircle',
+        name: 'editCircle',
+        component: () => import('src/views/circle/editCircle'),
+        meta: {title: '新增圈子',noCache: true, icon: 'article', roles: level2}
       }
     ]
   },
@@ -235,10 +241,10 @@ export const asyncRouterMap = [
         component: () => import('src/views/approval/productAudit'),
         meta: {title: '供应商商品审批',noCache: true, roles: level2}
       }, {
-        path: 'tweetAudit',
-        name: 'TweetAudit',
-        component: () => import('src/views/approval/tweetAudit'),
-        meta: {title: '推文审核',noCache: true, roles: level2}
+        path: 'circleAudit',
+        name: 'CircleAudit',
+        component: () => import('src/views/approval/circleAudit'),
+        meta: {title: '圈子审核',noCache: true, roles: level2}
       },
     ]
   },

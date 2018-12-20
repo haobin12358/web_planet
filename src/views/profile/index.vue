@@ -21,8 +21,8 @@
           <span class="label">商品上架</span>
           <span class="num">21</span>
         </router-link>
-        <router-link tag="li" to="/approval/tweetAudit" class="todo-item tweet">
-          <span class="label">推文审核</span>
+        <router-link tag="li" to="/approval/circleAudit" class="todo-item circle">
+          <span class="label">圈子审核</span>
           <span class="num">21</span>
         </router-link>
         <router-link tag="li" to="/approval/withdraw" class="todo-item activity">
@@ -238,7 +238,7 @@
             background: #87ACD6;
           }
 
-          &.tweet {
+          &.circle {
             background: #CB7E88;
           }
 

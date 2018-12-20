@@ -1,12 +1,12 @@
 <template>
-    <div class="container">
-         推文审核
-    </div>
+  <div class="container">
+    圈子
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'TweetAudit',
+    name: 'index',
 
     components: {},
 

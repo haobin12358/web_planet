@@ -33,7 +33,6 @@ const api = {
   create_items: title + 'items/create',                                   //创建标签
 
 
-
   get_order_situation: title + 'order/get_order_situation',               //获取订单概况
   get_all_order: title + 'order/list',                                    //获取所有订单
   get_order_by_LOid: title + 'order/get',                                 //获取订单详情
@@ -52,15 +51,17 @@ const api = {
   //  审批
   agree_product: title + 'product/agree_product',                         // 同意上架商品
 
-  update_activity: title + 'activity/update',                             //  修改活动基础信息
-  add_commodity: title + 'commodity/add',                                 //  添加试用商品
   get_all_qa: title + 'qa/get_all',                                       //获取所有问题
   add_questanswer: title + 'qa/add_questanswer',                          //添加问题
   add_questoutline: title + 'qa/add_questoutline',                        //添加问题类型
   delete_questoutline: title + 'qa/delete_questoutline',                  //删除问题分类
   delete_question: title + 'qa/delete_question',                          //删除问题
-  upload_file: title + 'file/upload?token='                               //上传图片
+  upload_file: title + 'file/upload?token=',                              //上传图片
 
-}
+
+  activity_list: title + 'activity/list',                                 // 获取正在进行中的活动
+  activity_update: title + 'activity/update',                             // 修改活动基础信息
+  commodity_add: title + 'commodity/add',                                 // 添加试用商品
+};
 
 export default api
