@@ -1,0 +1,139 @@
+<template>
+  <div>
+    <div v-if="couponList.length > 0">
+      <div class="m-coupon-card" v-for="(item, index) in couponList">
+        <div class="m-card-left">
+          <img class="m-store-img" :src="item.title_subtitle.left_logo" alt="">
+          <div class="m-store-name">{{item.title_subtitle.left_text}}</div>
+        </div>
+        <div class="m-card-right">
+          <div class="m-card-time">{{item.covalidstarttime}}—{{item.covalidendtime}}</div>
+          <div class="m-card-detail">
+            <div class="m-detail-left" v-if="item.codiscount == '10'">
+              <span class="m-text-small">￥</span>
+              <span class="m-text-big">{{item.cosubtration}}</span>
+            </div>
+            <div class="m-detail-left m-space" v-else>
+              <span class="m-text-big">{{item.codiscount}}</span>
+              <span class="m-text-small">折</span>
+            </div>
+            <div class="m-detail-right">
+              <div>{{item.title_subtitle.title}}</div>
+              <div>{{item.title_subtitle.subtitle}}</div>
+              <div class="m-detail-btn">点击领取</div>
+              <!--<div class="m-detail-btn" v-if="item.navName">{{item.navName}}</div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-no-coupon" v-if="couponList.length == 0 && !circle">
+      <span class="m-no-img"></span>
+      <p style="margin-top: -40px">暂时还没有优惠券哦~</p>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+
+      }
+    },
+    props: {
+      couponList: { type: Array, default: null },
+      order: { type: Boolean, default: false },
+      circle: { type: Boolean, default: false }
+    },
+    methods: {
+
+    },
+    mounted() {
+
+    },
+  }
+</script>
+
+<style lang="less" rel="stylesheet/less" scoped>
+  /*@import "../../../common/css/index";*/
+
+  .m-coupon-card{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 700px;
+    height: 171px;
+    margin: 0 0 5px 25px;
+    background: url("/static/images/coupon/icon-new.png") no-repeat;
+    background-size: 100% 100%;
+    &.m-had {
+      background: url("/static/images/coupon/icon-had.png") no-repeat;
+      background-size: 100% 100%;
+    }
+    .m-cancel-icon {
+      width: 45px;
+      height: 45px;
+      position: absolute;
+      top: -20px;
+      right: -10px;
+    }
+    .m-card-left {
+      margin: 20px 0 0 45px;
+      .m-store-img {
+        width: 100px;
+        height: 100px;
+        background: #ffffff;
+        box-shadow: 2px 3px 6px rgba(0,0,0,0.16);
+        border-radius: 10px;
+      }
+      .m-store-name {
+        color: #ffffff;
+        font-size: 18px;
+      }
+    }
+    .m-card-right {
+      width: 63%;
+      color: #ffffff;
+      font-size: 18px;
+      margin: 15px 20px 0 0;
+      .m-card-time {
+        margin-bottom: 5px;
+        text-align: right;
+      }
+      .m-card-detail {
+        display: flex;
+        justify-content: space-between;
+        .m-detail-left {
+          margin-top: -10px;
+          .m-text-small{
+            font-size: 46px;
+          }
+          .m-text-big {
+            font-size: 100px;
+            font-weight: bold;
+          }
+          &.m-space {
+            margin-left: 50px;
+          }
+        }
+        .m-detail-right {
+          display: flex;
+          flex-direction: column;
+          .m-detail-btn {
+            width: 96px;
+            white-space: nowrap;
+            height: 25px;
+            text-align: center;
+            line-height: 14px;
+            font-size: 16px;
+            padding: 5px 16px;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,1);
+            border-radius: 30px;
+          }
+        }
+      }
+    }
+  }
+</style>
