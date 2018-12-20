@@ -15,7 +15,7 @@
       <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
     </section>
 
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
+    <el-table :data="tableData" v-loading="loading" style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -46,7 +46,7 @@
       <el-table-column align="center" prop="suaddress" label="地址" ></el-table-column>
       <el-table-column align="center" prop="sustatus" label="状态" width="180">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>
+          <el-tag  v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>
           <el-tag v-if="scope.row.sustatus == -10" type="danger">禁用</el-tag>
         </template>
       </el-table-column>

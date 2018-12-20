@@ -23,7 +23,8 @@ const api = {
   delete_category: title + 'category/delete',                             //删除类目
 
   scene_list: title + 'scene/list',                                       //获取场景
-  create_scene: title + 'scene/create',                                   //编辑场景
+  create_scene: title + 'scene/create',                                   //新增场景
+  update_scene: title + 'scene/update',                                   //编辑场景
 
 
   brand_list: title + 'brand/list',                                       //获取品牌

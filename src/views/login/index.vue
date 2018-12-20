@@ -112,7 +112,8 @@
                 type: 'success'
               });
               this.$notify({
-                title: '左侧带有打勾的菜单功能可用'
+                title: '左侧带有打勾的菜单功能可用',
+                position: 'top-left'
               });
             }).catch(() => {
               this.loading = false

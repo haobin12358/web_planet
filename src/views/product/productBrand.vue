@@ -14,7 +14,7 @@
 
       <el-button type="primary" icon="el-icon-plus" @click="doAddBrand">新增</el-button>
     </section>
-    <el-table v-loading="brandLoading" :data="brandTableData">
+    <el-table v-loading="brandLoading" :data="brandTableData" height="600">
       <el-table-column label="品牌logo" align="center" prop="pblogo" width="160">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.pblogo" :key="scope.row.pblogo"></table-cell-img>
@@ -27,18 +27,18 @@
       </el-table-column>
       <el-table-column label="品牌名称" align="center" prop="pbname" width="160"></el-table-column>
       <el-table-column label="品牌所属供应商" prop="supplizer.suname" align="center" width="160"></el-table-column>
-      <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
       <el-table-column label="关联标签" align="center" width="300">
         <template slot-scope="scope">
           <el-tag style="margin: 0 5px 5px 0;" v-for="item in scope.row.items" :key="item.itid">{{item.itname}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="100" align="center" show-overflow-tooltip>
+      <el-table-column label="状态" width="100" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.pbstatus == 0">上架中</el-tag>
+          <el-tag  v-if="scope.row.pbstatus == 0">上架中</el-tag>
           <el-tag v-if="scope.row.pbstatus == 1" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="品牌描述" align="center" prop="pbdesc" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditBrand(scope.row)">编辑</el-button>
@@ -143,7 +143,7 @@
 
       <el-button type="primary" icon="el-icon-plus" @click="doAddItem">新增</el-button>
     </section>
-    <el-table v-loading="itemLoading" :data="itemTableData" height="300" size="mini">
+    <el-table v-loading="itemLoading" :data="itemTableData"  size="mini">
       <el-table-column label="标签名" align="center" prop="itname" width="300"></el-table-column>
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
       <!--<el-table-column label="关联品牌" align="center"></el-table-column>-->

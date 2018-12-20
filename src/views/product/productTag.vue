@@ -15,15 +15,15 @@
     </section>
     <!--场景table-->
     <el-table v-loading="sceneLoading" :data="sceneTableData">
-      <el-table-column label="图片" align="center" prop="pspic" width="120">
+      <el-table-column label="场景图片" align="center" prop="pspic" width="120">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.pspic" :key="scope.row.pspic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="psname"></el-table-column>
-      <el-table-column label="排序" align="center" prop="pssort" width="180">
+      <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
+      <el-table-column label="排序" align="center" prop="pssort" >
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.pssort" style="text-align: center"></el-input>
+          <el-input v-model.number="scope.row.pssort" @keyup.native.enter="changeSceneSort(scope.row)" style="width: 180px"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
@@ -87,7 +87,7 @@
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
       <el-table-column label="所属场景" align="center" width="300">
         <template slot-scope="scope">
-          <el-tag v-for="item in scope.row.prscene" style="margin: 0 10px 2px 0;">{{item.psname}}</el-tag>
+          <el-tag v-for="item in scope.row.prscene" :key="item.psid" style="margin: 0 10px 2px 0;">{{item.psname}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
@@ -135,6 +135,7 @@
   import TableCellImg from "src/components/TableCellImg";
   import {getStore, setStore} from "src/utils/index";
 
+  const natureNumberReg = /^(\d*)$/;   //  自然数
   export default {
     name: 'ProductTag',
 
@@ -174,7 +175,16 @@
           pssort: 1,
         },
         sceneRules: {
-
+          psname: [
+            {required: true, message: '场景名称必填', trigger: 'blur'}
+          ],
+          pspic: [
+            {required: true, message: '图片必传', trigger: 'change'}
+          ],
+          pssort: [
+            {required: true, message: '排序必填', trigger: 'blur'},
+            {pattern: natureNumberReg, message: '请输入合理的数字(>=0)', trigger: 'blur'},
+          ],
         },
 
         sceneLoading: false,
@@ -320,21 +330,51 @@
           }
         )
       },
+
+      changeSceneSort(row){
+        this.$http.post(this.$api.update_scene, row).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.$notify({
+                title: `排序改动成功`,
+                message: `场景名称:${row.psname}`,
+                type: 'success'
+              });
+              this.init();
+            }
+          }
+        );
+      },
+
+      resetSceneForm(){
+          this.sceneForm = {
+            psid: '',
+            psname: '',
+            pspic: '',
+            pssort: 1,
+          };
+      },
       doAddScene(){
+        this.resetSceneForm();
+
         this.sceneDlgVisible = true;
       },
       doEditScene(){
-        this.sceneDlgVisible = true;
+        this.resetSceneForm();
 
+        this.sceneDlgVisible = true;
       },
       doSaveScene(){
         this.$refs.sceneForm.validate(
           valid => {
             if (valid) {
-              let type = this.sceneForm.psid ? '修改' : '品牌新增';
+              let type = this.sceneForm.psid ? '场景修改' : '场景新增';
 
               if (this.sceneForm.psid) {
-                this.$http.post(this.$api.update_brand, this.sceneForm).then(
+                this.$http.post(this.$api.update_scene, this.sceneForm).then(
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
@@ -345,7 +385,8 @@
                         message: `品牌名:${this.sceneForm.psname}`,
                         type: 'success'
                       });
-                      this.brandDlgVisible = false;
+                      this.sceneDlgVisible = false;
+                      this.init();
                     }
                   }
                 );
@@ -362,6 +403,7 @@
                         type: 'success'
                       });
                       this.sceneDlgVisible = false;
+                      this.init();
                     }
                   }
                 );
