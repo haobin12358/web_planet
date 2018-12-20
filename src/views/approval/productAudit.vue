@@ -4,10 +4,15 @@
     <section class="tool-bar space-between">
       <el-form :inline="true">
         <el-form-item label="商品名">
-          <el-input></el-input>
+          <el-input v-model.trim="searchForm.kw"></el-input>
+        </el-form-item>
+        <el-form-item label="分类">
+          <el-cascader :options="categoryOptions" :props="categoryProps" change-on-select :clearable="true" filterable
+                       v-model="searchForm.pcid" @change="doSearch">
+          </el-cascader>
         </el-form-item>
         <el-form-item label="审核状态">
-          <el-select v-model="formInline.prstatus" @change="selectStatus">
+          <el-select v-model="searchForm.prstatus" @change="doSearch">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -24,7 +29,7 @@
 
 
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%"
-              @selection-change="handleSelectionChange">
+              @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
@@ -33,9 +38,14 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prtitle" label="商品名" width="280"></el-table-column>
-      <el-table-column align="center" prop="prprice" label="价格" width="120"></el-table-column>
+      <el-table-column align="center" prop="prprice" label="价格" sortable width="120"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
-      <el-table-column align="center" prop="prstocks" sortable label="库存"></el-table-column>
+      <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
+        <template slot-scope="scope">
+          {{`${scope.row.category[0].pcname}->${scope.row.category[1].pcname}->${scope.row.category[2].pcname}`}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="prstocks" label="库存"></el-table-column>
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
@@ -77,6 +87,12 @@
 
     data() {
       return {
+        categoryOptions: [],
+        categoryProps: {
+          value: 'pcid',
+          label: 'pcname',
+          children: 'subs',
+        },
         options: [
           {
             label: '待审核',
@@ -86,8 +102,11 @@
             value: 'reject'
           },
         ],
-        formInline: {
+        searchForm: {
+          kw: '',
+          pcid: [],
           prstatus: 'auditing',
+          order_type: '',
         },
 
         loading: false,
@@ -108,18 +127,56 @@
     computed: {},
 
     methods: {
-      selectStatus() {
+      getCategory() {
+        this.$http.get(this.$api.category_list, {
+          params: {
+            up: '',
+            deep: 2
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.categoryOptions = data;
+            }
+          });
+      },
+
+      doSearch() {
         this.getProduct();
+      },
+      doReset() {
+        this.searchForm = {
+          kw: '',
+          pcid: [],
+          prstatus: 'reject',
+          order_type: '',
+        };
+        this.doSearch();
       },
 
       getProduct() {
         this.loading = true;
+        let pcid = '';
+
+        if (this.searchForm.pcid.length) {
+          pcid = this.searchForm.pcid[this.searchForm.pcid.length - 1];
+        } else {
+          pcid = ''
+        }
+
         this.$http.get(this.$api.product_list, {
           noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
-            prstatus: this.formInline.prstatus,
+
+            kw: this.searchForm.kw,
+            pcid,
+            prstatus: this.searchForm.prstatus,
+            order_type: this.searchForm.order_type,
           }
         }).then(res => {
           this.loading = false;
@@ -224,9 +281,32 @@
           }
         );
       },
+
+      handleSortChange({column, prop, order}) {
+        switch (prop) {
+          case 'prprice':
+            prop = 'price';
+            break;
+          case 'prsalesvalue':
+            prop = 'sale_value';
+            break;
+          case 'createtime':
+            prop = 'time';
+            break;
+          default:
+            break;
+        }
+        order = order == 'ascending' ? 'asc' : 'desc';
+
+        if (prop){
+          this.searchForm.order_type = `${prop}|${order}`
+          this.doSearch();
+        }
+      },
     },
 
     created() {
+      this.getCategory();
       this.getProduct();
     }
   }

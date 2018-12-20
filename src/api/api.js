@@ -35,6 +35,7 @@ const api = {
 
   items_list: title + 'items/list',                                       //获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
   create_items: title + 'items/create',                                   //创建标签
+  update_items: title + 'items/update',                                   //修改标签
 
 
   get_order_situation: title + 'order/get_order_situation',               //获取订单概况

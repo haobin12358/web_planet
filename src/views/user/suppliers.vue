@@ -3,14 +3,14 @@
     <section class="tool-bar space-between">
       <el-form :inline="true">
         <el-form-item label="供应商姓名">
-          <el-input></el-input>
+          <el-input v-model.trim="searchForm.kw"></el-input>
         </el-form-item>
         <el-form-item label="供应商手机号">
-          <el-input></el-input>
+          <el-input v-model.trim="searchForm.mobile"></el-input>
         </el-form-item>
 
-        <el-button type="primary" icon="el-icon-search">查询</el-button>
-        <el-button icon="el-icon-refresh">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
     </section>
@@ -91,6 +91,11 @@
 
     data() {
       return {
+        searchForm: {
+          kw: '',
+          mobile: '',
+        },
+
         loading: false,
         total: 0,
         currentPage: 1,
@@ -108,10 +113,25 @@
 
 
     methods: {
+      doSearch(){
+        this.getSupplier();
+      },
+      doReset(){
+        this.searchForm = {
+          kw: '',
+          mobile: '',
+        };
+        this.doSearch();
+      },
+
       getSupplier() {
         this.loading = true;
         this.$http.get(this.$api.supplizer_list, {
           noLoading: true,
+          params: {
+            kw: this.searchForm.kw,
+            mobile: this.searchForm.mobile,
+          },
         }).then(
           res => {
             this.loading = false;

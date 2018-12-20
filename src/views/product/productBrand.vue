@@ -4,11 +4,21 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="品牌名">
-          <el-input></el-input>
+          <el-input v-model.trim="searchForm.kw" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="searchForm.pbstatus" @change="doSearch">
+            <el-option
+              v-for="item in statusOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -38,7 +48,8 @@
           <el-tag v-if="scope.row.pbstatus == 1" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="品牌描述" align="center" prop="pbdesc" show-overflow-tooltip></el-table-column>
+      <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createtime" width="180"></el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditBrand(scope.row)">编辑</el-button>
@@ -133,11 +144,11 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="标签名">
-          <el-input></el-input>
+          <el-input v-model.trim="itemSearchForm.kw" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doItemReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -185,6 +196,10 @@
 
     data() {
       return {
+        itemSearchForm: {
+          kw: '',
+        },
+
         itemLoading: false,
         itemTableData: [],
 
@@ -199,6 +214,24 @@
           ],
           itdesc: [
           ],
+        },
+
+        statusOption: [
+          {
+            value: 'all',
+            label: '全部',
+          }, {
+            value: 'upper',
+            label: '上架中',
+          }, {
+            value: 'off_shelves',
+            label: '已下架',
+          },
+        ],
+        searchForm: {
+          kw: '',
+          time_order: '',
+          pbstatus: 'all',
         },
 
         brandLoading: false,
@@ -247,12 +280,20 @@
     },
 
     methods: {
+      doItemSearch(){
+        this.setItemList();
+      },
+      doItemReset(){
+        this.itemSearchForm = { kw: ''};
+        this.doItemSearch();
+      },
       setItemList() {
         this.itemLoading = true;
         this.$http.get(this.$api.items_list, {
           noLoading: true,
           params: {
-            ittype: 40
+            ittype: 40,
+            kw: this.itemSearchForm.kw,
           }
         }).then(
           res => {
@@ -286,12 +327,11 @@
               this.itemForm.ittype = 40;
 
               if (this.itemForm.itid) {
-                return
-                this.$http.post(this.$api.update_brand, this.itemForm).then(
+                this.$http.post(this.$api.update_items, this.itemForm).then(
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                        data = res.data.data;
+                          data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -330,9 +370,42 @@
       },
 
       doRemoveItem(row) {
-        console.log('doRemoveItem');
+        this.$confirm(`确认删除标签(${row.itname})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.update_items,{
+              itid: row.itid,
+              ittype: 40,
+              isdelete: true
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '标签删除成功',
+                    message: `标签名:${row.itname}`,
+                    type: 'success'
+                  });
+                  this.setItemList();
+                }
+              }
+            )
+          }
+        )
       },
 
+      doSearch() {
+        this.setBrandList();
+      },
+      doReset() {
+        this.searchForm = {
+          kw: '',
+          time_order: '',
+          pbstatus: 'all',
+        };
+        this.doSearch();
+      },
 
       setBrandList() {
         this.brandLoading = true;
@@ -341,13 +414,17 @@
           params: {
             page_num: this.currentBrandPage,
             page_size: this.brandPageSize,
+
+            kw: this.searchForm.kw,
+            time_order: this.searchForm.time_order,
+            pbstatus: this.searchForm.pbstatus,
           }
         }).then(
           res => {
             this.brandLoading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.brandTableData = data;
               this.totalBrand = resData.total_count;

@@ -3,10 +3,13 @@
     <!--工具栏-->
     <section class="tool-bar space-between">
       <el-form :inline="true">
-        <el-form-item label="分类名">
-          <el-input></el-input>
+        <el-form-item label="所属分类">
+          <el-cascader :options="categoryOptions" :props="categoryProps" change-on-select :clearable="true" filterable
+                       v-model="searchForm.pcid" @change="doSearch">
+          </el-cascader>
         </el-form-item>
-        <el-button type="primary">查询</el-button>
+        <el-button type="primary" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
       </el-form>
 
       <el-button type="primary" icon="el-icon-plus" @click="doAdd">新增</el-button>
@@ -145,6 +148,16 @@
       };
 
       return {
+        categoryOptions: [],
+        categoryProps: {
+          value: 'pcid',
+          label: 'pcname',
+          children: 'subs',
+        },
+        searchForm: {
+          pcid: [],
+        },
+
         func: treeToArray,
         loading: false,
         expandAll: true,
@@ -209,12 +222,46 @@
       }
     },
     methods: {
+      getSearchCategory(){
+        this.$http.get(this.$api.category_list, {
+          params: {
+            up: '',
+            deep: 1
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.categoryOptions = data;
+            }
+          });
+      },
+      doSearch(){
+        this.setCategory();
+      },
+      doReset(){
+        this.searchForm = {
+          pcid: []
+        }
+        this.doSearch();
+      },
+
       setCategory() {
         this.loading = true;
+        let pcid = '';
+
+        if (this.searchForm.pcid.length) {
+          pcid = this.searchForm.pcid[this.searchForm.pcid.length - 1];
+        } else {
+          pcid = ''
+        }
+
         this.$http.get(this.$api.category_list, {
           noLoading: true,
           params: {
-            up: '',
+            up: pcid,
             deep: 2
           }
         }).then(
@@ -414,6 +461,7 @@
 
     created() {
       this.setCategory();
+      this.getSearchCategory();
     }
   }
 </script>
