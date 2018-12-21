@@ -116,14 +116,13 @@
     components: { navList, bottomLine },
     mounted() {
       common.changeTitle('素材');
+    },
+    activated() {
       this.getSwipe();
       this.getNav();
       if(!localStorage.getItem('circleIndex')) {
         localStorage.setItem('circleIndex', 0)
       }
-    },
-    activated() {
-
     },
     // 引入keepAlive后代替beforeDestroy
     deactivated() {
