@@ -146,14 +146,16 @@
         }
         .m-detail-right {
           display: flex;
+          text-align: center;
+          align-items: center;
           flex-direction: column;
           .m-detail-btn {
             width: 96px;
             height: 25px;
-            text-align: center;
             line-height: 29px;
             font-size: 22px;
             padding: 5px 16px;
+            text-align: center;
             margin-top: 10px;
             border: 1px solid rgba(255,255,255,1);
             border-radius: 30px;
