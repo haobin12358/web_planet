@@ -173,7 +173,7 @@ export const asyncRouterMap = [
         name: 'EditCircle',
         hidden: true,
         component: () => import('src/views/circle/editCircle'),
-        meta: {title: '新增圈子', noCache: true, roles: level2 }
+        meta: {title: '资讯编辑', noCache: false, roles: level2 }
       }
     ]
   },

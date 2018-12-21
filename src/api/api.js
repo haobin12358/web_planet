@@ -35,6 +35,7 @@ const api = {
 
   items_list: title + 'items/list',                                       //获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
   create_items: title + 'items/create',                                   //创建标签
+  update_items: title + 'items/update',                                   //修改标签
 
 
   get_order_situation: title + 'order/get_order_situation',               //获取订单概况
@@ -69,6 +70,10 @@ const api = {
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情
+  create_news: title + 'news/create_news',                                // 发布资讯
+  update_news: title + 'news/update_news',                                // 修改资讯
+  del_news: title + 'news/del_news',                                      // 删除资讯
+  coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
 };
 
 export default api

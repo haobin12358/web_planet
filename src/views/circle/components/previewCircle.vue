@@ -1,7 +1,12 @@
 <template>
   <div>
-    <el-button type="text" class="preview-button" @click="preview('list')">列表预览</el-button>
-    <el-button type="text" class="preview-button" @click="preview('detail')">详情预览</el-button>
+    <div v-if="from == 'detail'">
+      <el-button type="primary" @click="preview('detail')">预 览</el-button>
+    </div>
+    <div v-else>
+      <el-button type="text" class="preview-button" @click="preview('list')">列表预览</el-button>
+      <el-button type="text" class="preview-button" @click="preview('detail')">详情预览</el-button>
+    </div>
     <!--列表预览dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="listDialog" width="810px"
                :center="true" title="列表预览" :append-to-body="true" v-if="where == 'list'">
@@ -47,7 +52,7 @@
       <div class="m-circle-detail">
         <div class="m-circle-content" v-if="news_info">
           <h3 class="m-circle-title">{{news_info.netitle}}</h3>
-          <div class="m-author-box">
+          <div class="m-author-box" v-if="news_info.author">
             <img class="m-author-img" :src="news_info.author.usheader">
             <div class="m-author-name">{{news_info.author.usname}}</div>
             <div>{{news_info.createtime}}</div>
@@ -81,11 +86,11 @@
           <span class="m-circle-comment float-right">评论 {{news_info.commentnumber}}</span>
         </div>
         <div class="m-box">
-          <div class="m-item" v-if="news_info.coupon">
+          <div class="m-item" v-if="news_info.coupon.length">
             <div class="m-box-title">优惠领取</div>
             <coupon-card :couponList="news_info.coupon"></coupon-card>
           </div>
-          <div class="m-item" v-if="news_info.product">
+          <div class="m-item" v-if="news_info.product.length">
             <div class="m-box-title m-margin">相关推荐</div>
             <product :list="news_info.product"></product>
           </div>
@@ -112,6 +117,7 @@
       }
     },
     props: {
+      from: { type: String, default: '' },
       circle: { type: Object, default() { return {} }}
     },
     directives: { elDragDialog },
@@ -126,8 +132,13 @@
         if(where == 'list') {
           this.listDialog = true;
         }else if(where == 'detail') {
-          this.neid = this.circle.neid;
-          this.getNewsDetail();
+          if(this.from == 'detail') {
+            this.news_info = this.circle;
+            this.detailDialog = true;
+          }else {
+            this.neid = this.circle.neid;
+            this.getNewsDetail();
+          }
         }
       },
       // 获取资讯详情
