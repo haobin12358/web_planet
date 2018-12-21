@@ -463,7 +463,7 @@
         height: 109px;
         position: absolute;
         top: 130px;
-        left: 275px;
+        left: 297px;
         background: url("/static/images/icon-video.png") no-repeat;
         background-size: 100% 100%;
       }
