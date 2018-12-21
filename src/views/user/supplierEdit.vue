@@ -63,7 +63,7 @@
           <el-form-item label="合同图" prop="sucontract">
             <el-upload
               class="swiper-uploader"
-              :action="uploadUrl"
+              :action="uploadVoucherUrl"
               accept="image/*"
               list-type="picture-card"
               :file-list="suContractUrl"
@@ -71,7 +71,7 @@
               :before-upload="beforePicUpload"
               :on-remove="handleContractRemove"
               :http-request="uploadContract"
-              :limit="5"
+              :limit="20"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">
@@ -96,6 +96,10 @@
       </el-col>
     </el-row>
 
+    <!--预览大图dialog-->
+    <el-dialog :visible.sync="dialogVisible" top="8vh">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 
@@ -165,6 +169,10 @@
 
         pbSelect: '', //  先限制单选品牌
         suContractUrl: [],
+
+        //  大图预览
+        dialogImageUrl: '',
+        dialogVisible: false,
       }
     },
     watch: {
@@ -177,11 +185,16 @@
     },
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')
+        return this.$api.upload_file + getStore('token')+ '&type=avatar'
+      },
+
+      uploadVoucherUrl() {
+        return this.$api.upload_file + getStore('token')+ '&type=voucher'
       },
     },
 
     methods: {
+
 
       //  分类主图上传
       handleHeaderSuccess(res, file) {
@@ -209,7 +222,7 @@
 
         this.$http({
           method: 'post',
-          url: this.uploadUrl,
+          url: this.uploadVoucherUrl,
           data: formData,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(

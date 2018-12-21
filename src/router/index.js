@@ -49,7 +49,7 @@ export const constantRouterMap = [
         path: 'profile',
         name: 'ProfileIndex',
         component: () => import('src/views/profile/index'),
-        meta: {title: '概况', icon: 'gailan', noCache: true}
+        meta: {title: '概览', icon: 'gailan', noCache: true}
       }
     ]
   },
@@ -65,9 +65,11 @@ export default new Router({
 //  supplizer,admin,super
 
 //  快捷数组
+export const level0 = ['supplizer']; //  供应商可见
 export const level1 = ['supplizer', 'admin', 'super']; //  三角色都可见
 export const level2 = ['admin', 'super'];  //  管理员可见
 export const level3 = ['super']; //  超管可见
+
 export const asyncRouterMap = [
   {
     path: '/product',
@@ -270,7 +272,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/activity/index',
     name: 'Activity',
-    meta: {title: '活动', icon: 'huodong', roles: level2},
+    meta: {title: '活动', icon: 'huodong'},
     children: [
       {
         path: 'index',
@@ -297,6 +299,14 @@ export const asyncRouterMap = [
         name: 'FirstOrder',
         component: () => import('src/views/activity/firstOrder'),
         meta: {title: '新人首单',noCache: true, roles: level2}
+      },
+
+      //  供应商
+      {
+        path: 'supplizerActi',
+        name: 'SupplizerActi',
+        component: () => import('src/views/activity/supplizerActi'),
+        meta: {title: '活动',noCache: true, roles: level0}
       },
     ]
   },

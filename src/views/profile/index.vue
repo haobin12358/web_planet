@@ -5,122 +5,137 @@
       <div class="todo-line"></div>
 
       <ul class="todo-list">
-        <router-link tag="li" to="/approval/withdrawAudit" class="todo-item">
-          <span class="label">提现审批</span>
-          <span class="num">21</span>
-        </router-link>
-        <router-link tag="li" to="/approval/returnProductAudit" class="todo-item return-prod">
-          <span class="label">退货审批</span>
-          <span class="num">21</span>
-        </router-link>
-        <router-link tag="li" to="/approval/agentAudit" class="todo-item agent-audit">
-          <span class="label">代理商审批</span>
-          <span class="num">21</span>
-        </router-link>
-        <router-link tag="li" to="/approval/productAudit" class="todo-item prod-audit">
-          <span class="label">商品上架</span>
-          <span class="num">21</span>
-        </router-link>
-        <router-link tag="li" to="/approval/circleAudit" class="todo-item circle">
-          <span class="label">圈子审核</span>
-          <span class="num">21</span>
-        </router-link>
-        <router-link tag="li" to="/approval/withdraw" class="todo-item activity">
-          <span class="label">活动审核</span>
-          <span class="num">21</span>
-        </router-link>
+        <template v-if="checkPermission(level2)">
+          <router-link  tag="li" to="/approval/withdrawAudit" class="todo-item">
+            <span class="label">提现审批</span>
+            <span class="num">21</span>
+          </router-link>
+          <router-link tag="li" to="/approval/returnProductAudit" class="todo-item return-prod">
+            <span class="label">退货审批</span>
+            <span class="num">21</span>
+          </router-link>
+          <router-link tag="li" to="/approval/agentAudit" class="todo-item agent-audit">
+            <span class="label">代理商审批</span>
+            <span class="num">21</span>
+          </router-link>
+          <router-link tag="li" to="/approval/productAudit" class="todo-item prod-audit">
+            <span class="label">商品上架</span>
+            <span class="num">21</span>
+          </router-link>
+          <router-link tag="li" to="/approval/circleAudit" class="todo-item circle">
+            <span class="label">圈子审核</span>
+            <span class="num">21</span>
+          </router-link>
+          <router-link tag="li" to="/approval/withdraw" class="todo-item activity">
+            <span class="label">活动审核</span>
+            <span class="num">21</span>
+          </router-link>
+        </template>
+        <template v-if="checkPermission(level0)">
+          <router-link tag="li" to="/product/index" class="todo-item prod-audit">
+            <span class="label">商品上架</span>
+            <span class="num">21</span>
+          </router-link>
+          <router-link tag="li" to="/activity/supplizerActi" class="todo-item activity">
+            <span class="label">活动申请</span>
+            <span class="num">21</span>
+          </router-link>
+        </template>
       </ul>
     </section>
 
-    <section class="profile-block">
-      <block-title title="交易数据"></block-title>
-      <ul class="m-order-label-ul">
-        <li>
-          <div class="m-icon-price-box">
-            <img class="static-icon" src="/static/images/order-money.png" alt="">
-            <div class="icon-price-box-main">
-              <p class="label">今日交易额</p>
-              <p class="m-order-price m-red">￥469.50</p>
+    <template  v-if="checkPermission(level2)">
+      <section class="profile-block">
+        <block-title title="交易数据"></block-title>
+        <ul class="m-order-label-ul">
+          <li>
+            <div class="m-icon-price-box">
+              <img class="static-icon" src="/static/images/order-money.png" alt="">
+              <div class="icon-price-box-main">
+                <p class="label">今日交易额</p>
+                <p class="m-order-price m-red">￥469.50</p>
+              </div>
             </div>
-          </div>
 
-          <p class="m-order-bottom">
-            <span>昨日</span>
-            <section class="m-order-bottom-right">
+            <p class="m-order-bottom">
+              <span>昨日</span>
+              <section class="m-order-bottom-right">
+                <span>336.00</span>
+                <img src="/static/images/icon-order-up.png" alt="">
+              </section>
+            </p>
+
+            <p class="m-order-all">
+              <span>全部交易额</span>
+              <span class="m-order-price">￥336.00</span>
+            </p>
+          </li>
+          <li>
+            <div class="m-icon-price-box">
+              <img class="static-icon" src="/static/images/order-num.png" alt="">
+              <div class="icon-price-box-main">
+                <p class="label">今日订单数</p>
+                <p class="m-order-price">469</p>
+              </div>
+            </div>
+
+            <p class="m-order-bottom">
+              <span>昨日</span>
+              <section class="m-order-bottom-right">
+                <span>336</span>
+                <img src="/static/images/icon-order-down.png" alt="">
+              </section>
+            </p>
+
+            <p class="m-order-all">
+              <span>全部订单数</span>
+              <span class="m-order-price">336</span>
+            </p>
+          </li>
+
+
+          <li>
+            <div class="m-icon-price-box">
+              <img class="static-icon" src="/static/images/order-pay.png" alt="">
+              <div class="icon-price-box-main">
+                <p class="label">待付款订单数</p>
+                <p class="m-order-price">469</p>
+              </div>
+            </div>
+            <p class="m-order-bottom">
+              <span>昨日</span>
+              <section class="icon-price-box-main">
+                <span>336</span>
+              </section>
+            </p>
+          </li>
+          <li>
+            <div class="m-icon-price-box">
+              <img class="static-icon" src="/static/images/order-back.png" alt="">
+              <div class="icon-price-box-main">
+                <p class="label">退款订单数</p>
+                <p class="m-order-price">469</p>
+              </div>
+            </div>
+            <p class="m-order-bottom">
+              <span>昨日</span>
               <span>336.00</span>
-              <img src="/static/images/icon-order-up.png" alt="">
-            </section>
-          </p>
+            </p>
+          </li>
+        </ul>
+      </section>
 
-          <p class="m-order-all">
-            <span>全部交易额</span>
-            <span class="m-order-price">￥336.00</span>
-          </p>
-        </li>
-        <li>
-          <div class="m-icon-price-box">
-            <img class="static-icon" src="/static/images/order-num.png" alt="">
-            <div class="icon-price-box-main">
-              <p class="label">今日订单数</p>
-              <p class="m-order-price">469</p>
-            </div>
-          </div>
-
-          <p class="m-order-bottom">
-            <span>昨日</span>
-            <section class="m-order-bottom-right">
-              <span>336</span>
-              <img src="/static/images/icon-order-down.png" alt="">
-            </section>
-          </p>
-
-          <p class="m-order-all">
-            <span>全部订单数</span>
-            <span class="m-order-price">336</span>
-          </p>
-        </li>
-
-
-        <li>
-          <div class="m-icon-price-box">
-            <img class="static-icon" src="/static/images/order-pay.png" alt="">
-            <div class="icon-price-box-main">
-              <p class="label">待付款订单数</p>
-              <p class="m-order-price">469</p>
-            </div>
-          </div>
-          <p class="m-order-bottom">
-            <span>昨日</span>
-            <section class="icon-price-box-main">
-              <span>336</span>
-            </section>
-          </p>
-        </li>
-        <li>
-          <div class="m-icon-price-box">
-            <img class="static-icon" src="/static/images/order-back.png" alt="">
-            <div class="icon-price-box-main">
-              <p class="label">退款订单数</p>
-              <p class="m-order-price">469</p>
-            </div>
-          </div>
-          <p class="m-order-bottom">
-            <span>昨日</span>
-            <span>336.00</span>
-          </p>
-        </li>
-      </ul>
-    </section>
-
-    <block-title title="订单趋势"></block-title>
-    <echarts :id="id" :option="option" :width="1300"></echarts>
-
-
+      <block-title title="订单趋势"></block-title>
+      <echarts :id="id" :option="option" :width="1300"></echarts>
+    </template>
   </div>
 </template>
 
 <script>
   import VueEcharts from "src/components/VueEcharts";
+  import permission from 'src/directive/permission/index.js' // 权限判断指令
+  import checkPermission from 'src/utils/permission' // 权限判断函数
+  import {level0,level2} from "src/router";
 
 
   export default {
@@ -130,8 +145,13 @@
       echarts: VueEcharts
     },
 
+    directives: { permission },
+
     data() {
       return {
+        level0,
+        level2,
+
         id:'profile_echart',
         option : {
           color:['#CB7E88','#F2DA7A','#97ADCB'],
@@ -186,7 +206,9 @@
 
     computed: {},
 
-    methods: {},
+    methods: {
+      checkPermission,
+    },
 
     created() {
 

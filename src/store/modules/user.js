@@ -130,15 +130,6 @@ const user = {
         })
       })
     },
-
-    // 前端 登出
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        removeStore('token');
-        resolve()
-      })
-    }
   }
 }
 

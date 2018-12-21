@@ -4,11 +4,11 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="场景名">
-          <el-input></el-input>
+          <el-input v-model.trim="searchForm.kw" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddScene">新增</el-button>
@@ -21,7 +21,7 @@
         </template>
       </el-table-column>
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
-      <el-table-column label="排序" align="center" prop="pssort" >
+      <el-table-column label="排序" align="center" sortable prop="pssort" >
         <template slot-scope="scope">
           <el-input v-model.number="scope.row.pssort" @keyup.native.enter="changeSceneSort(scope.row)" style="width: 180px"></el-input>
         </template>
@@ -71,11 +71,11 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="标签名">
-          <el-input></el-input>
+          <el-input v-model.trim="itemSearchForm.kw" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doItemReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -92,8 +92,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text">编辑</el-button>
-          <el-button type="text" class="danger-text">删除</el-button>
+          <el-button type="text" @click="doEditItem(scope.row)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="doRemoveItem(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -145,27 +145,11 @@
 
     data() {
       return {
-        itemLoading: false,
-        itemTableData: [],
-
-        itemDlgVisible: false,
-        itemForm: {
-          itid: '',
-          itname: "",
-          psid: [],
-          itdesc: "",
+        searchForm:{
+          kw: '',
         },
-        itemRules: {
-          itname: [
-            {required: true, message: '标签名字必填', trigger: 'blur'}
-          ],
-          psid: [
-            {required: true, message: '所属场景必选', trigger: 'change'}
-          ],
-          itdesc: [
-          ],
-        },
-        psOptions: [],
+        sceneLoading: false,
+        sceneTableData: [],
 
         sceneDlgVisible: false,
         sceneForm: {
@@ -187,24 +171,56 @@
           ],
         },
 
-        sceneLoading: false,
-        sceneTableData: [],
+        itemSearchForm: {
+          kw: '',
+        },
+
+        itemLoading: false,
+        itemTableData: [],
+
+        itemDlgVisible: false,
+        itemForm: {
+          itid: '',
+          itname: "",
+          psid: [],
+          itdesc: "",
+        },
+        itemRules: {
+          itname: [
+            {required: true, message: '标签名字必填', trigger: 'blur'}
+          ],
+          psid: [
+            {required: true, message: '所属场景必选', trigger: 'change'}
+          ],
+          itdesc: [
+          ],
+        },
+        psOptions: [],
       }
     },
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')
+        return this.$api.upload_file + getStore('token')+ '&type=brand'
       },
     },
 
     methods: {
+      doItemSearch(){
+        this.setItemList();
+      },
+      doItemReset(){
+        this.itemSearchForm = { kw: ''};
+        this.doItemSearch();
+      },
+
       setItemList() {
         this.itemLoading = true;
         this.$http.get(this.$api.items_list, {
           noLoading: true,
           params: {
-            ittype: 0
+            ittype: 0,
+            kw: this.itemSearchForm.kw,
           }
         }).then(
           res => {
@@ -229,6 +245,7 @@
         };
         this.$http.get(this.$api.scene_list, {
           params: {
+
           }
         }).then(
           res => {
@@ -250,9 +267,12 @@
         this.resetItemForm();
         this.itemDlgVisible = true;
         this.itemForm = {
+          itid: row.itid,
           itname: row.itname,
           itdesc: row.itdesc,
+          psid: [],
         };
+        this.itemForm.psid  = row.prscene.map(item => item.psid);
       },
       doSaveItem(){
         this.$refs.itemForm.validate(
@@ -260,10 +280,9 @@
             if (valid) {
               let type = this.itemForm.itid ? '标签修改' : '标签新增';
 
-              console.log('doSaveItem');
+              this.itemForm.ittype = 0;
               if (this.itemForm.itid) {
-                return
-                this.$http.post(this.$api.update_brand, this.itemForm).then(
+                this.$http.post(this.$api.update_items, this.itemForm).then(
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
@@ -271,10 +290,10 @@
 
                       this.$notify({
                         title: `${type}成功`,
-                        message: `品牌名:${this.itemForm.pbname}`,
+                        message: `品牌名:${this.itemForm.itname}`,
                         type: 'success'
                       });
-                      this.brandDlgVisible = false;
+                      this.itemDlgVisible = false;
                       this.init();
                     }
                   }
@@ -306,26 +325,55 @@
       },
 
       doRemoveItem(row) {
-        console.log('doRemoveItem');
+        this.$confirm(`确认删除标签(${row.itname})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.update_items,{
+              itid: row.itid,
+              ittype: 0,
+              isdelete: true
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '标签删除成功',
+                    message: `标签名:${row.itname}`,
+                    type: 'success'
+                  });
+                  this.setItemList();
+                }
+              }
+            )
+          }
+        )
       },
 
+      doSearch(){
+        this.setSceneList();
+      },
+      doReset(){
+        this.searchForm = {
+          kw: ''
+        };
+        this.doSearch();
+      },
       setSceneList() {
         this.sceneLoading = true;
         this.$http.get(this.$api.scene_list, {
           noLoading: true,
           params: {
-            page_num: this.currentScenePage,
-            page_size: this.scenePageSize,
+            kw: this.searchForm.kw
           }
         }).then(
           res => {
             this.sceneLoading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.sceneTableData = data;
-              this.totalScene = resData.total_count;
             }
           }
         )

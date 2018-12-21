@@ -3,10 +3,13 @@
     <!--工具栏-->
     <section class="tool-bar space-between">
       <el-form :inline="true">
-        <el-form-item label="分类名">
-          <el-input></el-input>
+        <el-form-item label="所属分类">
+          <el-cascader :options="categoryOptions" :props="categoryProps" change-on-select :clearable="true" filterable
+                       v-model="searchForm.pcid" @change="doSearch">
+          </el-cascader>
         </el-form-item>
-        <el-button type="primary">查询</el-button>
+        <el-button type="primary" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
       </el-form>
 
       <el-button type="primary" icon="el-icon-plus" @click="doAdd">新增</el-button>
@@ -25,6 +28,9 @@
         </template>
       </el-table-column>
       <el-table-column label="排序" align="center" width="150" prop="pcsort">
+        <template slot-scope="scope">
+          <el-input v-model.number="scope.row.pcsort" @keyup.native.enter="changeCaSort(scope.row)" ></el-input>
+        </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
@@ -39,7 +45,7 @@
                :title="categroyForm.pcid?'分类编辑':'分类新增'">
       <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
         <el-form-item label="所属分类" prop="parentpcid">
-          <el-cascader :options="options" :props="cascaderProps" :clearable="true" :change-on-select="true"
+          <el-cascader :options="options" :props="cascaderProps" filterable :clearable="true" :change-on-select="true"
                        v-model="selectParentPcId" @change="selectParentPcIdChange" placeholder="添加一级分类时为空"
                        :disabled="categroyForm.pcid != ''">
           </el-cascader>
@@ -52,7 +58,7 @@
           <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="pcsort">
-          <el-input v-model.number="categroyForm.pcsort"></el-input>
+          <input v-model.number="categroyForm.pcsort">
         </el-form-item>
 
         <el-form-item label="图片" prop="pcpic">
@@ -122,7 +128,7 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')
+        return this.$api.upload_file + getStore('token')+ '&type=category'
       },
     },
 
@@ -145,6 +151,16 @@
       };
 
       return {
+        categoryOptions: [],
+        categoryProps: {
+          value: 'pcid',
+          label: 'pcname',
+          children: 'subs',
+        },
+        searchForm: {
+          pcid: [],
+        },
+
         func: treeToArray,
         loading: false,
         expandAll: true,
@@ -209,12 +225,46 @@
       }
     },
     methods: {
+      getSearchCategory(){
+        this.$http.get(this.$api.category_list, {
+          params: {
+            up: '',
+            deep: 1
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.categoryOptions = data;
+            }
+          });
+      },
+      doSearch(){
+        this.setCategory();
+      },
+      doReset(){
+        this.searchForm = {
+          pcid: []
+        }
+        this.doSearch();
+      },
+
       setCategory() {
         this.loading = true;
+        let pcid = '';
+
+        if (this.searchForm.pcid.length) {
+          pcid = this.searchForm.pcid[this.searchForm.pcid.length - 1];
+        } else {
+          pcid = ''
+        }
+
         this.$http.get(this.$api.category_list, {
           noLoading: true,
           params: {
-            up: '',
+            up: pcid,
             deep: 2
           }
         }).then(
@@ -248,6 +298,34 @@
             }
           }
         )
+      },
+
+      changeCaSort(row){
+        let updateRow = {
+          pcid: row.pcid,
+          parentpcid: row.parentpcid,
+          pcname: row.pcname,
+          pcdesc: row.pcdesc,
+          pcsort: row.pcsort,
+          pcpic: row.pcpic,
+          pctoppic: row.pctoppic,
+        }
+
+        this.$http.post(this.$api.update_category, updateRow).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.$notify({
+                title: `排序改动成功`,
+                message: `分类名称:${row.pcname}`,
+                type: 'success'
+              });
+              this.setCategory();
+            }
+          }
+        );
       },
 
       //  初始化表单
@@ -414,6 +492,7 @@
 
     created() {
       this.setCategory();
+      this.getSearchCategory();
     }
   }
 </script>

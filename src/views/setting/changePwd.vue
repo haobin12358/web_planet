@@ -68,24 +68,63 @@
       },
 
       doConfirm() {
-        this.$confirm('提示', '修改成功需要重新登录').then(
-          () => {
-            //  todo  等整合供应商修改密码
-            return
-            this.$http.get(this.$api.update_admin_password, {
-              noLoading: true,
-              params: {}
-            }).then(
-              res => {
-                if (res.data.status == 200) {
-                  let resData = res.data,
-                    data = res.data.data;
+        this.$refs.pwdForm.validate(
+          valid => {
+            if (valid) {
+              this.$confirm('提示', '修改成功需要重新登录').then(
+                () => {
+                  if (this.$store.getters.roles[0] == 'supplizer') {
+                    this.$http.post(this.$api.update_supplizer_password, {
+                      "supassword": this.password_new,
+                      "oldpassword": this.password_old,
+                    }).then(
+                      res => {
+                        if (res.data.status == 200) {
+                          let resData = res.data,
+                              data = res.data.data;
 
+                          this.$store.dispatch('LogOut').then(
+                            () => {
+                              this.push('/login');
+                              this.$notify({
+                                title: '密码已重置',
+                                message: `请重新登录`,
+                                type: 'info'
+                              });
+                            }
+                          );
+                        }
+                      }
+                    )
+                  } else {
+                    this.$http.post(this.$api.update_admin_password, this.pwdForm).then(
+                      res => {
+                        if (res.data.status == 200) {
+                          let resData = res.data,
+                              data = res.data.data;
+
+                          this.$store.dispatch('LogOut').then(
+                            () => {
+                              this.push('/login');
+                              this.$notify({
+                                title: '密码已重置',
+                                message: `请重新登录`,
+                                type: 'info'
+                              });
+                            }
+                          );
+                        }
+                      }
+                    )
+                  }
                 }
-              }
-            )
+              )
+            } else {
+              this.$message.warning('请根据校验信息完善表单!');
+            }
           }
-        )
+        );
+
       },
     },
     created() {

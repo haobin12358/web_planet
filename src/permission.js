@@ -16,7 +16,7 @@ router.beforeEach((to, from, next) => {
       if (store.getters.roles.length === 0) {
         store.commit('INIT_USER_INFO');
         if (store.getters.roles.length === 0) {
-          store.dispatch('FedLogOut').then(() => {
+          store.dispatch('LogOut').then(() => {
             Message.error('登录信息有误,请重新登录!');
             next({path: '/'})
           })
@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
         // store.dispatch('GetInfo').then(res => { // 拉取用户信息
         //   next()
         // }).catch((err) => {
-        //   store.dispatch('FedLogOut').then(() => {
+        //   store.dispatch('LogOut').then(() => {
         //     Message.error(err || 'Verification failed, please login again')
         //     next({ path: '/' })
         //   })
