@@ -186,6 +186,7 @@
   import axios from 'axios';
 
   export default {
+    name: 'personalIndex',
     data() {
       return {
         name: '',
@@ -208,6 +209,13 @@
       }
     },
     components: {},
+    mounted() {
+      common.changeTitle('我的');
+      // this.getUser();             // 获取个人信息
+    },
+    activated() {
+      this.getUser();             // 获取个人信息
+    },
     methods: {
       // 跳转页面
       changeRoute(v, which){
@@ -350,10 +358,6 @@
           }
         })
       }
-    },
-    mounted() {
-      common.changeTitle('我的');
-      this.getUser();             // 获取个人信息
     }
   }
 </script>

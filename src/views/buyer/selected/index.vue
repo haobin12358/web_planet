@@ -231,6 +231,7 @@
   import api from '../../../api/api';
 
     export default {
+      name: 'selectedIndex',
       data() {
         return {
           swipe_list:null,

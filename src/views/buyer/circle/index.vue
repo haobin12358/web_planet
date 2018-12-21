@@ -74,6 +74,7 @@
   import bottomLine from '../../../components/common/bottomLine';
 
   export default {
+    name: 'circleIndex',
     data() {
       return {
         nav_list: [

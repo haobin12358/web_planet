@@ -107,7 +107,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'shop',
     children: [
-      { path: '/shop', component: () => import('../views/buyer/shop/index'), meta: { keepAlive: false }, hidden: true }
+      { path: '/shop', component: () => import('../views/buyer/shop/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/submitOrder', component: () => import('../views/buyer/shop/submitOrder'), hidden: true },
@@ -122,7 +122,7 @@ export const constantRouterMap = [
     path: '/personal',
     component: Layout,
     redirect: 'personal',
-    children: [{ path: '/personal', component: () => import('../views/buyer/personal/index'), hidden: true }
+    children: [{ path: '/personal', component: () => import('../views/buyer/personal/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/personal/code', component: () => import('../views/buyer/personal/code'), hidden: true },
@@ -148,7 +148,7 @@ export const constantRouterMap = [
     path: '/activity',
     component: Layout,
     redirect: 'activity',
-    children: [{ path: '/activity', component: () => import('../views/buyer/activity/index'), hidden: true }
+    children: [{ path: '/activity', component: () => import('../views/buyer/activity/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/newcomer', component: () => import('../views/buyer/activity/newcomer'), hidden: true },            // 新人尝鲜礼包

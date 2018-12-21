@@ -92,6 +92,7 @@
     };
   })('scroll');
     export default {
+      name: 'shopIndex',
       data() {
         return {
           cart_list: [],

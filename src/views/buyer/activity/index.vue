@@ -21,6 +21,7 @@
   import { Toast } from 'mint-ui';
 
   export default {
+    name: 'activityIndex',
     data() {
       return {
         name: '',
