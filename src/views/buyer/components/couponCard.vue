@@ -117,6 +117,7 @@
       .m-store-name {
         color: #ffffff;
         font-size: 18px;
+        text-align: center;
       }
     }
     .m-card-right {
