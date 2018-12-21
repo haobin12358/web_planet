@@ -214,12 +214,30 @@
       },
       /*获取导航*/
       getNav(){
-        axios.get(api.items_list,{
-          params:{
-            ittype:10
-          }
-        }).then(res => {
+        axios.get(api.items_list, { params: { ittype:10 }}).then(res => {
           if(res.data.status == 200){
+            this.nav_list = [
+              {
+                itdesc: "我是描述",
+                itid: "",
+                itname: "全部",
+                itrecommend: true,
+                itsort: null,
+                ittype: 10,
+                active: false,
+                psid: ""
+              },
+              {
+                itdesc: "我是描述",
+                itid: "mynews",
+                itname: "我发布的",
+                itrecommend: true,
+                itsort: null,
+                ittype: 10,
+                active: false,
+                psid: ""
+              }
+            ];
             if(res.data.data.length == 0){
               this.nav_list = this.nav_list.concat([])
             }else{
