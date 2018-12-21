@@ -9,6 +9,7 @@ const api = {
   update_admin_password: title + 'user/update_admin_password',            //修改密码
 
   supplizer_login: title + 'user/supplizer_login',                        //供应商登录
+  update_supplizer_password: title + 'supplizer/change_password',         //供应商修改密码
 
   product_list: title + 'product/list',                                   //获取商品列表
   product_get: title + 'product/get',                                     //获取商品详情
