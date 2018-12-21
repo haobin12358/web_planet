@@ -8,7 +8,7 @@
       <el-button type="text" class="preview-button" @click="preview('detail')">详情预览</el-button>
     </div>
     <!--列表预览dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="listDialog" width="810px"
+    <el-dialog v-el-drag-dialog :visible.sync="listDialog" width="430px"
                :center="true" title="列表预览" :append-to-body="true" v-if="where == 'list'">
       <div class="m-circle-body">
         <template>
@@ -47,7 +47,7 @@
     </el-dialog>
 
     <!--详情预览dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="detailDialog" width="820px" top="5vh"
+    <el-dialog v-el-drag-dialog :visible.sync="detailDialog" width="450px" top="5vh"
                :center="true" title="详情预览" :append-to-body="true">
       <div class="m-circle-detail">
         <div class="m-circle-content" v-if="news_info">
@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        <div class="m-circle-foot" v-if="news_info">
+        <!--<div class="m-circle-foot" v-if="news_info">
           <div class="float-left">
             <span class="m-icon-btn" :class="news_info.is_favorite == 1 ? 'active' : ''">
               <span class="m-icon-zan"></span>
@@ -84,13 +84,13 @@
             </span>
           </div>
           <span class="m-circle-comment float-right">评论 {{news_info.commentnumber}}</span>
-        </div>
+        </div>-->
         <div class="m-box">
-          <div class="m-item" v-if="news_info.coupon.length">
+          <div class="m-item" v-if="news_info.coupon">
             <div class="m-box-title">优惠领取</div>
             <coupon-card :couponList="news_info.coupon"></coupon-card>
           </div>
-          <div class="m-item" v-if="news_info.product.length">
+          <div class="m-item" v-if="news_info.product">
             <div class="m-box-title m-margin">相关推荐</div>
             <product :list="news_info.product"></product>
           </div>
@@ -158,25 +158,25 @@
   @import "../../../styles/myIndex";
 
   .m-circle-body{
-    padding: 20px 28px;
+    padding: 10px 14px;
     background-color: #eee;
     .m-video-one{
       position: relative;
-      width: 700px;
-      border-radius: 10px;
-      box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
-      margin-bottom: 30px;
+      width: 350px;
+      border-radius: 5px;
+      box-shadow: 0 2.5px 3px 0 rgba(0, 0, 0, 0.16);
+      margin-bottom: 15px;
       background-color: #fff;
-      padding-bottom: 26px;
+      padding-bottom: 13px;
       .m-mark-label{
         position: absolute;
-        top:10px;
+        top:5px;
         right:0;
-        height: 33px;
-        line-height: 33px;
-        padding: 0 25px;
+        height: 16.5px;
+        line-height: 16.5px;
+        padding: 0 12.5px;
         background-color: #E9E9E9;
-        border-radius: 10px  0   0  10px;
+        border-radius: 5px 0 0 5px;
         box-shadow: 3px 5px 6px 0 rgba(0, 0, 0, 0.16);
         font-size: 18px;
         color: #999999;
@@ -185,46 +185,46 @@
         }
       }
       h3{
-        font-size: 28px;
+        font-size: 14px;
         font-weight: bold;
         text-align: left;
-        padding: 10px 20px;
+        padding: 5px 10px;
       }
       .m-video-box{
         position: relative;
         .m-video{
           display: block;
-          width: 700px;
-          height: 360px;
+          width: 350px;
+          height: 180px;
           position: absolute;
           top:0;
           left: 0;
         }
         .m-icon-video{
           display: block;
-          width: 109px;
-          height: 109px;
+          width: 54.5px;
+          height: 54.5px;
           position: absolute;
-          top: 125px;
-          left: 298px;
+          top: 62.5px;
+          left: 149px;
           background: url("/static/images/icon-video.png") no-repeat;
           background-size: 100% 100%;
         }
         .m-video-time{
           position: absolute;
-          bottom: 4px;
-          right: 40px;
+          bottom: 2px;
+          right: 20px;
           color: #fff;
         }
       }
       .m-img-box {
-        width: 700px;
-        height: 360px;
+        width: 350px;
+        height: 180px;
         position: relative;
         background-color: #ffffff;
         .m-img {
-          max-width: 700px;
-          max-height: 360px;
+          max-width: 350px;
+          max-height: 180px;
           position: absolute;
           top: 0;
           right: 0;
@@ -235,24 +235,24 @@
       }
       .m-text{
         text-align: left;
-        padding: 10px 22px;
+        padding: 5px 11px;
       }
 
       .m-video-like{
         position: absolute;
-        top: 161px;
-        right:16px;
+        top: 80.5px;
+        right: 8px;
         color: #fff;
-        height: 27px;
-        line-height: 27px;
+        height: 13.5px;
+        line-height: 13.5px;
         .m-like-icon{
           display: inline-block;
-          width: 28px;
-          height: 27px;
+          width: 14px;
+          height: 13.5px;
           background: url("/static/images/icon-collect.png") no-repeat;
           background-size: 100% 100%;
           vertical-align: text-bottom;
-          margin-right: 10px;
+          margin-right: 5px;
           &.active{
             background: url("/static/images/icon-collect-active.png") no-repeat;
             background-size: 100% 100%;
@@ -264,14 +264,14 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-around;
-        margin: 18px 0 0;
+        margin: 9px 0 0;
         color: #999;
         li{
           width: 33.3%;
           text-align: center;
-          line-height: 30px;
+          line-height: 15px;
           align-items: center;
-          font-size: 20px;
+          font-size: 10px;
         }
         .m-border{
           border-left: 1px solid #999999;
@@ -279,11 +279,11 @@
         }
         .m-icon-like{
           display: inline-block;
-          width: 24px;
-          height: 24px;
+          width: 12px;
+          height: 12px;
           background: url("/static/images/icon-like.png") no-repeat;
           background-size: 100% 100%;
-          margin-right: 10px;
+          margin-right: 5px;
           &.active{
             background: url("/static/images/icon-like-active.png") no-repeat;
             background-size: 100% 100%;
@@ -291,16 +291,16 @@
         }
         .m-icon-comment{
           display: inline-block;
-          width: 27px;
-          height: 21px;
+          width: 13.5px;
+          height: 10.5px;
           background: url("/static/images/icon-comment.png") no-repeat;
           background-size: 100% 100%;
-          margin-right: 10px;
+          margin-right: 5px;
         }
         .m-icon-transmit{
           display: inline-block;
-          width: 23px;
-          height: 20px;
+          width: 11.5px;
+          height: 10px;
           background: url("/static/images/icon-transmit.png") no-repeat;
           background-size: 100% 100%;
         }
@@ -314,40 +314,40 @@
         z-index: 10;
       }
       .m-refuse-reason{
-        padding: 14px 0;
+        padding: 7px 0;
         border-top: 1px solid #CCCCCC;
         text-align: left;
-        margin: 30px 20px 0 20px;
+        margin: 15px 10px 0 10px;
         color: #C70000;
-        font-size: 18px;
+        font-size: 9px;
       }
     }
   }
   .m-circle-detail {
     position: relative;
-    height: 780px;
+    height: 45rem;
     overflow: auto;
     overflow-x: hidden;
   }
   .m-circle-content{
-     padding: 0 0 100px 0;
+     padding: 0 0 50px 0;
      .m-circle-title{
-       font-size: 28px;
+       font-size: 14px;
        font-weight: bold;
-       margin-left: 28px;
+       margin-left: 14px;
        text-align: left;
      }
      .m-author-box {
        display: flex;
        align-items: center;
-       margin: 25px 40px;
-       font-size: 24px;
+       margin: 12.5px 20px;
+       font-size: 12px;
        .m-author-img {
          display: block;
-         width: 40px;
-         height: 40px;
+         width: 20px;
+         height: 20px;
          border-radius: 50%;
-         margin-right: 18px;
+         margin-right: 9px;
          border: none;
          background: url("/static/images/logo.png") no-repeat;
          background-size: 100% 100%;
@@ -360,24 +360,24 @@
      }
      .m-circle-img{
        display: block;
-       width: 750px;
+       width: 375px;
        max-height: 100%;
        background-color: #9fd0bf;
        /*margin: 14px 0 30px ;*/
      }
      .m-content{
-       padding: 46px 46px 0 46px;
+       padding: 23px 23px 0 23px;
        text-align: left;
        .m-video-box{
          position: relative;
          .m-img-box {
-           width: 700px;
-           height: 360px;
+           width: 350px;
+           height: 180px;
            position: relative;
            background-color: #ffffff;
            .m-img {
-             max-width: 700px;
-             max-height: 360px;
+             max-width: 350px;
+             max-height: 180px;
              position: absolute;
              top: 0;
              right: 0;
@@ -389,9 +389,9 @@
          .m-video{
            display: block;
            width: 100%;
-           height: 360px;
-           border-radius: 10px;
-           margin-bottom: 20px;
+           height: 180px;
+           border-radius: 5px;
+           margin-bottom: 10px;
            /*border: 1px red solid;*/
          }
          .m-video-img{
@@ -399,49 +399,49 @@
            top:0;
            left: 0;
            width: 100%;
-           height: 360px;
-           border-radius: 10px;
+           height: 180px;
+           border-radius: 5px;
          }
          .m-icon-video{
            display: block;
-           width: 109px;
-           height: 109px;
+           width: 54.5px;
+           height: 54.5px;
            position: absolute;
-           top: 130px;
-           left: 290px;
+           top: 65px;
+           left: 145px;
            background: url("/static/images/icon-video.png") no-repeat;
            background-size: 100% 100%;
          }
          .m-video-time{
            position: absolute;
-           bottom: -150px;
-           right: 13px;
+           bottom: -75px;
+           right: 6.5px;
            color: #fff;
          }
        }
        h3{
-         font-size: 28px;
+         font-size: 14px;
          font-weight: bold;
-         margin-bottom: 20px;
+         margin-bottom: 10px;
        }
        p{
-         margin-bottom: 20px;
+         margin-bottom: 10px;
          color: #666666;
        }
      }
    }
   .m-circle-foot{
-    width: 750px;
+    width: 375px;
     position: fixed;
-    bottom: -70px;
+    bottom: -35px;
     z-index: 200;
     display: flex;
     justify-content: space-between;
-    box-shadow: 5px 5px 6px 5px rgba(0, 0, 0, 0.16);
-    padding: 30px 49px 30px 45px;
+    box-shadow: 2.5px 2.5px 3px 2.5px rgba(0, 0, 0, 0.16);
+    padding: 15px 24.5px 15px 22.5px;
     background-color: #fff;
-    margin: 0 0 130px 0;
-    font-size: 18px;
+    margin: 0 0 65px 0;
+    font-size: 9px;
     &:after{
       content: '';
       display: block;
@@ -449,40 +449,40 @@
     }
     .m-circle-comment{
       display: block;
-      width: 90px;
-      height: 45px;
-      line-height: 35px;
-      font-size: 24px;
-      padding: 3px 10px;
+      width: 45px;
+      height: 22.5px;
+      line-height: 17.5px;
+      font-size: 12px;
+      padding: 1.5px 5px;
       background: url("/static/images/icon-circle-comment.png") no-repeat;
       background-size: 100% 100%;
       color: #fff;
     }
     .m-icon-btn{
       display: inline-block;
-      padding: 5px 18px 0 18px;
+      padding: 2.5px 9px 0 9px;
       background-color: #ccc;
-      border-radius: 10px;
+      border-radius: 5px;
       color: #fff;
-      font-size: 24px;
-      line-height: 42px;
-      margin-right: 30px;
+      font-size: 12px;
+      line-height: 21px;
+      margin-right: 7.5px;
       vertical-align: middle;
       &.active{
         background-color: #22A7D2;
       }
       .m-icon-zan{
         display: inline-block;
-        width: 38px;
-        height: 38px;
+        width: 19px;
+        height: 19px;
         background: url("/static/images/icon-zan.png") no-repeat;
         background-size: 100% 100%;
         vertical-align: text-top;
       }
       .m-icon-cai{
         display: inline-block;
-        width: 38px;
-        height: 38px;
+        width: 19px;
+        height: 19px;
         background: url("/static/images/icon-cai.png") no-repeat top;
         background-size: 100% 100%;
         vertical-align: text-bottom;
@@ -490,15 +490,15 @@
     }
   }
   .m-box {
-    margin: -100px 0 120px 0;
+    margin: -50px 0 60px 0;
     .m-item {
       text-align: left;
       .m-box-title {
-        font-size: 28px;
+        font-size: 14px;
         font-weight: bold;
-        margin: 0 0 15px 46px;
+        margin: 0 0 7.5px 23px;
         &.m-margin {
-          margin: 20px 0 -10px 46px;
+          margin: 10px 0 -5px 23px;
         }
       }
     }

@@ -62,9 +62,9 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    width: 700px;
-    height: 171px;
-    margin: 0 0 5px 25px;
+    width: 350px;
+    height: 85.5px;
+    margin: 0 0 2.5px 12.5px;
     background: url("/static/images/coupon/icon-new.png") no-repeat;
     background-size: 100% 100%;
     &.m-had {
@@ -72,65 +72,68 @@
       background-size: 100% 100%;
     }
     .m-cancel-icon {
-      width: 45px;
-      height: 45px;
+      width: 22.5px;
+      height: 22.5px;
       position: absolute;
-      top: -20px;
-      right: -10px;
+      top: -10px;
+      right: -5px;
     }
     .m-card-left {
-      margin: 20px 0 0 45px;
+      margin: 10px 0 0 22.5px;
       .m-store-img {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         background: #ffffff;
         box-shadow: 2px 3px 6px rgba(0,0,0,0.16);
-        border-radius: 10px;
+        border-radius: 5px;
       }
       .m-store-name {
         color: #ffffff;
-        font-size: 18px;
+        font-size: 9px;
+        text-align: center;
       }
     }
     .m-card-right {
       width: 63%;
       color: #ffffff;
-      font-size: 18px;
-      margin: 15px 20px 0 0;
+      font-size: 9px;
+      margin: 7.5px 10px 0 0;
       .m-card-time {
-        margin-bottom: 5px;
+        margin-left: -20px;
+        margin-bottom: 2.5px;
         text-align: right;
+        white-space: nowrap;
       }
       .m-card-detail {
         display: flex;
         justify-content: space-between;
         .m-detail-left {
-          margin-top: -10px;
+          margin-top: -5px;
           .m-text-small{
-            font-size: 46px;
+            font-size: 23px;
           }
           .m-text-big {
-            font-size: 100px;
+            font-size: 50px;
             font-weight: bold;
           }
           &.m-space {
-            margin-left: 50px;
+            margin-left: 25px;
           }
         }
         .m-detail-right {
           display: flex;
+          text-align: center;
+          align-items: center;
           flex-direction: column;
           .m-detail-btn {
-            width: 96px;
+            width: 70px;
             white-space: nowrap;
-            height: 25px;
-            text-align: center;
-            line-height: 14px;
-            font-size: 16px;
-            padding: 5px 16px;
-            margin-top: 10px;
+            line-height: 7px;
+            font-size: 8px;
+            padding: 5px 8px;
+            margin-top: 5px;
             border: 1px solid rgba(255,255,255,1);
-            border-radius: 30px;
+            border-radius: 15px;
           }
         }
       }

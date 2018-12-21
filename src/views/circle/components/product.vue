@@ -14,29 +14,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        data() {
-            return {
-                name: ''
-            }
-        },
-        props: {
-          list:{
-            type:Array,
-            default:null
-          },
-          gift:{
-            type:Boolean,
-            default:false
-          },
-        },
-        methods: {
+  export default {
+    data() {
+      return {
 
-        },
-        created() {
+      }
+    },
+    props: {
+      list: { type: Array, default: null },
+      gift: { type: Boolean, default: false }
+    },
+    methods: {
 
-        }
     }
+  }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   /*@import "../../../common/css/index";*/
@@ -45,34 +36,34 @@
     flex-flow: row;
     align-items: center;
     flex-wrap: wrap;
-    padding: 30px 33px ;
+    padding: 15px 16.5px ;
     li{
       list-style: none;
-      width: 325px;
+      width: 162.5px;
       height: auto;
-      border-radius: 10px;
+      border-radius: 5px;
       box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.16);
       background-color: #ffffff;
-      margin-bottom: 30px;
+      margin-bottom: 15px;
       &:nth-child(odd){
-        margin-right: 30px;
+        margin-right: 15px;
       }
       .m-one-product-img{
         display: block;
-        width: 325px;
-        height: 325px;
-        border-radius: 10px;
+        width: 162.5px;
+        height: 162.5px;
+        border-radius: 5px;
       }
       .m-one-product-text{
-        padding: 15px;
+        padding: 7.5px;
       }
       h3{
-        width: 300px;
+        width: 150px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        margin-top: 38px;
-        font-size: 21px;
+        margin-top: 1px;
+        font-size: 11px;
         text-align: left;
       }
     }
