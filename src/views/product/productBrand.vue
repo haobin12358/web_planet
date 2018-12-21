@@ -275,7 +275,7 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')
+        return this.$api.upload_file + getStore('token')+ '&type=brand'
       },
     },
 

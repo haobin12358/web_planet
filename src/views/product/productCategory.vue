@@ -42,7 +42,7 @@
                :title="categroyForm.pcid?'分类编辑':'分类新增'">
       <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
         <el-form-item label="所属分类" prop="parentpcid">
-          <el-cascader :options="options" :props="cascaderProps" :clearable="true" :change-on-select="true"
+          <el-cascader :options="options" :props="cascaderProps" filterable :clearable="true" :change-on-select="true"
                        v-model="selectParentPcId" @change="selectParentPcIdChange" placeholder="添加一级分类时为空"
                        :disabled="categroyForm.pcid != ''">
           </el-cascader>
@@ -125,7 +125,7 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')
+        return this.$api.upload_file + getStore('token')+ '&type=category'
       },
     },
 
