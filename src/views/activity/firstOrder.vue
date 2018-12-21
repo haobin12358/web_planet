@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
-      新人首单
-    </div>
+  <div class="container">
+    新人首单
+  </div>
 </template>
 
 <script>

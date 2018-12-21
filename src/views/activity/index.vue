@@ -1,7 +1,7 @@
 <template>
   <div class="activity-index">
     <el-table v-loading="activityLoading" :data="activityList" stripe>
-      <el-table-column label="活动首图" align="center" prop="acbackground">
+      <el-table-column label="活动封面图" align="center" prop="acbackground">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
         </template>

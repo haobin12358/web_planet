@@ -280,6 +280,11 @@ export const asyncRouterMap = [
         component: () => import('src/views/activity/index'),
         meta: {title: '活动管理',noCache: true, roles: level2}
       }, {
+        path: 'firstOrder',
+        name: 'FirstOrder',
+        component: () => import('src/views/activity/firstOrder'),
+        meta: {title: '新人首单',noCache: true, roles: level2}
+      }, {
         path: 'guess',
         name: 'Guess',
         component: () => import('src/views/activity/guess'),
@@ -294,11 +299,6 @@ export const asyncRouterMap = [
         name: 'TrialProduct',
         component: () => import('src/views/activity/trialProduct'),
         meta: {title: '试用商品',noCache: true, roles: level2}
-      }, {
-        path: 'firstOrder',
-        name: 'FirstOrder',
-        component: () => import('src/views/activity/firstOrder'),
-        meta: {title: '新人首单',noCache: true, roles: level2}
       },
 
       //  供应商
