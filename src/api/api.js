@@ -1,6 +1,5 @@
-// const title = 'http://10.0.0.119:7443/';
-// const title = 'http://120.79.182.43:7443/';
-const title = 'https://planet.daaiti.cn/api/v1/';
+// const title = 'https://planet.daaiti.cn/api/v1/';
+const title = 'http://47.110.149.143/api/v1/';
 
 const api={
   login: title + 'user/login',                                   // 用户登录
