@@ -30,7 +30,7 @@
     </section>
 
 
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%"
+    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" :cell-class-name="cellFunction"
               @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column
@@ -45,7 +45,7 @@
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
         <template slot-scope="scope">
-          {{`${scope.row.category[0].pcname}->${scope.row.category[1].pcname}->${scope.row.category[2].pcname}`}}
+          {{`${scope.row.category[0].pcname} / ${scope.row.category[1].pcname} / ${scope.row.category[2].pcname}`}}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
@@ -236,6 +236,11 @@
       pageChange(page) {
         this.currentPage = page;
         this.getProduct();
+      },
+      cellFunction({row, column}) {
+        if (['prprice', 'prsalesvalue'].includes(column.property)) {
+          return 'money-cell'
+        }
       },
 
       doAddProduct() {

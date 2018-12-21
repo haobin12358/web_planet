@@ -49,7 +49,7 @@ export const constantRouterMap = [
         path: 'profile',
         name: 'ProfileIndex',
         component: () => import('src/views/profile/index'),
-        meta: {title: '概况', icon: 'gailan', noCache: true}
+        meta: {title: '概览', icon: 'gailan', noCache: true}
       }
     ]
   },

@@ -27,8 +27,7 @@
       </el-form>
     </section>
 
-
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%"
+    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" :cell-class-name="cellFunction"
               @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column type="index"></el-table-column>
@@ -42,7 +41,7 @@
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
         <template slot-scope="scope">
-          {{`${scope.row.category[0].pcname}->${scope.row.category[1].pcname}->${scope.row.category[2].pcname}`}}
+          {{`${scope.row.category[0].pcname} / ${scope.row.category[1].pcname} / ${scope.row.category[2].pcname}`}}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prstocks" label="库存"></el-table-column>
@@ -199,6 +198,11 @@
       },
       handleSelectionChange(val) {
         this.selectedRows = val;
+      },
+      cellFunction({row, column}) {
+        if (['ommount', 'omfreight', 'omtruemount'].includes(column.property)) {
+          return 'money-cell'
+        }
       },
 
       doPassOne(row) {

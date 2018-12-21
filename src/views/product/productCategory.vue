@@ -28,6 +28,9 @@
         </template>
       </el-table-column>
       <el-table-column label="排序" align="center" width="150" prop="pcsort">
+        <template slot-scope="scope">
+          <el-input v-model.number="scope.row.pcsort" @keyup.native.enter="changeCaSort(scope.row)" ></el-input>
+        </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
@@ -55,7 +58,7 @@
           <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="pcsort">
-          <el-input v-model.number="categroyForm.pcsort"></el-input>
+          <input v-model.number="categroyForm.pcsort">
         </el-form-item>
 
         <el-form-item label="图片" prop="pcpic">
@@ -295,6 +298,34 @@
             }
           }
         )
+      },
+
+      changeCaSort(row){
+        let updateRow = {
+          pcid: row.pcid,
+          parentpcid: row.parentpcid,
+          pcname: row.pcname,
+          pcdesc: row.pcdesc,
+          pcsort: row.pcsort,
+          pcpic: row.pcpic,
+          pctoppic: row.pctoppic,
+        }
+
+        this.$http.post(this.$api.update_category, updateRow).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.$notify({
+                title: `排序改动成功`,
+                message: `分类名称:${row.pcname}`,
+                type: 'success'
+              });
+              this.setCategory();
+            }
+          }
+        );
       },
 
       //  初始化表单

@@ -222,7 +222,7 @@
 
     <section class="tool-tip-wrap pin-right-bottom">
       <el-button type="primary" @click="checkFormData(true)">保存并跳转</el-button>
-      <el-button type="primary" @click="checkFormData(false)">保存不跳转</el-button>
+      <el-button type="primary" @click="checkFormData(false)">保存并停留</el-button>
     </section>
 
     <!--规格排序dialog-->
