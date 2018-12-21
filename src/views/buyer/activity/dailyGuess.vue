@@ -38,15 +38,21 @@
         <div class="m-text-bg">
           <div class="m-rule-title">活动规则</div>
           <div class="m-rule-row">
-            <div class="m-rule-no">1</div>
+            <div>
+              <div class="m-rule-no">1</div>
+            </div>
             <div>{{rule.acdesc[0]}}</div>
           </div>
           <div class="m-rule-row">
-            <div class="m-rule-no">2</div>
+            <div>
+              <div class="m-rule-no">2</div>
+            </div>
             <div>{{rule.acdesc[1]}}</div>
           </div>
           <div class="m-rule-row">
-            <div class="m-rule-no">3</div>
+            <div>
+              <div class="m-rule-no">3</div>
+            </div>
             <div>{{rule.acdesc[2]}}</div>
           </div>
           <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
@@ -568,7 +574,9 @@
           }
           .m-rule-row {
             display: flex;
+            text-align: left;
             .m-rule-no {
+              text-align: center;
               width: 30px;
               height: 30px;
               font-size: 30px;
