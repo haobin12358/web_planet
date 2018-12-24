@@ -322,7 +322,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'SettingIndex',
         component: () => import('src/views/setting/index'),
-        meta: {title: '激活码',noCache: true, roles: level2}
+        meta: {title: '激活码打款',noCache: true, roles: level2}
       }, {
         path: 'manager',
         name: 'Manager',
