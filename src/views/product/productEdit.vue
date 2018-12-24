@@ -521,7 +521,7 @@
       addOneSku() {
         this.formData.skus.push({
           skupic: "",
-          skuprice: 0,
+          skuprice:this.formData.prprice || 0,
           skustock: 0,
           skuattritedetail: new Array(this.formData.prattribute.length)
         });
@@ -697,7 +697,7 @@
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                  data = res.data.data;
+                    data = res.data.data;
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');

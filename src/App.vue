@@ -8,6 +8,10 @@
 export default {
   name: 'App',
 
+  data: {
+      interval: null,
+  },
+
   computed:{
     cachedViews() {
       return this.$store.state.tagsView.cachedViews
@@ -17,8 +21,13 @@ export default {
     },
   },
 
+  destroyed(){
+
+  },
+
   created(){
-    // this.$store.commit('InitInfo');
+
+
   }
 }
 </script>

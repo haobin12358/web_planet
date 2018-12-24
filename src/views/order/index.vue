@@ -55,25 +55,29 @@
       <el-tab-pane label="已取消" name="-40"></el-tab-pane>
     </el-tabs>
 
-    <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small"
-              style="width: 100%" @row-click="expandRow" :cell-class-name="cellFunction">
-      <!--<el-table-column type="expand">-->
-      <!--<template slot-scope="props">-->
-      <!--<el-table :data="props.row.product_list" size="small" stripe :cell-class-name="subCellFunction"-->
-      <!--style="width: 100%">-->
-      <!--<el-table-column prop="img" align="center" label="图片" width="180">-->
-      <!--<template slot-scope="scope">-->
-      <!--<img v-lazy="scope.row.PRimage" :key="scope.row.PRimage" class="table-pic" alt="">-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column prop="PRname" align="center" label=" 商品名" width="240"></el-table-column>-->
-      <!--<el-table-column prop="PRprice" align="center" label="单价" width="120"></el-table-column>-->
-      <!--<el-table-column prop="colorname" align="center" label="颜色" width="120"></el-table-column>-->
-      <!--<el-table-column prop="sizename" align="center" label="尺码" width="120"></el-table-column>-->
-      <!--<el-table-column prop="number" align="center" label="数量" width="120"></el-table-column>-->
-      <!--</el-table>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
+    <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="true"
+              style="width: 100%" @row-dblclick="expandRow" :cell-class-name="cellFunction">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-table :data="props.row.order_part" size="small" stripe style="width: 100%">
+            <el-table-column prop="prmainpic" align="center" label="图片" width="180">
+              <template slot-scope="scope">
+                <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+              </template>
+            </el-table-column>
+            <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
+            <el-table-column label="规格" width="240">
+              <template slot-scope="scope">
+                <span
+                  v-for="(item,index) in scope.row.skuattritedetail">{{scope.row.prattribute[index]}}: {{item}};</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="opnum" align="center" label="数量" width="120"></el-table-column>
+            <el-table-column prop="skuprice" align="center" label="单价" width="120"></el-table-column>
+            <el-table-column prop="opsubtruetotal" align="center" label="总价" width="120"></el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
       <el-table-column prop="omno" align="center" label="订单号" width="280"></el-table-column>
       <el-table-column prop="pbname" align="center" label="品牌" width="180">
         <template slot-scope="scope">
@@ -101,9 +105,11 @@
       <el-table-column prop="ommessage" label="备注" width="180" align="center" show-tooltip-overflow></el-table-column>
       <el-table-column prop="createtime" label="下单时间" align="center" width="180"></el-table-column>
 
-      <el-table-column label="操作" width="120" fixed="right" align="center">
+      <el-table-column label="操作" width="200" fixed="right" align="center">
         <template slot-scope="scope">
-          <el-button type="text">查看
+          <el-button type="text" @click="gotoOrderDetail(scope.row)">查看</el-button>
+          <el-button type="text" v-if="scope.row.omstatus == 0" class="warning-text" @click="doCancelOrder(scope.row)">
+            取消订单
           </el-button>
           <!--<el-button v-if="scope.row.OIstatus == 3" type="text" size="small"-->
           <!--@click.stop="gotoOrderDetail(scope.row)">查看-->
@@ -130,10 +136,14 @@
 </template>
 
 <script>
+  import TableCellImg from "src/components/TableCellImg";
+
   export default {
     name: 'OrderIndex',
 
-    components: {},
+    components: {
+      TableCellImg
+    },
 
     data() {
       return {
@@ -216,6 +226,39 @@
       pageChange(page) {
         this.currentPage = page;
         this.setOrderList();
+      },
+
+      gotoOrderDetail(row) {
+        this.$router.push({
+          path: `/order/orderDetail`,
+          query: {
+            omid: row.omid
+          }
+        })
+      },
+      doCancelOrder(row) {
+        this.$confirm(`确认取消订单(${row.omno})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.cancle_order, {
+              omid: row.omid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.setOrderList();
+                  this.$notify({
+                    title: '订单取消成功',
+                    message: `订单号:${row.omno}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+
+          }
+        )
       },
     },
 

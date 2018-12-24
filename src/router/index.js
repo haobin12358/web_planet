@@ -118,14 +118,20 @@ export const asyncRouterMap = [
     path: '/order',
     component: Layout,
     redirect: 'order',
-    meta: {title: '订单', icon: 'dingdan', roles: level2},
+    meta: {title: '订单', icon: 'dingdan', roles: level1},
     children: [
       {
         path: 'order',
         name: 'OrderIndex',
         component: () => import('src/views/order/index'),
-        meta: {title: '订单',noCache: true, icon: 'dingdan', roles: level2}
-      }
+        meta: {title: '订单',noCache: true, icon: 'dingdan', roles: level1}
+      },{
+        path: 'orderDetail',
+        name: 'OrderDetail',
+        hidden: true,
+        component: () => import('src/views/order/orderDetail'),
+        meta: {title: '订单详情',noCache: true, roles: level1}
+      },
     ]
   },
 

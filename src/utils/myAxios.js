@@ -38,11 +38,6 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       showClose: true,
     })
   }
-  // if (data.data.status == 405 && data.data.status_code == 405003) {
-  //   location.href = location.origin;
-  //   localStorage.setItem('token', '');
-  //   this.$notify()
-  // }
 
   return data
 }, error => {
