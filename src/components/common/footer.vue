@@ -134,6 +134,8 @@
         handler: function(val, oldVal) {
           if(val.path == '/activity') {
             this.is_weixin = common.isWeixin();
+          }else {
+            this.is_weixin = true;
           }
           switch (val.path) {
             case '/selected':
