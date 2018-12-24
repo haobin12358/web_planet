@@ -15,7 +15,7 @@
     </section>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="usual">已上架</el-menu-item>
-      <el-menu-item index="auditing">审核中</el-menu-item>
+      <!--<el-menu-item index="auditing">审核中</el-menu-item>-->
       <el-menu-item index="refuse">已下架</el-menu-item>
     </el-menu>
     <el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">
