@@ -3,12 +3,12 @@
     <block-title title="圈子资讯"></block-title>
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
-        <el-form-item label="标题/作者/摘要">
-          <el-input></el-input>
+        <el-form-item label="标题 / 摘要">
+          <el-input v-model="kw"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="handleSelect(nestatus)">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="resetSearch">重置</el-button>
         </el-form-item>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="addCircle">新增</el-button>
@@ -153,6 +153,11 @@
             this.circleLoading = false;
           }
         })
+      },
+      // 重置搜索框
+      resetSearch() {
+        this.kw = '';
+        this.handleSelect(this.nestatus);  // 获取不同状态的圈子资讯内容
       },
       addCircle() {
         this.$router.push('/circle/editCircle');
