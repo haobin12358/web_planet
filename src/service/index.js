@@ -19,3 +19,8 @@ export const supplizerLogin = (mobile, password) => axios(api.supplizer_login, {
   },
 });
 
+export const authRefresh = (mobile, password) => axios(api.auth_fresh, {
+  noLoading: true,
+  method: 'get',
+});
+

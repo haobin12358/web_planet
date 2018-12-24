@@ -1,7 +1,10 @@
-const title = 'https://planet.daaiti.cn/api/v1/'
+const dev = true;  //  放正式服务器改成false再打包
+const title = dev ? 'https://planet.daaiti.cn/api/v1/' : 'http://47.110.149.143/api/v1/';
 
 const api = {
   login: title + 'user/admin_login',                                      //用户登录
+  auth_fresh: title + 'auth/fresh',                                       //刷新token
+
   get_admin_list: title + 'user/get_admin_list',                          //获取管理员列表
   add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        //添加管理员
   get_admin_all_type: title + 'user/get_admin_all_type',                  //获取管理员身份
@@ -45,13 +48,18 @@ const api = {
   order_count: title + 'order/count',                                     //获取订单数量
   get_omfilter: title + 'order/get_omfilter',                             //获取订单filter
   update_order_status: title + 'order/update_order_status',               //更新订单状态
+  update_order_price: title + 'order/update_price',                       //待支付订单改价
+  cancle_order: title + 'order/cancle',                                   //取消订单
+
+  get_list_company: title + 'logistic/list_company',                      //快递公司
+  send_order: title + 'logistic/send',                                    //发货
+  get_logistic: title + 'logistic/get',                                   //获取物流
 
 
   supplizer_list: title + 'supplizer/list',                               //供应商列表
   create_supplizer: title + 'supplizer/create',                           //新增
   update_supplizer: title + 'supplizer/update',                           //修改
   get_supplizer: title + 'supplizer/get',                                 //获取供应商
-
 
 
   //  审批
