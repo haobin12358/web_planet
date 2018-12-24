@@ -12,8 +12,8 @@
       <el-table-column align="center" prop="qoname" label="问题类型名称" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" align="center" fixed="right">
         <template slot-scope="scope">
-          <!--<el-button type="text" @click="handleTypeCurrentChange(scope.row)">查看</el-button>-->
-          <el-button type="text" @click="editType(scope.row)">编辑</el-button>
+          <el-button type="text" @click="handleTypeCurrentChange(scope.row)">查看</el-button>
+          <el-button type="text" class="warning-text" @click="editType(scope.row)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteType(scope.row)">删除</el-button>
         </template>
       </el-table-column>
