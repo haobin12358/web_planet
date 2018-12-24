@@ -146,7 +146,7 @@ export const asyncRouterMap = [
         path: 'distributor',
         name: 'Distributor',
         component: () => import('src/views/user/distributor'),
-        meta: {title: '分销商', noCache: true,roles: level2}
+        meta: {title: '分销商', icon: 'yes', noCache: true,roles: level2}
       },
 
       {
@@ -203,6 +203,11 @@ export const asyncRouterMap = [
         name: 'Attendance',
         component: () => import('src/views/marketing/attendance'),
         meta: {title: '签到设置', noCache: true,roles: level2}
+      }, {
+        path: 'indexBanner',
+        name: 'IndexBanner',
+        component: () => import('src/views/marketing/indexBanner'),
+        meta: {title: '首页轮播图', noCache: true, roles: level2 }
       },
     ]
   },
@@ -328,7 +333,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'SettingIndex',
         component: () => import('src/views/setting/index'),
-        meta: {title: '激活码打款',noCache: true, roles: level2}
+        meta: {title: '激活码打款', icon: 'yes', noCache: true, roles: level2}
       }, {
         path: 'manager',
         name: 'Manager',

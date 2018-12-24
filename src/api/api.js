@@ -87,8 +87,12 @@ const api = {
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
 
   list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
-  act_code_get_rule: title + 'act_code/get_rule',                                 // 设置激活码规则
-  act_code_set_rule: title + 'act_code/rule',                                 // 设置激活码规则
+  act_code_get_rule: title + 'act_code/get_rule',                         // 获取激活码规则
+  act_code_set_rule: title + 'act_code/rule',                             // 设置激活码规则
+
+  list_banner: title + 'index/list_banner',                               // 获取首页轮播图
+  set_banner: title + 'index/set_banner',                                 // 设置首页轮播图
+  update_banner: title + 'index/update_banner',                           // 修改首页轮播图
 };
 
 export default api
