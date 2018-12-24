@@ -85,8 +85,8 @@
           </template>
 
           <el-form-item>
-            <el-button type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>
-            <el-button type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货
+            <el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>
+            <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货
             </el-button>
             <el-popover placement="left" trigger="hover">
               <el-steps direction="vertical" :active="1">
@@ -275,6 +275,7 @@
                 this.showSteps = cancelSteps;
                 this.orderStep = 2;
               } else { //  普通流程
+                // this.showSteps = normalSteps;
                 switch (data.omstatus) {
                   case 0:
                     this.orderStep = 0;
