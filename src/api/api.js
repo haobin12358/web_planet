@@ -1,12 +1,13 @@
 const title = 'https://planet.daaiti.cn/api/v1/'
 
 const api = {
-  login: title + 'user/admin_login',                                      //用户登录
-  get_admin_list: title + 'user/get_admin_list',                          //获取管理员列表
-  add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        //添加管理员
-  get_admin_all_type: title + 'user/get_admin_all_type',                  //获取管理员身份
-  update_admin: title + 'user/update_admin',                              //更新管理员
-  update_admin_password: title + 'user/update_admin_password',            //修改密码
+  login: title + 'user/admin_login',                                      // 用户登录
+  add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        // 添加管理员
+  update_admin: title + 'user/update_admin',                              // 更新管理员信息
+  get_admin_list: title + 'user/get_admin_list',                          // 获取管理员列表
+  get_admin_all_status: title + 'user/get_admin_all_status',              // 获取所有管理员的状态
+  get_admin_all_type: title + 'user/get_admin_all_type',                  // 获取管理员所有的身份
+  update_admin_password: title + 'user/update_admin_password',            // 管理员更新密码
 
   supplizer_login: title + 'user/supplizer_login',                        //供应商登录
   update_supplizer_password: title + 'supplizer/change_password',         //供应商修改密码
@@ -75,6 +76,10 @@ const api = {
   update_news: title + 'news/update_news',                                // 修改资讯
   del_news: title + 'news/del_news',                                      // 删除资讯
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
+
+  list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
+  act_code_get_rule: title + 'act_code/get_rule',                                 // 设置激活码规则
+  act_code_set_rule: title + 'act_code/rule',                                 // 设置激活码规则
 };
 
 export default api
