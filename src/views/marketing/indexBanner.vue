@@ -69,10 +69,12 @@
             msg = '此轮播图当前会展示'
           }
         }else if(where == 'edit') {         // 编辑banner
-
+          return false;
         }else if(where == 'delete') {       // 删除banner
-          params.isdelete = true
+          params.isdelete = true;
+          this.bannerList.splice(scope.$index, 1)
         }
+        return false;
         this.$http.post(this.$api.update_banner, params).then(res => {
           if (res.data.status == 200) {
             this.$notify({
