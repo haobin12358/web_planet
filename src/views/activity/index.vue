@@ -38,7 +38,7 @@
       // 获取所有活动
       getActivity() {
         this.activityLoading = true;
-        this.$http.get(this.$api.activity_list).then(res => {
+        this.$http.get(this.$api.activity_list, { noLoading: true }).then(res => {
           if (res.data.status == 200) {
             this.activityList = res.data.data;
             this.activityLoading = false;

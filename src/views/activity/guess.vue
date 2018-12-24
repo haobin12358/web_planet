@@ -30,6 +30,7 @@
                         range-separator="至" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item>
+        选择商品
         <el-button type="primary">保 存</el-button>
       </el-form-item>
     </el-form>

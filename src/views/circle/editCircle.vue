@@ -13,7 +13,7 @@
               accept="image/*"
               :on-success="handleMainPicSuccess"
               :before-upload="beforeImgUpload">
-              <img v-if="circleForm.nemainpic" v-lazy="circleForm.nemainpic" class="avatar circle-avatar">
+              <img v-if="circleForm.nemainpic" v-lazy="circleForm.nemainpic" class="avatar circle-main-img">
               <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
               <div slot="tip" class="el-upload__tip">
                 建议为750 * 360，大小不要超过15M，上传成功后会显示，上传大图请耐心等待
@@ -63,7 +63,7 @@
               accept="video/*"
               :on-success="handleVideoSuccess"
               :before-upload="beforeVideoUpload">
-              <img v-if="video.video_thum" v-lazy="video.video_thum" class="avatar circle-avatar">
+              <img v-if="video.video_thum" v-lazy="video.video_thum" class="avatar circle-main-img">
               <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
               <div slot="tip" class="el-upload__tip">
                 建议为750 * 360，大小不要超过20M，上传成功后会显示，上传文件较大时请耐心等待
@@ -418,10 +418,6 @@
       width: 300px;
       height: 144px;
       line-height: 144px;
-    }
-    .circle-avatar {
-      width: 300px;
-      height: 144px;
     }
     .page-box {
       margin: 20px 0 -20px 0;
