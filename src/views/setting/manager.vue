@@ -1,26 +1,17 @@
 <template>
-    <div class="container">
-      管理员管理
-    </div>
+  <div class="container">
+
+  </div>
 </template>
 
 <script>
   export default {
     name: 'Manager',
-
-    components: {},
-
     data() {
       return {}
     },
-
-    computed: {},
-
-    methods: {},
-
-    created() {
-
-    }
+    components: {},
+    methods: {}
   }
 </script>
 
@@ -29,5 +20,5 @@
 
   .container {
 
-    }
+  }
 </style>

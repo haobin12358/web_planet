@@ -7,6 +7,7 @@ const api = {
 
   get_admin_list: title + 'user/get_admin_list',                          //获取管理员列表
   add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        //添加管理员
+  get_admin_all_status: title + 'user/get_admin_all_status',              // 获取所有管理员的状态
   get_admin_all_type: title + 'user/get_admin_all_type',                  //获取管理员身份
   update_admin: title + 'user/update_admin',                              //更新管理员
   update_admin_password: title + 'user/update_admin_password',            //修改密码
@@ -62,6 +63,7 @@ const api = {
   get_supplizer: title + 'supplizer/get',                                 //获取供应商
 
 
+
   //  审批
   agree_product: title + 'product/agree_product',                         // 同意上架商品
 
@@ -79,6 +81,14 @@ const api = {
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情
+  create_news: title + 'news/create_news',                                // 发布资讯
+  update_news: title + 'news/update_news',                                // 修改资讯
+  del_news: title + 'news/del_news',                                      // 删除资讯
+  coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
+
+  list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
+  act_code_get_rule: title + 'act_code/get_rule',                                 // 设置激活码规则
+  act_code_set_rule: title + 'act_code/rule',                                 // 设置激活码规则
 };
 
 export default api
