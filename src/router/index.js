@@ -313,11 +313,17 @@ export const asyncRouterMap = [
         name: 'MagicGiftBox',
         component: () => import('src/views/activity/magicGiftBox'),
         meta: {title: '魔术礼盒',noCache: true, roles: level2}
-      }, {
+      },
+      {
         path: 'trialProduct',
         name: 'TrialProduct',
         component: () => import('src/views/activity/trialProduct'),
         meta: {title: '试用商品',noCache: true, roles: level2}
+      },{
+        path: 'trialProductEdit',
+        name: 'TrialProductEdit',
+        component: () => import('src/views/activity/trialProductEdit'),
+        meta: {title: '试用商品编辑',noCache: true, roles: level2}
       },
 
       //  供应商

@@ -77,7 +77,10 @@ const api = {
 
   activity_list: title + 'activity/list',                                 // 获取正在进行中的活动
   activity_update: title + 'activity/update',                             // 修改活动基础信息
+
+  get_commodity: title + 'commodity/get',                                 // 获取试用商品
   commodity_add: title + 'commodity/add',                                 // 添加试用商品
+  del_commodity: title + 'commodity/del',                                 // 删除试用商品
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情
