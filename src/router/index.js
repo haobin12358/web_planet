@@ -207,7 +207,7 @@ export const asyncRouterMap = [
         path: 'indexBanner',
         name: 'IndexBanner',
         component: () => import('src/views/marketing/indexBanner'),
-        meta: {title: '首页轮播图', noCache: true, roles: level2 }
+        meta: {title: '首页轮播图', icon: 'yes', noCache: true, roles: level2 }
       },
     ]
   },

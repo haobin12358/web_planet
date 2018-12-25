@@ -14,7 +14,7 @@
           <table-cell-img :src="scope.row.ibpic" :key="scope.row.ibpic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="对应商品" align="center" prop="prtitle"></el-table-column>
+      <el-table-column label="对应商品" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="不展示/展示" align="center" prop="ibshow">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.ibshow" @change="editBanner(scope, 'ibshow')" active-color="#409EFF" inactive-color="#DBDCDC">
