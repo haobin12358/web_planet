@@ -216,7 +216,7 @@
   @import "../../../common/css/personal";
 
   .m-add-product {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
     padding: 20px;
     .m-content-radius {

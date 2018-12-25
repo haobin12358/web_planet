@@ -316,7 +316,7 @@
       .m-box-tip {
         position: absolute;
         top: 10px;
-        left: 150px;
+        left: 170px;
         color: #ffffff;
         padding-top: 23px;
         z-index: 10;

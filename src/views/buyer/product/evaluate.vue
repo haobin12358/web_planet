@@ -167,6 +167,7 @@
     }
   }
   .m-evaluate-content{
+    min-height: 100vh;
     background-color: #EEEEEE;
     padding-bottom: 20px;
   }

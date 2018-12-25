@@ -249,7 +249,7 @@
   @import "../../../common/css/index";
 
   .m-IDCard-box {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
     .m-IDCard-bg {
       width: 750px;

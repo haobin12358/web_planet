@@ -113,7 +113,7 @@
   @import "../../../common/css/personal";
 
   .m-delivery {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
     padding: 40px 48px;
     .m-content-radius {

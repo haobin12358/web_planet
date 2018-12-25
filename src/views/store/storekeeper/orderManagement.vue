@@ -189,7 +189,7 @@
   @import "../../../common/css/index";
 
   .m-order-management {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
     .m-nav{
       width: 706px;

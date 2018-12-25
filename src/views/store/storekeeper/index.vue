@@ -330,7 +330,7 @@
   @import "../../../common/css/index";
 
   .m-storekeeper {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
     /*padding-bottom: 300px;*/
     .m-storekeeper-bg {

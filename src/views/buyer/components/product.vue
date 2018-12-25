@@ -6,7 +6,8 @@
         <h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>
         <p class="m-flex-between">
           <span >￥{{item.prprice | money}}</span>
-          <s class="m-grey">￥{{item.prprice | money}}</s></p>
+          <s class="m-grey">￥{{item.prprice | money}}</s>
+        </p>
       </div>
     </li>
   </ul>
@@ -72,6 +73,14 @@
       }
       .m-one-product-text{
         padding: 15px;
+        .m-flex-between {
+          font-size: 21px;
+          text-align: left;
+          width: 300px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
       h3{
         width: 300px;

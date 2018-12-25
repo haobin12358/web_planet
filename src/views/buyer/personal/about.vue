@@ -40,7 +40,7 @@
   @import "../../../common/css/personal";
 
   .m-personal {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
   }
   .m-copy-right {

@@ -124,7 +124,7 @@
   @import "../../../common/css/index";
 
   .m-fans-management {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #EEEEEE;
     .m-fans-num {
       font-size: 24px;
