@@ -16,7 +16,7 @@
               <img v-if="circleForm.nemainpic" v-lazy="circleForm.nemainpic" class="avatar circle-main-img">
               <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
               <div slot="tip" class="el-upload__tip">
-                建议为750 * 360，大小不要超过15M，上传成功后会显示，上传大图请耐心等待
+                建议为750 * 360，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
               </div>
             </el-upload>
           </el-form-item>
@@ -50,7 +50,7 @@
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">
-                <span>可多选，最多4张，大小不要超过15M，上传成功后会显示，上传大图请耐心等待</span>
+                <span>可多选，最多4张，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待</span>
                 <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
               </div>
             </el-upload>
