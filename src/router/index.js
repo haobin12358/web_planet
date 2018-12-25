@@ -239,12 +239,20 @@ export const asyncRouterMap = [
         name: 'WithdrawAudit',
         component: () => import('src/views/approval/withdrawAudit'),
         meta: {title: '提现审批',noCache: true, roles: level2}
-      }, {
+      },
+      {
         path: 'returnProductAudit',
         name: 'ReturnProductAudit',
         component: () => import('src/views/approval/returnProductAudit'),
-        meta: {title: '退货审批', noCache: true,roles: level2}
+        meta: {title: '退货审批', noCache: false,roles: level2}
       }, {
+        path: 'returnProdOrderDetail',
+        name: 'ReturnProdOrderDetail',
+        hidden: true,
+        component: () => import('src/views/approval/returnProdOrderDetail'),
+        meta: {title: '退货订单详情', noCache: true,roles: level2}
+      },
+      {
         path: 'agentAudit',
         name: 'AgentAudit',
         component: () => import('src/views/approval/agentAudit'),

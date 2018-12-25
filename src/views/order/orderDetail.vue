@@ -69,8 +69,8 @@
                   :key="group.label"
                   :label="group.label">
                   <el-option
-                    v-for="item in group.options"
-                    :key="item.lccode"
+                    v-for="(item,index) in group.options"
+                    :key="index"
                     :label="item.lcname"
                     :value="item.lccode">
                   </el-option>
@@ -88,11 +88,13 @@
             <el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>
             <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货
             </el-button>
-            <el-popover placement="left" trigger="hover">
-              <el-steps direction="vertical" :active="1">
-                <el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"
-                         :description="item.status"></el-step>
-              </el-steps>
+            <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover" >
+              <div style="padding: 20px">
+                <el-steps direction="vertical" :active="orderLogisticsList.length">
+                  <el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"
+                           :description="item.status"></el-step>
+                </el-steps>
+              </div>
               <el-button slot="reference" icon="el-icon-search">查看物流</el-button>
             </el-popover>
           </el-form-item>
@@ -101,7 +103,7 @@
     </section>
 
     <block-title title="发货清单"></block-title>
-    <el-table :data="order.order_part" size="small" stripe style="width: 100%">
+    <el-table :data="order.order_part" size="small" stripe style="width: 100%" :row-class-name="tableRowClassName">
       <el-table-column prop="prmainpic" align="center" label="图片" width="180">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
@@ -110,13 +112,17 @@
       <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
       <el-table-column align="center" label="规格">
         <template slot-scope="scope">
-          <span
-            v-for="(item,index) in scope.row.skuattritedetail">{{`${scope.row.prattribute[index]}: ${item}; `}}</span>
+          <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="opnum" align="center" label="数量" width="120"></el-table-column>
       <el-table-column prop="skuprice" align="center" label="单价" width="120"></el-table-column>
       <el-table-column prop="opsubtruetotal" align="center" label="总价" width="120"></el-table-column>
+      <el-table-column prop="opisinora" align="center" label="退款中" width="120">
+        <template slot-scope="scope">
+          {{scope.row.opisinora || order.ominrefund ? '是':'否'}}
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -193,6 +199,27 @@
     computed: {},
 
     methods: {
+      tableRowClassName({row, rowIndex}){
+        if(row.opisinora || this.order.ominrefund){
+          return 'warning-row';
+        }
+
+        return ''
+      },
+      getSkuCellText(detail, attribute ){
+        let rst = '';
+
+        for (let i = 0; i < detail.length; i++) {
+          rst += attribute[i] + ': ' + detail[i];
+
+          if(i+1 < detail.length){
+            rst += ', '
+          }
+        }
+
+        return rst;
+      },
+
       doEditOrderPrice() {
         this.$refs.actionForm.validate(
           valid => {
@@ -258,6 +285,10 @@
         )
       },
 
+      orderIsSend(omstatus){
+          return  [20, 35, 30].includes(Number(omstatus))
+      },
+
       init() {
         this.$http.get(this.$api.get_order_by_LOid, {
           params: {
@@ -270,12 +301,12 @@
                 data = res.data.data;
 
               this.order = data;
-              //  步骤对应
               if (data.omstatus == -40) { //  取消
+                //  步骤对应
                 this.showSteps = cancelSteps;
                 this.orderStep = 2;
               } else { //  普通流程
-                // this.showSteps = normalSteps;
+                //  步骤对应
                 switch (data.omstatus) {
                   case 0:
                     this.orderStep = 0;
@@ -296,7 +327,8 @@
                     break;
                 }
 
-                if ([20, 35, 30].includes(Number(data.omstatus))){
+                //  发货中的处理下actionForm和物流信息
+                if (this.orderIsSend(data.omstatus)){
                   this.$http.get(this.$api.get_logistic, {
                     params: {
                       omid: this.order.omid
@@ -310,11 +342,13 @@
                         this.actionForm.olcompany = data.olcompany;
                         this.actionForm.olexpressno = data.olexpressno;
 
-                        this.orderLogisticsList = data.oldata.list;
+                        this.orderLogisticsList = data.oldata.list.reverse();
                       }
                     }
                   )
                 }
+
+                //  发货清单售后商品标明
               }
               //  改价
               this.actionForm.price = data.omtruemount;

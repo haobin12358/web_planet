@@ -38,9 +38,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="suname" label="供应商名称" width="180"></el-table-column>
-
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
-
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
       <el-table-column align="center" prop="sulinkphone" label="手机号" width="280"></el-table-column>
       <el-table-column align="center" prop="suaddress" label="地址" ></el-table-column>

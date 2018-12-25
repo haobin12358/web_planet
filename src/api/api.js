@@ -93,6 +93,8 @@ const api = {
   list_banner: title + 'index/list_banner',                               // 获取首页轮播图
   set_banner: title + 'index/set_banner',                                 // 设置首页轮播图
   update_banner: title + 'index/update_banner',                           // 修改首页轮播图
+
+  agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
 };
 
 export default api
