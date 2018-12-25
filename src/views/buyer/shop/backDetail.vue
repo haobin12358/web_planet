@@ -251,7 +251,7 @@
         line-height: 41px;
         text-align: center;
         border-radius: 30px;
-        border: 1px solid #ccc;
+        border: 2px solid #ccc;
         color: #999;
       }
     }
@@ -290,11 +290,12 @@
   }
   .m-input{
     display: inline-block;
-    width: 480px;
+    width: 440px;
     height: 50px;
     border: 1px solid #ccc;
     border-radius: 30px;
     margin: 10px 0;
+    padding: 20px 0;
   }
 }
 </style>
