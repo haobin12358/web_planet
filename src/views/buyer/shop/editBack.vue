@@ -160,6 +160,7 @@
         }
         this[v] = bool;
         if(this.picker_select == 'status_select') {
+          this.refund_select = null;
           // 获取退货原因
           this.getBack();
         }
