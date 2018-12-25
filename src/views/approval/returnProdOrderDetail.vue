@@ -96,12 +96,12 @@
         <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
         <!--</el-button>-->
         <el-popover v-if="order_refund" placement="left" trigger="hover">
-          <!--<div style="padding: 20px">-->
-          <!--<el-steps direction="vertical" :active="orderLogisticsList.length">-->
-          <!--<el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"-->
-          <!--:description="item.status"></el-step>-->
-          <!--</el-steps>-->
-          <!--</div>-->
+          <div style="padding: 20px">
+            <el-steps direction="vertical" :active="order_refund.orlogisticdata.list.length">
+            <el-step v-for="item in order_refund.orlogisticdata.list" :title="item.time" :key="item.time"
+            :description="item.status"></el-step>
+            </el-steps>
+          </div>
           <el-button slot="reference" icon="el-icon-search">查看物流</el-button>
         </el-popover>
       </section>
@@ -256,6 +256,7 @@
               } else {
                 this.order_refund_apply = data.order_refund_apply;
                 this.order_refund = data.order_refund;
+                this.order_refund.orlogisticdata.list = this.order_refund.orlogisticdata.list.reverse();
               }
 
               if (this.order_refund) {

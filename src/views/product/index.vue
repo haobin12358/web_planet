@@ -21,8 +21,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
-
         <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
         <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
       </el-form>
