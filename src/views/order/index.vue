@@ -147,6 +147,8 @@
         total: 0,
         currentPage: 1,
         pageSize: 10,
+
+        repeat: false,
       }
     },
 
@@ -314,7 +316,16 @@
       },
     },
 
+    activated(){
+      if(!this.repeat){
+        this.setOrderList();
+      }else{
+        this.repeat = false;
+      }
+    },
+
     created() {
+      this.repeat = true;
       this.setOrderList();
     }
   }

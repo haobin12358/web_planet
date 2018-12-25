@@ -315,10 +315,10 @@
                     this.orderStep = 1;
                     break;
                   case 20:
-                    this.orderStep = 2;
+                    this.orderStep = 3;
                     break;
                   case 35:
-                    this.orderStep = 3;
+                    this.orderStep = 4;
                     break;
                   case 30:
                     this.orderStep = 5;

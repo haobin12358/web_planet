@@ -124,7 +124,7 @@ export const asyncRouterMap = [
         path: 'order',
         name: 'OrderIndex',
         component: () => import('src/views/order/index'),
-        meta: {title: '订单',noCache: true, icon: 'dingdan', roles: level1}
+        meta: {title: '订单',noCache: false, icon: 'dingdan', roles: level1}
       },{
         path: 'orderDetail',
         name: 'OrderDetail',
@@ -244,7 +244,7 @@ export const asyncRouterMap = [
         path: 'returnProductAudit',
         name: 'ReturnProductAudit',
         component: () => import('src/views/approval/returnProductAudit'),
-        meta: {title: '退货审批', noCache: false,roles: level2}
+        meta: {title: '退货审批', icon: 'yes',noCache: false,roles: level2}
       }, {
         path: 'returnProdOrderDetail',
         name: 'ReturnProdOrderDetail',
