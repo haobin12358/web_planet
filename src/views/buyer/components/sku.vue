@@ -9,11 +9,11 @@
         </div>
         <div class="m-center">
           <p v-if="select_value">
-            <span class="m-red" v-if="select_value.skustock">￥{{select_value.skuprice | money}}</span>
+            <span class="m-red" v-if="select_value.skustock">￥{{select_value.skuprice}}</span>
             <span class="m-ft-26 m-red" v-if="select_value.skustock == 0">库存不足</span>
           </p>
           <p v-else>
-            <span class="m-red">￥{{product.prprice | money}}</span>
+            <span class="m-red">￥{{product.prprice}}</span>
           </p>
         </div>
         <div class="m-scroll">
