@@ -25,7 +25,7 @@
           <p>快递公司：<span @click="chooseCompany">{{companyName}}</span></p>
           <p v-if="order_refund.orlogisticsn">快递单号：{{order_refund.orlogisticsn}}</p>
           <p v-else>快递单号：
-            <input type="text" v-model="orlogisticsn" class="m-input">
+            <input type="text" v-model="orlogisticsn" class="m-input m-ft-22">
           </p>
           <p v-if="order_refund.orlogisticlostresult">物流近况：<span>{{order_refund.orlogisticlostresult.status}}</span></p>
           <!--快递公司picker-->
@@ -295,7 +295,7 @@
     border: 1px solid #ccc;
     border-radius: 30px;
     margin: 10px 0;
-    padding: 20px 0;
+    padding: 0 20px;
   }
 }
 </style>
