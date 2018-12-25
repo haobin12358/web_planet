@@ -87,20 +87,23 @@
           </p>
         </div>
 
-        <el-form-item>
-          <!--<el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>-->
-          <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
-          <!--</el-button>-->
-          <el-popover v-if="order_refund" placement="left" trigger="hover" >
-            <!--<div style="padding: 20px">-->
-              <!--<el-steps direction="vertical" :active="orderLogisticsList.length">-->
-                <!--<el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"-->
-                         <!--:description="item.status"></el-step>-->
-              <!--</el-steps>-->
-            <!--</div>-->
-            <el-button slot="reference" icon="el-icon-search">查看物流</el-button>
-          </el-popover>
-        </el-form-item>
+        <el-button style="margin-right: 10px;" type="primary" @click="doConfirmReceipt" v-if="order_refund.orstatus == 10">确认收货(退货订单)</el-button>
+        <template v-if="order_refund.orstatus == 20">
+          <el-button style="margin-right: 10px;" type="primary" @click="doConfirmBackMoney(true)" >确认退款(退货订单)</el-button>
+          <el-button style="margin-right: 10px;" type="danger" @click="doConfirmBackMoney(false)" >拒绝退款(退货订单)</el-button>
+        </template>
+
+        <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
+        <!--</el-button>-->
+        <el-popover v-if="order_refund" placement="left" trigger="hover">
+          <!--<div style="padding: 20px">-->
+          <!--<el-steps direction="vertical" :active="orderLogisticsList.length">-->
+          <!--<el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"-->
+          <!--:description="item.status"></el-step>-->
+          <!--</el-steps>-->
+          <!--</div>-->
+          <el-button slot="reference" icon="el-icon-search">查看物流</el-button>
+        </el-popover>
       </section>
     </section>
 
@@ -185,47 +188,103 @@
 
         return rst;
       },
+
+      //  确认收退货订单的物流
+      doConfirmReceipt(){
+        this.$confirm(`确认收货?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.back_confirm_recv,{
+              oraid: this.order_refund.oraid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.init();
+                  this.$notify({
+                    title: '收货成功',
+                    type: 'success'
+                  });
+                }
+              }
+            )
+
+          }
+        )
+      },
+      //  处理已收货的退货订单
+      doConfirmBackMoney(agree){
+        this.$confirm(`${agree ? '同意':'拒绝'}退款(退货订单)?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.back_confirm_refund,{
+              "oraid": this.order_refund.oraid,
+              "agree": agree
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.init();
+                  this.$notify({
+                    title: `退款已${agree ? '同意':'拒绝'}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+
+      init(){
+        this.$http.get(this.$api.get_order_by_LOid, {
+          params: {
+            omid: this.$route.query.omid
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              if (this.$route.query.opid) { //  订单商品
+                data.order_part = data.order_part.filter(item => item.opid == this.$route.query.opid)
+                this.order_refund_apply = data.order_part[0].order_refund_apply;
+                this.order_refund = data.order_part[0].order_refund;
+              } else {
+                this.order_refund_apply = data.order_refund_apply;
+                this.order_refund = data.order_refund;
+              }
+
+              if (this.order_refund) {
+                switch (this.order_refund.orstatus) {
+                  case 0:
+                    this.orderStep = 0;
+                    break;
+                  case 10:
+                    this.orderStep = 1;
+                    break;
+                  case 20:
+                    this.orderStep = 3;
+                    break;
+                  case 30:
+                    this.orderStep = 4;
+                    break;
+                }
+              }
+
+              this.order = data;
+            }
+          }
+        );
+      }
     },
 
 
     created() {
-      this.$http.get(this.$api.get_order_by_LOid, {
-        params: {
-          omid: this.$route.query.omid
-        }
-      }).then(
-        res => {
-          if (res.data.status == 200) {
-            let resData = res.data,
-              data = res.data.data;
-
-            if (this.$route.query.opid) { //  退货退款
-              data.order_part = data.order_part.filter(item => item.opid == this.$route.query.opid)
-              this.order_refund_apply = data.order_part[0].order_refund_apply;
-              this.order_refund = data.order_part[0].order_refund;
-
-              switch (this.order_refund.order_refund) {
-                case 0:
-                  this.orderStep = 0;
-                  break;
-                case 10:
-                  this.orderStep = 1;
-                  break;
-                case 20:
-                  this.orderStep = 2;
-                  break;
-                case 30:
-                  this.orderStep = 4;
-                  break;
-              }
-            } else {
-              this.order_refund_apply = data.order_refund_apply;
-            }
-
-            this.order = data;
-          }
-        }
-      );
+      this.init();
     },
   }
 </script>
