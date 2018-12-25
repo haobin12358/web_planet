@@ -8,8 +8,13 @@
           <img :src="product.prmainpic"  v-else alt="">
         </div>
         <div class="m-center">
-          <span class="m-red" v-if="select_value">￥{{select_value.skuprice}}</span>
-          <span class="m-red" v-else>￥{{product.prprice}}</span>
+          <p v-if="select_value">
+            <span class="m-red" v-if="select_value.skustock">￥{{select_value.skuprice | money}}</span>
+            <span class="m-ft-26 m-red" v-if="select_value.skustock == 0">库存不足</span>
+          </p>
+          <p v-else>
+            <span class="m-red">￥{{product.prprice | money}}</span>
+          </p>
         </div>
         <div class="m-scroll">
           <ul class="m-sku-box">
@@ -40,38 +45,37 @@
 
 <script>
     export default {
-        data(){
-          return{
-            select:[],
-            select_value:null,
-            num:1,
-          }
-        },
+      data(){
+        return{
+          select:[],
+          select_value:null,
+          num:1,
+        }
+      },
       props:{
-          product:{
+        product:{
+          type:Object,
+          default:null
+        },
+        now_select:{
             type:Object,
-            default:null
-          },
-          now_select:{
-              type:Object,
-            default:null
-          },
-          now_num:{
-            type:Number,
-            default:1
-          },
-          activity:{
-            type:Boolean,
-            default:false
-          }
+          default:null
+        },
+        now_num:{
+          type:Number,
+          default:1
+        },
+        activity:{
+          type:Boolean,
+          default:false
+        }
       },
       mounted(){
-          if(this.now_select){
-            this.select_value = this.now_select;
-            this.select = this.select_value.skuattritedetail;
-            this.num = this.now_num;
-          }
-
+        if(this.now_select){
+          this.select_value = this.now_select;
+          this.select = this.select_value.skuattritedetail;
+          this.num = this.now_num;
+        }
       },
       methods:{
         //  改变模态框
