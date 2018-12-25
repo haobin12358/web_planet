@@ -4,7 +4,6 @@
         <!--搜索-->
         <div class="m-selected-search">
           <span class="m-icon-home"></span>
-          <!--<span class="m-icon-home" @click="changeRoute('/giftBox')"></span>-->
           <div class="m-search-input-box" @click="changeRoute('/search')">
             <span class="m-icon-search"></span>
             <span>搜索商品</span>
@@ -14,7 +13,7 @@
         <div class="m-swipe">
           <mt-swipe :auto="3000" v-if="swipe_list">
             <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
-              <img :src="item.ibpic" class="img" alt="" >
+              <img :src="item.ibpic" class="img" @click="changeRoute('/product/detail', item)">
             </mt-swipe-item>
           </mt-swipe>
         </div>
@@ -297,19 +296,6 @@
         /*查看更多*/
         changeRoute(v, item) {
           switch(v) {
-            case '/giftBox':
-              /*axios.get(api.get_home + '?token=' + localStorage.getItem('token')).then(res => {
-                if(res.data.status == 200){
-                  if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包购买页
-                    this.$router.push({path:v});
-                  }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去身份认证页
-                    this.$router.push("/storekeeper/IDCardApprove");
-                  }else if(res.data.data.uslevel == "3") {      // 3 - 身份认证中 - 去身份认证页
-                    this.$router.push("/storekeeper/applyOwner");
-                  }
-                }
-              });*/
-              break;
             case 'equipment/detail':
               if(item){
                 this.$router.push({path:v,query:{pcid:item.pcid}});
@@ -319,6 +305,9 @@
               break;
             case '/brandDetail':
               this.$router.push({ path: v, query: { pbid: item.pbid,pbname: item.pbname }});
+              break;
+            case '/product/detail':
+              this.$router.push({ path: v, query: { prid: item.prid }});
               break;
             default:
               this.$router.push({path:v,});
