@@ -1,0 +1,300 @@
+<template>
+  <div class="container">
+    <template v-if="order_refund_apply.oraproductstatus == 0">
+      <block-title title="退货订单流程"></block-title>
+      <section class="tool-tip-wrap detail-section">
+        <el-steps :active="orderStep" align-center>
+          <el-step v-for="item in showSteps" :title="item.title" :key="item.title"
+                   :description="item.description"></el-step>
+        </el-steps>
+      </section>
+    </template>
+
+
+    <section class="detail-section row-two">
+      <section class="order-detail">
+        <h1 class="title">
+          订单详情
+        </h1>
+        <div class="detail-item-wrap">
+          <p class="detail-item">
+            <span class="label">订单号:</span>
+            <span class="value">{{order.omno}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">订单状态:</span>
+            <span class="value">{{order.omstatus_zh}}</span>
+          </p>
+
+          <p class="detail-item">
+            <span class="label">总价:</span>
+            <span class="value">￥ {{order.ommount}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">实付:</span>
+            <span class="value">￥ {{order.omtruemount}}</span>
+          </p>
+
+          <p class="detail-item">
+            <span class="label">下单时间:</span>
+            <span class="value">{{order.createtime}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">收件人:</span>
+            <span class="value">{{order.omrecvname}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">手机号:</span>
+            <span class="value">{{order.omrecvphone}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">收货地址:</span>
+            <span class="value">
+              {{order.omrecvaddress}}
+            </span>
+          </p>
+          <p class="detail-item">
+            <span class="label">买家留言:</span>
+            <span class="value">{{order.ommessage || '无'}}</span>
+          </p>
+
+        </div>
+      </section>
+      <section class="order-detail refund">
+        <h1 class="title">
+          售后详情
+        </h1>
+        <div class="detail-item-wrap">
+          <p class="detail-item">
+            <span class="label">审核状态:</span>
+            <span class="value">{{order_refund_apply.orastatus_zh}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">买家是否收到货:</span>
+            <span class="value">{{order_refund_apply.oraproductstatus_zh}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">售后期望:</span>
+            <span class="value">{{order_refund_apply.orastate_zh}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">买家退款原因:</span>
+            <span class="value">{{order_refund_apply.orareason}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">买家附加退款原因:</span>
+            <span class="value">{{order_refund_apply.oraaddtion}}</span>
+          </p>
+        </div>
+
+        <el-form-item>
+          <!--<el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>-->
+          <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
+          <!--</el-button>-->
+          <el-popover v-if="order_refund" placement="left" trigger="hover" >
+            <!--<div style="padding: 20px">-->
+              <!--<el-steps direction="vertical" :active="orderLogisticsList.length">-->
+                <!--<el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"-->
+                         <!--:description="item.status"></el-step>-->
+              <!--</el-steps>-->
+            <!--</div>-->
+            <el-button slot="reference" icon="el-icon-search">查看物流</el-button>
+          </el-popover>
+        </el-form-item>
+      </section>
+    </section>
+
+    <block-title title="售后商品"></block-title>
+    <el-table :data="order.order_part" stripe style="width: 100%" :row-class-name="tableRowClassName">
+      <el-table-column prop="prmainpic" align="center" label="图片" width="180">
+        <template slot-scope="scope">
+          <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+        </template>
+      </el-table-column>
+      <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
+      <el-table-column align="center" label="规格">
+        <template slot-scope="scope">
+          <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="opnum" align="center" label="数量" width="120"></el-table-column>
+      <el-table-column prop="skuprice" align="center" label="单价" width="120"></el-table-column>
+      <el-table-column prop="opsubtruetotal" align="center" label="总价" width="120"></el-table-column>
+      <el-table-column prop="opisinora" align="center" label="退款中" width="120">
+        <template slot-scope="scope">
+          {{scope.row.opisinora || order.ominrefund ? '是':'否'}}
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+
+<script>
+  import TableCellImg from "src/components/TableCellImg";
+
+  export default {
+    name: "ReturnProdOrderDetail",
+
+    components: {TableCellImg},
+
+    data() {
+      return {
+        orderStep: 0,
+        showSteps: [
+          {
+            title: '等待买家发货',
+            description: '',
+          }, {
+            title: '等待卖家收货',
+            description: '',
+          }, {
+            title: '卖家已收货',
+            description: '',
+          }, {
+            title: '已退款',
+            description: '',
+          },
+        ],
+
+        order: {},
+        order_refund_apply: {},
+        order_refund: null,
+      }
+    },
+
+    computed: {},
+
+    methods: {
+      tableRowClassName({row, rowIndex}) {
+        if (row.opisinora || this.order.ominrefund) {
+          return 'warning-row';
+        }
+
+        return ''
+      },
+      getSkuCellText(detail, attribute) {
+        let rst = '';
+
+        for (let i = 0; i < detail.length; i++) {
+          rst += attribute[i] + ': ' + detail[i];
+
+          if (i + 1 < detail.length) {
+            rst += ', '
+          }
+        }
+
+        return rst;
+      },
+    },
+
+
+    created() {
+      this.$http.get(this.$api.get_order_by_LOid, {
+        params: {
+          omid: this.$route.query.omid
+        }
+      }).then(
+        res => {
+          if (res.data.status == 200) {
+            let resData = res.data,
+              data = res.data.data;
+
+            if (this.$route.query.opid) { //  退货退款
+              data.order_part = data.order_part.filter(item => item.opid == this.$route.query.opid)
+              this.order_refund_apply = data.order_part[0].order_refund_apply;
+              this.order_refund = data.order_part[0].order_refund;
+
+              switch (this.order_refund.order_refund) {
+                case 0:
+                  this.orderStep = 0;
+                  break;
+                case 10:
+                  this.orderStep = 1;
+                  break;
+                case 20:
+                  this.orderStep = 2;
+                  break;
+                case 30:
+                  this.orderStep = 4;
+                  break;
+              }
+            } else {
+              this.order_refund_apply = data.order_refund_apply;
+            }
+
+            this.order = data;
+          }
+        }
+      );
+    },
+  }
+</script>
+
+<style lang="less" scoped>
+  @import "../../styles/myIndex";
+
+  .container {
+    .tool-tip-wrap {
+      padding: 40px;
+    }
+
+    .detail-section {
+      margin-bottom: 30px;
+    }
+
+    .row-two {
+      .fj();
+
+      .order-detail {
+        border: 1px dotted black;
+        flex: 1;
+        border-radius: 10px;
+        .fz(10px);
+        padding: 20px;
+        margin-right: 20px;
+
+        &.refund {
+          margin-right: 0;
+
+          .detail-item-wrap {
+            display: block;
+
+            .detail-item {
+              .label {
+                display: inline-block;
+                width: 120px;
+                text-align: right;
+              }
+            }
+          }
+        }
+
+        .title {
+          margin-bottom: 20px;
+          font-size: 20px;
+        }
+
+        .detail-item-wrap {
+          .fj();
+          flex-wrap: wrap;
+          .detail-item {
+            flex: 50%;
+            margin-bottom: 10px;
+            padding-right: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .order-action-block {
+        border: 1px dotted black;
+        flex: 1;
+        border-radius: 10px;
+        /*height: 10px;*/
+        padding: 20px;
+        box-sizing: border-box;
+      }
+    }
+  }
+</style>

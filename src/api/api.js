@@ -89,6 +89,8 @@ const api = {
   list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
   act_code_get_rule: title + 'act_code/get_rule',                                 // 设置激活码规则
   act_code_set_rule: title + 'act_code/rule',                                 // 设置激活码规则
+
+  agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
 };
 
 export default api

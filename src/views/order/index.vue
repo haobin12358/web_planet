@@ -44,22 +44,22 @@
       </el-switch>
     </section>
 
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="全部" name="-1"></el-tab-pane>
-      <el-tab-pane label="待支付" name="0"></el-tab-pane>
-      <el-tab-pane label="待发货" name="10"></el-tab-pane>
-      <el-tab-pane label="已发货" name="20"></el-tab-pane>
-      <el-tab-pane label="待评价" name="35"></el-tab-pane>
-      <el-tab-pane label="已完成" name="30"></el-tab-pane>
-      <el-tab-pane label="退货中" name="inrefund"></el-tab-pane>
-      <el-tab-pane label="已取消" name="-40"></el-tab-pane>
-    </el-tabs>
+    <el-menu :default-active="activeName" class="el-menu-demo" mode="horizontal" @select="handleClick">
+      <el-menu-item index="-1">全部</el-menu-item>
+      <el-menu-item index="0">待支付</el-menu-item>
+      <el-menu-item index="10">待发货</el-menu-item>
+      <el-menu-item index="20">已发货</el-menu-item>
+      <el-menu-item index="35">待评价</el-menu-item>
+      <el-menu-item index="30">已完成</el-menu-item>
+      <el-menu-item index="inrefund">退货中</el-menu-item>
+      <el-menu-item index="-40">已取消</el-menu-item>
+    </el-menu>
 
-    <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="true"
-              style="width: 100%" @row-dblclick="expandRow" :cell-class-name="cellFunction">
+    <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="expandAll"
+              style="width: 100%;" @row-dblclick="expandRow" :cell-class-name="cellFunction" :row-class-name="tableRowClassName">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.order_part" size="small" stripe style="width: 100%">
+          <el-table :data="props.row.order_part" size="small" style="width: 100%" :row-class-name="subTableRowClassName">
             <el-table-column prop="prmainpic" align="center" label="图片" width="180">
               <template slot-scope="scope">
                 <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
@@ -68,40 +68,37 @@
             <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
             <el-table-column label="规格" width="240">
               <template slot-scope="scope">
-                <span
-                  v-for="(item,index) in scope.row.skuattritedetail">{{scope.row.prattribute[index]}}: {{item}};</span>
+                <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="opnum" align="center" label="数量" width="120"></el-table-column>
             <el-table-column prop="skuprice" align="center" label="单价" width="120"></el-table-column>
             <el-table-column prop="opsubtruetotal" align="center" label="总价" width="120"></el-table-column>
+            <el-table-column prop="opisinora" align="center" label="退款中" width="120">
+              <template slot-scope="scope">
+                {{scope.row.opisinora ? '是':'否'}}
+              </template>
+            </el-table-column>
           </el-table>
         </template>
       </el-table-column>
       <el-table-column prop="omno" align="center" label="订单号" width="280"></el-table-column>
-      <el-table-column prop="pbname" align="center" label="品牌" width="180">
-        <template slot-scope="scope">
-          <span>{{scope.row.pbname}}</span>
-          <!--<img src="" alt="">-->
-        </template>
-      </el-table-column>
-
-      <!--<el-table-column prop="omrecvname" align="center" label="收件人" width="180"></el-table-column>-->
-      <!--<el-table-column prop="omrecvphone" align="center" label="手机号" width="160"></el-table-column>-->
+      <el-table-column prop="pbname" align="center" label="品牌" width="180"></el-table-column>
+      <el-table-column prop="omrecvname" align="center" label="收件人" width="120"></el-table-column>
+      <el-table-column prop="omrecvphone" align="center" label="手机号" width="160"></el-table-column>
       <el-table-column prop="ommount" label="总价" align="center" width="120"></el-table-column>
       <el-table-column prop="omfreight" label="运费" align="center" width="120"></el-table-column>
-      <el-table-column prop="omtruemount" label="实付" align="center"></el-table-column>
-      <el-table-column label="状态" width="120" align="center">
+      <el-table-column prop="omtruemount" label="实付" align="center" width="120"></el-table-column>
+      <el-table-column label="订单状态" width="120" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagType(scope.row.omstatus_zh)">{{scope.row.omstatus_zh}}</el-tag>
         </template>
       </el-table-column>
-
-      <!--<el-table-column label="快递信息" width="180" align="center">-->
-      <!--<template slot-scope="scope">-->
-      <!--{{`${scope.row.expressname || ''} ${scope.row.expressnum || ''}`}}-->
-      <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column label="退款中" width="120" align="center">
+        <template slot-scope="scope">
+            {{scope.row.ominrefund ? '是':'否'}}
+        </template>
+      </el-table-column>
       <el-table-column prop="ommessage" label="备注" width="180" align="center" show-tooltip-overflow></el-table-column>
       <el-table-column prop="createtime" label="下单时间" align="center" width="180"></el-table-column>
 
@@ -111,12 +108,6 @@
           <el-button type="text" v-if="scope.row.omstatus == 0" class="warning-text" @click="doCancelOrder(scope.row)">
             取消订单
           </el-button>
-          <!--<el-button v-if="scope.row.OIstatus == 3" type="text" size="small"-->
-          <!--@click.stop="gotoOrderDetail(scope.row)">查看-->
-          <!--</el-button>-->
-          <!--<el-button v-if="scope.row.OIstatus == 4" type="text" size="small"-->
-          <!--@click.stop="gotoOrderDetail(scope.row)">去发货-->
-          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -148,6 +139,7 @@
     data() {
       return {
         activeName: '-1', //  -1 => 空 全部
+        orderType: [],
 
         expandAll: true,
         loading: false,
@@ -162,11 +154,31 @@
 
     methods: {
       changeSwitch() {
-        for (let i = 0; i < this.tableData.length; i++) {
-          this.$refs.orderTable.toggleRowExpansion(this.tableData[i], this.expandAll);
+        for (let i = 0; i < this.orderData.length; i++) {
+          this.$refs.orderTable.toggleRowExpansion(this.orderData[i], this.expandAll);
         }
       },
-      handleClick(tab, event) {
+
+      //  获取每个订单类型的数量
+      setOrderType(){
+        this.$http.get(this.$api.order_count,{
+          params: {
+            extentions: 'refund'
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+
+            }
+          }
+        )
+      },
+      handleClick(key, keyPath) {
+        this.activeName = key;
+        this.expandAll = true;
         this.setOrderList();
       },
 
@@ -192,8 +204,36 @@
           default:
             return 'info'
         }
-
       },
+      tableRowClassName({row, rowIndex}){
+        if(row.ominrefund){
+          return 'warning-row';
+        }
+
+        return ''
+      },
+
+      getSkuCellText(detail, attribute ){
+        let rst = '';
+
+        for (let i = 0; i < detail.length; i++) {
+          rst += attribute[i] + ': ' + detail[i];
+
+          if(i+1 < detail.length){
+            rst += ', '
+          }
+        }
+
+        return rst;
+      },
+      subTableRowClassName({row, rowIndex}){
+        if(row.opisinora){
+          return 'warning-row';
+        }
+
+        return ''
+      },
+
       setOrderList() {
         this.loading = true;
         this.$http.get(this.$api.get_all_order, {
@@ -209,7 +249,7 @@
 
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.orderData = data;
               this.total = resData.total_count;
@@ -218,17 +258,29 @@
         )
       },
       sizeChange(pageSize) {
+        this.expandAll = true;
         this.pageSize = pageSize;
         this.currentPage = 1;
 
         this.setOrderList();
       },
       pageChange(page) {
+        this.expandAll = true;
         this.currentPage = page;
         this.setOrderList();
       },
 
       gotoOrderDetail(row) {
+        // if(row.inrefund){
+        //   this.$message('asd')
+        // }
+
+        if(row.ominrefund || row.order_part.find(item => item.opisinora)){
+          this.$message({
+            message: '订单中含有售后中的商品',
+            type: 'warning'
+          });
+        }
         this.$router.push({
           path: `/order/orderDetail`,
           query: {

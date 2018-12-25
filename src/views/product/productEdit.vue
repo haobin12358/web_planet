@@ -114,6 +114,12 @@
                   </el-upload>
                 </template>
               </el-table-column>
+              <el-table-column label="sn" align="center">
+                <template slot-scope="scope">
+                  <el-input v-model.trim="scope.row.skusn"></el-input>
+                </template>
+              </el-table-column>
+
               <!--自定商品规格-->
               <el-table-column :label="item" v-for="(item,index) in formData.prattribute" :key="index"
                                align="center">
@@ -521,6 +527,7 @@
       addOneSku() {
         this.formData.skus.push({
           skupic: "",
+          skusn: '',
           skuprice:this.formData.prprice || 0,
           skustock: 0,
           skuattritedetail: new Array(this.formData.prattribute.length)
@@ -750,6 +757,9 @@
               // 先判断外面的
               if (!currentSku.skupic) {
                 detailTip += '-图片未传'
+              }
+              if (!currentSku.skusn) {
+                detailTip += '-sn码未传'
               }
               if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
                 detailTip += '-价格不符'
