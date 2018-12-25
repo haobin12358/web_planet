@@ -108,7 +108,7 @@
     <el-dialog :visible.sync="dialogVisible" top="8vh">
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
-    <!--编辑dialog-->
+    <!--商品dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="15vh" title="商品绑定">
       <el-table v-loading="productLoading" :data="productsList" stripe
                 @selection-change="handleSelectionChange">
@@ -140,7 +140,7 @@
   import ImgsDragSort from 'src/components/ImgsDragSort/index'
   import elDragDialog from 'src/directive/el-dragDialog'
   import { getStore } from "src/utils/index";
-  import product from './components/product'
+  import product from '../../components/Product/product'
   import TableCellImg from "src/components/TableCellImg";
   import previewCircle from './components/previewCircle'
 

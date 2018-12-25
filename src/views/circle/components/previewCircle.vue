@@ -103,7 +103,7 @@
 <script>
   import elDragDialog from 'src/directive/el-dragDialog'
   import couponCard from './couponCard'
-  import product from './product'
+  import product from '../../../components/Product/product'
 
   export default {
     name: "previewCircle",
