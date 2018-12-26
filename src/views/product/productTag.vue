@@ -28,15 +28,15 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="text"  @click="doEditScene">编辑</el-button>
-          <el-button type="text" class="danger-text">删除</el-button>
+          <el-button type="text"  @click="doEditScene(scope.row)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="doDeleteScene(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--场景编辑dialog-->
-    <el-dialog :visible.sync="sceneDlgVisible" width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'"
+    <el-dialog :visible.sync="sceneDlgVisible" v-el-drag-dialog width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'"
                :close-on-click-modal="false">
-      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-width="120px">
+      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left" label-width="100px">
         <el-form-item label="场景名称" prop="psname">
           <el-input v-model.trim="sceneForm.psname"></el-input>
         </el-form-item>
@@ -99,9 +99,9 @@
       </el-table-column>
     </el-table>
     <!--商品标签编辑dialog-->
-    <el-dialog :visible.sync="itemDlgVisible" width="700px"  :title="itemForm.itid ? '标签编辑': '标签新增'"
+    <el-dialog :visible.sync="itemDlgVisible" v-el-drag-dialog width="700px" :title="itemForm.itid ? '标签编辑': '标签新增'"
                :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
+      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left" label-width="100px">
         <el-form-item label="标签名" prop="itname">
           <el-input v-model.trim="itemForm.itname"></el-input>
         </el-form-item>
@@ -136,10 +136,13 @@
 <script>
   import TableCellImg from "src/components/TableCellImg";
   import {getStore, setStore} from "src/utils/index";
+  import elDragDialog from 'src/directive/el-dragDialog'
 
   const natureNumberReg = /^(\d*)$/;   //  自然数
   export default {
     name: 'ProductTag',
+
+    directives: {elDragDialog},
 
     components: {
       TableCellImg
@@ -412,10 +415,16 @@
 
         this.sceneDlgVisible = true;
       },
-      doEditScene(){
+      doEditScene(row){
         this.resetSceneForm();
 
         this.sceneDlgVisible = true;
+        this.sceneForm = {
+          psid: row.psid,
+          psname: row.psname,
+          pspic: row.pspic,
+          pssort: row.pssort,
+        }
       },
       doSaveScene(){
         this.$refs.sceneForm.validate(
@@ -428,7 +437,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                        data = res.data.data;
+                          data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -466,6 +475,32 @@
         )
       },
 
+      doDeleteScene(row){
+        this.$confirm(`确认删除场景(${row.psname})?`).then(
+          ()=>{
+            this.$http.post(this.$api.update_scene, {
+              psid: row.psid,
+              isdelete: true
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: `删除成功`,
+                    message: `品牌名:${row.psname}`,
+                    type: 'success'
+                  });
+                  this.init();
+                }
+              }
+            );
+          }
+        )
+
+      },
+
       handlePsPicSuccess(res, file) {
         this.sceneForm.pspic = res.data;
       },
@@ -486,7 +521,6 @@
     },
 
     created() {
-
       this.init();
     }
   }

@@ -71,7 +71,7 @@
         this.$refs.pwdForm.validate(
           valid => {
             if (valid) {
-              this.$confirm('提示', '修改成功需要重新登录').then(
+              this.$confirm('修改成功需要重新登录', '提示').then(
                 () => {
                   if (this.$store.getters.roles[0] == 'supplizer') {
                     this.$http.post(this.$api.update_supplizer_password, {

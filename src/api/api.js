@@ -82,6 +82,7 @@ const api = {
   get_commodity_detail: title + 'commodity/get_commodity',                // 获取试用商品
   commodity_add: title + 'commodity/add',                                 // 添加试用商品
   del_commodity: title + 'commodity/del',                                 // 删除试用商品
+  update_commodity: title + 'commodity/update',                           // 修改试用商品
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情
