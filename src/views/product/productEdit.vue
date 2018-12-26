@@ -93,8 +93,9 @@
 
             <!--属性table-->
             <!--排序分组 todo-->
-            <el-table :data="formData.skus" :fit="true" empty-text="请在左上方添加商品规格后,再在右上方添加一行,最后补全该表格" style="width: 100%">
-              <el-table-column label="图片" align="center" width="120">
+            <el-table :data="formData.skus" :fit="true" :header-cell-class-name="headerCellFunction"
+                      empty-text="请在左上方添加商品规格后,再点右上方按钮添加一行,最后补全该表格" style="width: 100%">
+              <el-table-column label="图片" prop="img" align="center" width="120">
                 <template slot-scope="scope">
                   <el-upload
                     class="avatar-uploader  small"
@@ -114,7 +115,7 @@
                   </el-upload>
                 </template>
               </el-table-column>
-              <el-table-column label="sn" align="center">
+              <el-table-column label="sn" prop="sn" align="center">
                 <template slot-scope="scope">
                   <el-input v-model.trim="scope.row.skusn"></el-input>
                 </template>
@@ -127,18 +128,18 @@
                   <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="价格" align="center">
+              <el-table-column label="价格" prop="price" align="center">
                 <template slot-scope="scope">
                   <el-input v-model.number="scope.row.skuprice"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="库存" align="center">
+              <el-table-column label="库存" prop="stock" align="center">
                 <template slot-scope="scope">
                   <el-input v-model.number="scope.row.skustock"></el-input>
                 </template>
               </el-table-column>
 
-              <el-table-column label="操作" align="center" width="120" fixed="right">
+              <el-table-column label="操作" prop="action" align="center" width="120" fixed="right">
                 <template slot-scope="scope">
 
                   <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
@@ -413,9 +414,6 @@
     },
 
     methods: {
-      test(row) {
-        console.log(row);
-      },
       setCategory() {
         this.$http.get(this.$api.category_list, {
           params: {
@@ -537,8 +535,13 @@
         this.formData.skus.splice(index, 1);
       },
 
+      headerCellFunction({row, column}){
+        if(!column.property){
+          return 'warning-header-cell'
+        }
+      },
+
       handleSkuPicSuccess(res, file) {
-        console.log('skuitem 已上传');
         this.formData.skus[this.uploadSkuImgIndex].skupic = res.data;
       },
       //  强行配合el-upload 下策

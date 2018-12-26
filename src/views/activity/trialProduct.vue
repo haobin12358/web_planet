@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column align="center" prop="tctitle" label="商品名" width="280"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
-      <el-table-column align="center" prop="tcdeposit" label="押金/押金期限(天)" width="180">
+      <el-table-column align="center" prop="tcdeposit" label="押金/期限(天)" width="180">
         <template slot-scope="scope">
           {{scope.row.tcdeposit + ' / ' + scope.row.tcdeadline}}
         </template>
@@ -80,9 +80,9 @@
       </el-pagination>
     </section>
 
-    <el-dialog title="活动配置" :visible.sync="settingVisible">
+    <el-dialog title="活动配置" :visible.sync="settingVisible" width="700px">
       <el-form :model="formData" :rules="rules" ref="actiSettingForm" label-position="left"
-               label-width="100px" style="width: 600px;">
+               label-width="100px">
         <el-form-item label="活动封面图" prop="acbackground">
           <el-upload
             class="avatar-uploader"
@@ -224,9 +224,10 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.tableData = data.commodity;
+              this.total = resData.total_count;
             }
           }
         )
@@ -295,14 +296,10 @@
       padding: .1rem .2rem;
     }
     .activity-logo {
-      width: 280px;
-      height: 200px;
-      line-height: 200px;
+
     }
     .activity-avatar {
-      width: 280px;
-      height: 135px;
-      line-height: 135px;
+
     }
   }
 </style>
