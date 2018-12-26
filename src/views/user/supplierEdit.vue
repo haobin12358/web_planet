@@ -52,7 +52,7 @@
               :on-success="handleHeaderSuccess"
               :before-upload="beforePicUpload"
             >
-              <img v-if="supplierForm.suheader" v-lazy="supplierForm.suheader" class="avatar">
+              <img v-if="supplierForm.suheader" :key="supplierForm.suheader" v-lazy="supplierForm.suheader" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">

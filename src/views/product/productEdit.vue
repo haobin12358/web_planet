@@ -171,7 +171,7 @@
               :on-success="handleMainPicSuccess"
               :before-upload="beforeMainPicUpload"
             >
-              <img v-if="formData.prmainpic" v-lazy="formData.prmainpic" class="avatar">
+              <img v-if="formData.prmainpic" :key="formData.prmainpic" v-lazy="formData.prmainpic" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">

@@ -58,7 +58,7 @@
           <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="pcsort">
-          <input v-model.number="categroyForm.pcsort">
+          <el-input v-model.number="categroyForm.pcsort" style="width: 200px;"></el-input>
         </el-form-item>
 
         <el-form-item label="图片" prop="pcpic">
@@ -70,7 +70,7 @@
             :on-success="handlePcpicSuccess"
             :before-upload="beforePicUpload"
           >
-            <img v-if="categroyForm.pcpic" v-lazy="categroyForm.pcpic" class="avatar">
+            <img v-if="categroyForm.pcpic" :key="categroyForm.pcpic" v-lazy="categroyForm.pcpic" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
             <div slot="tip" class="el-upload__tip">
@@ -89,7 +89,7 @@
             :before-upload="beforePicUpload"
             :on-preview="handlePictureCardPreview"
           >
-            <img v-if="categroyForm.pctoppic" v-lazy="categroyForm.pctoppic" class="avatar avatar-top">
+            <img v-if="categroyForm.pctoppic" :key="categroyForm.pctoppic" v-lazy="categroyForm.pctoppic" class="avatar avatar-top">
             <i v-else class="el-icon-plus avatar-uploader-icon avatar-uploader-icon-top"></i>
 
             <div slot="tip" class="el-upload__tip">

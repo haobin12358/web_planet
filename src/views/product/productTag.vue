@@ -49,7 +49,7 @@
             :on-success="handlePsPicSuccess"
             :before-upload="beforePicUpload"
           >
-            <img v-if="sceneForm.pspic" v-lazy="sceneForm.pspic" class="avatar">
+            <img v-if="sceneForm.pspic" :key="sceneForm.pspic" v-lazy="sceneForm.pspic" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
             <div slot="tip" class="el-upload__tip">
