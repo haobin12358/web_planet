@@ -41,7 +41,7 @@
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
       <el-table-column align="center" prop="sulinkphone" label="手机号" width="280"></el-table-column>
-      <el-table-column align="center" prop="suaddress" label="地址" ></el-table-column>
+      <el-table-column align="center" prop="suaddress" label="地址" width="280"></el-table-column>
       <el-table-column align="center" prop="sustatus" label="状态" width="180">
         <template slot-scope="scope">
           <el-tag  v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>

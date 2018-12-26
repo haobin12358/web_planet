@@ -322,6 +322,7 @@ export const asyncRouterMap = [
       },{
         path: 'trialProductEdit',
         name: 'TrialProductEdit',
+        hidden: true,
         component: () => import('src/views/activity/trialProductEdit'),
         meta: {title: '试用商品编辑',noCache: true, roles: level2}
       },

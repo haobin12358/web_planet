@@ -11,18 +11,6 @@
     <el-row>
       <el-col :span="16">
         <el-form ref="prodForm" :model="formData" :rules="rules" label-position="left" label-width="100px">
-          <!--<block-title title="基础数据"></block-title>-->
-
-          <el-form-item label="所属分类" prop="pcid">
-            <el-cascader :options="categoryOptions" style="width: 500px;" :props="categoryProps"
-                         @change="handlePcidChange"
-                         v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
-            </el-cascader>
-            <router-link  tag="span" to="/product/productCategory"
-                         class="form-item-end-tip">分类不全?去新增 >
-            </router-link>
-          </el-form-item>
-
           <el-form-item label="所属品牌" prop="pbid">
             <el-select v-model="formData.pbid" style="width: 500px;" filterable placeholder="可搜索">
               <el-option v-for="item in brandOptions" :key="item.pbid" :label="item.pbname" :value="item.pbid">
@@ -30,41 +18,46 @@
                 <img v-lazy="item.pblogo" style="float: right;width: 32px;height: 32px;padding: 2px;" alt="">
               </el-option>
             </el-select>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand"
-                         class="form-item-end-tip">品牌不全?去新增 >
-            </router-link>
-          </el-form-item>
-
-          <el-form-item label="关联标签" prop="items">
-            <el-select v-model="items" style="width: 500px;" multiple filterable placeholder="可多选,可搜索">
-              <el-option
-                v-for="item in tagsOptions"
-                :key="item.itid"
-                :label="item.itname"
-                :value="item.itid">
-              </el-option>
-            </el-select>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag"
-                         class="form-item-end-tip">标签不全?去新增 >
-            </router-link>
+            <!--<router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand"-->
+                         <!--class="form-item-end-tip">品牌不全?去新增 >-->
+            <!--</router-link>-->
           </el-form-item>
 
           <!--<block-title title="基本信息"></block-title>-->
 
-          <el-form-item label="商品名称" prop="prtitle">
-            <el-input v-model.trim="formData.prtitle"></el-input>
+          <el-form-item label="商品名称" prop="tctitle">
+            <el-input v-model.trim="formData.tctitle"></el-input>
           </el-form-item>
-          <el-form-item label="商品描述" prop="prdescription">
-            <el-input v-model.trim="formData.prdescription"></el-input>
+          <el-form-item label="商品描述" prop="tcdescription">
+            <el-input v-model.trim="formData.tcdescription"></el-input>
           </el-form-item>
-          <el-form-item label="划线价格" prop="prlineprice">
-            <el-input style="width: 200px;" v-model.number="formData.prlineprice"></el-input>
+          <el-form-item label="运费" prop="tcfreight">
+            <el-input v-model.number="formData.tcfreight" style="width: 200px;"></el-input>
           </el-form-item>
-          <el-form-item label="价格" prop="prprice">
-            <el-input v-model.number="formData.prprice" style="width: 200px;"></el-input>
+
+          <el-form-item label="押金" prop="tcdeposit">
+            <el-input v-model.number="formData.tcdeposit" style="width: 200px;"></el-input>
           </el-form-item>
-          <el-form-item label="运费" prop="prfreight">
-            <el-input v-model.number="formData.prfreight" style="width: 200px;"></el-input>
+          <el-form-item label="押金期限(天)" prop="tcdeadline">
+            <el-input v-model.number="formData.tcdeadline" style="width: 200px;"></el-input>
+          </el-form-item>
+          <el-form-item label="申请的活动期间" required>
+            <el-col :span="11">
+              <el-form-item prop="applystarttime">
+                <el-date-picker type="date" v-model="formData.applystarttime" placeholder="活动起始日期" :picker-options="pickerOptions"
+                                value-format="yyyy-MM-dd HH:mm:ss"  style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col class="middle-line" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="applyendtime">
+                <el-date-picker type="date" v-model="formData.applyendtime" placeholder="活动结束日期" :picker-options="pickerOptions"
+                                value-format="yyyy-MM-dd HH:mm:ss"  style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="备注(商品列表说明)" prop="tcremarks">
+            <el-input v-model.number="formData.tcremarks"></el-input>
           </el-form-item>
 
           <el-form-item label="商品规格" required>
@@ -72,8 +65,8 @@
             <section class="form-item-sku">
               <!--商品规格tags管理, 颜色,规格...-->
               <section>
-                <el-tag :key="tag" v-for="tag in formData.prattribute" closable :disable-transitions="false"
-                        @close="handleClose(tag)" @dblclick.native="editPrAttribute(tag)">
+                <el-tag :key="tag" v-for="tag in formData.tcattribute" closable :disable-transitions="false"
+                        @close="handleClose(tag)" @dblclick.native="edittcattribute(tag)">
                   {{tag}}
                 </el-tag>
 
@@ -93,8 +86,9 @@
 
             <!--属性table-->
             <!--排序分组 todo-->
-            <el-table :data="formData.skus" :fit="true" empty-text="请在左上方添加商品规格后,再在右上方添加一行,最后补全该表格" style="width: 100%">
-              <el-table-column label="图片" align="center" width="120">
+            <el-table :data="formData.skus" :fit="true" :header-cell-class-name="headerCellFunction"
+                      empty-text="请在左上方添加商品规格后,再点右上方按钮添加一行,最后补全该表格" style="width: 100%">
+              <el-table-column label="图片" prop="img" align="center" width="120">
                 <template slot-scope="scope">
                   <el-upload
                     class="avatar-uploader  small"
@@ -114,31 +108,21 @@
                   </el-upload>
                 </template>
               </el-table-column>
-              <el-table-column label="sn" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model.trim="scope.row.skusn"></el-input>
-                </template>
-              </el-table-column>
 
               <!--自定商品规格-->
-              <el-table-column :label="item" v-for="(item,index) in formData.prattribute" :key="index"
+              <el-table-column :label="item" v-for="(item,index) in formData.tcattribute" :key="index"
                                align="center">
                 <template slot-scope="scope">
                   <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="价格" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model.number="scope.row.skuprice"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="库存" align="center">
+              <el-table-column label="库存" prop="stock" align="center">
                 <template slot-scope="scope">
                   <el-input v-model.number="scope.row.skustock"></el-input>
                 </template>
               </el-table-column>
 
-              <el-table-column label="操作" align="center" width="120" fixed="right">
+              <el-table-column label="操作" prop="action" align="center" width="120" fixed="right">
                 <template slot-scope="scope">
 
                   <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
@@ -151,17 +135,12 @@
             <div class="form-item-end-tip">
               确认排序面板会在点击保存前弹出
             </div>
-            <!--<section class="table-bottom">-->
-            <!--<el-tooltip effect="dark" content="单击弹出输入面板" placement="right">-->
-            <!--<el-button icon="el-icon-sort" @click="showSkuSortDlg">规格排序</el-button>-->
-            <!--</el-tooltip>-->
-            <!--</section>-->
           </el-form-item>
 
 
           <!--<block-title title="详细信息"></block-title>-->
 
-          <el-form-item label="商品主图" prop="prmainpic">
+          <el-form-item label="商品主图" prop="tcmainpic">
             <el-upload
               class="avatar-uploader"
               :action="uploadUrl"
@@ -170,7 +149,7 @@
               :on-success="handleMainPicSuccess"
               :before-upload="beforeMainPicUpload"
             >
-              <img v-if="formData.prmainpic" v-lazy="formData.prmainpic" class="avatar">
+              <img v-if="formData.tcmainpic" v-lazy="formData.tcmainpic" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">
@@ -198,23 +177,23 @@
               </div>
             </el-upload>
           </el-form-item>
-          <el-form-item label="底部长图(最多20张)" prop="prdesc">
+          <el-form-item label="底部长图(最多20张)" prop="tcdesc">
             <el-upload
               class="swiper-uploader"
               :action="uploadUrl"
               accept="image/*"
               list-type="picture-card"
-              :file-list="prDescUrl"
+              :file-list="tcdescUrl"
               :on-preview="handlePictureCardPreview"
               :before-upload="beforeImgsUpload"
-              :on-remove="handlePrDescRemove"
-              :http-request="uploadPrDesc"
+              :on-remove="handletcdescRemove"
+              :http-request="uploadtcdesc"
               :limit="5"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">
                 <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
-                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
+                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="tcdescUrl"></imgs-drag-sort>
               </div>
             </el-upload>
           </el-form-item>
@@ -227,15 +206,15 @@
     </el-row>
 
     <section class="tool-tip-wrap pin-right-bottom">
-      <el-button type="primary" @click="checkFormData(true)">保存并跳转</el-button>
-      <el-button type="primary" @click="checkFormData(false)">保存并停留</el-button>
+      <el-button type="primary" @click="checkFormData(true)">保存商品</el-button>
+      <!--<el-button type="primary" @click="checkFormData(false)">保存并停留</el-button>-->
     </section>
 
     <!--规格排序dialog-->
     <el-dialog :visible.sync="dialogSkuSortVisible" width="80%" title="确认规格顺序(拖动排序)">
       <section style="display: flex;align-items:flex-start;flex-wrap: wrap;">
-        <kan-ban v-for="(item,index) in formData.pskuvalue" :key="index" :list="item"
-                 class="kanban" :header-text="formData.prattribute[index]"/>
+        <kan-ban v-for="(item,index) in formData.tskuvalue" :key="index" :list="item"
+                 class="kanban" :header-text="formData.tcattribute[index]"/>
       </section>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogSkuSortVisible = false">取 消</el-button>
@@ -275,27 +254,17 @@
     directives: {permission},
 
     watch: {
-      selectedOption(val) {
-        this.formData.pcid = val[2];
-      },
-      items(val) {
-        this.formData.items = this.items.map(item => {
-          return {
-            itid: item
-          }
-        });
-      },
       imagesUrl(val) {
         this.formData.images = val.map((item, index) => {
           return {
-            pipic: item.url,
-            pisort: index,
-            piid: item.piid,
+            tcipic: item.url,
+            tcisort: index,
+            tciid: item.tciid,
           }
         });
       },
-      prDescUrl(val) {
-        this.formData.prdesc = val.map(item => item.url);
+      tcdescUrl(val) {
+        this.formData.tcdesc = val.map(item => item.url);
       },
       dialogSkuSortVisible(val) {
         if (!val) {
@@ -305,53 +274,57 @@
     },
 
     data() {
+      const startTimeValidator = (rule, value, callback) => {
+        if(value && value < new Date){
+
+        } else if (this.formData.applyendtime && value > this.formData.applyendtime) {
+          callback(new Error('请确认时间大小关系!'))
+        } else {
+          callback();
+        }
+      };
+      const endTimeValidator = (rule, value, callback) => {
+        if (this.formData.applystarttime && value < this.formData.applystarttime) {
+          callback(new Error('请确认时间大小关系!'))
+        } else {
+          callback();
+        }
+      };
+
       return {
         goToIndexAfterSave: false,
 
         formData: {
-          prid: '',
+          tcid: '',
 
-          pcid: "",
           pbid: "",
-          items: [],
+          tctitle: "",
+          tcdescription: "",
+          tcfreight: 0,
 
-          prtitle: "",
-          prdescription: "",
-          prprice: 0,
-          prlineprice: 0,
-          prfreight: 0,
+          tcdeposit: 0,
+          tcdeadline: 0,
+          applystarttime: '',
+          applyendtime: '',
+          tcremarks: '',
 
-          prattribute: [],
+          tcattribute: [],
           skus: [],
-          pskuvalue: [],
+          tskuvalue: [],
 
-          prmainpic: "",
+          tcmainpic: "",
           images: [],
-          prdesc: [],
+          tcdesc: [],
         },
         rules: {
-          pcid: [
-            {required: true, message: '分类必选', trigger: 'change'}
-          ],
           pbid: [
             {required: true, message: '所属品牌必选', trigger: 'change'}
           ],
-          items: [
-            {required: true, message: '关联标签必选', trigger: 'change'}
-          ],
-          prtitle: [
+          tctitle: [
             {required: true, message: '商品名称必填', trigger: 'blur'}
           ],
-          prdescription: [],
-          prprice: [
-            {required: true, message: '价格必填', trigger: 'blur'},
-            {pattern: moneyReg, message: '请输入合理的价格(至多2位小数)', trigger: 'blur'},
-          ],
-          prlineprice: [
-            {pattern: canZeroMoneyReg, message: '请输入合理的划线价格(至多2位小数)', trigger: 'blur'},
-          ],
-
-          prfreight: [
+          tcdescription: [],
+          tcfreight: [
             {required: true, message: '运费必填', trigger: 'blur'},
             {pattern: canZeroMoneyReg, message: '请输入合理的运费(至多2位小数)', trigger: 'blur'}
           ],
@@ -360,26 +333,44 @@
           //   {pattern: positiveNumberReg, message: '请输入合理的库存', trigger: 'blur'}
           // ],
 
-          prmainpic: [
+          tcdeposit: [
+            {required: true, message: '押金数额必填', trigger: 'blur'},
+            {pattern: moneyReg, message: '请输入合理的押金数额(至多2位小数)', trigger: 'blur'},
+          ],
+          tcdeadline: [
+            {required: true, message: '押金期限必填', trigger: 'blur'},
+            {pattern: positiveNumberReg, message: '请输入合理的押金天数', trigger: 'blur'},
+          ],
+          applystarttime: [
+            {required: true, message: '活动开始时间必填', trigger: 'change'},
+            {validator: startTimeValidator, trigger: 'change'},
+          ],
+          applyendtime: [
+            {required: true, message: '活动结束时间必填', trigger: 'change'},
+            {validator: endTimeValidator, trigger: 'change'},
+          ],
+
+          tcmainpic: [
             {required: true, message: '商品主图必传', trigger: 'change'},
           ],
           images: [
             {required: true, message: '商品轮播图必传', trigger: 'change'},
           ],
-          prdesc: [
+          tcdesc: [
             {required: true, message: '商品长图必传', trigger: 'change'},
           ],
 
         },
 
-        //分类
-        categoryOptions: [],
-
         // 品牌
         brandOptions: [],
 
-        // 标签
-        tagsOptions: [],
+        //  活动特有
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() < Date.now();
+          },
+        },
 
         //  sku
         inputVisible: false,
@@ -394,24 +385,18 @@
         dialogVisible: false,
 
         //  配合element组件,编辑用,需在init和watch中转换下
-        selectedOption: [], //  完整的三个分类id
-        items: [], //  item
         imagesUrl: [],    //  详情页顶部轮播图
-        prDescUrl: [],       //  详情长图
+        tcdescUrl: [],       //  详情长图
       }
     },
 
     computed: {
       uploadUrl() {
         return this.$api.upload_file + getStore('token')+ '&type=product'
-      },
+      }
     },
 
     methods: {
-      test(row) {
-        console.log(row);
-      },
-
       setBrand() {
         this.$http.get(this.$api.brand_list, {
           params: {
@@ -429,23 +414,6 @@
         )
       },
 
-      setTags() {
-        this.$http.get(this.$api.items_list, {
-          params: {
-            ittype: 0
-          }
-        }).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-
-              this.tagsOptions = data;
-            }
-          }
-        )
-      },
-
       //  规格
       showInput() {
         this.inputVisible = true;
@@ -456,21 +424,21 @@
       handleInputConfirm() {
         let inputValue = this.inputValue;
 
-        if (inputValue && !this.formData.prattribute.includes(inputValue)) {
-          this.formData.prattribute.push(inputValue);
+        if (inputValue && !this.formData.tcattribute.includes(inputValue)) {
+          this.formData.tcattribute.push(inputValue);
           this.inputVisible = false;
           this.inputValue = '';
         } else {
           this.$message.warning('不能为空或不能重名!');
         }
       },
-      async editPrAttribute(tag) {
+      async edittcattribute(tag) {
         let prompt = await this.$prompt('请输入新的商品属性名', '提示', {
           inputValue: tag,
           inputValidator: value => {
             if (!value) {
               return '不能为空'
-            } else if (this.formData.prattribute.includes(value)) {
+            } else if (this.formData.tcattribute.includes(value)) {
               if (tag == value) {
                 return
               } else {
@@ -480,15 +448,15 @@
           }
         });
 
-        let index = this.formData.prattribute.indexOf(tag);
+        let index = this.formData.tcattribute.indexOf(tag);
 
         // this.$set()
-        this.formData.prattribute.splice(index, 1, prompt.value);
+        this.formData.tcattribute.splice(index, 1, prompt.value);
       },
       handleClose(tag) {
-        let index = this.formData.prattribute.indexOf(tag);
+        let index = this.formData.tcattribute.indexOf(tag);
 
-        this.formData.prattribute.splice(index, 1);
+        this.formData.tcattribute.splice(index, 1);
         for (let i = 0; i < this.formData.skus.length; i++) {
           this.formData.skus[i].skuattritedetail.splice(index, 1);
         }
@@ -496,20 +464,27 @@
 
       //  商品属性
       addOneSku() {
-        this.formData.skus.push({
-          skupic: "",
-          skusn: '',
-          skuprice:this.formData.prprice || 0,
-          skustock: 0,
-          skuattritedetail: new Array(this.formData.prattribute.length)
-        });
+        if(this.formData.tcattribute.length){
+          this.formData.skus.push({
+            skupic: "",
+            skustock: 0,
+            skuattritedetail: new Array(this.formData.tcattribute.length)
+          });
+        }else{
+          this.$message.warning('请先在左边新增商品规格')
+        }
       },
       removeOneSku(index) {
         this.formData.skus.splice(index, 1);
       },
 
+      headerCellFunction({row, column}){
+        if(!column.property){
+          return 'warning-header-cell'
+        }
+      },
+
       handleSkuPicSuccess(res, file) {
-        console.log('skuitem 已上传');
         this.formData.skus[this.uploadSkuImgIndex].skupic = res.data;
       },
       //  强行配合el-upload 下策
@@ -519,11 +494,11 @@
 
       //  sku排序
       showSkuSortDlg() {
-        this.setPSkuValue();
+        this.settskuvalue();
         this.dialogSkuSortVisible = true;
       },
-      setPSkuValue() {
-        let num = this.formData.prattribute.length,
+      settskuvalue() {
+        let num = this.formData.tcattribute.length,
           rst = [];
 
         for (let i = 0; i < num; i++) {
@@ -540,7 +515,7 @@
           }
         }
 
-        this.$set(this.formData, 'pskuvalue', rst);
+        this.$set(this.formData, 'tskuvalue', rst);
       },
 
       //  预览图
@@ -550,7 +525,7 @@
       },
       //  主图上传
       handleMainPicSuccess(res, file) {
-        this.formData.prmainpic = res.data;
+        this.formData.tcmainpic = res.data;
       },
       beforeMainPicUpload(file) {
         const isLt15M = file.size / 1024 / 1024 < 15;
@@ -603,12 +578,12 @@
         )
       },
       //  长图
-      handlePrDescRemove(file, fileList) {
-        this.prDescUrl = this.prDescUrl.filter(
+      handletcdescRemove(file, fileList) {
+        this.tcdescUrl = this.tcdescUrl.filter(
           item => item.uid != file.uid
         );
       },
-      uploadPrDesc(file) {
+      uploadtcdesc(file) {
         let formData = new FormData();
 
         formData.append('file', file.file)
@@ -624,7 +599,7 @@
               let resData = res.data,
                 data = resData.data;
 
-              this.prDescUrl.push({
+              this.tcdescUrl.push({
                 name: file.file.name,
                 url: data
               })
@@ -645,22 +620,23 @@
 
       //  保存
       doSaveProd() {
-        if (this.formData.prid) { //  编辑
+        if (this.formData.tcid) { //  编辑
           this.$http.post(this.$api.update_product, this.formData, {
             params: {}
           }).then(
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                  data = res.data.data;
+                    data = res.data.data;
 
-                if (this.goToIndexAfterSave) {
-                  this.$router.push('/product');
-                }
+                // if (this.goToIndexAfterSave) {
+                //   this.$router.push('/activity/trialProduct');
+                // }
 
+                this.$router.push('/activity/trialProduct');
                 this.$notify({
                   title: '商品编辑成功',
-                  message: `商品名:${this.formData.prtitle}`,
+                  message: `商品名:${this.formData.tctitle}`,
                   type: 'success'
                 });
                 this.reset();
@@ -669,22 +645,22 @@
             }
           )
         } else {
-          this.$http.post(this.$api.create_product, this.formData, {
+          this.$http.post(this.$api.commodity_add, this.formData, {
             params: {}
           }).then(
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                  data = res.data.data;
+                    data = res.data.data;
 
-                if (this.goToIndexAfterSave) {
-                  this.$router.push('/product');
-                }
-
+                // if (this.goToIndexAfterSave) {
+                //   this.$router.push('/activity/trialProduct');
+                // }
+                this.$router.push('/activity/trialProduct');
 
                 this.$notify({
                   title: '商品新增成功',
-                  message: `商品名:${this.formData.prtitle}`,
+                  message: `商品名:${this.formData.tctitle}`,
                   type: 'success'
                 });
                 this.reset();
@@ -719,7 +695,7 @@
       },
       //  校验sku
       checkSkuData() {
-        if (this.formData.prattribute.length) {
+        if (this.formData.tcattribute.length) {
           if (this.formData.skus.length) {
             for (let i = 0; i < this.formData.skus.length; i++) {
               let detailTip = '',
@@ -729,12 +705,6 @@
               if (!currentSku.skupic) {
                 detailTip += '-图片未传'
               }
-              if (!currentSku.skusn) {
-                detailTip += '-sn码未传'
-              }
-              if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
-                detailTip += '-价格不符'
-              }
               if (!currentSku.skustock || !positiveNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
@@ -742,7 +712,7 @@
               //  再看额外的
               for (let j = 0; j < currentSku.skuattritedetail.length; j++) {
                 if (!currentSku.skuattritedetail[j]) {
-                  detailTip += `-${this.formData.prattribute[j]}未填`;
+                  detailTip += `-${this.formData.tcattribute[j]}未填`;
                 }
               }
 
@@ -762,16 +732,13 @@
 
       //  编辑时,已保存的商品数据转换成组件要的
       convertFromEdit(data) {
-        this.selectedOption = data.pcids;
-        this.items = data.items.map(item => item.itid);
-
         this.imagesUrl = data.images.map(item => {
           return {
             url: item.pipic,
-            piid: item.piid,
+            tciid: item.tciid,
           }
         });
-        this.prDescUrl = data.prdesc.map(item => {
+        this.tcdescUrl = data.tcdesc.map(item => {
           return {
             url: item
           }
@@ -781,20 +748,19 @@
       //  抽离出来的初始化
       init() {
         this.setBrand();
-        this.setTags();
 
-        if (this.$route.query.prid) { //  编辑
+        if (this.$route.query.tcid) { //  编辑
           //  编辑更换的商品或之前是新增,数据替换
-          if (this.$route.query.prid != this.formData.prid) {
-            this.$http.get(this.$api.product_get, {
+          if (this.$route.query.tcid != this.formData.tcid) {
+            this.$http.get(this.$api.get_commodity_detail, {
               params: {
-                prid: this.$route.query.prid,
+                tcid: this.$route.query.tcid,
               }
             }).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                    data = res.data.data;
+                      data = res.data.data;
 
                   this.convertFromEdit(data);
                   this.formData = data;
@@ -807,7 +773,7 @@
           }
         } else {  //  新增
           //  编辑到新增
-          if (this.formData.prid) {
+          if (this.formData.tcid) {
             this.reset();
           }
         }
@@ -815,41 +781,40 @@
         this.$refs.prodForm.clearValidate();
         this.$message({
           type: 'info',
-          message: `当前是商品${this.$route.query.prid ? '编辑' : '新增'}状态`,
+          message: `当前是商品${this.$route.query.tcid ? '编辑' : '新增'}状态`,
           duration: '2000'
         });
       },
       //  重置(新增状态)
       reset() {
         this.formData = {
-          prid: '',
+          tcid: '',
 
-          pcid: "",
           pbid: "",
-          items: [],
+          tctitle: "",
+          tcdescription: "",
+          tcfreight: 0,
 
-          prtitle: "",
-          prdescription: "",
-          prprice: 0,
-          prlineprice: 0,
-          prfreight: 0,
+          tcdeposit: 0,
+          tcdeadline: 0,
+          applystarttime: '',
+          applyendtime: '',
+          tcremarks: '',
 
-          prattribute: [],
+          tcattribute: [],
           skus: [],
-          pskuvalue: [],
+          tskuvalue: [],
 
-          prmainpic: "",
+          tcmainpic: "",
           images: [],
-          prdesc: [],
+          tcdesc: [],
         };
-        this.selectedOption = [];
-        this.items = [];
         this.imagesUrl = [];
-        this.prDescUrl = [];
+        this.tcdescUrl = [];
       },
     },
 
-    //  新增编辑共用一个,光新增和prid不变时不会重置数据,
+    //  新增编辑共用一个,光新增和tcid不变时不会重置数据,
     activated() {
       //  todo  编辑时回显
       this.init();
