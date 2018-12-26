@@ -27,7 +27,7 @@
                      @size-change="sizeChange" @current-change="pageChange"></el-pagination>
     </section>
 
-    <el-dialog v-el-drag-dialog title="管理员信息" :visible.sync="adminDialog" top="10vh" width="600px" :close-on-click-modal="false">
+    <el-dialog v-el-drag-dialog title="管理员信息" :visible.sync="adminDialog" top="10vh" width="700px" :close-on-click-modal="false">
       <el-form :model="adminForm" :rules="rules" ref="adminForm" label-position="left" label-width="100px"
                status-icon style="padding-left: 20px">
         <el-form-item label="管理员头像" prop="adheader">
@@ -49,8 +49,8 @@
           <el-input class="sort-input" v-model="adminForm.adname"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="adtelphone">
-          <el-input class="sort-input long-input" v-if="!adminForm.adid" v-model="adminForm.adtelphone"></el-input>
-          <el-input class="sort-input long-input" v-else v-model="adminForm.adtelphone" @change="inputChange"></el-input>
+          <el-input class="sort-input long-input" maxlength="13" v-if="!adminForm.adid" v-model="adminForm.adtelphone"></el-input>
+          <el-input class="sort-input long-input" maxlength="13" v-else v-model="adminForm.adtelphone" @change="inputChange"></el-input>
           <el-button type="primary" size="small" v-if="!getCode" @click="getInforCode">获取验证码</el-button>
           <el-button type="info" disabled size="small" v-else>{{time}}秒后重发</el-button>
         </el-form-item>
@@ -141,10 +141,12 @@
             { required: true, message: '验证码必填', trigger: 'blur' }
           ],
           adpassword: [
-            { required: true, validator: validatePass, trigger: 'blur' }
+            { required: true, validator: validatePass, trigger: 'blur' },
+            { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
           ],
           adpasswordagain: [
-            { required: true, validator: validatePass2, trigger: 'blur' }
+            { required: true, validator: validatePass2, trigger: 'blur' },
+            { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
           ],
           adstatus: [
             { required: true, message: '管理员状态必选', trigger: 'blur' }
@@ -158,12 +160,7 @@
         getCode: false,               // 是否已获取验证码
         time: 0,                      // 倒计时
         editPasswd: '',               // 编辑管理员信息时密码选填
-        telephone: '',                // 编辑管理员信息时暂存之前的手机号
-        /*typeList: [
-          { value: 'agent', label: '供应商' },
-          { value: 'common_admin', label: '普通管理员' },
-          { value: 'super_admin', label: '超级管理员' }
-        ],*/
+        telephone: ''                 // 编辑管理员信息时暂存之前的手机号
       }
     },
     computed: {
@@ -297,8 +294,14 @@
             callback();
           }
         };
-        this.rules.adpassword = [{ required: false, validator: validatePass, trigger: 'blur' }];
-        this.rules.adpasswordagain = [{ required: false, validator: validatePass2, trigger: 'blur' }];
+        this.rules.adpassword = [
+          { required: false, validator: validatePass, trigger: 'blur' },
+          { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
+        ];
+        this.rules.adpasswordagain = [
+          { required: false, validator: validatePass2, trigger: 'blur' },
+          { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
+        ];
         this.rules.identifyingcode = [{ required: false, trigger: 'blur' }];
         this.adminDialog = true;
       },
