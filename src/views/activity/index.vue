@@ -1,14 +1,19 @@
 <template>
   <div class="activity-index">
     <el-table v-loading="activityLoading" :data="activityList" stripe>
+      <el-table-column label="序号" align="center" prop="acsort" width="180">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @change="sortChange"></el-input>
+        </template>
+      </el-table-column>
       <el-table-column label="活动封面图" align="center" prop="acbackground">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>
-      <el-table-column label="封面按钮" align="center" prop="acbutton"></el-table-column>
-      <el-table-column label="类别" align="center" prop="actype_zh"></el-table-column>
+      <el-table-column label="封面按钮文字" align="center" prop="acbutton"></el-table-column>
+      <el-table-column label="活动类别" align="center" prop="actype_zh"></el-table-column>
       <el-table-column label="商品数" align="center" prop="pblogo"></el-table-column>
       <el-table-column label="关闭/开启" align="center" prop="pblogo">
         <template slot-scope="scope">
@@ -22,11 +27,63 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!--编辑dialog-->
+    <el-dialog v-el-drag-dialog :visible.sync="activityDialog" width="800px" top="7vh"
+               :title="formData.acname + ' - 编辑'" :close-on-click-modal="false">
+      <el-form :model="formData" :rules="rules" ref="formData" label-position="left" size="medium" label-width="120px" status-icon>
+        <el-form-item label="活动封面图" prop="adheader">
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadUrl"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handleBackSuccess"
+            :before-upload="beforeImgUpload">
+            <img v-if="formData.acbackground" :key="formData.acbackground" v-lazy="formData.acbackground" class="avatar back-img">
+            <i v-else class="el-icon-plus avatar-uploader-icon back-img"></i>
+            <div slot="tip" class="el-upload__tip">
+              建议尺寸为700 * 500，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+            </div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="活动名称" prop="acname">
+          <el-input class="long-input" v-model="formData.acname"></el-input>
+        </el-form-item>
+        <el-form-item label="封面按钮文字" prop="acbutton">
+          <el-input class="long-input" v-model="formData.acbutton"></el-input>
+        </el-form-item>
+        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '3'">
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadUrl"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handleTopSuccess"
+            :before-upload="beforeImgUpload">
+            <img v-if="formData.actoppic" :key="formData.actoppic" v-lazy="formData.actoppic" class="avatar top-img">
+            <i v-else class="el-icon-plus avatar-uploader-icon top-img"></i>
+            <div slot="tip" class="el-upload__tip">
+              建议尺寸为700 * 500，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+            </div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '3'">
+          <el-input v-model="formData.acdesc"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="initActivityForm">取 消</el-button>
+        <el-button type="primary" @click="saveActivity">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import TableCellImg from "src/components/TableCellImg";
+  import elDragDialog from 'src/directive/el-dragDialog'
+  import TableCellImg from "src/components/TableCellImg"
+  import { getStore } from "src/utils/index"
 
   export default {
     name: 'ActivityIndex',
@@ -34,13 +91,53 @@
       return {
         activityLoading: false,
         activityList: [],
+        index: '',                  // 暂存点击的是哪一行
+        activityDialog: false,
+        formData: {
+          actype: '',
+          acbackground: '',       // 活动封面图
+          acname: '',
+          actoppic: '',           // 详情页顶部图(如果需要)
+          acdesc: '',             // 详情页描述(如果需要)
+          acbutton: '',           // 封面按钮文字
+          acsort: '',
+          acshow: false,
+        },
+        rules: {
+          acbackground: [{ required: true, message: '活动封面图必需', trigger: 'blur' }],
+          acname: [{ required: true, message: '活动名称必填', trigger: 'blur' }],
+          acbutton: [{ required: true, message: '封面按钮文字必填', trigger: 'blur' }],
+        }
       }
     },
+    directives: { elDragDialog },
     components: { TableCellImg },
+    computed: {
+      // 上传图片
+      uploadUrl() {
+        return this.$api.upload_file + getStore('token') + '&type=index'
+      }
+    },
     mounted() {
       this.getActivity();         // 获取所有活动
     },
     methods: {
+      // 活动封面图上传
+      handleBackSuccess(res, file) {
+        this.formData.acbackground = res.data;
+      },
+      // 详情页顶部图上传
+      handleTopSuccess(res, file) {
+        this.formData.actoppic = res.data;
+      },
+      // 上传前限制小于15M
+      beforeImgUpload(file) {
+        const isLt15M = file.size / 1024 / 1024 < 15;
+        if (!isLt15M) {
+          this.$message.error('上传图片大小不能超过 15MB!');
+        }
+        return isLt15M;
+      },
       // 获取所有活动
       getActivity() {
         this.activityLoading = true;
@@ -76,7 +173,60 @@
       },
       // 编辑活动
       editActivity(scope) {
-
+        this.activityDialog = true;
+        this.formData = JSON.parse(JSON.stringify(scope.row));
+        if(this.formData.actype == '0' || this.formData.actype == '3') {
+          this.rules.actoppic = [{ required: true, message: '详情页顶部图必需', trigger: 'blur' }];
+          this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
+        }
+      },
+      // 编辑活动dialog的保存按钮
+      saveActivity() {
+        this.$refs.formData.validate(valid => {
+          if(valid) {
+            this.$http.post(this.$api.activity_update, this.formData).then(res => {
+              if (res.data.status == 200) {
+                this.initActivityForm();   // 重置
+                this.$notify({
+                  title: '修改成功',
+                  message: `${this.formData.acname} 修改成功`,
+                  type: 'success'
+                });
+                this.activityDialog = false;
+                this.getActivity()         // 获取所有活动
+              }
+            })
+          }else {
+            this.$message.warning('请根据校验信息完善表单!');
+          }
+        })
+      },
+      // 记录点击的是哪一行
+      indexDone(scope) {
+        this.index = scope.$index;
+      },
+      // 改变活动序号
+      sortChange(v) {
+        let params = {
+          actype: this.activityList[this.index].actype,
+          acshow: this.activityList[this.index].acshow,
+          acsort: this.activityList[this.index].acsort
+        };
+        this.$http.post(this.$api.activity_update, params).then(res => {
+          if (res.data.status == 200) {
+            this.$notify({
+              title: '保存成功',
+              message: `${this.activityList[this.index].acname}的序号已保存`,
+              type: 'success'
+            });
+            this.getActivity()          // 获取所有活动
+          }
+        });
+      },
+      // 重置
+      initActivityForm() {
+        this.activityDialog = false;
+        this.$refs.formData.resetFields();
       }
     }
   }
@@ -86,6 +236,17 @@
   @import "../../styles/myIndex";
 
   .activity-index {
-
+    .back-img {
+      width: 249px;
+    }
+    .top-img {
+      width: 370px;
+    }
+    .long-input {
+      width: 249px;
+    }
+    .sort-input {
+      width: 5rem;
+    }
   }
 </style>
