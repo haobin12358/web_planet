@@ -318,7 +318,7 @@ export const asyncRouterMap = [
         path: 'trialProduct',
         name: 'TrialProduct',
         component: () => import('src/views/activity/trialProduct'),
-        meta: {title: '试用商品',noCache: true, roles: level2}
+        meta: {title: '试用商品',icon: 'yes',noCache: true, roles: level2}
       },{
         path: 'trialProductEdit',
         name: 'TrialProductEdit',

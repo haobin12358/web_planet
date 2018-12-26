@@ -7,7 +7,7 @@
           <el-input v-model.trim="searchForm.kw"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="searchForm.prstatus">
+          <el-select v-model="searchForm.prstatus" @change="doSearch">
             <el-option
               v-for="item in statusOption"
               :key="item.value"
@@ -16,12 +16,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" icon="el-icon-search">查询</el-button>
-        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;" @click="doReset">重置</el-button>
       </el-form>
 
       <section>
-        <el-button type="info" icon="el-icon-setting" @click="settingVisible = true">活动配置</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="doAdd">新增</el-button>
       </section>
     </section>
@@ -41,16 +40,16 @@
           {{scope.row.tcdeposit + ' / ' + scope.row.tcdeadline}}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="tcstocks" label="库存" width="120"></el-table-column>
-      <el-table-column align="center" prop="tcsalesvalue" label="销量" width="120"></el-table-column>
       <el-table-column align="center" prop="prstatus_zh" label="状态" width="120">
         <template slot-scope="scope">
           <el-tag :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="tcstocks" label="库存" width="120"></el-table-column>
+      <el-table-column align="center" prop="tcsalesvalue" label="销量" width="120"></el-table-column>
       <el-table-column align="center" prop="tcdeposit" label="活动时间(执行)" width="280">
-        <template slot-scope="scope">
-          {{scope.row.agreestarttime + '-' + scope.row.agreeendtime}}
+        <template slot-scope="scope" v-if="scope.row.agreestarttime">
+          {{scope.row.agreestarttime + ' - ' + scope.row.agreeendtime}}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="tcdeposit" label="活动时间(申请)" width="280">
@@ -62,7 +61,7 @@
 
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
+          <el-button type="text" v-if="scope.row.tcstatus == 20" @click="doEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -141,7 +140,7 @@
             value: 'all',
             label: '全部',
           }, {
-            value: 'usual',
+            value: 'upper',
             label: '上架中',
           }, {
             value: 'auditing',
@@ -197,6 +196,17 @@
       }
     },
     methods: {
+      doSearch() {
+        this.getProductList();
+      },
+      doReset() {
+        this.searchForm = {
+          kw: '',
+          prstatus: 'all',
+        };
+        this.doSearch();
+      },
+
       statusTagType(status) {
         switch (status) {
           case 0:
@@ -218,13 +228,14 @@
             page_size: this.pageSize,
             page_num: this.currentPage,
 
+            kw: this.searchForm.kw,
             tcstatus: this.searchForm.prstatus,
           }
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.tableData = data.commodity;
               this.total = resData.total_count;

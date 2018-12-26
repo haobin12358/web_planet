@@ -71,7 +71,7 @@
     </section>
 
     <!--品牌dialog-->
-    <el-dialog :visible.sync="brandDlgVisible" width="700px" top="10vh" :title="brandForm.pbid ? '品牌编辑': '品牌新增'"
+    <el-dialog :visible.sync="brandDlgVisible" width="700px" top="10vh" v-el-drag-dialog :title="brandForm.pbid ? '品牌编辑': '品牌新增'"
                :close-on-click-modal="false">
       <el-form :model="brandForm" :rules="brandRules" ref="brandForm" size="medium" label-width="120px">
         <el-form-item label="品牌logo" prop="pblogo">
@@ -167,7 +167,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="itemDlgVisible" width="700px"  :title="itemForm.itid ? '标签编辑': '标签新增'"
+    <el-dialog :visible.sync="itemDlgVisible" width="700px" v-el-drag-dialog :title="itemForm.itid ? '标签编辑': '标签新增'"
                :close-on-click-modal="false">
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名" prop="itname">
@@ -188,9 +188,12 @@
 <script>
   import TableCellImg from "src/components/TableCellImg";
   import {getStore, setStore} from "src/utils/index";
+  import elDragDialog from 'src/directive/el-dragDialog'
 
   export default {
     name: 'ProductBrand',
+
+    directives: {elDragDialog},
 
     components: {
       TableCellImg

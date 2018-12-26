@@ -44,14 +44,14 @@
           <el-form-item label="申请的活动期间" required>
             <el-col :span="11">
               <el-form-item prop="applystarttime">
-                <el-date-picker type="date" v-model="formData.applystarttime" placeholder="活动起始日期" :picker-options="pickerOptions"
+                <el-date-picker type="date" v-model="formData.applystarttime" placeholder="活动起始日期(该天0点起)" :picker-options="pickerOptions"
                                 value-format="yyyy-MM-dd HH:mm:ss"  style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col class="middle-line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="applyendtime">
-                <el-date-picker type="date" v-model="formData.applyendtime" placeholder="活动结束日期" :picker-options="pickerOptions"
+                <el-date-picker type="date" v-model="formData.applyendtime" placeholder="活动结束日期(该天24点止)" :picker-options="pickerOptions"
                                 value-format="yyyy-MM-dd HH:mm:ss"  style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
@@ -149,7 +149,7 @@
               :on-success="handleMainPicSuccess"
               :before-upload="beforeMainPicUpload"
             >
-              <img v-if="formData.tcmainpic" v-lazy="formData.tcmainpic" class="avatar">
+              <img v-if="formData.tcmainpic" :key="formData.tcmainpic" v-lazy="formData.tcmainpic" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">
@@ -323,7 +323,10 @@
           tctitle: [
             {required: true, message: '商品名称必填', trigger: 'blur'}
           ],
-          tcdescription: [],
+          tcdescription: [
+            {required: true, message: '商品描述必填', trigger: 'blur'}
+
+          ],
           tcfreight: [
             {required: true, message: '运费必填', trigger: 'blur'},
             {pattern: canZeroMoneyReg, message: '请输入合理的运费(至多2位小数)', trigger: 'blur'}
@@ -406,7 +409,7 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.brandOptions = data;
             }
@@ -621,8 +624,7 @@
       //  保存
       doSaveProd() {
         if (this.formData.tcid) { //  编辑
-          this.$http.post(this.$api.update_product, this.formData, {
-            params: {}
+          this.$http.post(this.$api.update_commodity, this.formData, {
           }).then(
             res => {
               if (res.data.status == 200) {
@@ -732,9 +734,9 @@
 
       //  编辑时,已保存的商品数据转换成组件要的
       convertFromEdit(data) {
-        this.imagesUrl = data.images.map(item => {
+        this.imagesUrl = data.image.map(item => {
           return {
-            url: item.pipic,
+            url: item.tcipic,
             tciid: item.tciid,
           }
         });
@@ -761,6 +763,9 @@
                 if (res.data.status == 200) {
                   let resData = res.data,
                       data = res.data.data;
+
+                  data.applystarttime = data.applystarttime + ' 00:00:00'
+                  data.applyendtime = data.applyendtime + ' 00:00:00'
 
                   this.convertFromEdit(data);
                   this.formData = data;
@@ -816,7 +821,6 @@
 
     //  新增编辑共用一个,光新增和tcid不变时不会重置数据,
     activated() {
-      //  todo  编辑时回显
       this.init();
     },
 
