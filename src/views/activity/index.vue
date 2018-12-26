@@ -7,12 +7,18 @@
         </template>
       </el-table-column>
       <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>
+      <el-table-column label="封面按钮" align="center" prop="acbutton"></el-table-column>
       <el-table-column label="类别" align="center" prop="actype_zh"></el-table-column>
       <el-table-column label="商品数" align="center" prop="pblogo"></el-table-column>
       <el-table-column label="关闭/开启" align="center" prop="pblogo">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.acshow" @change="showActivity(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" prop="pblogo">
+        <template slot-scope="scope">
+          <el-button type="text" @click="settingActivity(scope)">活动配置</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,14 +74,10 @@
           }
         );
       },
-      // 编辑活动
-      editActivity(row) {
+      // 活动配置
+      settingActivity(scope) {
 
-      },
-      // 删除活动
-      deleteActivity(row) {
-
-      },
+      }
     }
   }
 </script>
