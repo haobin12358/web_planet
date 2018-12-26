@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <section class="add-admin tr">
-      <el-button type="primary" icon="el-icon-plus" @click="addAdmin">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="adminDialog = true">新增</el-button>
     </section>
     <el-table v-loading="adminLoading" :data="adminList" height="726" stripe size="mini">
       <el-table-column label="编号" align="center" prop="adnum"></el-table-column>
-      <el-table-column label="头像" align="center" prop="adheader">
+      <el-table-column label="头像" align="center" prop="adheader" width="60">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.adheader" :key="scope.row.adheader"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="管理员身份" align="center" prop="adlevel"></el-table-column>
       <el-table-column label="管理员昵称" align="center" prop="adname" show-overflow-tooltip></el-table-column>
-      <el-table-column label="状态" align="center" prop="adstatus"></el-table-column>
+      <el-table-column label="管理员身份" align="center" prop="adlevel"></el-table-column>
+      <el-table-column label="状态" align="center" prop="adstatus" width="80"></el-table-column>
       <el-table-column label="手机号" align="center" prop="adtelphone"></el-table-column>
       <el-table-column label="最近登录时间" align="center" prop="logintime" width="180"></el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="120">
@@ -27,9 +27,9 @@
                      @size-change="sizeChange" @current-change="pageChange"></el-pagination>
     </section>
 
-    <el-dialog v-el-drag-dialog title="管理员信息" :visible.sync="adminDialog" top="10vh">
+    <el-dialog v-el-drag-dialog title="管理员信息" :visible.sync="adminDialog" top="10vh" width="600px">
       <el-form :model="adminForm" :rules="rules" ref="adminForm" label-position="left" label-width="100px"
-               status-icon inline>
+               status-icon style="padding-left: 20px">
         <el-form-item label="管理员头像" prop="adheader">
           <el-upload
             class="avatar-uploader"
@@ -46,30 +46,33 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="管理员昵称" prop="adname">
-          <el-input class="long-input" v-model="adminForm.adname"></el-input>
+          <el-input class="sort-input" v-model="adminForm.adname"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="adtelphone">
-          <el-input class="sort-input" v-model="adminForm.adtelphone"></el-input>
+          <el-input class="sort-input long-input" v-if="!adminForm.adid" v-model="adminForm.adtelphone"></el-input>
+          <el-input class="sort-input long-input" v-else v-model="adminForm.adtelphone" @change="inputChange"></el-input>
+          <el-button type="primary" size="small" v-if="!getCode" @click="getInforCode">获取验证码</el-button>
+          <el-button type="info" disabled size="small" v-else>{{time}}秒后重发</el-button>
         </el-form-item>
         <el-form-item label="验证码" prop="identifyingcode">
           <el-input class="sort-input" v-model="adminForm.identifyingcode" maxlength="6"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="adpassword">
-          <el-input class="sort-input" type="password" v-model="adminForm.adpassword"></el-input>
+          <el-input class="sort-input" type="password" :placeholder="editPasswd" v-model="adminForm.adpassword"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="adpasswordagain">
-          <el-input class="sort-input" type="password" v-model="adminForm.adpasswordagain"></el-input>
+          <el-input class="sort-input" type="password" :placeholder="editPasswd" v-model="adminForm.adpasswordagain"></el-input>
         </el-form-item>
         <el-form-item label="管理员状态" prop="adstatus">
-          <el-select v-model="adminForm.adstatus" placeholder="请选择">
+          <el-select v-model="adminForm.adstatus" placeholder="请选择" class="sort-input">
             <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="管理员等级" prop="adlevel">
+        <!--<el-form-item label="管理员等级" prop="adlevel">
           <el-select v-model="adminForm.adlevel" placeholder="请选择">
             <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="initAdminForm">取 消</el-button>
@@ -142,6 +145,9 @@
           ],
           adpasswordagain: [
             { required: true, validator: validatePass2, trigger: 'blur' }
+          ],
+          adstatus: [
+            { required: true, message: '管理员状态必选', trigger: 'blur' }
           ]
         },
         statusList: [
@@ -149,11 +155,15 @@
           { value: 'frozen', label: '已冻结' },
           { value: 'deleted', label: '已删除' }
         ],
-        typeList: [
+        getCode: false,               // 是否已获取验证码
+        time: 0,                      // 倒计时
+        editPasswd: '',               // 编辑管理员信息时密码选填
+        telephone: '',                // 编辑管理员信息时暂存之前的手机号
+        /*typeList: [
           { value: 'agent', label: '供应商' },
           { value: 'common_admin', label: '普通管理员' },
           { value: 'super_admin', label: '超级管理员' }
-        ],
+        ],*/
       }
     },
     computed: {
@@ -180,6 +190,31 @@
         }
         return isLt15M;
       },
+      // 获取验证码
+      getInforCode() {
+        if(!this.adminForm.adtelphone){
+          this.$message.warning('请先输入手机号码!');
+          return false;
+        }
+        this.getCode = true;
+        // 倒计时
+        const TIME_COUNT = 60;
+        this.time = TIME_COUNT;
+        let time_count = setInterval(() => {
+          if(this.time > 0 && this.time <= TIME_COUNT) {
+            this.time --;
+          }else {
+            this.getCode = false;
+            clearInterval(time_count);
+          }
+        }, 1000);
+        this.$http.get(this.$api.get_inforcode, {
+          noLoading: true, params: { ustelphone: this.adminForm.adtelphone }}).then(res => {
+          if (res.data.status == 200) {
+            this.$message.success('验证码发送成功');
+          }
+        })
+      },
       // 获取admin
       getAdmin() {
         this.adminLoading = true;
@@ -192,10 +227,17 @@
           if (res.data.status == 200) {
             this.adminList = res.data.data;
             this.total = res.data.total_count;
-            console.log(res.data.data);
             this.adminLoading = false;
           }
         })
+      },
+      // 监听编辑管理员信息时手机号的变化
+      inputChange(v) {
+        if(this.telephone !== v) {
+          this.rules.identifyingcode = [{ required: true, message: '修改管理员手机号需要输入验证码', trigger: 'blur' }];
+        }else {
+          this.rules.identifyingcode = [{ required: false, trigger: 'blur' }];
+        }
       },
       // 保存admin
       saveAdmin() {
@@ -204,9 +246,10 @@
             if(this.adminForm.adid) {      // 编辑
               this.$http.post(this.$api.update_admin, this.adminForm).then(res => {
                 if (res.data.status == 200) {
+                  this.initAdminForm();
                   this.$notify({
                     title: '修改成功',
-                    message: `管理员：${adminForm.adname}修改成功`,
+                    message: `管理员：${this.adminForm.adname} 修改成功`,
                     type: 'success'
                   });
                   this.adminDialog = false;
@@ -219,7 +262,7 @@
                   this.initAdminForm();
                   this.$notify({
                     title: '新增成功',
-                    message: `管理员：${adminForm.adname}新增成功`,
+                    message: `管理员：${this.adminForm.adname} 新增成功`,
                     type: 'success'
                   });
                   this.getAdmin()
@@ -234,7 +277,9 @@
       // 编辑admin
       editAdmin(scope) {
         this.adminForm = JSON.parse(JSON.stringify(scope.row));
+        this.telephone = JSON.parse(JSON.stringify(scope.row)).adtelphone;
         this.adminForm.adpassword = '';
+        this.editPasswd = '编辑管理员信息时选填';
         let validatePass = (rule, value, callback) => {
           if (this.adminForm.adpasswordagain !== '') {
             this.$refs.adminForm.validateField('adpasswordagain');
@@ -242,14 +287,19 @@
           callback();
         };
         let validatePass2 = (rule, value, callback) => {
-          if(value !== this.adminForm.adpassword) {
-            callback(new Error('两次输入密码不一致!'));
+          if(value !== undefined) {
+            if(value !== this.adminForm.adpassword) {
+              callback(new Error('两次输入密码不一致!'));
+            }else {
+              callback();
+            }
           }else {
             callback();
           }
         };
         this.rules.adpassword = [{ required: false, validator: validatePass, trigger: 'blur' }];
         this.rules.adpasswordagain = [{ required: false, validator: validatePass2, trigger: 'blur' }];
+        this.rules.identifyingcode = [{ required: false, trigger: 'blur' }];
         this.adminDialog = true;
       },
       sizeChange(val) {
@@ -260,25 +310,10 @@
         this.page_num = val;
         this.getAdmin();
       },
-      // 新增按钮
-      addAdmin() {
-        this.adminDialog = true;
-        // 获取所有管理员的状态
-        this.$http.get(this.$api.get_admin_all_status, { noLoading: true }).then(res => {
-          if (res.data.status == 200) {
-            // console.log(res.data.data);
-          }
-        });
-        // 获取管理员所有的身份
-        this.$http.get(this.$api.get_admin_all_type, { noLoading: true }).then(res => {
-          if (res.data.status == 200) {
-            // console.log(res.data.data);
-          }
-        })
-      },
       // 重置
       initAdminForm() {
         this.adminDialog = false;
+        this.telephone = '';
         this.$refs.adminForm.resetFields();
       }
     }
@@ -298,10 +333,10 @@
       line-height: 100px;
     }
     .long-input {
-      width: 19rem;
+      margin-right: 20px;
     }
     .sort-input {
-      width: 195px;
+      width: 300px;
     }
   }
 </style>

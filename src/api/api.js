@@ -98,6 +98,8 @@ const api = {
   set_banner: title + 'index/set_banner',                                 // 设置首页轮播图
   update_banner: title + 'index/update_banner',                           // 修改首页轮播图
 
+  get_inforcode: title + 'user/get_inforcode',                            // 获取验证码-管理员更改手机号
+
   agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
   back_confirm_recv: title + 'refund/back_confirm_recv',                   // 后台确认收货
   back_confirm_refund: title + 'refund/back_confirm_refund',                 // 后台确认执行退款(售后订单确认收货后执行退款)
