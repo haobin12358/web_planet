@@ -59,7 +59,7 @@
 
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="itemDialog" width="700px" top="20vh"
-               :title="itemForm.itid?'编辑圈子标签':'新增资讯标签'">
+               :title="itemForm.itid?'编辑圈子标签':'新增资讯标签'" :close-on-click-modal="false">
       <el-form :model="itemForm" :rules="rules" ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名称" prop="itname">
           <el-input v-model="itemForm.itname"></el-input>

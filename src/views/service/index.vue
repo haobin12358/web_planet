@@ -32,7 +32,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="问题类型" :visible.sync="dialogQaTypeVisible">
+    <el-dialog title="问题类型" :visible.sync="dialogQaTypeVisible" :close-on-click-modal="false">
       <el-form label-width="100px">
         <el-form-item label="问题图标:" >
           <el-upload
@@ -56,7 +56,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="currentRowName" :visible.sync="dialogQaVisible" label-width="100px">
+    <el-dialog :title="currentRowName" :visible.sync="dialogQaVisible" label-width="100px" :close-on-click-modal="false">
       <el-form label-width="120px">
         <el-form-item label="问题:" >
           <el-input v-model="question_form.quest"></el-input>

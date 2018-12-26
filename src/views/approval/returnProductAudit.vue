@@ -203,7 +203,7 @@
       </el-pagination>
     </section>
 
-    <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址">
+    <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址" :close-on-click-modal="false">
       <el-form :model="passRefundForm" :rules="rules" ref="passRefundForm" label-width="120px">
         <el-form-item label="收货人" prop="orrecvname">
           <el-input  class="m-input-pwd" v-model.trim="passRefundForm.orrecvname"
