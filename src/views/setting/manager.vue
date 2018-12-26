@@ -160,12 +160,7 @@
         getCode: false,               // 是否已获取验证码
         time: 0,                      // 倒计时
         editPasswd: '',               // 编辑管理员信息时密码选填
-        telephone: '',                // 编辑管理员信息时暂存之前的手机号
-        /*typeList: [
-          { value: 'agent', label: '供应商' },
-          { value: 'common_admin', label: '普通管理员' },
-          { value: 'super_admin', label: '超级管理员' }
-        ],*/
+        telephone: ''                 // 编辑管理员信息时暂存之前的手机号
       }
     },
     computed: {
