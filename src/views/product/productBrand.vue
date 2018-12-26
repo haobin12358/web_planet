@@ -83,7 +83,7 @@
             :on-success="handlePbLogoSuccess"
             :before-upload="beforePicUpload"
           >
-            <img v-if="brandForm.pblogo" v-lazy="brandForm.pblogo" class="avatar">
+            <img v-if="brandForm.pblogo" :key="brandForm.pblogo" v-lazy="brandForm.pblogo" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
             <div slot="tip" class="el-upload__tip">
