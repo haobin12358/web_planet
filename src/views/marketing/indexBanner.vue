@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <section class="add-banner">
+    <section class="add-banner tr">
       <el-button type="primary" icon="el-icon-plus" @click="bannerDialog = true">新增</el-button>
     </section>
     <el-table v-loading="bannerLoading" :data="bannerList" stripe>
@@ -43,7 +43,7 @@
             <img v-if="bannerForm.ibpic" v-lazy="bannerForm.ibpic" class="avatar banner-img">
             <i v-else class="el-icon-plus avatar-uploader-icon banner-img"></i>
             <div slot="tip" class="el-upload__tip">
-              建议为680 * 370，大小不要超过15M，上传成功后会显示，上传大图请耐心等待
+              建议为680 * 370，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
             </div>
           </el-upload>
         </el-form-item>
@@ -80,7 +80,7 @@
           </el-form-item>
         </el-form>
       </section>
-      <el-table v-loading="productLoading" :data="productsList" stripe height="600">
+      <el-table v-loading="productLoading" :data="productsList" stripe size="mini" height="600">
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
@@ -96,10 +96,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination background :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
-                     :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
-                     @size-change="sizeChange" @current-change="pageChange" style="margin: 20px 0 0 0; text-align: center">
-      </el-pagination>
+      <section class="table-bottom">
+        <el-pagination background :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+                       :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                       @size-change="sizeChange" @current-change="pageChange"></el-pagination>
+      </section>
     </el-dialog>
   </div>
 </template>
@@ -220,6 +221,7 @@
                       message: '轮播图新增成功',
                       type: 'success'
                     });
+                    this.getBanner()
                   }
                 })
               }
@@ -376,7 +378,7 @@
 
   .container {
     .add-banner {
-      text-align: right;
+      margin-bottom: 20px;
     }
     .banner-img {
       width: 272px;
