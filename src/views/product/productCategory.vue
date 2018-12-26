@@ -41,7 +41,7 @@
     </tree-table>
 
     <!--编辑dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh"
+    <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh" :close-on-click-modal="false"
                :title="categroyForm.pcid?'分类编辑':'分类新增'">
       <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
         <el-form-item label="所属分类" prop="parentpcid">

@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="修改密码">
+    <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="修改密码" :close-on-click-modal="false">
       <el-form :model="pwdForm" :rules="rules" ref="pwdForm" label-position="left" label-width="120px">
         <el-form-item label="旧密码" prop="password_old">
           <el-input type="password" class="m-input-pwd" v-model="pwdForm.password_old"

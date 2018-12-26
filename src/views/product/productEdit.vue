@@ -233,7 +233,7 @@
     </section>
 
     <!--规格排序dialog-->
-    <el-dialog :visible.sync="dialogSkuSortVisible" width="80%" title="确认规格顺序(拖动排序)">
+    <el-dialog :visible.sync="dialogSkuSortVisible" width="80%" title="确认规格顺序(拖动排序)" :close-on-click-modal="false">
       <section style="display: flex;align-items:flex-start;flex-wrap: wrap;">
         <kan-ban v-for="(item,index) in formData.pskuvalue" :key="index" :list="item"
                  class="kanban" :header-text="formData.prattribute[index]"/>

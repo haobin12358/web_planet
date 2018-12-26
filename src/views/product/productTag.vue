@@ -34,7 +34,8 @@
       </el-table-column>
     </el-table>
     <!--场景编辑dialog-->
-    <el-dialog :visible.sync="sceneDlgVisible" width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'">
+    <el-dialog :visible.sync="sceneDlgVisible" width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'"
+               :close-on-click-modal="false">
       <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-width="120px">
         <el-form-item label="场景名称" prop="psname">
           <el-input v-model.trim="sceneForm.psname"></el-input>
@@ -98,7 +99,8 @@
       </el-table-column>
     </el-table>
     <!--商品标签编辑dialog-->
-    <el-dialog :visible.sync="itemDlgVisible" width="700px"  :title="itemForm.itid ? '标签编辑': '标签新增'">
+    <el-dialog :visible.sync="itemDlgVisible" width="700px"  :title="itemForm.itid ? '标签编辑': '标签新增'"
+               :close-on-click-modal="false">
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名" prop="itname">
           <el-input v-model.trim="itemForm.itname"></el-input>

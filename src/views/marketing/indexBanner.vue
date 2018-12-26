@@ -29,7 +29,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-el-drag-dialog title="首页轮播图" :visible.sync="bannerDialog" top="5vh">
+    <el-dialog v-el-drag-dialog title="首页轮播图" :visible.sync="bannerDialog" top="5vh" :close-on-click-modal="false">
       <el-form :model="bannerForm" :rules="rules" ref="bannerFormRef" label-position="left"
                label-width="100px">
         <el-form-item label="轮播图" prop="ibpic">
@@ -68,7 +68,8 @@
     </el-dialog>
 
     <!--商品dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="商品绑定" append-to-body>
+    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="商品绑定"
+               :close-on-click-modal="false" append-to-body>
       <section class="tool-bar" style="margin-top: -20px">
         <el-form :inline="true" size="medium">
           <el-form-item label="商品名 / 品牌名">
@@ -265,7 +266,7 @@
             });
           }else if(where == 'edit') {         // 编辑banner
             this.productList = [];
-            this.$http.get(this.$api.product_get, {params: 
+            this.$http.get(this.$api.product_get, {params:
               { prid: scope.row.prid }}).then(res => {
               if (res.data.status == 200) {
                 this.productList.push(res.data.data)

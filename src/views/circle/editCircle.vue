@@ -109,7 +109,7 @@
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
     <!--商品dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="15vh" title="商品绑定">
+    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="15vh" title="商品绑定" :close-on-click-modal="false">
       <el-table v-loading="productLoading" :data="productsList" stripe
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection"></el-table-column>

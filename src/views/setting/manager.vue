@@ -27,7 +27,7 @@
                      @size-change="sizeChange" @current-change="pageChange"></el-pagination>
     </section>
 
-    <el-dialog v-el-drag-dialog title="管理员信息" :visible.sync="adminDialog" top="10vh" width="600px">
+    <el-dialog v-el-drag-dialog title="管理员信息" :visible.sync="adminDialog" top="10vh" width="600px" :close-on-click-modal="false">
       <el-form :model="adminForm" :rules="rules" ref="adminForm" label-position="left" label-width="100px"
                status-icon style="padding-left: 20px">
         <el-form-item label="管理员头像" prop="adheader">

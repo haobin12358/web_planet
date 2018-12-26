@@ -80,7 +80,7 @@
       </el-pagination>
     </section>
 
-    <el-dialog title="活动配置" :visible.sync="settingVisible" width="700px">
+    <el-dialog title="活动配置" :visible.sync="settingVisible" width="700px" :close-on-click-modal="false">
       <el-form :model="formData" :rules="rules" ref="actiSettingForm" label-position="left"
                label-width="100px">
         <el-form-item label="活动封面图" prop="acbackground">
