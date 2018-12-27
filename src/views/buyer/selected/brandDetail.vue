@@ -17,10 +17,10 @@
         <div class="m-normal" :class="isFold?'m-fold':''">
           {{brand_info.pbdesc}}
         </div>
-        <p class="m-up-fold">
+        <!--<p class="m-up-fold">
           <span v-if="!isFold" @click="foldClick">点击展开 <span class="m-icon-unfold"></span></span>
           <span v-else @click="foldClick">点击收起 <span class="m-icon-packup"></span></span>
-        </p>
+        </p>-->
       </div>
       <nav-list class="m-width" :navlist="nav_list" @navClick="navClick"></nav-list>
 
@@ -221,6 +221,7 @@
       height: 64px;
       line-height: 32px;
       overflow: hidden;
+      text-indent: 2em;
       width: 676px;
       display:block;
       word-break: break-all;
