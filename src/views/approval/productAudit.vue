@@ -23,7 +23,7 @@
         </el-form-item>
 
         <el-button type="primary" icon="el-icon-search">查询</el-button>
-        <el-button icon="el-icon-refresh">重置</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;">重置</el-button>
       </el-form>
     </section>
 

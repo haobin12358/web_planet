@@ -1,17 +1,23 @@
 <template>
   <div class="container">
-    <section class="fixed-right-top">
-      <el-tabs tab-position="right" style="height: 200px;">
-        <el-tab-pane label="基础数据"></el-tab-pane>
-        <el-tab-pane label="基本信息"></el-tab-pane>
-        <el-tab-pane label="详细信息"></el-tab-pane>
-      </el-tabs>
-    </section>
+    <!--<section class="fixed-right-top">-->
+      <!--<el-tabs tab-position="right" @tab-click="goLabel2" style="height: 200px;">-->
+        <!--<el-tab-pane label="基础数据" name="1">1</el-tab-pane>-->
+        <!--<el-tab-pane label="基本信息" name="2">2</el-tab-pane>-->
+        <!--<el-tab-pane label="详细信息" name="3">3</el-tab-pane>-->
+      <!--</el-tabs>-->
+    <!--</section>-->
+    <!--<nav style="display: none">-->
+      <!--<a href="#1" ref="1">基础数据</a>-->
+      <!--<a href="#2" ref="2">基本信息</a>-->
+      <!--<a href="#3" ref="3">详细信息</a>-->
+    <!--</nav>-->
+
 
     <el-row>
       <el-col :span="16">
         <el-form ref="prodForm" :model="formData" :rules="rules" label-position="left" label-width="100px">
-          <el-form-item label="所属品牌" prop="pbid">
+          <el-form-item id="1" label="所属品牌" prop="pbid">
             <el-select v-model="formData.pbid" style="width: 500px;" filterable placeholder="可搜索">
               <el-option v-for="item in brandOptions" :key="item.pbid" :label="item.pbname" :value="item.pbid">
                 <span style="float: left">{{ item.pbname }}</span>
@@ -25,7 +31,7 @@
 
           <!--<block-title title="基本信息"></block-title>-->
 
-          <el-form-item label="商品名称" prop="tctitle">
+          <el-form-item  label="商品名称" prop="tctitle">
             <el-input v-model.trim="formData.tctitle"></el-input>
           </el-form-item>
           <el-form-item label="商品描述" prop="tcdescription">
@@ -35,7 +41,7 @@
             <el-input v-model.number="formData.tcfreight" style="width: 200px;"></el-input>
           </el-form-item>
 
-          <el-form-item label="押金" prop="tcdeposit">
+          <el-form-item id="2" label="押金" prop="tcdeposit">
             <el-input v-model.number="formData.tcdeposit" style="width: 200px;"></el-input>
           </el-form-item>
           <el-form-item label="押金期限(天)" prop="tcdeadline">
@@ -140,7 +146,7 @@
 
           <!--<block-title title="详细信息"></block-title>-->
 
-          <el-form-item label="商品主图" prop="tcmainpic">
+          <el-form-item id="3" label="商品主图" prop="tcmainpic">
             <el-upload
               class="avatar-uploader"
               :action="uploadUrl"
@@ -400,6 +406,12 @@
     },
 
     methods: {
+      goLabel(tag){
+        // console.log(tag);
+        // return
+        // this.$refs[tag.name].click();
+      },
+
       setBrand() {
         this.$http.get(this.$api.brand_list, {
           params: {

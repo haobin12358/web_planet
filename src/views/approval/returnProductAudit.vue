@@ -2,43 +2,22 @@
   <div class="container">
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
-        <!--<el-form-item label="订单号">-->
-        <!--<el-input></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="收件人">-->
-        <!--<el-input></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="手机号">-->
-        <!--<el-input></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="商品名">-->
-        <!--<el-input></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="下单时间">-->
-        <!--<el-col :span="11">-->
-        <!--<el-date-picker type="date" placeholder="起始日期" style="width: 100%;"></el-date-picker>-->
-        <!--</el-col>-->
-        <!--<el-col class="middle-line" :span="2">-</el-col>-->
-        <!--<el-col :span="11">-->
-        <!--<el-date-picker type="date" placeholder="结束日期" style="width: 100%;"></el-date-picker>-->
-        <!--</el-col>-->
-        <!--</el-form-item>-->
         <el-form-item label="申请状态">
-          <el-select v-model="searchForm.applyStatus">
+          <el-select v-model="searchForm.orastatus" @change="doSearch">
             <el-option v-for="item in applyStatusOptions" :key="item.value" :label="item.label"
                        :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="searchForm.applyStatus == 10" label="退货状态">
-          <el-select v-model="searchForm.refundStatus">
+        <el-form-item v-if="searchForm.orastatus == 10" label="退货状态">
+          <el-select v-model="searchForm.orstatus" @change="doSearch">
             <el-option v-for="item in refundStatusOption" :key="item.value" :label="item.label"
                        :value="item.value"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -65,7 +44,10 @@
             <el-table-column label="订单商品退款" align="center">
               <el-table-column label="审核状态" width="120" align="center">
                 <template slot-scope="scope">
-                  <el-tag v-if="scope.row.order_refund_apply" :type="applyStatusTagType(scope.row.order_refund_apply.orastatus_zh)">{{scope.row.order_refund_apply.orastatus_zh}}</el-tag>
+                  <el-tag v-if="scope.row.order_refund_apply"
+                          :type="applyStatusTagType(scope.row.order_refund_apply.orastatus_zh)">
+                    {{scope.row.order_refund_apply.orastatus_zh}}
+                  </el-tag>
                 </template>
               </el-table-column>
               <el-table-column label="买家是否收到货" width="180" align="center">
@@ -84,6 +66,13 @@
                       {{scope.row.order_refund_apply.orastate_zh}}
                     </el-tag>
                   </template>
+                </template>
+              </el-table-column>
+              <el-table-column label="退货状态" width="120" align="center">
+                <template slot-scope="scope">
+                    <el-tag  v-if="scope.row.order_refund" :type="orstatusTagType(scope.row.order_refund.orstatus_zh)">
+                      {{scope.row.order_refund.orstatus_zh}}
+                    </el-tag>
                 </template>
               </el-table-column>
             </el-table-column>
@@ -137,7 +126,10 @@
       <el-table-column label="整订单退款" align="center">
         <el-table-column label="审核状态" width="120" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.order_refund_apply" :type="applyStatusTagType(scope.row.order_refund_apply.orastatus_zh)">{{scope.row.order_refund_apply.orastatus_zh}}</el-tag>
+            <el-tag v-if="scope.row.order_refund_apply"
+                    :type="applyStatusTagType(scope.row.order_refund_apply.orastatus_zh)">
+              {{scope.row.order_refund_apply.orastatus_zh}}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="买家是否收到货" width="180" align="center">
@@ -156,6 +148,13 @@
                 {{scope.row.order_refund_apply.orastate_zh}}
               </el-tag>
             </template>
+          </template>
+        </el-table-column>
+        <el-table-column label="退货状态" width="120" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.order_refund"  :type="orstatusTagType(scope.row.order_refund.orstatus_zh)">
+              {{scope.row.order_refund.orstatus_zh}}
+            </el-tag>
           </template>
         </el-table-column>
       </el-table-column>
@@ -206,15 +205,15 @@
     <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址" :close-on-click-modal="false">
       <el-form :model="passRefundForm" :rules="rules" ref="passRefundForm" label-width="120px">
         <el-form-item label="收货人" prop="orrecvname">
-          <el-input  class="m-input-pwd" v-model.trim="passRefundForm.orrecvname"
+          <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvname"
                     placeholder=""></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="orrecvphone">
-          <el-input  class="m-input-pwd" v-model.trim="passRefundForm.orrecvphone"
+          <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvphone"
                     placeholder=""></el-input>
         </el-form-item>
         <el-form-item label="收货地址" prop="orrecvaddress">
-          <el-input  class="m-input-pwd" v-model.trim="passRefundForm.orrecvaddress"
+          <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvaddress"
                     placeholder=""></el-input>
         </el-form-item>
       </el-form>
@@ -239,21 +238,27 @@
       return {
         applyStatusOptions: [
           {
-            label: '取消',
+            label: '全部',
+            value: '',
+          }, {
+            label: '已取消',
             value: -20,
           }, {
-            label: '拒绝',
+            label: '已拒绝',
             value: -10,
           }, {
             label: '未审核',
             value: 0,
           }, {
-            label: '同意',
+            label: '已同意',
             value: 10,
           },
         ],
         refundStatusOption: [
           {
+            label: '全部',
+            value: '',
+          }, {
             label: '等待买家发货',
             value: 0,
           }, {
@@ -271,8 +276,8 @@
           },
         ],
         searchForm: {
-          applyStatus: '',
-          refundStatus: '', //  同意退货退款后才有
+          orastatus: '',
+          orstatus: '', //  同意退货退款后才有
         },
 
         expandAll: true,
@@ -306,6 +311,16 @@
     computed: {},
 
     methods: {
+      doSearch() {
+        this.setOrderList();
+      },
+      doReset() {
+        this.searchForm = {
+          orastatus: '',
+          orstatus: '',
+        }
+      },
+
       changeSwitch() {
         for (let i = 0; i < this.orderData.length; i++) {
           this.$refs.orderTable.toggleRowExpansion(this.orderData[i], this.expandAll);
@@ -335,7 +350,7 @@
             return 'info'
         }
       },
-      applyStatusTagType(statusZh){
+      applyStatusTagType(statusZh) {
         switch (statusZh) {
           case '未审核':
             return 'primary'
@@ -347,6 +362,15 @@
             return 'danger'
         }
       },
+      orstatusTagType(statusZh){
+        switch (statusZh) {
+          case '已退款':
+            return 'success'
+          case '已拒绝':
+            return 'info'
+        }
+      },
+
       tableRowClassName({row, rowIndex}) {
         if (row.ominrefund) {
           return 'warning-row';
@@ -384,6 +408,8 @@
             page_size: this.pageSize,
             page_num: this.currentPage,
             omstatus: 'inrefund',
+
+            ...this.searchForm
           }
         }).then(
           res => {
@@ -415,12 +441,12 @@
       gotoReturnOrderDetail(row, props) {
         let query = {};
 
-        if(props){  //  订单商品退款查看
+        if (props) {  //  订单商品退款查看
           query = {
             omid: props.row.omid,
             opid: row.opid
           }
-        }else{
+        } else {
           query = {
             omid: row.omid,
           }
@@ -435,22 +461,22 @@
           query,
         })
       },
-      doPass(row,props) {
-        if(row.order_refund_apply.orastate == 0){
+      doPass(row, props) {
+        if (row.order_refund_apply.orastate == 0) {
           this.passRefundVisible = true;
           this.passRefundForm.oraid = row.order_refund_apply.oraid;
           this.passRefundForm.message = `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`;
-        }else{
+        } else {
           this.$confirm(`确认同意申请?`, '提示').then(
             () => {
-              this.$http.post(this.$api.agree_refund_apply,{
+              this.$http.post(this.$api.agree_refund_apply, {
                 "oraid": row.order_refund_apply.oraid,
                 "agree": true,
               }).then(
                 res => {
                   if (res.data.status == 200) {
                     let resData = res.data,
-                        data = res.data.data;
+                      data = res.data.data;
 
                     this.setOrderList();
                     this.$notify({
@@ -465,11 +491,11 @@
           )
         }
       },
-      doPassRefundOrder(){
+      doPassRefundOrder() {
         this.$refs.passRefundForm.validate(
           valid => {
             if (valid) {
-              this.$http.post(this.$api.agree_refund_apply,{
+              this.$http.post(this.$api.agree_refund_apply, {
                 "oraid": this.passRefundForm.oraid,
                 "agree": true,
                 "orrecvname": this.passRefundForm.orrecvname,
@@ -479,7 +505,7 @@
                 res => {
                   if (res.data.status == 200) {
                     let resData = res.data,
-                        data = res.data.data;
+                      data = res.data.data;
 
                     this.setOrderList();
                     this.$notify({
@@ -496,7 +522,7 @@
                   }
                 }
               )
-            }else {
+            } else {
               this.$message.warning('请根据校验信息完善表单!');
             }
           }
@@ -506,14 +532,14 @@
       doNoPass(row, props) {
         this.$confirm(`确认拒绝申请?`, '提示').then(
           () => {
-            this.$http.post(this.$api.agree_refund_apply,{
+            this.$http.post(this.$api.agree_refund_apply, {
               "oraid": row.order_refund_apply.oraid,
               "agree": false,
             }).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.setOrderList();
                   this.$notify({

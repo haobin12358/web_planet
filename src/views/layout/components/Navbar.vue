@@ -6,7 +6,7 @@
     <div class="right-menu-wrap">
 
       <template v-if="device!=='mobile'">
-        <el-input placeholder="搜索菜单"></el-input>
+        <menu-search></menu-search>
         <error-log class="errLog-container right-menu-item"/>
 
         <el-tooltip content="全屏" effect="dark" placement="bottom">
@@ -48,6 +48,7 @@
   import ErrorLog from 'src/components/ErrorLog'
   import Screenfull from 'src/components/Screenfull'
   import SizeSelect from 'src/components/SizeSelect'
+  import MenuSearch from 'src/components/MenuSearch'
   import ChangePwd from 'src/views/setting/changePwd'
 
   export default {
@@ -57,7 +58,8 @@
       ErrorLog,
       Screenfull,
       SizeSelect,
-      ChangePwd
+      ChangePwd,
+      MenuSearch,
     },
     computed: {
       ...mapGetters([

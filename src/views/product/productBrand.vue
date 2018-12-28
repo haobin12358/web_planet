@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column label="状态" width="100" align="center">
         <template slot-scope="scope">
-          <el-tag  v-if="scope.row.pbstatus == 0">上架中</el-tag>
+          <el-tag v-if="scope.row.pbstatus == 0">上架中</el-tag>
           <el-tag v-if="scope.row.pbstatus == 1" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
@@ -53,7 +53,11 @@
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditBrand(scope.row)">编辑</el-button>
-          <el-button type="text" class="danger-text">下架</el-button>
+          <el-button type="text" v-if="scope.row.pbstatus == 0" class="warning-text" @click="doOffShelvesBrand(scope.row)">下架</el-button>
+          <el-button type="text" v-if="scope.row.pbstatus == 10" class="success-text" @click="doOffShelvesBrand(scope.row, true)">上架</el-button>
+          <el-button type="text" class="danger-text" @click="doDeleteBrand(scope.row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,7 +75,8 @@
     </section>
 
     <!--品牌dialog-->
-    <el-dialog :visible.sync="brandDlgVisible" width="700px" top="10vh" v-el-drag-dialog :title="brandForm.pbid ? '品牌编辑': '品牌新增'"
+    <el-dialog :visible.sync="brandDlgVisible" width="700px" top="10vh" v-el-drag-dialog
+               :title="brandForm.pbid ? '品牌编辑': '品牌新增'"
                :close-on-click-modal="false">
       <el-form :model="brandForm" :rules="brandRules" ref="brandForm" size="medium" label-width="120px">
         <el-form-item label="品牌logo" prop="pblogo">
@@ -155,7 +160,7 @@
 
       <el-button type="primary" icon="el-icon-plus" @click="doAddItem">新增</el-button>
     </section>
-    <el-table v-loading="itemLoading" :data="itemTableData"  size="mini">
+    <el-table v-loading="itemLoading" :data="itemTableData" size="mini">
       <el-table-column label="标签名" align="center" prop="itname" width="300"></el-table-column>
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
       <!--<el-table-column label="关联品牌" align="center"></el-table-column>-->
@@ -217,8 +222,7 @@
           itname: [
             {required: true, message: '标签名字必填', trigger: 'blur'}
           ],
-          itdesc: [
-          ],
+          itdesc: [],
         },
 
         statusOption: [
@@ -280,16 +284,16 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=brand'
+        return this.$api.upload_file + getStore('token') + '&type=brand'
       },
     },
 
     methods: {
-      doItemSearch(){
+      doItemSearch() {
         this.setItemList();
       },
-      doItemReset(){
-        this.itemSearchForm = { kw: ''};
+      doItemReset() {
+        this.itemSearchForm = {kw: ''};
         this.doItemSearch();
       },
       setItemList() {
@@ -324,7 +328,7 @@
           itdesc: row.itdesc,
         };
       },
-      doSaveItem(){
+      doSaveItem() {
         this.$refs.itemForm.validate(
           valid => {
             if (valid) {
@@ -336,7 +340,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -375,9 +379,9 @@
       },
 
       doRemoveItem(row) {
-        this.$confirm(`确认删除标签(${row.itname})?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.update_items,{
+        this.$confirm(`确认删除标签(${row.itname})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.update_items, {
               itid: row.itid,
               ittype: 40,
               isdelete: true
@@ -429,7 +433,7 @@
             this.brandLoading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.brandTableData = data;
               this.totalBrand = resData.total_count;
@@ -465,7 +469,7 @@
         return isLt15M;
       },
 
-      resetBrandForm(){
+      resetBrandForm() {
         this.brandForm = {
           pblogo: "",
           pbbackgroud: '',
@@ -501,7 +505,7 @@
         this.brandDlgVisible = true;
         this.brandForm = {
           pbid: row.pbid,
-          pblogo:row.pblogo,
+          pblogo: row.pblogo,
           pbbackgroud: row.pbbackgroud,
           pbname: row.pbname,
           pbdesc: row.pbdesc,
@@ -509,6 +513,55 @@
           itids: [],
         };
         this.brandForm.itids = row.items.map(item => item.itid);
+      },
+      doOffShelvesBrand(row, up) {
+        let type = up ? '上架' : '下架';
+
+        this.$confirm(`确认${type}品牌(${row.pbname})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.off_shelves_brand, {
+              pbid: row.pbid,
+              up: up ? 'up': '',
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.init();
+                  this.$notify({
+                    title: `品牌${type}成功`,
+                    message: `品牌名:${row.pbname}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+      doDeleteBrand(row) {
+        this.$confirm(`确认删除品牌(${row.pbname})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.delete_brand, {
+              pbid: row.pbid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.init();
+                  this.$notify({
+                    title: '品牌删除成功',
+                    message: `品牌名:${row.pbname}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
       },
 
       doSaveBrand() {
@@ -522,7 +575,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,

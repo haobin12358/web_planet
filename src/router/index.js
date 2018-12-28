@@ -222,8 +222,13 @@ export const asyncRouterMap = [
         path: 'commission',
         name: 'CommissionIndex',
         component: () => import('src/views/commission/index'),
-        meta: {title: '佣金', noCache: true,icon: 'yongjin', roles: level2}
-      }
+        meta: {title: '佣金', noCache: true, roles: level2}
+      },{
+        path: 'commissionSetting',
+        name: 'CommissionSetting',
+        component: () => import('src/views/commission/commissionSetting'),
+        meta: {title: '佣金设置', noCache: true, roles: level2}
+      },
     ]
   },
 
@@ -353,7 +358,7 @@ export const asyncRouterMap = [
         path: 'manager',
         name: 'Manager',
         component: () => import('src/views/setting/manager'),
-        meta: {title: '管理员',noCache: true, roles: level2}
+        meta: {title: '管理员',noCache: true, roles: level3}
       }, {
         path: 'approvalSetting',
         name: 'ApprovalSetting',

@@ -1,19 +1,25 @@
 <template>
   <div class="container">
     <section class="fixed-right-top">
-      <el-tabs tab-position="right" style="height: 200px;">
-        <el-tab-pane label="基础数据"></el-tab-pane>
-        <el-tab-pane label="基本信息"></el-tab-pane>
-        <el-tab-pane label="详细信息"></el-tab-pane>
+      <el-tabs tab-position="right"  @tab-click="goLabel" style="height: 200px;">
+        <el-tab-pane label="基础数据" name="1"></el-tab-pane>
+        <el-tab-pane label="基本信息" name="2"></el-tab-pane>
+        <el-tab-pane label="详细信息" name="3"></el-tab-pane>
       </el-tabs>
     </section>
 
-    <el-row>
-      <el-col :span="16">
-        <el-form ref="prodForm" :model="formData" :rules="rules" label-position="left" label-width="100px">
+    <nav style="display: none">
+      <a href="#1" ref="1">基础数据</a>
+      <a href="#2" ref="2">基本信息</a>
+      <a href="#3" ref="3">详细信息</a>
+    </nav>
+
+    <!--<el-row>-->
+      <!--<el-col :span="16">-->
+        <el-form class="prod-form" ref="prodForm" :model="formData" :rules="rules" label-position="left" label-width="100px">
           <!--<block-title title="基础数据"></block-title>-->
 
-          <el-form-item label="所属分类" prop="pcid">
+          <el-form-item id="1" label="所属分类" prop="pcid">
             <el-cascader :options="categoryOptions" style="width: 500px;" :props="categoryProps"
                          @change="handlePcidChange"
                          v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
@@ -51,11 +57,11 @@
 
           <!--<block-title title="基本信息"></block-title>-->
 
-          <el-form-item label="商品名称" prop="prtitle">
-            <el-input v-model.trim="formData.prtitle"></el-input>
+          <el-form-item id="2" label="商品名称" prop="prtitle">
+            <el-input v-model.trim="formData.prtitle" style="width: 700px;"></el-input>
           </el-form-item>
           <el-form-item label="商品描述" prop="prdescription">
-            <el-input v-model.trim="formData.prdescription"></el-input>
+            <el-input v-model.trim="formData.prdescription" type="textarea" style="width: 700px;"></el-input>
           </el-form-item>
           <el-form-item label="划线价格" prop="prlineprice">
             <el-input style="width: 200px;" v-model.number="formData.prlineprice"></el-input>
@@ -115,7 +121,7 @@
                   </el-upload>
                 </template>
               </el-table-column>
-              <el-table-column label="sn" prop="sn" align="center">
+              <el-table-column label="SN" prop="sn" align="center">
                 <template slot-scope="scope">
                   <el-input v-model.trim="scope.row.skusn"></el-input>
                 </template>
@@ -162,7 +168,7 @@
 
           <!--<block-title title="详细信息"></block-title>-->
 
-          <el-form-item label="商品主图" prop="prmainpic">
+          <el-form-item id="3"  label="商品主图" prop="prmainpic">
             <el-upload
               class="avatar-uploader"
               :action="uploadUrl"
@@ -224,8 +230,8 @@
             <el-button type="primary" @click="checkFormData">保存商品</el-button>
           </el-form-item>
         </el-form>
-      </el-col>
-    </el-row>
+      <!--</el-col>-->
+    <!--</el-row>-->
 
     <section class="tool-tip-wrap pin-right-bottom">
       <el-button type="primary" @click="checkFormData(true)">保存并跳转</el-button>
@@ -414,6 +420,10 @@
     },
 
     methods: {
+      goLabel(tag){
+        this.$refs[tag.name].click();
+      },
+
       setCategory() {
         this.$http.get(this.$api.category_list, {
           params: {
@@ -688,14 +698,13 @@
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
+                  this.reset();
                 }
-
                 this.$notify({
                   title: '商品编辑成功',
                   message: `商品名:${this.formData.prtitle}`,
                   type: 'success'
                 });
-                this.reset();
                 this.dialogSkuSortVisible = false;
               }
             }
@@ -711,6 +720,7 @@
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
+                  this.reset();
                 }
 
 
@@ -719,7 +729,6 @@
                   message: `商品名:${this.formData.prtitle}`,
                   type: 'success'
                 });
-                this.reset();
                 this.dialogSkuSortVisible = false;
               }
             }
@@ -904,6 +913,12 @@
     .fixed-right-top {
       position: fixed;
       right: 0;
+    }
+
+    .prod-form{
+      .el-form-item{
+        width: 70vw;
+      }
     }
 
     .el-tag + .el-tag {

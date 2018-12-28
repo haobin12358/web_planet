@@ -95,7 +95,7 @@
 
         <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
         <!--</el-button>-->
-        <el-popover v-if="order_refund" placement="left" trigger="hover">
+        <el-popover v-if="order_refund && order_refund.orlogisticdata" placement="left" trigger="hover">
           <div style="padding: 20px">
             <el-steps direction="vertical" :active="order_refund.orlogisticdata.list.length">
             <el-step v-for="item in order_refund.orlogisticdata.list" :title="item.time" :key="item.time"
@@ -161,7 +161,7 @@
 
         order: {},
         order_refund_apply: {},
-        order_refund: null,
+        order_refund: {},
       }
     },
 
@@ -247,7 +247,7 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               if (this.$route.query.opid) { //  订单商品
                 data.order_part = data.order_part.filter(item => item.opid == this.$route.query.opid)
@@ -256,10 +256,13 @@
               } else {
                 this.order_refund_apply = data.order_refund_apply;
                 this.order_refund = data.order_refund;
+              }
+
+              if(this.order_refund.orlogisticdata){
                 this.order_refund.orlogisticdata.list = this.order_refund.orlogisticdata.list.reverse();
               }
 
-              if (this.order_refund) {
+              if (this.order_refund.orstatus) {
                 switch (this.order_refund.orstatus) {
                   case 0:
                     this.orderStep = 0;

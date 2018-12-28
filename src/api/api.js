@@ -36,6 +36,7 @@ const api = {
   create_brand: title + 'brand/create',                                   //新增品牌
   update_brand: title + 'brand/update',                                   //修改品牌
   off_shelves_brand: title + 'brand/off_shelves',                         //下架品牌
+  delete_brand: title + 'brand/delete',                                   //删除品牌
 
 
   items_list: title + 'items/list',                                       //获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
@@ -61,6 +62,7 @@ const api = {
   create_supplizer: title + 'supplizer/create',                           //新增
   update_supplizer: title + 'supplizer/update',                           //修改
   get_supplizer: title + 'supplizer/get',                                 //获取供应商
+  delete_supplizer: title + 'supplizer/delete',                           //删除供应商
 
 
 
@@ -103,7 +105,7 @@ const api = {
 
   agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
   back_confirm_recv: title + 'refund/back_confirm_recv',                   // 后台确认收货
-  back_confirm_refund: title + 'refund/back_confirm_refund',                 // 后台确认执行退款(售后订单确认收货后执行退款)
+  back_confirm_refund: title + 'refund/back_confirm_refund',               // 后台确认执行退款(售后订单确认收货后执行退款)
 };
 
 export default api

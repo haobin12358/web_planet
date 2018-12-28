@@ -52,6 +52,7 @@
       <el-table-column align="center" prop="prtitle" label="操作" width="180" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditSupplier(scope.row)">编辑</el-button>
+          <el-button type="text" @click="doEditSupplierPwd(scope.row)">修改密码</el-button>
           <el-button type="text" class="danger-text" @click="doRemoveSupplier(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -104,8 +105,6 @@
         //  大图预览
         dialogImageUrl: '',
         dialogVisible: false,
-
-
       }
     },
 
@@ -173,9 +172,56 @@
       },
 
       doRemoveSupplier(row) {
-        this.$confirm(`确认弃用供应商(${row.suname})?其下的品牌及品牌下面的商品也会一并下架!`, '提示').then(
+        this.$confirm(`确认弃用供应商(${row.suname})?其下的品牌及品牌下面的商品也会一并下架!`, '提示',{
+          type: 'warning'
+        }).then(
           ()=>{
-            console.log('doRemoveSupplier');
+            this.$http.post(this.$api.delete_supplizer,{
+              suid: row.suid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.$notify({
+                    title: '供应商删除成功',
+                    message: `供应商名称:${row.suname}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+
+      doEditSupplierPwd(row){
+        this.$prompt('请输入新密码', `提示-${row.suname}`, {
+          inputValidator: value => {
+            if (!value) {
+              return '密码不能为空'
+            }
+          }
+        }).then(
+          prompt => {
+            this.$http.post(this.$api.update_supplizer_password,{
+              suid: row.suid,
+              supassword: prompt.value,
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.$notify({
+                    title: '密码修改成功',
+                    message: `供应商:${row.suname}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
           }
         )
       },

@@ -3,29 +3,29 @@
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
         <el-form-item label="订单号">
-          <el-input></el-input>
+          <el-input v-model="inlineForm.omno" clearable></el-input>
         </el-form-item>
         <el-form-item label="收件人">
-          <el-input></el-input>
+          <el-input v-model="inlineForm.omrecvname" clearable></el-input>
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input></el-input>
+          <el-input v-model="inlineForm.omrecvphone" clearable></el-input>
         </el-form-item>
         <el-form-item label="商品名">
-          <el-input></el-input>
+          <el-input v-model="inlineForm.prtitle" clearable></el-input>
         </el-form-item>
         <el-form-item label="下单时间">
           <el-col :span="11">
-            <el-date-picker type="date" placeholder="起始日期" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_start" placeholder="起始日期" style="width: 100%;"></el-date-picker>
           </el-col>
           <el-col class="middle-line" :span="2">-</el-col>
           <el-col :span="11">
-            <el-date-picker type="date" placeholder="结束日期" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_end" placeholder="结束日期" style="width: 100%;"></el-date-picker>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search">查询</el-button>
-          <el-button icon="el-icon-refresh">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="info" icon="el-icon-document">生成报表</el-button>
@@ -45,14 +45,15 @@
     </section>
 
     <el-menu :default-active="activeName" class="el-menu-demo" mode="horizontal" @select="handleClick">
-      <el-menu-item index="-1">全部</el-menu-item>
-      <el-menu-item index="0">待支付</el-menu-item>
-      <el-menu-item index="10">待发货</el-menu-item>
-      <el-menu-item index="20">已发货</el-menu-item>
-      <el-menu-item index="35">待评价</el-menu-item>
-      <el-menu-item index="30">已完成</el-menu-item>
-      <el-menu-item index="inrefund">退货中</el-menu-item>
-      <el-menu-item index="-40">已取消</el-menu-item>
+      <el-menu-item v-for="item in menuList" :key="item.status" :index="item.status.toString()">{{`${item.name} ${item.count}`}}</el-menu-item>
+      <!--<el-menu-item index="-1">全部</el-menu-item>-->
+      <!--<el-menu-item index="0">待支付</el-menu-item>-->
+      <!--<el-menu-item index="10">待发货</el-menu-item>-->
+      <!--<el-menu-item index="20">已发货</el-menu-item>-->
+      <!--<el-menu-item index="35">待评价</el-menu-item>-->
+      <!--<el-menu-item index="30">已完成</el-menu-item>-->
+      <!--<el-menu-item index="inrefund">退货中</el-menu-item>-->
+      <!--<el-menu-item index="-40">已取消</el-menu-item>-->
     </el-menu>
 
     <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="expandAll"
@@ -140,6 +141,16 @@
       return {
         activeName: '-1', //  -1 => 空 全部
         orderType: [],
+        inlineForm: {
+          omno: '',
+          omrecvname: '',
+          omrecvphone: '',
+          prtitle: '',
+          createtime_start: '',
+          createtime_end: '',
+        },
+
+        menuList: [],
 
         expandAll: true,
         loading: false,
@@ -160,6 +171,19 @@
           this.$refs.orderTable.toggleRowExpansion(this.orderData[i], this.expandAll);
         }
       },
+      doSearch(){
+        this.setOrderList();
+      },
+      doReset(){
+        this.inlineForm = {
+          omno: '',
+          omrecvname: '',
+          omrecvphone: '',
+          prtitle: '',
+          createtime_start: '',
+          createtime_end: '',
+        }
+      },
 
       //  获取每个订单类型的数量
       setOrderType(){
@@ -173,7 +197,8 @@
               let resData = res.data,
                   data = res.data.data;
 
-
+              data[0].status = -1;
+              this.menuList = data;
             }
           }
         )
@@ -243,7 +268,8 @@
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
-            omstatus: this.activeName == '-1' ? '' : this.activeName
+            omstatus: this.activeName == '-1' ? '' : this.activeName,
+            ...this.inlineForm
           }
         }).then(
           res => {
@@ -326,6 +352,7 @@
 
     created() {
       this.repeat = true;
+      this.setOrderType();
       this.setOrderList();
     }
   }
