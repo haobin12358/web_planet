@@ -14,7 +14,11 @@
       <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>
       <el-table-column label="封面按钮文字" align="center" prop="acbutton"></el-table-column>
       <el-table-column label="活动类别" align="center" prop="actype_zh"></el-table-column>
-      <el-table-column label="商品数" align="center" prop="pblogo"></el-table-column>
+      <el-table-column label="商品数" align="center" prop="prcount">
+        <template slot-scope="scope">
+          <el-button type="text" @click="goDetail(scope.row)">{{scope.row.prcount}}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="关闭/开启" align="center" prop="pblogo">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.acshow" @change="showActivity(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
@@ -147,6 +151,23 @@
             this.activityLoading = false;
           }
         })
+      },
+      // 去活动详情页
+      goDetail(row) {
+        switch(row.actype) {
+          case 0:
+            this.$router.push('/activity/firstOrder');
+            break;
+          case 1:
+            this.$router.push('/activity/guess');
+            break;
+          case 2:
+            this.$router.push('/activity/magicGiftBox');
+            break;
+          case 3:
+            this.$router.push('/activity/trialProduct');
+            break;
+        }
       },
       // 关闭或开启活动
       showActivity(row) {
