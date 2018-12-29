@@ -107,8 +107,10 @@
         },
       mixins: [wxapi],
       components: { sku },
-      mounted(){
+      mounted() {
         common.changeTitle('商品详情');
+      },
+      activated() {
         this.getInfo();
         this.getUser();
       },
@@ -165,7 +167,6 @@
            }).then(res => {
              if(res.data.status == 200){
                this.product_info = res.data.data;
-               console.log(this.product_info.price_range);
                this.product_info.praveragescore = this.product_info.praveragescore / 2;
              }
            },error => {

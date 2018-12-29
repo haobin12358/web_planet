@@ -151,6 +151,7 @@
                   this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
                 }else {
                   this.$router.push('/selected');
+                  Toast('登录成功');
                 }
               }
             });
