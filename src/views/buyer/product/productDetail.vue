@@ -15,7 +15,8 @@
         </h3>
         <h3>
           <span class="m-product-title">{{product_info.prtitle}}</span>
-          <span class="m-red">￥{{product_info.prprice | money}}</span>
+          <span class="m-red" v-if="product_info.price_range">￥{{product_info.price_range}}</span>
+          <span class="m-red" v-else>￥{{product_info.prprice | money}}</span>
         </h3>
         <div class="m-info-list">
           <span>快递：{{product_info.prfreight | money}} 元</span>
@@ -164,6 +165,7 @@
            }).then(res => {
              if(res.data.status == 200){
                this.product_info = res.data.data;
+               console.log(this.product_info.price_range);
                this.product_info.praveragescore = this.product_info.praveragescore / 2;
              }
            },error => {

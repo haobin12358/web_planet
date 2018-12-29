@@ -13,7 +13,8 @@
             <span class="m-ft-26 m-red" v-if="select_value.skustock == 0">库存不足</span>
           </p>
           <p v-else>
-            <span class="m-red">￥{{product.prprice}}</span>
+            <span class="m-red" v-if="product.price_range">￥{{product.price_range}}</span>
+            <span class="m-red" v-else>￥{{product.prprice}}</span>
           </p>
         </div>
         <div class="m-scroll">
