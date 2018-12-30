@@ -62,14 +62,17 @@
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="itemDialog" width="700px" top="20vh"
                :title="itemForm.itid?'编辑圈子标签':'新增资讯标签'" :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="rules" ref="itemForm" size="medium" label-width="120px">
-        <el-form-item label="标签名称" prop="itname">
-          <el-input v-model="itemForm.itname"></el-input>
+      <el-form :model="itemForm" :rules="rules" ref="itemForm" size="medium" label-width="100px">
+        <el-form-item label="标签名称：" prop="itname">
+          <el-input class="long-input" v-model="itemForm.itname"></el-input>
         </el-form-item>
-        <el-form-item label="标签描述" prop="itdesc">
-          <el-input v-model="itemForm.itdesc"></el-input>
+        <el-form-item label="标签描述：" prop="itdesc">
+          <el-input class="long-input" v-model="itemForm.itdesc"></el-input>
         </el-form-item>
-        <el-form-item label="推荐" prop="itrecommend">
+        <el-form-item label="标签序号：" prop="itsort">
+          <el-input class="short-input" v-model="itemForm.itsort"></el-input>
+        </el-form-item>
+        <el-form-item label="推荐：" prop="itrecommend">
           <el-switch v-model="itemForm.itrecommend" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </el-form-item>
@@ -99,6 +102,7 @@
           itid: '',
           itname: '',
           itdesc: '',
+          itsort: '',
           itrecommend: false,
           ittype: 10
         },
@@ -106,6 +110,9 @@
           itname: [
             { required: true, message: '标签名称必填', trigger: 'blur' },
             { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
+          ],
+          itsort: [
+            { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },
         activeIndex: 'usual',
@@ -251,12 +258,13 @@
                       type: 'success'
                     });
                     this.itemDialog = false;
+                    this.$refs.itemForm.clearValidate();
                     this.getItem();         // 获取标签列表
                   }
                 }
               )
             }else{
-              this.itemForm.itsort = Number(this.itemList.length + 1);
+              // this.itemForm.itsort = Number(this.itemList.length + 1);
               this.$http.post(this.$api.create_items, this.itemForm).then(res => {
                 if (res.data.status == 200) {
                   this.$notify({
@@ -265,6 +273,7 @@
                     type: 'success'
                   });
                   this.itemDialog = false;
+                  this.$refs.itemForm.clearValidate();
                   this.getItem();         // 获取标签列表
                 }
               })
@@ -277,7 +286,7 @@
       // 编辑标签
       editItem(row) {
         this.itemDialog = true;
-        this.itemForm = row;
+        this.itemForm = JSON.parse(JSON.stringify(row));
       },
       // 删除标签
       deleteItem(scope) {
@@ -319,6 +328,12 @@
     .add-item-btn {
       float: right;
       margin: -50px 0 10px 0;
+    }
+    .long-input {
+      width: 500px;
+    }
+    .short-input {
+      width: 250px;
     }
   }
 </style>
