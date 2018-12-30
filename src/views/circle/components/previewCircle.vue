@@ -165,7 +165,7 @@
       width: 350px;
       border-radius: 5px;
       box-shadow: 0 2.5px 3px 0 rgba(0, 0, 0, 0.16);
-      margin-bottom: 15px;
+      /*margin-bottom: 15px;*/
       background-color: #fff;
       padding-bottom: 13px;
       .m-mark-label{
