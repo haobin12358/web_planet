@@ -1,5 +1,5 @@
 const dev = true;  //  放正式服务器改成false再打包
-const title = dev ? 'https://planet.daaiti.cn/api/v1/' : 'http://47.110.149.143/api/v1/';
+const title = dev ? 'https://planet.daaiti.cn/api/v1/' : 'https://www.bigxingxing.com/api/v1/';
 
 const api = {
   login: title + 'user/admin_login',                                      //用户登录
