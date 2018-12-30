@@ -42,7 +42,7 @@
       <el-table-column align="center" prop="prprice" sortable label="价格" width="120"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
-        <template slot-scope="scope" v-if="scope.row.category.length">
+        <template slot-scope="scope" v-if="scope.row.category && scope.row.category.length">
           {{`${scope.row.category[0].pcname} / ${scope.row.category[1].pcname} / ${scope.row.category[2].pcname}`}}
         </template>
       </el-table-column>

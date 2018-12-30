@@ -10,7 +10,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" :render-header="renderHeader">
         <template slot-scope="scope">
           <el-button type="text">保存</el-button>
         </template>
@@ -64,7 +64,21 @@
 
     computed: {},
 
-    methods: {},
+    methods: {
+      renderHeader(h) {
+        return h('el-button', {
+          props: {
+            type: 'primary',
+            disabled: true,
+          },
+          on: {
+            click: () => {
+              this.doAddPd();
+            }
+          }
+        }, '新增');
+      },
+    },
 
     created() {
 

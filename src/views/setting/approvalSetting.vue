@@ -1,17 +1,10 @@
 <template>
     <div class="container">
-      <el-tabs type="border-card" closable>
-        <el-tab-pane label="用户管理">
-          <two-setting-table></two-setting-table>
-        </el-tab-pane>
-        <el-tab-pane label="配置管理">
-          <two-setting-table></two-setting-table>
-        </el-tab-pane>
-        <el-tab-pane label="角色管理">
-          <two-setting-table></two-setting-table>
-        </el-tab-pane>
-        <el-tab-pane label="定时任务补偿">
-          <two-setting-table></two-setting-table>
+      <el-tabs type="border-card" v-model="activeName">
+        <el-tab-pane v-for="(item,index) in list" :label="item" :key="item">
+          <keep-alive>
+            <two-setting-table v-if="activeName == index"></two-setting-table>
+          </keep-alive>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -27,7 +20,18 @@
     components: {TwoSettingTable},
 
     data() {
-      return {}
+      return {
+        list: [
+          '提现审批',
+          '退货审批',
+          '代理商审批',
+          '供应商商品审批',
+          '圈子审批',
+          '活动审批',
+        ],
+
+        activeName: '0',
+      }
     },
 
     computed: {},

@@ -20,7 +20,11 @@
         <el-table-column label="店主姓名" align="center" prop="usname"></el-table-column>
         <el-table-column label="手机号" align="center" prop="ustelphone"></el-table-column>
         <el-table-column label="账户余额" align="center" prop="remain"></el-table-column>
-        <el-table-column label="粉丝数量" align="center" prop="fans_num"></el-table-column>
+        <el-table-column label="粉丝数量" align="center" prop="fans_num">
+          <template slot-scope="scope">
+            <el-button type="text" @click="showFansList(scope.row)">{{scope.row.fans_num}}</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="获得佣金" align="center" prop="total"></el-table-column>
       </el-table>
 
@@ -36,6 +40,28 @@
           @current-change="pageChange">
         </el-pagination>
       </section>
+
+      <el-dialog :visible.sync="fansDlgVisible" width="800px">
+        <el-table :data="fansData" v-loading="fansLoading" >
+          <el-table-column label="账号" align="center" prop="usname"></el-table-column>
+          <el-table-column label="手机号" align="center" prop="ustelphone"></el-table-column>
+          <el-table-column label="类别" align="center" prop="uslevel"></el-table-column>
+          <el-table-column label="从该粉丝/代理商获得佣金" align="center" prop="commision_from"></el-table-column>
+        </el-table>
+        <section class="table-bottom">
+          <el-pagination
+            background
+            :current-page="currentFansPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="fansPageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalFans"
+            @size-change="fansSizeChange"
+            @current-change="fansPageChange"
+          >
+          </el-pagination>
+        </section>
+      </el-dialog>
     </div>
 </template>
 
@@ -57,6 +83,15 @@
         currentPage: 1,
         pageSize: 10,
         tableData: [],
+
+        fansDlgVisible: false,
+        fansLoading: false,
+        fansData: [],
+        currentFansPage: 1,
+        fansPageSize: 10,
+        totalFans: 0,
+
+        usid: '',
       }
     },
 
@@ -92,6 +127,7 @@
                   data = res.data.data;
 
               this.tableData = data;
+              this.total = resData.total_count;
             }
           }
         )
@@ -105,6 +141,47 @@
       pageChange(page) {
         this.currentPage = page;
         this.getUserCommissionList();
+      },
+
+      showFansList(row){
+        this.fansDlgVisible = true;
+
+        this.usid = row.usid;
+        this.getFansList();
+      },
+      getFansList(){
+        this.fansLoading = true;
+
+        this.$http.get(this.$api.list_fans,{
+          noLoading: true,
+          params: {
+            usid: this.usid,
+
+            page_num: this.currentFansPage,
+            page_size: this.fansPageSize,
+          }
+        }).then(
+          res => {
+            this.fansLoading=false;
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.fansData = data;
+              this.totalFans = resData.total_count;
+            }
+          }
+        )
+      },
+      fansSizeChange(pageSize) {
+        this.fansPageSize = pageSize;
+        this.currentFansPage = 1;
+
+        this.getFansList();
+      },
+      fansPageChange(page) {
+        this.currentFansPage = page;
+        this.getFansList();
       },
 
       gotoCommissionSetting(){

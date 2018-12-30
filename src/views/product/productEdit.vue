@@ -720,10 +720,9 @@
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
-                  this.reset();
                 }
 
-
+                this.reset();
                 this.$notify({
                   title: '商品新增成功',
                   message: `商品名:${this.formData.prtitle}`,

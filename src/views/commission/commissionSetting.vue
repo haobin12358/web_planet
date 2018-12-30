@@ -1,19 +1,21 @@
 <template>
   <div class="container ">
-    <block-title title="公共佣金比"></block-title>
+    <block-title title="佣金比例"></block-title>
     <section class="tool-bar">
-      <el-form inline style="display: flex;justify-content: space-between;">
-        <span style="line-height: 40px;">100%</span>
-        <el-form-item label="二级代理佣金比例">
+      <el-form inline>
+        <el-form-item label="三级代理佣金比例">
           <el-input v-model.number="secLevelRate">
             <template slot="append">%</template>
-
+          </el-input>
+        </el-form-item>
+        <el-form-item label="二级代理佣金比例">
+          <el-input >
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="一级代理佣金比例">
           <el-input v-model.number="firstLevelRate">
             <template slot="append">%</template>
-
           </el-input>
         </el-form-item>
         <el-form-item label="平台佣金比例">
@@ -21,12 +23,88 @@
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
-        <span style="line-height: 40px;">{{100- secLevelRate-firstLevelRate-platformRate}}%</span>
         <el-form-item>
           <el-button icon="el-icon-save" type="primary" @click="doSaveCommonRate">保存</el-button>
         </el-form-item>
       </el-form>
     </section>
+    <block-title title="升级相关"></block-title>
+    <section class="tool-bar">
+      <el-form inline label-width="150px">
+        <el-form-item label="升级所需人数">
+          <el-input>
+          </el-input>
+          <el-input>
+            <template slot="append">%</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="升级所需团队总额">
+          <el-input>
+          </el-input>
+          <el-input>
+            <template slot="append">%</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="升级所需个人总额">
+          <el-input>
+          </el-input>
+          <el-input>
+            <template slot="append">%</template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+    </section>
+    <block-title title="极差减额"></block-title>
+    <section class="tool-bar">
+      <el-form inline>
+        <el-form-item label="1-2">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="2-3">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="3-4">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="4-5">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-save" type="primary" @click="doSaveCommonRate">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
+
+    <block-title title="极差增额"></block-title>
+    <section class="tool-bar">
+      <el-form inline>
+        <el-form-item label="1-2">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="2-3">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="3-4">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="4-5">
+          <el-input >
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button icon="el-icon-save" type="primary" @click="doSaveCommonRate">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
+
+
 
     <block-title title="个人佣金比"></block-title>
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
@@ -118,6 +196,17 @@
   @import "../../styles/myIndex";
 
   .container {
-
+    .demo-table-expand {
+      font-size: 0;
+    }
+    .demo-table-expand label {
+      width: 120px;
+      color: #99a9bf;
+    }
+    .demo-table-expand .el-form-item {
+      margin-right: 0;
+      /*margin-bottom: 0;*/
+      width: 50%;
+    }
   }
 </style>
