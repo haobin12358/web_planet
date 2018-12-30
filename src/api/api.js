@@ -92,6 +92,7 @@ const api = {
   update_news: title + 'news/update_news',                                // 修改资讯
   del_news: title + 'news/del_news',                                      // 删除资讯
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
+  coupon_create: title + 'coupon/create',                                 // 后台创建优惠券
 
   list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
   list_fans: title + 'user/list_fans',                                    // 销售商列表(后台佣金)

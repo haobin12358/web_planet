@@ -24,8 +24,8 @@
       <el-table-column label="剩余/总量" align="center" prop="commentnumber"></el-table-column>
       <el-table-column label="操作" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editCoupon(scope)">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>
+          <!--<el-button type="text" @click="editCoupon(scope)">编辑</el-button>-->
+          <!--<el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -97,6 +97,7 @@
             { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
           ],
           itsort: [
+            { required: true, message: '标签序号必填', trigger: 'blur' },
             { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },

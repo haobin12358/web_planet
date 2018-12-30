@@ -199,6 +199,12 @@ export const asyncRouterMap = [
         component: () => import('src/views/marketing/coupon'),
         meta: {title: '优惠券', noCache: true,roles: level2}
       }, {
+        path: 'editCoupon',
+        name: 'EditCoupon',
+        hidden: true,
+        component: () => import('src/views/marketing/editCoupon'),
+        meta: {title: '优惠券编辑', noCache: true, roles: level2}
+      }, {
         path: 'attendance',
         name: 'Attendance',
         component: () => import('src/views/marketing/attendance'),
