@@ -204,12 +204,10 @@
     directives: { permission, elDragDialog },
     components: { ImgsDragSort, product, TableCellImg, previewCircle },
     mounted() {
-      this.getItem();                       // 获取标签列表
-      this.getCoupon();                     // 获取优惠券列表
+      this.initCircle()
     },
     activated() {
-      this.getItem();                       // 获取标签列表
-      this.getCoupon();                     // 获取优惠券列表
+      this.initCircle()
     },
     watch: {
       // 选中的标签
@@ -222,13 +220,30 @@
       }
     },
     methods: {
+      // 初始化
+      initCircle() {
+        // 编辑
+        if(this.$route.query.neid) {
+          this.$http.get(this.$api.get_news_content, { params: { neid: this.$route.query.neid }}).then(res => {
+            if (res.data.status == 200) {
+              console.log(res.data.data);
+              // 将拿到的数据处理给组件
+              // this.convertFromEdit(res.data.data);
+              this.circleForm = res.data.data;
+              // this.$refs.circleFormRef.clearValidate();
+            }
+          })
+        }else {    // 新增
+
+        }
+
+        this.getItem();                       // 获取标签列表
+        this.getCoupon();                     // 获取优惠券列表
+      },
       // 获取标签列表
       getItem() {
         this.$http.get(this.$api.items_list, {
-          noLoading: true,
-          params: {
-            ittype: 10
-          }}).then(res => {
+          noLoading: true, params: { ittype: 10 }}).then(res => {
           if (res.data.status == 200) {
             this.itemsList = res.data.data;
           }
