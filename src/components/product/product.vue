@@ -45,9 +45,7 @@
       background-color: #ffffff;
       padding-bottom: 10px;
       margin-bottom: 15px;
-      &:nth-child(odd){
-        margin-right: 15px;
-      }
+      margin-right: 15px;
       .m-one-product-img{
         display: block;
         width: 162.5px;
