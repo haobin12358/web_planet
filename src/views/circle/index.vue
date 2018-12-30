@@ -112,6 +112,7 @@
             { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
           ],
           itsort: [
+            { required: true, message: '标签序号必填', trigger: 'blur' },
             { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },

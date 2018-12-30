@@ -109,8 +109,8 @@
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
     <!--商品dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="15vh" title="商品绑定" :close-on-click-modal="false">
-      <el-table v-loading="productLoading" :data="productsList" stripe
+    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="商品绑定" :close-on-click-modal="false">
+      <el-table v-loading="productLoading" :data="productsList" stripe height="65vh"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
@@ -139,9 +139,9 @@
   import permission from 'src/directive/permission/index.js' // 权限判断指令
   import ImgsDragSort from 'src/components/ImgsDragSort/index'
   import elDragDialog from 'src/directive/el-dragDialog'
-  import { getStore } from "src/utils/index";
+  import { getStore } from "src/utils/index"
   import product from '../../components/Product/product'
-  import TableCellImg from "src/components/TableCellImg";
+  import TableCellImg from "src/components/TableCellImg"
   import previewCircle from './components/previewCircle'
 
   export default {
