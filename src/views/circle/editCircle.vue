@@ -396,13 +396,13 @@
               let title = '新增';
               this.$http.post(this.$api.create_news, this.circleForm).then(res => {
                 if (res.data.status == 200) {
-                  this.initCircleForm();
                   this.$router.push('/circle/circle');
                   this.$notify({
                     title: `${title}成功`,
                     message: `资讯标题：${this.circleForm.netitle}成功`,
                     type: 'success'
                   });
+                  this.initCircleForm();
                 }
               });
             }

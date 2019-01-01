@@ -18,14 +18,15 @@
     </section>
     <el-table v-loading="couponLoading" :data="couponList" stripe size="mini">
       <el-table-column label="名称" align="center" prop="coname" show-overflow-tooltip></el-table-column>
-      <el-table-column label="生效条件" align="center" prop="favoritnumber"></el-table-column>
-      <el-table-column label="优惠内容" align="center" prop="commentnumber"></el-table-column>
-      <el-table-column label="生效范围" align="center" prop="commentnumber"></el-table-column>
-      <el-table-column label="剩余/总量" align="center" prop="commentnumber"></el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="生效介绍" align="center" prop="title_subtitle.title" show-overflow-tooltip></el-table-column>
+      <el-table-column label="生效对象" align="center" prop="title_subtitle.left_text" show-overflow-tooltip></el-table-column>
+      <el-table-column label="生效条件" align="center" prop="title_subtitle.subtitle" show-overflow-tooltip></el-table-column>
+      <el-table-column label="发放开始时间" align="center" prop="cosendstarttime"></el-table-column>
+      <el-table-column label="发放数量" align="center" prop="colimitnum" width="100"></el-table-column>
+      <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <!--<el-button type="text" @click="editCoupon(scope)">编辑</el-button>-->
-          <!--<el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>-->
+          <el-button type="text" @click="editCoupon(scope)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -158,7 +159,19 @@
       },
       // 删除优惠券
       deleteCoupon(scope) {
-
+        this.$confirm('此操作将删除该优惠券, 是否继续?', '提示', {
+          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'}).then(() => {
+          this.$http.post(this.$api.coupon_delete, { coid: scope.row.coid }).then(res => {
+            if (res.data.status == 200) {
+              this.couponList.splice(scope.$index, 1);
+              this.$notify({
+                title: '删除成功',
+                message: `优惠券${scope.row.coname}删除成功`,
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => { });
       },
       // 标签dialog的保存按钮
       saveItem() {

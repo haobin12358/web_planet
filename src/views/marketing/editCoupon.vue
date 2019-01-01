@@ -5,7 +5,7 @@
         <block-title title="基本信息"></block-title>
         <el-form :model="couponForm" :rules="rules" ref="couponForm" label-position="right" label-width="130px">
           <el-form-item label="优惠券名称：" prop="coname">
-            <el-input v-model="couponForm.coname" style="width: 600px"></el-input>
+            <el-input v-model="couponForm.coname" maxlength="32" style="width: 600px"></el-input>
           </el-form-item>
           <el-form-item label="标签名称：" prop="itids">
             <el-select v-model="itemList" multiple filterable placeholder="请选择" style="width: 600px" @visible-change="getItem">
@@ -89,12 +89,14 @@
               v-model="cosendtime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
               start-placeholder="开始日期" range-separator="至" end-placeholder="结束日期">
             </el-date-picker>
+            <span class="form-item-end-tip" v-if="!cosendtime.length">不选择时间代表创建即开始发放</span>
           </el-form-item>
           <el-form-item label="可用起止时间：">
             <el-date-picker
               v-model="covalidtime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
               start-placeholder="开始日期" range-separator="至" end-placeholder="结束日期">
             </el-date-picker>
+            <span class="form-item-end-tip" v-if="!covalidtime.length">不选择时间代表任意时间可用</span>
           </el-form-item>
 
           <el-form-item label="是否可用：" prop="product">
@@ -147,8 +149,8 @@
         couponForm: {
           coid: '',
           coname: '',
-          cosubtration: '',
-          codiscount: '',
+          cosubtration: '1',
+          codiscount: '10',
           codownline: '',
           colimitnum: '1',
           cocollectnum: '1',
@@ -165,7 +167,8 @@
         },
         rules: {
           coname: [
-            { required: true, message: '优惠券名称必填', trigger: 'blur' }
+            { required: true, message: '优惠券名称必填', trigger: 'blur' },
+            { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
           ],
           itids: [
             { required: true, message: '标签必选', trigger: 'blur' }
@@ -212,11 +215,13 @@
       radioDiscount(val) {
         if(val == 10) {
           this.couponForm.radioDiscount = 10;
-          this.rules.cosubtration = [{ required: true, message: '减额必填', trigger: 'blur' }];
+          this.couponForm.codiscount = '10';
           this.rules.codiscount = []
+          this.rules.cosubtration = [{ required: true, message: '减额必填', trigger: 'blur' }];
         }else if(val == 20) {
-          this.rules.codiscount = [{ required: true, message: '折扣必填', trigger: 'blur' }];
           this.rules.cosubtration = []
+          this.couponForm.cosubtration = '1';
+          this.rules.codiscount = [{ required: true, message: '折扣必填', trigger: 'blur' }];
         }
       }
     },
@@ -286,9 +291,9 @@
           if (valid) {
             // 处理商品
             if(this.productList.length) {
-              this.couponForm.product = [];
+              this.couponForm.prids = [];
               for(let product of this.productList) {
-                this.couponForm.product.push(product.prid)
+                this.couponForm.prids.push(product.prid)
               }
             }
             // 发放时间起止
@@ -322,19 +327,20 @@
                     message: `资讯标题：${this.couponForm.coname}成功`,
                     type: 'success'
                   });
+                  this.initCouponForm();
                 }
               });*/
             }else {
               let title = '新增';
               this.$http.post(this.$api.coupon_create, this.couponForm).then(res => {
                 if (res.data.status == 200) {
-                  this.initCouponForm();
                   this.$router.push('/marketing/coupon');
                   this.$notify({
                     title: `${title}成功`,
-                    message: `优惠券${this.couponForm.coname}成功`,
+                    message: `优惠券${this.couponForm.coname + title}成功`,
                     type: 'success'
                   });
+                  this.initCouponForm();
                 }
               });
             }
