@@ -145,7 +145,6 @@
             this.couponList = res.data.data;
             this.total = res.data.total_count;
             this.couponLoading = false;
-            console.log(res.data.data[0]);
           }
         })
       },
@@ -155,7 +154,7 @@
       },
       // 编辑优惠券
       editCoupon(scope) {
-
+        console.log(scope.row);
       },
       // 删除优惠券
       deleteCoupon(scope) {
