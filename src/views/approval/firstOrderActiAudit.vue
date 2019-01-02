@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-     圈子审核
+    新人首单活动商品申请
   </div>
 </template>
 
 <script>
-  //  topublish
+  //  tofreshmanfirstproduct
   export default {
-    name: 'CircleAudit',
+    name: "firstOrderActiAudit",
 
     components: {},
 
@@ -21,7 +21,7 @@
 
     created() {
 
-    }
+    },
   }
 </script>
 
@@ -30,5 +30,5 @@
 
   .container {
 
-    }
+  }
 </style>

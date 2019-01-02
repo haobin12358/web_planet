@@ -83,7 +83,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'ProductIndex',
         component: () => import('src/views/product/index'),
-        meta: {title: '所有商品',icon: 'yes', noCache: false, roles: level1}
+        meta: {title: '普通商品',icon: 'yes', noCache: false, roles: level1}
       }, {
         path: 'productEdit',
         name: 'ProductEdit',
@@ -124,13 +124,20 @@ export const asyncRouterMap = [
         path: 'order',
         name: 'OrderIndex',
         component: () => import('src/views/order/index'),
-        meta: {title: '订单',noCache: false, icon: 'dingdan', roles: level1}
+        meta: {title: '普通订单',noCache: false,icon: 'yes',  roles: level1}
       },{
         path: 'orderDetail',
         name: 'OrderDetail',
         hidden: true,
         component: () => import('src/views/order/orderDetail'),
-        meta: {title: '订单详情',noCache: true, roles: level1}
+        meta: {title: '普通订单详情',noCache: true, roles: level1}
+      },
+
+      {
+        path: 'actiOrder',
+        name: 'ActiOrder',
+        component: () => import('src/views/order/actiOrder'),
+        meta: {title: '活动订单',noCache: false,  roles: level1}
       },
     ]
   },
@@ -222,7 +229,7 @@ export const asyncRouterMap = [
         path: 'commission',
         name: 'CommissionIndex',
         component: () => import('src/views/commission/index'),
-        meta: {title: '佣金', noCache: true, roles: level2}
+        meta: {title: '佣金', icon: 'yes',noCache: true, roles: level2}
       },{
         path: 'commissionSetting',
         name: 'CommissionSetting',
@@ -272,6 +279,14 @@ export const asyncRouterMap = [
         name: 'CircleAudit',
         component: () => import('src/views/approval/circleAudit'),
         meta: {title: '圈子审核',noCache: true, roles: level2}
+      },
+
+      //  活动
+      {
+        path: 'trialProductAudit',
+        name: 'TrialProductAudit',
+        component: () => import('src/views/approval/trialProductAudit'),
+        meta: {title: '试用商品审批',noCache: true, roles: level2}
       },
     ]
   },
@@ -323,22 +338,22 @@ export const asyncRouterMap = [
         path: 'trialProduct',
         name: 'TrialProduct',
         component: () => import('src/views/activity/trialProduct'),
-        meta: {title: '试用商品',icon: 'yes',noCache: true, roles: level2}
+        meta: {title: '试用商品',icon: 'yes',noCache: true, roles: level1}
       },{
         path: 'trialProductEdit',
         name: 'TrialProductEdit',
         hidden: true,
         component: () => import('src/views/activity/trialProductEdit'),
-        meta: {title: '试用商品编辑',noCache: true, roles: level2}
+        meta: {title: '试用商品编辑',noCache: true, roles: level1}
       },
 
       //  供应商
-      {
-        path: 'supplizerActi',
-        name: 'SupplizerActi',
-        component: () => import('src/views/activity/supplizerActi'),
-        meta: {title: '活动',noCache: true, roles: level0}
-      },
+      // {
+      //   path: 'supplizerActi',
+      //   name: 'SupplizerActi',
+      //   component: () => import('src/views/activity/supplizerActi'),
+      //   meta: {title: '活动',noCache: true, roles: level0}
+      // },
     ]
   },
 

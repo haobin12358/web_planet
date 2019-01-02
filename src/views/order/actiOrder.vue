@@ -94,7 +94,7 @@
       </el-table-column>
       <el-table-column label="退款中" width="120" align="center">
         <template slot-scope="scope">
-            {{scope.row.ominrefund ? '是':'否'}}
+          {{scope.row.ominrefund ? '是':'否'}}
         </template>
       </el-table-column>
       <el-table-column prop="ommessage" label="备注" width="180" align="center" show-tooltip-overflow></el-table-column>
@@ -128,7 +128,7 @@
   import TableCellImg from "src/components/TableCellImg";
 
   export default {
-    name: 'OrderIndex',
+    name: 'ActiOrder',
 
     components: {
       TableCellImg
@@ -156,7 +156,7 @@
         currentPage: 1,
         pageSize: 10,
 
-        repeat: false,
+        repeat: true,
       }
     },
 
@@ -186,7 +186,7 @@
       setOrderType(){
         this.$http.get(this.$api.order_count,{
           params: {
-            extentions: 'refund'
+            ordertype: 'act'
           }
         }).then(
           res => {
@@ -274,7 +274,7 @@
 
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.orderData = data;
               this.total = resData.total_count;
@@ -322,7 +322,7 @@
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.setOrderList();
                   this.$notify({
@@ -340,16 +340,15 @@
     },
 
     activated(){
-      if(!this.repeat){
-        this.setOrderList();
-      }else{
+      if(this.repeat){
         this.repeat = false;
+      }else{
+        this.setOrderList();
       }
     },
 
     created() {
-      this.repeat = true;
-      this.setOrderType();
+      // this.setOrderType();
       this.setOrderList();
     }
   }

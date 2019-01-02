@@ -105,7 +105,8 @@
         this.searchForm = {
           name: '',
           mobile: '',
-        }
+        };
+        this.doSearch();
       },
 
       getUserCommissionList(){

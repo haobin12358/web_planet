@@ -111,6 +111,8 @@
 
     data() {
       return {
+        repeat: true,
+
         //  查询表单用
         categoryOptions: [],
         categoryProps: {
@@ -355,7 +357,11 @@
     },
 
     activated() {
-      this.getProduct()
+      if(this.repeat){
+        this.repeat = false
+      }else {
+        this.getProduct()
+      }
     },
     created() {
       this.getProduct()

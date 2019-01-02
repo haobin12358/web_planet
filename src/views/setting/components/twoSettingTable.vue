@@ -1,20 +1,20 @@
 <template>
   <div class="container">
     <block-title title="提现审批层级管理"></block-title>
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
-      <el-table-column type="index" width="55"></el-table-column>
+    <el-table :data="levelData" v-loading="loading" stripe style="width: 100%">
+      <el-table-column prop="pelevel" label="等级" align="center" width="155"></el-table-column>
       <el-table-column label="关联标签用户组" align="center">
         <template slot-scope="scope">
-          <el-select>
-            <el-option label="标签组1"></el-option>
+          <el-select v-model="scope.row.piid">
+            <el-option></el-option>
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" :render-header="renderHeader">
-        <template slot-scope="scope">
-          <el-button type="text">保存</el-button>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="操作" align="center" :render-header="renderHeader">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button type="text">保存</el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
 
     </el-table>
     <block-title title="权限标签管理"></block-title>
@@ -41,7 +41,19 @@
   export default {
     name: "twoSettingTable",
 
-    components: {},
+    components: {
+    },
+
+    props: {
+      ptid: {
+        type: String,
+        default: '',
+      },
+      levelData: {
+        type: Array,
+        default: [],
+      },
+    },
 
     data() {
       return {
@@ -81,7 +93,7 @@
     },
 
     created() {
-
+      console.log(this.ptid);
     },
   }
 </script>
