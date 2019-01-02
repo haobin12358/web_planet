@@ -130,7 +130,7 @@ export const asyncRouterMap = [
         name: 'OrderDetail',
         hidden: true,
         component: () => import('src/views/order/orderDetail'),
-        meta: {title: '普通订单详情',noCache: true, roles: level1}
+        meta: {title: '订单详情',noCache: true, roles: level1}
       },
 
       {
@@ -146,7 +146,6 @@ export const asyncRouterMap = [
     path: '/user',
     component: Layout,
     redirect: '/user/distributor',
-    name: 'User',
     meta: {title: '用户', icon: 'huiyuan', roles: level2},
     children: [
       {
@@ -167,6 +166,13 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/user/supplierEdit'),
         meta: {title: '供应商编辑',noCache: true, roles: level2}
+      },
+
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('src/views/user/user'),
+        meta: {title: '消费者',icon: 'yes',noCache: true, roles: level2}
       },
     ]
   },
@@ -206,12 +212,6 @@ export const asyncRouterMap = [
         component: () => import('src/views/marketing/coupon'),
         meta: {title: '优惠券', noCache: true,roles: level2}
       }, {
-        path: 'editCoupon',
-        name: 'EditCoupon',
-        hidden: true,
-        component: () => import('src/views/marketing/editCoupon'),
-        meta: {title: '优惠券编辑', noCache: true, roles: level2}
-      }, {
         path: 'attendance',
         name: 'Attendance',
         component: () => import('src/views/marketing/attendance'),
@@ -240,7 +240,7 @@ export const asyncRouterMap = [
         path: 'commissionSetting',
         name: 'CommissionSetting',
         component: () => import('src/views/commission/commissionSetting'),
-        meta: {title: '佣金设置', noCache: true, roles: level2}
+        meta: {title: '佣金设置', icon: 'yes',noCache: true, roles: level2}
       },
     ]
   },
@@ -256,13 +256,13 @@ export const asyncRouterMap = [
         path: 'withdrawAudit',
         name: 'WithdrawAudit',
         component: () => import('src/views/approval/withdrawAudit'),
-        meta: {title: '提现审批',noCache: true, roles: level2}
+        meta: {title: '提现审批',icon: 'yes',noCache: true, roles: level2}
       },
       {
         path: 'returnProductAudit',
         name: 'ReturnProductAudit',
         component: () => import('src/views/approval/returnProductAudit'),
-        meta: {title: '退货审批', icon: 'yes',noCache: false,roles: level2}
+        meta: {title: '退货审批',noCache: false,roles: level2}
       }, {
         path: 'returnProdOrderDetail',
         name: 'ReturnProdOrderDetail',
@@ -274,12 +274,12 @@ export const asyncRouterMap = [
         path: 'agentAudit',
         name: 'AgentAudit',
         component: () => import('src/views/approval/agentAudit'),
-        meta: {title: '代理商审批',noCache: true, roles: level2}
+        meta: {title: '新代理商审批',noCache: true, roles: level2}
       }, {
         path: 'productAudit',
         name: 'ProductAudit',
         component: () => import('src/views/approval/productAudit'),
-        meta: {title: '供应商商品审批',noCache: true,icon: 'yes', roles: level2}
+        meta: {title: '供应商商品审批',noCache: true, roles: level2}
       }, {
         path: 'circleAudit',
         name: 'CircleAudit',
@@ -289,6 +289,21 @@ export const asyncRouterMap = [
 
       //  活动
       {
+        path: 'firstOrderActiAudit',
+        name: 'FirstOrderActiAudit',
+        component: () => import('src/views/approval/firstOrderActiAudit'),
+        meta: {title: '新人首单活动商品申请',noCache: true, roles: level2}
+      },{
+        path: 'magicGiftBoxAudit',
+        name: 'MagicGiftBoxAudit',
+        component: () => import('src/views/approval/magicGiftBoxAudit'),
+        meta: {title: '魔术礼盒活动商品申请',noCache: true, roles: level2}
+      },{
+        path: 'guessActiAudit',
+        name: 'GuessActiAudit',
+        component: () => import('src/views/approval/guessActiAudit'),
+        meta: {title: '猜数字活动商品申请',noCache: true, roles: level2}
+      },{
         path: 'trialProductAudit',
         name: 'TrialProductAudit',
         component: () => import('src/views/approval/trialProductAudit'),

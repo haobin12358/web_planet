@@ -7,7 +7,7 @@
 <script>
   //  tomagicbox
   export default {
-    name: "magicGitfBoxAudit",
+    name: "MagicGiftBoxAudit",
 
     components: {},
 

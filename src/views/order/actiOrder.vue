@@ -14,6 +14,12 @@
         <el-form-item label="商品名">
           <el-input v-model="inlineForm.prtitle" clearable></el-input>
         </el-form-item>
+        <el-form-item label="状态">
+          <el-select>
+            <el-option></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="下单时间">
           <el-col :span="11">
             <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_start" placeholder="起始日期" style="width: 100%;"></el-date-picker>
@@ -42,15 +48,7 @@
     </section>
 
     <el-menu :default-active="activeName" class="el-menu-demo" mode="horizontal" @select="handleClick">
-      <el-menu-item v-for="item in menuList" :key="item.status" :index="item.status.toString()">{{`${item.name} ${item.count}`}}</el-menu-item>
-      <!--<el-menu-item index="-1">全部</el-menu-item>-->
-      <!--<el-menu-item index="0">待支付</el-menu-item>-->
-      <!--<el-menu-item index="10">待发货</el-menu-item>-->
-      <!--<el-menu-item index="20">已发货</el-menu-item>-->
-      <!--<el-menu-item index="35">待评价</el-menu-item>-->
-      <!--<el-menu-item index="30">已完成</el-menu-item>-->
-      <!--<el-menu-item index="inrefund">退货中</el-menu-item>-->
-      <!--<el-menu-item index="-40">已取消</el-menu-item>-->
+      <el-menu-item v-for="item in menuList" :key="item.status" :index="item.omfrom.toString()">{{`${item.name} ${item.count}`}}</el-menu-item>
     </el-menu>
 
     <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="expandAll"
@@ -136,8 +134,28 @@
 
     data() {
       return {
-        activeName: '-1', //  -1 => 空 全部
-        orderType: [],
+        activeName: '40', //  -1 => 空 全部
+        orderType: [
+          {
+            label: '全部',
+            value: '',
+          },{
+            label: '已取消',
+            value: '',
+          },{
+            label: '全部',
+            value: '',
+          },{
+            label: '全部',
+            value: '',
+          },{
+            label: '全部',
+            value: '',
+          },{
+            label: '全部',
+            value: '',
+          },
+        ],
         inlineForm: {
           omno: '',
           omrecvname: '',
@@ -145,6 +163,7 @@
           prtitle: '',
           createtime_start: '',
           createtime_end: '',
+          omstatus: ''
         },
 
         menuList: [],
@@ -194,7 +213,7 @@
               let resData = res.data,
                   data = res.data.data;
 
-              data[0].status = -1;
+              // data[0].status = -1;
               this.menuList = data;
             }
           }
@@ -265,7 +284,7 @@
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
-            omstatus: this.activeName == '-1' ? '' : this.activeName,
+            omfrom:  this.activeName,
             ...this.inlineForm
           }
         }).then(
@@ -348,7 +367,7 @@
     },
 
     created() {
-      // this.setOrderType();
+      this.setOrderType();
       this.setOrderList();
     }
   }

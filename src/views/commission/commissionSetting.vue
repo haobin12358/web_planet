@@ -30,22 +30,22 @@
     </section>
     <block-title title="升级相关"></block-title>
     <section class="tool-bar">
-      <el-form inline label-width="150px">
-        <el-form-item label="升级所需人数">
+      <el-form inline label-width="180px">
+        <el-form-item label="升级所需人数/比例">
           <el-input v-model.number="commonSetting.invitenum">
           </el-input>
           <el-input v-model.number="commonSetting.invitenumscale">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="升级所需团队总额">
+        <el-form-item label="升级所需团队总额/比例">
           <el-input v-model.number="commonSetting.groupsale">
           </el-input>
           <el-input v-model.number="commonSetting.groupsalescale">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="升级所需个人总额">
+        <el-form-item label="升级所需个人总额/比例">
           <el-input v-model.number="commonSetting.pesonalsale">
           </el-input>
           <el-input v-model.number="commonSetting.pesonalsalescale">
@@ -156,7 +156,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" prop="usname">
         <template slot-scope="scope">
-          <el-button type="text" @click="doSavePersonRate(scope.row)">修改佣金比</el-button>
+          <el-button type="text" @click="doSavePersonRate(scope.row)">保存</el-button>
+          <el-button type="text" class="info-text" @click="doSavePersonRate(scope.row, true)">重置</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -184,7 +185,7 @@
 
     data() {
       return {
-        commonSetting:{
+        commonSetting: {
           "levelcommision": [0, 0, 0, 0],
           "invitenum": 0,
           "groupsale": 0,
@@ -248,13 +249,13 @@
         }
         type += '设置';
 
-        this.$confirm(`确认保存${type}?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.update_commision,saveData).then(
+        this.$confirm(`确认保存${type}?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.update_commision, saveData).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.getCommisionSetting();
                   this.$notify({
@@ -267,16 +268,14 @@
           }
         )
       },
-      getCommisionSetting(){
-        this.$http.get(this.$api.get_commision,{
-          params: {
-
-          }
+      getCommisionSetting() {
+        this.$http.get(this.$api.get_commision, {
+          params: {}
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.commonSetting = data;
             }
@@ -284,32 +283,32 @@
         )
       },
 
-      doSearch(){
+      doSearch() {
         this.getAllUserCommission();
       },
-      doReset(){
+      doReset() {
         this.searchForm = {
           name: '',
           mobile: '',
         }
         this.doSearch();
       },
-      getAllUserCommission(){
-        this.$http.get(this.$api.list_user_commison,{
+      getAllUserCommission() {
+        this.$http.get(this.$api.list_user_commison, {
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
 
-            level: 'all',   //  获取所有前台用户的
             ...this.searchForm,
           }
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.tableData = data;
+              this.total = resData.total_count;
             }
           }
         )
@@ -324,17 +323,17 @@
         this.currentPage = page;
         this.getAllUserCommission();
       },
-      doSavePersonRate(row) {
-        this.$http.post(this.$api.update_user_commision,{
+      doSavePersonRate(row, reset) {
+        this.$http.post(this.$api.update_user_commision, {
           "usid": row.usid,
-          "commision1": row.uscommission1,
-          "commision2": row.uscommission2,
-          "commision3": row.uscommission3,
+          "commision1": reset ? '' : row.uscommission1,
+          "commision2": reset ? '' : row.uscommission2,
+          "commision3": reset ? '' : row.uscommission3,
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.getAllUserCommission();
               this.$notify({
