@@ -1,44 +1,7 @@
 <template>
   <div class="circle-index">
-    <block-title title="圈子资讯"></block-title>
-    <section class="tool-bar space-between">
-      <el-form :inline="true" size="medium">
-        <el-form-item label="标题 / 摘要">
-          <el-input v-model="kw"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleSelect(nestatus)">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="resetSearch">重置</el-button>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="addCircle">新增</el-button>
-    </section>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="usual">已上架</el-menu-item>
-      <!--<el-menu-item index="auditing">审核中</el-menu-item>-->
-      <el-menu-item index="refuse">已下架</el-menu-item>
-    </el-menu>
-    <el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">
-      <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="点赞数" align="center" prop="favoritnumber"></el-table-column>
-      <el-table-column label="评论数" align="center" prop="commentnumber"></el-table-column>
-      <el-table-column label="预览" align="center" fixed="right">
-        <template slot-scope="scope">
-          <preview-circle :circle="scope.row"></preview-circle>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="text" class="danger-text" @click="deleteCircle(scope)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
-                   :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="sizeChange" @current-change="pageChange"></el-pagination>
-
     <block-title title="圈子标签管理"></block-title>
-    <el-button type="primary" class="add-item-btn" icon="el-icon-plus" @click="itemDialog = true">新增</el-button>
+    <el-button type="primary" class="add-item-btn" icon="el-icon-plus" @click="itemDialog = true">新增标签</el-button>
     <el-table v-loading="itemLoading" :data="itemList" stripe>
       <el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>
       <el-table-column label="标签名称" align="center" prop="itname"></el-table-column>
@@ -57,17 +20,59 @@
       </el-table-column>
     </el-table>
 
+    <block-title title="圈子资讯"></block-title>
+    <section class="tool-bar space-between">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="标题 / 摘要">
+          <el-input v-model="kw"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="handleSelect(nestatus)">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="resetSearch">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" icon="el-icon-plus" @click="addCircle">新增资讯</el-button>
+    </section>
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item index="usual">已上架</el-menu-item>
+      <!--<el-menu-item index="auditing">审核中</el-menu-item>-->
+      <el-menu-item index="refuse">已下架</el-menu-item>
+    </el-menu>
+    <el-table v-loading="circleLoading" :data="circleList" stripe size="mini">
+    <!--<el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">-->
+      <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
+      <el-table-column label="点赞数" align="center" prop="favoritnumber"></el-table-column>
+      <el-table-column label="评论数" align="center" prop="commentnumber"></el-table-column>
+      <el-table-column label="预览" align="center" fixed="right">
+        <template slot-scope="scope">
+          <preview-circle :circle="scope.row"></preview-circle>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" @click="editCircle(scope)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="deleteCircle(scope)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+                   :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="sizeChange" @current-change="pageChange"></el-pagination>
+
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="itemDialog" width="700px" top="20vh"
                :title="itemForm.itid?'编辑圈子标签':'新增资讯标签'" :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="rules" ref="itemForm" size="medium" label-width="120px">
-        <el-form-item label="标签名称" prop="itname">
-          <el-input v-model="itemForm.itname"></el-input>
+      <el-form :model="itemForm" :rules="rules" ref="itemForm" size="medium" label-width="100px">
+        <el-form-item label="标签名称：" prop="itname">
+          <el-input class="long-input" v-model="itemForm.itname"></el-input>
         </el-form-item>
-        <el-form-item label="标签描述" prop="itdesc">
-          <el-input v-model="itemForm.itdesc"></el-input>
+        <el-form-item label="标签描述：" prop="itdesc">
+          <el-input class="long-input" v-model="itemForm.itdesc"></el-input>
         </el-form-item>
-        <el-form-item label="推荐" prop="itrecommend">
+        <el-form-item label="标签序号：" prop="itsort">
+          <el-input class="short-input" v-model="itemForm.itsort"></el-input>
+        </el-form-item>
+        <el-form-item label="推荐：" prop="itrecommend">
           <el-switch v-model="itemForm.itrecommend" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </el-form-item>
@@ -97,6 +102,7 @@
           itid: '',
           itname: '',
           itdesc: '',
+          itsort: '',
           itrecommend: false,
           ittype: 10
         },
@@ -104,6 +110,10 @@
           itname: [
             { required: true, message: '标签名称必填', trigger: 'blur' },
             { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
+          ],
+          itsort: [
+            { required: true, message: '标签序号必填', trigger: 'blur' },
+            { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },
         activeIndex: 'usual',
@@ -137,6 +147,9 @@
     methods: {
       // 获取不同状态的圈子资讯内容
       handleSelect(nestatus) {
+        if(!nestatus == this.nestatus) {
+          this.page_num = 1;
+        }
         this.nestatus = nestatus;
         this.circleLoading = true;
         this.$http.get(this.$api.get_all_news, {
@@ -159,6 +172,7 @@
         this.kw = '';
         this.handleSelect(this.nestatus);  // 获取不同状态的圈子资讯内容
       },
+      // 添加资讯
       addCircle() {
         this.$router.push('/circle/editCircle');
       },
@@ -169,6 +183,10 @@
       pageChange(val) {
         this.page_num = val;
         this.handleSelect(this.nestatus);
+      },
+      // 编辑资讯
+      editCircle(scope) {
+        this.$router.push({ path: '/circle/editCircle', query: { neid: scope.row.neid }})
       },
       // 删除资讯
       deleteCircle(scope) {
@@ -241,12 +259,13 @@
                       type: 'success'
                     });
                     this.itemDialog = false;
+                    this.$refs.itemForm.clearValidate();
                     this.getItem();         // 获取标签列表
                   }
                 }
               )
             }else{
-              this.itemForm.itsort = Number(this.itemList.length + 1);
+              // this.itemForm.itsort = Number(this.itemList.length + 1);
               this.$http.post(this.$api.create_items, this.itemForm).then(res => {
                 if (res.data.status == 200) {
                   this.$notify({
@@ -255,6 +274,7 @@
                     type: 'success'
                   });
                   this.itemDialog = false;
+                  this.$refs.itemForm.clearValidate();
                   this.getItem();         // 获取标签列表
                 }
               })
@@ -267,7 +287,7 @@
       // 编辑标签
       editItem(row) {
         this.itemDialog = true;
-        this.itemForm = row;
+        this.itemForm = JSON.parse(JSON.stringify(row));
       },
       // 删除标签
       deleteItem(scope) {
@@ -309,6 +329,12 @@
     .add-item-btn {
       float: right;
       margin: -50px 0 10px 0;
+    }
+    .long-input {
+      width: 500px;
+    }
+    .short-input {
+      width: 250px;
     }
   }
 </style>

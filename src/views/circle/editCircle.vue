@@ -109,8 +109,8 @@
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
     <!--商品dialog-->
-    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="15vh" title="商品绑定" :close-on-click-modal="false">
-      <el-table v-loading="productLoading" :data="productsList" stripe
+    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="商品绑定" :close-on-click-modal="false">
+      <el-table v-loading="productLoading" :data="productsList" stripe height="65vh"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
@@ -139,9 +139,9 @@
   import permission from 'src/directive/permission/index.js' // 权限判断指令
   import ImgsDragSort from 'src/components/ImgsDragSort/index'
   import elDragDialog from 'src/directive/el-dragDialog'
-  import { getStore } from "src/utils/index";
+  import { getStore } from "src/utils/index"
   import product from '../../components/Product/product'
-  import TableCellImg from "src/components/TableCellImg";
+  import TableCellImg from "src/components/TableCellImg"
   import previewCircle from './components/previewCircle'
 
   export default {
@@ -204,12 +204,10 @@
     directives: { permission, elDragDialog },
     components: { ImgsDragSort, product, TableCellImg, previewCircle },
     mounted() {
-      this.getItem();                       // 获取标签列表
-      this.getCoupon();                     // 获取优惠券列表
+      this.initCircle()
     },
     activated() {
-      this.getItem();                       // 获取标签列表
-      this.getCoupon();                     // 获取优惠券列表
+      this.initCircle()
     },
     watch: {
       // 选中的标签
@@ -222,13 +220,30 @@
       }
     },
     methods: {
+      // 初始化
+      initCircle() {
+        // 编辑
+        if(this.$route.query.neid) {
+          this.$http.get(this.$api.get_news_content, { params: { neid: this.$route.query.neid }}).then(res => {
+            if (res.data.status == 200) {
+              console.log(res.data.data);
+              // 将拿到的数据处理给组件
+              // this.convertFromEdit(res.data.data);
+              this.circleForm = res.data.data;
+              // this.$refs.circleFormRef.clearValidate();
+            }
+          })
+        }else {    // 新增
+
+        }
+
+        this.getItem();                       // 获取标签列表
+        this.getCoupon();                     // 获取优惠券列表
+      },
       // 获取标签列表
       getItem() {
         this.$http.get(this.$api.items_list, {
-          noLoading: true,
-          params: {
-            ittype: 10
-          }}).then(res => {
+          noLoading: true, params: { ittype: 10 }}).then(res => {
           if (res.data.status == 200) {
             this.itemsList = res.data.data;
           }
@@ -381,13 +396,13 @@
               let title = '新增';
               this.$http.post(this.$api.create_news, this.circleForm).then(res => {
                 if (res.data.status == 200) {
-                  this.initCircleForm();
                   this.$router.push('/circle/circle');
                   this.$notify({
                     title: `${title}成功`,
                     message: `资讯标题：${this.circleForm.netitle}成功`,
                     type: 'success'
                   });
+                  this.initCircleForm();
                 }
               });
             }
