@@ -22,6 +22,7 @@
       <el-table-column label="生效对象" align="center" prop="title_subtitle.left_text" show-overflow-tooltip></el-table-column>
       <el-table-column label="生效条件" align="center" prop="title_subtitle.subtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="发放开始时间" align="center" prop="cosendstarttime"></el-table-column>
+      <el-table-column label="剩余数量" align="center" prop="coremainnum" width="100"></el-table-column>
       <el-table-column label="发放数量" align="center" prop="colimitnum" width="100"></el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
@@ -154,7 +155,8 @@
       },
       // 编辑优惠券
       editCoupon(scope) {
-        console.log(scope.row);
+        let coupon = JSON.stringify(scope.row);
+        this.$router.push({ path: '/marketing/editCoupon', query: { coupon: coupon }})
       },
       // 删除优惠券
       deleteCoupon(scope) {
