@@ -79,6 +79,8 @@ const api = {
 
   activity_list: title + 'activity/list',                                 // 获取正在进行中的活动
   activity_update: title + 'activity/update',                             // 修改活动基础信息
+  fresh_man_list: title + 'fresh_man/list',                               // 获取新人首单商品列表
+  fresh_man_apply_award: title + 'fresh_man/apply_award',                 // 申请参与新人首单
 
   get_commodity: title + 'commodity/get',                                 // 获取试用商品
   get_commodity_detail: title + 'commodity/get_commodity',                // 获取试用商品
@@ -91,6 +93,7 @@ const api = {
   create_news: title + 'news/create_news',                                // 发布资讯
   update_news: title + 'news/update_news',                                // 修改资讯
   del_news: title + 'news/del_news',                                      // 删除资讯
+
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
   coupon_create: title + 'coupon/create',                                 // 后台创建优惠券
   coupon_update: title + 'coupon/update',                                 // 后台修改优惠券
