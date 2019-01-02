@@ -180,6 +180,7 @@
           createtime_start: '',
           createtime_end: '',
         }
+        this.doSearch();
       },
 
       //  获取每个订单类型的数量

@@ -123,6 +123,7 @@ const api = {
   get_all_permissiontype: title + 'approval/get_all_permissiontype',       // 获取所有审批流类型
   get_approval_list: title + 'approval/get_approval_list',                 // 获取审批列表
   deal_approval: title + 'approval/deal_approval',                         // 管理员处理审批流
+  get_approvalnotes: title + 'approval/get_approvalnotes',                 // 获取审批流所有流程
 
   get_permission_admin_list: title + 'approval/get_permission_admin_list', // 获取审批权限下管理员列表
   add_permissionitems: title + 'approval/add_permissionitems',             // 创建审批标签

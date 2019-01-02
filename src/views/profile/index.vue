@@ -272,23 +272,23 @@
           align-items: flex-end;
           white-space: nowrap;
 
-          &.return-prod {
+          &:nth-child(2) {
             background: #D18E62;
           }
 
-          &.agent-audit {
+          &:nth-child(3)  {
             background: #C7D687;
           }
 
-          &.prod-audit {
+          &:nth-child(4) {
             background: #87ACD6;
           }
 
-          &.circle {
+          &:nth-child(5)  {
             background: #CB7E88;
           }
 
-          &.activity {
+          &:nth-child(6)  {
             background: #C397CB;
           }
 

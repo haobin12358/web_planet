@@ -15,8 +15,8 @@
           <el-input v-model="inlineForm.prtitle" clearable></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select>
-            <el-option></el-option>
+          <el-select v-model="inlineForm.omstatus" @change="doSearch">
+            <el-option v-for="item in orderType" :value="item.value" :label="item.label" :key="item.label"></el-option>
           </el-select>
         </el-form-item>
 
@@ -141,19 +141,22 @@
             value: '',
           },{
             label: '已取消',
-            value: '',
+            value: '-40',
           },{
-            label: '全部',
-            value: '',
+            label: '待支付',
+            value: '0',
           },{
-            label: '全部',
-            value: '',
+            label: '待发货',
+            value: '10',
           },{
-            label: '全部',
-            value: '',
+            label: '待收货',
+            value: '20',
           },{
-            label: '全部',
-            value: '',
+            label: '待评价',
+            value: '35',
+          },{
+            label: '已完成',
+            value: '30',
           },
         ],
         inlineForm: {
@@ -163,7 +166,7 @@
           prtitle: '',
           createtime_start: '',
           createtime_end: '',
-          omstatus: ''
+          omstatus: '',
         },
 
         menuList: [],
@@ -198,7 +201,9 @@
           prtitle: '',
           createtime_start: '',
           createtime_end: '',
-        }
+          omstatus: '',
+        };
+        this.doSearch();
       },
 
       //  获取每个订单类型的数量
