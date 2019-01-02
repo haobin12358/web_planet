@@ -1,9 +1,9 @@
 <template>
     <div class="container">
       <el-tabs type="border-card" v-model="activeName">
-        <el-tab-pane v-for="(item,index) in list" :label="item" :key="item">
+        <el-tab-pane v-for="(item,index) in list" :label="item.ptname" :key="item.ptid">
           <keep-alive>
-            <two-setting-table v-if="activeName == index"></two-setting-table>
+            <two-setting-table v-if="activeName == index" :levelData="item.pemission" :ptid="item.ptid"></two-setting-table>
           </keep-alive>
         </el-tab-pane>
       </el-tabs>
@@ -21,14 +21,7 @@
 
     data() {
       return {
-        list: [
-          '提现审批',
-          '退货审批',
-          '代理商审批',
-          '供应商商品审批',
-          '圈子审批',
-          '活动审批',
-        ],
+        list: [],
 
         activeName: '0',
       }
@@ -36,9 +29,27 @@
 
     computed: {},
 
-    methods: {},
+    methods: {
+      getAllPermissionType(){
+        this.$http.get(this.$api.get_all_permissiontype,{
+          params: {
+
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.list = data;
+            }
+          }
+        )
+      },
+    },
 
     created() {
+      this.getAllPermissionType();
 
     }
   }

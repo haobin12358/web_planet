@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-     圈子审核
+    猜数字活动申请
   </div>
 </template>
 
 <script>
-  //  topublish
+  //  toguessnum
   export default {
-    name: 'CircleAudit',
+    name: "guessActiAudit",
 
     components: {},
 
@@ -21,7 +21,7 @@
 
     created() {
 
-    }
+    },
   }
 </script>
 
@@ -30,5 +30,5 @@
 
   .container {
 
-    }
+  }
 </style>

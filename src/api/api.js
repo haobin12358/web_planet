@@ -98,6 +98,9 @@ const api = {
 
   list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
   list_fans: title + 'user/list_fans',                                    // 销售商列表(后台佣金)
+  update_user_commision: title + 'user/update_user_commision',            // 设置个人佣金
+  get_commision: title + 'commision/get',                                 // 获取平台佣金详情
+  update_commision: title + 'commision/update',                           // 设置平台佣金详情
 
   act_code_get_rule: title + 'act_code/get_rule',                         // 获取激活码规则
   act_code_set_rule: title + 'act_code/rule',                             // 设置激活码规则
@@ -111,6 +114,17 @@ const api = {
   agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
   back_confirm_recv: title + 'refund/back_confirm_recv',                   // 后台确认收货
   back_confirm_refund: title + 'refund/back_confirm_refund',               // 后台确认执行退款(售后订单确认收货后执行退款)
+
+  //  审批流
+  get_dealing_approval: title + 'approval/get_dealing_approval',           // 管理员查看自己待审批数据-概览
+  get_all_permissiontype: title + 'approval/get_all_permissiontype',       // 获取所有审批流类型
+  get_approval_list: title + 'approval/get_approval_list',                 // 获取审批列表
+
+  get_permission_admin_list: title + 'approval/get_permission_admin_list', // 获取审批权限下管理员列表
+  add_permissionitems: title + 'approval/add_permissionitems',             // 创建审批标签
+  add_permission: title + 'approval/add_permission',                       // 给权限标签赋予权限
+  add_adminpermission: title + 'approval/add_adminpermission',             // 绑定审批权限标签和管理员
+
 };
 
 export default api

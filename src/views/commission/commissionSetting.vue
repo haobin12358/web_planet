@@ -1,30 +1,30 @@
 <template>
   <div class="container ">
-    <block-title title="佣金比例"></block-title>
+    <block-title title="等级佣金比例"></block-title>
     <section class="tool-bar">
       <el-form inline>
-        <el-form-item label="三级代理佣金比例">
-          <el-input v-model.number="secLevelRate">
+        <el-form-item label="一级代理佣金比例">
+          <el-input v-model.number="commonSetting.levelcommision[0]">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="二级代理佣金比例">
-          <el-input >
+          <el-input v-model.number="commonSetting.levelcommision[1]">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="一级代理佣金比例">
-          <el-input v-model.number="firstLevelRate">
+        <el-form-item label="三级代理佣金比例">
+          <el-input v-model.number="commonSetting.levelcommision[2]">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="平台佣金比例">
-          <el-input v-model.number="platformRate">
+          <el-input v-model.number="commonSetting.levelcommision[3]">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-save" type="primary" @click="doSaveCommonRate">保存</el-button>
+          <el-button type="primary" @click="doSaveCommonRate(1)">保存</el-button>
         </el-form-item>
       </el-form>
     </section>
@@ -32,25 +32,28 @@
     <section class="tool-bar">
       <el-form inline label-width="150px">
         <el-form-item label="升级所需人数">
-          <el-input>
+          <el-input v-model.number="commonSetting.invitenum">
           </el-input>
-          <el-input>
+          <el-input v-model.number="commonSetting.invitenumscale">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="升级所需团队总额">
-          <el-input>
+          <el-input v-model.number="commonSetting.groupsale">
           </el-input>
-          <el-input>
+          <el-input v-model.number="commonSetting.groupsalescale">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="升级所需个人总额">
-          <el-input>
+          <el-input v-model.number="commonSetting.pesonalsale">
           </el-input>
-          <el-input>
+          <el-input v-model.number="commonSetting.pesonalsalescale">
             <template slot="append">%</template>
           </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="doSaveCommonRate(2)">保存</el-button>
         </el-form-item>
       </el-form>
     </section>
@@ -58,23 +61,27 @@
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="1-2">
-          <el-input >
+          <el-input v-model.number="commonSetting.reduceratio[0]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="2-3">
-          <el-input >
+          <el-input v-model.number="commonSetting.reduceratio[1]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="3-4">
-          <el-input >
+          <el-input v-model.number="commonSetting.reduceratio[2]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="4-5">
-          <el-input >
+          <el-input v-model.number="commonSetting.reduceratio[3]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-save" type="primary" @click="doSaveCommonRate">保存</el-button>
+          <el-button type="primary" @click="doSaveCommonRate(3)">保存</el-button>
         </el-form-item>
       </el-form>
     </section>
@@ -83,42 +90,73 @@
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="1-2">
-          <el-input >
+          <el-input v-model.number="commonSetting.increaseratio[0]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="2-3">
-          <el-input >
+          <el-input v-model.number="commonSetting.increaseratio[1]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="3-4">
-          <el-input >
+          <el-input v-model.number="commonSetting.increaseratio[2]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="4-5">
-          <el-input >
+          <el-input v-model.number="commonSetting.increaseratio[3]">
+            <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-save" type="primary" @click="doSaveCommonRate">保存</el-button>
+          <el-button type="primary" @click="doSaveCommonRate(4)">保存</el-button>
         </el-form-item>
       </el-form>
     </section>
 
 
-
     <block-title title="个人佣金比"></block-title>
+    <section class="tool-bar space-between">
+      <el-form :inline="true" :model="searchForm">
+        <el-form-item label="用户名称">
+          <el-input v-model.trim="searchForm.name" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input v-model.trim="searchForm.mobile" clearable></el-input>
+        </el-form-item>
+
+        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
+      </el-form>
+    </section>
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
-      <el-table-column label="代理商" align="center" prop="name"></el-table-column>
-      <el-table-column label="佣金比例" align="center" prop="usname">
+      <el-table-column label="用户名" align="center" prop="usname"></el-table-column>
+      <el-table-column label="手机号" align="center" prop="ustelphone"></el-table-column>
+      <el-table-column label="一级佣金比例" align="center" prop="usname">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.rate" style="width: 200px;">
+          <el-input v-model.number="scope.row.uscommission1" style="width: 140px;">
+            <template slot="append">%</template>
+          </el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="二级佣金比例" align="center" prop="usname">
+        <template slot-scope="scope">
+          <el-input v-model.number="scope.row.uscommission2" style="width: 140px;">
+            <template slot="append">%</template>
+          </el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="三级佣金比例" align="center" prop="usname">
+        <template slot-scope="scope">
+          <el-input v-model.number="scope.row.uscommission3" style="width: 140px;">
             <template slot="append">%</template>
           </el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" prop="usname">
         <template slot-scope="scope">
-          <el-button type="text">修改佣金比</el-button>
+          <el-button type="text" @click="doSavePersonRate(scope.row)">修改佣金比</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -146,48 +184,174 @@
 
     data() {
       return {
-        secLevelRate: 10,
-        firstLevelRate: 10,
-        platformRate: 10,
+        commonSetting:{
+          "levelcommision": [0, 0, 0, 0],
+          "invitenum": 0,
+          "groupsale": 0,
+          "pesonalsale": 0,
+          "invitenumscale": 0,
+          "groupsalescale": 0,
+          "pesonalsalescale": 0,
+          "reduceratio": [0, 0, 0, 0],
+          "increaseratio": [0, 0, 0, 0],
+        },
+
+        searchForm: {
+          name: '',
+          mobile: '',
+        },
 
         loading: false,
         total: 0,
         currentPage: 1,
         pageSize: 10,
-        tableData: [
-          {
-            name: 'yyy',
-            rate: 40,
-          }
-        ],
+        tableData: [],
       }
     },
 
     computed: {},
 
     methods: {
-      doSaveCommonRate(){
+      doSaveCommonRate(sectionNum) {
+        let saveData = {},
+          type = '';
+        switch (sectionNum) {
+          case 1:
+            saveData = {
+              levelcommision: this.commonSetting.levelcommision
+            };
+            type = '等级佣金比例';
+            break;
+          case 2:
+            saveData = {
+              invitenum: this.commonSetting.invitenum,
+              invitenumscale: this.commonSetting.invitenumscale,
+              groupsale: this.commonSetting.groupsale,
+              groupsalescale: this.commonSetting.groupsalescale,
+              pesonalsale: this.commonSetting.pesonalsale,
+              pesonalsalescale: this.commonSetting.pesonalsalescale,
+            };
+            type = '升级相关';
+            break;
+          case 3:
+            saveData = {
+              reduceratio: this.commonSetting.reduceratio
+            };
+            type = '极差减额';
+            break;
+          case 4:
+            saveData = {
+              increaseratio: this.commonSetting.increaseratio
+            };
+            type = '极差增额';
+            break;
+        }
+        type += '设置';
 
+        this.$confirm(`确认保存${type}?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.update_commision,saveData).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.getCommisionSetting();
+                  this.$notify({
+                    title: `${type}保存成功`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+      getCommisionSetting(){
+        this.$http.get(this.$api.get_commision,{
+          params: {
+
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.commonSetting = data;
+            }
+          }
+        )
       },
 
+      doSearch(){
+        this.getAllUserCommission();
+      },
+      doReset(){
+        this.searchForm = {
+          name: '',
+          mobile: '',
+        }
+        this.doSearch();
+      },
+      getAllUserCommission(){
+        this.$http.get(this.$api.list_user_commison,{
+          params: {
+            page_size: this.pageSize,
+            page_num: this.currentPage,
+
+            level: 'all',   //  获取所有前台用户的
+            ...this.searchForm,
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.tableData = data;
+            }
+          }
+        )
+      },
       sizeChange(pageSize) {
         this.pageSize = pageSize;
         this.currentPage = 1;
 
-        // this.getUserCommissionList();
+        this.getAllUserCommission();
       },
       pageChange(page) {
         this.currentPage = page;
-        // this.getUserCommissionList();
+        this.getAllUserCommission();
       },
+      doSavePersonRate(row) {
+        this.$http.post(this.$api.update_user_commision,{
+          "usid": row.usid,
+          "commision1": row.uscommission1,
+          "commision2": row.uscommission2,
+          "commision3": row.uscommission3,
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
 
-      doSavePersonRate(){
+              this.getAllUserCommission();
+              this.$notify({
+                title: '个人佣金设置成功',
+                message: `用户名:${row.usname}`,
+                type: 'success'
+              });
+            }
+          }
+        )
 
       },
     },
 
     created() {
-
+      this.getCommisionSetting();
+      this.getAllUserCommission();
     },
   }
 </script>

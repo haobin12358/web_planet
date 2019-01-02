@@ -6,30 +6,34 @@
 
       <ul class="todo-list">
         <template v-if="checkPermission(level2)">
-          <router-link  tag="li" to="/approval/withdrawAudit" class="todo-item">
-            <span class="label">提现审批</span>
-            <span class="num">21</span>
-          </router-link>
-          <router-link tag="li" to="/approval/returnProductAudit" class="todo-item return-prod">
-            <span class="label">退货审批</span>
-            <span class="num">21</span>
-          </router-link>
-          <router-link tag="li" to="/approval/agentAudit" class="todo-item agent-audit">
-            <span class="label">代理商审批</span>
-            <span class="num">21</span>
-          </router-link>
-          <router-link tag="li" to="/approval/productAudit" class="todo-item prod-audit">
-            <span class="label">商品上架</span>
-            <span class="num">21</span>
-          </router-link>
-          <router-link tag="li" to="/approval/circleAudit" class="todo-item circle">
-            <span class="label">圈子审核</span>
-            <span class="num">21</span>
-          </router-link>
-          <router-link tag="li" to="/approval/withdraw" class="todo-item activity">
-            <span class="label">活动审核</span>
-            <span class="num">21</span>
-          </router-link>
+          <li  class="todo-item" v-for="item in todos" :key="item.ptid">
+            <span class="label">{{item.ptname}}</span>
+            <span class="num">{{item.approval_num}}</span>
+          </li>
+          <!--<router-link  tag="li" to="/approval/withdrawAudit" class="todo-item">-->
+            <!--<span class="label">提现审批</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+          <!--<router-link tag="li" to="/approval/returnProductAudit" class="todo-item return-prod">-->
+            <!--<span class="label">退货审批</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+          <!--<router-link tag="li" to="/approval/agentAudit" class="todo-item agent-audit">-->
+            <!--<span class="label">代理商审批</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+          <!--<router-link tag="li" to="/approval/productAudit" class="todo-item prod-audit">-->
+            <!--<span class="label">商品上架</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+          <!--<router-link tag="li" to="/approval/circleAudit" class="todo-item circle">-->
+            <!--<span class="label">圈子审核</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+          <!--<router-link tag="li" to="/approval/withdraw" class="todo-item activity">-->
+            <!--<span class="label">活动审核</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
         </template>
         <template v-if="checkPermission(level0)">
           <router-link tag="li" to="/product/index" class="todo-item prod-audit">
@@ -152,6 +156,7 @@
         level0,
         level2,
 
+        todos: [],
         id:'profile_echart',
         option : {
           color:['#CB7E88','#F2DA7A','#97ADCB'],
@@ -208,10 +213,29 @@
 
     methods: {
       checkPermission,
+
+      getDealingApproval(){
+        this.$http.get(this.$api.get_dealing_approval,{
+          params: {
+
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.todos = data;
+            }
+          }
+        )
+      },
     },
 
     created() {
-
+      if(this.$store.getters.roles[0] != 'supplizer'){
+        this.getDealingApproval();
+      }
     }
   }
 </script>
