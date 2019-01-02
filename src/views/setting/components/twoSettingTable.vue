@@ -28,7 +28,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" :render-header="renderHeader">
         <template slot-scope="scope">
           <el-button type="text">保存</el-button>
         </template>
@@ -85,15 +85,19 @@
           },
           on: {
             click: () => {
-              this.doAddPd();
+              // this.doAddPd();
+
             }
           }
         }, '新增');
       },
+
+      doAddItem(){
+
+      },
     },
 
     created() {
-      console.log(this.ptid);
     },
   }
 </script>

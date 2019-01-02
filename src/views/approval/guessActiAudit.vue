@@ -7,7 +7,7 @@
 <script>
   //  toguessnum
   export default {
-    name: "guessActiAudit",
+    name: "GuessActiAudit",
 
     components: {},
 

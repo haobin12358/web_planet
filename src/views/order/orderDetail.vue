@@ -62,7 +62,7 @@
           </template>
           <template v-else>
             <el-form-item prop="olcompany" label="快递公司">
-              <el-select v-model="actionForm.olcompany" :disabled="order.omstatus != 10" placeholder="请选择,可搜索"
+              <el-select v-model="actionForm.olcompany" placeholder="请选择,可搜索"
                          filterable>
                 <el-option-group
                   v-for="group in expressOptions"
@@ -79,7 +79,8 @@
             </el-form-item>
             <el-form-item prop="olexpressno" label="快递单号">
               <el-col :span="14">
-                <el-input v-model.trim="actionForm.olexpressno" :disabled="order.omstatus != 10"></el-input>
+                <el-input v-model.trim="actionForm.olexpressno" ></el-input>
+                <!--<el-input v-model.trim="actionForm.olexpressno" :disabled="order.omstatus != 10"></el-input>-->
               </el-col>
             </el-form-item>
           </template>

@@ -7,7 +7,7 @@
 <script>
   //  tofreshmanfirstproduct
   export default {
-    name: "firstOrderActiAudit",
+    name: "FirstOrderActiAudit",
 
     components: {},
 
