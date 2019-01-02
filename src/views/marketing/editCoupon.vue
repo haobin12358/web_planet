@@ -121,9 +121,9 @@
     </el-row>
     <!--商品dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="商品绑定" :close-on-click-modal="false">
-      <el-table v-loading="productLoading" :data="productsList" stripe height="65vh"
+      <el-table v-loading="productLoading" :data="productsList" stripe height="65vh" row-key="prid"
                 @selection-change="handleSelectionChange" ref="productList">
-        <el-table-column type="selection"></el-table-column>
+        <el-table-column type="selection" :reserve-selection="true"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
@@ -241,7 +241,6 @@
       // 编辑优惠券时处理数据
       editCoupon() {
         let coupon = JSON.parse(this.$route.query.coupon);
-        console.log(coupon);
         this.couponForm.coid = coupon.coid
         // 优惠券名称、描述
         this.couponForm.coname = coupon.coname;
@@ -273,16 +272,19 @@
         if(coupon.products) {
           this.radioPrPb = 3;
           this.productList = coupon.products;
-          console.log(coupon.products);
         }
         // 发放数量、个人可领取、可叠加使用
         this.couponForm.colimitnum = coupon.colimitnum;
         this.couponForm.cocollectnum = coupon.cocollectnum;
         this.couponForm.cousenum = coupon.cousenum;
-        // 发放时间起止
-        this.cosendtime = [coupon.cosendstarttime, coupon.cosendendtime]
-        // 可用时间起止
-        this.covalidtime = [coupon.covalidstarttime, coupon.covalidendtime]
+        if(coupon.cosendstarttime && coupon.cosendendtime) {
+          // 发放时间起止
+          this.cosendtime = [coupon.cosendstarttime, coupon.cosendendtime]
+        }
+        if(coupon.covalidstarttime && coupon.covalidendtime) {
+          // 可用时间起止
+          this.covalidtime = [coupon.covalidstarttime, coupon.covalidendtime]
+        }
         // 是否可用
         if(coupon.coisavailable) {
           this.iscoisavailable = true
@@ -317,26 +319,22 @@
       // 获取商品列表
       getProduct() {
         this.productDialog = true;
-        if(this.couponForm.coid) {
-          this.productLoading = true;
-        }else {
-          this.productLoading = true;
-          this.$http.get(this.$api.product_list, {
-            noLoading: true,
-            params: {
-              page_num: 1,
-              page_size: 300
-            }}).then(res => {
-            if (res.data.status == 200) {
-              this.productsList = res.data.data;
-              this.productLoading = false;
+        this.productLoading = true;
+        this.$http.get(this.$api.product_list, {
+          noLoading: true,
+          params: {
+            page_num: 1,
+            page_size: 200
+          }}).then(res => {
+          if (res.data.status == 200) {
+            this.productsList = res.data.data;
+            this.productLoading = false;
 
-              for(let i in this.productList) {
-                this.$refs.productList.toggleRowSelection(this.productList[i])
-              }
+            for(let i in this.productList) {
+              this.$refs.productList.toggleRowSelection(this.productList[i])
             }
-          })
-        }
+          }
+        })
       },
       // 确认选中的商品
       chooseProduct() {
