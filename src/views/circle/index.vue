@@ -114,7 +114,7 @@
           ],
           itsort: [
             { required: true, message: '标签序号必填', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
+            // { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },
         activeIndex: 'usual',
