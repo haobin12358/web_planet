@@ -87,6 +87,7 @@ const api = {
   guess_num_list: title + 'guess_num/list',                               // 获取自己的猜数字奖品申请列表
   guess_num_apply_award: title + 'guess_num/apply_award',                 // 申请添加猜数字奖品
   guess_num_shelf_award: title + 'guess_num/shelf_award',                 // 撤销自己猜数字奖品申请
+  guess_num_update_apply: title + 'guess_num/update_apply',               // 修改猜数字奖品申请
   magic_box_list: title + 'magicbox/list',                                // 获取自己的魔盒奖品申请列表
   magic_box_apply_award: title + 'magicbox/apply_award',                  // 申请添加魔盒奖品
   magic_box_update_apply: title + 'magicbox/update_apply',                // 修改魔盒奖品申请

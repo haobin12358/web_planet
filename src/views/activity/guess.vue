@@ -17,7 +17,7 @@
       <el-table-column label="申请状态" align="center" prop="gnaastatus_zh"></el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editGuess(scope)">编辑</el-button>
+          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteGuess(scope)"
                      v-if="scope.row.gnaastatus == 0">撤销</el-button>
         </template>
@@ -42,6 +42,7 @@
         page_size: 10,
         page_num: 1,
         total: 0,
+        scope: {}             // 暂存scope
       }
     },
     components: { getSku, TableCellImg },
@@ -51,12 +52,25 @@
     methods: {
       // 申请添加竞猜奖品-按钮
       addGuess() {
+        this.$refs.guess.isEdit = false;
         this.$refs.guess.productDialog = true
       },
       // 申请添加竞猜奖品
       chooseSkus(sku, isEdit) {
         if(isEdit) {
-
+          sku.gnaaid = this.scope.row.gnaaid;
+          this.$http.post(this.$api.guess_num_update_apply, sku).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '编辑成功',
+                message: res.data.message,
+                type: 'success'
+              });
+              this.getGuess();
+              this.$refs.guess.productDialog = false;
+              this.$refs.guess.skusDialog = false;
+            }
+          });
         }else {
           this.$http.post(this.$api.guess_num_apply_award, sku).then(res => {
             if (res.data.status == 200) {
@@ -98,7 +112,10 @@
       },
       // 编辑我的申请
       editGuess(scope) {
-
+        this.scope = scope;
+        this.$refs.guess.productDialog = true;
+        scope.row.where = 'guess';
+        this.$refs.guess.chooseProduct(scope);
       },
       // 撤销我的申请
       deleteGuess(scope) {

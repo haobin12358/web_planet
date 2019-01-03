@@ -17,7 +17,7 @@
       <el-table-column label="申请状态" align="center" prop="mbastatus_zh"></el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editGuess(scope)">编辑</el-button>
+          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus == -20">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == 0">撤销</el-button>
         </template>
       </el-table-column>
@@ -25,12 +25,6 @@
     <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
                    :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="sizeChange" @current-change="pageChange"></el-pagination>
-
-
-
-
-
-
   </div>
 </template>
 
@@ -48,6 +42,7 @@
         page_size: 10,
         page_num: 1,
         total: 0,
+        scope: {}             // 暂存scope
       }
     },
     components: { getSku, TableCellImg },
@@ -57,12 +52,25 @@
     methods: {
       // 申请添加魔盒奖品-按钮
       addGuess() {
+        this.$refs.magic.isEdit = false;
         this.$refs.magic.productDialog = true
       },
       // 申请添加魔盒奖品
       chooseSkus(sku, isEdit) {
         if(isEdit) {
-
+          sku.mbaid = this.scope.row.mbaid;
+          this.$http.post(this.$api.magic_box_update_apply, sku).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '编辑成功',
+                message: res.data.message,
+                type: 'success'
+              });
+              this.getMagic();
+              this.$refs.magic.productDialog = false;
+              this.$refs.magic.skusDialog = false;
+            }
+          });
         }else {
           this.$http.post(this.$api.magic_box_apply_award, sku).then(res => {
             if (res.data.status == 200) {
@@ -104,7 +112,10 @@
       },
       // 编辑我的申请
       editGuess(scope) {
-
+        this.scope = scope;
+        this.$refs.magic.productDialog = true;
+        scope.row.where = 'magic';
+        this.$refs.magic.chooseProduct(scope);
       },
       // 撤销我的申请
       deleteGuess(scope) {
