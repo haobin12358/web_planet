@@ -55,7 +55,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+    <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
                    :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="sizeChange" @current-change="pageChange"></el-pagination>
 
@@ -323,7 +323,6 @@
 
   .circle-index {
     .page-box {
-      text-align: right;
       padding: 20px;
     }
     .add-item-btn {
