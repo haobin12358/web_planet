@@ -101,16 +101,18 @@
         },
         /*搜索结果*/
         searchInfo(){
-          axios.get(api.guess_search,{
-            params:{
-              kw:this.searchContent,
-              shtype:this.$route.query.shtype || 'product'
-            }
-          }).then(res => {
-            if(res.data.status ==200){
-              this.result_list = res.data.data;
-            }
-          })
+          if(this.searchContent) {
+            axios.get(api.guess_search,{
+              params:{
+                kw:this.searchContent,
+                shtype:this.$route.query.shtype || 'product'
+              }
+            }).then(res => {
+              if(res.data.status ==200){
+                this.result_list = res.data.data;
+              }
+            })
+          }
         },
         /*切换路由*/
         changeRoute(item){
