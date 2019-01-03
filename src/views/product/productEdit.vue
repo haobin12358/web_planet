@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <section class="fixed-right-top">
-      <el-tabs tab-position="right"  @tab-click="goLabel" style="height: 200px;">
+      <el-tabs tab-position="right" @tab-click="goLabel" style="height: 200px;">
         <el-tab-pane label="基础数据" name="1"></el-tab-pane>
         <el-tab-pane label="基本信息" name="2"></el-tab-pane>
         <el-tab-pane label="详细信息" name="3"></el-tab-pane>
@@ -15,227 +15,228 @@
     </nav>
 
     <!--<el-row>-->
-      <!--<el-col :span="16">-->
-        <el-form class="prod-form" ref="prodForm" :model="formData" :rules="rules" label-position="left" label-width="100px">
-          <!--<block-title title="基础数据"></block-title>-->
+    <!--<el-col :span="16">-->
+    <el-form class="prod-form" ref="prodForm" :model="formData" :rules="rules" label-position="left"
+             label-width="100px">
+      <!--<block-title title="基础数据"></block-title>-->
 
-          <el-form-item id="1" label="所属分类" prop="pcid">
-            <el-cascader :options="categoryOptions" style="width: 500px;" :props="categoryProps"
-                         @change="handlePcidChange"
-                         v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
-            </el-cascader>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productCategory"
-                         class="form-item-end-tip">分类不全?去新增 >
-            </router-link>
-          </el-form-item>
+      <el-form-item id="1" label="所属分类" prop="pcid">
+        <el-cascader :options="categoryOptions" style="width: 500px;" :props="categoryProps"
+                     @change="handlePcidChange"
+                     v-model="selectedOption" placeholder="必须选中第三级分类,可搜索" :filterable="true">
+        </el-cascader>
+        <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productCategory"
+                     class="form-item-end-tip">分类不全?去新增 >
+        </router-link>
+      </el-form-item>
 
-          <el-form-item label="所属品牌" prop="pbid">
-            <el-select v-model="formData.pbid" style="width: 500px;" filterable placeholder="可搜索">
-              <el-option v-for="item in brandOptions" :key="item.pbid" :label="item.pbname" :value="item.pbid">
-                <span style="float: left">{{ item.pbname }}</span>
-                <img v-lazy="item.pblogo" style="float: right;width: 32px;height: 32px;padding: 2px;" alt="">
-              </el-option>
-            </el-select>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand"
-                         class="form-item-end-tip">品牌不全?去新增 >
-            </router-link>
-          </el-form-item>
+      <el-form-item label="所属品牌" prop="pbid">
+        <el-select v-model="formData.pbid" style="width: 500px;" filterable placeholder="可搜索">
+          <el-option v-for="item in brandOptions" :key="item.pbid" :label="item.pbname" :value="item.pbid">
+            <span style="float: left">{{ item.pbname }}</span>
+            <img v-lazy="item.pblogo" style="float: right;width: 32px;height: 32px;padding: 2px;" alt="">
+          </el-option>
+        </el-select>
+        <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productBrand"
+                     class="form-item-end-tip">品牌不全?去新增 >
+        </router-link>
+      </el-form-item>
 
-          <el-form-item label="关联标签" prop="items">
-            <el-select v-model="items" style="width: 500px;" multiple filterable placeholder="可多选,可搜索">
-              <el-option
-                v-for="item in tagsOptions"
-                :key="item.itid"
-                :label="item.itname"
-                :value="item.itid">
-              </el-option>
-            </el-select>
-            <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag"
-                         class="form-item-end-tip">标签不全?去新增 >
-            </router-link>
-          </el-form-item>
+      <el-form-item label="关联标签" prop="items" v-if="showTags">
+        <el-select v-model="items" style="width: 500px;" multiple filterable placeholder="可多选,可搜索">
+          <el-option
+            v-for="item in tagsOptions"
+            :key="item.itid"
+            :label="item.itname"
+            :value="item.itid">
+          </el-option>
+        </el-select>
+        <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag"
+                     class="form-item-end-tip">标签不全?去新增 >
+        </router-link>
+      </el-form-item>
 
-          <!--<block-title title="基本信息"></block-title>-->
+      <!--<block-title title="基本信息"></block-title>-->
 
-          <el-form-item id="2" label="商品名称" prop="prtitle">
-            <el-input v-model.trim="formData.prtitle" style="width: 700px;"></el-input>
-          </el-form-item>
-          <el-form-item label="商品描述" prop="prdescription">
-            <el-input v-model.trim="formData.prdescription" type="textarea" style="width: 700px;"></el-input>
-          </el-form-item>
-          <el-form-item label="划线价格" prop="prlineprice">
-            <el-input style="width: 200px;" v-model.number="formData.prlineprice"></el-input>
-          </el-form-item>
-          <el-form-item label="价格" prop="prprice">
-            <el-input v-model.number="formData.prprice" style="width: 200px;"></el-input>
-          </el-form-item>
-          <el-form-item label="运费" prop="prfreight">
-            <el-input v-model.number="formData.prfreight" style="width: 200px;"></el-input>
-          </el-form-item>
+      <el-form-item id="2" label="商品名称" prop="prtitle">
+        <el-input v-model.trim="formData.prtitle" style="width: 700px;"></el-input>
+      </el-form-item>
+      <el-form-item label="商品描述" prop="prdescription">
+        <el-input v-model.trim="formData.prdescription" type="textarea" style="width: 700px;"></el-input>
+      </el-form-item>
+      <el-form-item label="划线价格" prop="prlineprice">
+        <el-input style="width: 200px;" v-model.number="formData.prlineprice"></el-input>
+      </el-form-item>
+      <el-form-item label="价格" prop="prprice">
+        <el-input v-model.number="formData.prprice" style="width: 200px;"></el-input>
+      </el-form-item>
+      <el-form-item label="运费" prop="prfreight">
+        <el-input v-model.number="formData.prfreight" style="width: 200px;"></el-input>
+      </el-form-item>
 
-          <el-form-item label="商品规格" required>
-            <!--工具栏-->
-            <section class="form-item-sku">
-              <!--商品规格tags管理, 颜色,规格...-->
-              <section>
-                <el-tag :key="tag" v-for="tag in formData.prattribute" closable :disable-transitions="false"
-                        @close="handleClose(tag)" @dblclick.native="editPrAttribute(tag)">
-                  {{tag}}
-                </el-tag>
+      <el-form-item label="商品规格" required>
+        <!--工具栏-->
+        <section class="form-item-sku">
+          <!--商品规格tags管理, 颜色,规格...-->
+          <section>
+            <el-tag :key="tag" v-for="tag in formData.prattribute" closable :disable-transitions="false"
+                    @close="handleClose(tag)" @dblclick.native="editPrAttribute(tag)">
+              {{tag}}
+            </el-tag>
 
-                <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                          @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
-                </el-input>
-                <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
-                            placement="right">
-                  <el-button class="button-new-tag" size="small" @click="showInput">+ 添加商品规格</el-button>
-                </el-tooltip>
-                <div class="tag-tip">双击修改,不能重名</div>
-              </section>
+            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
+                      @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
+            </el-input>
+            <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
+                        placement="right">
+              <el-button class="button-new-tag" size="small" @click="showInput">+ 添加商品规格</el-button>
+            </el-tooltip>
+            <div class="tag-tip">双击修改,不能重名</div>
+          </section>
 
-              <!--添加属性table行-->
-              <el-button type="primary" @click="addOneSku">添加一行商品属性</el-button>
-            </section>
+          <!--添加属性table行-->
+          <el-button type="primary" @click="addOneSku">添加一行商品属性</el-button>
+        </section>
 
-            <!--属性table-->
-            <!--排序分组 todo-->
-            <el-table :data="formData.skus" :fit="true" :header-cell-class-name="headerCellFunction"
-                      empty-text="请在左上方添加商品规格后,再点右上方按钮添加一行,最后补全该表格" style="width: 100%">
-              <el-table-column label="图片" prop="img" align="center" width="120">
-                <template slot-scope="scope">
-                  <el-upload
-                    class="avatar-uploader  small"
-                    :action="uploadUrl"
-                    :show-file-list="false"
-                    accept="image/*"
-                    :on-success="handleSkuPicSuccess"
-                    :before-upload="beforeImgsUpload"
-                    @click.native="setSkuPicIndex(scope.$index)"
-                  >
-                    <img v-if="scope.row.skupic" v-lazy="scope.row.skupic" :key="scope.row.skupic" class="avatar small">
-                    <i v-else class="el-icon-plus avatar-uploader-icon small"></i>
+        <!--属性table-->
+        <!--排序分组 todo-->
+        <el-table :data="formData.skus" :fit="true" :header-cell-class-name="headerCellFunction"
+                  empty-text="请在左上方添加商品规格后,再点右上方按钮添加一行,最后补全该表格" style="width: 100%">
+          <el-table-column label="图片" prop="img" align="center" width="120">
+            <template slot-scope="scope">
+              <el-upload
+                class="avatar-uploader  small"
+                :action="uploadUrl"
+                :show-file-list="false"
+                accept="image/*"
+                :on-success="handleSkuPicSuccess"
+                :before-upload="beforeImgsUpload"
+                @click.native="setSkuPicIndex(scope.$index)"
+              >
+                <img v-if="scope.row.skupic" v-lazy="scope.row.skupic" :key="scope.row.skupic" class="avatar small">
+                <i v-else class="el-icon-plus avatar-uploader-icon small"></i>
 
-                    <div slot="tip" class="el-upload__tip">
+                <div slot="tip" class="el-upload__tip">
 
-                    </div>
-                  </el-upload>
-                </template>
-              </el-table-column>
-              <el-table-column label="SN" prop="sn" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model.trim="scope.row.skusn"></el-input>
-                </template>
-              </el-table-column>
+                </div>
+              </el-upload>
+            </template>
+          </el-table-column>
+          <el-table-column label="SN" prop="sn" align="center">
+            <template slot-scope="scope">
+              <el-input v-model.trim="scope.row.skusn"></el-input>
+            </template>
+          </el-table-column>
 
-              <!--自定商品规格-->
-              <el-table-column :label="item" v-for="(item,index) in formData.prattribute" :key="index"
-                               align="center">
-                <template slot-scope="scope">
-                  <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="价格" prop="price" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model.number="scope.row.skuprice"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="库存" prop="stock" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model.number="scope.row.skustock"></el-input>
-                </template>
-              </el-table-column>
+          <!--自定商品规格-->
+          <el-table-column :label="item" v-for="(item,index) in formData.prattribute" :key="index"
+                           align="center">
+            <template slot-scope="scope">
+              <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="价格" prop="price" align="center">
+            <template slot-scope="scope">
+              <el-input v-model.number="scope.row.skuprice"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="库存" prop="stock" align="center">
+            <template slot-scope="scope">
+              <el-input v-model.number="scope.row.skustock"></el-input>
+            </template>
+          </el-table-column>
 
-              <el-table-column label="操作" prop="action" align="center" width="120" fixed="right">
-                <template slot-scope="scope">
+          <el-table-column label="操作" prop="action" align="center" width="120" fixed="right">
+            <template slot-scope="scope">
 
-                  <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
-                    移除该属性
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+              <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
+                移除该属性
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-            <div class="form-item-end-tip">
-              确认排序面板会在点击保存前弹出
-            </div>
-            <!--<section class="table-bottom">-->
-            <!--<el-tooltip effect="dark" content="单击弹出输入面板" placement="right">-->
-            <!--<el-button icon="el-icon-sort" @click="showSkuSortDlg">规格排序</el-button>-->
-            <!--</el-tooltip>-->
-            <!--</section>-->
-          </el-form-item>
+        <div class="form-item-end-tip">
+          确认排序面板会在点击保存前弹出
+        </div>
+        <!--<section class="table-bottom">-->
+        <!--<el-tooltip effect="dark" content="单击弹出输入面板" placement="right">-->
+        <!--<el-button icon="el-icon-sort" @click="showSkuSortDlg">规格排序</el-button>-->
+        <!--</el-tooltip>-->
+        <!--</section>-->
+      </el-form-item>
 
 
-          <!--<block-title title="详细信息"></block-title>-->
+      <!--<block-title title="详细信息"></block-title>-->
 
-          <el-form-item id="3"  label="商品主图" prop="prmainpic">
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadUrl"
-              :show-file-list="false"
-              accept="image/*"
-              :on-success="handleMainPicSuccess"
-              :before-upload="beforeMainPicUpload"
-            >
-              <img v-if="formData.prmainpic" :key="formData.prmainpic" v-lazy="formData.prmainpic" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      <el-form-item id="3" label="商品主图" prop="prmainpic">
+        <el-upload
+          class="avatar-uploader"
+          :action="uploadUrl"
+          :show-file-list="false"
+          accept="image/*"
+          :on-success="handleMainPicSuccess"
+          :before-upload="beforeMainPicUpload"
+        >
+          <img v-if="formData.prmainpic" :key="formData.prmainpic" v-lazy="formData.prmainpic" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
-              <div slot="tip" class="el-upload__tip">
-                建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待
-              </div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="顶部轮播图(最多9张)" prop="images">
-            <el-upload
-              class="swiper-uploader"
-              :action="uploadUrl"
-              accept="image/*"
-              list-type="picture-card"
-              :file-list="imagesUrl"
-              :on-preview="handlePictureCardPreview"
-              :before-upload="beforeImgsUpload"
-              :on-remove="handleImagesRemove"
-              :http-request="uploadImages"
-              :limit="9"
-              :multiple="true">
-              <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">
-                <span>可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
-                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
-              </div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="底部长图(最多20张)" prop="prdesc">
-            <el-upload
-              class="swiper-uploader"
-              :action="uploadUrl"
-              accept="image/*"
-              list-type="picture-card"
-              :file-list="prDescUrl"
-              :on-preview="handlePictureCardPreview"
-              :before-upload="beforeImgsUpload"
-              :on-remove="handlePrDescRemove"
-              :http-request="uploadPrDesc"
-              :limit="5"
-              :multiple="true">
-              <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">
-                <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
-                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
-              </div>
-            </el-upload>
-          </el-form-item>
+          <div slot="tip" class="el-upload__tip">
+            建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待
+          </div>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="顶部轮播图(最多9张)" prop="images">
+        <el-upload
+          class="swiper-uploader"
+          :action="uploadUrl"
+          accept="image/*"
+          list-type="picture-card"
+          :file-list="imagesUrl"
+          :on-preview="handlePictureCardPreview"
+          :before-upload="beforeImgsUpload"
+          :on-remove="handleImagesRemove"
+          :http-request="uploadImages"
+          :limit="9"
+          :multiple="true">
+          <i class="el-icon-plus"></i>
+          <div slot="tip" class="el-upload__tip">
+            <span>可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+            <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
+          </div>
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="底部长图(最多20张)" prop="prdesc">
+        <el-upload
+          class="swiper-uploader"
+          :action="uploadUrl"
+          accept="image/*"
+          list-type="picture-card"
+          :file-list="prDescUrl"
+          :on-preview="handlePictureCardPreview"
+          :before-upload="beforeImgsUpload"
+          :on-remove="handlePrDescRemove"
+          :http-request="uploadPrDesc"
+          :limit="5"
+          :multiple="true">
+          <i class="el-icon-plus"></i>
+          <div slot="tip" class="el-upload__tip">
+            <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+            <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
+          </div>
+        </el-upload>
+      </el-form-item>
 
-          <el-form-item>
-            <el-button type="primary" @click="checkFormData">保存商品</el-button>
-          </el-form-item>
-        </el-form>
-      <!--</el-col>-->
+      <el-form-item>
+        <el-button type="primary" @click="checkFormData">保存商品</el-button>
+      </el-form-item>
+    </el-form>
+    <!--</el-col>-->
     <!--</el-row>-->
 
     <section class="tool-tip-wrap pin-right-bottom">
-      <el-button type="primary" @click="checkFormData(true)">保存并跳转</el-button>
-      <el-button type="primary" @click="checkFormData(false)">保存并停留</el-button>
+      <el-button type="primary" @click="checkFormData(true)">保存商品</el-button>
+      <!--<el-button type="primary" @click="checkFormData(false)">保存并停留</el-button>-->
     </section>
 
     <!--规格排序dialog-->
@@ -270,6 +271,7 @@
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   const natureNumberReg = /^(\d*)$/;   //  自然数
 
+  const upgradeItId = 'upgrade_product';
   export default {
     name: "ProductEdit",
 
@@ -314,6 +316,7 @@
     data() {
       return {
         goToIndexAfterSave: false,
+        repeat: true,
 
         formData: {
           prid: '',
@@ -415,12 +418,28 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=product'
+        return this.$api.upload_file + getStore('token') + '&type=product'
+      },
+      showTags() {
+        if (this.formData.prid) {
+          for (let i = 0; i < this.formData.items.length; i++) {
+            if (this.formData.items[i].itid == upgradeItId) {
+              return false
+            }
+          }
+        } else {
+
+        }
+
+        return true
+      },
+      isBigBag() {
+        return this.$route.query.addBig == 'true' || !this.showTags
       },
     },
 
     methods: {
-      goLabel(tag){
+      goLabel(tag) {
         this.$refs[tag.name].click();
       },
 
@@ -467,20 +486,7 @@
       },
 
       setTags() {
-        this.$http.get(this.$api.items_list, {
-          params: {
-            ittype: 0
-          }
-        }).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
 
-              this.tagsOptions = data;
-            }
-          }
-        )
       },
 
       //  规格
@@ -533,20 +539,28 @@
 
       //  商品属性
       addOneSku() {
-        this.formData.skus.push({
-          skupic: "",
-          skusn: '',
-          skuprice:this.formData.prprice || 0,
-          skustock: 0,
-          skuattritedetail: new Array(this.formData.prattribute.length)
-        });
+        //  限制开店大礼包只有1个sku
+        if (!this.formData.prattribute.length) {
+          this.$message.warning('请先添加商品规格!');
+        } else if (this.formData.skus.length == 1 && this.isBigBag) {
+          this.$message.warning('开店大礼包最多只有一个商品属性!');
+        } else {
+          this.formData.skus.push({
+            skupic: "",
+            skusn: '',
+            skuprice: this.formData.prprice || 0,
+            skustock: 0,
+            skuattritedetail: new Array(this.formData.prattribute.length)
+          });
+        }
+
       },
       removeOneSku(index) {
         this.formData.skus.splice(index, 1);
       },
 
-      headerCellFunction({row, column}){
-        if(!column.property){
+      headerCellFunction({row, column}) {
+        if (!column.property) {
           return 'warning-header-cell'
         }
       },
@@ -694,7 +708,7 @@
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                  data = res.data.data;
+                    data = res.data.data;
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
@@ -716,19 +730,19 @@
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                    data = res.data.data;
+                  data = res.data.data;
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
                 }
 
-                this.reset();
                 this.$notify({
                   title: '商品新增成功',
                   message: `商品名:${this.formData.prtitle}`,
                   type: 'success'
                 });
                 this.dialogSkuSortVisible = false;
+                this.reset();
               }
             }
           )
@@ -822,9 +836,10 @@
       init() {
         this.setCategory();
         this.setBrand();
-        this.setTags();
+        // this.setTags();
 
         if (this.$route.query.prid) { //  编辑
+
           //  编辑更换的商品或之前是新增,数据替换
           if (this.$route.query.prid != this.formData.prid) {
             this.$http.get(this.$api.product_get, {
@@ -847,11 +862,41 @@
 
           }
         } else {  //  新增
+          if (this.$route.query.addBig == 'true') {
+            this.items = [upgradeItId];
+          } else {
+            this.items = [];
+          }
           //  编辑到新增
           if (this.formData.prid) {
             this.reset();
           }
         }
+
+        this.$http.get(this.$api.items_list, {
+          params: {
+            ittype: 0
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              if (this.$route.query.addBig == 'true') {
+                data.push(
+                  {
+                    itid: upgradeItId,
+                    itname: '开店大礼包',
+                  }
+                );
+              }
+
+              this.tagsOptions = (data);
+            }
+          }
+        )
+
 
         this.$refs.prodForm.clearValidate();
         this.$message({
@@ -892,7 +937,11 @@
 
     //  新增编辑共用一个,光新增和prid不变时不会重置数据,
     activated() {
-      this.init();
+      if (this.repeat) {
+        this.repeat = false
+      } else {
+        this.init()
+      }
     },
 
     //  当前keepAlive bug: 当还没打开过该页面时,打开会执行 created和activated
@@ -914,8 +963,8 @@
       right: 0;
     }
 
-    .prod-form{
-      .el-form-item{
+    .prod-form {
+      .el-form-item {
         width: 70vw;
       }
     }

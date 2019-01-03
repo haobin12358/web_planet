@@ -24,7 +24,10 @@
         <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
         <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
       </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="doAddProduct">新增</el-button>
+      <section class="action-wrap">
+        <el-button type="primary" icon="el-icon-plus" @click="doAddProduct(false)">新增</el-button>
+        <el-button v-permission="[ 'admin', 'super']" type="primary" icon="el-icon-plus" @click="doAddProduct(true)">新增开店大礼包</el-button>
+      </section>
     </section>
 
 
@@ -42,8 +45,8 @@
       <el-table-column align="center" prop="prprice" sortable label="价格" width="120"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
-        <template slot-scope="scope" v-if="scope.row.category && scope.row.category.length">
-          {{`${scope.row.category[0].pcname} / ${scope.row.category[1].pcname} / ${scope.row.category[2].pcname}`}}
+        <template slot-scope="scope" >
+          {{categoryCellText(scope.row.category)}}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
@@ -211,6 +214,7 @@
             pcid,
             prstatus: this.searchForm.prstatus,
             order_type: this.searchForm.order_type,
+            // itid: 'upgrade_product'
           }
         }).then(res => {
           this.loading = false;
@@ -226,6 +230,21 @@
 
         console.log(value, row, column);
         return row[property] === value;
+      },
+      categoryCellText(arr){
+        let rst = ''
+
+        if(arr){
+          for (let i = 0; i < arr.length; i++) {
+            rst += arr[i].pcname;
+
+            if(i != arr.length-1){
+              rst += ' / '
+            }
+          }
+        }
+
+        return rst
       },
       sizeChange(pageSize) {
         this.pageSize = pageSize;
@@ -243,8 +262,20 @@
         }
       },
 
-      doAddProduct() {
-        this.$router.push('/product/productEdit')
+      doAddProduct(addBig) {
+        let query = {}
+
+        // console.log(addBig);
+        // return
+        if(addBig){
+          query = {
+            addBig: 'true'
+          }
+        }
+        this.$router.push({
+          path: '/product/productEdit',
+          query
+        })
       },
       doEdit(product) {
         this.$router.push({
@@ -377,6 +408,11 @@
     .table-bottom {
       margin-top: 20px;
       .fj();
+    }
+
+    .action-wrap{
+      .fj();
+
     }
   }
 </style>

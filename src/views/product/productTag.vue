@@ -21,22 +21,25 @@
         </template>
       </el-table-column>
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
-      <el-table-column label="排序" align="center" sortable prop="pssort" >
+      <el-table-column label="排序" align="center" sortable prop="pssort">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.pssort" @keyup.native.enter="changeSceneSort(scope.row)" style="width: 180px"></el-input>
+          <el-input v-model.number="scope.row.pssort" @keyup.native.enter="changeSceneSort(scope.row)"
+                    style="width: 180px"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="text"  @click="doEditScene(scope.row)">编辑</el-button>
+          <el-button type="text" @click="doEditScene(scope.row)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="doDeleteScene(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--场景编辑dialog-->
-    <el-dialog :visible.sync="sceneDlgVisible" v-el-drag-dialog width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'"
+    <el-dialog :visible.sync="sceneDlgVisible" v-el-drag-dialog width="700px" top="10vh"
+               :title="sceneForm.pbid ? '场景编辑': '场景新增'"
                :close-on-click-modal="false">
-      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left" label-width="100px">
+      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left"
+               label-width="100px">
         <el-form-item label="场景名称" prop="psname">
           <el-input v-model.trim="sceneForm.psname"></el-input>
         </el-form-item>
@@ -88,7 +91,8 @@
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
       <el-table-column label="所属场景" align="center" width="300">
         <template slot-scope="scope">
-          <el-tag v-for="item in scope.row.prscene" :key="item.psid" style="margin: 0 10px 2px 0;">{{item.psname}}</el-tag>
+          <el-tag v-for="item in scope.row.prscene" :key="item.psid" style="margin: 0 10px 2px 0;">{{item.psname}}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
@@ -101,7 +105,8 @@
     <!--商品标签编辑dialog-->
     <el-dialog :visible.sync="itemDlgVisible" v-el-drag-dialog width="700px" :title="itemForm.itid ? '标签编辑': '标签新增'"
                :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left" label-width="100px">
+      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left"
+               label-width="100px">
         <el-form-item label="标签名" prop="itname">
           <el-input v-model.trim="itemForm.itname"></el-input>
         </el-form-item>
@@ -150,7 +155,7 @@
 
     data() {
       return {
-        searchForm:{
+        searchForm: {
           kw: '',
         },
         sceneLoading: false,
@@ -187,6 +192,7 @@
         itemForm: {
           itid: '',
           itname: "",
+          itsort: "",
           psid: [],
           itdesc: "",
         },
@@ -197,8 +203,7 @@
           psid: [
             {required: true, message: '所属场景必选', trigger: 'change'}
           ],
-          itdesc: [
-          ],
+          itdesc: [],
         },
         psOptions: [],
       }
@@ -206,16 +211,16 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=brand'
+        return this.$api.upload_file + getStore('token') + '&type=brand'
       },
     },
 
     methods: {
-      doItemSearch(){
+      doItemSearch() {
         this.setItemList();
       },
-      doItemReset(){
-        this.itemSearchForm = { kw: ''};
+      doItemReset() {
+        this.itemSearchForm = {kw: ''};
         this.doItemSearch();
       },
 
@@ -241,22 +246,21 @@
         )
       },
 
-      resetItemForm(){
+      resetItemForm() {
         this.itemForm = {
-          itid:'',
+          itid: '',
           psid: [],
           itname: "",
           itdesc: "",
+          itsort: "",
         };
         this.$http.get(this.$api.scene_list, {
-          params: {
-
-          }
+          params: {}
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.psOptions = data;
             }
@@ -276,10 +280,11 @@
           itname: row.itname,
           itdesc: row.itdesc,
           psid: [],
+          itsort: row.itsort,
         };
-        this.itemForm.psid  = row.prscene.map(item => item.psid);
+        this.itemForm.psid = row.prscene.map(item => item.psid);
       },
-      doSaveItem(){
+      doSaveItem() {
         this.$refs.itemForm.validate(
           valid => {
             if (valid) {
@@ -308,7 +313,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -330,10 +335,12 @@
       },
 
       doRemoveItem(row) {
-        this.$confirm(`确认删除标签(${row.itname})?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.update_items,{
+        this.$confirm(`确认删除标签(${row.itname})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.update_items, {
               itid: row.itid,
+              itname: row.itname,
+              itsort: row.itsort,
               ittype: 0,
               isdelete: true
             }).then(
@@ -355,10 +362,10 @@
         )
       },
 
-      doSearch(){
+      doSearch() {
         this.setSceneList();
       },
-      doReset(){
+      doReset() {
         this.searchForm = {
           kw: ''
         };
@@ -376,7 +383,7 @@
             this.sceneLoading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.sceneTableData = data;
             }
@@ -384,7 +391,7 @@
         )
       },
 
-      changeSceneSort(row){
+      changeSceneSort(row) {
         this.$http.post(this.$api.update_scene, row).then(
           res => {
             if (res.data.status == 200) {
@@ -402,20 +409,20 @@
         );
       },
 
-      resetSceneForm(){
-          this.sceneForm = {
-            psid: '',
-            psname: '',
-            pspic: '',
-            pssort: 1,
-          };
+      resetSceneForm() {
+        this.sceneForm = {
+          psid: '',
+          psname: '',
+          pspic: '',
+          pssort: 1,
+        };
       },
-      doAddScene(){
+      doAddScene() {
         this.resetSceneForm();
 
         this.sceneDlgVisible = true;
       },
-      doEditScene(row){
+      doEditScene(row) {
         this.resetSceneForm();
 
         this.sceneDlgVisible = true;
@@ -426,7 +433,7 @@
           pssort: row.pssort,
         }
       },
-      doSaveScene(){
+      doSaveScene() {
         this.$refs.sceneForm.validate(
           valid => {
             if (valid) {
@@ -437,7 +444,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -468,16 +475,16 @@
                 );
               }
 
-            }else{
+            } else {
               this.$message.warning('请根据校验信息完善表单!');
             }
           }
         )
       },
 
-      doDeleteScene(row){
+      doDeleteScene(row) {
         this.$confirm(`确认删除场景(${row.psname})?`).then(
-          ()=>{
+          () => {
             this.$http.post(this.$api.update_scene, {
               psid: row.psid,
               isdelete: true
@@ -514,7 +521,7 @@
         return isLt15M;
       },
 
-      init(){
+      init() {
         this.setItemList();
         this.setSceneList();
       }
