@@ -307,7 +307,8 @@
               this.$router.push({ path: v, query: { pbid: item.pbid,pbname: item.pbname }});
               break;
             case '/product/detail':
-              this.$router.push({ path: v, query: { prid: item.prid }});
+              window.location.href = item.contentlink;
+              // this.$router.push({ path: v, query: { prid: item.prid }});
               break;
             default:
               this.$router.push({path:v,});
