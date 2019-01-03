@@ -41,8 +41,9 @@
     <el-table v-loading="circleLoading" :data="circleList" stripe size="mini">
     <!--<el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">-->
       <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="点赞数" align="center" prop="favoritnumber"></el-table-column>
-      <el-table-column label="评论数" align="center" prop="commentnumber"></el-table-column>
+      <el-table-column label="点赞数" align="center" prop="favoritnumber" width="130"></el-table-column>
+      <el-table-column label="评论数" align="center" prop="commentnumber" width="130"></el-table-column>
+      <el-table-column label="浏览量" align="center" prop="nepageviews" width="130"></el-table-column>
       <el-table-column label="预览" align="center" fixed="right">
         <template slot-scope="scope">
           <preview-circle :circle="scope.row"></preview-circle>
