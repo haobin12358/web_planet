@@ -2,7 +2,7 @@
   <div class="container">
     <block-title title="申请列表"></block-title>
     <el-button type="primary" class="add-magic-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
-    <get-sku @chooseSkus="chooseSkus" ref="new" where="magic"></get-sku>
+    <get-sku @chooseSkus="chooseSkus" ref="magic" where="magic"></get-sku>
     <el-table v-loading="magicLoading" :data="magicList" stripe size="mini">
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
@@ -57,22 +57,26 @@
     methods: {
       // 申请添加魔盒奖品-按钮
       addGuess() {
-        this.$refs.new.productDialog = true
+        this.$refs.magic.productDialog = true
       },
       // 申请添加魔盒奖品
-      chooseSkus(sku) {
-        this.$http.post(this.$api.magic_box_apply_award, sku).then(res => {
-          if (res.data.status == 200) {
-            this.$notify({
-              title: '申请成功',
-              message: res.data.message,
-              type: 'success'
-            });
-            this.getMagic();
-            this.$refs.new.productDialog = false;
-            this.$refs.new.skusDialog = false
-          }
-        });
+      chooseSkus(sku, isEdit) {
+        if(isEdit) {
+
+        }else {
+          this.$http.post(this.$api.magic_box_apply_award, sku).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '申请成功',
+                message: res.data.message,
+                type: 'success'
+              });
+              this.getMagic();
+              this.$refs.magic.productDialog = false;
+              this.$refs.magic.skusDialog = false
+            }
+          });
+        }
       },
       sizeChange(val) {
         this.page_size = val;

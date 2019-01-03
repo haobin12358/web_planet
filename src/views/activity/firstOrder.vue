@@ -11,14 +11,13 @@
       </el-table-column>
       <el-table-column label="商品名称" align="center" prop="fresh_product.prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="time" width="220"></el-table-column>
-      <el-table-column label="参与价格" align="center" prop="fresh_product.sku.skuprice"></el-table-column>
-      <el-table-column label="参与数量" align="center" prop="fresh_product.sku.fmfpstock"></el-table-column>
+      <!--<el-table-column label="参与价格" align="center" prop="fresh_product.sku.skuprice"></el-table-column>-->
+      <!--<el-table-column label="参与数量" align="center" prop="fresh_product.sku.fmfpstock"></el-table-column>-->
       <el-table-column label="申请状态" align="center" prop="fmfastatus_zh"></el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editNew(scope)">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteNew(scope)"
-                     v-if="scope.row.fmfastatus == 0">撤销</el-button>
+          <el-button type="text" @click="editNew(scope)" v-if="scope.row.fmfastatus == -20">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="deleteNew(scope)" v-if="scope.row.fmfastatus == 0">撤销</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,7 +39,8 @@
       newLoading: false,
       page_size: 10,
       page_num: 1,
-      total: 0
+      total: 0,
+      scope: {}             // 暂存scope
     }
   },
   components: { getSku, TableCellImg },
@@ -50,6 +50,7 @@
   methods: {
     // 添加新人商品-按钮
     addNew() {
+      this.$refs.new.isEdit = false;
       this.$refs.new.productDialog = true
     },
     sizeChange(val) {
@@ -75,24 +76,44 @@
         }
       })
     },
-    // 申请参与新人首单
-    chooseSkus(sku) {
-      this.$http.post(this.$api.fresh_man_apply_award, sku).then(res => {
-        if (res.data.status == 200) {
-          this.$notify({
-            title: '申请成功',
-            message: res.data.message,
-            type: 'success'
-          });
-          this.getNew();
-          this.$refs.new.productDialog = false;
-          this.$refs.new.skusDialog = false
-        }
-      });
+    // 参与新人首单
+    chooseSkus(sku, isEdit) {
+      if(isEdit) {
+        sku.fmfaid = this.scope.row.fmfaid;
+        this.$http.post(this.$api.fresh_man_update_award, sku).then(res => {
+          if (res.data.status == 200) {
+            this.$notify({
+              title: '编辑成功',
+              message: res.data.message,
+              type: 'success'
+            });
+            this.getNew();
+            this.$refs.new.productDialog = false;
+            this.$refs.new.skusDialog = false;
+          }
+        });
+      }else {
+        this.$http.post(this.$api.fresh_man_apply_award, sku).then(res => {
+          if (res.data.status == 200) {
+            this.$notify({
+              title: '申请成功',
+              message: res.data.message,
+              type: 'success'
+            });
+            this.getNew();
+            this.$refs.new.productDialog = false;
+            this.$refs.new.skusDialog = false;
+          }
+        });
+      }
     },
     // 编辑申请
     editNew(scope) {
-
+      this.scope = scope;
+      this.$refs.new.productDialog = true;
+      scope.row.prid = scope.row.fresh_product.prid;
+      scope.row.where = 'new';
+      this.$refs.new.chooseProduct(scope)
     },
     // 删除
     deleteNew(scope) {

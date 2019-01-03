@@ -2,7 +2,7 @@
   <div class="container">
     <block-title title="申请列表"></block-title>
     <el-button type="primary" class="add-guess-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
-    <get-sku @chooseSkus="chooseSkus" ref="new" where="guess"></get-sku>
+    <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
@@ -51,22 +51,26 @@
     methods: {
       // 申请添加竞猜奖品-按钮
       addGuess() {
-        this.$refs.new.productDialog = true
+        this.$refs.guess.productDialog = true
       },
       // 申请添加竞猜奖品
-      chooseSkus(sku) {
-        this.$http.post(this.$api.guess_num_apply_award, sku).then(res => {
-          if (res.data.status == 200) {
-            this.$notify({
-              title: '申请成功',
-              message: res.data.message,
-              type: 'success'
-            });
-            this.getGuess();
-            this.$refs.new.productDialog = false;
-            this.$refs.new.skusDialog = false
-          }
-        });
+      chooseSkus(sku, isEdit) {
+        if(isEdit) {
+
+        }else {
+          this.$http.post(this.$api.guess_num_apply_award, sku).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '申请成功',
+                message: res.data.message,
+                type: 'success'
+              });
+              this.getGuess();
+              this.$refs.guess.productDialog = false;
+              this.$refs.guess.skusDialog = false
+            }
+          });
+        }
       },
       sizeChange(val) {
         this.page_size = val;

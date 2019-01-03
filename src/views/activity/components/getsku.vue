@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="选择商品" :close-on-click-modal="false">
+  <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1200px" top="5vh" title="选择商品" :close-on-click-modal="false">
     <section class="tool-bar space-between" style="margin-top: -30px">
       <el-form :inline="true" size="medium">
         <el-form-item label="商品名称">
@@ -11,7 +11,7 @@
         </el-form-item>
       </el-form>
     </section>
-    <el-table v-loading="productLoading" :data="productList" stripe height="65vh" ref="productList">
+    <el-table v-loading="productLoading" :data="productList" stripe height="65vh">
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
@@ -34,7 +34,7 @@
 
     <el-dialog v-el-drag-dialog :visible.sync="skusDialog" title="选择商品规格" width="1000px" top="10vh" :close-on-click-modal="false" append-to-body>
       <!--新人首单-->
-      <el-form :model="skusForm" ref="skusForm" label-position="right" label-width="120px" v-if="where == 'new'">
+      <el-form :model="skusForm" label-position="right" label-width="120px" v-if="where == 'new'">
         <el-form-item label="参与起止时间：">
           <el-date-picker
             v-model="fmfatime" type="daterange" value-format="yyyy-MM-dd"
@@ -97,9 +97,9 @@
         </el-form-item>
       </el-form>
 
-      <el-table v-loading="skusLoading" :data="skusList" stripe :height="height" ref="skusList"
-                @selection-change="handleSelectionChange">
-        <el-table-column type="selection"></el-table-column>
+      <el-table v-loading="skusLoading" :data="skusList" stripe :height="height"
+                @selection-change="handleSelectionChange" row-key="skuid" ref="skuList">
+        <el-table-column type="selection" :reserve-selection="true"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.skupic" :key="scope.row.skuid"></table-cell-img>
@@ -138,7 +138,8 @@
       </el-table>
       <span slot="footer">
         <el-button @click="skusDialog = false">取 消</el-button>
-        <el-button type="primary" @click="chooseSkus">确 定</el-button>
+        <el-button type="primary" @click="chooseSkus" v-if="isEdit">重新申请</el-button>
+        <el-button type="primary" @click="chooseSkus" v-else>确 定</el-button>
       </span>
     </el-dialog>
   </el-dialog>
@@ -151,7 +152,7 @@
   export default {
     data() {
       return {
-        kw: '16',
+        kw: '',
         productDialog: false,
         productLoading: false,
         productList: [],
@@ -171,6 +172,7 @@
         mbastarttime: [],
         height: '500px',
         numList: [1, 2, 3, 5, 5, 10, 5, 10, 20, 30],
+        isEdit: false
       }
     },
     props: {
@@ -248,7 +250,7 @@
             };
             sku.skus.push(skus)
           }
-          this.$emit('chooseSkus', sku);
+          this.$emit('chooseSkus', sku, this.isEdit);
         }else if(this.where == 'guess') {       // 竞猜奖品
           if(!this.skus.length) {
             this.$message.warning('请先单选商品规格');
@@ -269,7 +271,7 @@
             skuprice: this.skus[0].price,
             skustock: this.skus[0].stock
           };
-          this.$emit('chooseSkus', sku);
+          this.$emit('chooseSkus', sku, this.isEdit);
         }else if(this.where == 'magic') {       // 魔盒奖品
           if(!this.skus.length) {
             this.$message.warning('请先单选商品规格');
@@ -294,7 +296,7 @@
             gearstwo: [this.numList[2] + '-' + this.numList[3], this.numList[4] + '-' + this.numList[5]],
             gearsthree: [this.numList[6] + '-' + this.numList[7], this.numList[8] + '-' + this.numList[9]],
           };
-          this.$emit('chooseSkus', sku);
+          this.$emit('chooseSkus', sku, this.isEdit);
         }
       },
       getProduct() {
@@ -314,6 +316,8 @@
         })
       },
       chooseProduct(scope) {
+        this.initDialog();
+        // 获取选择的商品信息
         this.prid = scope.row.prid;
         this.$http.get(this.$api.product_get, {
           noLoading: true,
@@ -332,8 +336,40 @@
               this.skusList[i].price = 0.01;
               this.skusList[i].maxprice = this.skusList[i].skuprice;
             }
+            // 编辑时处理数据
+            if(scope.row.where) {
+              this.isEdit = true;
+              this.editActivity(scope);
+              for(let i in scope.row.fresh_product.sku) {
+                for(let j in this.skusList) {
+                  if(scope.row.fresh_product.sku[i].skuid == this.skusList[j].skuid) {
+                    this.skusList[j].stock = scope.row.fresh_product.sku[i].fmfpstock;
+                    this.skusList[j].price = scope.row.fresh_product.sku[i].skuprice;
+                  }
+                }
+              }
+            }
           }
-        })
+        });
+      },
+      // 初始化dialog
+      initDialog() {
+        this.fmfatime = [];
+        this.skusForm.prprice = ''
+      },
+      // 编辑时处理数据
+      editActivity(scope) {
+        // console.log(scope.row.fresh_product.sku);
+        if(scope.row.where == 'new') {
+          this.fmfatime = [scope.row.fmfastarttime, scope.row.fmfaendtime];
+          this.skusForm.prprice = scope.row.fresh_product.prprice;
+
+          // 选中之前勾选的商品
+          console.log(this.$refs);
+          for(let i in scope.row.fresh_product.sku) {
+            this.$refs.skuList.toggleRowSelection(scope.row.fresh_product.sku[i])
+          }
+        }
       }
     }
   }
