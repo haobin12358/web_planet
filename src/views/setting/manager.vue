@@ -51,11 +51,11 @@
         <el-form-item label="手机号" prop="adtelphone">
           <el-input class="sort-input long-input" maxlength="13" v-if="!adminForm.adid" v-model="adminForm.adtelphone"></el-input>
           <el-input class="sort-input long-input" maxlength="13" v-else v-model="adminForm.adtelphone" @change="inputChange"></el-input>
-          <el-button type="primary" size="small" v-if="!getCode" @click="getInforCode">获取验证码</el-button>
-          <el-button type="info" disabled size="small" v-else>{{time}}秒后重发</el-button>
+          <el-button type="text" size="small" v-if="!getCode" @click="getInforCode">获取验证码</el-button>
+          <el-button type="text" disabled size="small" v-else>{{time}}秒后重发</el-button>
         </el-form-item>
         <el-form-item label="验证码" prop="identifyingcode">
-          <el-input class="sort-input" v-model="adminForm.identifyingcode" maxlength="6"></el-input>
+          <el-input class="sort-input" v-model="adminForm.identifyingcode" maxlength="6" placeholder="仅在修改手机号时需要获取验证码"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="adpassword">
           <el-input class="sort-input" type="password" :placeholder="editPasswd" v-model="adminForm.adpassword"></el-input>
