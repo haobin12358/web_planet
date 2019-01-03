@@ -34,7 +34,8 @@
         methods: {
           changeRoute(item){
             if(this.gift) {
-              this.$router.push({ path: '/gift', query: { prid:item.prid, from: this.gift }});
+              console.log(item.prid);
+              this.$router.push({ path: '/gift', query: { prid: item.prid, from: this.gift }});
             }else {
               this.$router.push({ path: '/product/detail', query: { prid:item.prid }});
             }

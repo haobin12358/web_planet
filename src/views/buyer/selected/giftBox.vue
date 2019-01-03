@@ -19,18 +19,6 @@
     },
     components: { product },
     methods: {
-      // 跳转页面
-      changeRoute(item) {
-        this.$router.push({ path: '/gift', query: { pbid: item.pbid }});
-      },
-      // 获取商家礼包详情
-      getGift() {
-        axios.get(api.product_get + '?prid=pridgift').then(res => {
-          if(res.data.status == 200){
-            this.giftList = res.data.data;
-          }
-        });
-      },
       // 获取商家礼包列表
       getProduct() {
         let params = {
@@ -47,7 +35,6 @@
     },
     mounted() {
       common.changeTitle('购买礼包');
-      // this.getGift();            // 获取商家礼包详情
       this.getProduct();            // 获取商家礼包列表
     }
   }

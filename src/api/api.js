@@ -1,5 +1,5 @@
-// const title = 'https://planet.daaiti.cn/api/v1/';
-const title = 'https://www.bigxingxing.com/api/v1/';
+const title = 'https://planet.daaiti.cn/api/v1/';
+// const title = 'https://www.bigxingxing.com/api/v1/';
 // const title = 'http://47.110.149.143/api/v1/';
 
 const api={

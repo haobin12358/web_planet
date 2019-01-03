@@ -32,7 +32,7 @@
     methods: {
       // 获取商家礼包详情
       getGift() {
-        axios.get(api.product_get + '?prid=pridgift').then(res => {
+        axios.get(api.product_get + '?prid=' + this.$route.query.prid).then(res => {
           if(res.data.status == 200){
             this.gift = res.data.data;
           }
