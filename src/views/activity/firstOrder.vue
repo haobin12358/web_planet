@@ -1,34 +1,30 @@
 <template>
   <div class="container">
-    <block-title title="新人首单商品列表"></block-title>
-    <section class="tool-bar space-between">
-      <el-form :inline="true" size="medium">
-        <el-form-item label="商品名称">
-          <el-input v-model="kw"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="">重置</el-button>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="addNew">申请</el-button>
-    </section>
-    <get-sku @chooseSkus="chooseSkus" ref="new"></get-sku>
+    <block-title title="申请列表"></block-title>
+    <el-button type="primary" class="add-new-btn" icon="el-icon-plus" @click="addNew">申请</el-button>
+    <get-sku @chooseSkus="chooseSkus" ref="new" where="new"></get-sku>
     <el-table v-loading="newLoading" :data="newList" stripe size="mini">
       <el-table-column label="商品图片" align="center" prop="prdescription">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prmainpic"></table-cell-img>
+          <table-cell-img :src="scope.row.fresh_product.prmainpic" :key="scope.row.fresh_product.prmainpic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="品牌" align="center" prop="pbname"></el-table-column>
-      <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="列表显示价格" align="center" prop="prprice"></el-table-column>
-     <!-- <el-table-column label="操作" align="center" width="100" fixed="right">
+      <el-table-column label="商品名称" align="center" prop="fresh_product.prtitle" show-overflow-tooltip></el-table-column>
+      <el-table-column label="参与日期" align="center" prop="time" width="220"></el-table-column>
+      <el-table-column label="参与价格" align="center" prop="fresh_product.sku.skuprice"></el-table-column>
+      <el-table-column label="参与数量" align="center" prop="fresh_product.sku.fmfpstock"></el-table-column>
+      <el-table-column label="申请状态" align="center" prop="fmfastatus_zh"></el-table-column>
+      <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" class="danger-text" @click="deleteNew(scope)">删除</el-button>
+          <el-button type="text" @click="editNew(scope)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="deleteNew(scope)"
+                     v-if="scope.row.fmfastatus == 0">撤销</el-button>
         </template>
-      </el-table-column>-->
+      </el-table-column>
     </el-table>
+    <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+                   :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="sizeChange" @current-change="pageChange"></el-pagination>
   </div>
 </template>
 
@@ -42,7 +38,9 @@
     return {
       newList: [],
       newLoading: false,
-      kw: ''
+      page_size: 10,
+      page_num: 1,
+      total: 0
     }
   },
   components: { getSku, TableCellImg },
@@ -50,22 +48,34 @@
     this.getNew()         // 获取新人首单商品列表
   },
   methods: {
+    // 添加新人商品-按钮
+    addNew() {
+      this.$refs.new.productDialog = true
+    },
+    sizeChange(val) {
+      this.page_size = val;
+      this.getNew()
+    },
+    pageChange(val) {
+      this.page_num = val;
+      this.getNew()
+    },
     // 获取新人首单商品列表
     getNew() {
       this.newLoading = true;
       this.$http.get(this.$api.fresh_man_list, { noLoading: true,
         params: { page_num: this.page_num, page_size: this.page_size }}).then(res => {
         if (res.data.status == 200) {
-          this.newList = res.data.data.fresh_man;
+          this.newList = res.data.data;
           this.total = res.data.total_count;
           this.newLoading = false;
+          for(let i in this.newList) {
+            this.newList[i].time = this.newList[i].fmfastarttime + ' - ' + this.newList[i].fmfaendtime
+          }
         }
       })
     },
-    // 添加新人商品
-    addNew() {
-      this.$refs.new.productDialog = true
-    },
+    // 申请参与新人首单
     chooseSkus(sku) {
       this.$http.post(this.$api.fresh_man_apply_award, sku).then(res => {
         if (res.data.status == 200) {
@@ -74,25 +84,33 @@
             message: res.data.message,
             type: 'success'
           });
+          this.getNew();
           this.$refs.new.productDialog = false;
-          this.$refs.new.skusDialog = false;
+          this.$refs.new.skusDialog = false
         }
       });
     },
+    // 编辑申请
+    editNew(scope) {
+
+    },
     // 删除
     deleteNew(scope) {
-      this.$confirm('此操作将删除该新人首单商品?', '提示', {
-        confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'}).then(() => {
-        /*this.$http.post(this.$api.coupon_delete, { coid: scope.row.coid }).then(res => {
+      this.$confirm('此操作将撤销该申请，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.post(this.$api.fresh_man_shelf_award, { fmfaid: scope.row.fmfaid }).then(res => {
           if (res.data.status == 200) {
-            this.couponList.splice(scope.$index, 1);
+            this.getNew();
             this.$notify({
-              title: '删除成功',
-              message: `新人首单商品${scope.row.coname}删除成功`,
+              title: '撤销成功',
+              message: '该申请已撤销成功',
               type: 'success'
             });
           }
-        })*/
+        })
       }).catch(() => { });
     },
   }
@@ -103,6 +121,10 @@
   @import "../../styles/myIndex";
 
   .container {
+    .add-new-btn {
+      float: right;
+      margin: -50px 0 10px 0;
+    }
     .page-box {
       padding: 20px;
     }

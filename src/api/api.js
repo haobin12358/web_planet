@@ -78,9 +78,19 @@ const api = {
 
 
   activity_list: title + 'activity/list',                                 // 获取正在进行中的活动
+  activity_get: title + 'activity/get',                                   // 获取正在进行中的活动
   activity_update: title + 'activity/update',                             // 修改活动基础信息
-  fresh_man_list: title + 'fresh_man/list',                               // 获取新人首单商品列表
+  fresh_man_list: title + 'fresh_man/list_apply',                         // 获取新人首单商品列表
   fresh_man_apply_award: title + 'fresh_man/apply_award',                 // 申请参与新人首单
+  fresh_man_update_award: title + 'fresh_man/update_award',               // 新人首单申请单修改
+  fresh_man_shelf_award: title + 'fresh_man/shelf_award',                 // 撤销新人首单申请单申请
+  guess_num_list: title + 'guess_num/list',                               // 获取自己的猜数字奖品申请列表
+  guess_num_apply_award: title + 'guess_num/apply_award',                 // 申请添加猜数字奖品
+  guess_num_shelf_award: title + 'guess_num/shelf_award',                 // 撤销自己猜数字奖品申请
+  magic_box_list: title + 'magicbox/list',                                // 获取自己的魔盒奖品申请列表
+  magic_box_apply_award: title + 'magicbox/apply_award',                  // 申请添加魔盒奖品
+  magic_box_update_apply: title + 'magicbox/update_apply',                // 修改魔盒奖品申请
+  magic_box_shelf_award: title + 'magicbox/shelf_award',                  // 撤销自己魔盒奖品申请
 
   get_commodity: title + 'commodity/get',                                 // 获取试用商品
   get_commodity_detail: title + 'commodity/get_commodity',                // 获取试用商品

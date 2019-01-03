@@ -12,9 +12,9 @@
         </template>
       </el-table-column>
       <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>
-      <el-table-column label="封面按钮文字" align="center" prop="acbutton"></el-table-column>
+      <el-table-column label="封面按钮文字" align="center" prop="acbutton" show-overflow-tooltip></el-table-column>
       <el-table-column label="活动类别" align="center" prop="actype_zh"></el-table-column>
-      <el-table-column label="商品数" align="center" prop="prcount">
+      <el-table-column label="商品数" align="center" prop="prcount" width="80">
         <template slot-scope="scope">
           <el-button type="text" @click="goDetail(scope.row)">{{scope.row.prcount}}</el-button>
         </template>
@@ -35,7 +35,7 @@
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="activityDialog" width="800px" top="7vh"
                :title="formData.acname + ' - 编辑'" :close-on-click-modal="false">
-      <el-form :model="formData" :rules="rules" ref="formData" label-position="left" size="medium" label-width="120px" status-icon>
+      <el-form :model="formData" :rules="rules" ref="formData" label-position="right" size="medium" label-width="120px" status-icon>
         <el-form-item label="活动封面图" prop="adheader">
           <el-upload
             class="avatar-uploader"
@@ -75,6 +75,13 @@
         <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '3'">
           <el-input v-model="formData.acdesc"></el-input>
         </el-form-item>
+        <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
+          <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="13" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
+                    v-for="i in [0, 1, 2]" :key="i" v-model="activityRule[i]">
+            <template slot="prepend">序号{{i + 1}}</template>
+            <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/13</template>
+          </el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="initActivityForm">取 消</el-button>
@@ -111,7 +118,8 @@
           acbackground: [{ required: true, message: '活动封面图必需', trigger: 'blur' }],
           acname: [{ required: true, message: '活动名称必填', trigger: 'blur' }],
           acbutton: [{ required: true, message: '封面按钮文字必填', trigger: 'blur' }],
-        }
+        },
+        activityRule: []
       }
     },
     directives: { elDragDialog },
@@ -200,11 +208,19 @@
           this.rules.actoppic = [{ required: true, message: '详情页顶部图必需', trigger: 'blur' }];
           this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
         }
+        this.activityRule = this.formData.acdesc.split('|');
       },
       // 编辑活动dialog的保存按钮
       saveActivity() {
         this.$refs.formData.validate(valid => {
           if(valid) {
+            if(this.formData.actype == '1') {
+              this.formData.acdesc = '';
+              for(let i in this.activityRule) {
+                this.formData.acdesc = this.formData.acdesc + '|' + this.activityRule[i]
+              }
+              this.formData.acdesc = this.formData.acdesc.slice(1, this.formData.acdesc.length);
+            }
             this.$http.post(this.$api.activity_update, this.formData).then(res => {
               if (res.data.status == 200) {
                 this.initActivityForm();   // 重置
