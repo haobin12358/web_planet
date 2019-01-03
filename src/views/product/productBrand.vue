@@ -215,8 +215,10 @@
 
         itemDlgVisible: false,
         itemForm: {
+          itid: '',
           itname: "",
           itdesc: "",
+          itsort: "",
         },
         itemRules: {
           itname: [
@@ -317,17 +319,29 @@
           }
         )
       },
+      doResetItem(){
+        this.itemForm = {
+          itid: '',
+          itname: "",
+          itdesc: "",
+          itsort: "",
+        };
+      },
       doAddItem() {
-        console.log('doAddItem');
+        this.doResetItem();
         this.itemDlgVisible = true;
       },
       doEditItem(row) {
+        this.doResetItem();
         this.itemDlgVisible = true;
         this.itemForm = {
+          itid: row.itid,
           itname: row.itname,
           itdesc: row.itdesc,
+          itsort: '',
         };
       },
+
       doSaveItem() {
         this.$refs.itemForm.validate(
           valid => {
@@ -344,10 +358,10 @@
 
                       this.$notify({
                         title: `${type}成功`,
-                        message: `品牌名:${this.itemForm.pbname}`,
+                        message: `标签名:${this.itemForm.itname}`,
                         type: 'success'
                       });
-                      this.brandDlgVisible = false;
+                      this.itemDlgVisible = false;
                       this.init();
                     }
                   }
@@ -383,6 +397,8 @@
           () => {
             this.$http.post(this.$api.update_items, {
               itid: row.itid,
+              itname: row.itname,
+              itsort: row.itsort,
               ittype: 40,
               isdelete: true
             }).then(
