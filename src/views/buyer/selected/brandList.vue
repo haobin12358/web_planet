@@ -1,11 +1,11 @@
 <template>
     <div class="m-brandList" @touchmove="touchMove">
-      <div class="m-nav isFixed" >
+      <div class="m-nav isFixed">
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
       </div>
       <div class="m-bandList-content">
         <div class="m-scroll-content">
-          <template v-for="(items,index) in brand_list">
+          <template v-for="(items,index) in brand_list" v-if="items.brands.length">
             <div class="m-one-brand-part" :ref="items.itid" :id="items.itid">
               <h3>{{items.itname}}</h3>
               <ul class="m-brand-ul">
@@ -16,7 +16,6 @@
             </div>
           </template>
         </div>
-
       </div>
     </div>
 </template>
@@ -114,7 +113,7 @@
       padding-left: 35px;
       padding-top: 10px;
       width: 715px;
-      /*box-shadow:0 3px 6px rgba(0,0,0,0.16);*/
+      box-shadow:0 3px 6px rgba(0,0,0,0.16);
       padding-bottom: 10px;
       margin: 0 0 48px;
       background-color: #fff;
@@ -138,21 +137,28 @@
         overflow-y: auto;
       }
       .m-one-brand-part{
+        &:first-child {
+          margin-top: 50px;
+        }
         h3{
-          padding:  80px 0 48px 34px;
+          /*padding:  80px 0 48px 34px;*/
+          padding: 40px;
           font-size: 36px;
           font-weight: bold;
         }
         .m-brand-ul{
+          margin: 0 40px;
+          padding: 30px 45px 0 45px;
+          background-color: #ffffff;
           .flex-row(flex-start);
           flex-wrap: wrap;
-          padding: 0 70px ;
           li{
             margin-bottom: 40px;
             img{
               display: block;
               width: 150px;
               height: 150px;
+              border-radius: 10px;
               /*background-color: #9fd0bf;*/
             }
             margin-right: 80px;
