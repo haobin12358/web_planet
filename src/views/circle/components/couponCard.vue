@@ -88,9 +88,13 @@
         border-radius: 5px;
       }
       .m-store-name {
+        width: 90px;
         color: #ffffff;
         font-size: 9px;
-        text-align: center;
+        /*text-align: center;*/
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .m-card-right {
