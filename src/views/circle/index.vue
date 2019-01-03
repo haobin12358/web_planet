@@ -41,8 +41,9 @@
     <el-table v-loading="circleLoading" :data="circleList" stripe size="mini">
     <!--<el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">-->
       <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="点赞数" align="center" prop="favoritnumber"></el-table-column>
-      <el-table-column label="评论数" align="center" prop="commentnumber"></el-table-column>
+      <el-table-column label="点赞数" align="center" prop="favoritnumber" width="130"></el-table-column>
+      <el-table-column label="评论数" align="center" prop="commentnumber" width="130"></el-table-column>
+      <el-table-column label="浏览量" align="center" prop="nepageviews" width="130"></el-table-column>
       <el-table-column label="预览" align="center" fixed="right">
         <template slot-scope="scope">
           <preview-circle :circle="scope.row"></preview-circle>
@@ -55,7 +56,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+    <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
                    :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="sizeChange" @current-change="pageChange"></el-pagination>
 
@@ -113,7 +114,7 @@
           ],
           itsort: [
             { required: true, message: '标签序号必填', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
+            // { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },
         activeIndex: 'usual',
@@ -323,7 +324,6 @@
 
   .circle-index {
     .page-box {
-      text-align: right;
       padding: 20px;
     }
     .add-item-btn {

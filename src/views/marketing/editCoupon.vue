@@ -329,7 +329,7 @@
           if (res.data.status == 200) {
             this.productsList = res.data.data;
             this.productLoading = false;
-
+            // 选中之前勾选的商品
             for(let i in this.productList) {
               this.$refs.productList.toggleRowSelection(this.productList[i])
             }
