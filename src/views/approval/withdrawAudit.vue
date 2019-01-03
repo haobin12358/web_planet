@@ -2,11 +2,11 @@
   <div class="container">
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
-        <el-table-column label="银行名" prop="content.cnbankname" align="center"></el-table-column>
+        <el-table-column label="银行名" prop="content.cnbankname" align="center" width="180"></el-table-column>
         <el-table-column label="开户人" prop="content.cncardname" align="center"></el-table-column>
-        <el-table-column label="卡号" prop="content.cncardno" align="center"></el-table-column>
+        <el-table-column label="卡号" prop="content.cncardno" align="center" width="280"></el-table-column>
         <el-table-column label="金额" prop="content.cncashnum" align="center"></el-table-column>
-        <el-table-column label="备注" prop="content.cnbankdetail" align="center"></el-table-column>
+        <el-table-column label="备注" prop="content.cnbankdetail" align="center" show-overflow-tooltip></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
@@ -23,9 +23,30 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
+          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+            <div style="padding: 20px;width: 300px;">
+              <el-steps direction="vertical" :active="steps.length">
+              <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
+              :description="item.avadname +': '+ item.anabo"></el-step>
+              </el-steps>
+            </div>
+            <el-button slot="reference" type="text" >查看记录</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
+    <section class="table-bottom">
+      <el-pagination
+        background
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="sizeChange"
+        @current-change="pageChange">
+      </el-pagination>
+    </section>
   </div>
 </template>
 
@@ -43,6 +64,8 @@
         currentPage: 1,
         pageSize: 10,
         tableData: [],
+
+        steps: [],
       }
     },
 
@@ -53,6 +76,9 @@
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
           params: {
+            page_size: this.pageSize,
+            page_num: this.currentPage,
+
             ptid: 'tocash',
           }
         }).then(
@@ -63,9 +89,20 @@
                 data = res.data.data;
 
               this.tableData = data;
+              this.total = resData.total_count;
             }
           }
         )
+      },
+      sizeChange(pageSize) {
+        this.pageSize = pageSize;
+        this.currentPage = 1;
+
+        this.getList();
+      },
+      pageChange(page) {
+        this.currentPage = page;
+        this.getList();
       },
 
       tagsType(status) {
@@ -79,6 +116,23 @@
           case 10:
             return {label: '已通过',type: 'success'};
         }
+      },
+
+      showStep(row){
+        this.$http.get(this.$api.get_approvalnotes,{
+          params: {
+            avid: row.avid
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                  data = res.data.data;
+
+              this.steps = data.reverse();
+            }
+          }
+        )
       },
 
       pass(row) {

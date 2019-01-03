@@ -175,7 +175,6 @@
       <el-table-column label="操作" width="200" fixed="right" align="center">
         <template slot-scope="scope">
           <template v-if="scope.row.ominrefund">
-            <el-button type="text" @click="gotoReturnOrderDetail(scope.row)">查看</el-button>
             <template v-if="scope.row.order_refund_apply.orastatus == 0">
               <el-button type="text" class="success-text" @click="doPass(scope.row)">
                 审核通过
@@ -184,6 +183,8 @@
                 审核拒绝
               </el-button>
             </template>
+            <el-button v-else type="text" @click="gotoReturnOrderDetail(scope.row)">查看</el-button>
+
           </template>
         </template>
       </el-table-column>
@@ -320,6 +321,7 @@
           orastatus: '',
           orstatus: '',
         }
+        this.setOrderList();
       },
 
       changeSwitch() {

@@ -1,46 +1,36 @@
 <template>
   <div class="container">
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
-      <el-table-column
-        type="index"></el-table-column>
-      <el-table-column align="center" width="120" label="图片">
+    <el-table :data="tableData" v-loading="loading">
+      <el-table-column label="审批内容" align="center">
+      </el-table-column>
+      <el-table-column label="发起人" align="center">
+        <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
+      </el-table-column>
+      <el-table-column label="审批层级" prop="avlevel" align="center"></el-table-column>
+      <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.tcmainpic" :key="scope.row.tcid"></table-cell-img>
+          <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="tctitle" label="商品名" width="280"></el-table-column>
-      <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
-      <el-table-column align="center" prop="tcdeposit" label="押金/期限(天)" width="180">
+      <el-table-column label="操作" align="center" width="180" fixed="right">
         <template slot-scope="scope">
-          {{scope.row.tcdeposit + ' / ' + scope.row.tcdeadline}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="prstatus_zh" label="状态" width="120">
-        <template slot-scope="scope">
-          <el-tag :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="tcstocks" label="库存" width="120"></el-table-column>
-      <el-table-column align="center" prop="tcsalesvalue" label="销量" width="120"></el-table-column>
-      <el-table-column align="center" prop="tcdeposit" label="活动时间(执行)" width="280">
-        <template slot-scope="scope" v-if="scope.row.agreestarttime">
-          {{scope.row.agreestarttime + ' - ' + scope.row.agreeendtime}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="tcdeposit" label="活动时间(申请)" width="280">
-        <template slot-scope="scope">
-          {{scope.row.applystarttime + '-' + scope.row.applyendtime}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="zh_remarks" label="备注" width="180"></el-table-column>
-
-      <el-table-column align="center" width="180" label="操作" fixed="right">
-        <template slot-scope="scope">
-          <!--<el-button type="text" v-if="scope.row.tcstatus == 20" @click="doEdit(scope.row)">编辑</el-button>-->
+          <template v-if="scope.row.avstatus == 0">
+            <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
+            <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
+          </template>
+          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
+                      @show="showStep(scope.row)">
+            <div style="padding: 20px;width: 300px;">
+              <el-steps direction="vertical" :active="steps.length">
+                <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
+                         :description="item.avadname +': '+ item.anabo"></el-step>
+              </el-steps>
+            </div>
+            <el-button slot="reference" type="text">查看记录</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
-
     <section class="table-bottom">
       <el-pagination
         background
@@ -71,42 +61,31 @@
         pageSize: 10,
         tableData: [],
 
+        steps: [],
       }
     },
 
     computed: {},
 
     methods: {
-      statusTagType(status) {
-        switch (status) {
-          case 0:
-            return 'primary';
-          case 10:
-            return 'danger'
-          case 20:
-            return 'warning'
-          case 30:
-            return 'info'
-          case 40:
-            return 'info'
-        }
-      },
-
-      getList(){
+      getList() {
         this.loading = true;
-        this.$http.get(this.$api.get_approval_list,{
-          noLoading: true,
+        this.$http.get(this.$api.get_approval_list, {
           params: {
-            ptid: 'totrialcommodity'
+            page_size: this.pageSize,
+            page_num: this.currentPage,
+
+            ptid: 'totrialcommodity',
           }
         }).then(
           res => {
             this.loading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
-              console.log(data);
+              this.tableData = data;
+              this.total = resData.total_count;
             }
           }
         )
@@ -121,6 +100,99 @@
         this.currentPage = page;
         this.getList();
       },
+
+      tagsType(status) {
+        switch (status) {
+          case -20:
+            return {label: '已取消', type: 'info'};
+          case -10:
+            return {label: '已拒绝', type: 'danger'};
+          case 0:
+            return {label: '审核中', type: 'primary'};
+          case 10:
+            return {label: '已通过', type: 'success'};
+        }
+      },
+
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
+          params: {
+            avid: row.avid
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.steps = data.reverse();
+            }
+          }
+        )
+      },
+
+      pass(row) {
+        this.$prompt(`确认批准?`, '提示', {
+          inputPlaceholder: '审批意见',
+          inputValidator: value => {
+            if (!value) {
+              return '意见不能为空'
+            }
+          }
+        }).then(
+          prompt => {
+            this.$http.post(this.$api.deal_approval, {
+              "avid": row.avid,
+              "anaction": 1,
+              "anabo": prompt.value
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.getList();
+                  this.$notify({
+                    title: '批准通过成功',
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+      nopass(row) {
+        this.$prompt(`确认不批准?`, '提示', {
+          inputPlaceholder: '审批意见',
+          inputValidator: value => {
+            if (!value) {
+              return '意见不能为空'
+            }
+          },
+        }).then(
+          prompt => {
+            this.$http.post(this.$api.deal_approval, {
+              "avid": row.avid,
+              "anaction": -1,
+              "anabo": prompt.value
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.getList();
+                  this.$notify({
+                    title: '批准拒绝成功',
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      }
     },
 
     created() {
