@@ -41,18 +41,15 @@
             <li v-for="item in history_list" @click="changeRoute(item)">{{item.ushname}}</li>
           </ul>
         </div>
-        <!--<div class="m-search-one">-->
-        <!--<p class="m-ft-22 m-flex-between">-->
-        <!--<span>推荐商品</span>-->
-        <!--<span class="m-icon-delete"></span>-->
-        <!--</p>-->
-        <!--<ul class="m-tab-ul">-->
-        <!--<li>北山</li>-->
-        <!--<li>南山</li>-->
-        <!--<li>登山服</li>-->
-        <!--<li>登山服</li>-->
-        <!--</ul>-->
-        <!--</div>-->
+        <div class="m-search-one" v-if="isCircle">
+          <p class="m-ft-22 m-flex-between">
+            <span>推荐商品</span>
+            <!--<span class="m-icon-delete"></span>-->
+          </p>
+          <ul class="m-tab-ul">
+            <li v-for="item in recommendList" @click="changeRoute(item, 'recommend')">{{item.itname}}</li>
+          </ul>
+        </div>
         <ul class="m-search-result-ul" v-if="result_list">
           <li v-for="item in result_list" @click="changeRoute(item)">
             <span>{{item.ushname}}</span>
@@ -70,16 +67,31 @@
     export default {
         data(){
           return{
-            searchContent:'',
-            history_list:null,
-            result_list:null,
-            isNews:false
+            searchContent: '',
+            history_list: null,
+            result_list: null,
+            isNews: false,
+            isCircle: false,
+            recommendList: []
           }
         },
       mounted(){
           this.historySearch();
+          // 在圈子的搜索时才显示推荐圈子
+          if(this.$route.query.shtype == 'news') {
+            this.isCircle = true;
+            this.getNav();
+          }
       },
       methods:{
+        // 获取圈子所在的标签
+        getNav() {
+          axios.get(api.items_list + "?ittype=10&recommend=1").then(res => {
+            if(res.data.status == 200) {
+              this.recommendList = res.data.data;
+            }
+          })
+        },
           /*返回*/
         returnBack(){
           this.$router.go(-1)
@@ -115,10 +127,14 @@
           }
         },
         /*切换路由*/
-        changeRoute(item){
+        changeRoute(item, where){
           this.searchContent = (item && item.ushname )|| this.searchContent;
-          if(this.$route.query.shtype){
-            this.$router.push({path:'/circle',query:{kw: this.searchContent}})
+          if(this.$route.query.shtype) {
+            if(where) {
+              this.$router.push({path:'/circle',query:{itid: item.itid}})
+            }else {
+              this.$router.push({path:'/circle',query:{kw: this.searchContent}})
+            }
           }else{
             this.$router.push({path:'/product',query:{kw: this.searchContent}})
           }

@@ -255,7 +255,15 @@
             if(localStorage.getItem('circleDetail') == 1) {
               this.navClick(localStorage.getItem('circleIndex'));
             }else {
-              this.navClick(0);
+              if(this.$route.query.itid) {
+                for(let i in this.nav_list) {
+                  if(this.$route.query.itid == this.nav_list[i].itid) {
+                    this.navClick(i);
+                  }
+                }
+              }else {
+                this.navClick(0);
+              }
             }
           }
         })
