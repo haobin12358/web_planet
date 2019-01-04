@@ -285,6 +285,7 @@
       font-weight: bold;
       border-radius: 10px;
       box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+      margin-top: 50px;
     }
   }
 </style>
