@@ -108,14 +108,14 @@
           </template>
         </el-table-column>
         <el-table-column label="规格名称" align="center" prop="skuname" show-overflow-tooltip></el-table-column>
-        <el-table-column label="库存" align="center" prop="skustock"></el-table-column>
+        <!--<el-table-column label="库存" align="center" prop="skustock"></el-table-column>-->
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
             <el-input class="short-input" v-model="scope.row.stock">
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column label="价格" align="center" prop="skuprice" v-if="where !== 'magic'"></el-table-column>
+        <el-table-column label="原价" align="center" prop="skuprice" v-if="where !== 'magic'"></el-table-column>
         <el-table-column label="最高价格" align="center" prop="skuprice" v-else>
           <template slot-scope="scope">
             <el-input class="short-input" v-model="scope.row.maxprice">
