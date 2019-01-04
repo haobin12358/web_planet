@@ -6,11 +6,24 @@
         <el-form-item label="商品名">
           <el-input v-model.trim="searchForm.kw"></el-input>
         </el-form-item>
+        <el-form-item label="品牌">
+          <el-select v-model="searchForm.pbid" @change="doSearch" filterable clearable>
+            <el-option
+              v-for="item in brandOptions"
+              :key="item.pbid"
+              :label="item.pbname"
+              :value="item.pbid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="分类">
           <el-cascader :options="categoryOptions" :props="categoryProps" change-on-select :clearable="true" filterable
                        v-model="searchForm.pcid" @change="doSearch">
           </el-cascader>
         </el-form-item>
+
+
         <el-form-item label="状态">
           <el-select v-model="searchForm.prstatus" @change="doSearch">
             <el-option
@@ -26,7 +39,9 @@
       </el-form>
       <section class="action-wrap">
         <el-button type="primary" icon="el-icon-plus" @click="doAddProduct(false)">新增</el-button>
-        <el-button v-permission="[ 'admin', 'super']" type="primary" icon="el-icon-plus" @click="doAddProduct(true)">新增开店大礼包</el-button>
+        <el-button v-permission="[ 'admin', 'super']" type="primary" icon="el-icon-plus" @click="doAddProduct(true)">
+          新增开店大礼包
+        </el-button>
       </section>
     </section>
 
@@ -45,7 +60,7 @@
       <el-table-column align="center" prop="prprice" sortable label="价格" width="120"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
-        <template slot-scope="scope" >
+        <template slot-scope="scope">
           {{categoryCellText(scope.row.category)}}
         </template>
       </el-table-column>
@@ -55,6 +70,12 @@
           <el-tag v-if="scope.row.prstatus_zh=='上架中'">{{scope.row.prstatus_zh}}</el-tag>
           <el-tag v-else-if="scope.row.prstatus_zh=='审核中'" type="warning">{{scope.row.prstatus_zh}}</el-tag>
           <el-tag v-else-if="scope.row.prstatus_zh=='已下架'" type="danger">{{scope.row.prstatus_zh}}</el-tag>
+          <el-popover
+            v-else-if="scope.row.prstatus_zh=='审核失败'"
+            placement="top-start" title="拒绝理由" width="200" trigger="click" @show="showNoPassReason(scope.row)">
+            {{noPassReason}}
+            <el-tag slot="reference" type="info">{{scope.row.prstatus_zh}}</el-tag>
+          </el-popover>
           <el-tag v-else type="info">{{scope.row.prstatus_zh}}</el-tag>
         </template>
       </el-table-column>
@@ -114,9 +135,8 @@
 
     data() {
       return {
-        repeat: true,
-
         //  查询表单用
+        brandOptions: [],
         categoryOptions: [],
         categoryProps: {
           value: 'pcid',
@@ -146,11 +166,13 @@
         ],
         searchForm: {
           kw: '',
+          pbid: '',
           pcid: [],
           prstatus: 'all',
           order_type: '',
         },
 
+        noPassReason: '',
         loading: false,
         total: 0,
         currentPage: 1,
@@ -177,6 +199,21 @@
                 data = res.data.data;
 
               this.categoryOptions = data;
+            }
+          });
+      },
+      getBrand() {
+        this.$http.get(this.$api.brand_list, {
+          params: {
+            pbstatus: 'all',
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.brandOptions = data;
             }
           });
       },
@@ -211,6 +248,7 @@
             page_num: this.currentPage,
 
             kw: this.searchForm.kw,
+            pbid: this.searchForm.pbid,
             pcid,
             prstatus: this.searchForm.prstatus,
             order_type: this.searchForm.order_type,
@@ -231,20 +269,37 @@
         console.log(value, row, column);
         return row[property] === value;
       },
-      categoryCellText(arr){
+      categoryCellText(arr) {
         let rst = ''
 
-        if(arr){
+        if (arr) {
           for (let i = 0; i < arr.length; i++) {
             rst += arr[i].pcname;
 
-            if(i != arr.length-1){
+            if (i != arr.length - 1) {
               rst += ' / '
             }
           }
         }
 
         return rst
+      },
+      showNoPassReason(row){
+        this.$http.get(this.$api.list_approval_notes,{
+          params: {
+            ptid: 'toshelves',
+            avcontent: row.prid,
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.noPassReason = data.notes[data.notes.length-1].anabo
+            }
+          }
+        )
       },
       sizeChange(pageSize) {
         this.pageSize = pageSize;
@@ -267,7 +322,7 @@
 
         // console.log(addBig);
         // return
-        if(addBig){
+        if (addBig) {
           query = {
             addBig: 'true'
           }
@@ -380,7 +435,7 @@
         }
         order = order == 'ascending' ? 'asc' : 'desc';
 
-        if (prop){
+        if (prop) {
           this.searchForm.order_type = `${prop}|${order}`
           this.doSearch();
         }
@@ -388,16 +443,10 @@
     },
 
     activated() {
-      if(this.repeat){
-        this.repeat = false
-      }else {
-        this.getProduct()
-      }
-    },
-    created() {
       this.getProduct()
       this.getCategory();
-    }
+      this.getBrand();
+    },
   }
 </script>
 
@@ -410,7 +459,7 @@
       .fj();
     }
 
-    .action-wrap{
+    .action-wrap {
       .fj();
 
     }

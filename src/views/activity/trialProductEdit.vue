@@ -194,7 +194,7 @@
               :before-upload="beforeImgsUpload"
               :on-remove="handletcdescRemove"
               :http-request="uploadtcdesc"
-              :limit="5"
+              :limit="20"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">

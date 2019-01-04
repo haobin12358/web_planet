@@ -23,7 +23,7 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover :key="scope.row.avid"  placement="left" trigger="click" @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
               <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
@@ -129,7 +129,7 @@
               let resData = res.data,
                   data = res.data.data;
 
-              this.steps = data.reverse();
+              this.steps = data;
             }
           }
         )

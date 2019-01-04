@@ -95,8 +95,10 @@ const api = {
   get_commodity: title + 'commodity/get',                                 // 获取试用商品
   get_commodity_detail: title + 'commodity/get_commodity',                // 获取试用商品
   commodity_add: title + 'commodity/add',                                 // 添加试用商品
-  del_commodity: title + 'commodity/del',                                 // 删除试用商品
   update_commodity: title + 'commodity/update',                           // 修改试用商品
+  del_commodity: title + 'commodity/del',                                 // 删除试用商品
+  cancel_commodity: title + 'commodity/cancel',                           // 撤销试用商品
+  resubmit_commodity: title + 'commodity/resubmit',                       // 重新提交试用商品
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情
@@ -134,11 +136,15 @@ const api = {
   get_approval_list: title + 'approval/get_approval_list',                 // 获取审批列表
   deal_approval: title + 'approval/deal_approval',                         // 管理员处理审批流
   get_approvalnotes: title + 'approval/get_approvalnotes',                 // 获取审批流所有流程
+  list_approval_notes: title + 'approval/list_approval_notes',             // 获取审批流所有流程,跟上个相比不需要管理员token
 
-  get_permission_admin_list: title + 'approval/get_permission_admin_list', // 获取审批权限下管理员列表
+  get_permissiontype: title + 'approval/get_permissiontype',                // 获取审批类型详情
+  add_pi_and_pe_and_ap: title + 'approval/add_pi_and_pe_and_ap',           // 添加权限标签,修改用下面三个
   add_permissionitems: title + 'approval/add_permissionitems',             // 创建审批标签
   add_permission: title + 'approval/add_permission',                       // 给权限标签赋予权限
   add_adminpermission: title + 'approval/add_adminpermission',             // 绑定审批权限标签和管理员
+  get_permission_admin_list: title + 'approval/get_permission_admin_list', // 获取审批权限下管理员列表
+
 
 };
 
