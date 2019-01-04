@@ -6,7 +6,8 @@
         <h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>
         <p class="m-flex-between">
           <span >￥{{item.prprice | money}}</span>
-          <s class="m-grey">￥{{item.prprice | money}}</s>
+          <s class="m-grey" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
+          <s class="m-grey" v-else>￥{{item.prprice | money}}</s>
         </p>
       </div>
     </li>
