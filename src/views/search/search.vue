@@ -42,8 +42,8 @@
           </ul>
         </div>
         <div class="m-search-one" v-if="isCircle">
-          <p class="m-ft-22 m-flex-between">
-            <span>推荐商品</span>
+          <p class="m-ft-22 m-flex-between" v-if="recommendList.length">
+            <span>推荐圈子</span>
             <!--<span class="m-icon-delete"></span>-->
           </p>
           <ul class="m-tab-ul">
