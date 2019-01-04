@@ -134,6 +134,9 @@
         common.changeTitle('商品列表');
         this.getProduct(1,'sale_value|asc');
       },
+      activated() {
+        this.getProduct(1,'sale_value|asc');
+      },
      methods:{
         //滚动加载更多
        touchMove(e){
@@ -175,9 +178,11 @@
            this.getCategory();
          }else{
            if(arr[index].desc_asc){
-             this.getProduct(1,arr[index].params +'|asc')
-           }else{
+             // this.getProduct(1,arr[index].params +'|asc')
              this.getProduct(1,arr[index].params +'|desc')
+           }else{
+             // this.getProduct(1,arr[index].params +'|desc')
+             this.getProduct(1,arr[index].params +'|asc')
            }
          }
        },
@@ -192,6 +197,7 @@
        },
        //获取商品列表
        getProduct(start,desc_asc){
+         this.product_list = [];
          let _pcid = this.$route.query.pcid || this.pcid;
          let _kw = this.$route.query.kw || '';
          axios.get(api.product_list,{

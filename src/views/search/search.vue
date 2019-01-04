@@ -2,7 +2,7 @@
     <div class="m-search">
       <div class="m-flex-between m-search-top">
         <div class="m-search-input-box">
-          <input type="text" v-model="searchContent" @input="searchInfo" autofocus="!search" @keypress="keyPress" placeholder="请输入搜索内容">
+          <input type="text" v-model="searchContent" @input="searchInfo" @keypress="keyPress" placeholder="请输入搜索内容">
           <span class="m-icon-close" @click="clearInput"></span>
         </div>
         <span @click="returnBack">取消</span>
