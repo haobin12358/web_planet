@@ -137,7 +137,7 @@ export const asyncRouterMap = [
         path: 'actiOrder',
         name: 'ActiOrder',
         component: () => import('src/views/order/actiOrder'),
-        meta: {title: '活动订单',noCache: false,  roles: level1}
+        meta: {title: '活动订单',noCache: false,icon: 'yes',  roles: level1}
       },
     ]
   },
@@ -254,9 +254,10 @@ export const asyncRouterMap = [
   {
     path: '/approval',
     component: Layout,
+    alwaysShow: true,
     redirect: '/approval/withdraw',
     name: 'Approval',
-    meta: {title: '审批', icon: 'shenpi', roles: level2},
+    meta: {title: '审批', icon: 'shenpi', roles: level1},
     children: [
       {
         path: 'withdrawAudit',
@@ -268,7 +269,7 @@ export const asyncRouterMap = [
         path: 'returnProductAudit',
         name: 'ReturnProductAudit',
         component: () => import('src/views/approval/returnProductAudit'),
-        meta: {title: '退货审批',noCache: false,roles: level2}
+        meta: {title: '退货审批',noCache: false,roles: level1}
       }, {
         path: 'returnProdOrderDetail',
         name: 'ReturnProdOrderDetail',
@@ -336,6 +337,7 @@ export const asyncRouterMap = [
   {
     path: '/activity',
     component: Layout,
+    alwaysShow: true,
     redirect: '/activity/index',
     name: 'Activity',
     meta: {title: '活动', icon: 'huodong'},

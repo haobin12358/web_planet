@@ -217,7 +217,7 @@
           :before-upload="beforeImgsUpload"
           :on-remove="handlePrDescRemove"
           :http-request="uploadPrDesc"
-          :limit="5"
+          :limit="20"
           :multiple="true">
           <i class="el-icon-plus"></i>
           <div slot="tip" class="el-upload__tip">
@@ -316,7 +316,6 @@
     data() {
       return {
         goToIndexAfterSave: false,
-        repeat: true,
 
         formData: {
           prid: '',
@@ -937,19 +936,8 @@
 
     //  新增编辑共用一个,光新增和prid不变时不会重置数据,
     activated() {
-      if (this.repeat) {
-        this.repeat = false
-      } else {
-        this.init()
-      }
+      this.init()
     },
-
-    //  当前keepAlive bug: 当还没打开过该页面时,打开会执行 created和activated
-    //  除了多调一遍接口,问题不大
-    mounted() {
-      this.init();
-    }
-    ,
   }
 </script>
 

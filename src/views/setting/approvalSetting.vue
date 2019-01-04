@@ -3,7 +3,7 @@
       <el-tabs type="border-card" v-model="activeName">
         <el-tab-pane v-for="(item,index) in list" :label="item.ptname" :key="item.ptid">
           <keep-alive>
-            <two-setting-table v-if="activeName == index" :levelData="item.pemission" :ptid="item.ptid"></two-setting-table>
+            <two-setting-table v-if="activeName == index" :ptid="item.ptid"></two-setting-table>
           </keep-alive>
         </el-tab-pane>
       </el-tabs>

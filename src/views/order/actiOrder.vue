@@ -218,8 +218,9 @@
               let resData = res.data,
                   data = res.data.data;
 
-              // data[0].status = -1;
               this.menuList = data;
+              this.activeName =  data[0].omfrom;
+              this.setOrderList();
             }
           }
         )
@@ -373,7 +374,6 @@
 
     created() {
       this.setOrderType();
-      this.setOrderList();
     }
   }
 </script>

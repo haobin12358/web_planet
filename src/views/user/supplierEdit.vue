@@ -8,9 +8,10 @@
           </el-form-item>
           <el-form-item label="品牌" prop="pbids">
             <el-select
-              v-model="pbSelect"
+              v-model="supplierForm.pbids"
               clearable
               filterable
+              multiple
               default-first-option
               placeholder="可查询" style="width: 500px">
               <el-option
@@ -52,7 +53,8 @@
               :on-success="handleHeaderSuccess"
               :before-upload="beforePicUpload"
             >
-              <img v-if="supplierForm.suheader" :key="supplierForm.suheader" v-lazy="supplierForm.suheader" class="avatar">
+              <img v-if="supplierForm.suheader" :key="supplierForm.suheader" v-lazy="supplierForm.suheader"
+                   class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">
@@ -122,7 +124,7 @@
           "sulinkman": "",
           "sulinkphone": "",
           "suaddress": "",
-          pbids: '',
+          pbids: [],
 
           "suheader": "",
           "sucontract": [],
@@ -176,20 +178,17 @@
       }
     },
     watch: {
-      pbSelect(val) {
-        this.supplierForm.pbids = [val];
-      },
       suContractUrl(val) {
         this.supplierForm.sucontract = val.map(item => item.url);
-      }
+      },
     },
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=avatar'
+        return this.$api.upload_file + getStore('token') + '&type=avatar'
       },
 
       uploadVoucherUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=voucher'
+        return this.$api.upload_file + getStore('token') + '&type=voucher'
       },
     },
 
@@ -307,16 +306,31 @@
           return data;
         }
       },
+
+      async getSuDetail(suid) {
+        let res = await this.$http.get(this.$api.get_supplizer, {
+          params: {
+            suid,
+          }
+        })
+
+        if (res.data.status == 200) {
+          let resData = res.data,
+              data = res.data.data;
+
+          return data;
+        }
+      },
     },
 
     async created() {
       let brandList = await this.getBrandList();
 
-      if (this.$route.params.item) {
+      if (this.$route.query.suid) {
         this.$message.info('当前是编辑状态');
 
-        let data = JSON.parse(this.$route.params.item);
-        brandList.push(data.brand);
+        let data = await this.getSuDetail(this.$route.query.suid);
+        brandList =brandList.concat(data.pbs) ;
 
         this.brandOptions = brandList;
 
@@ -327,7 +341,7 @@
           "sulinkman": data.sulinkman,
           "sulinkphone": data.sulinkphone,
           "suaddress": data.suaddress,
-          pbids: [data.brand.pbid],
+          pbids: data.pbs.map(item => item.pbid),
 
           "suheader": data.suheader,
           "sucontract": data.sucontract,
@@ -336,7 +350,6 @@
           "subanksn": data.subanksn,
         };
 
-        this.pbSelect = data.brand.pbid;
         this.suContractUrl = data.sucontract.map(item => {
           return {
             url: item

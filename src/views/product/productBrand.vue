@@ -78,7 +78,7 @@
     <el-dialog :visible.sync="brandDlgVisible" width="700px" top="10vh" v-el-drag-dialog
                :title="brandForm.pbid ? '品牌编辑': '品牌新增'"
                :close-on-click-modal="false">
-      <el-form :model="brandForm" :rules="brandRules" ref="brandForm" size="medium" label-width="120px">
+      <el-form :model="brandForm" :rules="brandRules" ref="brandForm" size="medium" label-width="120px" label-position="left">
         <el-form-item label="品牌logo" prop="pblogo">
           <el-upload
             class="avatar-uploader"
