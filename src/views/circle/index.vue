@@ -224,18 +224,13 @@
       },
       // 推荐该标签
       recommend(row) {
-        let params = {
-          itid: row.itid,
-          ittype: 10,
-          itrecommend: row.itrecommend
-        };
         let title = '推荐';
         if(row.itrecommend) {
           title += '';
         }else {
           title += '关闭';
         }
-        this.$http.post(this.$api.update_items, params).then(res => {
+        this.$http.post(this.$api.update_items, row).then(res => {
             if (res.data.status == 200) {
               this.$notify({
                 title: `${title}成功`,
