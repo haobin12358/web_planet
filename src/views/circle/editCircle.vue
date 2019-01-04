@@ -82,8 +82,8 @@
           <block-title title="商品绑定"></block-title>
           <el-form-item label="推荐商品" prop="product">
             <product :list="productList"></product>
-            <el-button @click="productDialog = true" v-if="productList.length">点击选择</el-button>
-            <el-button @click="getProduct" v-else>点击选择</el-button>
+            <!--<el-button @click="productDialog = true" v-if="productList.length">点击选择</el-button>-->
+            <el-button @click="getProduct">点击选择</el-button>
           </el-form-item>
 
           <block-title title="优惠券绑定"></block-title>
@@ -94,6 +94,7 @@
           </el-form-item>
 
           <el-form-item>
+            <el-button type="info" @click="initCircleForm">取 消</el-button>
             <el-button type="primary" @click="checkFormData">保存资讯</el-button>
           </el-form-item>
         </el-form>
@@ -110,9 +111,20 @@
     </el-dialog>
     <!--商品dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1000px" top="5vh" title="商品绑定" :close-on-click-modal="false">
+      <section class="tool-bar space-between" style="margin-top: -30px">
+        <el-form :inline="true" size="medium">
+          <el-form-item label="商品名称">
+            <el-input v-model="kw"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
+            <el-button icon="el-icon-refresh" @click="reset">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </section>
       <el-table v-loading="productLoading" :data="productsList" stripe height="65vh"
-                @selection-change="handleSelectionChange">
-        <el-table-column type="selection"></el-table-column>
+                @selection-change="handleSelectionChange" row-key="prid" ref="productList">
+        <el-table-column type="selection" :reserve-selection="true"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
@@ -123,10 +135,9 @@
         <el-table-column label="品牌" align="center" prop="brand.pbname"></el-table-column>
         <el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>
       </el-table>
-      <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+      <!--<el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
                      :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
-                     @size-change="sizeChange" @current-change="pageChange">
-      </el-pagination>
+                     @size-change="sizeChange" @current-change="pageChange"></el-pagination>-->
       <span slot="footer">
         <el-button @click="productDialog = false">取 消</el-button>
         <el-button type="primary" @click="chooseProduct">确 定</el-button>
@@ -188,7 +199,8 @@
         isrecommend: false,
         page_num: 1,
         page_size: 10,
-        total: 0
+        total: 0,
+        kw: ''
       }
     },
     computed: {
@@ -204,7 +216,7 @@
     directives: { permission, elDragDialog },
     components: { ImgsDragSort, product, TableCellImg, previewCircle },
     mounted() {
-      this.initCircle()
+      // this.initCircle()
     },
     activated() {
       this.initCircle()
@@ -220,23 +232,63 @@
       }
     },
     methods: {
+      search() {
+        this.page_num = 1;
+        this.getProduct()
+      },
+      reset() {
+        this.kw = '';
+        this.page_num = 1;
+        this.getProduct()
+      },
       // 初始化
       initCircle() {
         // 编辑
         if(this.$route.query.neid) {
           this.$http.get(this.$api.get_news_content, { params: { neid: this.$route.query.neid }}).then(res => {
             if (res.data.status == 200) {
-              console.log(res.data.data);
               // 将拿到的数据处理给组件
-              // this.convertFromEdit(res.data.data);
               this.circleForm = res.data.data;
-              // this.$refs.circleFormRef.clearValidate();
+              this.circleForm.source = 'web';
+              this.circleForm.neid = this.$route.query.neid;
+              // 处理标签
+              if(res.data.data.items) {
+                this.itemList = [];
+                for(let i in res.data.data.items) {
+                  this.itemList.push(res.data.data.items[i].itid)
+                }
+              }
+              // 处理图片
+              if(res.data.data.image) {
+                this.imagesUrl = [];
+                for(let i in res.data.data.image) {
+                  this.imagesUrl.push({ url: res.data.data.image[i].niimage })
+                }
+              }
+              // 处理视频
+              if(res.data.data.video) {
+                this.video.video_thum = res.data.data.video.nvthumbnail;
+              }
+              // 处理是否推荐到轮播图
+              if(res.data.data.neisrecommend) {
+                this.isrecommend = true
+              }
+              // 处理优惠券
+              if(res.data.data.coupon) {
+                this.couponList = [];
+                for(let i in res.data.data.coupon) {
+                  this.couponList.push(res.data.data.coupon[i].coid)
+                }
+              }
+              // 处理商品
+              if(res.data.data.product) {
+                this.productList = res.data.data.product;
+              }
             }
           })
         }else {    // 新增
-
+          this.initCircleForm()
         }
-
         this.getItem();                       // 获取标签列表
         this.getCoupon();                     // 获取优惠券列表
       },
@@ -254,7 +306,7 @@
         this.$http.get(this.$api.coupon_list, {
           noLoading: true,
           params: {
-            itid: 'news_bind_coupon',
+            // itid: 'news_bind_coupon',
             page_num: 1,
             page_size: 200
           }}).then(res => {
@@ -270,14 +322,26 @@
         this.$http.get(this.$api.product_list, {
           noLoading: true,
           params: {
-            itid: 'news_bind_product',
+            kw: this.kw,
+            // itid: 'news_bind_product',
             page_num: this.page_num,
-            page_size: this.page_size
+            page_size: 200
+            // page_size: this.page_size
           }}).then(res => {
           if (res.data.status == 200) {
             this.productsList = res.data.data;
             this.total = res.data.total_count;
             this.productLoading = false;
+            // 将已选择的商品勾选上
+            if(this.productList.length) {
+              for(let i in this.productsList) {
+                for(let j in this.productList) {
+                  if(this.productList[j].prid == this.productsList[i].prid) {
+                    this.$refs.productList.toggleRowSelection(this.productsList[j])
+                  }
+                }
+              }
+            }
           }
         })
       },
@@ -383,15 +447,17 @@
             }
             if(this.circleForm.neid) {
               let title = '编辑';
-              /*this.$http.post(this.$api.update_news, this.circleForm).then(res => {
+              this.$http.post(this.$api.update_news, this.circleForm).then(res => {
                 if (res.data.status == 200) {
+                  this.$router.push('/circle/circle');
                   this.$notify({
                     title: `${title}成功`,
-                    message: `资讯标题：${this.circleForm.netitle}成功`,
+                    message: `资讯标题：${this.circleForm.netitle}编辑成功`,
                     type: 'success'
                   });
+                  this.initCircleForm();
                 }
-              });*/
+              });
             }else {
               let title = '新增';
               this.$http.post(this.$api.create_news, this.circleForm).then(res => {
@@ -399,7 +465,7 @@
                   this.$router.push('/circle/circle');
                   this.$notify({
                     title: `${title}成功`,
-                    message: `资讯标题：${this.circleForm.netitle}成功`,
+                    message: `资讯标题：${this.circleForm.netitle}新增成功`,
                     type: 'success'
                   });
                   this.initCircleForm();
@@ -419,6 +485,19 @@
         this.productList = [];
         this.couponList = [];
         this.isrecommend = false;
+        this.circleForm = {
+          neid: "",
+          items: [],
+          netitle: '',
+          netext: '',
+          nemainpic: '',
+          video: {},
+          images: [],
+          coupon: [],
+          product: [],
+          neisrecommend: 0,
+          source: 'web'
+        };
         this.$refs.circleFormRef.resetFields();
       }
     }

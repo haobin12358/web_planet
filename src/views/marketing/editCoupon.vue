@@ -423,7 +423,7 @@
       initCouponForm() {
         this.itemList = [];
         this.productList = [];
-        this.$refs.couponForm.resetFields();
+        // this.$refs.couponForm.resetFields();
       }
     }
   }

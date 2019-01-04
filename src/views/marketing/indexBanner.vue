@@ -14,7 +14,8 @@
           <table-cell-img :src="scope.row.ibpic" :key="scope.row.ibpic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="对应商品" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
+      <!--<el-table-column label="对应商品" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>-->
+      <el-table-column label="对应链接" align="center" prop="contentlink" show-overflow-tooltip></el-table-column>
       <el-table-column label="不展示/展示" align="center" prop="ibshow">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.ibshow" @change="editBanner(scope, 'ibshow')" active-color="#409EFF" inactive-color="#DBDCDC">
@@ -54,12 +55,15 @@
           <el-switch v-model="bannerForm.ibshow" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </el-form-item>
-        <el-form-item label="绑定商品" prop="prid">
-          <product :list="productList"></product>
-          <!--<el-button class="bind-btn" @click="productDialog = true" v-if="productList.length">点击选择</el-button>-->
-          <!--<el-button @click="getProduct" v-else>点击选择</el-button>-->
-          <el-button class="bind-btn" @click="getProduct">点击选择</el-button>
+        <el-form-item label="链接" prop="contentlink">
+          <el-input v-model="bannerForm.contentlink"></el-input>
         </el-form-item>
+        <!--<el-form-item label="绑定商品" prop="prid">
+          <product :list="productList"></product>
+          &lt;!&ndash;<el-button class="bind-btn" @click="productDialog = true" v-if="productList.length">点击选择</el-button>&ndash;&gt;
+          &lt;!&ndash;<el-button @click="getProduct" v-else>点击选择</el-button>&ndash;&gt;
+          <el-button class="bind-btn" @click="getProduct">点击选择</el-button>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="initBannerForm">取 消</el-button>
@@ -122,6 +126,7 @@
           prid: '',
           ibpic: '',
           ibsort: '',
+          contentlink: '',
           ibshow: false,
         },
         rules: {
@@ -131,9 +136,12 @@
           ibsort: [
             { required: true, message: '序号必填', trigger: 'blur' }
           ],
-          prid: [
+          contentlink: [
+            { required: true, message: '链接必填', trigger: 'blur' }
+          ],
+          /*prid: [
             { required: true, message: '商品必选', trigger: 'blur' }
-          ]
+          ]*/
         },
         bannerLoading: false,
         bannerList: [],
@@ -186,7 +194,7 @@
       // 新增banner的取消按钮
       initBannerForm() {
         this.productList = [];
-        // this.$refs.bannerFormRef.resetFields();
+        this.$refs.bannerFormRef.resetFields();
         this.bannerForm = {
           prid: '',
           ibpic: '',
@@ -265,13 +273,13 @@
               }
             });
           }else if(where == 'edit') {         // 编辑banner
-            this.productList = [];
+            /*this.productList = [];
             this.$http.get(this.$api.product_get, {params:
               { prid: scope.row.prid }}).then(res => {
               if (res.data.status == 200) {
                 this.productList.push(res.data.data)
               }
-            });
+            });*/
             this.bannerForm = JSON.parse(JSON.stringify(scope.row));
             this.bannerDialog = true
           }else if(where == 'delete') {       // 删除banner

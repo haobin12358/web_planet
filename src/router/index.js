@@ -210,7 +210,13 @@ export const asyncRouterMap = [
         path: 'coupon',
         name: 'Coupon',
         component: () => import('src/views/marketing/coupon'),
-        meta: {title: '优惠券', noCache: true,roles: level2}
+        meta: {title: '优惠券',icon: 'yes', noCache: true,roles: level2}
+      }, {
+        path: 'editCoupon',
+        name: 'EditCoupon',
+        hidden: true,
+        component: () => import('src/views/marketing/editCoupon'),
+        meta: {title: '优惠券编辑', noCache: true, roles: level2}
       }, {
         path: 'attendance',
         name: 'Attendance',
@@ -340,22 +346,22 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'ActivityIndex',
         component: () => import('src/views/activity/index'),
-        meta: {title: '活动管理',noCache: true, roles: level2}
+        meta: {title: '活动管理',icon: 'yes',noCache: true, roles: level2}
       }, {
         path: 'firstOrder',
         name: 'FirstOrder',
         component: () => import('src/views/activity/firstOrder'),
-        meta: {title: '新人首单',noCache: true, roles: level2}
+        meta: {title: '新人首单',icon: 'yes',noCache: true, roles: level2}
       }, {
         path: 'guess',
         name: 'Guess',
         component: () => import('src/views/activity/guess'),
-        meta: {title: '每日竞猜',noCache: true, roles: level2}
+        meta: {title: '每日竞猜',icon: 'yes',noCache: true, roles: level2}
       }, {
         path: 'magicGiftBox',
         name: 'MagicGiftBox',
         component: () => import('src/views/activity/magicGiftBox'),
-        meta: {title: '魔术礼盒',noCache: true, roles: level2}
+        meta: {title: '魔术礼盒',icon: 'yes',noCache: true, roles: level2}
       },
       {
         path: 'trialProduct',

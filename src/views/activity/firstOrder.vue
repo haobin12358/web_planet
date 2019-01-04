@@ -113,7 +113,7 @@
       this.$refs.new.productDialog = true;
       scope.row.prid = scope.row.fresh_product.prid;
       scope.row.where = 'new';
-      this.$refs.new.chooseProduct(scope)
+      this.$refs.new.chooseProduct(scope);
     },
     // 删除
     deleteNew(scope) {

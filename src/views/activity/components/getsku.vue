@@ -1,38 +1,40 @@
 <template>
-  <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1200px" top="5vh" title="选择商品" :close-on-click-modal="false">
-    <section class="tool-bar space-between" style="margin-top: -30px">
-      <el-form :inline="true" size="medium">
-        <el-form-item label="商品名称">
-          <el-input v-model="kw"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="reset">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </section>
-    <el-table v-loading="productLoading" :data="productList" stripe height="65vh">
-      <el-table-column align="center" width="120" label="图片">
-        <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
-        </template>
-      </el-table-column>
-      <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="价格" align="center" prop="prprice"></el-table-column>
-      <el-table-column label="品牌" align="center" prop="brand.pbname"></el-table-column>
-      <el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>
-      <el-table-column label="操作" align="center" width="100" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="text" @click="chooseProduct(scope)">选择</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
-                   :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="sizeChange" @current-change="pageChange"></el-pagination>
+  <div>
+    <el-dialog v-el-drag-dialog :visible.sync="productDialog" width="1200px" top="5vh" title="选择商品" :close-on-click-modal="false">
+      <section class="tool-bar space-between" style="margin-top: -30px">
+        <el-form :inline="true" size="medium">
+          <el-form-item label="商品名称">
+            <el-input v-model="kw"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
+            <el-button icon="el-icon-refresh" @click="reset">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </section>
+      <el-table v-loading="productLoading" :data="productList" stripe height="65vh">
+        <el-table-column align="center" width="120" label="图片">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
+        <el-table-column label="价格" align="center" prop="prprice"></el-table-column>
+        <el-table-column label="品牌" align="center" prop="brand.pbname"></el-table-column>
+        <el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>
+        <el-table-column label="操作" align="center" width="100" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" @click="chooseProduct(scope)">选择</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+                     :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                     @size-change="sizeChange" @current-change="pageChange"></el-pagination>
+    </el-dialog>
 
 
-    <el-dialog v-el-drag-dialog :visible.sync="skusDialog" title="选择商品规格" width="1000px" top="10vh" :close-on-click-modal="false" append-to-body>
+    <el-dialog v-el-drag-dialog :visible.sync="skusDialog" title="选择商品规格" width="1000px" top="10vh" :close-on-click-modal="false">
       <!--新人首单-->
       <el-form :model="skusForm" label-position="right" label-width="120px" v-if="where == 'new'">
         <el-form-item label="参与起止时间：">
@@ -99,7 +101,7 @@
 
       <el-table v-loading="skusLoading" :data="skusList" stripe :height="height"
                 @selection-change="handleSelectionChange" row-key="skuid" ref="skuList">
-        <el-table-column type="selection" :reserve-selection="true"></el-table-column>
+        <el-table-column type="selection" :reserve-selection="false"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.skupic" :key="scope.row.skuid"></table-cell-img>
@@ -142,7 +144,7 @@
         <el-button type="primary" @click="chooseSkus" v-else>确 定</el-button>
       </span>
     </el-dialog>
-  </el-dialog>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -305,6 +307,7 @@
           noLoading: true,
           params: {
             kw: this.kw,
+            prstatus: 'usual',
             page_num: this.page_num,
             page_size: this.page_size
           }}).then(res => {
@@ -340,35 +343,98 @@
             if(scope.row.where) {
               this.isEdit = true;
               this.editActivity(scope);
-              for(let i in scope.row.fresh_product.sku) {
-                for(let j in this.skusList) {
-                  if(scope.row.fresh_product.sku[i].skuid == this.skusList[j].skuid) {
-                    this.skusList[j].stock = scope.row.fresh_product.sku[i].fmfpstock;
-                    this.skusList[j].price = scope.row.fresh_product.sku[i].skuprice;
-                  }
-                }
-              }
             }
           }
         });
       },
       // 初始化dialog
       initDialog() {
+        this.skus = [];
         this.fmfatime = [];
+        this.gnaastarttime = [];
+        this.mbastarttime = [];
         this.skusForm.prprice = ''
       },
       // 编辑时处理数据
       editActivity(scope) {
-        // console.log(scope.row.fresh_product.sku);
         if(scope.row.where == 'new') {
           this.fmfatime = [scope.row.fmfastarttime, scope.row.fmfaendtime];
           this.skusForm.prprice = scope.row.fresh_product.prprice;
-
-          // 选中之前勾选的商品
-          console.log(this.$refs);
-          for(let i in scope.row.fresh_product.sku) {
-            this.$refs.skuList.toggleRowSelection(scope.row.fresh_product.sku[i])
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              // 选中之前勾选的商品
+              for(let i in scope.row.fresh_product.sku) {
+                for(let j in this.skusList) {
+                  if(scope.row.fresh_product.sku[i].skuid == this.skusList[j].skuid) {
+                    this.skusList[j].stock = scope.row.fresh_product.sku[i].fmfpstock;
+                    this.skusList[j].price = scope.row.fresh_product.sku[i].skuprice;
+                    this.$refs.skuList.toggleRowSelection(this.skusList[j])
+                  }
+                }
+              }
+              clearInterval(time);
+            }
+          }, 10);
+        }else if(scope.row.where == 'guess') {
+          this.gnaastarttime = [scope.row.gnaastarttime];
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              // 选中之前勾选的商品
+              for(let i in this.skusList) {
+                if(scope.row.skuid == this.skusList[i].skuid) {
+                  this.skusList[i].stock = scope.row.skustock;
+                  this.skusList[i].price = scope.row.skuprice;
+                  this.$refs.skuList.toggleRowSelection(this.skusList[i])
+                }
+              }
+              clearInterval(time);
+            }
+          }, 10);
+        }else if(scope.row.where == 'magic') {
+          this.mbastarttime = [scope.row.mbastarttime];
+          this.numList = [];
+          for(let i in scope.row.gearsone[0].split('-')) {
+            this.numList.push(scope.row.gearsone[0].split('-')[i])
           }
+          for(let i in scope.row.gearstwo) {
+            for(let j in scope.row.gearstwo[i].split('-')) {
+              this.numList.push(scope.row.gearstwo[i].split('-')[j])
+            }
+          }
+          for(let i in scope.row.gearsthree) {
+            for(let j in scope.row.gearsthree[i].split('-')) {
+              this.numList.push(scope.row.gearsthree[i].split('-')[j])
+            }
+          }
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              // 选中之前勾选的商品
+              for(let i in this.skusList) {
+                if(scope.row.skuid == this.skusList[i].skuid) {
+                  this.skusList[i].stock = scope.row.skustock;
+                  this.skusList[i].price = scope.row.skuminprice;
+                  this.skusList[i].maxprice = scope.row.skuprice;
+                  this.$refs.skuList.toggleRowSelection(this.skusList[i])
+                }
+              }
+              clearInterval(time);
+            }
+          }, 10);
         }
       }
     }
@@ -387,7 +453,7 @@
     width: 183px;
   }
   .short-input {
-    width: 120px;
+    width: 130px;
   }
   .dates-box {
     width: 500px;
