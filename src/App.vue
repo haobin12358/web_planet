@@ -46,7 +46,8 @@ export default {
       }
     }
   },
-  mounted(){
+  mounted() {
+    console.log('v 0.1.1');
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NTMxMDM2OCwiZXhwIjoxNTQ1OTE1MTY4fQ.eyJpZCI6ImFkMTliNWFlLTAyMjktMTFlOS04ZmQ1LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.y_i8mnyJd6bwRHJpyG4xdwoQ-XkaRzpFSC_jKF5aLJw';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
