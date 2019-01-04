@@ -216,7 +216,7 @@
     directives: { permission, elDragDialog },
     components: { ImgsDragSort, product, TableCellImg, previewCircle },
     mounted() {
-      this.initCircle()
+      // this.initCircle()
     },
     activated() {
       this.initCircle()
