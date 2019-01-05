@@ -381,7 +381,7 @@
 
   .m-shop{
     width: 100%;
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #ffffff;
     position: relative;
     /*z-index: -2;*/
