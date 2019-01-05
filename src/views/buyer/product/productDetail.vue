@@ -114,6 +114,8 @@
       mounted() {
         common.changeTitle('商品详情');
         wxapi.wxRegister(location.href.split('#')[0]);
+        this.getInfo();
+        this.getUser();
       },
       activated() {
         this.getInfo();
