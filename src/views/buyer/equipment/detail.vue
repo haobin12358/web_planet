@@ -36,7 +36,7 @@
               </p>
             </div>
             <ul class="m-equipment-detail-product" v-if="item.subs">
-              <li  v-for="(v,i) in item.subs" @click="changeRoute('/product',item)">
+              <li  v-for="(v,i) in item.subs" @click="changeRoute('/product',v)">
                 <img :src="v.pcpic" alt="">
                 <span>{{v.pcname}}</span>
               </li>
@@ -73,9 +73,7 @@
       // 跳转页面
       changeRoute(v,item){
         if(item){
-          this.$router.push({path: v,query:{
-              pcid:item.pcid
-            }})
+          this.$router.push({path: v,query:{pcid:item.pcid}})
         }else{
           this.$router.push({path: v})
         }
