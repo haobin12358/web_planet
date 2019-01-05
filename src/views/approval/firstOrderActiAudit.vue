@@ -12,9 +12,13 @@
 
       </el-table-column>
       <el-table-column label="发起人" align="center">
-        <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
+        <el-table-column label="姓名" prop="start.adname" align="center">
+          <template slot-scope="scope">
+            {{scope.row.start.adname || scope.row.start.suname}}
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center"></el-table-column>
+      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
@@ -81,6 +85,7 @@
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
+          noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,

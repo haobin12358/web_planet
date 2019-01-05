@@ -4,19 +4,23 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品规格图片" align="center" prop="prdescription">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.skupic" :key="scope.row.content.skupic"></table-cell-img>
+            <table-cell-img :src="scope.row.content.skupic" :key="scope.row.content.product.skupic"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.pbname"></el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.prtitle" show-overflow-tooltip></el-table-column>
+        <el-table-column label="品牌" align="center" prop="content.product.pbname"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" show-overflow-tooltip></el-table-column>
         <el-table-column label="参与日期" align="center" prop="content.gnaastarttime"></el-table-column>
         <el-table-column label="参与价格" align="center" prop="content.skuprice"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="content.skustock"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
-        <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
+        <el-table-column label="姓名" prop="start.adname" align="center">
+          <template slot-scope="scope">
+            {{scope.row.start.adname || scope.row.start.suname}}
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center"></el-table-column>
+      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
@@ -56,12 +60,13 @@
 </template>
 
 <script>
+  import TableCellImg from "src/components/TableCellImg";
+
   //  toguessnum
   export default {
     name: "GuessActiAudit",
 
-
-    components: {},
+    components: {TableCellImg},
 
     data() {
       return {
@@ -81,6 +86,7 @@
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
+          noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
@@ -126,6 +132,7 @@
 
       showStep(row){
         this.$http.get(this.$api.get_approvalnotes,{
+          noLoading: true,
           params: {
             avid: row.avid
           }
