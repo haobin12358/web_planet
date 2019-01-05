@@ -84,8 +84,8 @@
                 <div class="m-selected-brand-product-text">
                   <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
                   <p class="m-flex-between m-ft-18">
-                    <span>￥{{item.prprice |money}}</span>
-                    <s class="m-grey m-ft-18" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
+                    <span class="money-text">￥{{item.prprice |money}}</span>
+                    <s class="money-text m-grey m-ft-18" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
                   </p>
                 </div>
               </li>
@@ -546,6 +546,11 @@
         }
       }
     }
+  }
+  .money-text {
+    width: 240px;
+    overflow: hidden; // 超出的文本隐藏
+    text-overflow: ellipsis;    // 溢出用省略号显示
   }
 }
 

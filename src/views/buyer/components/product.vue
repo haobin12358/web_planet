@@ -5,9 +5,9 @@
       <div class="m-one-product-text">
         <h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>
         <p class="m-flex-between">
-          <span >￥{{item.prprice | money}}</span>
-          <s class="m-grey" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
-          <s class="m-grey" v-else>￥{{item.prprice | money}}</s>
+          <span class="money-text">￥{{item.prprice | money}}</span>
+          <s class="money-text m-grey" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
+          <s class="money-text m-grey" v-else>￥{{item.prprice | money}}</s>
         </p>
       </div>
     </li>
@@ -93,6 +93,11 @@
         font-size: 21px;
         text-align: left;
       }
+    }
+    .money-text {
+      /*width: 200px;*/
+      overflow: hidden; // 超出的文本隐藏
+      text-overflow: ellipsis;    // 溢出用省略号显示
     }
   }
 </style>
