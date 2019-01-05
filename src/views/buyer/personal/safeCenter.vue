@@ -46,7 +46,7 @@
                 <span class="m-icon-more"></span>
               </div>
             </li>
-            <li @click="changeRoute('/personal/editInput', 'passwd')">
+            <!--<li @click="changeRoute('/personal/editInput', 'passwd')">
               <div>
                 <span>支付密码</span>
               </div>
@@ -54,7 +54,7 @@
                <span class="m-grey">去修改</span>
                 <span class="m-icon-more"></span>
               </div>
-            </li>
+            </li>-->
           </ul>
         </div>
       </div>
