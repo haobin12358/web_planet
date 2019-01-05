@@ -307,7 +307,7 @@
     }
   }
   .m-product-detail-img-box{
-    margin-bottom: 15px;
+    margin: 5px 0 15px 0;
     img{
       display: block;
       width: 750px;
