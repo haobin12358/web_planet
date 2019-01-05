@@ -34,13 +34,14 @@
             <span class="form-item-end-tip" v-if="couponForm.codiscount > 10">折扣数不大于10</span>
           </el-form-item>
 
-          <el-form-item label="生效条件：" v-if="radioDiscount == 10">
+          <el-form-item label="生效条件：">
+          <!--<el-form-item label="生效条件：" v-if="radioDiscount == 10">-->
             <el-radio-group v-model="radioMoney">
               <el-radio :label="0">无条件</el-radio>
               <el-radio :label="1">满减条件</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item prop="codownline" v-if="radioMoney !== 0 && radioDiscount == 10">
+          <el-form-item prop="codownline" v-if="radioMoney !== 0">
             <el-input class="short-input" v-model="couponForm.codownline">
               <template slot="prepend">满</template>
               <template slot="append">元</template>
@@ -233,6 +234,7 @@
         }else if(val == 20) {
           this.rules.cosubtration = []
           this.couponForm.cosubtration = '0';
+          this.couponForm.codiscount = '9.9';
           this.rules.codiscount = [{ required: true, message: '折扣必填', trigger: 'blur' }];
         }
       }
@@ -255,10 +257,10 @@
           this.couponForm.codiscount = coupon.codiscount
         }else {     // 减额
           this.couponForm.cosubtration = coupon.cosubtration;
-          if(coupon.codownline) {    // 满减
-            this.radioMoney = 1;
-            this.couponForm.codownline = coupon.codownline
-          }
+        }
+        if(coupon.codownline) {    // 满减
+          this.radioMoney = 1;
+          this.couponForm.codownline = coupon.codownline
         }
         // 自选品牌
         if(coupon.brands) {
@@ -357,6 +359,11 @@
                 this.$message.warning('折扣数要小于10');
                 return false
               }
+            }
+            // 满10减100不允许
+            if(this.couponForm.codownline <= this.couponForm.cosubtration) {
+              this.$message.warning('减额要小于满减条件');
+              return false
             }
             // 处理商品
             if(this.productList.length) {
