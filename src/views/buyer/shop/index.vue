@@ -50,9 +50,9 @@
                 </div>
               </div>
             </template>
-            <bottom-line v-if="bottom_show"></bottom-line>
           </div>
         </template>
+        <bottom-line v-if="bottom_show"></bottom-line>
         <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
       </div>
       <div class="m-shop-foot">
