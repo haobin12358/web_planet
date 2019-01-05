@@ -34,6 +34,7 @@
       <el-button type="primary" icon="el-icon-plus" @click="addCircle">新增资讯</el-button>
     </section>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item index="all">全部</el-menu-item>
       <el-menu-item index="usual">已上架</el-menu-item>
       <el-menu-item index="auditing">审核中</el-menu-item>
       <el-menu-item index="refuse">已下架</el-menu-item>
@@ -41,10 +42,13 @@
     <el-table v-loading="circleLoading" :data="circleList" stripe size="mini">
     <!--<el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">-->
       <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="点赞数" align="center" prop="favoritnumber" width="130"></el-table-column>
-      <el-table-column label="评论数" align="center" prop="commentnumber" width="130"></el-table-column>
-      <el-table-column label="浏览量" align="center" prop="nepageviews" width="130"></el-table-column>
-      <el-table-column label="预览" align="center" fixed="right">
+      <el-table-column label="发布者" align="center" prop="authername" show-overflow-tooltip></el-table-column>
+      <el-table-column label="审核回复" align="center" prop="refuse_info"
+                       show-overflow-tooltip v-if="activeIndex=='refuse'"></el-table-column>
+      <el-table-column label="点赞数" align="center" prop="favoritnumber" width="80"></el-table-column>
+      <el-table-column label="评论数" align="center" prop="commentnumber" width="80"></el-table-column>
+      <el-table-column label="浏览量" align="center" prop="nepageviews" width="100"></el-table-column>
+      <el-table-column label="预览" align="center" width="160" fixed="right">
         <template slot-scope="scope">
           <preview-circle :circle="scope.row"></preview-circle>
         </template>
@@ -117,7 +121,7 @@
             // { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
           ]
         },
-        activeIndex: 'usual',
+        activeIndex: 'all',
         page_num: 1,
         page_size: 10,
         total: 10,
@@ -148,6 +152,7 @@
     methods: {
       // 获取不同状态的圈子资讯内容
       handleSelect(nestatus) {
+        this.activeIndex = nestatus;
         if(!nestatus == this.nestatus) {
           this.page_num = 1;
         }
