@@ -34,8 +34,8 @@
 
     <el-dialog title="问题类型" :visible.sync="dialogQaTypeVisible" :close-on-click-modal="false">
       <el-form label-width="100px">
-        <el-form-item label="问题图标:" >
-          <el-upload
+        <el-form-item label="问题图标：" >
+          <!--<el-upload
             class="avatar-uploader-icon question-icon"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
@@ -44,9 +44,21 @@
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <img v-else-if="type_form.qoicon" :src="type_form.qoicon" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon question-icon"></i>
+          </el-upload>-->
+
+          <el-upload
+            class="avatar-uploader"
+            :action="uploadUrl"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeImgUpload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-else-if="type_form.qoicon" :src="type_form.qoicon" class="avatar question-img">
+            <i v-else class="el-icon-plus avatar-uploader-icon question-img"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="问题类型:" >
+        <el-form-item label="问题类型：" >
           <el-input  v-model="type_form.qoname"></el-input>
         </el-form-item>
       </el-form>
@@ -78,6 +90,8 @@
   import axios from 'axios';
   import api from '../../api/api'
   import TableCellImg from "src/components/TableCellImg";
+  import { getStore } from "src/utils/index";
+
   export default {
     name: "index",
 
@@ -107,6 +121,12 @@
         ],
         dialogQaVisible: false,
         imageUrl:''
+      }
+    },
+    computed: {
+      // 上传图片
+      uploadUrl() {
+        return this.$api.upload_file + getStore('token') + '&type=index'
       }
     },
     mounted() {
@@ -176,10 +196,20 @@
           }
         })
       },
+      // 主图上传
       handleAvatarSuccess(res, file) {
-        this.type_form.qoicon = URL.createObjectURL(file.raw);
+        this.type_form.qoicon = res.data;
+        // this.type_form.qoicon = URL.createObjectURL(file.raw);
       },
-      /*商品详情大图上传重定向*/
+      // 上传前限制小于15M
+      beforeImgUpload(file) {
+        const isLt15M = file.size / 1024 / 1024 < 15;
+        if (!isLt15M) {
+          this.$message.error('上传图片大小不能超过 15MB!');
+        }
+        return isLt15M;
+      },
+      /*/!*商品详情大图上传重定向*!/
       imgUploadAbo(params){
         let form = new FormData();
         form.append("file", params.file);
@@ -204,7 +234,7 @@
             message: '服务器请求失败，请稍后再试 '
           });
         })
-      },
+      },*/
       // /上传问题类型
       typeSure(){
         if(this.type_form.qoname == ''){
@@ -332,6 +362,11 @@
       display: inline-block;
       width: 50px;
       height: 50px;
+    }
+    .question-img {
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
     }
   }
 </style>
