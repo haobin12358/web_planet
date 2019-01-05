@@ -6,16 +6,16 @@
       <el-table-column label="关联标签用户组" align="center">
         <template slot-scope="scope">
           <el-tag disable-transitions v-for="item in scope.row.permission" :key="item.piid"
-                  style="margin: 0 10px 2px 0;">
+               closable   @close="doDeletePe(item)" style="margin: 0 10px 2px 0;">
             {{item.piname}}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button type="text" class="danger-text">删除</el-button>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="操作" align="center">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-button type="text" class="danger-text" @click="doDeletePe(scope.row)">删除</el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
     </el-table>
     <block-title title="权限标签管理"></block-title>
     <el-table :data="itemData" v-loading="loading" stripe>
@@ -28,12 +28,16 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" :render-header="renderHeader">
+      <el-table-column label="编辑" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditItemName(scope.row)">修改标签名</el-button>
           <el-button type="text" @click="doEditItemAds(scope.row)">修改管理员</el-button>
           <el-button type="text" @click="doEditItemAuth(scope.row)">修改所属层级</el-button>
-          <el-button type="text" class="danger-text">删除</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :render-header="renderHeader">
+        <template slot-scope="scope">
+          <el-button type="text" class="danger-text" @click="doDeletePi(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -164,6 +168,33 @@
           }
         )
       },
+
+      doDeletePe(row){
+        this.$confirm(`确认移除标签(${row.piname})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.delete_permission,{
+              "actiontype": "pe",
+              "actionid": row.peid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.getTablesData();
+                  this.$notify({
+                    title: '标签移除成功',
+                    message: `标签名:${row.piname}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+
+
       setLevelOptions() {
         this.levelOptions = [];
         for (let i = 0; i < this.levelData.length + 1; i++) {
@@ -186,14 +217,14 @@
         this.editType = '';
         this.dlgVisible = true;
       },
-      doEditItemName(row){
+      doEditItemName(row) {
         this.resetForm();
         this.form.piid = row.piid
         this.form.piname = row.piname
         this.editType = '1';
         this.dlgVisible = true;
       },
-      doEditItemAds(row){
+      doEditItemAds(row) {
         this.resetForm();
         this.form.piid = row.piid
         this.form.ad_list = row.admin.map(item => item.adid);
@@ -201,24 +232,49 @@
         this.editType = '2';
         this.dlgVisible = true;
       },
-      doEditItemAuth(row){
+      doEditItemAuth(row) {
         this.resetForm();
         this.form.peid = row.peid;
         this.form.pelevel = row.pelevel;
-        this.form.piid= row.piid;
+        this.form.piid = row.piid;
         this.form.piname = row.piname
         this.editType = '3';
         this.dlgVisible = true;
       },
 
+      doDeletePi(row) {
+        this.$confirm(`确认删除标签(${row.piname})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.delete_permission,{
+              "actiontype": "pi",
+              "actionid": row.piid,
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
 
-        doSaveItem() {
+                  this.getTablesData();
+                  this.$notify({
+                    title: '标签删除成功',
+                    message: `标签名:${row.piname}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+
+
+      doSaveItem() {
         this.$refs.form.validate(
           valid => {
             if (valid) {
               let type = this.editType ? '编辑' : '新增'
 
-              if(this.editType == ''){  //  新增
+              if (this.editType == '') {  //  新增
                 this.$http.post(this.$api.add_pi_and_pe_and_ap, {
                   ptid: this.ptid,
                   ...this.form,
@@ -232,7 +288,7 @@
                     }
                   }
                 );
-              }else if(this.editType == '1'){ //  修改标签名
+              } else if (this.editType == '1') { //  修改标签名
                 this.$http.post(this.$api.add_permissionitems, {
                   ptid: this.ptid,
                   piid: this.form.piid,
@@ -241,13 +297,13 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.showSuccessTip(type)
                     }
                   }
                 );
-              }else if(this.editType == '2'){
+              } else if (this.editType == '2') {
                 this.$http.post(this.$api.add_adminpermission, {
                   piid: this.form.piid,
                   adid: this.form.ad_list,
@@ -256,13 +312,13 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.showSuccessTip(type)
                     }
                   }
                 );
-              }else if(this.editType == '3'){
+              } else if (this.editType == '3') {
                 this.$http.post(this.$api.add_permission, {
                   piid: this.form.piid,
                   ptid: this.ptid,

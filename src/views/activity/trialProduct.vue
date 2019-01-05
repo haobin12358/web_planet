@@ -68,7 +68,7 @@
 
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
-          <template v-if="[-10,20,30].includes(scope.row.tcstatus)">
+          <template v-if="[-10,30].includes(scope.row.tcstatus)">
             <el-button type="text"  @click="doEdit(scope.row)">编辑</el-button>
           </template>
           <template v-if="[20].includes(scope.row.tcstatus)">
