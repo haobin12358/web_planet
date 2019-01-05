@@ -2,6 +2,7 @@
   <div class="m-circle-detail">
     <div class="m-circle-content" v-if="news_info">
       <h3 class="m-circle-title">{{news_info.netitle}}</h3>
+      <span class="m-icon-gray-share" @click="shareCircle"></span>
       <div class="m-author-box">
         <img class="m-author-img" :src="news_info.author.usheader">
         <div class="m-author-name">{{news_info.author.usname}}</div>
@@ -33,9 +34,9 @@
           <span class="m-icon-cai"></span>
           <span>反对 {{news_info.tramplenumber}}</span>
         </span>
-        <span class="m-icon-btn" @click="shareCircle">
+        <!--<span class="m-icon-btn" @click="shareCircle">
           <span>分 享</span>
-        </span>
+        </span>-->
       </div>
       <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论 {{news_info.commentnumber}}</span>
     </div>
@@ -446,6 +447,16 @@
     font-weight: bold;
     margin-left: 28px;
     text-align: left;
+  }
+  .m-icon-gray-share {
+    position: absolute;
+    top: 30px;
+    right: 45px;
+    display: block;
+    width: 33px;
+    height: 40px;
+    background: url("/static/images/icon-gray-share.png") no-repeat;
+    background-size: 100% 100%;
   }
   .m-author-box {
     display: flex;

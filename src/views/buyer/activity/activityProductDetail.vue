@@ -103,15 +103,15 @@
               options = {
                 title: '新人首单',
                 desc: '分享给好友购买, 享受优惠, 可返原价',
-                imgUrl: item.prmainpic,
-                link: window.location.href.split('#')[0] + '?fmfpid=' + item.fmfpid + '&which=new'
+                imgUrl: this.product.prmainpic,
+                link: window.location.href.split('#')[0] + '?fmfpid=' + this.$route.query.fmfpid + '&which=new'
               };
             }else if(which == "try") {
               options = {
                 title: '试用商品',
                 desc: '试用商品的体验专区',
-                imgUrl: item.tcmainpic,
-                link: window.location.href.split('#')[0] + '?tcid=' + item.tcid + '&which=try'
+                imgUrl: this.product.tcmainpic,
+                link: window.location.href.split('#')[0] + '?tcid=' + this.$route.query.tcid + '&which=try'
               };
             }
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
@@ -294,21 +294,21 @@
       height: 750px;
       .m-icon-back{
         position: absolute;
-        top: 30px;
-        left: 40px;
-        width: 24px;
-        height: 41px;
-        background: url("/static/images/icon-detail-back.png") no-repeat;
+        top: 45px;
+        left: 45px;
+        width: 70px;
+        height: 70px;
+        background: url("/static/images/yuan-back.png") no-repeat;
         background-size: 100% 100%;
       }
       .m-icon-gray-share {
         position: absolute;
-        top: 30px;
+        top: 45px;
         right: 45px;
         display: block;
-        width: 33px;
-        height: 40px;
-        background: url("/static/images/icon-gray-share.png") no-repeat;
+        width: 70px;
+        height: 70px;
+        background: url("/static/images/yuan-share.png") no-repeat;
         background-size: 100% 100%;
       }
     }
