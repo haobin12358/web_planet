@@ -49,8 +49,8 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.1.9');
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NTMxMDM2OCwiZXhwIjoxNTQ1OTE1MTY4fQ.eyJpZCI6ImFkMTliNWFlLTAyMjktMTFlOS04ZmQ1LTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.y_i8mnyJd6bwRHJpyG4xdwoQ-XkaRzpFSC_jKF5aLJw';
+    console.log('v 0.2.0');
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NjcxOTgyOSwiZXhwIjoxNTQ3MzI0NjI5fQ.eyJpZCI6ImQ1NzM5MzUyLTBiNmMtMTFlOS1hNmVmLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.xvbRIEtWTkebhe2wo5m1BWeX8iG03jvQWTIMb5wsUIg';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },

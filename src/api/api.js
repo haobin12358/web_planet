@@ -1,5 +1,5 @@
-// const title = 'https://planet.daaiti.cn/api/v1/';
-const title = 'https://www.bigxingxing.com/api/v1/';
+const title = 'https://planet.daaiti.cn/api/v1/';
+// const title = 'https://www.bigxingxing.com/api/v1/';
 
 const api={
   login: title + 'user/login',                                   // 用户登录

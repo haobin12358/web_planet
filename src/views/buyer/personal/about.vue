@@ -3,6 +3,12 @@
     <div class="m-personal-bg">
       <span class="m-icon-bg"></span>
     </div>
+    <div class="logo-box">
+      <span class="logo-img"></span>
+      <p>大行星</p>
+      <span class="m-ft-28">www.bigxingxing.com</span>
+    </div>
+    <!--Copyright-->
     <div class="m-copy-right">
       <p class="m-copy-right-text-one">
         <span>Copyright</span>
@@ -42,6 +48,25 @@
   .m-personal {
     min-height: 100vh;
     background-color: #EEEEEE;
+  }
+  .logo-box {
+    position: absolute;
+    top: 100px;
+    left: 240px;
+    color: #ffffff;
+    .logo-img {
+      display: inline-block;
+      width: 120px;
+      height: 120px;
+      background: url("/static/images/logo.png") no-repeat;
+      background-size: 100% 100%;
+      border-radius: 20px;
+    }
+    p {
+      font-size: 35px;
+      margin-top: 30px;
+      letter-spacing: 5px;
+    }
   }
   .m-copy-right {
     /*color: #666666;*/
