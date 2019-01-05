@@ -2,7 +2,7 @@
   <div class="container">
     <el-row>
       <el-col :span="16">
-        <el-form :model="supplierForm" :rules="rules" ref="supplierForm" label-width="120px">
+        <el-form :model="supplierForm" :rules="rules" ref="supplierForm" label-position="left" label-width="120px">
           <el-form-item label="供应商名称" prop="suname">
             <el-input v-model="supplierForm.suname"></el-input>
           </el-form-item>
@@ -27,7 +27,7 @@
           <el-form-item label="联系人" prop="sulinkman">
             <el-input v-model="supplierForm.sulinkman"></el-input>
           </el-form-item>
-          <el-form-item label="联系电话" prop="sulinkphone">
+          <el-form-item :label="`联系电话${!this.supplierForm.suid? '(同时作为登录账号)' :''}`" prop="sulinkphone">
             <el-input v-model="supplierForm.sulinkphone"></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="suaddress">
@@ -35,9 +35,6 @@
           </el-form-item>
 
           <template v-if="!this.supplierForm.suid">
-            <el-form-item label="登录账号" prop="suloginphone">
-              <el-input v-model="supplierForm.suloginphone"></el-input>
-            </el-form-item>
             <el-form-item label="登录密码" prop="supassword">
               <el-input v-model="supplierForm.supassword"></el-input>
             </el-form-item>
@@ -266,12 +263,12 @@
                   }
                 )
               } else {
-
+                this.supplierForm.suloginphone = this.supplierForm.sulinkphone;
                 this.$http.post(this.$api.create_supplizer, this.supplierForm).then(
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                        data = res.data.data;
+                          data = res.data.data;
 
                       this.$router.push('/user/suppliers');
                       this.$notify({

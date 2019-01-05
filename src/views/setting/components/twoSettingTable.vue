@@ -195,12 +195,18 @@
       },
       doEditItemAds(row){
         this.resetForm();
-        this.form.ad_list = row.adminList
+        this.form.piid = row.piid
+        this.form.ad_list = row.admin.map(item => item.adid);
+        this.form.piname = row.piname
         this.editType = '2';
         this.dlgVisible = true;
       },
       doEditItemAuth(row){
         this.resetForm();
+        this.form.peid = row.peid;
+        this.form.pelevel = row.pelevel;
+        this.form.piid= row.piid;
+        this.form.piname = row.piname
         this.editType = '3';
         this.dlgVisible = true;
       },
@@ -227,7 +233,7 @@
                   }
                 );
               }else if(this.editType == '1'){ //  修改标签名
-                this.$http.post(this.$api.add_permission, {
+                this.$http.post(this.$api.add_permissionitems, {
                   ptid: this.ptid,
                   piid: this.form.piid,
                   piname: this.form.piname,
@@ -236,6 +242,37 @@
                     if (res.data.status == 200) {
                       let resData = res.data,
                           data = res.data.data;
+
+                      this.showSuccessTip(type)
+                    }
+                  }
+                );
+              }else if(this.editType == '2'){
+                this.$http.post(this.$api.add_adminpermission, {
+                  piid: this.form.piid,
+                  adid: this.form.ad_list,
+                  // adpid: this.form.peid,
+                }).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                          data = res.data.data;
+
+                      this.showSuccessTip(type)
+                    }
+                  }
+                );
+              }else if(this.editType == '3'){
+                this.$http.post(this.$api.add_permission, {
+                  piid: this.form.piid,
+                  ptid: this.ptid,
+                  peid: this.form.peid,
+                  pelevel: this.form.pelevel,
+                }).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
 
                       this.showSuccessTip(type)
                     }
