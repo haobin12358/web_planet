@@ -331,6 +331,17 @@
       .m-product-title{
         margin-right: 20px;
         text-align: left;
+        /*text-indent: 2em;*/
+        overflow: hidden; // 超出的文本隐藏
+        text-overflow: ellipsis;    // 溢出用省略号显示
+        display: -webkit-box; // 将对象作为弹性伸缩盒子模型显示。
+        -webkit-box-orient: vertical; // 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+        -webkit-line-clamp: 2; // 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
+      }
+      .money-text {
+        width: 240px;
+        overflow: hidden; // 超出的文本隐藏
+        text-overflow: ellipsis;    // 溢出用省略号显示
       }
       .m-profict-title {
         white-space: nowrap;
