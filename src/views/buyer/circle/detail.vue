@@ -33,6 +33,9 @@
           <span class="m-icon-cai"></span>
           <span>反对 {{news_info.tramplenumber}}</span>
         </span>
+        <span class="m-icon-btn" @click="shareCircle">
+          <span>分 享</span>
+        </span>
       </div>
       <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论 {{news_info.commentnumber}}</span>
     </div>
@@ -45,6 +48,7 @@
         <div class="m-box-title m-margin">相关推荐</div>
         <product :list="news_info.product"></product>
       </div>
+      <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
     </div>
 
     <div class="m-comment-modal" v-if="show_modal">
@@ -94,11 +98,12 @@
 <script>
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast,MessageBox} from 'mint-ui';
+  import { Toast, MessageBox } from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
   import couponCard from '../components/couponCard';
   import product from '../components/product';
   import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
 
   var scroll = (function (className) {
     var scrollTop;
@@ -134,6 +139,7 @@
         comment_content:'',
         comment_index:null,
         show_comment:false,
+        show_invite:false,
         timeOutEvent:null
       }
     },
@@ -155,6 +161,55 @@
       this.$router.push('/circle');
     },
     methods: {
+      // 分享圈子 - 详情页点击
+      shareCircle() {
+        if(localStorage.getItem('token')) {
+          let options = {
+            title: '圈子',
+            desc: '快来查看您的好友分享的圈子乐趣吧',
+            imgUrl: this.news_info.author.usheader,       // 初步考虑用用户头像
+            link: location.href.split('#')[0] + '?neid=' + this.$route.query.neid
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+              // 点击分享
+              this.show_invite = true;
+            }
+          });
+
+          // 倒计时
+          const TIME_COUNT = 3;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if (count > 0 && count <= TIME_COUNT) {
+              count --;
+            } else {
+              this.show_invite = false;
+              clearInterval(time);
+            }
+          }, 1000);
+
+          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+          if(wx.updateAppMessageShareData) {
+            wx.updateAppMessageShareData(options);
+          }
+          // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+          if(wx.updateTimelineShareData) {
+            wx.updateTimelineShareData(options);
+          }
+          // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareAppMessage) {
+            wx.onMenuShareAppMessage(options);
+          }
+          // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareTimeline) {
+            wx.onMenuShareTimeline(options);
+          }
+        }else {
+          Toast('请登录后再试');
+        }
+      },
       // 预览图片
       previewImage(index, image) {
         let images = [];
@@ -628,7 +683,7 @@
   z-index: 100;
   bottom: 0;
   left: 0;
-  padding: 30px 49px 30px 45px;
+  padding: 30px 49px 30px 49px;
   width: 652px;
   background-color: #fff;
   font-size: 18px;
@@ -691,6 +746,14 @@
           margin: 20px 0 -10px 46px;
         }
       }
+    }
+    .m-invite-course {
+      position: fixed;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
     }
   }
 </style>

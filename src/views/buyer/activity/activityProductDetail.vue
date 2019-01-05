@@ -6,6 +6,8 @@
           <img class="product-img" :src="item.tcipic" @click="previewImage(index, product.image)">
         </mt-swipe-item>
       </mt-swipe>
+      <span class="m-icon-back" @click="changeBack"></span>
+      <span class="m-icon-gray-share" @click="shareProduct"></span>
     </div>
     <!--商品详情的文字信息-->
     <div class="m-detail-text">
@@ -40,6 +42,7 @@
     <div class="m-detail-img-box">
       <img class="m-detail-img" v-for="item in product.tcdesc" :src="item" alt="">
     </div>
+    <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
 
     <div class="m-detail-btn-box">
       <div class="m-detail-service"></div>
@@ -53,8 +56,9 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import sku from '../components/sku';
-  import wxapi from '../../../common/js/mixins';
   import { Toast } from 'mint-ui';
+  import wx from 'weixin-js-sdk';
+  import wxapi from '../../../common/js/mixins';
 
   let scroll = (function (className) {
     let scrollTop;
@@ -82,12 +86,81 @@
         select_value: null,
         canums: 1,
         cart_buy: null,
-        which: ''
+        which: '',
+        show_invite: false
       }
     },
     mixins: [wxapi],
     components: { sku },
     methods: {
+      // 分享商品
+      shareProduct() {
+        if(common.isWeixin()) {
+          if(localStorage.getItem('token')) {
+            let options = {};
+            let which = this.$route.query.which;
+            if(which == "new") {
+              options = {
+                title: '新人首单',
+                desc: '分享给好友购买, 享受优惠, 可返原价',
+                imgUrl: item.prmainpic,
+                link: window.location.href.split('#')[0] + '?fmfpid=' + item.fmfpid + '&which=new'
+              };
+            }else if(which == "try") {
+              options = {
+                title: '试用商品',
+                desc: '试用商品的体验专区',
+                imgUrl: item.tcmainpic,
+                link: window.location.href.split('#')[0] + '?tcid=' + item.tcid + '&which=try'
+              };
+            }
+            axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+              if(res.data.status == 200) {
+                options.link += '&secret_usid=' + res.data.data.secret_usid;
+                // 点击分享
+                this.show_invite = true;
+              }
+            });
+
+            // 倒计时
+            const TIME_COUNT = 3;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.show_invite = false;
+                clearInterval(time);
+              }
+            }, 1000);
+
+            // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+            if(wx.updateAppMessageShareData) {
+              wx.updateAppMessageShareData(options);
+            }
+            // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+            if(wx.updateTimelineShareData) {
+              wx.updateTimelineShareData(options);
+            }
+            // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+            if(wx.onMenuShareAppMessage) {
+              wx.onMenuShareAppMessage(options);
+            }
+            // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+            if(wx.onMenuShareTimeline) {
+              wx.onMenuShareTimeline(options);
+            }
+          }else {
+            Toast('请登录后再试');
+          }
+        }else {
+          Toast('请在微信公众号分享');
+        }
+      },
+      // 返回上一页
+      changeBack(){
+        this.$router.go(-1);
+      },
       // 预览图片
       previewImage(index, image) {
         let images = [];
@@ -219,6 +292,25 @@
       position: relative;
       width: 750px;
       height: 750px;
+      .m-icon-back{
+        position: absolute;
+        top: 30px;
+        left: 40px;
+        width: 24px;
+        height: 41px;
+        background: url("/static/images/icon-detail-back.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      .m-icon-gray-share {
+        position: absolute;
+        top: 30px;
+        right: 45px;
+        display: block;
+        width: 33px;
+        height: 40px;
+        background: url("/static/images/icon-gray-share.png") no-repeat;
+        background-size: 100% 100%;
+      }
     }
     .m-detail-text {
       padding: 25px 25px 15px 30px;
@@ -292,6 +384,14 @@
         border-radius: 10px;
         background-color: @mainColor;
       }
+    }
+    .m-invite-course {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
     }
   }
 </style>

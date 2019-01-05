@@ -27,7 +27,7 @@
           <div class="m-price-share">
             <div class="m-product-price" v-if="item.zh_remarks">押金：<span class="m-price-time">{{item.zh_remarks}}</span></div>
             <div class="m-product-price" v-if="item.prprice"><span class="m-price-time">￥{{item.prprice | money}}</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare">
+            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare(item)">
             <div class="m-share-text" @click.stop="productShare(item)">分享</div>
           </div>
           <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
@@ -59,7 +59,7 @@
         month: "",
         dayNum: "",
         monthNum: "",
-        show_invite: false,
+        show_invite: false
       }
     },
     mixins: [wxapi],
@@ -76,6 +76,7 @@
       },
       // 商品分享按钮
       productShare(item) {
+        console.log(item);
         if(common.isWeixin()) {
           if(localStorage.getItem('token')) {
             let options = {};
@@ -84,7 +85,7 @@
               options = {
                 title: '新人首单',
                 desc: '分享给好友购买, 享受优惠, 可返原价',
-                imgUrl: item.prmainpic,
+                imgUrl: item.tcmainpic,
                 link: window.location.href.split('#')[0] + '?fmfpid=' + item.fmfpid + '&which=new'
               };
             }else if(which == "try") {

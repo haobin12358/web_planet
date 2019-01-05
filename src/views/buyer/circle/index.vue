@@ -136,48 +136,51 @@
     methods: {
       // 分享圈子
       shareCircle(items) {
-        console.log(items);
-        let options = {
-          title: '圈子',
-          desc: '快来查看您的好友分享的圈子乐趣吧',
-          imgUrl: items.usheader,       // 初步考虑用用户头像
-          link: location.href.split('#')[0] + '?neid=' + items.neid
-        };
-        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
-          if(res.data.status == 200) {
-            options.link += '&secret_usid=' + res.data.data.secret_usid;
-            // 点击分享
-            this.show_invite = true;
-          }
-        });
+        if(localStorage.getItem('token')) {
+          let options = {
+            title: '圈子',
+            desc: '快来查看您的好友分享的圈子乐趣吧',
+            imgUrl: items.usheader,       // 初步考虑用用户头像
+            link: location.href.split('#')[0] + '?neid=' + items.neid
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+              // 点击分享
+              this.show_invite = true;
+            }
+          });
 
-        // 倒计时
-        const TIME_COUNT = 3;
-        let count = TIME_COUNT;
-        let time = setInterval(() => {
-          if (count > 0 && count <= TIME_COUNT) {
-            count --;
-          } else {
-            this.show_invite = false;
-            clearInterval(time);
-          }
-        }, 1000);
+          // 倒计时
+          const TIME_COUNT = 3;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if (count > 0 && count <= TIME_COUNT) {
+              count --;
+            } else {
+              this.show_invite = false;
+              clearInterval(time);
+            }
+          }, 1000);
 
-        // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
-        if(wx.updateAppMessageShareData) {
-          wx.updateAppMessageShareData(options);
-        }
-        // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
-        if(wx.updateTimelineShareData) {
-          wx.updateTimelineShareData(options);
-        }
-        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
-        if(wx.onMenuShareAppMessage) {
-          wx.onMenuShareAppMessage(options);
-        }
-        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
-        if(wx.onMenuShareTimeline) {
-          wx.onMenuShareTimeline(options);
+          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+          if(wx.updateAppMessageShareData) {
+            wx.updateAppMessageShareData(options);
+          }
+          // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+          if(wx.updateTimelineShareData) {
+            wx.updateTimelineShareData(options);
+          }
+          // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareAppMessage) {
+            wx.onMenuShareAppMessage(options);
+          }
+          // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareTimeline) {
+            wx.onMenuShareTimeline(options);
+          }
+        }else {
+          Toast('请登录后再试');
         }
       },
       /*跳转路由*/

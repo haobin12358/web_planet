@@ -7,6 +7,7 @@
           </mt-swipe-item>
         </mt-swipe>
         <span class="m-icon-back" @click="changeBack"></span>
+        <span class="m-icon-gray-share" @click="shareProduct"></span>
       </div>
       <div class="m-product-detail-info">
         <h3 v-if="user.uslevel == 2">
@@ -63,6 +64,7 @@
           <span class="active" @click="addCart">加入购物车</span>
           <span @click="buyNow">立即购买</span>
         </div>
+        <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
       </div>
 
       <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
@@ -74,8 +76,9 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import {Toast} from 'mint-ui'
+  import { Toast } from 'mint-ui'
   import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
 
   var scroll = (function (className) {
     var scrollTop;
@@ -93,28 +96,79 @@
     };
   })('scroll');
     export default {
-        data(){
-          return{
-            show_sku:false,
-            product_info:null,
-            sku:null,
-            select_value:null,
-            canums:1,
-            cart_buy:null,
-            star:['','','','',''],
-            user: { uslevel: '1' }
-          }
-        },
+      data(){
+        return{
+          show_sku:false,
+          product_info:null,
+          sku:null,
+          select_value:null,
+          canums:1,
+          cart_buy:null,
+          star:['','','','',''],
+          user: { uslevel: '1' },
+          show_invite: false
+        }
+      },
       mixins: [wxapi],
       components: { sku },
       mounted() {
         common.changeTitle('商品详情');
+        wxapi.wxRegister(location.href.split('#')[0]);
       },
       activated() {
         this.getInfo();
         this.getUser();
       },
       methods:{
+        // 分享商品
+        shareProduct() {
+          if(localStorage.getItem('token')) {
+            let options = {
+              title: '商品',
+              desc: '快来查看您的好友分享的商品吧',
+              imgUrl: this.product_info.prmainpic,
+              link: location.href.split('#')[0] + '?prid=' + this.$route.query.prid
+            };
+            axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+              if(res.data.status == 200) {
+                options.link += '&secret_usid=' + res.data.data.secret_usid;
+                // 点击分享
+                this.show_invite = true;
+              }
+            });
+
+            // 倒计时
+            const TIME_COUNT = 3;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.show_invite = false;
+                clearInterval(time);
+              }
+            }, 1000);
+
+            // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+            if(wx.updateAppMessageShareData) {
+              wx.updateAppMessageShareData(options);
+            }
+            // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+            if(wx.updateTimelineShareData) {
+              wx.updateTimelineShareData(options);
+            }
+            // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+            if(wx.onMenuShareAppMessage) {
+              wx.onMenuShareAppMessage(options);
+            }
+            // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+            if(wx.onMenuShareTimeline) {
+              wx.onMenuShareTimeline(options);
+            }
+          }else {
+            Toast('请登录后再试');
+          }
+        },
         // 获取个人信息
         getUser() {
           if(localStorage.getItem('token')) {
@@ -154,7 +208,7 @@
           };
           wxapi.previewImage(options);
         },
-        //返回{
+        // 返回上一页
         changeBack(){
           this.$router.go(-1);
         },
@@ -190,7 +244,7 @@
           }
           this.changeModal('show_sku',false);
         },
-      //  加入购物请求
+        // 加入购物请求
         postCart(){
           axios.post(api.cart_create + '?token=' + localStorage.getItem('token'),{
             skuid:this.select_value.skuid,
@@ -204,7 +258,7 @@
             Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
           })
         },
-      //  加入购物车
+        // 加入购物车
         addCart(){
            /*if(this.select_value){
                this.postCart();
@@ -215,7 +269,7 @@
            this.cart_buy = 'cart';
         },
         //立即购买
-        buyNow(){
+        buyNow() {
           if(this.select_value){
             let product = {};
             product.pb = this.product_info.brand;
@@ -248,6 +302,16 @@
       width: 24px;
       height: 41px;
       background: url("/static/images/icon-detail-back.png") no-repeat;
+      background-size: 100% 100%;
+    }
+    .m-icon-gray-share {
+      position: absolute;
+      top: 30px;
+      right: 45px;
+      display: block;
+      width: 33px;
+      height: 40px;
+      background: url("/static/images/icon-gray-share.png") no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -359,6 +423,14 @@
           border-radius: 10px 0 0 10px;
         }
       }
+    }
+    .m-invite-course {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
     }
   }
 
