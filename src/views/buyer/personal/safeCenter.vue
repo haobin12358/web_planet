@@ -29,7 +29,7 @@
             </li>
             <li @click="changeRoute('/storekeeper/IDCardApprove')">
               <div>
-                <span>身份证号</span>
+                <span>身份认证</span>
               </div>
               <div>
                 <span class="m-grey" v-if="!user.usidentification">未认证</span>

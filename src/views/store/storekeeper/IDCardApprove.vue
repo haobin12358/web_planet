@@ -234,6 +234,7 @@
             // 申请提交成功则返回上一页
             this.$router.go(-1);
             this.submitPopup = true;
+            localStorage.setItem('noIDCard', false);
           }
         });
       }
