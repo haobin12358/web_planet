@@ -230,7 +230,7 @@
   import api from '../../../api/api';
 
     export default {
-      name: 'selectedIndex',
+      name: 'SelectedIndex',
       data() {
         return {
           swipe_list:null,
@@ -307,7 +307,9 @@
               this.$router.push({ path: v, query: { pbid: item.pbid,pbname: item.pbname }});
               break;
             case '/product/detail':
-              window.location.href = item.contentlink;
+              if(item.contentlink) {
+                window.location.href = item.contentlink;
+              }
               // this.$router.push({ path: v, query: { prid: item.prid }});
               break;
             default:
