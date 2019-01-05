@@ -206,7 +206,7 @@
       },
       // 申请退款
       submitRefund() {
-        if(this.oraproductstatus == 0 && !this.status_select){
+        if(this.oraproductstatus == 0 && !this.status_select && this.orastate != 10){
           Toast("请先选择货物状态");
           return false;
         }
