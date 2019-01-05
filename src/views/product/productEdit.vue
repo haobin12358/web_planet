@@ -65,13 +65,13 @@
         <el-input v-model.trim="formData.prdescription" type="textarea" style="width: 700px;"></el-input>
       </el-form-item>
       <el-form-item label="划线价格" prop="prlineprice">
-        <el-input style="width: 200px;" v-model.number="formData.prlineprice"></el-input>
+        <el-input style="width: 200px;" v-model.number="formData.prlineprice" maxlength="11" ></el-input>
       </el-form-item>
       <el-form-item label="价格" prop="prprice">
-        <el-input v-model.number="formData.prprice" style="width: 200px;"></el-input>
+        <el-input v-model.number="formData.prprice" style="width: 200px;" maxlength="11"></el-input>
       </el-form-item>
       <el-form-item label="运费" prop="prfreight">
-        <el-input v-model.number="formData.prfreight" style="width: 200px;"></el-input>
+        <el-input v-model.number="formData.prfreight" style="width: 200px;" maxlength="11"></el-input>
       </el-form-item>
 
       <el-form-item label="商品规格" required>
@@ -137,18 +137,17 @@
           </el-table-column>
           <el-table-column label="价格" prop="price" align="center">
             <template slot-scope="scope">
-              <el-input v-model.number="scope.row.skuprice"></el-input>
+              <el-input v-model.number="scope.row.skuprice" maxlength="11"></el-input>
             </template>
           </el-table-column>
           <el-table-column label="库存" prop="stock" align="center">
             <template slot-scope="scope">
-              <el-input v-model.number="scope.row.skustock"></el-input>
+              <el-input v-model.number="scope.row.skustock" maxlength="11"></el-input>
             </template>
           </el-table-column>
 
           <el-table-column label="操作" prop="action" align="center" width="120" fixed="right">
             <template slot-scope="scope">
-
               <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
                 移除该属性
               </el-button>

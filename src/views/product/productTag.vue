@@ -23,7 +23,7 @@
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
       <el-table-column label="排序" align="center" sortable prop="pssort">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.pssort" @keyup.native.enter="changeSceneSort(scope.row)"
+          <el-input v-model.number="scope.row.pssort" maxlength="11" @keyup.native.enter="changeSceneSort(scope.row)"
                     style="width: 180px"></el-input>
         </template>
       </el-table-column>
@@ -61,7 +61,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="排序" prop="pssort">
-          <el-input v-model.number="sceneForm.pssort"></el-input>
+          <el-input v-model.number="sceneForm.pssort" maxlength="11"></el-input>
         </el-form-item>
 
       </el-form>

@@ -14,9 +14,9 @@
         <el-table-column align="center" prop="content.categorys" label="分类" width="240"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
-        <el-table-column label="姓名" prop="start.usname" align="center" width="120">
+        <el-table-column label="姓名" prop="start.adname" align="center" width="120">
           <template slot-scope="scope">
-            {{scope.row.start.usname || scope.row.start.adname}}
+            {{scope.row.start.adname || scope.row.start.adname}}
           </template>
         </el-table-column>
       </el-table-column>
@@ -91,6 +91,7 @@
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
+          noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,

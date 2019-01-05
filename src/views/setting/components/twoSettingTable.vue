@@ -41,16 +41,16 @@
     <el-dialog :visible.sync="dlgVisible" width="700px" v-el-drag-dialog :close-on-click-modal="false"
                :title="dlgTitle">
       <el-form :model="form" :rules="rules" ref="form" label-width="120px" label-position="left">
-        <el-form-item v-if="editType == 1" label="标签名" prop="piname">
+        <el-form-item v-if="editType == '' || editType == 1" label="标签名" prop="piname">
           <el-input v-model.trim="form.piname"></el-input>
         </el-form-item>
-        <el-form-item v-if="editType == 2" label="关联管理员" prop="ad_list">
+        <el-form-item v-if="editType == '' || editType == 2" label="关联管理员" prop="ad_list">
           <el-select v-model="form.ad_list" multiple filterable style="width: 400px">
             <el-option v-for="item in adminList" :key="item.adid" :value="item.adid"
                        :label="item.adname"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="editType == 3" label="所属层级" prop="pelevel">
+        <el-form-item v-if="editType == '' || editType == 3" label="所属层级" prop="pelevel">
           <el-select v-model="form.pelevel" style="width: 400px">
             <el-option v-for="item in levelOptions" :key="item" :value="item"
                        :label="item"></el-option>

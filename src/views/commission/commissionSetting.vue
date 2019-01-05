@@ -4,22 +4,22 @@
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="一级代理佣金比例">
-          <el-input v-model.number="commonSetting.levelcommision[0]">
+          <el-input v-model.number="commonSetting.levelcommision[0]"  maxlength="5">
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="二级代理佣金比例">
-          <el-input v-model.number="commonSetting.levelcommision[1]">
+          <el-input v-model.number="commonSetting.levelcommision[1]" maxlength="5" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="三级代理佣金比例">
-          <el-input v-model.number="commonSetting.levelcommision[2]">
+          <el-input v-model.number="commonSetting.levelcommision[2]" maxlength="5" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="平台佣金比例">
-          <el-input v-model.number="commonSetting.levelcommision[3]">
+          <el-input v-model.number="commonSetting.levelcommision[3]"  maxlength="5" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
@@ -32,23 +32,23 @@
     <section class="tool-bar">
       <el-form inline label-width="180px">
         <el-form-item label="升级所需人数/比例">
-          <el-input v-model.number="commonSetting.invitenum">
+          <el-input v-model.number="commonSetting.invitenum" maxlength="11" >
           </el-input>
-          <el-input v-model.number="commonSetting.invitenumscale">
+          <el-input v-model.number="commonSetting.invitenumscale" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="升级所需团队总额/比例">
-          <el-input v-model.number="commonSetting.groupsale">
+          <el-input v-model.number="commonSetting.groupsale" maxlength="11" >
           </el-input>
-          <el-input v-model.number="commonSetting.groupsalescale">
+          <el-input v-model.number="commonSetting.groupsalescale" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="升级所需个人总额/比例">
-          <el-input v-model.number="commonSetting.pesonalsale">
+          <el-input v-model.number="commonSetting.pesonalsale" maxlength="11" >
           </el-input>
-          <el-input v-model.number="commonSetting.pesonalsalescale">
+          <el-input v-model.number="commonSetting.pesonalsalescale" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
@@ -61,22 +61,22 @@
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="1-2">
-          <el-input v-model.number="commonSetting.reduceratio[0]">
+          <el-input v-model.number="commonSetting.reduceratio[0]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="2-3">
-          <el-input v-model.number="commonSetting.reduceratio[1]">
+          <el-input v-model.number="commonSetting.reduceratio[1]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="3-4">
-          <el-input v-model.number="commonSetting.reduceratio[2]">
+          <el-input v-model.number="commonSetting.reduceratio[2]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="4-5">
-          <el-input v-model.number="commonSetting.reduceratio[3]">
+          <el-input v-model.number="commonSetting.reduceratio[3]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
@@ -90,22 +90,22 @@
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="1-2">
-          <el-input v-model.number="commonSetting.increaseratio[0]">
+          <el-input v-model.number="commonSetting.increaseratio[0]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="2-3">
-          <el-input v-model.number="commonSetting.increaseratio[1]">
+          <el-input v-model.number="commonSetting.increaseratio[1]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="3-4">
-          <el-input v-model.number="commonSetting.increaseratio[2]">
+          <el-input v-model.number="commonSetting.increaseratio[2]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
         <el-form-item label="4-5">
-          <el-input v-model.number="commonSetting.increaseratio[3]">
+          <el-input v-model.number="commonSetting.increaseratio[3]" maxlength="11" >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
@@ -135,21 +135,21 @@
       <el-table-column label="手机号" align="center" prop="ustelphone"></el-table-column>
       <el-table-column label="一级佣金比例" align="center" prop="usname">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.uscommission1" style="width: 140px;">
+          <el-input v-model.number="scope.row.uscommission1" maxlength="5"  style="width: 140px;">
             <template slot="append">%</template>
           </el-input>
         </template>
       </el-table-column>
       <el-table-column label="二级佣金比例" align="center" prop="usname">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.uscommission2" style="width: 140px;">
+          <el-input v-model.number="scope.row.uscommission2" maxlength="5" style="width: 140px;">
             <template slot="append">%</template>
           </el-input>
         </template>
       </el-table-column>
       <el-table-column label="三级佣金比例" align="center" prop="usname">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.uscommission3" style="width: 140px;">
+          <el-input v-model.number="scope.row.uscommission3" maxlength="5" style="width: 140px;">
             <template slot="append">%</template>
           </el-input>
         </template>
