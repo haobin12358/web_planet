@@ -12,7 +12,7 @@
       <div class="m-product-detail-info">
         <h3 v-if="user.uslevel == 2">
           <span class="m-profict-title">预计赚：</span>
-          <span class="m-red">￥{{product_info.profict | money}}</span>
+          <span class="m-red">￥{{product_info.profict}}</span>
         </h3>
         <h3>
           <span class="m-product-title">{{product_info.prtitle}}</span>
@@ -226,6 +226,9 @@
                this.product_info.praveragescore = this.product_info.praveragescore / 2;
                if(this.product_info.prtitle.length > 27) {
                  this.product_info.prtitle = this.product_info.prtitle.slice(0, 27) + '...'
+               }
+               if(this.product_info.profict) {
+                 this.product_info.profict = this.product_info.profict.toString().slice(0, 5) + '...'
                }
              }
            },error => {
