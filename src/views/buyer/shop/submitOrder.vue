@@ -202,7 +202,7 @@
             this.product_info[i].prfreight += this.product_info[i].cart[j].product.prfreight;
             this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
           }
-          this.total_money = this.total_money + this.product_info[i].total;
+          this.total_money = this.total_money + this.product_info[i].total + this.product_info[i].prfreight;
         }
         // 判断是否是从商家大礼包来结算的
         if(this.$route.query.gift) {

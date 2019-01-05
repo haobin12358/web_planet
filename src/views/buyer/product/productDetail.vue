@@ -274,7 +274,7 @@
             let product = {};
             product.pb = this.product_info.brand;
             product.cart = [];
-            product.cart.push({product:{prtitle:this.product_info.prtitle},sku:this.select_value,canums:this.canums,prid:this.product_info.prid});
+            product.cart.push({product:{prtitle:this.product_info.prtitle,prfreight:this.product_info.prfreight},sku:this.select_value,canums:this.canums,prid:this.product_info.prid});
             let arr = [];
             arr.push(product);
             this.$router.push({path:'/submitOrder',query:{product:JSON.stringify(arr)}});
