@@ -1,4 +1,4 @@
-import { Loading, Message, MessageBox } from 'element-ui'
+import { Loading, Message, MessageBox,Notification } from 'element-ui'
 import axios from 'axios'
 import store from "../store";
 
@@ -38,6 +38,10 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       showClose: true,
     })
   }
+  // if(data.data.status == '404' && data.data.status_code == '405004'){
+  //   location.href = location.origin;
+  //   localStorage.setItem('token', '');
+  // }
 
   return data
 }, error => {
