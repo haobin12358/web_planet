@@ -22,14 +22,14 @@
           <table-cell-img :src="scope.row.pcpic" :key="scope.row.pcpic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="顶部图片" align="center">
+      <el-table-column label="顶部图片" align="center" width="240">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
+          <table-cell-img width="141px" :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="排序" align="center" width="150" prop="pcsort">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.pcsort" @keyup.native.enter="changeCaSort(scope.row)" ></el-input>
+          <el-input v-model="scope.row.pcsort" maxlength="11" @keyup.native.enter="changeCaSort(scope.row)" ></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
@@ -58,7 +58,7 @@
           <el-input v-model="categroyForm.pcdesc"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="pcsort">
-          <el-input v-model.number="categroyForm.pcsort" style="width: 200px;"></el-input>
+          <el-input v-model.number="categroyForm.pcsort" maxlength="11" style="width: 200px;"></el-input>
         </el-form-item>
 
         <el-form-item label="图片" prop="pcpic">
@@ -301,31 +301,35 @@
       },
 
       changeCaSort(row){
-        let updateRow = {
-          pcid: row.pcid,
-          parentpcid: row.parentpcid,
-          pcname: row.pcname,
-          pcdesc: row.pcdesc,
-          pcsort: row.pcsort,
-          pcpic: row.pcpic,
-          pctoppic: row.pctoppic,
-        }
+        if(natureNumberReg.test(row.pcsort)){
+          let updateRow = {
+            pcid: row.pcid,
+            parentpcid: row.parentpcid,
+            pcname: row.pcname,
+            pcdesc: row.pcdesc,
+            pcsort: row.pcsort,
+            pcpic: row.pcpic,
+            pctoppic: row.pctoppic,
+          }
 
-        this.$http.post(this.$api.update_category, updateRow).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
+          this.$http.post(this.$api.update_category, updateRow).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
                   data = res.data.data;
 
-              this.$notify({
-                title: `排序改动成功`,
-                message: `分类名称:${row.pcname}`,
-                type: 'success'
-              });
-              this.setCategory();
+                this.$notify({
+                  title: `排序改动成功`,
+                  message: `分类名称:${row.pcname}`,
+                  type: 'success'
+                });
+                this.setCategory();
+              }
             }
-          }
-        );
+          );
+        }else {
+          this.$message.warning('请输入合理排序值');
+        }
       },
 
       //  初始化表单

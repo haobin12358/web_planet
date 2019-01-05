@@ -32,20 +32,20 @@
           <!--<block-title title="基本信息"></block-title>-->
 
           <el-form-item  label="商品名称" prop="tctitle">
-            <el-input v-model.trim="formData.tctitle"></el-input>
+            <el-input v-model.trim="formData.tctitle" maxlength="1000"></el-input>
           </el-form-item>
           <el-form-item label="商品描述" prop="tcdescription">
             <el-input v-model.trim="formData.tcdescription"></el-input>
           </el-form-item>
           <el-form-item label="运费" prop="tcfreight">
-            <el-input v-model.number="formData.tcfreight" style="width: 200px;"></el-input>
+            <el-input v-model.number="formData.tcfreight" maxlength="11" style="width: 200px;"></el-input>
           </el-form-item>
 
           <el-form-item id="2" label="押金" prop="tcdeposit">
-            <el-input v-model.number="formData.tcdeposit" style="width: 200px;"></el-input>
+            <el-input v-model.number="formData.tcdeposit" maxlength="11" style="width: 200px;"></el-input>
           </el-form-item>
           <el-form-item label="押金期限(天)" prop="tcdeadline">
-            <el-input v-model.number="formData.tcdeadline" style="width: 200px;"></el-input>
+            <el-input v-model.number="formData.tcdeadline" maxlength="11" style="width: 200px;"></el-input>
           </el-form-item>
           <el-form-item label="申请的活动期间" required>
             <el-col :span="11">
@@ -63,7 +63,7 @@
             </el-col>
           </el-form-item>
           <el-form-item label="备注(商品列表说明)" prop="tcremarks">
-            <el-input v-model.number="formData.tcremarks"></el-input>
+            <el-input v-model="formData.tcremarks"></el-input>
           </el-form-item>
 
           <el-form-item label="商品规格" required>
@@ -124,7 +124,7 @@
               </el-table-column>
               <el-table-column label="库存" prop="stock" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model.number="scope.row.skustock"></el-input>
+                  <el-input v-model.number="scope.row.skustock"  maxlength="11" ></el-input>
                 </template>
               </el-table-column>
 

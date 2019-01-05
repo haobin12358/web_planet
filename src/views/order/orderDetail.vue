@@ -57,7 +57,7 @@
                  size="medium">
           <template v-if="order.omstatus == 0">
             <el-form-item label="新订单价格" prop="price">
-              <el-input v-model.number="actionForm.price"></el-input>
+              <el-input v-model.number="actionForm.price"  maxlength="11" ></el-input>
             </el-form-item>
           </template>
           <template v-else>
