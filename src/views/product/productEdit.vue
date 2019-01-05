@@ -314,6 +314,7 @@
 
     data() {
       return {
+        repeat: true,
         goToIndexAfterSave: false,
 
         formData: {
@@ -935,8 +936,16 @@
 
     //  新增编辑共用一个,光新增和prid不变时不会重置数据,
     activated() {
+      if (this.repeat) {
+        this.repeat = false;
+      } else {
+        this.init()
+      }
+    },
+    mounted() {
       this.init()
     },
+
   }
 </script>
 

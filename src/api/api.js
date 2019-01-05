@@ -21,6 +21,7 @@ const api = {
   delete_product: title + 'product/delete_list',                          //删除商品
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
+  resubmit_product: title + 'product/resubmit_product',                   //重新提交审核商品
 
   category_list: title + 'category/list',                                 //获取类目
   create_category: title + 'category/create',                             //新增类目
@@ -146,6 +147,7 @@ const api = {
   add_permission: title + 'approval/add_permission',                       // 给权限标签赋予权限
   add_adminpermission: title + 'approval/add_adminpermission',             // 绑定审批权限标签和管理员
   get_permission_admin_list: title + 'approval/get_permission_admin_list', // 获取审批权限下管理员列表
+  delete_permission: title + 'approval/delete_permission',                  // 删除审批,多用途  pt:整个,pe:等级,pi标签
 
 
 };

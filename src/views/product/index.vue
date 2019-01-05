@@ -56,7 +56,7 @@
           <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="prtitle" label="商品名" width="280"></el-table-column>
+      <el-table-column align="center" prop="prtitle" label="商品名" width="280" show-overflow-tooltip></el-table-column>
       <el-table-column align="center" prop="prprice" sortable label="价格" width="120"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
       <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
@@ -89,13 +89,21 @@
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
+          <el-popover placement="top-start" title="提示" width="200" trigger="hover"  :open-delay="300">
+            商品修改后会重新进行审批(5分钟自动通过)
+            <el-button slot="reference" type="text" @click="doEdit(scope.row)">编辑</el-button>
+          </el-popover>
           <el-button v-if="scope.row.prstatus == 0" type="text" class="warning-text"
                      @click="doUnShelveOne(scope.row)">下架
           </el-button>
           <el-button v-if="scope.row.prstatus == 60" type="text" class="success-text"
                      @click="doOnShelveOne(scope.row)">上架
           </el-button>
+          <el-button v-if="scope.row.prstatus == 30" type="text" class="success-text"
+                     @click="doResubmit(scope.row)">重新提交
+          </el-button>
+          <el-button type="text" class="danger-text" @click="doDeleteOne(scope.row)">删除</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -135,6 +143,8 @@
 
     data() {
       return {
+        repeat: true,
+
         //  查询表单用
         brandOptions: [],
         categoryOptions: [],
@@ -285,8 +295,8 @@
 
         return rst
       },
-      showNoPassReason(row){
-        this.$http.get(this.$api.list_approval_notes,{
+      showNoPassReason(row) {
+        this.$http.get(this.$api.list_approval_notes, {
           params: {
             ptid: 'toshelves',
             avcontent: row.prid,
@@ -342,16 +352,60 @@
         })
       },
 
+      doResubmit(row) {
+        this.$confirm(`确认提交商品(${row.tctitle})申请?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.resubmit_product, {
+              prid: row.prid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '商品提交成功',
+                    message: `商品名:${row.tctitle}`,
+                    type: 'success'
+                  });
+                  this.getProductList();
+                }
+              }
+            )
+          }
+        )
+      },
+      doDeleteOne(row) {
+        this.$confirm(`确认删除商品(${row.prtitle})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.delete_product, {
+              prids: [row.prid],
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.getProduct();
+                  this.$notify({
+                    title: '商品删除成功',
+                    message: `商品名:${row.prtitle}`,
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
       //  下架1个
       doUnShelveOne(row) {
         this.doOneShelveAction([row], false);
       },
-
       //  上架1个
       doOnShelveOne(row) {
         this.doOneShelveAction([row], true);
       },
-
       /**
        * 批量上下架商品
        * @param prid
@@ -387,9 +441,34 @@
         )
       },
       doUnShelveSelect() {
-        let prids = this.selectedRows.map(item => item.prid);
+        if (this.selectedRows.some(item => item.prstatus != 0)) {
+          this.$message.warning('批量下架的商品必须全部是上架中的')
+        } else {
+          let prids = this.selectedRows.map(item => item.prid),
+            prtitles = this.selectedRows.map(item => item.prtitle).join(' , ');
 
-        console.log(prids);
+          this.$confirm(`确认下架商品(${prtitles})?`, '提示').then(
+            () => {
+              this.$http.post(this.$api.off_shelves_product, {
+                prids,
+                status: 60,
+              }).then(
+                res => {
+                  if (res.data.status == 200) {
+                    let resData = res.data,
+                      data = res.data.data;
+
+                    this.getProduct();
+                    this.$notify({
+                      title: '商品下架成功',
+                      type: 'success'
+                    });
+                  }
+                }
+              )
+            }
+          )
+        }
       },
       doDeleteSelect() {
         let prids = this.selectedRows.map(item => item.prid),
@@ -407,7 +486,7 @@
 
                   this.getProduct();
                   this.$notify({
-                    title: '商品下架成功',
+                    title: '商品删除成功',
                     type: 'success'
                   });
                 }
@@ -444,6 +523,16 @@
     },
 
     activated() {
+      if (this.repeat) {
+        this.repeat = false;
+      } else {
+        this.getProduct()
+        this.getCategory();
+        this.getBrand();
+      }
+    },
+
+    created() {
       this.getProduct()
       this.getCategory();
       this.getBrand();
