@@ -24,22 +24,22 @@
             </div>
             <template v-for="(item,i) in items.cart" >
               <div class="m-shop-product">
-                <div class="m-product-info" @click="changeRoute('product',item)">
+                <div class="m-product-info">
                   <span class="m-icon-radio m-radio-margin" :class="item.active?'active':''" @click.stop="radioClick('product',index,i)"></span>
-                  <img :src="item.sku.skupic" class="m-product-img" alt="">
+                  <img :src="item.sku.skupic" class="m-product-img" alt="" @click="changeRoute('product',item)">
                   <div class="m-text-info">
-                    <h3>{{item.product.prtitle}}</h3>
-                    <p class="m-product-sku-select-p">
-                  <span class="m-product-sku-select" @click.stop="skuSelect(index,i,item)">
-                    <template v-for="(key,k) in item.sku.skuattritedetail" >
-                      <span >{{key}}</span>
-                      <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
-                    </template>
-                    <span class="m-sku-more"></span>
-                  </span>
+                    <h3 @click="changeRoute('product',item)">{{item.product.prtitle}}</h3>
+                    <p class="m-product-sku-select-p" @click="changeRoute('product',item)">
+                      <span class="m-product-sku-select" @click.stop="skuSelect(index,i,item)">
+                        <template v-for="(key,k) in item.sku.skuattritedetail" >
+                          <span >{{key}}</span>
+                          <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
+                        </template>
+                        <span class="m-sku-more"></span>
+                      </span>
                     </p>
                     <div class="m-sku-num">
-                      <span class="m-red">￥{{item.sku.skuprice | money}}</span>
+                      <span class="m-red" @click="changeRoute('product',item)">￥{{item.sku.skuprice | money}}</span>
                       <div class="m-num">
                         <span class="m-icon-cut" @click.stop="changeNum(-1,index,i)"></span>
                         <input type="number" v-model="item.canums" class="m-num-input" >
@@ -92,7 +92,7 @@
     };
   })('scroll');
     export default {
-      name: 'shopIndex',
+      name: 'ShopIndex',
       data() {
         return {
           cart_list: [],
