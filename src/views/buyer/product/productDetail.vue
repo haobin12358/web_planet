@@ -195,7 +195,8 @@
            if(v == '/evaluate'){
              this.$router.push({path:v,query:{prid:this.product_info.prid}});
            }else{
-             this.$router.push(v);
+             sessionStorage.setItem('shop', true);
+             this.$router.push('/selected');
            }
         },
         // 预览图片

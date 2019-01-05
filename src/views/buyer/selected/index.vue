@@ -256,6 +256,10 @@
         this.getBrand();
         this.getScene();
         this.getCategory();
+        if(sessionStorage.getItem('shop')) {
+          this.$router.push('/shop');
+          sessionStorage.removeItem('shop')
+        }
       },
       methods: {
         /*获取轮播图*/
@@ -328,9 +332,6 @@
         loadTop(){
           this.reload();
         }
-      },
-      created() {
-
       }
     }
 </script>
