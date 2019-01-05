@@ -314,6 +314,7 @@
 
     methods: {
       doSearch() {
+        this.currentPage = 1;
         this.setOrderList();
       },
       doReset() {

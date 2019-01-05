@@ -1,10 +1,13 @@
 <template>
   <div class="container">
     <el-table :data="tableData" v-loading="loading">
-      <el-table-column label="圈子" align="center">
-        <template slot-scope="scope">
-          <el-button type="text" class="preview-button" @click="preview(scope.row)">详情预览</el-button>
-        </template>
+      <el-table-column label="审批内容" align="center">
+        <el-table-column label="资讯标题"  prop="content.netitle" align="center"></el-table-column>
+        <el-table-column label="预览" align="center">
+            <template slot-scope="scope">
+              <preview-circle :circle="scope.row.content"></preview-circle>
+            </template>
+          </el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
@@ -21,14 +24,15 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left"
+                      trigger="click" @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
                 <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -49,11 +53,14 @@
 </template>
 
 <script>
+  import PreviewCircle from "../circle/components/previewCircle";
+
+
   //  topublish
   export default {
     name: 'CircleAudit',
 
-    components: {},
+    components: {PreviewCircle},
 
     data() {
       return {
@@ -74,7 +81,7 @@
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
           params: {
-            page_size:this.pageSize,
+            page_size: this.pageSize,
             page_num: this.currentPage,
 
             ptid: 'topublish',
@@ -106,18 +113,18 @@
       tagsType(status) {
         switch (status) {
           case -20:
-            return {label: '已取消',type: 'info'};
+            return {label: '已取消', type: 'info'};
           case -10:
-            return {label: '已拒绝',type: 'danger'};
+            return {label: '已拒绝', type: 'danger'};
           case 0:
-            return {label: '审核中',type: 'primary'};
+            return {label: '审核中', type: 'primary'};
           case 10:
-            return {label: '已通过',type: 'success'};
+            return {label: '已通过', type: 'success'};
         }
       },
 
-      showStep(row){
-        this.$http.get(this.$api.get_approvalnotes,{
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
           params: {
 
 
@@ -135,7 +142,7 @@
         )
       },
 
-      preview(row){
+      preview(row) {
         console.log(row);
       },
 

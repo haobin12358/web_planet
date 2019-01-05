@@ -100,6 +100,7 @@ const api = {
   del_commodity: title + 'commodity/del',                                 // 删除试用商品
   cancel_commodity: title + 'commodity/cancel',                           // 撤销试用商品
   resubmit_commodity: title + 'commodity/resubmit',                       // 重新提交试用商品
+  shelves_commodity: title + 'commodity/shelves',                         // 下架试用商品
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情

@@ -15,7 +15,7 @@
 
 
   export default {
-    name: 'approvalSetting',
+    name: 'ApprovalSetting',
 
     components: {TwoSettingTable},
 

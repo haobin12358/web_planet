@@ -2,7 +2,30 @@
   <div class="container">
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
+        <el-table-column type="index"></el-table-column>
+        <el-table-column align="center" width="120" label="图片">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content.tcmainpic" :key="scope.row.content.tcid"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="content.tctitle" label="商品名" width="280"></el-table-column>
+        <el-table-column align="center" prop="content.brand.pbname" label="品牌" width="180"></el-table-column>
+        <el-table-column align="center" prop="content.tcdeposit" label="押金/期限(天)" width="180">
+          <template slot-scope="scope">
+            {{scope.row.content.tcdeposit + ' / ' + scope.row.content.tcdeadline}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="content.tcstocks" label="库存" width="120"></el-table-column>
+        <el-table-column align="center" prop="content.tcsalesvalue" label="销量" width="120"></el-table-column>
+        <el-table-column align="center" prop="content.tcdeposit" label="活动时间(执行)" width="280">
+          <template slot-scope="scope" v-if="scope.row.content.agreestarttime">
+            {{scope.row.content.agreestarttime + ' - ' + scope.row.content.agreeendtime}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="content.tcdescription" label="商品描述" width="180"
+                         show-overflow-tooltip></el-table-column>
       </el-table-column>
+
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
       </el-table-column>
@@ -47,11 +70,13 @@
 </template>
 
 <script>
+  import TableCellImg from "src/components/TableCellImg";
+
   //  totrialcommodity
   export default {
     name: "TrialProductAudit",
 
-    components: {},
+    components: {TableCellImg},
 
     data() {
       return {

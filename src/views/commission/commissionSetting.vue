@@ -284,6 +284,7 @@
       },
 
       doSearch() {
+        this.currentPage = 1;
         this.getAllUserCommission();
       },
       doReset() {

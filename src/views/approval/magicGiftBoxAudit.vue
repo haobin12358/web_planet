@@ -2,6 +2,17 @@
   <div class="container">
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
+        <el-table-column label="商品规格图片" align="center" prop="prdescription">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content.skupic" :key="scope.row.content.skupic"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column label="品牌" align="center" prop="content.pbname"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.prtitle" show-overflow-tooltip></el-table-column>
+        <el-table-column label="参与日期" align="center" prop="content.mbastarttime"></el-table-column>
+        <el-table-column label="参与价格" align="center" prop="content.skuprice"></el-table-column>
+        <el-table-column label="参与数量" align="center" prop="content.skustock"></el-table-column>
+        <el-table-column label="申请状态" align="center" prop="content.mbastatus_zh"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
@@ -46,11 +57,13 @@
 </template>
 
 <script>
+  import TableCellImg from "src/components/TableCellImg";
+
   //  tomagicbox
   export default {
     name: "MagicGiftBoxAudit",
 
-    components: {},
+    components: {TableCellImg},
 
     data() {
       return {

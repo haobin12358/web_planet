@@ -269,7 +269,7 @@ export const asyncRouterMap = [
         path: 'returnProductAudit',
         name: 'ReturnProductAudit',
         component: () => import('src/views/approval/returnProductAudit'),
-        meta: {title: '退货审批',noCache: false,roles: level1}
+        meta: {title: '退货审批',icon: 'yes',noCache: false,roles: level1}
       }, {
         path: 'returnProdOrderDetail',
         name: 'ReturnProdOrderDetail',
@@ -286,7 +286,7 @@ export const asyncRouterMap = [
         path: 'productAudit',
         name: 'ProductAudit',
         component: () => import('src/views/approval/productAudit'),
-        meta: {title: '供应商商品审批',noCache: true, roles: level2}
+        meta: {title: '普通商品审批',noCache: true, roles: level2}
       }, {
         path: 'circleAudit',
         name: 'CircleAudit',
@@ -299,17 +299,17 @@ export const asyncRouterMap = [
         path: 'firstOrderActiAudit',
         name: 'FirstOrderActiAudit',
         component: () => import('src/views/approval/firstOrderActiAudit'),
-        meta: {title: '新人首单活动商品申请',noCache: true, roles: level2}
-      },{
-        path: 'magicGiftBoxAudit',
-        name: 'MagicGiftBoxAudit',
-        component: () => import('src/views/approval/magicGiftBoxAudit'),
-        meta: {title: '魔术礼盒活动商品申请',noCache: true, roles: level2}
+        meta: {title: '新人首单活动商品审批',noCache: true, roles: level2}
       },{
         path: 'guessActiAudit',
         name: 'GuessActiAudit',
         component: () => import('src/views/approval/guessActiAudit'),
-        meta: {title: '猜数字活动商品申请',noCache: true, roles: level2}
+        meta: {title: '每日竞猜活动商品审批',noCache: true, roles: level2}
+      },{
+        path: 'magicGiftBoxAudit',
+        name: 'MagicGiftBoxAudit',
+        component: () => import('src/views/approval/magicGiftBoxAudit'),
+        meta: {title: '魔术礼盒活动商品审批',noCache: true, roles: level2}
       },{
         path: 'trialProductAudit',
         name: 'TrialProductAudit',
@@ -402,12 +402,12 @@ export const asyncRouterMap = [
         path: 'manager',
         name: 'Manager',
         component: () => import('src/views/setting/manager'),
-        meta: {title: '管理员',noCache: true, roles: level3}
+        meta: {title: '管理员',icon: 'yes',noCache: true, roles: level3}
       }, {
         path: 'approvalSetting',
         name: 'ApprovalSetting',
         component: () => import('src/views/setting/approvalSetting'),
-        meta: {title: '审批流',noCache: true, roles: level2}
+        meta: {title: '审批流',noCache: false, roles: level2}
       }
     ]
   },
