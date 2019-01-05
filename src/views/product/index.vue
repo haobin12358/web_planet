@@ -219,6 +219,7 @@
       },
 
       doSearch() {
+        this.currentPage = 1;
         this.getProduct();
       },
       doReset() {
@@ -296,7 +297,7 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.noPassReason = data.notes[data.notes.length-1].anabo
+              this.noPassReason = data.notes[0].anabo
             }
           }
         )

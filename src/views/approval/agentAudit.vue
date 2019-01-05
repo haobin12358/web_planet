@@ -2,17 +2,27 @@
   <div class="container">
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
-        <!--<el-table-column label="银行名" prop="content.cnbankname" align="center"></el-table-column>-->
-        <!--<el-table-column label="开户人" prop="content.cncardname" align="center"></el-table-column>-->
-        <!--<el-table-column label="卡号" prop="content.cncardno" align="center"></el-table-column>-->
+        <el-table-column align="center" width="120" label="头像">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.start.usheader" :key="scope.row.start.usheader"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column label="姓名" prop="start.usrealname" align="center" width="120"></el-table-column>
+        <el-table-column label="手机号" prop="start.ustelphone" align="center" width="120"></el-table-column>
+        <el-table-column label="性别" prop="start.usgender" align="center" width="120">
+          <template slot-scope="scope">
+            {{scope.row.start.usgender == '0' ? '男' : '女'}}
+          </template>
+        </el-table-column>
+        <el-table-column label="身份证号" prop="start.usidentification" align="center" width="220"></el-table-column>
         <!--<el-table-column label="金额" prop="content.cncashnum" align="center"></el-table-column>-->
         <!--<el-table-column label="备注" prop="content.cnbankdetail" align="center"></el-table-column>-->
       </el-table-column>
       <el-table-column label="发起人" align="center">
-        <el-table-column label="姓名" prop="start.usname" align="center"></el-table-column>
+        <el-table-column label="姓名" prop="start.usname" align="center" width="120"></el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center"></el-table-column>
-      <el-table-column label="状态" prop="avlevel" align="center">
+      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="状态" prop="avlevel" align="center" fixed="right">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
         </template>
@@ -52,11 +62,13 @@
 </template>
 
 <script>
+  import TableCellImg from "src/components/TableCellImg";
+
   //  toagent
   export default {
     name: 'AgentAudit',
 
-    components: {},
+    components: {TableCellImg},
 
     data() {
       return {

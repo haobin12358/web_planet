@@ -421,6 +421,7 @@
       },
 
       doSearch() {
+        this.currentPage = 1;
         this.setBrandList();
       },
       doReset() {

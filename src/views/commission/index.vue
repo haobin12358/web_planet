@@ -99,6 +99,7 @@
 
     methods: {
       doSearch(){
+        this.currentPage = 1;
         this.getUserCommissionList();
       },
       doReset(){
@@ -147,6 +148,7 @@
       showFansList(row){
         this.fansDlgVisible = true;
 
+        this.currentFansPage = 1;
         this.usid = row.usid;
         this.getFansList();
       },

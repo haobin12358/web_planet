@@ -40,9 +40,15 @@
           {{scope.row.tcdeposit + ' / ' + scope.row.tcdeadline}}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="prstatus_zh" label="状态" width="120">
+      <el-table-column align="center" prop="prstatus_zh" label="状态" width="180">
         <template slot-scope="scope">
-          <el-tag :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
+          <el-popover
+            v-if="scope.row.reject_reason"
+            placement="top-start" title="拒绝理由" width="200" trigger="click">
+            {{scope.row.reject_reason}}
+            <el-tag slot="reference" :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
+          </el-popover>
+          <el-tag v-else :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="tcstocks" label="库存" width="120"></el-table-column>
@@ -72,6 +78,7 @@
             <el-button  type="text" class="success-text" @click="doResubmit(scope.row)">重新提交</el-button>
             <el-button  type="text" class="danger-text" @click="doDelete(scope.row)">删除</el-button>
           </template>
+          <el-button v-if="scope.row.tcstatus == 0" type="text" class="warning-text" @click="doShelves(scope.row)">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -150,13 +157,16 @@
             value: 'all',
             label: '全部',
           }, {
+            value: 'cancel',
+            label: '已撤销',
+          },  {
             value: 'upper',
             label: '上架中',
           }, {
             value: 'auditing',
             label: '审核中',
           }, {
-            value: 'off_shelves',
+            value: 'reject',
             label: '已下架',
           },
         ],
@@ -207,6 +217,7 @@
     },
     methods: {
       doSearch() {
+        this.currentPage = 1;
         this.getProductList();
       },
       doReset() {
@@ -340,6 +351,30 @@
 
                   this.$notify({
                     title: '试用商品删除成功',
+                    message: `商品名:${row.tctitle}`,
+                    type: 'success'
+                  });
+                  this.getProductList();
+                }
+              }
+            )
+          }
+        )
+
+      },
+      doShelves(row){
+        this.$confirm(`确认下架试用商品(${row.tctitle})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.shelves_commodity,{
+              tcids: [row.tcid]
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '试用商品下架成功',
                     message: `商品名:${row.tctitle}`,
                     type: 'success'
                   });

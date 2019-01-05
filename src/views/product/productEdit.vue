@@ -201,7 +201,7 @@
           :multiple="true">
           <i class="el-icon-plus"></i>
           <div slot="tip" class="el-upload__tip">
-            <span>可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+            <span>可多选,建议尺寸为375x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
             <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
           </div>
         </el-upload>

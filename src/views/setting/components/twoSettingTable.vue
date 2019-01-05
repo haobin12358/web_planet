@@ -195,6 +195,7 @@
       },
       doEditItemAds(row){
         this.resetForm();
+        this.form.ad_list = row.adminList
         this.editType = '2';
         this.dlgVisible = true;
       },
