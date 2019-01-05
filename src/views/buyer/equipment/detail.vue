@@ -30,7 +30,7 @@
         </div>
         <div class="m-equipment-detail-content">
           <div v-if="category_list" v-for="(item,index) in category_list">
-            <div class="m-line">
+            <div class="m-line" v-if="item.subs">
               <p class="m-line-name">
                 <span >{{item.pcname}}</span>
               </p>
@@ -147,7 +147,7 @@
       min-height: 100%;
       .m-line{
         .m-line-name{
-          text-align: right;
+          /*text-align: right;*/
         }
       }
       .m-equipment-info{
