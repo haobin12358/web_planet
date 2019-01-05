@@ -202,7 +202,11 @@
             this.product_info[i].prfreight += this.product_info[i].cart[j].product.prfreight;
             this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
           }
-          this.total_money = this.total_money + this.product_info[i].total + this.product_info[i].prfreight;
+          if(this.product_info[i].prfreight) {
+            this.total_money = this.total_money + this.product_info[i].total + this.product_info[i].prfreight
+          }else {
+            this.total_money = this.total_money + this.product_info[i].total
+          }
         }
         // 判断是否是从商家大礼包来结算的
         if(this.$route.query.gift) {
@@ -463,7 +467,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
 .m-submitOrder{
-  min-height: 100%;
+  min-height: 100vh;
   background-color: #eee;
   padding: 17px 25px 100px 25px;
   color: #333;
