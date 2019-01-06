@@ -176,7 +176,7 @@
       },
 
       doRemoveSupplier(row) {
-        this.$confirm(`确认弃用供应商(${row.suname})?其下的品牌及品牌下面的商品也会一并下架!`, '提示',{
+        this.$confirm(`确认弃用供应商(${row.suname})?其下的品牌及品牌下面的商品也会一并删除!`, '提示',{
           type: 'warning'
         }).then(
           ()=>{
@@ -188,6 +188,7 @@
                   let resData = res.data,
                       data = res.data.data;
 
+                  this.getSupplier();
                   this.$notify({
                     title: '供应商删除成功',
                     message: `供应商名称:${row.suname}`,
@@ -218,6 +219,7 @@
                   let resData = res.data,
                       data = res.data.data;
 
+                  this.getSupplier();
                   this.$notify({
                     title: '密码修改成功',
                     message: `供应商:${row.suname}`,

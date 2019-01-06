@@ -44,8 +44,8 @@
       </el-table-column>
       <el-table-column label="状态" width="100" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.pbstatus == 0">上架中</el-tag>
-          <el-tag v-if="scope.row.pbstatus == 1" type="danger">已下架</el-tag>
+          <el-tag v-if="scope.row.pbstatus == 0">已上架</el-tag>
+          <el-tag v-if="scope.row.pbstatus == 10" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
@@ -53,7 +53,7 @@
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditBrand(scope.row)">编辑</el-button>
-          <el-button type="text" v-if="scope.row.pbstatus == 0" class="warning-text" @click="doOffShelvesBrand(scope.row)">下架</el-button>
+          <el-button type="text" v-if="scope.row.pbstatus == 0" class="warning-text" @click="doOffShelvesBrand(scope.row, false)">下架</el-button>
           <el-button type="text" v-if="scope.row.pbstatus == 10" class="success-text" @click="doOffShelvesBrand(scope.row, true)">上架</el-button>
           <el-button type="text" class="danger-text" @click="doDeleteBrand(scope.row)">
             删除
@@ -233,7 +233,7 @@
             label: '全部',
           }, {
             value: 'upper',
-            label: '上架中',
+            label: '已上架',
           }, {
             value: 'off_shelves',
             label: '已下架',
@@ -534,11 +534,11 @@
       doOffShelvesBrand(row, up) {
         let type = up ? '上架' : '下架';
 
-        this.$confirm(`确认${type}品牌(${row.pbname})?`, '提示').then(
+        this.$confirm(`确认${type}品牌(${row.pbname})${up? '该品牌下的商品会一并下架':''}?`, '提示').then(
           () => {
             this.$http.post(this.$api.off_shelves_brand, {
               pbid: row.pbid,
-              up: up ? 'up': '',
+              pbstatus: up ? 'up': 'down',
             }).then(
               res => {
                 if (res.data.status == 200) {
@@ -558,7 +558,7 @@
         )
       },
       doDeleteBrand(row) {
-        this.$confirm(`确认删除品牌(${row.pbname})?`, '提示').then(
+        this.$confirm(`确认删除品牌(${row.pbname}),该品牌下的商品会一并删除?`, '提示').then(
           () => {
             this.$http.post(this.$api.delete_brand, {
               pbid: row.pbid

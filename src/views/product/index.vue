@@ -45,7 +45,6 @@
       </section>
     </section>
 
-
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" :cell-class-name="cellFunction"
               @selection-change="handleSelectionChange" @sort-change="handleSortChange">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -58,20 +57,14 @@
       </el-table-column>
       <el-table-column align="center" prop="prtitle" label="商品名" width="280" show-overflow-tooltip></el-table-column>
       <el-table-column align="center" prop="prprice" sortable label="价格" width="120"></el-table-column>
-      <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
-      <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
-        <template slot-scope="scope">
-          {{categoryCellText(scope.row.category)}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
+      <el-table-column align="center" prop="prstocks" label="库存"></el-table-column>
       <el-table-column align="center" prop="prstatus_zh" label="状态" width="120">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.prstatus_zh=='上架中'">{{scope.row.prstatus_zh}}</el-tag>
-          <el-tag v-else-if="scope.row.prstatus_zh=='审核中'" type="warning">{{scope.row.prstatus_zh}}</el-tag>
-          <el-tag v-else-if="scope.row.prstatus_zh=='已下架'" type="danger">{{scope.row.prstatus_zh}}</el-tag>
+          <el-tag v-if="scope.row.prstatus=='0'">{{scope.row.prstatus_zh}}</el-tag>
+          <el-tag v-else-if="scope.row.prstatus=='10'" type="warning">{{scope.row.prstatus_zh}}</el-tag>
+          <el-tag v-else-if="scope.row.prstatus=='60'" type="danger">{{scope.row.prstatus_zh}}</el-tag>
           <el-popover
-            v-else-if="scope.row.prstatus_zh=='审核失败'"
+            v-else-if="scope.row.prstatus=='30'"
             placement="top-start" title="拒绝理由" width="200" trigger="click" @show="showNoPassReason(scope.row)">
             {{noPassReason}}
             <el-tag slot="reference" type="info">{{scope.row.prstatus_zh}}</el-tag>
@@ -79,13 +72,19 @@
           <el-tag v-else type="info">{{scope.row.prstatus_zh}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
+      <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
+        <template slot-scope="scope">
+          {{categoryCellText(scope.row.category)}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">
         <template slot-scope="scope">
           <el-tag :type="scope.row.supplizer === '平台' ? 'primary' : 'success'">{{scope.row.supplizer}}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" prop="prstocks" label="库存"></el-table-column>
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
@@ -159,7 +158,7 @@
             label: '全部',
           }, {
             value: 'usual',
-            label: '上架中',
+            label: '已上架',
           }, {
             value: 'auditing',
             label: '审核中',
