@@ -6,7 +6,7 @@
 
       <ul class="todo-list">
         <template v-if="checkPermission(level2)">
-          <li  class="todo-item" v-for="item in todos" :key="item.ptid">
+          <li  class="todo-item" v-for="item in todos" :key="item.ptid" @click="gotoTodoPage(item)">
             <span class="label">{{item.ptname}}</span>
             <span class="num">{{item.approval_num}}</span>
           </li>
@@ -130,7 +130,7 @@
       </section>
 
       <block-title title="订单趋势"></block-title>
-      <echarts :id="id" :option="option" :width="1300"></echarts>
+      <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
     </template>
   </div>
 </template>
@@ -229,6 +229,32 @@
             }
           }
         )
+      },
+      gotoTodoPage(item){
+        switch (item.ptid) {
+          case 'toactivationcode':
+            this.$router.push('')
+            break;
+            case 'toshelves':
+            break;
+            case 'totrialcommodity':
+            break;
+            case 'toactivationcode':
+            break;
+            case 'toactivationcode':
+            break;
+            case 'toactivationcode':
+            break;
+            case 'toactivationcode':
+            break;
+            case 'toactivationcode':
+            break;
+            case 'toactivationcode':
+            break;
+            case 'toactivationcode':
+            break;
+
+        }
       },
     },
 

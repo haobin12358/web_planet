@@ -184,7 +184,6 @@
               </el-button>
             </template>
             <el-button v-else type="text" @click="gotoReturnOrderDetail(scope.row)">查看</el-button>
-
           </template>
         </template>
       </el-table-column>
