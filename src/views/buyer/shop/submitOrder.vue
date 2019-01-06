@@ -207,6 +207,7 @@
           }else {
             this.total_money = this.total_money + this.product_info[i].total
           }
+          sessionStorage.setItem('total_money', this.total_money);
         }
         // 判断是否是从商家大礼包来结算的
         if(this.$route.query.gift) {
@@ -290,8 +291,8 @@
         couponClick(item) {
           this.product_info[this.index].coupon_info = item;
           this.show_coupon = false;
-          this.product_info[this.index].total = this.product_info[this.index].total - item.reduce;
-          this.total_money = this.total_money - item.reduce;
+          // this.product_info[this.index].total = this.product_info[this.index].total - item.reduce;
+          this.total_money = sessionStorage.getItem('total_money') - item.reduce;
           // 使用无门槛优惠券后付款金额不小于0.01
           if(this.product_info[this.index].total < 0.01) {
             this.product_info[this.index].total = 0.01;
