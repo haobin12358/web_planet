@@ -443,6 +443,7 @@
 .m-circle-content{
   padding: 18px 0 150px 0;
   .m-circle-title{
+    width: 640px;
     font-size: 28px;
     font-weight: bold;
     margin-left: 28px;
