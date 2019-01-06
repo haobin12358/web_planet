@@ -196,6 +196,7 @@
       changeRoute(v,params,value){
         if(v == '/circle/detail'){
           this.$router.push({path:v,query:{neid:params.neid}});
+          sessionStorage.setItem('circleFrom', 'store');
           return false;
         }
         if(params == 'shtype'){
@@ -206,6 +207,7 @@
       },
       /*导航切换*/
       navClick(index){
+        localStorage.setItem('circleIndex', index);
         let arr = [].concat(this.nav_list);
         for(let i=0;i<arr.length;i++){
           arr[i].active = false;
@@ -224,7 +226,29 @@
             ittype:10
           }
         }).then(res => {
-          if(res.data.status == 200){
+          if(res.data.status == 200) {
+            this.nav_list = [
+              {
+                itdesc: "我是描述",
+                itid: "",
+                itname: "全部",
+                itrecommend: true,
+                itsort: null,
+                ittype: 10,
+                active: false,
+                psid: ""
+              },
+              {
+                itdesc: "我是描述",
+                itid: "mynews",
+                itname: "我发布的",
+                itrecommend: true,
+                itsort: null,
+                ittype: 10,
+                active: false,
+                psid: ""
+              }
+            ];
             if(res.data.data.length == 0){
               this.nav_list = this.nav_list.concat([])
             }else{

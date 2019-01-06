@@ -159,7 +159,12 @@
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
-      this.$router.push('/circle');
+      if(sessionStorage.getItem('circleFrom') == 'buyer') {
+        this.$router.push('/circle');
+      }else if(sessionStorage.getItem('circleFrom') == 'store') {
+        this.$router.push('/material/circle');
+      }
+      sessionStorage.removeItem('circleFrom');
     },
     methods: {
       // 分享圈子 - 详情页点击

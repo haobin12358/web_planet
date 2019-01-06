@@ -192,6 +192,7 @@
             return false;
           }else {
             this.$router.push({path:v,query:{neid:params.neid}});
+            sessionStorage.setItem('circleFrom', 'buyer');
             return false;
           }
         }
