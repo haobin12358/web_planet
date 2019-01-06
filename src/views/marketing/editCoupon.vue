@@ -360,10 +360,12 @@
                 return false
               }
             }
-            // 满10减100不允许
-            if(this.couponForm.codownline <= this.couponForm.cosubtration) {
-              this.$message.warning('减额要小于满减条件');
-              return false
+            // 非无条件时 - 满10减100不允许
+            if(this.radioMoney == 1) {
+              if(this.couponForm.codownline <= this.couponForm.cosubtration) {
+                this.$message.warning('减额要小于满减条件');
+                return false
+              }
             }
             // 处理商品
             if(this.productList.length) {
