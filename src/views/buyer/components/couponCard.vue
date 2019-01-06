@@ -138,7 +138,7 @@
             font-size: 46px;
           }
           .m-text-big {
-            font-size: 100px;
+            font-size: 90px;
             font-weight: bold;
           }
           &.m-space {

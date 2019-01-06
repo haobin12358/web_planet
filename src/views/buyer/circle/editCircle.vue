@@ -171,6 +171,13 @@
                   this.couponList[i].title_subtitle.left_text = this.couponList[i].title_subtitle.left_text.substring(0, 8) + "..";
                 }
               }
+              // 显示内容精简
+              for(let i in this.couponList) {
+                if(this.couponList[i].cosubtration.toString().length > 8) {
+                  this.couponList[i].cosubtration = this.couponList[i].cosubtration.toString().slice(0, 3)
+                }
+                this.couponList[i].codiscount = this.couponList[i].codiscount.toString().slice(0, 3)
+              }
             }
           });
         }
