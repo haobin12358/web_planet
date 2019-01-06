@@ -30,15 +30,17 @@ export default {
   created() {
     let url = location.href.split('&from')[0];
     if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
-      location.href = url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1];
+      location.href = url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1]
     }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
-      location.href = url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1];
+      location.href = url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1]
     }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
-      location.href = url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1];
+      location.href = url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1]
     }else if(location.href.indexOf('neid') > 0) {           // 圈子详情 - 在圈子列表页点击的分享
-      location.href = url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1];
+      location.href = url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1]
     }else if(location.href.indexOf('prid') > 0) {           // 商品详情
-      location.href = url.split('?prid')[0] + '#/product/detail?prid' + url.split('?prid')[1];
+      location.href = url.split('?prid')[0] + '#/product/detail?prid' + url.split('?prid')[1]
+    }else if(location.href.indexOf('circleid') > 0) {       // 店主版圈子右上角分享
+      location.href = location.origin
     }
     // 将邀请人的usid保存，等注册的时候使用
     if(!localStorage.getItem('token')) {
@@ -49,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.2.0');
+    console.log('v 0.2.1');
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NjcxOTgyOSwiZXhwIjoxNTQ3MzI0NjI5fQ.eyJpZCI6ImQ1NzM5MzUyLTBiNmMtMTFlOS1hNmVmLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.xvbRIEtWTkebhe2wo5m1BWeX8iG03jvQWTIMb5wsUIg';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');

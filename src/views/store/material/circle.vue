@@ -7,7 +7,7 @@
         <span class="m-icon-search"></span>
         <span>搜索圈子关键词</span>
       </div>
-      <span class="m-icon-share"></span>
+      <span class="m-icon-share" @click="shareIndex"></span>
     </div>
     <span class="m-add-img" @click="changeRoute('/circle/editCircle')"></span>
     <!--轮播图-->
@@ -64,6 +64,7 @@
           </div>
         </template>
         <bottom-line v-if="bottom_show"></bottom-line>
+        <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
       </div>
     </div>
   </div>
@@ -76,6 +77,8 @@
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
   import bottomLine from '../../../components/common/bottomLine';
+  import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
 
   export default {
     data() {
@@ -111,11 +114,13 @@
         isScroll: true,
         total_count: 0,
         bottom_show: false,
+        show_invite: false
       }
     },
     components: { navList, bottomLine },
     mounted() {
       common.changeTitle('素材');
+      wxapi.wxRegister(location.href.split('#')[0]);
     },
     activated() {
       this.getSwipe();
@@ -134,6 +139,51 @@
       }
     },
     methods: {
+      // 分享后点击进入首页
+      shareIndex() {
+        let options = {
+          title: '大行星',
+          desc: '快来大行星查看好友分享给您的精彩内容吧',
+          imgUrl: this.swipe_list[0].mainpic || '',
+          link: location.href.split('#')[0] + '?circleid=index'
+        };
+        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            options.link += '&secret_usid=' + res.data.data.secret_usid;
+            // 点击分享
+            this.show_invite = true;
+          }
+        });
+
+        // 倒计时
+        const TIME_COUNT = 3;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            this.show_invite = false;
+            clearInterval(time);
+          }
+        }, 1000);
+
+        // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+        if(wx.updateAppMessageShareData) {
+          wx.updateAppMessageShareData(options);
+        }
+        // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+        if(wx.updateTimelineShareData) {
+          wx.updateTimelineShareData(options);
+        }
+        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareAppMessage) {
+          wx.onMenuShareAppMessage(options);
+        }
+        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareTimeline) {
+          wx.onMenuShareTimeline(options);
+        }
+      },
       /*获取轮播图*/
       getSwipe() {
         axios.get(api.news_banner).then(res => {
@@ -465,7 +515,14 @@
 
         }
       }
-
+    }
+    .m-invite-course {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
     }
   }
 </style>
