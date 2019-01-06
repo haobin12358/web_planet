@@ -122,6 +122,10 @@
       activated() {
         this.page_info.page_num = 1;
         this.getCart();
+        if(sessionStorage.getItem('shop')) {
+          this.$router.push('/shop');
+          sessionStorage.removeItem('shop')
+        }
       },
       methods: {
         changeRoute(v, item){
