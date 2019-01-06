@@ -81,17 +81,17 @@
         </template>
       </el-table-column>
       <el-table-column prop="omno" align="center" label="订单号" width="280"></el-table-column>
-      <el-table-column prop="pbname" align="center" label="品牌" width="180"></el-table-column>
-      <el-table-column prop="omrecvname" align="center" label="收件人" width="120"></el-table-column>
-      <el-table-column prop="omrecvphone" align="center" label="手机号" width="160"></el-table-column>
-      <el-table-column prop="ommount" label="总价" align="center" width="120"></el-table-column>
-      <el-table-column prop="omfreight" label="运费" align="center" width="120"></el-table-column>
-      <el-table-column prop="omtruemount" label="实付" align="center" width="120"></el-table-column>
       <el-table-column label="订单状态" width="120" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagType(scope.row.omstatus_zh)">{{scope.row.omstatus_zh}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="omtruemount" label="实付" align="center" width="120"></el-table-column>
+      <el-table-column prop="pbname" align="center" label="品牌" width="180"></el-table-column>
+      <el-table-column prop="omrecvname" align="center" label="收件人" width="120"></el-table-column>
+      <el-table-column prop="omrecvphone" align="center" label="手机号" width="160"></el-table-column>
+      <el-table-column prop="ommount" label="总价" align="center" width="120"></el-table-column>
+      <el-table-column prop="omfreight" label="运费" align="center" width="120"></el-table-column>
       <el-table-column label="退款中" width="120" align="center">
         <template slot-scope="scope">
             {{scope.row.ominrefund ? '是':'否'}}
@@ -149,14 +149,14 @@
 
         menuList: [],
 
-        expandAll: true,
+        expandAll: false,
         loading: false,
         orderData: [],
         total: 0,
         currentPage: 1,
         pageSize: 10,
 
-        repeat: false,
+        repeat: true,
       }
     },
 
@@ -169,6 +169,7 @@
         }
       },
       doSearch(){
+        this.expandAll = false;
         this.currentPage = 1;
         this.setOrderList();
       },
@@ -204,7 +205,7 @@
       },
       handleClick(key, keyPath) {
         this.activeName = key;
-        this.expandAll = true;
+        this.expandAll = false;
         this.setOrderList();
       },
 
@@ -285,14 +286,14 @@
         )
       },
       sizeChange(pageSize) {
-        this.expandAll = true;
+        this.expandAll = false;
         this.pageSize = pageSize;
         this.currentPage = 1;
 
         this.setOrderList();
       },
       pageChange(page) {
-        this.expandAll = true;
+        this.expandAll = false;
         this.currentPage = page;
         this.setOrderList();
       },
@@ -342,7 +343,7 @@
     },
 
     activated(){
-      if(!this.repeat){
+      if(this.repeat){
         this.setOrderList();
       }else{
         this.repeat = false;
@@ -350,7 +351,6 @@
     },
 
     created() {
-      this.repeat = true;
       this.setOrderType();
       this.setOrderList();
     }

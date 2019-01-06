@@ -275,23 +275,23 @@ export const asyncRouterMap = [
         name: 'ReturnProdOrderDetail',
         hidden: true,
         component: () => import('src/views/approval/returnProdOrderDetail'),
-        meta: {title: '退货订单详情', noCache: true,roles: level2}
+        meta: {title: '退货订单详情',icon: 'yes', noCache: true,roles: level2}
       },
       {
         path: 'agentAudit',
         name: 'AgentAudit',
         component: () => import('src/views/approval/agentAudit'),
-        meta: {title: '新代理商审批',noCache: true, roles: level2}
+        meta: {title: '新代理商审批',icon: 'yes',noCache: true, roles: level2}
       }, {
         path: 'productAudit',
         name: 'ProductAudit',
         component: () => import('src/views/approval/productAudit'),
-        meta: {title: '普通商品审批',noCache: true, roles: level2}
+        meta: {title: '普通商品审批',icon: 'yes',noCache: true, roles: level2}
       }, {
         path: 'circleAudit',
         name: 'CircleAudit',
         component: () => import('src/views/approval/circleAudit'),
-        meta: {title: '圈子审核',noCache: true, roles: level2}
+        meta: {title: '圈子审核',icon: 'yes',noCache: true, roles: level2}
       },
 
       //  活动
@@ -299,22 +299,22 @@ export const asyncRouterMap = [
         path: 'firstOrderActiAudit',
         name: 'FirstOrderActiAudit',
         component: () => import('src/views/approval/firstOrderActiAudit'),
-        meta: {title: '新人首单活动商品审批',noCache: true, roles: level2}
+        meta: {title: '新人首单活动商品审批',icon: 'yes',noCache: true, roles: level2}
       },{
         path: 'guessActiAudit',
         name: 'GuessActiAudit',
         component: () => import('src/views/approval/guessActiAudit'),
-        meta: {title: '每日竞猜活动商品审批',noCache: true, roles: level2}
+        meta: {title: '每日竞猜活动商品审批',icon: 'yes',noCache: true, roles: level2}
       },{
         path: 'magicGiftBoxAudit',
         name: 'MagicGiftBoxAudit',
         component: () => import('src/views/approval/magicGiftBoxAudit'),
-        meta: {title: '魔术礼盒活动商品审批',noCache: true, roles: level2}
+        meta: {title: '魔术礼盒活动商品审批',icon: 'yes',noCache: true, roles: level2}
       },{
         path: 'trialProductAudit',
         name: 'TrialProductAudit',
         component: () => import('src/views/approval/trialProductAudit'),
-        meta: {title: '试用商品审批',noCache: true, roles: level2}
+        meta: {title: '试用商品审批',icon: 'yes',noCache: true, roles: level2}
       },
     ]
   },
@@ -351,17 +351,17 @@ export const asyncRouterMap = [
         path: 'firstOrder',
         name: 'FirstOrder',
         component: () => import('src/views/activity/firstOrder'),
-        meta: {title: '新人首单',icon: 'yes',noCache: true, roles: level2}
+        meta: {title: '新人首单',icon: 'yes',noCache: true, roles: level1}
       }, {
         path: 'guess',
         name: 'Guess',
         component: () => import('src/views/activity/guess'),
-        meta: {title: '每日竞猜',icon: 'yes',noCache: true, roles: level2}
+        meta: {title: '每日竞猜',icon: 'yes',noCache: true, roles: level1}
       }, {
         path: 'magicGiftBox',
         name: 'MagicGiftBox',
         component: () => import('src/views/activity/magicGiftBox'),
-        meta: {title: '魔术礼盒',icon: 'yes',noCache: true, roles: level2}
+        meta: {title: '魔术礼盒',icon: 'yes',noCache: true, roles: level1}
       },
       {
         path: 'trialProduct',
@@ -407,7 +407,7 @@ export const asyncRouterMap = [
         path: 'approvalSetting',
         name: 'ApprovalSetting',
         component: () => import('src/views/setting/approvalSetting'),
-        meta: {title: '审批流',noCache: false, roles: level2}
+        meta: {title: '审批流',icon: 'yes',noCache: false, roles: level2}
       }
     ]
   },

@@ -27,8 +27,8 @@
           <el-form-item label="联系人" prop="sulinkman">
             <el-input v-model="supplierForm.sulinkman"></el-input>
           </el-form-item>
-          <el-form-item :label="`联系电话${!this.supplierForm.suid? '(同时作为登录账号)' :''}`" prop="sulinkphone">
-            <el-input v-model="supplierForm.sulinkphone"></el-input>
+          <el-form-item label="联系电话" prop="sulinkphone">
+            <el-input v-model="supplierForm.sulinkphone" :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="suaddress">
             <el-input v-model="supplierForm.suaddress"></el-input>
