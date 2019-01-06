@@ -77,8 +77,15 @@
           this.select = this.select_value.skuattritedetail;
           this.num = this.now_num;
         }
-        if(this.product.skuvalue.length ==1) {
-          this.skuSelect(0, this.product.skuvalue[0].value[0]);
+        // 单个sku时自动选中
+        let a = 0;
+        for(let i in this.product.skuvalue) {
+          a += this.product.skuvalue[i].value.length;
+        }
+        if(a == this.product.skuvalue.length) {
+          for(let i in this.product.skuvalue) {
+            this.skuSelect(i, this.product.skuvalue[i].value[0]);
+          }
         }
       },
       methods:{
