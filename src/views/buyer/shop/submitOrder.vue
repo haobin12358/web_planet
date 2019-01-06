@@ -306,10 +306,10 @@
           if(index) {
             this.index = index - 1;
             this.couponList = this.product_info[this.index].couponList;
-            // 显示内容精简
+            // 优惠券显示内容精简
             for(let i in this.couponList) {
-              if(this.couponList[i].cosubtration.toString().length > 8) {
-                this.couponList[i].cosubtration = this.couponList[i].cosubtration.toString().slice(0, 3)
+              if(this.couponList[i].cosubtration.toString().length > 4) {
+                this.couponList[i].cosubtration = 999
               }
               this.couponList[i].codiscount = this.couponList[i].codiscount.toString().slice(0, 3)
             }
