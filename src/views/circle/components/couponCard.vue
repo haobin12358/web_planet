@@ -12,6 +12,7 @@
             <div class="m-detail-left" v-if="item.codiscount == '10'">
               <span class="m-text-small">￥</span>
               <span class="m-text-big">{{item.cosubtration}}</span>
+              <span class="m-text-small" v-if="item.cosubtration == 999">+</span>
             </div>
             <div class="m-detail-left m-space" v-else>
               <span class="m-text-big">{{item.codiscount}}</span>
@@ -117,7 +118,7 @@
             font-size: 23px;
           }
           .m-text-big {
-            font-size: 50px;
+            font-size: 45px;
             font-weight: bold;
           }
           &.m-space {

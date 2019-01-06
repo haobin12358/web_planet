@@ -146,6 +146,13 @@
         this.$http.get(this.$api.get_news_content, { params:{ neid: this.neid }}).then(res => {
           if(res.data.status == 200){
             this.news_info = res.data.data;
+            // 显示内容精简
+            for(let i in this.news_info.coupon) {
+              if(this.news_info.coupon[i].cosubtration.toString().length > 4) {
+                this.news_info.coupon[i].cosubtration = 999
+              }
+              this.news_info.coupon[i].codiscount = this.news_info.coupon[i].codiscount.toString().slice(0, 3)
+            }
             this.detailDialog = true;
           }
         })

@@ -28,7 +28,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="折扣：" prop="codiscount" v-if="radioDiscount == 20">
-            <el-input class="short-input" v-model="couponForm.codiscount">
+            <el-input class="short-input" v-model="couponForm.codiscount" maxlength="3">
               <template slot="append">折</template>
             </el-input>
             <span class="form-item-end-tip" v-if="couponForm.codiscount > 10">折扣数不大于10</span>
