@@ -78,11 +78,14 @@
   @import "../../../common/css/index";
 
   .m-history {
+    min-height: 100vh;
+    background-color: #EEEEEE;
     .m-history-box {
       width: 690px;
       margin: 50px 30px;
       text-align: left;
       .m-history-item {
+        background-color: #ffffff;
         border-radius: 10px;
         box-shadow: 0 5px 6px rgba(0,0,0,0.16);
         display: flex;
