@@ -146,7 +146,11 @@
 
       // 设置当前时间 - 年月
       let now = new Date();
-      this.now = now.getFullYear() + "-" + (now.getMonth() + 1);
+      if((now.getMonth() + 1).toString().length == 1) {
+        this.now = now.getFullYear() + "-0" + (now.getMonth() + 1);
+      }else {
+        this.now = now.getFullYear() + "-" + (now.getMonth() + 1);
+      }
       this.slots[2].defaultIndex = now.getMonth();          // 默认当前月份
       this.getIncomeList();         // 获取店主收益详情
     }
@@ -157,7 +161,7 @@
   @import "../../../common/css/index";
 
   .m-income-detail {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
