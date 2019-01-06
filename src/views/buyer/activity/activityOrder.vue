@@ -114,7 +114,6 @@
         },
         // 导航点击
         navClick(index) {
-          console.log(this.nav_list);
           this.page_info.page_num = 1;
           this.total_count = 0;
           this.bottom_show = false;
@@ -285,7 +284,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../../common/css/index";
   .m-orderList{
-    min-height: 100%;
+    min-height: 100vh;
     padding-bottom: 30px;
     .m-nav{
       background-color: #fff;
