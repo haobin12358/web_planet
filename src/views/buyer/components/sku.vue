@@ -78,7 +78,7 @@
           this.num = this.now_num;
         }
         if(this.product.skuvalue.length ==1) {
-          this.skuSelect(0, '1')
+          this.skuSelect(0, this.product.skuvalue[0].value[0]);
         }
       },
       methods:{
@@ -95,7 +95,6 @@
         },
         //sku选择
         skuSelect(index,item){
-          console.log(index,item);
           let _arr = [].concat(this.select);
           _arr[index] = item;
           this.select = [].concat(_arr);
