@@ -1,7 +1,22 @@
 <template>
   <div class="container">
-    <block-title title="申请列表"></block-title>
-    <el-button type="primary" class="add-magic-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
+    <section class="tool-bar">
+      <el-form :inline="true" :model="searchForm">
+        <el-form-item label="下单时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="searchForm.starttime" placeholder="起始日期" style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="searchForm.endtime" placeholder="结束日期" style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;" @click="doReset">重置</el-button>
+      </el-form>
+
+      <el-button type="primary" style="margin-bottom: 20px" icon="el-icon-plus" @click="addGuess">申请</el-button>
+    </section>
     <get-sku @chooseSkus="chooseSkus" ref="magic" where="magic"></get-sku>
     <el-table v-loading="magicLoading" :data="magicList" stripe size="mini">
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
@@ -18,7 +33,8 @@
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus == -20">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == 0">撤销</el-button>
+          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == 0">撤销
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,6 +52,11 @@
     name: "MagicGiftBox",
     data() {
       return {
+        searchForm: {
+          starttime: '',
+          endtime: '',
+        },
+
         value6: '',
         magicLoading: false,
         magicList: [],
@@ -45,11 +66,31 @@
         scope: {}             // 暂存scope
       }
     },
-    components: { getSku, TableCellImg },
+    components: {getSku, TableCellImg},
     mounted() {
       this.getMagic()
     },
     methods: {
+      doSearch(){
+        this.page_num = 1;
+        if(this.searchForm.starttime && this.searchForm.endtime){
+          if(new Date(this.searchForm.starttime) > new Date(this.searchForm.endtime)){
+            let term = this.searchForm.endtime;
+
+            this.searchForm.endtime = this.searchForm.starttime;
+            this.searchForm.starttime = term;
+          }
+        }
+        this.getMagic()
+      },
+      doReset(){
+        this.searchForm = {
+          starttime: '',
+          endtime: '',
+        }
+        this.doSearch();
+      },
+
       // 申请添加魔盒奖品-按钮
       addGuess() {
         this.$refs.magic.isEdit = false;
@@ -57,7 +98,7 @@
       },
       // 申请添加魔盒奖品
       chooseSkus(sku, isEdit) {
-        if(isEdit) {
+        if (isEdit) {
           sku.mbaid = this.scope.row.mbaid;
           this.$http.post(this.$api.magic_box_update_apply, sku).then(res => {
             if (res.data.status == 200) {
@@ -71,7 +112,7 @@
               this.$refs.magic.skusDialog = false;
             }
           });
-        }else {
+        } else {
           this.$http.post(this.$api.magic_box_apply_award, sku).then(res => {
             if (res.data.status == 200) {
               this.$notify({
@@ -102,7 +143,10 @@
           params: {
             page_num: this.page_num,
             page_size: this.page_size,
-          }}).then(res => {
+
+            ...this.searchForm,
+          }
+        }).then(res => {
           if (res.data.status == 200) {
             this.magicList = res.data.data;
             this.total = res.data.total_count;
@@ -124,7 +168,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(this.$api.magic_box_shelf_award, { mbaid: scope.row.mbaid }).then(res => {
+          this.$http.post(this.$api.magic_box_shelf_award, {mbaid: scope.row.mbaid}).then(res => {
             if (res.data.status == 200) {
               this.getMagic();
               this.$notify({
@@ -134,7 +178,8 @@
               });
             }
           })
-        }).catch(() => { });
+        }).catch(() => {
+        });
       },
     }
   }

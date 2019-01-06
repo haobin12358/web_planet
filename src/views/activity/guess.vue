@@ -1,7 +1,22 @@
 <template>
   <div class="container">
-    <block-title title="申请列表"></block-title>
-    <el-button type="primary" class="add-guess-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
+    <section class="tool-bar">
+      <el-form :inline="true" :model="searchForm">
+        <el-form-item label="下单时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="searchForm.starttime" placeholder="起始日期" style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="searchForm.endtime" placeholder="结束日期" style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;" @click="doReset">重置</el-button>
+      </el-form>
+
+      <el-button type="primary" style="margin-bottom: 20px" icon="el-icon-plus" @click="addGuess">申请</el-button>
+    </section>
     <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
@@ -37,6 +52,11 @@
     name: "Guess",
     data() {
       return {
+        searchForm: {
+          starttime: '',
+          endtime: '',
+        },
+
         guessLoading: false,
         guessList: [],
         page_size: 10,
@@ -50,6 +70,26 @@
       this.getGuess();        // 获取自己的猜数字奖品申请列表
     },
     methods: {
+      doSearch(){
+        this.page_num = 1;
+        if(this.searchForm.starttime && this.searchForm.endtime){
+          if(new Date(this.searchForm.starttime) > new Date(this.searchForm.endtime)){
+            let term = this.searchForm.endtime;
+
+            this.searchForm.endtime = this.searchForm.starttime;
+            this.searchForm.starttime = term;
+          }
+        }
+        this.getGuess()
+      },
+      doReset(){
+        this.searchForm = {
+          starttime: '',
+          endtime: '',
+        }
+        this.doSearch();
+      },
+
       // 申请添加竞猜奖品-按钮
       addGuess() {
         this.$refs.guess.isEdit = false;
@@ -102,6 +142,8 @@
           params: {
             page_num: this.page_num,
             page_size: this.page_size,
+
+            ...this.searchForm,
           }}).then(res => {
           if (res.data.status == 200) {
             this.guessList = res.data.data;

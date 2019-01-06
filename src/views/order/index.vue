@@ -171,6 +171,14 @@
       doSearch(){
         this.expandAll = false;
         this.currentPage = 1;
+        if(this.inlineForm.createtime_end && this.inlineForm.createtime_start){
+          if(new Date(this.inlineForm.createtime_start) > new Date(this.inlineForm.createtime_end)){
+            let term = this.inlineForm.createtime_end;
+
+            this.inlineForm.createtime_end = this.inlineForm.createtime_start;
+            this.inlineForm.createtime_start = term;
+          }
+        }
         this.setOrderList();
       },
       doReset(){
