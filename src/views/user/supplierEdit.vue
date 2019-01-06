@@ -28,7 +28,7 @@
             <el-input v-model.trim="supplierForm.sulinkman" maxlength="100" ></el-input>
           </el-form-item>
           <el-form-item label="联系电话" prop="sulinkphone">
-            <el-input v-model.trim="supplierForm.sulinkphone" maxlength="100" :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
+            <el-input v-model.trim="supplierForm.sulinkphone" maxlength="11" :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="suaddress">
             <el-input v-model.trim="supplierForm.suaddress" maxlength="100" ></el-input>

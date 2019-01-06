@@ -177,10 +177,10 @@
           <template v-if="scope.row.ominrefund">
             <template v-if="scope.row.order_refund_apply.orastatus == 0">
               <el-button type="text" class="success-text" @click="doPass(scope.row)">
-                审核通过
+                同意
               </el-button>
               <el-button type="text" class="danger-text" @click="doNoPass(scope.row)">
-                审核拒绝
+                拒绝
               </el-button>
             </template>
             <el-button v-else type="text" @click="gotoReturnOrderDetail(scope.row)">查看</el-button>
