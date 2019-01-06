@@ -131,9 +131,10 @@
 
   .m-after-sales {
     min-height: 100vh;
-    /*background-color: #EEEEEE;*/
+    background-color: #EEEEEE;
     .m-no-coupon{
-      margin-top: 300px;
+      /*margin-top: 300px;*/
+      margin-left: 50px;
     }
     .m-order-box {
       .m-order-item {

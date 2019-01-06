@@ -335,7 +335,8 @@
       padding: 0 26px ;
     }
     .m-no-coupon{
-      margin-top: 300px;
+      margin-top: 200px;
+      margin-left: 50px;
     }
     .m-orderList-content{
       padding: 0 26px;
