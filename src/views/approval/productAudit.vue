@@ -159,6 +159,9 @@
             if (!value) {
               return '意见不能为空'
             }
+            if(!/^\w{0,128}$/.test(value)){
+              return '意见文本过长(128)'
+            }
           }
         }).then(
           prompt => {
@@ -189,6 +192,9 @@
           inputValidator: value => {
             if (!value) {
               return '意见不能为空'
+            }
+            if(!/^\w{0,128}$/.test(value)){
+              return '意见文本过长(128)'
             }
           },
         }).then(

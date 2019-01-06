@@ -3,16 +3,16 @@
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
         <el-form-item label="订单号">
-          <el-input v-model="inlineForm.omno" clearable></el-input>
+          <el-input v-model.trim="inlineForm.omno" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="收件人">
-          <el-input v-model="inlineForm.omrecvname" clearable></el-input>
+          <el-input v-model.trim="inlineForm.omrecvname" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="手机号">
-          <el-input v-model="inlineForm.omrecvphone" clearable></el-input>
+          <el-input v-model.trim="inlineForm.omrecvphone" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="商品名">
-          <el-input v-model="inlineForm.prtitle" clearable></el-input>
+          <el-input v-model.trim="inlineForm.prtitle" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="inlineForm.omstatus" @change="doSearch">

@@ -3,10 +3,10 @@
     <section class="tool-bar space-between">
       <el-form :inline="true">
         <el-form-item label="供应商姓名">
-          <el-input v-model.trim="searchForm.kw"></el-input>
+          <el-input v-model.trim="searchForm.kw" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item label="供应商手机号">
-          <el-input v-model.trim="searchForm.mobile"></el-input>
+          <el-input v-model.trim="searchForm.mobile" maxlength="100" ></el-input>
         </el-form-item>
 
         <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>

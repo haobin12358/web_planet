@@ -10,9 +10,9 @@
           </el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
-        <el-table-column label="姓名" prop="start.adname" align="center">
+        <el-table-column label="姓名" prop="start.usname" align="center">
           <template slot-scope="scope">
-            {{scope.row.start.adname || scope.row.start.suname}}
+            {{nameRender(scope.row)}}
           </template>
         </el-table-column>
       </el-table-column>
@@ -127,6 +127,12 @@
             return {label: '已通过', type: 'success'};
         }
       },
+      nameRender(row){
+        // console.log(row.start.usname || row.start.adname);
+        if(row.start){
+          return row.start.usname || row.start.adname
+        }
+      },
 
       showStep(row) {
         this.$http.get(this.$api.get_approvalnotes, {
@@ -158,6 +164,9 @@
             if (!value) {
               return '意见不能为空'
             }
+            if(!/^\w{0,128}$/.test(value)){
+              return '意见文本过长(128)'
+            }
           }
         }).then(
           prompt => {
@@ -188,6 +197,9 @@
           inputValidator: value => {
             if (!value) {
               return '意见不能为空'
+            }
+            if(!/^\w{0,128}$/.test(value)){
+              return '意见文本过长(128)'
             }
           },
         }).then(

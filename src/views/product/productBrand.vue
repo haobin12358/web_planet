@@ -4,7 +4,7 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="品牌名">
-          <el-input v-model.trim="searchForm.kw" clearable></el-input>
+          <el-input v-model.trim="searchForm.kw" maxlength="100"  clearable></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="searchForm.pbstatus" @change="doSearch">
@@ -115,10 +115,10 @@
         </el-form-item>
 
         <el-form-item label="品牌名" prop="pbname">
-          <el-input v-model.trim="brandForm.pbname"></el-input>
+          <el-input v-model.trim="brandForm.pbname" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item label="品牌描述" prop="pbdesc">
-          <el-input v-model.trim="brandForm.pbdesc" type="textarea"></el-input>
+          <el-input v-model.trim="brandForm.pbdesc" maxlength="1000"  type="textarea"></el-input>
         </el-form-item>
         <el-form-item label="关联标签" prop="itids">
           <el-select
@@ -136,7 +136,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="官网">
-          <el-input v-model.trim="brandForm.pblinks"></el-input>
+          <el-input v-model.trim="brandForm.pblinks" maxlength="1000" ></el-input>
         </el-form-item>
       </el-form>
 
@@ -150,7 +150,7 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="标签名">
-          <el-input v-model.trim="itemSearchForm.kw" clearable></el-input>
+          <el-input v-model.trim="itemSearchForm.kw" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
@@ -176,10 +176,10 @@
                :close-on-click-modal="false">
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名" prop="itname">
-          <el-input v-model.trim="itemForm.itname"></el-input>
+          <el-input v-model.trim="itemForm.itname" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="标签描述" prop="itdesc">
-          <el-input v-model.trim="itemForm.itdesc" type="textarea"></el-input>
+          <el-input v-model.trim="itemForm.itdesc" maxlength="1000" type="textarea"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

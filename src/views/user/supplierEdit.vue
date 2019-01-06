@@ -4,7 +4,7 @@
       <el-col :span="16">
         <el-form :model="supplierForm" :rules="rules" ref="supplierForm" label-position="left" label-width="120px">
           <el-form-item label="供应商名称" prop="suname">
-            <el-input v-model="supplierForm.suname"></el-input>
+            <el-input v-model.trim="supplierForm.suname" maxlength="100" ></el-input>
           </el-form-item>
           <el-form-item label="品牌" prop="pbids">
             <el-select
@@ -25,18 +25,18 @@
             </el-select>
           </el-form-item>
           <el-form-item label="联系人" prop="sulinkman">
-            <el-input v-model="supplierForm.sulinkman"></el-input>
+            <el-input v-model.trim="supplierForm.sulinkman" maxlength="100" ></el-input>
           </el-form-item>
           <el-form-item label="联系电话" prop="sulinkphone">
-            <el-input v-model="supplierForm.sulinkphone" :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
+            <el-input v-model.trim="supplierForm.sulinkphone" maxlength="100" :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="suaddress">
-            <el-input v-model="supplierForm.suaddress"></el-input>
+            <el-input v-model.trim="supplierForm.suaddress" maxlength="100" ></el-input>
           </el-form-item>
 
           <template v-if="!this.supplierForm.suid">
             <el-form-item label="登录密码" prop="supassword">
-              <el-input v-model="supplierForm.supassword"></el-input>
+              <el-input v-model="supplierForm.supassword" maxlength="100" ></el-input>
             </el-form-item>
           </template>
 
@@ -81,10 +81,10 @@
 
 
           <el-form-item label="银行" prop="subankname">
-            <el-input v-model="supplierForm.subankname"></el-input>
+            <el-input v-model.trim="supplierForm.subankname" maxlength="100" ></el-input>
           </el-form-item>
           <el-form-item label="银行卡号" prop="subanksn">
-            <el-input v-model="supplierForm.subanksn"></el-input>
+            <el-input v-model.trim="supplierForm.subanksn" maxlength="100"></el-input>
           </el-form-item>
 
           <el-form-item>

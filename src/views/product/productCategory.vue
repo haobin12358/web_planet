@@ -52,10 +52,10 @@
           <span class="form-item-end-tip">例:新增第三级分类,请选第二级分类</span>
         </el-form-item>
         <el-form-item label="分类名" prop="pcname">
-          <el-input v-model="categroyForm.pcname"></el-input>
+          <el-input v-model="categroyForm.pcname" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="描述" prop="pcdesc">
-          <el-input v-model="categroyForm.pcdesc"></el-input>
+          <el-input v-model="categroyForm.pcdesc" maxlength="1000" ></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="pcsort">
           <el-input v-model.number="categroyForm.pcsort" maxlength="11" style="width: 200px;"></el-input>

@@ -543,7 +543,7 @@
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                    data = res.data.data;
+                      data = res.data.data;
 
                   this.setOrderList();
                   this.$notify({

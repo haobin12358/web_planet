@@ -316,6 +316,13 @@ export const asyncRouterMap = [
         component: () => import('src/views/approval/trialProductAudit'),
         meta: {title: '试用商品审批',icon: 'yes',noCache: true, roles: level2}
       },
+
+      {
+        path: 'activationCodeActi',
+        name: 'ActivationCodeActi',
+        component: () => import('src/views/approval/activationCodeActi'),
+        meta: {title: '激活码审批',icon: 'yes',noCache: true, roles: level2}
+      },
     ]
   },
 
