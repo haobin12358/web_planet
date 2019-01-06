@@ -43,6 +43,7 @@
     <!--<el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">-->
       <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="发布者" align="center" prop="authername" show-overflow-tooltip></el-table-column>
+      <el-table-column label="状态" align="center" prop="zh_nestatus" width="100" v-if="activeIndex=='all'"></el-table-column>
       <el-table-column label="审核回复" align="center" prop="refuse_info"
                        show-overflow-tooltip v-if="activeIndex=='refuse'"></el-table-column>
       <el-table-column label="点赞数" align="center" prop="favoritnumber" width="80"></el-table-column>
