@@ -59,10 +59,10 @@
       <!--<block-title title="基本信息"></block-title>-->
 
       <el-form-item id="2" label="商品名称" prop="prtitle">
-        <el-input v-model.trim="formData.prtitle" style="width: 700px;"></el-input>
+        <el-input v-model.trim="formData.prtitle" maxlength="100" style="width: 700px;"></el-input>
       </el-form-item>
       <el-form-item label="商品描述" prop="prdescription">
-        <el-input v-model.trim="formData.prdescription" type="textarea" style="width: 700px;"></el-input>
+        <el-input v-model.trim="formData.prdescription" maxlength="1000" type="textarea" style="width: 700px;"></el-input>
       </el-form-item>
       <el-form-item label="划线价格" prop="prlineprice">
         <el-input style="width: 200px;" v-model.number="formData.prlineprice" maxlength="11" ></el-input>
@@ -85,7 +85,7 @@
             </el-tag>
 
             <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                      @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
+                      maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
             </el-input>
             <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
                         placement="right">
@@ -124,7 +124,7 @@
           </el-table-column>
           <el-table-column label="SN" prop="sn" align="center">
             <template slot-scope="scope">
-              <el-input v-model.trim="scope.row.skusn"></el-input>
+              <el-input v-model.trim="scope.row.skusn" maxlength="100" ></el-input>
             </template>
           </el-table-column>
 

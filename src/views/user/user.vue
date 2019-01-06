@@ -3,10 +3,10 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="搜索账号">
-          <el-input v-model="name"></el-input>
+          <el-input v-model.trim="name" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item label="搜索手机号">
-          <el-input v-model="mobile"></el-input>
+          <el-input v-model.trim="mobile" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="getUserList">查询</el-button>

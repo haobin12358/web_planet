@@ -52,6 +52,7 @@
     created() {
       //  5分钟刷新一下token
       this.interval = setInterval(this.authRefresh, 1000 * 60 * 5);
+      console.log('v 0.21');
     }
   }
 </script>

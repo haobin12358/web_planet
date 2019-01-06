@@ -32,10 +32,10 @@
           <!--<block-title title="基本信息"></block-title>-->
 
           <el-form-item  label="商品名称" prop="tctitle">
-            <el-input v-model.trim="formData.tctitle" maxlength="1000"></el-input>
+            <el-input v-model.trim="formData.tctitle" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="商品描述" prop="tcdescription">
-            <el-input v-model.trim="formData.tcdescription"></el-input>
+            <el-input v-model.trim="formData.tcdescription" maxlength="1000"></el-input>
           </el-form-item>
           <el-form-item label="运费" prop="tcfreight">
             <el-input v-model.number="formData.tcfreight" maxlength="11" style="width: 200px;"></el-input>
@@ -63,7 +63,7 @@
             </el-col>
           </el-form-item>
           <el-form-item label="备注(商品列表说明)" prop="tcremarks">
-            <el-input v-model="formData.tcremarks"></el-input>
+            <el-input v-model="formData.tcremarks" maxlength="1000"></el-input>
           </el-form-item>
 
           <el-form-item label="商品规格" required>
@@ -77,7 +77,7 @@
                 </el-tag>
 
                 <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                          @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
+                          maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
                 </el-input>
                 <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
                             placement="right">
@@ -119,7 +119,7 @@
               <el-table-column :label="item" v-for="(item,index) in formData.tcattribute" :key="index"
                                align="center">
                 <template slot-scope="scope">
-                  <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
+                  <el-input maxlength="100" v-model.trim="scope.row.skuattritedetail[index]"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="库存" prop="stock" align="center">
@@ -555,11 +555,16 @@
 
       //  轮播图和长图
       beforeImgsUpload(file) {
+        console.log(file);
+        return false
         const isLt15M = file.size / 1024 / 1024 < 15;
 
         if (!isLt15M) {
           this.$message.error('上传图片大小不能超过 15MB!');
         }
+
+        const legalImgArr = ['.jpg','.jpeg','.png','.gif'],
+              isInLeagaArr = legalImgArr.includes(file)
 
         return isLt15M;
       },

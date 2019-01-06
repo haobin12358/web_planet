@@ -46,7 +46,7 @@
                :title="dlgTitle">
       <el-form :model="form" :rules="rules" ref="form" label-width="120px" label-position="left">
         <el-form-item v-if="editType == '' || editType == 1" label="标签名" prop="piname">
-          <el-input v-model.trim="form.piname"></el-input>
+          <el-input v-model.trim="form.piname" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item v-if="editType == '' || editType == 2" label="关联管理员" prop="ad_list">
           <el-select v-model="form.ad_list" multiple filterable style="width: 400px">

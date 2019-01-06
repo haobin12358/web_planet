@@ -4,7 +4,7 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="场景名">
-          <el-input v-model.trim="searchForm.kw" clearable></el-input>
+          <el-input v-model.trim="searchForm.kw" maxlength="100"  clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="doSearch">查询</el-button>
@@ -41,7 +41,7 @@
       <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left"
                label-width="100px">
         <el-form-item label="场景名称" prop="psname">
-          <el-input v-model.trim="sceneForm.psname"></el-input>
+          <el-input v-model.trim="sceneForm.psname" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="pspic">
           <el-upload
@@ -75,7 +75,7 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="标签名">
-          <el-input v-model.trim="itemSearchForm.kw" clearable></el-input>
+          <el-input v-model.trim="itemSearchForm.kw" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
@@ -108,7 +108,7 @@
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left"
                label-width="100px">
         <el-form-item label="标签名" prop="itname">
-          <el-input v-model.trim="itemForm.itname"></el-input>
+          <el-input v-model.trim="itemForm.itname" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="关联场景" prop="psid">
           <el-select
@@ -127,7 +127,7 @@
         </el-form-item>
 
         <el-form-item label="标签描述" prop="itdesc">
-          <el-input v-model.trim="itemForm.itdesc" type="textarea"></el-input>
+          <el-input v-model.trim="itemForm.itdesc" maxlength="1000" type="textarea"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
