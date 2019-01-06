@@ -188,10 +188,12 @@
             { required: true, message: '标签必选', trigger: 'blur' }
           ],
           netitle: [
-            { required: true, message: '资讯标题必填', trigger: 'blur' }
+            { required: true, message: '资讯标题必填', trigger: 'blur' },
+            { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
           ],
           netext: [
-            { required: true, message: '资讯正文必填', trigger: 'blur' }
+            { required: true, message: '资讯正文必填', trigger: 'blur' },
+            { min: 1, max: 1000, message: '长度在 1 到 1000 个字符', trigger: 'blur' }
           ]
         },
         dialogVisible: false,
