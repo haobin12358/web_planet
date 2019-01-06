@@ -21,6 +21,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
+  import { Toast } from 'mint-ui';
 
   export default {
     data() {
@@ -48,10 +49,28 @@
         arr.push(product);
         this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), gift: true }});
       },
+      // 获取身份
+      getUser() {
+        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包list页面
+
+            }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去卖家版首页
+
+            }else if(res.data.data.uslevel == "3") {      // 3 - 申请成为卖家中
+              this.$router.push("/selected");
+            }else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
+              Toast('请完成店主身份认证');
+              this.$router.push("/selected");
+            }
+          }
+        });
+      }
     },
     mounted() {
       common.changeTitle('购买礼包');
       this.getGift();            // 获取商家礼包详情
+      this.getUser();            // 获取身份
     }
   }
 </script>
