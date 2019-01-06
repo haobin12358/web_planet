@@ -9,7 +9,6 @@
   import api from '../../../api/api';
   import axios from 'axios';
   import product from '../components/product';
-  import { Toast } from 'mint-ui';
 
   export default {
     data() {
@@ -37,9 +36,6 @@
     mounted() {
       common.changeTitle('购买礼包');
       this.getProduct();            // 获取商家礼包列表
-      if(localStorage.getItem('noIDCard')) {
-        Toast('请前往安全中心进行身份认证');
-      }
     }
   }
 </script>
@@ -48,6 +44,7 @@
   @import "../../../common/css/index";
 
   .m-gift-box {
-    min-height: 100%;
+    min-height: 100vh;
+    background-color: #EEEEEE;
   }
 </style>

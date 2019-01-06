@@ -2,7 +2,7 @@
   <div class="m-IDCard-box">
     <div class="m-IDCard-bg"></div>
     <div class="m-content">
-      <div class="m-IDCard-top" v-if="user.uslevel == '2'">
+      <!--<div class="m-IDCard-top" v-if="user.uslevel == '2'">
         <div class="m-IDCard-rows">
           <div class="m-row-left m-left-url">大行星后台管理系统网址</div>
           <div class="m-row-right" id="url" @click="copyText('url')">{{user.manager_address}}</div>
@@ -18,18 +18,19 @@
             <div class="m-eye-icon" :class="showPassword ? 'active' : ''" @click="passWord"></div>
           </div>
         </div>
-      </div>
+      </div>-->
       <div class="m-IDCard">
         <div>
           <div class="m-IDCard-row">
             <div class="m-row-title">真实姓名</div>
-            <input type="text" class="m-row-input m-width-220" v-model="user.usrealname" placeholder="请填写真实姓名" :readonly="user.uslevel != '1'">
+            <input type="text" class="m-row-input m-width-220" v-model="user.usrealname" placeholder="请填写真实姓名"
+                   :readonly="user.uslevel == '2' || user.uslevel == '3'">
           </div>
-          <div class="m-IDCard-row" @click="genderPopup = true" v-if="user.uslevel == '1'">
+          <div class="m-IDCard-row" @click="genderPopup = true" v-if="user.uslevel == '1' || user.uslevel == '4'">
             <div class="m-row-title">性别</div>
             <div class="m-row-input m-width-450">{{user.usGender}}</div>
           </div>
-          <div class="m-IDCard-row" v-if="user.uslevel != '1'">
+          <div class="m-IDCard-row" v-if="user.uslevel == '2' || user.uslevel == '3'">
             <div class="m-row-title">性别</div>
             <div class="m-row-input m-width-450">{{user.usGender}}</div>
           </div>
@@ -47,7 +48,8 @@
           </div>-->
           <div class="m-IDCard-row">
             <div class="m-row-title">身份证号</div>
-            <input type="text" class="m-row-input m-width-450" v-model="user.usidentification" maxlength="18" placeholder="请填写身份证号" :readonly="user.uslevel != '1'">
+            <input type="text" class="m-row-input m-width-450" v-model="user.usidentification" maxlength="18"
+                   placeholder="请填写身份证号" :readonly="user.uslevel == '2' || user.uslevel == '3'">
           </div>
           <div class="m-IDCard-row">
             <div class="m-row-title">身份证照片</div>
@@ -55,14 +57,16 @@
         </div>
         <div class="m-IDCard-img">
           <img class="m-IDCard-img" v-if="umfrontTemp" :src="umfrontTemp" alt="">
-          <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif" @change="uploadFrontImg" :disabled="user.uslevel != '1'">
+          <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif"
+                 @change="uploadFrontImg" :disabled="user.uslevel == '2' || user.uslevel == '3'">
         </div>
         <div class="m-IDCard-img">
           <img class="m-IDCard-img" v-if="umbackTemp" :src="umbackTemp" alt="">
-          <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif" @change="uploadBackImg" :disabled="user.uslevel != '1'">
+          <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif"
+                 @change="uploadBackImg" :disabled="user.uslevel == '2' || user.uslevel == '3'">
         </div>
         <!--按钮-->
-        <div class="m-foot-btn" v-if="user.uslevel == '1'">
+        <div class="m-foot-btn" v-if="user.uslevel == '1' || user.uslevel == '4'">
           <span @click="submitUser">提交认证</span>
         </div>
         <!--弹窗-->
@@ -234,7 +238,6 @@
             // 申请提交成功则返回上一页
             this.$router.go(-1);
             this.submitPopup = true;
-            localStorage.setItem('noIDCard', false);
           }
         });
       }
@@ -250,7 +253,7 @@
   @import "../../../common/css/index";
 
   .m-IDCard-box {
-    min-height: 100vh;
+    min-height: 105vh;
     background-color: #EEEEEE;
     .m-IDCard-bg {
       width: 750px;
