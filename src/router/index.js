@@ -128,6 +128,7 @@ export const constantRouterMap = [
   { path: '/personal/code', component: () => import('../views/buyer/personal/code'), hidden: true },
   // 竞猜记录
   { path: '/personal/guess', component: () => import('../views/buyer/personal/guess'), hidden: true },
+  { path: '/personal/history', component: () => import('../views/buyer/personal/history'), hidden: true },
   // 售后
   { path: '/personal/afterSales', component: () => import('../views/buyer/personal/afterSales'), meta: { keepAlive: true }, hidden: true },
   { path: '/personal/about', component: () => import('../views/buyer/personal/about'), hidden: true },

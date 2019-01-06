@@ -104,15 +104,15 @@
             <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">{{moneyNumTemp | money}}</span></div>
             <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
           </div>
-          <ul class="m-part-icon-ul m-use">
+          <ul class="m-part-icon-ul m-use m-double">
             <li @click="changeRoute('/activityOrder')">
               <img src="/static/images/activity/icon-activity.png" alt="">
               <span>活动订单</span>
             </li>
-            <!--<li @click="changeRoute('/personal/guess')">
-              <img src="/static/images/activity/guess-history.png"  alt="">
-              <span>竞猜历史</span>
-            </li>-->
+            <li @click="changeRoute('/personal/history')">
+              <img src="/static/images/icon-wuliu-done.png"  alt="">
+              <span>提现历史</span>
+            </li>
           </ul>
         </div>
 

@@ -52,6 +52,7 @@ const api={
   upgrade_agent : title + 'user/upgrade_agent',                  // 店主申请
   // check_idcode : title + 'user/check_idcode',                    // 实名认证 - 身份证
   get_identifyinginfo : title + 'user/get_identifyinginfo',      // 获取个人身份证详情
+  get_cash_notes : title + 'user/get_cash_notes',                // 获取提现记录
   update_user : title + 'user/update_user',                      // 更新用户信息
   get_user_integral : title + 'user/get_user_integral',          // 获取积分列表
   user_sign_in : title + 'user/user_sign_in',                    // 用户签到
