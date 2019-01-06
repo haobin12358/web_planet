@@ -134,7 +134,7 @@
         display: flex;
         justify-content: space-between;
         .m-detail-left {
-          margin-top: -10px;
+          /*margin-top: -10px;*/
           width: 290px;
           text-align: center;
           .m-text-small{

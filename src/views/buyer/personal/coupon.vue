@@ -142,7 +142,8 @@
   @import "../../../common/css/index";
 
   .m-coupon{
-    min-height: 100%;
+    min-height: 100vh;
+    background-color: #EEEEEE;
     .m-nav {
       width: 600px;
       margin: 0 75px;
