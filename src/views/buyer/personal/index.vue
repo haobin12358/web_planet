@@ -101,7 +101,7 @@
           </p>
           <div class="m-activity-subtitle">账户余额</div>
           <div class="m-activity-money">
-            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">{{moneyNum | money}}</span></div>
+            <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">{{moneyNumTemp | money}}</span></div>
             <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
           </div>
           <ul class="m-part-icon-ul m-use">
@@ -200,6 +200,7 @@
         outSubmit: false,
         bankPopup: false,
         moneyNum: "0",
+        moneyNumTemp: "0",
         slots: [{ values: ['请点击选择银行'] }],
         realName: "",
         bankName: "",
@@ -334,6 +335,7 @@
           if(res.data.status == 200){
             this.user = res.data.data;
             this.moneyNum = this.user.usbalance;
+            this.moneyNumTemp = JSON.parse(JSON.stringify(this.moneyNum));
             this.getOrderCount();       // 获取订单数量
           }
         })
