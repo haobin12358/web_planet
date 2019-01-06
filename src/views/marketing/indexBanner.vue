@@ -136,9 +136,9 @@
           ibsort: [
             { required: true, message: '序号必填', trigger: 'blur' }
           ],
-          contentlink: [
+          /*contentlink: [
             { required: true, message: '链接必填', trigger: 'blur' }
-          ],
+          ],*/
           /*prid: [
             { required: true, message: '商品必选', trigger: 'blur' }
           ]*/

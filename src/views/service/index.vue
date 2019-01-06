@@ -33,8 +33,8 @@
     </el-table>
 
     <el-dialog title="问题类型" :visible.sync="dialogQaTypeVisible" :close-on-click-modal="false">
-      <el-form label-width="100px">
-        <el-form-item label="问题图标：" >
+      <el-form :model="type_form" :rules="rules" ref="type_form" label-width="100px">
+        <el-form-item label="问题图标：" prop="qoicon">
           <!--<el-upload
             class="avatar-uploader-icon question-icon"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -45,7 +45,6 @@
             <img v-else-if="type_form.qoicon" :src="type_form.qoicon" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon question-icon"></i>
           </el-upload>-->
-
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -58,7 +57,7 @@
             <i v-else class="el-icon-plus avatar-uploader-icon question-img"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="问题类型：" >
+        <el-form-item label="问题类型：" prop="qoname">
           <el-input  v-model="type_form.qoname"></el-input>
         </el-form-item>
       </el-form>
@@ -69,11 +68,11 @@
     </el-dialog>
 
     <el-dialog :title="currentRowName" :visible.sync="dialogQaVisible" label-width="100px" :close-on-click-modal="false">
-      <el-form label-width="120px">
-        <el-form-item label="问题:" >
+      <el-form :model="question_form" :rules="q_rules" ref="question_form"  label-width="80px">
+        <el-form-item label="问题：" prop="quest">
           <el-input v-model="question_form.quest"></el-input>
         </el-form-item>
-        <el-form-item label="回答:">
+        <el-form-item label="回答：" prop="answer">
           <el-input type="textarea" v-model="question_form.answer"
                     :autosize="{ minRows: 4, maxRows: 6}"></el-input>
         </el-form-item>
@@ -101,6 +100,22 @@
         type_form:{
           qoname:'',
           qoicon:''
+        },
+        rules: {
+          qoicon: [
+            { required: true, message: '问题类型图标必传', trigger: 'blur' }
+          ],
+          qoname: [
+            { required: true, message: '问题类型名称必填', trigger: 'blur' }
+          ]
+        },
+        q_rules: {
+          quest: [
+            { required: true, message: '问题必填', trigger: 'blur' }
+          ],
+          answer: [
+            { required: true, message: '回答必填', trigger: 'blur' }
+          ]
         },
         question_form:{
           quest:'',
@@ -235,47 +250,47 @@
           });
         })
       },*/
-      // /上传问题类型
+      // 上传问题类型
       typeSure(){
-        if(this.type_form.qoname == ''){
-          this.$message({
-            type: 'error',
-            message: '请填写问题类型名称 '
-          });
-          return false;
-        }
-        if(this.type_form.qoicon == ''){
-          this.$message({
-            type: 'error',
-            message: '请上传问题类型图标 '
-          });
-          return false;
-        }
-        axios.post(api.add_questoutline+'?token='+localStorage.getItem('token'),this.type_form).then(res => {
-          if(res.data.status == 200){
-            this.dialogQaTypeVisible = false;
-            this.$notify.success(res.data.message);
-            this.getQuestion();
-          }else{
-            this.$message({
-              type: 'error',
-              message: '服务器请求失败，请稍后再试 '
-            });
+        this.$refs.type_form.validate(valid => {
+          if (valid) {
+            axios.post(api.add_questoutline+'?token='+localStorage.getItem('token'),this.type_form).then(res => {
+              if(res.data.status == 200){
+                this.dialogQaTypeVisible = false;
+                this.$notify.success(res.data.message);
+                this.getQuestion();
+                this.$refs.type_form.resetFields();
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            })
+          }else {
+            this.$message.warning('请根据校验信息完善表单!');
           }
         })
       },
       //  上传问题
       questionSure(){
-        this.dialogQaVisible = false;
-        axios.post(api.add_questanswer+'?token='+localStorage.getItem('token'),this.question_form).then(res => {
-          if(res.data.status == 200){
-            this.$notify.success(res.data.message);
-            this.getQuestion();
-          }else{
-            this.$message({
-              type: 'error',
-              message: '服务器请求失败，请稍后再试 '
-            });
+        this.$refs.question_form.validate(valid => {
+          if (valid) {
+            axios.post(api.add_questanswer+'?token='+localStorage.getItem('token'),this.question_form).then(res => {
+              if(res.data.status == 200){
+                this.$notify.success(res.data.message);
+                this.getQuestion();
+                this.dialogQaVisible = false;
+                this.$refs.question_form.resetFields();
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            })
+          }else {
+            this.$message.warning('请根据校验信息完善表单!');
           }
         })
       },
@@ -284,7 +299,7 @@
         let params = [];
         params.push(item.qoid);
         let that = this;
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该问题类型, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -315,7 +330,7 @@
         let params = [];
         params.push(item.quid);
         let that = this;
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该问题, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

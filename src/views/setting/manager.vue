@@ -174,6 +174,51 @@
     mounted() {
       this.getAdmin()          // 获取admin
     },
+    watch: {
+      adminDialog(val, oldVal) {
+        if(oldVal) {
+          this.adminForm = {
+            adid: '',
+            adheader: '',
+            adname: '',
+            adstatus: 'normal',
+            adtelphone: '',
+            identifyingcode: '',
+            adpassword: '',
+            adpasswordagain: '',
+            adlevel: 'common_admin',
+          };
+          let validatePass = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请输入密码'));
+            } else {
+              if (this.adminForm.adpasswordagain !== '') {
+                this.$refs.adminForm.validateField('adpasswordagain');
+              }
+              callback();
+            }
+          };
+          let validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请再次输入密码'));
+            } else if (value !== this.adminForm.adpassword) {
+              callback(new Error('两次输入密码不一致!'));
+            } else {
+              callback();
+            }
+          };
+          this.rules.identifyingcode = [{ required: true, message: '验证码必填', trigger: 'blur' }];
+          this.rules.adpassword = [
+            { required: true, validator: validatePass, trigger: 'blur' },
+            { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
+          ];
+          this.rules.adpasswordagain = [
+            { required: true, validator: validatePass2, trigger: 'blur' },
+            { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
+          ];
+        }
+      }
+    },
     methods: {
       // 主图上传
       handleBannerSuccess(res, file) {
