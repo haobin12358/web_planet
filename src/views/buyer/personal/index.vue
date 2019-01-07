@@ -99,7 +99,8 @@
           <p class="m-one-part-title">
             <span class="m-name">我的活动</span>
           </p>
-          <div class="m-activity-subtitle">账户余额</div>
+          <!--<div class="m-activity-subtitle">账户余额</div>-->
+          <div class="m-activity-subtitle">可提现余额</div>
           <div class="m-activity-money">
             <div class="m-money m-ft-28 m-red">￥ <span class="m-ft-58">{{moneyNumTemp | money}}</span></div>
             <div class="m-money-btn m-ft-24" @click="outPopup = true">提现</div>
@@ -354,7 +355,8 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
-            this.moneyNum = this.user.usbalance;
+            // this.moneyNum = this.user.usbalance;
+            this.moneyNum = this.user.uscash;
             this.moneyNumTemp = JSON.parse(JSON.stringify(this.moneyNum));
             this.getOrderCount();       // 获取订单数量
             if(res.data.data.uslevel == 2) {
