@@ -83,7 +83,7 @@
                             placement="right">
                   <el-button class="button-new-tag" size="small" @click="showInput">+ 添加商品规格</el-button>
                 </el-tooltip>
-                <div class="tag-tip">双击修改,不能重名</div>
+                <div class="tag-tip">双击修改,不能重名,回车保存</div>
               </section>
 
               <!--添加属性table行-->

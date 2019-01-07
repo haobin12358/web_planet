@@ -48,88 +48,92 @@
       </ul>
     </section>
 
-      <section class="profile-block">
-        <block-title title="交易数据"></block-title>
-        <ul class="m-order-label-ul">
-          <li>
-            <div class="m-icon-price-box">
-              <img class="static-icon" src="/static/images/order-money.png" alt="">
-              <div class="icon-price-box-main">
-                <p class="label">今日交易额</p>
-                <p class="m-order-price m-red">￥{{todaySaleData.day_total}}</p>
-              </div>
+    <section class="profile-block">
+      <block-title title="交易数据"></block-title>
+      <ul class="m-order-label-ul">
+        <li>
+          <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(1,'today')">
+            <img class="static-icon" src="/static/images/order-money.png" alt="">
+            <div class="icon-price-box-main">
+              <p class="label">今日交易额</p>
+              <p class="m-order-price m-red">￥{{todaySaleData.day_total}}</p>
             </div>
+          </div>
 
-            <p class="m-order-bottom">
-              <span>昨日</span>
-              <section class="m-order-bottom-right">
-                <span>{{yesterdaySaleData.day_total}}</span>
-                <img :src="todaySaleData.day_total > yesterdaySaleData.day_total ? '/static/images/icon-order-up.png' : '/static/images/icon-order-down.png'" alt="">
-              </section>
-            </p>
+          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(1,'yesterday')">
+            <span>昨日</span>
+            <section class="m-order-bottom-right">
+              <span>{{yesterdaySaleData.day_total}}</span>
+              <img
+                :src="todaySaleData.day_total > yesterdaySaleData.day_total ? '/static/images/icon-order-up.png' : '/static/images/icon-order-down.png'"
+                alt="">
+            </section>
+          </p>
 
-            <p class="m-order-all">
-              <span>总交易额</span>
-              <span class="m-order-price">￥{{totalSaleData.day_total}}</span>
-            </p>
-          </li>
-          <li>
-            <div class="m-icon-price-box">
-              <img class="static-icon" src="/static/images/order-num.png" alt="">
-              <div class="icon-price-box-main">
-                <p class="label">今日订单数</p>
-                <p class="m-order-price">{{todaySaleData.day_count}}</p>
-              </div>
+          <p class="m-order-all click-cursor" @click="gotoOrderWithParam(1,'')">
+            <span>总交易额</span>
+            <span class="m-order-price">￥{{totalSaleData.day_total}}</span>
+          </p>
+        </li>
+        <li>
+          <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(1,'today')">
+            <img class="static-icon" src="/static/images/order-num.png" alt="">
+            <div class="icon-price-box-main">
+              <p class="label">今日订单数</p>
+              <p class="m-order-price">{{todaySaleData.day_count}}</p>
             </div>
+          </div>
 
-            <p class="m-order-bottom">
-              <span>昨日</span>
-              <section class="m-order-bottom-right">
-                <span>{{yesterdaySaleData.day_count}}</span>
-                <img :src="todaySaleData.day_count > yesterdaySaleData.day_count ? '/static/images/icon-order-up.png' : '/static/images/icon-order-down.png'" alt="">
-              </section>
-            </p>
+          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(1,'yesterday')">
+            <span>昨日</span>
+            <section class="m-order-bottom-right">
+              <span>{{yesterdaySaleData.day_count}}</span>
+              <img
+                :src="todaySaleData.day_count > yesterdaySaleData.day_count ? '/static/images/icon-order-up.png' : '/static/images/icon-order-down.png'"
+                alt="">
+            </section>
+          </p>
 
-            <p class="m-order-all">
-              <span>总订单数</span>
-              <span class="m-order-price">{{totalSaleData.day_count}}</span>
-            </p>
-          </li>
+          <p class="m-order-all click-cursor" @click="gotoOrderWithParam(2,'')">
+            <span>总订单数</span>
+            <span class="m-order-price">{{totalSaleData.day_count}}</span>
+          </p>
+        </li>
 
 
-          <li>
-            <div class="m-icon-price-box">
-              <img class="static-icon" src="/static/images/order-pay.png" alt="">
-              <div class="icon-price-box-main">
-                <p class="label">待付款订单数</p>
-                <p class="m-order-price">{{todaySaleData.wai_pay_count}}</p>
-              </div>
+        <li>
+          <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(3,'today')">
+            <img class="static-icon" src="/static/images/order-pay.png" alt="">
+            <div class="icon-price-box-main">
+              <p class="label">待付款订单数</p>
+              <p class="m-order-price">{{todaySaleData.wai_pay_count}}</p>
             </div>
-            <p class="m-order-bottom">
-              <span>昨日</span>
-              <section class="icon-price-box-main">
-                <span>{{yesterdaySaleData.wai_pay_count}}</span>
-              </section>
-            </p>
-          </li>
-          <li>
-            <div class="m-icon-price-box">
-              <img class="static-icon" src="/static/images/order-back.png" alt="">
-              <div class="icon-price-box-main">
-                <p class="label">退款订单数</p>
-                <p class="m-order-price">{{todaySaleData.in_refund}}</p>
-              </div>
+          </div>
+          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(3,'yesterday')">
+            <span>昨日</span>
+            <section class="icon-price-box-main">
+              <span>{{yesterdaySaleData.wai_pay_count}}</span>
+            </section>
+          </p>
+        </li>
+        <li>
+          <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(4,'today')">
+            <img class="static-icon" src="/static/images/order-back.png" alt="">
+            <div class="icon-price-box-main">
+              <p class="label">退款订单数</p>
+              <p class="m-order-price">{{todaySaleData.in_refund}}</p>
             </div>
-            <p class="m-order-bottom">
-              <span>昨日</span>
-              <span>{{yesterdaySaleData.in_refund}}</span>
-            </p>
-          </li>
-        </ul>
-      </section>
+          </div>
+          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(4,'yesterday')">
+            <span>昨日</span>
+            <span>{{yesterdaySaleData.in_refund}}</span>
+          </p>
+        </li>
+      </ul>
+    </section>
 
-      <!--<block-title title="订单趋势"></block-title>-->
-      <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
+    <!--<block-title title="订单趋势"></block-title>-->
+    <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
   </div>
 </template>
 
@@ -288,12 +292,47 @@
         let today = new Date(),
           yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
 
-        let twoDaysData = await this.getHistoryDetail(this.formatDate(yesterday)+','+this.formatDate(today));
+        let twoDaysData = await this.getHistoryDetail(this.formatDate(yesterday) + ',' + this.formatDate(today));
         let allData = await this.getHistoryDetail();
 
         this.yesterdaySaleData = twoDaysData[0];
         this.todaySaleData = twoDaysData[1];
         this.totalSaleData = allData[0];
+      },
+
+      gotoOrderWithParam(type, dateType) {
+        //  权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+        let query = {
+          omstatus: '-1'
+        }
+
+        let today = new Date(),
+          yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+
+        if (dateType == 'today') {
+          query.searchDate = this.formatDate(today)
+        } else if (dateType == 'yesterday') {
+          query.searchDate = this.formatDate(yesterday)
+        }
+
+        switch (type) {
+          case 1:
+          case 2:
+            break
+          case 3:
+            query.omstatus = '0'
+            break
+          case 4:
+            query.omstatus = '40'
+            break
+        }
+
+        this.$router.push({
+          // path: '/order/order',
+          // query
+          name: 'OrderIndex',
+          params: query
+        })
       },
 
       formatDate: function (date) {
