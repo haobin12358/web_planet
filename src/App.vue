@@ -40,7 +40,7 @@ export default {
     }else if(location.href.indexOf('prid') > 0) {           // 商品详情
       location.href = url.split('?prid')[0] + '#/product/detail?prid' + url.split('?prid')[1]
     }else if(location.href.indexOf('circleid') > 0) {       // 店主版圈子右上角分享
-      location.href = location.origin
+      location.href = location.origin + '/#/circle'
     }
     // 将邀请人的usid保存，等注册的时候使用
     if(!localStorage.getItem('token')) {
@@ -51,9 +51,9 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.2.6');
+    console.log('v 0.2.9');
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NjcxOTgyOSwiZXhwIjoxNTQ3MzI0NjI5fQ.eyJpZCI6ImQ1NzM5MzUyLTBiNmMtMTFlOS1hNmVmLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.xvbRIEtWTkebhe2wo5m1BWeX8iG03jvQWTIMb5wsUIg';
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NjcwNDM4MiwiZXhwIjoxNTQ3MzA5MTgyfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiYjNkNTcxZDItMTBmYS0xMWU5LTk0YzctMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.MqI99lbmvRWlnY8X8yhSiNWOExwwV4zJwtS_-lDsiXc';
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Njc3MzMyNiwiZXhwIjoxNTQ3Mzc4MTI2fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiMjc5NzNlZWUtMTFhNC0xMWU5LWIxODgtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.c5q0P6kuE3v0ajqC9F-6hWdF624IpCRU1j5N_A2D-Qo';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },
