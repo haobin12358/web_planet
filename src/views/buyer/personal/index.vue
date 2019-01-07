@@ -113,6 +113,10 @@
               <img src="/static/images/icon-wuliu-done.png"  alt="">
               <span>提现历史</span>
             </li>
+            <li @click="goStore">
+              <img src="/static/images/icon-home.png"  alt="">
+              <span>{{store}}</span>
+            </li>
           </ul>
         </div>
 
@@ -189,7 +193,6 @@
     name: 'personalIndex',
     data() {
       return {
-        name: '',
         user: { usheader: '', usidname: '登录 / 注册'},               // 个人信息
         pay: "0",               // 待付款
         send: "0",              // 待发货
@@ -206,7 +209,8 @@
         bankName: "",
         bankResult: "",
         bank: "",
-        bankNo: ""
+        bankNo: "",
+        store: '成为店主',
       }
     },
     components: {},
@@ -218,6 +222,22 @@
       this.getUser();             // 获取个人信息
     },
     methods: {
+      goStore() {
+        axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            if(res.data.data.uslevel == "1") {            // 1 - 买家 - 去商家大礼包list页面
+              this.$router.push("/giftBox");
+            }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去卖家版首页
+              this.$router.push("material/circle");
+            }else if(res.data.data.uslevel == "3") {      // 3 - 申请成为卖家中
+              this.$router.push("storekeeper/applyOwner");
+            }else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
+              Toast('请完成店主身份认证');
+              this.$router.push("storekeeper/IDCardApprove");
+            }
+          }
+        });
+      },
       // 跳转页面
       changeRoute(v, which){
         if(which) {
@@ -337,6 +357,11 @@
             this.moneyNum = this.user.usbalance;
             this.moneyNumTemp = JSON.parse(JSON.stringify(this.moneyNum));
             this.getOrderCount();       // 获取订单数量
+            if(res.data.data.uslevel == 2) {
+              this.store = '转换店主'
+            }else {
+              this.store = '成为店主'
+            }
           }
         })
       },
