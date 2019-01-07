@@ -92,6 +92,7 @@
       <el-table-column prop="omrecvphone" align="center" label="手机号" width="160"></el-table-column>
       <el-table-column prop="ommount" label="总价" align="center" width="120"></el-table-column>
       <el-table-column prop="omfreight" label="运费" align="center" width="120"></el-table-column>
+
       <el-table-column label="退款中" width="120" align="center">
         <template slot-scope="scope">
             {{scope.row.ominrefund ? '是':'否'}}

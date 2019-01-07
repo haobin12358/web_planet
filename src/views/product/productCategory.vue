@@ -27,17 +27,20 @@
           <table-cell-img width="141px" :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="排序" align="center" width="150" prop="pcsort">
+
+      <el-table-column label="权重" width="150" align="center" :render-header="sortHeaderRender">
         <template slot-scope="scope">
           <el-input v-model="scope.row.pcsort" maxlength="11" @keyup.native.enter="changeCaSort(scope.row)" ></el-input>
         </template>
       </el-table-column>
+
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="doRemove(scope.row)">删除</el-button>
         </template>
       </el-table-column>
+
     </tree-table>
 
     <!--编辑dialog-->
@@ -57,7 +60,7 @@
         <el-form-item label="描述" prop="pcdesc">
           <el-input v-model="categroyForm.pcdesc" maxlength="1000" ></el-input>
         </el-form-item>
-        <el-form-item label="排序" prop="pcsort">
+        <el-form-item label="权重" prop="pcsort">
           <el-input v-model.number="categroyForm.pcsort" maxlength="11" style="width: 200px;"></el-input>
         </el-form-item>
 
@@ -116,6 +119,7 @@
   import {getStore, setStore} from "src/utils/index";
 
   const natureNumberReg = /^(\d*)$/;   //  自然数
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'ProductCategory',
 
@@ -163,7 +167,7 @@
 
         func: treeToArray,
         loading: false,
-        expandAll: true,
+        expandAll: false,
         data: {},
         columns: [
           {
@@ -196,8 +200,8 @@
             {required: true, message: '描述必填', trigger: 'blur'}
           ],
           pcsort: [
-            {required: true, message: '排序必填', trigger: 'blur'},
-            {pattern: natureNumberReg, message: '请输入合理的数字(>=0)', trigger: 'blur'},
+            {required: true, message: '权重必填', trigger: 'blur'},
+            {pattern: positiveNumberReg, message: '请输入合理的数字(>0)', trigger: 'blur'},
           ],
           pcpic: [
             {required: true, message: '图片必传', trigger: 'change'}
@@ -225,6 +229,8 @@
       }
     },
     methods: {
+
+
       getSearchCategory(){
         this.$http.get(this.$api.category_list, {
           params: {
@@ -300,8 +306,21 @@
         )
       },
 
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
+
       changeCaSort(row){
-        if(natureNumberReg.test(row.pcsort)){
+        if(positiveNumberReg.test(row.pcsort)){
           let updateRow = {
             pcid: row.pcid,
             parentpcid: row.parentpcid,
@@ -319,7 +338,7 @@
                   data = res.data.data;
 
                 this.$notify({
-                  title: `排序改动成功`,
+                  title: `权重改动成功`,
                   message: `分类名称:${row.pcname}`,
                   type: 'success'
                 });
@@ -328,7 +347,7 @@
             }
           );
         }else {
-          this.$message.warning('请输入合理排序值');
+          this.$message.warning('请输入合理权重值');
         }
       },
 

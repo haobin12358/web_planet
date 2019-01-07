@@ -301,7 +301,6 @@
       },
 
       gotoOrderWithParam(type, dateType) {
-        //  权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
         let query = {
           omstatus: '-1'
         }

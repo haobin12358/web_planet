@@ -176,7 +176,7 @@
                :close-on-click-modal="false">
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名" prop="itname">
-          <el-input v-model.trim="itemForm.itname" maxlength="100"></el-input>
+          <el-input v-model.trim="itemForm.itname" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="标签描述" prop="itdesc">
           <el-input v-model.trim="itemForm.itdesc" maxlength="1000" type="textarea"></el-input>

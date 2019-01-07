@@ -21,10 +21,10 @@
         </template>
       </el-table-column>
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
-      <el-table-column label="排序" align="center" sortable prop="pssort">
+      <el-table-column label="权重" align="center" prop="pssort" :render-header="sortHeaderRender">
         <template slot-scope="scope">
           <el-input v-model.number="scope.row.pssort" maxlength="11" @keyup.native.enter="changeSceneSort(scope.row)"
-                    style="width: 180px"></el-input>
+                    @focus.native="focusSceneSort(scope)" style="width: 180px"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
@@ -41,7 +41,7 @@
       <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left"
                label-width="100px">
         <el-form-item label="场景名称" prop="psname">
-          <el-input v-model.trim="sceneForm.psname" maxlength="100"></el-input>
+          <el-input v-model.trim="sceneForm.psname" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="pspic">
           <el-upload
@@ -60,7 +60,7 @@
             </div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="排序" prop="pssort">
+        <el-form-item label="权重" prop="pssort">
           <el-input v-model.number="sceneForm.pssort" maxlength="11"></el-input>
         </el-form-item>
 
@@ -108,7 +108,7 @@
       <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left"
                label-width="100px">
         <el-form-item label="标签名" prop="itname">
-          <el-input v-model.trim="itemForm.itname" maxlength="100"></el-input>
+          <el-input v-model.trim="itemForm.itname" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="关联场景" prop="psid">
           <el-select
@@ -144,6 +144,7 @@
   import elDragDialog from 'src/directive/el-dragDialog'
 
   const natureNumberReg = /^(\d*)$/;   //  自然数
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   const tenZhWordReg = /^[\u4e00-\u9fa5]{1,10}$/
   export default {
     name: 'ProductTag',
@@ -177,8 +178,8 @@
             {required: true, message: '图片必传', trigger: 'change'}
           ],
           pssort: [
-            {required: true, message: '排序必填', trigger: 'blur'},
-            {pattern: natureNumberReg, message: '请输入合理的数字(>=0)', trigger: 'blur'},
+            {required: true, message: '权重必填', trigger: 'blur'},
+            {pattern: positiveNumberReg, message: '请输入合理的数字(>0)', trigger: 'blur'},
           ],
         },
 
@@ -392,22 +393,42 @@
         )
       },
 
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
       changeSceneSort(row) {
-        this.$http.post(this.$api.update_scene, row).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
+        if(positiveNumberReg.test(row.pcsort)) {
 
-              this.$notify({
-                title: `排序改动成功`,
-                message: `场景名称:${row.psname}`,
-                type: 'success'
-              });
-              this.init();
+          this.$http.post(this.$api.update_scene, row).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+
+                this.$notify({
+                  title: `权重改动成功`,
+                  message: `场景名称:${row.psname}`,
+                  type: 'success'
+                });
+                this.init();
+              }
             }
-          }
-        );
+          );
+        }else {
+          this.$message.warning('请输入合理权重值');
+        }
+      },
+      focusSceneSort(index){
+        console.log(index);
       },
 
       resetSceneForm() {
