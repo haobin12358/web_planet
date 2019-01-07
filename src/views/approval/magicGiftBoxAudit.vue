@@ -1,18 +1,52 @@
 <template>
   <div class="container">
+    <section class="tool-bar">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="活动开始时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                            placeholder="起始日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
-        <el-table-column label="商品规格图片" align="center" prop="prdescription">
+        <el-table-column label="商品图片" align="center" prop="prdescription">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.skupic" :key="scope.row.content.skupic"></table-cell-img>
+            <table-cell-img :src="scope.row.content.product.prmainpic"
+                            :key="scope.row.content.product.prmainpic"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.pbname"></el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.prtitle" show-overflow-tooltip></el-table-column>
-        <el-table-column label="参与日期" align="center" prop="content.mbastarttime"></el-table-column>
-        <el-table-column label="参与价格" align="center" prop="content.skuprice"></el-table-column>
-        <el-table-column label="参与数量" align="center" prop="content.skustock"></el-table-column>
-        <el-table-column label="申请状态" align="center" prop="content.mbastatus_zh"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="180"
+                         show-overflow-tooltip></el-table-column>
+        <el-table-column label="品牌" align="center" prop="content.product.brand" width="180">
+          <template slot-scope="scope">
+            {{scope.row.content.product.brand ? scope.row.content.product.brand.pbname : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="分类" align="center" prop="content.product.categorys" width="280">
+          <template slot-scope="scope">
+            {{scope.row.content.product.categorys || ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="参与日期" align="center" prop="content.mbastarttime" width="220">
+          <template slot-scope="scope">
+            {{scope.row.content.mbastarttime+' - '+scope.row.content.mbaendtime}}
+          </template>
+        </el-table-column>
+        <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
+        <el-table-column label="参与数量" align="center" prop="content.skustock" width="120"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
@@ -33,14 +67,15 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
+                      @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
                 <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -71,6 +106,11 @@
 
     data() {
       return {
+        inlineForm: {
+          starttime: '',
+          endtime: '',
+        },
+
         loading: false,
         total: 0,
         currentPage: 1,
@@ -84,6 +124,23 @@
     computed: {},
 
     methods: {
+      doSearch() {
+        if(this.inlineForm.starttime && this.inlineForm.endtime){
+          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+            let term = this.inlineForm.endtime;
+
+            this.inlineForm.endtime = this.inlineForm.starttime;
+            this.inlineForm.starttime = term;
+          }
+        }
+        this.getList();
+      },
+      doReset() {
+        this.inlineForm = {
+          starttime: '',
+          endtime: '',
+        };
+      },
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
@@ -93,14 +150,20 @@
             page_num: this.currentPage,
 
             ptid: 'tomagicbox',
+            ...this.inlineForm,
           }
         }).then(
           res => {
             this.loading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
+              for (let i = 0; i < data.length; i++) {
+                if(!data[i].content.product){
+                  data[i].content.product = {}
+                }
+              }
               this.tableData = data;
               this.total = resData.total_count;
             }
@@ -121,18 +184,18 @@
       tagsType(status) {
         switch (status) {
           case -20:
-            return {label: '已取消',type: 'info'};
+            return {label: '已取消', type: 'info'};
           case -10:
-            return {label: '已拒绝',type: 'danger'};
+            return {label: '已拒绝', type: 'danger'};
           case 0:
-            return {label: '审核中',type: 'primary'};
+            return {label: '审核中', type: 'primary'};
           case 10:
-            return {label: '已通过',type: 'success'};
+            return {label: '已通过', type: 'success'};
         }
       },
 
-      showStep(row){
-        this.$http.get(this.$api.get_approvalnotes,{
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
           params: {
             avid: row.avid
           }
@@ -155,8 +218,8 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(!/^\w{0,128}$/.test(value)){
-              return '意见文本过长(128)'
+            if (value.length > 100) {
+              return '意见文本过长(100)'
             }
           }
         }).then(
@@ -189,8 +252,8 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(!/^\w{0,128}$/.test(value)){
-              return '意见文本过长(128)'
+            if (value.length > 100) {
+              return '意见文本过长(100)'
             }
           },
         }).then(
@@ -203,7 +266,7 @@
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                    data = res.data.data;
+                      data = res.data.data;
 
                   this.getList();
                   this.$notify({

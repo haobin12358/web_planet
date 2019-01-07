@@ -1,5 +1,25 @@
 <template>
   <div class="container">
+    <section class="tool-bar">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="活动开始时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                            placeholder="起始日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品规格图片" align="center" prop="prdescription">
@@ -7,11 +27,11 @@
             <table-cell-img :src="scope.row.content.skupic" :key="scope.row.content.product.skupic"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.product.pbname"></el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" show-overflow-tooltip></el-table-column>
-        <el-table-column label="参与日期" align="center" prop="content.gnaastarttime"></el-table-column>
-        <el-table-column label="参与价格" align="center" prop="content.skuprice"></el-table-column>
-        <el-table-column label="参与数量" align="center" prop="content.skustock"></el-table-column>
+        <el-table-column label="品牌" align="center" prop="content.product.pbname" width="120"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="120" show-overflow-tooltip></el-table-column>
+        <el-table-column label="参与日期" align="center" prop="content.gnaastarttime" width="120"></el-table-column>
+        <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
+        <el-table-column label="参与数量" align="center" prop="content.skustock" width="120"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
@@ -70,6 +90,11 @@
 
     data() {
       return {
+        inlineForm: {
+          starttime: '',
+          endtime: '',
+        },
+
         loading: false,
         total: 0,
         currentPage: 1,
@@ -83,6 +108,25 @@
     computed: {},
 
     methods: {
+      doSearch() {
+        if(this.inlineForm.starttime && this.inlineForm.endtime){
+          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+            let term = this.inlineForm.endtime;
+
+            this.inlineForm.endtime = this.inlineForm.starttime;
+            this.inlineForm.starttime = term;
+          }
+        }
+
+        this.getList();
+      },
+      doReset() {
+        this.inlineForm = {
+          starttime: '',
+          endtime: '',
+        };
+      },
+
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
@@ -92,6 +136,7 @@
             page_num: this.currentPage,
 
             ptid: 'toguessnum',
+            ...this.inlineForm,
           }
         }).then(
           res => {
@@ -155,8 +200,8 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(!/^\w{0,128}$/.test(value)){
-              return '意见文本过长(128)'
+            if(value.length>100){
+              return '意见文本过长(100)'
             }
           }
         }).then(
@@ -189,8 +234,8 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(!/^\w{0,128}$/.test(value)){
-              return '意见文本过长(128)'
+            if(value.length>100){
+              return '意见文本过长(100)'
             }
           },
         }).then(
@@ -205,6 +250,11 @@
                   let resData = res.data,
                     data = res.data.data;
 
+                  for (let i = 0; i < data.length; i++) {
+                    if(!data[i].content.product){
+                      data[i].content.product = {}
+                    }
+                  }
                   this.getList();
                   this.$notify({
                     title: '批准拒绝成功',

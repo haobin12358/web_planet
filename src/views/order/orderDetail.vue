@@ -110,7 +110,7 @@
           <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
+      <el-table-column prop="prtitle" align="center" label=" 商品名" width="240" show-overflow-tooltip></el-table-column>
       <el-table-column align="center" label="规格">
         <template slot-scope="scope">
           <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>

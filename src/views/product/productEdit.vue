@@ -70,9 +70,9 @@
       <el-form-item label="价格" prop="prprice">
         <el-input v-model.number="formData.prprice" style="width: 200px;" maxlength="11"></el-input>
       </el-form-item>
-      <el-form-item label="运费" prop="prfreight">
-        <el-input v-model.number="formData.prfreight" style="width: 200px;" maxlength="11"></el-input>
-      </el-form-item>
+      <!--<el-form-item label="运费" prop="prfreight">-->
+        <!--<el-input v-model.number="formData.prfreight" style="width: 200px;" maxlength="11"></el-input>-->
+      <!--</el-form-item>-->
 
       <el-form-item label="商品规格" required>
         <!--工具栏-->
@@ -788,7 +788,7 @@
               if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
                 detailTip += '-价格不符'
               }
-              if (!currentSku.skustock || !positiveNumberReg.test(currentSku.skustock)) {
+              if (currentSku.skustock === '' || !natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
 
@@ -800,7 +800,7 @@
               }
 
               if (detailTip) {
-                return `第${i + 1}行信息不全!` + detailTip;
+                return `第${i + 1}行信息不全` + detailTip;
               } else {
                 return
               }
