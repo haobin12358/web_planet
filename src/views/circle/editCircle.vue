@@ -96,6 +96,7 @@
           <el-form-item>
             <el-button type="info" @click="initCircleForm">取 消</el-button>
             <el-button type="primary" @click="checkFormData">保存资讯</el-button>
+            <el-button type="text" class="info-text">保存后将自动发起审批</el-button>
           </el-form-item>
         </el-form>
       </el-col>
