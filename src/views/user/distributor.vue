@@ -27,10 +27,14 @@
       <el-table-column label="粉丝数" align="center" prop="fans_num"></el-table-column>
       <el-table-column label="总佣金" align="center" prop="total"></el-table-column>
       <el-table-column label="余 额" align="center" prop="remain"></el-table-column>
+      <!--todo 分销商等级 下级团队-->
     </el-table>
+    <section class="table-bottom">
+
     <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
                    :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="sizeChange" @current-change="pageChange"></el-pagination>
+    </section>
   </div>
 </template>
 

@@ -5,6 +5,8 @@ const api = {
   login: title + 'user/admin_login',                                      //用户登录
   auth_fresh: title + 'auth/fresh',                                       //刷新token
 
+  history_detail: title + 'order/history_detail',                         //概览页历史数据
+
   get_admin_list: title + 'user/get_admin_list',                          //获取管理员列表
   add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        //添加管理员
   get_admin_all_status: title + 'user/get_admin_all_status',              // 获取所有管理员的状态

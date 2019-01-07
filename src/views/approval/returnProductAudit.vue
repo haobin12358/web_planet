@@ -59,6 +59,7 @@
                   </template>
                 </template>
               </el-table-column>
+              <!--<el-table-column label="退款原因" prop="order_refund_apply.orareason" width="180" align="center" show-overflow-tooltip></el-table-column>-->
               <el-table-column label="售后期望" width="120" align="center">
                 <template slot-scope="scope">
                   <template v-if="scope.row.order_refund_apply">
@@ -141,6 +142,9 @@
             </template>
           </template>
         </el-table-column>
+        <!--<el-table-column label="退款原因" prop="order_refund_apply.orareason" width="180" align="center" show-overflow-tooltip></el-table-column>-->
+        <!--<el-table-column label="退款原因" prop="order_refund_apply.oranote" width="180" align="center" show-overflow-tooltip></el-table-column>-->
+
         <el-table-column label="售后期望" width="120" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.order_refund_apply">
@@ -183,7 +187,7 @@
                 拒绝
               </el-button>
             </template>
-            <el-button v-else type="text" @click="gotoReturnOrderDetail(scope.row)">查看</el-button>
+            <el-button type="text" @click="gotoReturnOrderDetail(scope.row)">查看</el-button>
           </template>
         </template>
       </el-table-column>

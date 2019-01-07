@@ -555,18 +555,20 @@
 
       //  轮播图和长图
       beforeImgsUpload(file) {
-        console.log(file);
-        return false
         const isLt15M = file.size / 1024 / 1024 < 15;
 
         if (!isLt15M) {
           this.$message.error('上传图片大小不能超过 15MB!');
         }
 
-        const legalImgArr = ['.jpg','.jpeg','.png','.gif'],
-              isInLeagaArr = legalImgArr.includes(file)
+        const legalImgArr = ['jpg','jpeg','png','gif'],
+              isInLeagaArr = legalImgArr.includes(file.type.split('/')[1])
 
-        return isLt15M;
+        if(!isInLeagaArr){
+          this.$message.error(file.name+' 不允许格式 '+legalImgArr.join(','));
+        }
+
+        return isLt15M && isInLeagaArr;
       },
       handleImagesRemove(file, fileList) {
         this.imagesUrl = this.imagesUrl.filter(
@@ -724,7 +726,7 @@
               if (!currentSku.skupic) {
                 detailTip += '-图片未传'
               }
-              if (!currentSku.skustock || !positiveNumberReg.test(currentSku.skustock)) {
+              if (currentSku.skustock === '' || !natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
 
@@ -736,7 +738,7 @@
               }
 
               if (detailTip) {
-                return `第${i + 1}行信息不全!` + detailTip;
+                return `第${i + 1}行信息不全` + detailTip;
               } else {
                 return
               }

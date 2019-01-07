@@ -11,7 +11,7 @@
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
           <template slot-scope="scope">
-            {{scope.row.start.adname || scope.row.start.suname}}
+            {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
           </template>
         </el-table-column>
       </el-table-column>

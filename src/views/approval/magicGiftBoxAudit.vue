@@ -2,17 +2,31 @@
   <div class="container">
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
-        <el-table-column label="商品规格图片" align="center" prop="prdescription">
+        <el-table-column label="商品图片" align="center" prop="prdescription">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.skupic" :key="scope.row.content.skupic"></table-cell-img>
+            <table-cell-img :src="scope.row.content.product.prmainpic"
+                            :key="scope.row.content.product.prmainpic"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.pbname"></el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.prtitle" show-overflow-tooltip></el-table-column>
-        <el-table-column label="参与日期" align="center" prop="content.mbastarttime"></el-table-column>
-        <el-table-column label="参与价格" align="center" prop="content.skuprice"></el-table-column>
-        <el-table-column label="参与数量" align="center" prop="content.skustock"></el-table-column>
-        <el-table-column label="申请状态" align="center" prop="content.mbastatus_zh"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="180"
+                         show-overflow-tooltip></el-table-column>
+        <el-table-column label="品牌" align="center" prop="content.product.brand" width="180">
+          <template slot-scope="scope">
+            {{scope.row.content.product.brand ? scope.row.content.product.brand.pbname : ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="分类" align="center" prop="content.product.categorys" width="280">
+          <template slot-scope="scope">
+            {{scope.row.content.product.categorys || ''}}
+          </template>
+        </el-table-column>
+        <el-table-column label="参与日期" align="center" prop="content.mbastarttime" width="220">
+          <template slot-scope="scope">
+            {{scope.row.content.mbastarttime+' - '+scope.row.content.mbaendtime}}
+          </template>
+        </el-table-column>
+        <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
+        <el-table-column label="参与数量" align="center" prop="content.skustock" width="120"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
@@ -33,14 +47,15 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
+                      @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
                 <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -121,18 +136,18 @@
       tagsType(status) {
         switch (status) {
           case -20:
-            return {label: '已取消',type: 'info'};
+            return {label: '已取消', type: 'info'};
           case -10:
-            return {label: '已拒绝',type: 'danger'};
+            return {label: '已拒绝', type: 'danger'};
           case 0:
-            return {label: '审核中',type: 'primary'};
+            return {label: '审核中', type: 'primary'};
           case 10:
-            return {label: '已通过',type: 'success'};
+            return {label: '已通过', type: 'success'};
         }
       },
 
-      showStep(row){
-        this.$http.get(this.$api.get_approvalnotes,{
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
           params: {
             avid: row.avid
           }
@@ -155,7 +170,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           }
@@ -189,7 +204,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           },

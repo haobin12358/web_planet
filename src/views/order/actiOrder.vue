@@ -101,9 +101,9 @@
       <el-table-column label="操作" width="200" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="gotoOrderDetail(scope.row)">查看</el-button>
-          <el-button type="text" v-if="scope.row.omstatus == 0" class="warning-text" @click="doCancelOrder(scope.row)">
-            取消订单
-          </el-button>
+          <!--<el-button type="text" v-if="scope.row.omstatus == 0" class="warning-text" @click="doCancelOrder(scope.row)">-->
+            <!--取消订单-->
+          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
