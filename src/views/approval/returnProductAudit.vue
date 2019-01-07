@@ -50,6 +50,7 @@
                   </el-tag>
                 </template>
               </el-table-column>
+              <el-table-column label="退款金额" prop="order_refund_apply.oramount" width="120" align="center"></el-table-column>
               <el-table-column label="买家是否收到货" width="180" align="center">
                 <template slot-scope="scope">
                   <template v-if="scope.row.order_refund_apply">
@@ -71,9 +72,9 @@
               </el-table-column>
               <el-table-column label="退货状态" width="120" align="center">
                 <template slot-scope="scope">
-                    <el-tag  v-if="scope.row.order_refund" :type="orstatusTagType(scope.row.order_refund.orstatus_zh)">
-                      {{scope.row.order_refund.orstatus_zh}}
-                    </el-tag>
+                  <el-tag v-if="scope.row.order_refund" :type="orstatusTagType(scope.row.order_refund.orstatus_zh)">
+                    {{scope.row.order_refund.orstatus_zh}}
+                  </el-tag>
                 </template>
               </el-table-column>
             </el-table-column>
@@ -133,6 +134,7 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="退款金额" prop="order_refund_apply.oramount" width="120" align="center"></el-table-column>
         <el-table-column label="买家是否收到货" width="180" align="center">
           <template slot-scope="scope">
             <template v-if="scope.row.order_refund_apply">
@@ -156,7 +158,7 @@
         </el-table-column>
         <el-table-column label="退货状态" width="120" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.order_refund"  :type="orstatusTagType(scope.row.order_refund.orstatus_zh)">
+            <el-tag v-if="scope.row.order_refund" :type="orstatusTagType(scope.row.order_refund.orstatus_zh)">
               {{scope.row.order_refund.orstatus_zh}}
             </el-tag>
           </template>
@@ -207,7 +209,7 @@
     </section>
 
     <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址" :close-on-click-modal="false">
-      <el-form :model="passRefundForm" :rules="rules" ref="passRefundForm" label-width="120px">
+      <el-form :model="passRefundForm" :rules="rules" ref="passRefundForm" label-position="left" label-width="120px">
         <el-form-item label="收货人" prop="orrecvname">
           <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvname"
                     placeholder=""></el-input>
@@ -241,6 +243,8 @@
 
     data() {
       return {
+        repeat: true,
+
         applyStatusOptions: [
           {
             label: '全部',
@@ -252,7 +256,7 @@
             label: '已拒绝',
             value: -10,
           }, {
-            label: '未审核',
+            label: '审核中',
             value: 0,
           }, {
             label: '已同意',
@@ -338,7 +342,7 @@
         this.$refs.orderTable.toggleRowExpansion(row);
       },
       cellFunction({row, column}) {
-        if (['ommount', 'omfreight', 'omtruemount'].includes(column.property)) {
+        if (['ommount', 'omfreight', 'omtruemount', 'order_refund_apply.oramount'].includes(column.property)) {
           return 'money-cell'
         }
       },
@@ -369,7 +373,7 @@
             return 'danger'
         }
       },
-      orstatusTagType(statusZh){
+      orstatusTagType(statusZh) {
         switch (statusZh) {
           case '已退款':
             return 'success'
@@ -424,7 +428,7 @@
 
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.orderData = data;
               this.total = resData.total_count;
@@ -459,22 +463,19 @@
           }
         }
 
-        // console.log(row, props);
-        // console.log(query);
-        // return
-
         this.$router.push({
           path: '/approval/returnProdOrderDetail',
           query,
         })
       },
+      //  点击同意
       doPass(row, props) {
         if (row.order_refund_apply.orastate == 0) {
           this.passRefundVisible = true;
           this.passRefundForm.oraid = row.order_refund_apply.oraid;
           this.passRefundForm.message = `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`;
         } else {
-          this.$confirm(`确认同意申请?`, '提示').then(
+          this.$confirm(`确认同意退货申请?`, '提示').then(
             () => {
               this.$http.post(this.$api.agree_refund_apply, {
                 "oraid": row.order_refund_apply.oraid,
@@ -487,7 +488,7 @@
 
                     this.setOrderList();
                     this.$notify({
-                      title: '申请已同意',
+                      title: '退货申请已同意',
                       message: `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`,
                       type: 'success'
                     });
@@ -498,6 +499,7 @@
           )
         }
       },
+
       doPassRefundOrder() {
         this.$refs.passRefundForm.validate(
           valid => {
@@ -516,7 +518,7 @@
 
                     this.setOrderList();
                     this.$notify({
-                      title: '申请已同意',
+                      title: '退货申请已同意',
                       message: this.passRefundForm.message,
                       type: 'success'
                     });
@@ -537,7 +539,7 @@
       },
 
       doNoPass(row, props) {
-        this.$confirm(`确认拒绝申请?`, '提示').then(
+        this.$confirm(`确认拒绝退货申请?`, '提示').then(
           () => {
             this.$http.post(this.$api.agree_refund_apply, {
               "oraid": row.order_refund_apply.oraid,
@@ -546,11 +548,11 @@
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.setOrderList();
                   this.$notify({
-                    title: '申请已拒绝',
+                    title: '退货申请已拒绝',
                     message: `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`,
                     type: 'success'
                   });
@@ -560,6 +562,14 @@
           }
         )
       },
+    },
+
+    activated() {
+      if (this.repeat) {
+        this.repeat = true;
+      } else {
+        this.setOrderList();
+      }
     },
 
     created() {

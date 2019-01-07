@@ -111,10 +111,6 @@
                 message: `身份:${roleZh}`,
                 type: 'success'
               });
-              this.$notify({
-                title: '左侧带有打勾的菜单功能可用',
-                position: 'top-left'
-              });
             }).catch(() => {
               this.loading = false
             })

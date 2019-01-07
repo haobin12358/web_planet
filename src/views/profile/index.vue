@@ -48,7 +48,6 @@
       </ul>
     </section>
 
-    <template v-if="checkPermission(level2)">
       <section class="profile-block">
         <block-title title="交易数据"></block-title>
         <ul class="m-order-label-ul">
@@ -57,21 +56,21 @@
               <img class="static-icon" src="/static/images/order-money.png" alt="">
               <div class="icon-price-box-main">
                 <p class="label">今日交易额</p>
-                <p class="m-order-price m-red">￥469.50</p>
+                <p class="m-order-price m-red">￥{{todaySaleData.day_total}}</p>
               </div>
             </div>
 
             <p class="m-order-bottom">
               <span>昨日</span>
               <section class="m-order-bottom-right">
-                <span>336.00</span>
-                <img src="/static/images/icon-order-up.png" alt="">
+                <span>{{yesterdaySaleData.day_total}}</span>
+                <img :src="todaySaleData.day_total > yesterdaySaleData.day_total ? '/static/images/icon-order-up.png' : '/static/images/icon-order-down.png'" alt="">
               </section>
             </p>
 
             <p class="m-order-all">
-              <span>全部交易额</span>
-              <span class="m-order-price">￥336.00</span>
+              <span>总交易额</span>
+              <span class="m-order-price">￥{{totalSaleData.day_total}}</span>
             </p>
           </li>
           <li>
@@ -79,21 +78,21 @@
               <img class="static-icon" src="/static/images/order-num.png" alt="">
               <div class="icon-price-box-main">
                 <p class="label">今日订单数</p>
-                <p class="m-order-price">469</p>
+                <p class="m-order-price">{{todaySaleData.day_count}}</p>
               </div>
             </div>
 
             <p class="m-order-bottom">
               <span>昨日</span>
               <section class="m-order-bottom-right">
-                <span>336</span>
-                <img src="/static/images/icon-order-down.png" alt="">
+                <span>{{yesterdaySaleData.day_count}}</span>
+                <img :src="todaySaleData.day_count > yesterdaySaleData.day_count ? '/static/images/icon-order-up.png' : '/static/images/icon-order-down.png'" alt="">
               </section>
             </p>
 
             <p class="m-order-all">
-              <span>全部订单数</span>
-              <span class="m-order-price">336</span>
+              <span>总订单数</span>
+              <span class="m-order-price">{{totalSaleData.day_count}}</span>
             </p>
           </li>
 
@@ -103,13 +102,13 @@
               <img class="static-icon" src="/static/images/order-pay.png" alt="">
               <div class="icon-price-box-main">
                 <p class="label">待付款订单数</p>
-                <p class="m-order-price">469</p>
+                <p class="m-order-price">{{todaySaleData.wai_pay_count}}</p>
               </div>
             </div>
             <p class="m-order-bottom">
               <span>昨日</span>
               <section class="icon-price-box-main">
-                <span>336</span>
+                <span>{{yesterdaySaleData.wai_pay_count}}</span>
               </section>
             </p>
           </li>
@@ -118,12 +117,12 @@
               <img class="static-icon" src="/static/images/order-back.png" alt="">
               <div class="icon-price-box-main">
                 <p class="label">退款订单数</p>
-                <p class="m-order-price">469</p>
+                <p class="m-order-price">{{todaySaleData.in_refund}}</p>
               </div>
             </div>
             <p class="m-order-bottom">
               <span>昨日</span>
-              <span>336.00</span>
+              <span>{{yesterdaySaleData.in_refund}}</span>
             </p>
           </li>
         </ul>
@@ -131,7 +130,6 @@
 
       <!--<block-title title="订单趋势"></block-title>-->
       <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
-    </template>
   </div>
 </template>
 
@@ -157,6 +155,13 @@
         level2,
 
         todos: [],
+
+        todaySaleData: {},
+        yesterdaySaleData: {},
+        totalSaleData: {},
+        upUrl: '',
+        downUrl: '',
+
         id: 'profile_echart',
         option: {
           color: ['#CB7E88', '#F2DA7A', '#97ADCB'],
@@ -264,21 +269,31 @@
         }
       },
 
-      getHistoryDetail(days) {
-        this.$http.get(this.$api.history_detail, {
+      async getHistoryDetail(days) {
+        let res = await this.$http.get(this.$api.history_detail, {
           params: {
-            days,
+            days: days,
           }
-        }).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
+        });
 
-              console.log(data);
-            }
-          }
-        )
+        if (res.data.status == 200) {
+          let resData = res.data,
+            data = res.data.data;
+
+          return data
+        }
+      },
+
+      async setSaleData() {
+        let today = new Date(),
+          yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+
+        let twoDaysData = await this.getHistoryDetail(this.formatDate(yesterday)+','+this.formatDate(today));
+        let allData = await this.getHistoryDetail();
+
+        this.yesterdaySaleData = twoDaysData[0];
+        this.todaySaleData = twoDaysData[1];
+        this.totalSaleData = allData[0];
       },
 
       formatDate: function (date) {
@@ -290,16 +305,12 @@
       },
     },
 
-    created() {
+    async created() {
       if (this.$store.getters.roles[0] != 'supplizer') {
         this.getDealingApproval();
       }
-      let today = new Date(),
-          yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
 
-      console.log(this.formatData(today));
-      this.getHistoryDetail();
-      this.getHistoryDetail();
+      await this.setSaleData();
     }
   }
 </script>

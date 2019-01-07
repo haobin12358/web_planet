@@ -414,7 +414,7 @@ export const asyncRouterMap = [
         path: 'approvalSetting',
         name: 'ApprovalSetting',
         component: () => import('src/views/setting/approvalSetting'),
-        meta: {title: '审批流',icon: 'yes',noCache: false, roles: level2}
+        meta: {title: '审批流',icon: 'yes',noCache: false, roles: level3}
       }
     ]
   },
