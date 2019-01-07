@@ -554,6 +554,9 @@
     p{
       margin-bottom: 20px;
       color: #666666;
+      width: 630px;
+      text-indent: 2em;
+      word-wrap: break-word;
     }
 
   }
