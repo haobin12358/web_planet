@@ -108,6 +108,7 @@ const api = {
   create_news: title + 'news/create_news',                                // 发布资讯
   update_news: title + 'news/update_news',                                // 修改资讯
   del_news: title + 'news/del_news',                                      // 删除资讯
+  news_shelves: title + 'news/news_shelves',                              // 资讯下架
 
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
   coupon_create: title + 'coupon/create',                                 // 后台创建优惠券

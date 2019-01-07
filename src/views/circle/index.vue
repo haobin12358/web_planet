@@ -56,8 +56,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editCircle(scope)">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteCircle(scope)">删除</el-button>
+          <el-button type="text" v-if="scope.row.nestatus == 'refuse'" @click="editCircle(scope)">编辑</el-button>
+          <el-button type="text" class="warning-text" v-if="scope.row.nestatus == 'usual'" @click="downCircle(scope)">下架</el-button>
+          <el-button type="text" class="danger-text" v-if="scope.row.nestatus == 'refuse'" @click="deleteCircle(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -195,6 +196,25 @@
       editCircle(scope) {
         this.$router.push({ path: '/circle/editCircle', query: { neid: scope.row.neid }})
       },
+      // 下架资讯
+      downCircle(scope) {
+        this.$confirm('此操作将下架该资讯, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.news_shelves, { neid: [scope.row.neid] }).then(res => {
+            if (res.data.status == 200) {
+              this.circleList.splice(scope.$index, 1);
+              this.$notify({
+                title: '下架成功',
+                message: `${scope.row.netitle}：下架成功`,
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => { });
+      },
       // 删除资讯
       deleteCircle(scope) {
         this.$confirm('此操作将删除该资讯, 是否继续?', '提示', {
@@ -202,7 +222,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(this.$api.del_news, { neid: scope.row.neid }).then(res => {
+          this.$http.post(this.$api.del_news, { neid: [scope.row.neid] }).then(res => {
             if (res.data.status == 200) {
               this.circleList.splice(scope.$index, 1);
               this.$notify({
