@@ -95,6 +95,7 @@
       if(this.from == 'new') {
         if(localStorage.getItem('is_new')) {
           Toast('微信登录用户请绑定手机号');
+          localStorage.removeItem('token')
         }
       }
     },
