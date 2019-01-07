@@ -83,7 +83,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
     if(data.data.status_code == 405007 || data.data.message == '用户不存在') {
       localStorage.removeItem('token');
       if(localStorage.getItem('toLogin')) {
-        Toast({ message: data.data.message, duration: 1000 });
+        Toast({ message: data.data.message, duration: 1000 });  // Toast('未登录');
       }else {
         // 避免code影响
         // router.push('/login');

@@ -260,6 +260,9 @@
           this.$router.push('/shop');
           sessionStorage.removeItem('shop')
         }
+        if(sessionStorage.getItem('new')) {
+          localStorage.setItem('toLogin', 'toLogin')
+        }
       },
       methods: {
         /*获取轮播图*/

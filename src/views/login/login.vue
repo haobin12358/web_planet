@@ -128,9 +128,9 @@
 
       if(this.isWeiXin()){    //是来自微信内置浏览器
         if(common.GetQueryString('code')) {
-          if(localStorage.getItem('is_new')) {
+         /* if(localStorage.getItem('is_new')) {
 
-          }else {
+          }else {*/
             // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
             window.localStorage.setItem("code", common.GetQueryString('code'));
             let params = {
@@ -141,7 +141,7 @@
               params.secret_usid = localStorage.getItem('secret_usid');
             }
             axios.post(api.wx_login, params).then(res => {
-              if(res.data.status == 200){
+              if(res.data.status == 200) {
                 localStorage.removeItem('secret_usid');
                 localStorage.removeItem('toLogin');
                 window.localStorage.setItem("token",res.data.data.token);
@@ -155,7 +155,7 @@
                 }
               }
             });
-          }
+          // }
         }
       }
     },
