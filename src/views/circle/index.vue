@@ -6,7 +6,7 @@
       <el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>
       <el-table-column label="标签名称" align="center" prop="itname"></el-table-column>
       <el-table-column label="标签描述" align="center" prop="itdesc"></el-table-column>
-      <el-table-column label="推荐" align="center" prop="itrecommend">
+      <el-table-column label="搜索推荐" align="center" prop="itrecommend">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.itrecommend" @change="recommend(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
@@ -78,7 +78,7 @@
         <el-form-item label="标签序号：" prop="itsort">
           <el-input class="short-input" v-model="itemForm.itsort"></el-input>
         </el-form-item>
-        <el-form-item label="推荐：" prop="itrecommend">
+        <el-form-item label="搜索推荐：" prop="itrecommend">
           <el-switch v-model="itemForm.itrecommend" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </el-form-item>

@@ -129,7 +129,7 @@
         </ul>
       </section>
 
-      <block-title title="订单趋势"></block-title>
+      <!--<block-title title="订单趋势"></block-title>-->
       <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
     </template>
   </div>
@@ -263,12 +263,43 @@
             break;
         }
       },
+
+      getHistoryDetail(days) {
+        this.$http.get(this.$api.history_detail, {
+          params: {
+            days,
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              console.log(data);
+            }
+          }
+        )
+      },
+
+      formatDate: function (date) {
+        var arr = [];
+        arr[0] = date.getFullYear();
+        arr[1] = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        arr[2] = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        return `${arr[0]}-${arr[1]}-${arr[2]}`
+      },
     },
 
     created() {
       if (this.$store.getters.roles[0] != 'supplizer') {
         this.getDealingApproval();
       }
+      let today = new Date(),
+          yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+
+      console.log(this.formatData(today));
+      this.getHistoryDetail();
+      this.getHistoryDetail();
     }
   }
 </script>

@@ -1,5 +1,25 @@
 <template>
   <div class="container">
+    <section class="tool-bar">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="活动开始时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                            placeholder="起始日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
         <el-table-column type="index"></el-table-column>
@@ -84,6 +104,11 @@
 
     data() {
       return {
+        inlineForm: {
+          starttime: '',
+          endtime: '',
+        },
+
         loading: false,
         total: 0,
         currentPage: 1,
@@ -97,6 +122,25 @@
     computed: {},
 
     methods: {
+      doSearch() {
+        if(this.inlineForm.starttime && this.inlineForm.endtime){
+          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+            let term = this.inlineForm.endtime;
+
+            this.inlineForm.endtime = this.inlineForm.starttime;
+            this.inlineForm.starttime = term;
+          }
+        }
+
+        this.getList();
+      },
+      doReset() {
+        this.inlineForm = {
+          starttime: '',
+          endtime: '',
+        };
+      },
+
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
@@ -106,14 +150,21 @@
             page_num: this.currentPage,
 
             ptid: 'totrialcommodity',
+            ...this.inlineForm,
+
           }
         }).then(
           res => {
             this.loading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
+              for (let i = 0; i < data.length; i++) {
+                if(!data[i].content.product){
+                  data[i].content.product = {}
+                }
+              }
               this.tableData = data;
               this.total = resData.total_count;
             }
