@@ -124,7 +124,7 @@
               </el-upload>
             </template>
           </el-table-column>
-          <el-table-column label="SN" prop="sn" align="center">
+          <el-table-column label="SN" prop="sn" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.trim="scope.row.skusn" maxlength="100"></el-input>
             </template>
@@ -132,17 +132,24 @@
 
           <!--自定商品规格-->
           <el-table-column :label="item" v-for="(item,index) in formData.prattribute" :key="index"
-                           align="center">
+                           align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="价格" prop="price" align="center">
+          <el-table-column label="价格" prop="price" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skuprice" maxlength="11"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="库存" prop="stock" align="center">
+          <!--<el-table-column label="让利" prop="price" align="center" width="120">
+            <template slot-scope="scope">
+              <el-input v-model.number="scope.row.skuprice" maxlength="11">
+                <template slot="append">%</template>
+              </el-input>
+            </template>
+          </el-table-column>-->
+          <el-table-column label="库存" prop="stock" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skustock" maxlength="11"></el-input>
             </template>

@@ -85,7 +85,7 @@
             </el-table-column>
             <el-table-column prop="prmainpic" align="center" label="图片" width="180">
               <template slot-scope="scope">
-                <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+                <table-cell-img :src="scope.row.prmainpic" :key="scope.row.avid"></table-cell-img>
               </template>
             </el-table-column>
             <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>

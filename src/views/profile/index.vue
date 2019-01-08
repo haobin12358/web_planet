@@ -5,7 +5,7 @@
       <div class="todo-line"></div>
 
       <ul class="todo-list">
-        <template v-if="checkPermission(level2)">
+        <!--<template v-if="checkPermission(level2)">-->
           <li class="todo-item" v-for="item in todos" :key="item.ptid" @click="gotoTodoPage(item)">
             <span class="label">{{item.ptname}}</span>
             <span class="num">{{item.approval_num}}</span>
@@ -34,17 +34,17 @@
           <!--<span class="label">活动审核</span>-->
           <!--<span class="num">21</span>-->
           <!--</router-link>-->
-        </template>
-        <template v-if="checkPermission(level0)">
-          <router-link tag="li" to="/product/index" class="todo-item prod-audit">
-            <span class="label">商品上架</span>
-            <span class="num">21</span>
-          </router-link>
-          <router-link tag="li" to="/activity/supplizerActi" class="todo-item activity">
-            <span class="label">活动申请</span>
-            <span class="num">21</span>
-          </router-link>
-        </template>
+        <!--</template>-->
+        <!--<template v-if="checkPermission(level0)">-->
+          <!--<router-link tag="li" to="/product/index" class="todo-item prod-audit">-->
+            <!--<span class="label">商品上架</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+          <!--<router-link tag="li" to="/activity/supplizerActi" class="todo-item activity">-->
+            <!--<span class="label">活动申请</span>-->
+            <!--<span class="num">21</span>-->
+          <!--</router-link>-->
+        <!--</template>-->
       </ul>
     </section>
 
@@ -248,14 +248,34 @@
           case 'topublish':
             this.$router.push('/approval/circleAudit')
             break;
+
           case 'tofreshmanfirstproduct':
-            this.$router.push('/approval/firstOrderActiAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/firstOrderActiAudit')
+            }else {
+              this.$router.push('/activity/firstOrder')
+            }
             break;
           case 'toguessnum':
-            this.$router.push('/approval/guessActiAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/guessActiAudit')
+            }else {
+              this.$router.push('/activity/guess')
+            }
             break;
           case 'tomagicbox':
-            this.$router.push('/approval/magicGiftBoxAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/magicGiftBoxAudit')
+            }else {
+              this.$router.push('/activity/magicGiftBox')
+            }
+            break;
+          case 'totrialcommodity':
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/trialProductAudit')
+            }else {
+              this.$router.push('/activity/trialProduct')
+            }
             break;
 
           case 'toshelves':
@@ -264,9 +284,7 @@
           case 'toreturn':
             this.$router.push('/approval/returnProductAudit')
             break;
-          case 'totrialcommodity':
-            this.$router.push('/approval/trialProductAudit')
-            break;
+
           case 'tocash':
             this.$router.push('/approval/withdrawAudit')
             break;
@@ -344,9 +362,7 @@
     },
 
     async created() {
-      if (this.$store.getters.roles[0] != 'supplizer') {
-        this.getDealingApproval();
-      }
+      this.getDealingApproval();
 
       await this.setSaleData();
     }

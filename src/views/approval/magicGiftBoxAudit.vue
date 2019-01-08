@@ -30,7 +30,7 @@
         <el-table-column label="商品图片" align="center" prop="prdescription">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.content.product.prmainpic"
-                            :key="scope.row.content.product.prmainpic"></table-cell-img>
+                            :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="180"

@@ -18,7 +18,7 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.prmainpic" :key="scope.row.prid"></table-cell-img>
+            <table-cell-img :src="scope.row.content.prmainpic" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="content.prtitle" label="商品名" width="280"></el-table-column>
