@@ -24,7 +24,7 @@
             </div>
             <div class="m-detail-right">
               <div>{{item.title_subtitle.title}}</div>
-              <div>{{item.title_subtitle.subtitle}}</div>
+              <div class="m-subtitle">{{item.title_subtitle.subtitle}}</div>
               <div class="m-detail-btn" v-if="item.cocancollect && !item.ready_collected && !item.navName && !order && !circle" @click="getCoupon(index)">点击领取</div>
               <div class="m-detail-btn" v-if="!item.cocancollect">不可领取</div>
               <div class="m-detail-btn" v-if="item.ready_collected">已领取</div>
@@ -153,6 +153,13 @@
           text-align: center;
           align-items: center;
           flex-direction: column;
+          .m-subtitle {
+            width: 180px;
+            white-space: nowrap;
+            /*text-indent: 2em;*/
+            overflow: hidden; // 超出的文本隐藏
+            text-overflow: ellipsis;    // 溢出用省略号显示
+          }
           .m-detail-btn {
             width: 96px;
             height: 25px;
