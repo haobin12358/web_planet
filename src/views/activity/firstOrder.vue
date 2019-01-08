@@ -134,7 +134,7 @@
     // 编辑申请
     editNew(scope) {
       this.scope = scope;
-      this.$refs.new.productDialog = true;
+      // this.$refs.new.productDialog = true;
       scope.row.prid = scope.row.fresh_product.prid;
       scope.row.where = 'new';
       this.$refs.new.chooseProduct(scope);

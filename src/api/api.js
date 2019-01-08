@@ -158,7 +158,13 @@ const api = {
   get_permission_admin_list: title + 'approval/get_permission_admin_list', // 获取审批权限下管理员列表
   delete_permission: title + 'approval/delete_permission',                  // 删除审批,多用途  pt:整个,pe:等级,pi标签
 
+  get_all_signsetting: title + 'siginsetting/get_all_signsetting',          // 获取签到设置
+  add_or_update_signsetting: title + 'siginsetting/add_or_update_signsetting',          // 新增获取修改签到设置
+  get_signin_default: title + 'user/get_signin_default',                    // 新增获取修改签到设置
+  set_signin_default: title + 'user/set_signin_default',                    // 设置默认签到规则
 
+  get_cash_notes: title + 'user/get_cash_notes',                            // 提现申请
+  apply_cash: title + 'user/apply_cash',                                    // 提现申请
 };
 
 export default api

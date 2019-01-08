@@ -175,10 +175,10 @@
     },
     methods: {
       checkPermission,
+
       // 获取不同状态的圈子资讯内容
       handleSelect(nestatus) {
         this.activeIndex = nestatus;
-        this.page_num = 1;
         this.nestatus = nestatus;
         this.circleLoading = true;
         this.$http.get(this.$api.get_all_news, {
@@ -186,6 +186,7 @@
           params: {
             page_num: this.page_num,
             page_size: this.page_size,
+
             kw: this.kw || '',
             nestatus: nestatus
           }
@@ -235,16 +236,21 @@
         this.focusedRowIndex = scope.$index;
       },
 
+      doSearch(){
+        this.page_num = 1;
+        this.handleSelect(this.nestatus);  // 获取不同状态的圈子资讯内容
+      },
       // 重置搜索框
       resetSearch() {
         this.kw = '';
-        this.handleSelect(this.nestatus);  // 获取不同状态的圈子资讯内容
+        this.doSearch();
       },
       // 添加资讯
       addCircle() {
         this.$router.push('/circle/editCircle');
       },
       sizeChange(val) {
+        this.page_num = 1;
         this.page_size = val;
         this.handleSelect(this.nestatus);
       },

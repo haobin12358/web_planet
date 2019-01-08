@@ -102,6 +102,7 @@
   import TableCellImg from "src/components/TableCellImg"
   import { getStore } from "src/utils/index"
 
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'ActivityIndex',
     data() {
@@ -262,22 +263,26 @@
       },
       // 改变活动序号
       sortChange(v) {
-        let params = {
-          actype: this.activityList[this.index].actype,
-          acshow: this.activityList[this.index].acshow,
-          acsort: this.activityList[this.index].acsort
-        };
-        this.$http.post(this.$api.activity_update, params).then(res => {
-          if (res.data.status == 200) {
-            this.$notify({
-              title: '保存成功',
-              message: `${this.activityList[this.index].acname}的序号已保存`,
-              type: 'success'
-            });
-            this.getActivity()          // 获取所有活动
-            this.index = -1;
-          }
-        });
+        if(positiveNumberReg.test(row.acsort)) {
+          let params = {
+            actype: this.activityList[this.index].actype,
+            acshow: this.activityList[this.index].acshow,
+            acsort: this.activityList[this.index].acsort
+          };
+          this.$http.post(this.$api.activity_update, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '保存成功',
+                message: `${this.activityList[this.index].acname}的序号已保存`,
+                type: 'success'
+              });
+              this.getActivity()          // 获取所有活动
+              this.index = -1;
+            }
+          });
+        }else{
+          this.$message.warning('请输入合理权重值');
+        }
       },
       // 重置
       initActivityForm() {

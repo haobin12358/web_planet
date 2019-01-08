@@ -256,7 +256,7 @@
       // 编辑我的申请
       editGuess(scope) {
         this.scope = scope;
-        this.$refs.magic.productDialog = true;
+        // this.$refs.magic.productDialog = true;
         scope.row.where = 'magic';
         this.$refs.magic.chooseProduct(scope);
       },

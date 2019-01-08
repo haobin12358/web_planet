@@ -225,7 +225,7 @@ export const asyncRouterMap = [
         path: 'attendance',
         name: 'Attendance',
         component: () => import('src/views/marketing/attendance'),
-        meta: {title: '签到设置', noCache: true, roles: level2}
+        meta: {title: '签到设置',icon: 'yes', noCache: true, roles: level2}
       }, {
         path: 'indexBanner',
         name: 'IndexBanner',
@@ -423,6 +423,23 @@ export const asyncRouterMap = [
         component: () => import('src/views/setting/approvalSetting'),
         meta: {title: '审批流', icon: 'yes', noCache: false, roles: level3}
       }
+    ]
+  },
+
+  {
+    path: '/personSetting',
+    component: Layout,
+    redirect: '/personSetting/withdraw',
+    name: 'PersonSetting',
+    alwaysShow: true,
+    meta: {title: '设置', icon: 'personSetting', roles: level0},
+    children: [
+      {
+        path: 'withdraw',
+        name: 'Withdraw',
+        component: () => import('src/views/personSetting/withdraw'),
+        meta: {title: '提现', noCache: true, roles: level0}
+      },
     ]
   },
 

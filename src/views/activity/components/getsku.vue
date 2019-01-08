@@ -20,6 +20,7 @@
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
         <el-table-column label="价格" align="center" prop="prprice"></el-table-column>
+        <el-table-column label="库存" align="center" prop="prstocks"></el-table-column>
         <el-table-column label="品牌" align="center" prop="brand.pbname"></el-table-column>
         <el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>
         <el-table-column label="操作" align="center" width="100" fixed="right">
@@ -53,7 +54,7 @@
       <el-form label-position="right" label-width="120px" v-if="where == 'guess'">
         <el-form-item label="参与时间：">
           <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd"
-                          v-model="gnaastarttime" placeholder="选择一个或多个日期">
+                          v-model="gnaastarttime" placeholder="选择一个或多个日期" :disabled="isEdit">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -61,7 +62,7 @@
       <el-form label-position="right" label-width="120px" inline v-if="where == 'magic'" style="margin-top: -30px">
         <el-form-item label="参与时间：">
           <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd"
-                          v-model="mbastarttime" placeholder="选择一个或多个日期">
+                          v-model="mbastarttime" placeholder="选择一个或多个日期" :disabled="isEdit">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="第一档:">
@@ -111,7 +112,7 @@
         <!--<el-table-column label="库存" align="center" prop="skustock"></el-table-column>-->
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.stock">
+            <el-input class="short-input" v-model="scope.row.stock" :disabled="isEdit">
             </el-input>
           </template>
         </el-table-column>
@@ -172,7 +173,7 @@
         prid: '',
         gnaastarttime: [],
         mbastarttime: [],
-        height: '500px',
+        // height: '500px',
         numList: [1, 2, 3, 5, 5, 10, 5, 10, 20, 30],
         isEdit: false
       }
@@ -185,7 +186,7 @@
     mounted() {
       this.getProduct();
       if(this.where == 'magic') {
-        this.height = '400px'
+        // this.height = '400px'
       }
     },
     methods: {

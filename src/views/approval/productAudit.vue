@@ -30,16 +30,14 @@
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center" width="120">
           <template slot-scope="scope">
-            <template slot-scope="scope">
-            <span v-if="scope.row.start">
-              {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
-            </span>
-            </template>
+              <span v-if="scope.row.start">
+                {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname }}
+              </span>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
-      <el-table-column label="创建时间" prop="createtime" align="center" width="110"></el-table-column>
+      <el-table-column label="审批创建时间" prop="createtime" align="center" width="180"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center" fixed="right">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>

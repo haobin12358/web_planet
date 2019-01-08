@@ -48,7 +48,7 @@
         </el-table-column>
       </el-table-column>
       <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
-      <el-table-column label="创建时间" prop="createtime" align="center" width="110"></el-table-column>
+      <el-table-column label="审批创建时间" prop="createtime" align="center" width="180"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
