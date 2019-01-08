@@ -94,11 +94,13 @@ const api = {
   guess_num_shelf_award: title + 'guess_num/shelf_award',                 // 撤销自己猜数字奖品申请
   guess_num_update_apply: title + 'guess_num/update_apply',               // 修改猜数字奖品申请
   guess_num_delete: title + 'guess_num/delete',                           // 删除猜数字奖品申请
+  guess_num_shelves: title + 'guess_num/shelves',                         // 下架猜数字奖品
   magic_box_list: title + 'magicbox/list',                                // 获取自己的魔盒奖品申请列表
   magic_box_apply_award: title + 'magicbox/apply_award',                  // 申请添加魔盒奖品
   magic_box_update_apply: title + 'magicbox/update_apply',                // 修改魔盒奖品申请
   magic_box_shelf_award: title + 'magicbox/shelf_award',                  // 撤销自己魔盒奖品申请
   magic_box_delete: title + 'magicbox/delete',                            // 删除魔盒奖品申请
+  magic_box_shelves: title + 'magicbox/shelves',                          // 下架魔盒奖品
 
   get_commodity: title + 'commodity/get',                                 // 获取试用商品
   get_commodity_detail: title + 'commodity/get_commodity',                // 获取试用商品

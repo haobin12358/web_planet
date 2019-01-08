@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <block-title title="申请列表"></block-title>
-    <section class="tool-bar">
+    <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="活动开始时间">
           <el-col :span="11">
@@ -25,8 +25,10 @@
           <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
+      <section class="action-wrap">
+        <el-button type="primary" icon="el-icon-plus" @click="addGuess">申请</el-button>
+      </section>
     </section>
-    <el-button type="primary" class="add-magic-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
     <get-sku @chooseSkus="chooseSkus" ref="magic" where="magic"></get-sku>
     <el-table v-loading="magicLoading" :data="magicList" stripe size="mini" :span-method="objectSpanMethod">
       <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
@@ -56,6 +58,7 @@
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus == -20 || scope.row.mbastatus == -10">编辑</el-button>
           <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.mbastatus == 0">撤销</el-button>
           <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == -20 || scope.row.mbastatus == -10">删除</el-button>
+          <el-button type="text" class="danger-text" @click="shelvesGuess(scope)" v-if="scope.row.mbastatus == 10">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -257,7 +260,7 @@
         scope.row.where = 'magic';
         this.$refs.magic.chooseProduct(scope);
       },
-      // 撤销我的申请
+      // 撤销
       delGuess(scope) {
         this.$confirm('此操作将撤销该申请，是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -276,7 +279,7 @@
           })
         }).catch(() => {});
       },
-      // 删除我的申请
+      // 删除
       deleteGuess(scope) {
         this.$confirm('此操作将删除该申请，是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -295,6 +298,25 @@
           })
         }).catch(() => {});
       },
+      // 下架
+      shelvesGuess(scope) {
+        this.$confirm('此操作将下架该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.magic_box_shelves, {mbaid: scope.row.mbaid}).then(res => {
+            if (res.data.status == 200) {
+              this.getMagic();
+              this.$notify({
+                title: '下架成功',
+                message: '该申请已下架成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => {});
+      },
     }
   }
 </script>
@@ -303,10 +325,6 @@
   @import "../../styles/myIndex";
 
   .container {
-    .add-magic-btn {
-      float: right;
-      margin: -50px 0 10px 0;
-    }
     .page-box {
       padding: 20px;
     }

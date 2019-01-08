@@ -1,31 +1,34 @@
 <template>
   <div class="container">
-    <block-title title="申请列表"></block-title><section class="tool-bar">
-    <el-form :inline="true" size="medium">
-      <el-form-item label="活动开始时间">
-        <el-col :span="11">
-          <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
-                          placeholder="起始日期"
-                          style="width: 100%;"></el-date-picker>
-        </el-col>
-        <el-col class="middle-line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
-                          style="width: 100%;"></el-date-picker>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="审核状态">
-        <el-select v-model="inlineForm.gnaastatus" @select="doSearch">
-          <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
-      </el-form-item>
-    </el-form>
-  </section>
-    <el-button type="primary" class="add-guess-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
+    <block-title title="申请列表"></block-title>
+    <section class="tool-bar space-between">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="活动开始时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                            placeholder="起始日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="审核状态">
+          <el-select v-model="inlineForm.gnaastatus" @select="doSearch">
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <section class="action-wrap">
+        <el-button type="primary" icon="el-icon-plus" @click="addGuess">申请</el-button>
+      </section>
+    </section>
     <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
       <el-table-column type="index" width="55"></el-table-column>
@@ -55,6 +58,7 @@
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">编辑</el-button>
           <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.gnaastatus == 0">撤销</el-button>
           <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">删除</el-button>
+          <el-button type="text" class="danger-text" @click="shelvesGuess(scope)" v-if="scope.row.gnaastatus == 10">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -236,6 +240,25 @@
           })
         }).catch(() => { });
       },
+      // 下架
+      shelvesGuess(scope) {
+        this.$confirm('此操作将下架该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.guess_num_shelves, {gnaaid: scope.row.gnaaid}).then(res => {
+            if (res.data.status == 200) {
+              this.getMagic();
+              this.$notify({
+                title: '下架成功',
+                message: '该申请已下架成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => {});
+      },
     }
   }
 </script>
@@ -244,10 +267,6 @@
   @import "../../styles/myIndex";
 
   .container {
-    .add-guess-btn {
-      float: right;
-      margin: -50px 0 10px 0;
-    }
     .page-box {
       padding: 20px;
     }
