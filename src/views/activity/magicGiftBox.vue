@@ -3,8 +3,8 @@
     <block-title title="申请列表"></block-title>
     <el-button type="primary" class="add-magic-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
     <get-sku @chooseSkus="chooseSkus" ref="magic" where="magic"></get-sku>
-    <el-table v-loading="magicLoading" :data="magicList" stripe size="mini">
-      <el-table-column type="index" width="55"></el-table-column>
+    <el-table v-loading="magicLoading" :data="magicList" stripe size="mini" :span-method="objectSpanMethod">
+      <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.skupic" :key="scope.row.skupic"></table-cell-img>
@@ -14,12 +14,23 @@
       <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="mbastarttime"></el-table-column>
       <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
-      <el-table-column label="参与数量" align="center" prop="skustock"></el-table-column>
-      <el-table-column label="申请状态" align="center" prop="mbastatus_zh"></el-table-column>
+      <el-table-column label="参与数量" align="center" prop="skustock" :render-header="stockHeaderRender"></el-table-column>
+      <el-table-column label="申请状态" align="center" prop="mbastatus_zh">
+        <template slot-scope="scope">
+          <el-popover
+            v-if="scope.row.mbarejectreason"
+            placement="top-start" title="拒绝理由" width="200" trigger="click">
+            {{scope.row.mbarejectreason}}
+            <el-tag slot="reference" :type="statusTagType(scope.row.mbastatus)">{{scope.row.mbastatus_zh}}</el-tag>
+          </el-popover>
+          <el-tag v-else :type="statusTagType(scope.row.mbastatus)">{{scope.row.mbastatus_zh}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus == -20">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == 0">撤销</el-button>
+          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == 0">撤销
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -43,10 +54,13 @@
         page_size: 10,
         page_num: 1,
         total: 0,
-        scope: {}             // 暂存scope
+        scope: {},             // 暂存scope
+
+        spanArr: [],
+        groupCount: 1,
       }
     },
-    components: { getSku, TableCellImg },
+    components: {getSku, TableCellImg},
     mounted() {
       this.getMagic()
     },
@@ -58,7 +72,7 @@
       },
       // 申请添加魔盒奖品
       chooseSkus(sku, isEdit) {
-        if(isEdit) {
+        if (isEdit) {
           sku.mbaid = this.scope.row.mbaid;
           this.$http.post(this.$api.magic_box_update_apply, sku).then(res => {
             if (res.data.status == 200) {
@@ -72,7 +86,7 @@
               this.$refs.magic.skusDialog = false;
             }
           });
-        }else {
+        } else {
           this.$http.post(this.$api.magic_box_apply_award, sku).then(res => {
             if (res.data.status == 200) {
               this.$notify({
@@ -103,14 +117,80 @@
           params: {
             page_num: this.page_num,
             page_size: this.page_size,
-          }}).then(res => {
+          }
+        }).then(res => {
           if (res.data.status == 200) {
+            this.getSpanArr(res.data.data);
+            for (let i = 0; i < this.spanArr.length; i++) {
+              if(this.spanArr[i]>0){
+                res.data.data[i].groupCount = this.groupCount;
+                this.groupCount ++;
+              }
+            }
+            this.groupCount = 1;
             this.magicList = res.data.data;
             this.total = res.data.total_count;
             this.magicLoading = false;
           }
         })
       },
+      statusTagType(status) {
+        switch (status) {
+          case 0:
+            return 'primary';
+          case -10:
+            return 'danger'
+          case -20:
+            return 'warning'
+          case 10:
+            return 'success'
+        }
+      },
+
+      getSpanArr(data) {
+        this.spanArr = [];
+        this.pos = 0;
+
+        for (let i = 0; i < data.length; i++) {
+          if (i === 0) {
+            this.spanArr.push(1);
+            this.pos = 0
+          } else {
+            // 判断当前元素与上一个元素是否相同
+            if (data[i].osid === data[i - 1].osid) {
+              this.spanArr[this.pos] += 1;
+              this.spanArr.push(0);
+            } else {
+              this.spanArr.push(1);
+              this.pos = i;
+            }
+          }
+        }
+      },
+      objectSpanMethod({row, column, rowIndex, columnIndex}) {
+        if (columnIndex === 0) {
+          const _row = this.spanArr[rowIndex];
+          const _col = _row > 0 ? 1 : 0;
+          return {
+            rowspan: _row,
+            colspan: _col
+          }
+        }
+      },
+
+      stockHeaderRender(h, {column}) {
+        return (
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              同一次申请多个日期的活动商品会被分成多个单日活动去审批,同一次申请的算同一批,每批的库存是共用的,合并的单元格表示为同一批
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
+
       // 编辑我的申请
       editGuess(scope) {
         this.scope = scope;
@@ -125,7 +205,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(this.$api.magic_box_shelf_award, { mbaid: scope.row.mbaid }).then(res => {
+          this.$http.post(this.$api.magic_box_shelf_award, {mbaid: scope.row.mbaid}).then(res => {
             if (res.data.status == 200) {
               this.getMagic();
               this.$notify({
@@ -135,7 +215,8 @@
               });
             }
           })
-        }).catch(() => { });
+        }).catch(() => {
+        });
       },
     }
   }

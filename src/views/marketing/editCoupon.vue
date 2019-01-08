@@ -82,12 +82,12 @@
               <template slot="append">张</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="可叠加使用：" prop="cousenum">
-            <el-input class="short-input" v-model="couponForm.cousenum">
-              <template slot="append">张</template>
-            </el-input>
-            <span class="form-item-end-tip" v-if="couponForm.cousenum == 0">0 代表无限制</span>
-          </el-form-item>
+          <!--<el-form-item label="可叠加使用：" prop="cousenum">-->
+            <!--<el-input class="short-input" v-model="couponForm.cousenum">-->
+              <!--<template slot="append">张</template>-->
+            <!--</el-input>-->
+            <!--<span class="form-item-end-tip" v-if="couponForm.cousenum == 0">0 代表无限制</span>-->
+          <!--</el-form-item>-->
           <el-form-item label="发放起止时间：">
             <el-date-picker
               v-model="cosendtime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
@@ -113,7 +113,7 @@
             <el-switch v-model="iscoiscancollect"
                        active-color="#409EFF" inactive-color="#DBDCDC"></el-switch>
           </el-form-item>
-          
+
           <el-form-item>
             <el-button type="primary" @click="checkFormData">保存优惠券</el-button>
           </el-form-item>
@@ -161,7 +161,7 @@
           codownline: '0',
           colimitnum: '1',
           cocollectnum: '1',
-          cousenum: '1',
+          // cousenum: '1',
           cosendstarttime: '',
           cosendendtime: '',
           covalidstarttime: '',
@@ -183,9 +183,9 @@
           cosubtration: [
             { required: true, message: '减额必填', trigger: 'blur' }
           ],
-          cousenum: [
-            { required: true, message: '可叠加使用数量必填', trigger: 'blur' }
-          ]
+          // cousenum: [
+          //   { required: true, message: '可叠加使用数量必填', trigger: 'blur' }
+          // ]
         },
         radioDiscount: 10,
         radioMoney: 0,
@@ -278,7 +278,7 @@
         // 发放数量、个人可领取、可叠加使用
         this.couponForm.colimitnum = coupon.colimitnum;
         this.couponForm.cocollectnum = coupon.cocollectnum;
-        this.couponForm.cousenum = coupon.cousenum;
+        // this.couponForm.cousenum = coupon.cousenum;
         if(coupon.cosendstarttime && coupon.cosendendtime) {
           // 发放时间起止
           this.cosendtime = [coupon.cosendstarttime, coupon.cosendendtime]
@@ -303,7 +303,6 @@
       // 获取品牌列表
       getPbList() {
         this.$http.get(this.$api.brand_list, { noLoading: true, params: { page_num: 1, page_size: 300 }}).then(res => {
-          this.brandLoading = false;
           if (res.data.status == 200) {
             this.brandList = res.data.data;
           }

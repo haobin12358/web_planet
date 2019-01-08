@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item label="审核状态">
           <el-select v-model="inlineForm.avstatus" @select="doSearch">
-            <el-option v-for="(value, key) in statusOption" :label="value" :value="key"></el-option>
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>

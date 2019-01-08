@@ -62,16 +62,17 @@
         <el-input v-model.trim="formData.prtitle" maxlength="100" style="width: 700px;"></el-input>
       </el-form-item>
       <el-form-item label="商品描述" prop="prdescription">
-        <el-input v-model.trim="formData.prdescription" maxlength="1000" type="textarea" style="width: 700px;"></el-input>
+        <el-input v-model.trim="formData.prdescription" maxlength="1000" type="textarea"
+                  style="width: 700px;"></el-input>
       </el-form-item>
       <el-form-item label="划线价格" prop="prlineprice">
-        <el-input style="width: 200px;" v-model.number="formData.prlineprice" maxlength="11" ></el-input>
+        <el-input style="width: 200px;" v-model.number="formData.prlineprice" maxlength="11"></el-input>
       </el-form-item>
       <el-form-item label="价格" prop="prprice">
         <el-input v-model.number="formData.prprice" style="width: 200px;" maxlength="11"></el-input>
       </el-form-item>
       <!--<el-form-item label="运费" prop="prfreight">-->
-        <!--<el-input v-model.number="formData.prfreight" style="width: 200px;" maxlength="11"></el-input>-->
+      <!--<el-input v-model.number="formData.prfreight" style="width: 200px;" maxlength="11"></el-input>-->
       <!--</el-form-item>-->
 
       <el-form-item label="商品规格" required>
@@ -85,7 +86,8 @@
             </el-tag>
 
             <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                      maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
+                      maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false"
+                      placeholder="例如:颜色,尺码">
             </el-input>
             <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
                         placement="right">
@@ -124,7 +126,7 @@
           </el-table-column>
           <el-table-column label="SN" prop="sn" align="center">
             <template slot-scope="scope">
-              <el-input v-model.trim="scope.row.skusn" maxlength="100" ></el-input>
+              <el-input v-model.trim="scope.row.skusn" maxlength="100"></el-input>
             </template>
           </el-table-column>
 
@@ -471,6 +473,9 @@
         this.$http.get(this.$api.brand_list, {
           params: {
             pbstatus: 'upper',
+              page_num: 1,
+              page_size: 200
+
           }
         }).then(
           res => {
@@ -707,7 +712,7 @@
             res => {
               if (res.data.status == 200) {
                 let resData = res.data,
-                    data = res.data.data;
+                  data = res.data.data;
 
                 if (this.goToIndexAfterSave) {
                   this.$router.push('/product');
@@ -838,7 +843,6 @@
         // this.setTags();
 
         if (this.$route.query.prid) { //  编辑
-
           //  编辑更换的商品或之前是新增,数据替换
           if (this.$route.query.prid != this.formData.prid) {
             this.$http.get(this.$api.product_get, {
@@ -874,7 +878,9 @@
 
         this.$http.get(this.$api.items_list, {
           params: {
-            ittype: 0
+            ittype: 0,
+            page_num: 1,
+            page_size: 200,
           }
         }).then(
           res => {

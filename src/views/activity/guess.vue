@@ -15,7 +15,17 @@
       <el-table-column label="参与日期" align="center" prop="gnaastarttime"></el-table-column>
       <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
       <el-table-column label="参与数量" align="center" prop="skustock"></el-table-column>
-      <el-table-column label="申请状态" align="center" prop="gnaastatus_zh"></el-table-column>
+      <el-table-column label="申请状态" align="center" prop="gnaastatus_zh">
+        <template slot-scope="scope">
+          <el-popover
+            v-if="scope.row.gnarejectreason"
+            placement="top-start" title="拒绝理由" width="200" trigger="click">
+            {{scope.row.gnarejectreason}}
+            <el-tag slot="reference" :type="statusTagType(scope.row.gnaastatus)">{{scope.row.gnaastatus_zh}}</el-tag>
+          </el-popover>
+          <el-tag v-else :type="statusTagType(scope.row.gnaastatus)">{{scope.row.gnaastatus_zh}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20">编辑</el-button>
@@ -111,6 +121,19 @@
           }
         })
       },
+      statusTagType(status) {
+        switch (status) {
+          case 0:
+            return 'primary';
+          case -10:
+            return 'danger'
+          case -20:
+            return 'warning'
+          case 10:
+            return 'success'
+        }
+      },
+
       // 编辑我的申请
       editGuess(scope) {
         this.scope = scope;

@@ -28,7 +28,7 @@
       <el-table-column label="权重" align="center" :render-header="sortHeaderRender">
         <template slot-scope="scope">
           <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @keyup.native.enter="sortChange"></el-input>
-          <el-button type="text" v-if="index == scope.row.$index" @click="sortChange">保存</el-button>
+          <el-button type="text" v-if="index == scope.$index" @click="sortChange">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -108,7 +108,7 @@
       return {
         activityLoading: false,
         activityList: [],
-        index: '',                  // 暂存点击的是哪一行
+        index: '-1',                  // 暂存点击的是哪一行
         activityDialog: false,
         formData: {
           actype: '',
@@ -275,6 +275,7 @@
               type: 'success'
             });
             this.getActivity()          // 获取所有活动
+            this.index = -1;
           }
         });
       },

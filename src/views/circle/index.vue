@@ -385,8 +385,9 @@
         }).then(() => {
           let params = {
             itid: scope.row.itid,
+            itname: scope.row.itname,
             ittype: 10,
-            isdelete: true
+            isdelete: true,
           }
           this.$http.post(this.$api.update_items, params).then(res => {
             if (res.data.status == 200) {
