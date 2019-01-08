@@ -180,7 +180,7 @@
         MessageBox.confirm('你确定要删除这条圈子吗?').then(action => {
           if(action){
             axios.post(api.del_news + '?token='+localStorage.getItem('token'),{
-              neid: that.news_info.neid
+              neid: [that.news_info.neid]
             }).then(res => {
               if(res.data.status == 200) {
                 Toast('删除成功');

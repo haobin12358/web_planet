@@ -87,6 +87,27 @@
       }
     },
     mixins: [wxapi],
+    beforeDestroy() {
+      // 如果不是去选择地址，则把product的localstorage去除
+      if(!sessionStorage.getItem('choose')) {
+        localStorage.removeItem('mbaid');
+        sessionStorage.removeItem('choose');
+      }
+    },
+    mounted() {
+      common.changeTitle('魔法礼盒');
+      this.mbjid = this.$route.query.mbjid;
+      if(localStorage.getItem('mbjid')) {
+        localStorage.setItem('mbjid', this.$route.query.mbjid);
+      }
+      this.getBox();                 // 获取该活动的规则
+      this.uaid = localStorage.getItem('uaid');
+      if(this.uaid) {
+        localStorage.removeItem('uaid');
+        this.buyNow();      // 点击购买
+      }
+      wxapi.wxRegister(location.href.split('#')[0]);
+    },
     methods: {
       // 点击魔盒
       pandora(level) {
@@ -121,7 +142,8 @@
           let options = {
             title: '魔法礼盒',
             desc: '快来帮您的好友拆开魔法礼盒吧',
-            imgUrl: this.box.prpic
+            imgUrl: location.origin + this.box.prpic
+            // imgUrl: this.box.prpic
           };
           // 参与魔盒活动(获取分享所需的url参数) - 拿mbjid
           axios.post(api.join_magicbox + '?token='+ localStorage.getItem('token'), { mbaid: this.mbaid }).then(res => {
@@ -279,27 +301,6 @@
           onBridgeReady();
         }
       }
-    },
-    beforeDestroy() {
-      // 如果不是去选择地址，则把product的localstorage去除
-      if(!sessionStorage.getItem('choose')) {
-        localStorage.removeItem('mbaid');
-        sessionStorage.removeItem('choose');
-      }
-    },
-    mounted() {
-      common.changeTitle('魔法礼盒');
-      this.mbjid = this.$route.query.mbjid;
-      if(localStorage.getItem('mbjid')) {
-        localStorage.setItem('mbjid', this.$route.query.mbjid);
-      }
-      this.getBox();                 // 获取该活动的规则
-      this.uaid = localStorage.getItem('uaid');
-      if(this.uaid) {
-        localStorage.removeItem('uaid');
-        this.buyNow();      // 点击购买
-      }
-      wxapi.wxRegister(location.href.split('#')[0]);
     }
   }
 </script>
