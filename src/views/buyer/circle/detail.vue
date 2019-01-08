@@ -164,7 +164,7 @@
       sessionStorage.removeItem('neid');
       if(sessionStorage.getItem('circleFrom') == 'buyer') {
         if(this.$route.name == 'productDetail') {
-
+          sessionStorage.setItem('circleProduct', true)
         }else {
           this.$router.push('/circle');
         }

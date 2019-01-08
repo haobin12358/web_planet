@@ -123,6 +123,10 @@
     },
     activated() {
       this.getNav();
+      if(sessionStorage.getItem('circleProduct')) {
+        this.$router.push('/shop');
+        sessionStorage.removeItem('circleProduct')
+      }
     },
     // 引入keepAlive后代替beforeDestroy
     deactivated() {
