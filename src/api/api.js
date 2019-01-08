@@ -68,6 +68,7 @@ const api={
   get_all_news: title + 'news/get_all_news',                     // 获取资讯列表
   get_news_content: title +'news/get_news_content',              // 获取资讯详情
   favorite_news: title + 'news/favorite_news',                   // 资讯点赞
+  del_news: title + 'news/del_news',                             // 删除自己的资讯
   create_comment: title + 'news/create_comment',                 // 发表评论
   favorite_comment: title +'news/favorite_comment',              // 评论点赞
   del_comment: title + 'news/del_comment',                       // 删除评论

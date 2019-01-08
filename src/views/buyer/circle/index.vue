@@ -214,7 +214,16 @@
         this.select_nav = arr[index];
         this.page_info.page_num = 1;
         this.bottom_show = false;
-        this.getNews(this.nav_list[index].itid);
+        if(arr[index].itid == 'mynews') {
+          if(localStorage.getItem('token')) {
+            this.getNews(this.nav_list[index].itid)
+          }else {
+            this.news_list = [];
+            Toast('未登录')
+          }
+        }else {
+          this.getNews(this.nav_list[index].itid)
+        }
       },
       /*获取导航*/
       getNav(){
@@ -273,7 +282,7 @@
         })
       },
       /*获取资讯列表*/
-      getNews(itid){
+      getNews(itid) {
         axios.get(api.get_all_news,{
           params:{
             token:localStorage.getItem('token'),

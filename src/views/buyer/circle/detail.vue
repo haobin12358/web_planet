@@ -37,6 +37,9 @@
         <!--<span class="m-icon-btn" @click="shareCircle">
           <span>分 享</span>
         </span>-->
+        <span class="m-icon-btn" @click="deleteCircle" v-if="news_info.is_own">
+          <span>删 除</span>
+        </span>
       </div>
       <span class="m-circle-comment float-right" @click="changeModal('show_modal',true)">评论 {{news_info.commentnumber}}</span>
     </div>
@@ -160,13 +163,33 @@
       this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
       if(sessionStorage.getItem('circleFrom') == 'buyer') {
-        this.$router.push('/circle');
+        if(this.$route.name == 'productDetail') {
+
+        }else {
+          this.$router.push('/circle');
+        }
       }else if(sessionStorage.getItem('circleFrom') == 'store') {
         this.$router.push('/material/circle');
       }
       sessionStorage.removeItem('circleFrom');
     },
     methods: {
+      // 删除圈子
+      deleteCircle() {
+        let that = this;
+        MessageBox.confirm('你确定要删除这条圈子吗?').then(action => {
+          if(action){
+            axios.post(api.del_news + '?token='+localStorage.getItem('token'),{
+              neid: that.news_info.neid
+            }).then(res => {
+              if(res.data.status == 200) {
+                Toast('删除成功');
+                this.$router.go(-1);
+              }
+            })
+          }
+        });
+      },
       // 分享圈子 - 详情页点击
       shareCircle() {
         if(localStorage.getItem('token')) {
