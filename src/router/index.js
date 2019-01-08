@@ -119,6 +119,8 @@ export const asyncRouterMap = [
     path: '/order',
     component: Layout,
     redirect: 'order',
+    alwaysShow: true,
+    name: 'OrderIndex',
     meta: {title: '订单', icon: 'dingdan', roles: level1},
     children: [
       {
@@ -147,6 +149,8 @@ export const asyncRouterMap = [
     path: '/user',
     component: Layout,
     redirect: '/user/distributor',
+    alwaysShow: true,
+    name: 'Distributor',
     meta: {title: '用户', icon: 'huiyuan', roles: level2},
     children: [
       {
@@ -235,13 +239,15 @@ export const asyncRouterMap = [
     path: '/commission',
     component: Layout,
     redirect: 'commission',
+    alwaysShow: true,
+    name: 'CommissionIndex',
     meta: {title: '佣金', icon: 'yongjin', roles: level2},
     children: [
       {
         path: 'commission',
         name: 'CommissionIndex',
         component: () => import('src/views/commission/index'),
-        meta: {title: '佣金', icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '佣金概览', icon: 'yes', noCache: true, roles: level2}
       }, {
         path: 'commissionSetting',
         name: 'CommissionSetting',

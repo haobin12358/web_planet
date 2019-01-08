@@ -7,7 +7,7 @@
       <el-table-column type="index" width="55"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.skupic" :key="scope.row.skupic"></table-cell-img>
+          <table-cell-img :src="scope.row.skupic" :key="scope.row.gnaaid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌" align="center" prop="pbname"></el-table-column>

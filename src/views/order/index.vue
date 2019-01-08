@@ -3,7 +3,7 @@
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
         <el-form-item label="订单号">
-          <el-input v-model.trim="inlineForm.omno" maxlength="100"  clearable></el-input>
+          <el-input v-model.trim="inlineForm.omno" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item label="收件人">
           <el-input v-model.trim="inlineForm.omrecvname" maxlength="100" clearable></el-input>
@@ -16,11 +16,13 @@
         </el-form-item>
         <el-form-item label="下单时间">
           <el-col :span="11">
-            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_start" placeholder="起始日期" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_start"
+                            placeholder="起始日期" style="width: 100%;"></el-date-picker>
           </el-col>
           <el-col class="middle-line" :span="2">-</el-col>
           <el-col :span="11">
-            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_end" placeholder="结束日期" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.createtime_end" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -42,22 +44,18 @@
     </section>
 
     <el-menu :default-active="activeName" class="el-menu-demo" mode="horizontal" @select="handleClick">
-      <el-menu-item v-for="item in menuList" :key="item.status" :index="item.status.toString()">{{`${item.name} ${item.count}`}}</el-menu-item>
-      <!--<el-menu-item index="-1">全部</el-menu-item>-->
-      <!--<el-menu-item index="0">待支付</el-menu-item>-->
-      <!--<el-menu-item index="10">待发货</el-menu-item>-->
-      <!--<el-menu-item index="20">已发货</el-menu-item>-->
-      <!--<el-menu-item index="35">待评价</el-menu-item>-->
-      <!--<el-menu-item index="30">已完成</el-menu-item>-->
-      <!--<el-menu-item index="inrefund">退货中</el-menu-item>-->
-      <!--<el-menu-item index="-40">已取消</el-menu-item>-->
+      <el-menu-item v-for="item in menuList" :key="item.status" :index="item.status.toString()">{{`${item.name}
+        ${item.count}`}}
+      </el-menu-item>
     </el-menu>
 
     <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="expandAll"
-              style="width: 100%;" @row-dblclick="expandRow" :cell-class-name="cellFunction" :row-class-name="tableRowClassName">
+              style="width: 100%;" @row-dblclick="expandRow" :cell-class-name="cellFunction"
+              :row-class-name="tableRowClassName">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data="props.row.order_part" size="small" style="width: 100%" :row-class-name="subTableRowClassName">
+          <el-table :data="props.row.order_part" size="small" style="width: 100%"
+                    :row-class-name="subTableRowClassName">
             <el-table-column prop="prmainpic" align="center" label="图片" width="180">
               <template slot-scope="scope">
                 <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
@@ -95,7 +93,7 @@
 
       <el-table-column label="退款中" width="120" align="center">
         <template slot-scope="scope">
-            {{scope.row.ominrefund ? '是':'否'}}
+          {{scope.row.ominrefund ? '是':'否'}}
         </template>
       </el-table-column>
       <el-table-column prop="ommessage" label="备注" width="180" align="center" show-tooltip-overflow></el-table-column>
@@ -105,7 +103,7 @@
         <template slot-scope="scope">
           <el-button type="text" @click="gotoOrderDetail(scope.row)">查看</el-button>
           <!--<el-button type="text" v-if="scope.row.omstatus == 0" class="warning-text" @click="doCancelOrder(scope.row)">-->
-            <!--取消订单-->
+          <!--取消订单-->
           <!--</el-button>-->
         </template>
       </el-table-column>
@@ -169,11 +167,11 @@
           this.$refs.orderTable.toggleRowExpansion(this.orderData[i], this.expandAll);
         }
       },
-      doSearch(){
+      doSearch() {
         this.expandAll = false;
         this.currentPage = 1;
-        if(this.inlineForm.createtime_end && this.inlineForm.createtime_start){
-          if(new Date(this.inlineForm.createtime_start) > new Date(this.inlineForm.createtime_end)){
+        if (this.inlineForm.createtime_end && this.inlineForm.createtime_start) {
+          if (new Date(this.inlineForm.createtime_start) > new Date(this.inlineForm.createtime_end)) {
             let term = this.inlineForm.createtime_end;
 
             this.inlineForm.createtime_end = this.inlineForm.createtime_start;
@@ -182,7 +180,7 @@
         }
         this.setOrderList();
       },
-      doReset(){
+      doReset() {
         this.inlineForm = {
           omno: '',
           omrecvname: '',
@@ -195,8 +193,8 @@
       },
 
       //  获取每个订单类型的数量
-      setOrderType(){
-        this.$http.get(this.$api.order_count,{
+      setOrderType() {
+        this.$http.get(this.$api.order_count, {
           params: {
             extentions: 'refund'
           }
@@ -204,7 +202,7 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               data[0].status = -1;
               this.menuList = data;
@@ -241,29 +239,29 @@
             return 'info'
         }
       },
-      tableRowClassName({row, rowIndex}){
-        if(row.ominrefund){
+      tableRowClassName({row, rowIndex}) {
+        if (row.ominrefund) {
           return 'warning-row';
         }
 
         return ''
       },
 
-      getSkuCellText(detail, attribute ){
+      getSkuCellText(detail, attribute) {
         let rst = '';
 
         for (let i = 0; i < detail.length; i++) {
           rst += attribute[i] + ': ' + detail[i];
 
-          if(i+1 < detail.length){
+          if (i + 1 < detail.length) {
             rst += ', '
           }
         }
 
         return rst;
       },
-      subTableRowClassName({row, rowIndex}){
-        if(row.opisinora){
+      subTableRowClassName({row, rowIndex}) {
+        if (row.opisinora) {
           return 'warning-row';
         }
 
@@ -286,7 +284,7 @@
 
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.orderData = data;
               this.total = resData.total_count;
@@ -308,15 +306,41 @@
       },
 
       gotoOrderDetail(row) {
-        // if(row.inrefund){
-        //   this.$message('asd')
-        // }
-
-        if(row.ominrefund || row.order_part.find(item => item.opisinora)){
+        if (row.ominrefund || row.order_part.find(item => item.opisinora)) {
           this.$message({
             message: '订单中含有售后中的商品',
             type: 'warning'
           });
+        } else {
+          //  对 用户刚下单就取消 的旧数据进行拦截
+          if ([0, 10].includes(row.omstatus)) {
+            this.$http.get(this.$api.get_order_by_LOid, {
+              params: {
+                omid: row.omid
+              }
+            }).then()
+
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              if (data.omstatus == 40) {
+                this.$confirm(`用户发起了退货,是否前往退货审批页?`,'提示').then(
+                  ()=>{
+
+
+                  }
+                )
+              }
+              if (data.omstatus == -40) {
+                this.$message.info(`用户已取消了订单`);
+                this.getList();
+              }
+            }
+            return
+          } else {
+
+          }
         }
         this.$router.push({
           path: `/order/orderDetail`,
@@ -334,7 +358,7 @@
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.setOrderList();
                   this.$notify({
@@ -350,12 +374,12 @@
         )
       },
 
-      initProfileSearch(){
-        if(this.$route.params.searchDate){
+      initProfileSearch() {
+        if (this.$route.params.searchDate) {
           this.inlineForm.createtime_start = this.$route.params.searchDate;
           this.inlineForm.createtime_end = this.$route.params.searchDate;
         }
-        if (this.$route.params.omstatus){
+        if (this.$route.params.omstatus) {
           this.activeName = this.$route.params.omstatus.toString();
         }
 
@@ -364,11 +388,11 @@
       }
     },
 
-    activated(){
-      if(this.repeat){
+    activated() {
+      if (this.repeat) {
         this.initProfileSearch();
         this.setOrderList();
-      }else{
+      } else {
         this.repeat = false;
       }
     },

@@ -762,6 +762,13 @@
       //  formData.skuvalue(规格属性排序)干扰因素过多,所以需要用户最后确认
       //  该方法是确认前对其他参数的校验,最后在排序面板点确认触发doSaveProd
       checkFormData(goToIndexAfterSave) {
+        let checkSkuRst = this.checkSkuData();
+
+        if (checkSkuRst) {
+          this.$message.warning(checkSkuRst)
+          return
+        }
+        return
         this.$refs.prodForm.validate(
           valid => {
             if (valid) {
@@ -788,7 +795,7 @@
           if (this.formData.skus.length) {
             for (let i = 0; i < this.formData.skus.length; i++) {
               let detailTip = '',
-                currentSku = this.formData.skus[i];
+                  currentSku = this.formData.skus[i];
 
               // 先判断外面的
               if (!currentSku.skupic) {
@@ -814,9 +821,9 @@
               if (detailTip) {
                 return `第${i + 1}行信息不全` + detailTip;
               } else {
-                return
               }
             }
+            return
           } else {
             return '至少需要有一行商品属性'
           }
