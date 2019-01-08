@@ -16,7 +16,7 @@
           </el-col>
         </el-form-item>
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+          <el-select v-model="inlineForm.mbastatus" @select="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -54,8 +54,8 @@
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus == -20 || scope.row.mbastatus == -10">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == 0">撤销
-          </el-button>
+          <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.mbastatus == 0">撤销</el-button>
+          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == -20 || scope.row.mbastatus == -10">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,7 +76,7 @@
         inlineForm: {
           starttime: '',
           endtime: '',
-          avstatus: 'all',
+          mbastatus: 'all',
         },
         statusOption: {
           'all': '全部',
@@ -118,7 +118,7 @@
         this.inlineForm = {
           starttime: '',
           endtime: '',
-          avstatus: 'all',
+          mbastatus: 'all',
         };
         this.doSearch();
       },
@@ -257,7 +257,7 @@
         this.$refs.magic.chooseProduct(scope);
       },
       // 撤销我的申请
-      deleteGuess(scope) {
+      delGuess(scope) {
         this.$confirm('此操作将撤销该申请，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -273,8 +273,26 @@
               });
             }
           })
-        }).catch(() => {
-        });
+        }).catch(() => {});
+      },
+      // 删除我的申请
+      deleteGuess(scope) {
+        this.$confirm('此操作将删除该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.magic_box_delete, {mbaid: scope.row.mbaid}).then(res => {
+            if (res.data.status == 200) {
+              this.getMagic();
+              this.$notify({
+                title: '删除成功',
+                message: '该申请已删除成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => {});
       },
     }
   }

@@ -1,6 +1,30 @@
 <template>
   <div class="container">
-    <block-title title="申请列表"></block-title>
+    <block-title title="申请列表"></block-title><section class="tool-bar">
+    <el-form :inline="true" size="medium">
+      <el-form-item label="活动开始时间">
+        <el-col :span="11">
+          <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                          placeholder="起始日期"
+                          style="width: 100%;"></el-date-picker>
+        </el-col>
+        <el-col class="middle-line" :span="2">-</el-col>
+        <el-col :span="11">
+          <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                          style="width: 100%;"></el-date-picker>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="审核状态">
+        <el-select v-model="inlineForm.gnaastatus" @select="doSearch">
+          <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </section>
     <el-button type="primary" class="add-guess-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
     <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
@@ -28,9 +52,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="deleteGuess(scope)"
-                     v-if="scope.row.gnaastatus == 0">撤销</el-button>
+          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">编辑</el-button>
+          <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.gnaastatus == 0">撤销</el-button>
+          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,6 +72,18 @@
     name: "Guess",
     data() {
       return {
+        inlineForm: {
+          starttime: '',
+          endtime: '',
+          gnaastatus: 'all',
+        },
+        statusOption: {
+          'all': '全部',
+          "agree": "已同意",
+          "cancle": "已撤销",
+          "reject": "已拒绝",
+          "wait_check": "审核中"
+        },
         guessLoading: false,
         guessList: [],
         page_size: 10,
@@ -61,6 +97,27 @@
       this.getGuess();        // 获取自己的猜数字奖品申请列表
     },
     methods: {
+      // 顶部查询
+      doSearch() {
+        if(this.inlineForm.starttime && this.inlineForm.endtime){
+          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+            let term = this.inlineForm.endtime;
+
+            this.inlineForm.endtime = this.inlineForm.starttime;
+            this.inlineForm.starttime = term;
+          }
+        }
+        this.getGuess();
+      },
+      // 重置
+      doReset() {
+        this.inlineForm = {
+          starttime: '',
+          endtime: '',
+          gnaastatus: 'all',
+        };
+        this.doSearch();
+      },
       // 申请添加竞猜奖品-按钮
       addGuess() {
         this.$refs.guess.isEdit = false;
@@ -142,7 +199,7 @@
         this.$refs.guess.chooseProduct(scope);
       },
       // 撤销我的申请
-      deleteGuess(scope) {
+      delGuess(scope) {
         this.$confirm('此操作将撤销该申请，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -154,6 +211,25 @@
               this.$notify({
                 title: '撤销成功',
                 message: '该申请已撤销成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => { });
+      },
+      // 删除我的申请
+      deleteGuess(scope) {
+        this.$confirm('此操作将删除该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.guess_num_delete, { gnaaid: scope.row.gnaaid }).then(res => {
+            if (res.data.status == 200) {
+              this.getGuess();
+              this.$notify({
+                title: '删除成功',
+                message: '该申请已删除成功',
                 type: 'success'
               });
             }
