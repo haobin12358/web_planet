@@ -115,6 +115,9 @@
     },
     components: { picker},
     mounted(){
+      if(localStorage.getItem('back')) {
+        location.href = location.origin + '/#/personal'
+      }
       if(this.$route.query.allOrder) {
         this.order = JSON.parse(this.$route.query.product);
         this.total_money = JSON.parse(this.$route.query.product).omtruemount;
@@ -235,6 +238,7 @@
         axios.post(api.refund_create + '?token=' + localStorage.getItem('token'), params).then(res => {
           if(res.data.status == 200){
             Toast(res.data.message);
+            localStorage.setItem('back', true);
             this.$router.push({ path: '/backDetail', query: { omid: this.product_info[0].omid, allOrder: this.$route.query.allOrder }});
           }
         })

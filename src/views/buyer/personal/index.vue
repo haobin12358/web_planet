@@ -221,6 +221,10 @@
     },
     activated() {
       this.getUser();             // 获取个人信息
+      if(localStorage.getItem('back')) {
+        localStorage.removeItem('back');
+        this.$router.push('/personal/afterSales')
+      }
     },
     methods: {
       goStore() {
