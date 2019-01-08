@@ -37,9 +37,9 @@
           <el-form-item label="商品描述" prop="tcdescription">
             <el-input v-model.trim="formData.tcdescription" maxlength="1000"></el-input>
           </el-form-item>
-          <el-form-item label="运费" prop="tcfreight">
-            <el-input v-model.number="formData.tcfreight" maxlength="11" style="width: 200px;"></el-input>
-          </el-form-item>
+          <!--<el-form-item label="运费" prop="tcfreight">-->
+            <!--<el-input v-model.number="formData.tcfreight" maxlength="11" style="width: 200px;"></el-input>-->
+          <!--</el-form-item>-->
 
           <el-form-item id="2" label="押金" prop="tcdeposit">
             <el-input v-model.number="formData.tcdeposit" maxlength="11" style="width: 200px;"></el-input>
@@ -740,9 +740,9 @@
               if (detailTip) {
                 return `第${i + 1}行信息不全` + detailTip;
               } else {
-                return
               }
             }
+            return
           } else {
             return '至少需要有一行商品属性'
           }

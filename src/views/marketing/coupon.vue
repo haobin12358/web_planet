@@ -21,12 +21,12 @@
       <el-table-column label="生效介绍" align="center" prop="title_subtitle.title" show-overflow-tooltip></el-table-column>
       <el-table-column label="生效对象" align="center" prop="title_subtitle.left_text" show-overflow-tooltip></el-table-column>
       <el-table-column label="生效条件" align="center" prop="title_subtitle.subtitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="发放开始时间" align="center" prop="cosendstarttime"></el-table-column>
+      <el-table-column label="发放开始时间" align="center" prop="cosendstarttime" :render-header="startTimeHeaderRender"></el-table-column>
       <el-table-column label="剩余数量" align="center" prop="coremainnum" width="100"></el-table-column>
       <el-table-column label="发放数量" align="center" prop="colimitnum" width="100"></el-table-column>
-      <el-table-column label="操作" align="center" width="100" fixed="right">
+      <el-table-column label="操作" align="center" width="120" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editCoupon(scope)">编辑</el-button>
+          <el-button type="text" v-if="new Date()<new Date(scope.row.cosendstarttime)" @click="editCoupon(scope)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>
         </template>
       </el-table-column>
@@ -41,7 +41,7 @@
       <el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>
       <el-table-column label="标签名称" align="center" prop="itname"></el-table-column>
       <el-table-column label="标签描述" align="center" prop="itdesc"></el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="editItem(scope)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteItem(scope)">删除</el-button>
@@ -148,6 +148,18 @@
             this.couponLoading = false;
           }
         })
+      },
+      startTimeHeaderRender(h, {column}) {
+        return (
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              优惠券发放后无法编辑
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
       },
       // 新增优惠券
       addCoupon() {

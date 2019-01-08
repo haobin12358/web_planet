@@ -4,10 +4,10 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" :model="searchForm">
         <el-form-item label="商品名">
-          <el-input v-model.trim="searchForm.kw"></el-input>
+          <el-input v-model.trim="searchForm.kw" clearable></el-input>
         </el-form-item>
         <el-form-item label="品牌">
-          <el-select v-model="searchForm.pbid" @change="doSearch" filterable clearable>
+          <el-select v-model="searchForm.pbid" @change="doSearch(true)" filterable clearable>
             <el-option
               v-for="item in brandOptions"
               :key="item.pbid"
@@ -16,16 +16,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="分类">
           <el-cascader :options="categoryOptions" :props="categoryProps" change-on-select :clearable="true" filterable
-                       v-model="searchForm.pcid" @change="doSearch">
+                       v-model="searchForm.pcid" @change="doSearch(true)">
           </el-cascader>
         </el-form-item>
-
-
         <el-form-item label="状态">
-          <el-select v-model="searchForm.prstatus" @change="doSearch">
+          <el-select v-model="searchForm.prstatus" @change="doSearch(true)">
             <el-option
               v-for="item in statusOption"
               :key="item.value"
@@ -34,9 +31,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+        <el-form-item >
+          <el-checkbox v-permission="[ 'admin', 'super']" v-model="searchForm.showUpgradeProd" @change="doSearch(true)">只显示开店大礼包商品</el-checkbox>
+        </el-form-item>
+        <el-button type="primary" icon="el-icon-search" @click="doSearch(true)">查询</el-button>
         <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
       </el-form>
+
       <section class="action-wrap">
         <el-button type="primary" icon="el-icon-plus" @click="doAddProduct(false)">新增</el-button>
         <el-button v-permission="[ 'admin', 'super']" type="primary" icon="el-icon-plus" @click="doAddProduct(true)">
@@ -174,6 +175,8 @@
           },
         ],
         searchForm: {
+          showUpgradeProd: false,
+
           kw: '',
           pbid: '',
           pcid: [],
@@ -227,12 +230,32 @@
           });
       },
 
-      doSearch() {
-        this.currentPage = 1;
-        this.getProduct();
+      doSearch(replace = false) {
+        if(replace){
+          this.currentPage = 1;
+        }
+
+        let searchParams = {
+          pcid: '',
+          ...this.searchForm,
+        };
+
+        if (this.searchForm.pcid.length) {
+          searchParams.pcid = this.searchForm.pcid[this.searchForm.pcid.length - 1];
+        } else {
+          searchParams.pcid = ''
+        }
+
+        if(searchParams.showUpgradeProd){
+          searchParams.itid = 'upgrade_product'
+        }
+
+        this.getProduct(searchParams);
       },
       doReset() {
         this.searchForm = {
+          showUpgradeProd: false,
+
           kw: '',
           pcid: [],
           prstatus: 'all',
@@ -241,28 +264,15 @@
         this.doSearch();
       },
 
-      getProduct() {
+      getProduct(searchParams = {}) {
         this.loading = true;
-        let pcid = '';
-
-        if (this.searchForm.pcid.length) {
-          pcid = this.searchForm.pcid[this.searchForm.pcid.length - 1];
-        } else {
-          pcid = ''
-        }
-
         this.$http.get(this.$api.product_list, {
           noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
 
-            kw: this.searchForm.kw,
-            pbid: this.searchForm.pbid,
-            pcid,
-            prstatus: this.searchForm.prstatus,
-            order_type: this.searchForm.order_type,
-            // itid: 'upgrade_product'
+            ...searchParams,
           }
         }).then(res => {
           this.loading = false;
@@ -315,11 +325,11 @@
         this.pageSize = pageSize;
         this.currentPage = 1;
 
-        this.getProduct();
+        this.doSearch();
       },
       pageChange(page) {
         this.currentPage = page;
-        this.getProduct();
+        this.doSearch();
       },
       cellFunction({row, column}) {
         if (['prprice', 'prsalesvalue'].includes(column.property)) {
@@ -367,7 +377,7 @@
                     message: `商品名:${row.tctitle}`,
                     type: 'success'
                   });
-                  this.getProductList();
+                  this.doSearch();
                 }
               }
             )
@@ -385,7 +395,7 @@
                   let resData = res.data,
                     data = res.data.data;
 
-                  this.getProduct();
+                  this.doSearch();
                   this.$notify({
                     title: '商品删除成功',
                     message: `商品名:${row.prtitle}`,
@@ -427,7 +437,7 @@
                   let resData = res.data,
                     data = res.data.data;
 
-                  this.getProduct();
+                  this.doSearch();
                   this.$notify({
                     title: `商品已${type}`,
                     message: `商品名:${tip}`,
@@ -457,7 +467,7 @@
                     let resData = res.data,
                       data = res.data.data;
 
-                    this.getProduct();
+                    this.doSearch();
                     this.$notify({
                       title: '商品下架成功',
                       type: 'success'
@@ -483,7 +493,7 @@
                   let resData = res.data,
                     data = res.data.data;
 
-                  this.getProduct();
+                  this.doSearch();
                   this.$notify({
                     title: '商品删除成功',
                     type: 'success'
@@ -525,14 +535,14 @@
       if (this.repeat) {
         this.repeat = false;
       } else {
-        this.getProduct()
+        this.doSearch()
         this.getCategory();
         this.getBrand();
       }
     },
 
     created() {
-      this.getProduct()
+      this.doSearch()
       this.getCategory();
       this.getBrand();
     },
