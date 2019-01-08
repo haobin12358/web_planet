@@ -107,6 +107,8 @@
         this.buyNow();      // 点击购买
       }
       wxapi.wxRegister(location.href.split('#')[0]);
+      localStorage.removeItem('share');
+      localStorage.removeItem('url');
     },
     methods: {
       // 点击魔盒

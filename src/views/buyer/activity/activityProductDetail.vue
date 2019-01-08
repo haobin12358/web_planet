@@ -104,6 +104,8 @@
       common.changeTitle('活动商品详情');
       this.getProductDetail();              // 获取商品详情
       wxapi.wxRegister(location.href.split('#')[0]);
+      localStorage.removeItem('share');
+      localStorage.removeItem('url');
     },
     methods: {
       // 分享商品

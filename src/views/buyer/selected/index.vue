@@ -252,6 +252,36 @@
         }
       },
       activated() {
+        // 倒计时
+        const TIME_COUNT = 1;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            if(localStorage.getItem('share') && localStorage.getItem('url')) {
+              let url = localStorage.getItem('url');
+              if(localStorage.getItem('share') == 'mbjid') {
+                let params = url.split('?mbjid=')[1].split('&secret_usid')[0];
+                this.$router.push({ path: '/pandora', query: { mbjid: params }})
+              }else if(localStorage.getItem('share') == 'fmfpid') {
+                let params = url.split('?fmfpid=')[1].split('&secret_usid')[0].split('&which=');
+                this.$router.push({ path: '/activityProductDetail', query: { fmfpid: params[0], which: params[1] }})
+              }else if(localStorage.getItem('share') == 'tcid') {
+                let params = url.split('?tcid=')[1].split('&secret_usid')[0].split('&which=');
+                this.$router.push({ path: '/activityProductDetail', query: { tcid: params[0], which: params[1] }})
+              }else if(localStorage.getItem('share') == 'neid') {
+                let params = url.split('?neid=')[1].split('&secret_usid')[0];
+                this.$router.push({ path: '/circle/detail', query: { neid: params }})
+              }else if(localStorage.getItem('share') == 'prid') {
+                let params = url.split('?prid=')[1].split('&secret_usid')[0];
+                this.$router.push({ path: '/product/detail', query: { prid: params }})
+              }
+            }
+            clearInterval(time);
+          }
+        }, 100);
+
         this.getSwipe();
         this.getBrand();
         this.getScene();

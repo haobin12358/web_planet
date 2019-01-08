@@ -116,10 +116,14 @@
         wxapi.wxRegister(location.href.split('#')[0]);
         this.getInfo();
         this.getUser();
+        localStorage.removeItem('share');
+        localStorage.removeItem('url');
       },
       activated() {
-        this.getInfo();
+       /* this.getInfo();
         this.getUser();
+        localStorage.removeItem('share');
+        localStorage.removeItem('url');*/
       },
       methods:{
         // 分享商品

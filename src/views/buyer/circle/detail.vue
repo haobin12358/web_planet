@@ -158,6 +158,8 @@
         sessionStorage.removeItem('showComments');
       }
       // wxapi.wxRegister(location.href.split('#')[0]);
+      localStorage.removeItem('share');
+      localStorage.removeItem('url');
     },
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
