@@ -1,11 +1,11 @@
 <template>
   <div class="activity-index">
     <el-table v-loading="activityLoading" :data="activityList" stripe>
-      <el-table-column label="序号" align="center" prop="acsort" width="180">
+      <!--<el-table-column label="序号" align="center" prop="acsort" width="180">
         <template slot-scope="scope">
           <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @change="sortChange"></el-input>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="活动封面图" align="center" prop="acbackground">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
@@ -23,6 +23,12 @@
         <template slot-scope="scope">
           <el-switch v-model="scope.row.acshow" @change="showActivity(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="权重" align="center" :render-header="sortHeaderRender">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @keyup.native.enter="sortChange"></el-input>
+          <el-button type="text" v-if="index == scope.row.$index" @click="sortChange">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -237,6 +243,18 @@
             this.$message.warning('请根据校验信息完善表单!');
           }
         })
+      },
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
       },
       // 记录点击的是哪一行
       indexDone(scope) {

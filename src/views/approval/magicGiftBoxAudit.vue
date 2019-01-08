@@ -14,6 +14,11 @@
                             style="width: 100%;"></el-date-picker>
           </el-col>
         </el-form-item>
+        <el-form-item label="审核状态">
+          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
           <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
@@ -40,11 +45,7 @@
             {{scope.row.content.product.categorys || ''}}
           </template>
         </el-table-column>
-        <el-table-column label="参与日期" align="center" prop="content.mbastarttime" width="220">
-          <template slot-scope="scope">
-            {{scope.row.content.mbastarttime+' - '+scope.row.content.mbaendtime}}
-          </template>
-        </el-table-column>
+        <el-table-column label="参与日期" align="center" prop="content.mbastarttime" width="220"></el-table-column>
         <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="content.skustock" width="120"></el-table-column>
       </el-table-column>
@@ -109,6 +110,13 @@
         inlineForm: {
           starttime: '',
           endtime: '',
+          avstatus: 'wait_check',
+        },
+        statusOption: {
+          "agree": "已同意",
+          "cancle": "已撤销",
+          "reject": "已拒绝",
+          "wait_check": "审核中"
         },
 
         loading: false,
@@ -139,7 +147,9 @@
         this.inlineForm = {
           starttime: '',
           endtime: '',
+          avstatus: 'wait_check',
         };
+        this.doSearch();
       },
       getList() {
         this.loading = true;

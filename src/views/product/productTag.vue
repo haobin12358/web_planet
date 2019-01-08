@@ -24,7 +24,8 @@
       <el-table-column label="权重" align="center" prop="pssort" :render-header="sortHeaderRender">
         <template slot-scope="scope">
           <el-input v-model.number="scope.row.pssort" maxlength="11" @keyup.native.enter="changeSceneSort(scope.row)"
-                    @focus.native="focusSceneSort(scope)" style="width: 180px"></el-input>
+                    @focus="focusCell(scope)"  style="width: 160px"></el-input>
+          <el-button type="text" v-if="scope.$index == focusedRowIndex" @click="changeSceneSort(scope.row)">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
@@ -162,6 +163,7 @@
         },
         sceneLoading: false,
         sceneTableData: [],
+        focusedRowIndex: -1,
 
         sceneDlgVisible: false,
         sceneForm: {
@@ -406,8 +408,7 @@
         )
       },
       changeSceneSort(row) {
-        if(positiveNumberReg.test(row.pcsort)) {
-
+        if(positiveNumberReg.test(row.pssort)) {
           this.$http.post(this.$api.update_scene, row).then(
             res => {
               if (res.data.status == 200) {
@@ -420,6 +421,7 @@
                   type: 'success'
                 });
                 this.init();
+                this.focusedRowIndex = -1;
               }
             }
           );
@@ -427,8 +429,8 @@
           this.$message.warning('请输入合理权重值');
         }
       },
-      focusSceneSort(index){
-        console.log(index);
+      focusCell(scope){
+        this.focusedRowIndex = scope.$index;
       },
 
       resetSceneForm() {

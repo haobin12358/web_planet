@@ -4,6 +4,7 @@
     <el-button type="primary" class="add-guess-btn" icon="el-icon-plus" @click="addGuess">申请</el-button>
     <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
+      <el-table-column type="index" width="55"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.skupic" :key="scope.row.skupic"></table-cell-img>

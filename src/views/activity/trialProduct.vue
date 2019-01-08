@@ -26,8 +26,7 @@
     </section>
 
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
-      <el-table-column
-        type="index"></el-table-column>
+      <el-table-column type="index" width="55"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.tcmainpic" :key="scope.row.tcid"></table-cell-img>

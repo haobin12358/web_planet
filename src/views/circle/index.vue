@@ -14,9 +14,11 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="权重" width="150" align="center" :render-header="sortHeaderRender">
+        <el-table-column label="权重" width="220" align="center" :render-header="sortHeaderRender">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.itsort" maxlength="11" @keyup.native.enter="changeItemSort(scope.row)"></el-input>
+            <el-input v-model="scope.row.itsort" maxlength="11" @keyup.native.enter="changeItemSort(scope.row)"
+                      @focus="focusCell(scope)" style="width: 160px;"></el-input>
+            <el-button type="text" v-if="scope.$index == focusedRowIndex" @click="changeItemSort(scope.row)">保存</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" fixed="right">
@@ -120,6 +122,8 @@
 
         circleLoading: false,
         circleList: [],
+        focusedRowIndex: -1,
+
         itemLoading: false,
         itemList: [],
         itemDialog: false,
@@ -221,12 +225,16 @@
                   type: 'success'
                 });
                 this.getItem();         // 获取标签列表
+                this.focusedRowIndex = -1;
               }
             }
           );
         }else {
           this.$message.warning('请输入合理权重值(>0)');
         }
+      },
+      focusCell(scope){
+        this.focusedRowIndex = scope.$index;
       },
 
       // 重置搜索框

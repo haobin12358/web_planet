@@ -285,7 +285,7 @@
           },
         ],
         searchForm: {
-          orastatus: '',
+          orastatus: 0,
           orstatus: '', //  同意退货退款后才有
         },
 

@@ -1,5 +1,18 @@
 <template>
   <div class="container">
+    <section class="tool-bar">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="审核状态">
+          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
         <!--<el-table-column align="center" width="120" label="头像">-->
@@ -82,6 +95,16 @@
 
     data() {
       return {
+        statusOption: {
+          "agree": "已同意",
+          "cancle": "已撤销",
+          "reject": "已拒绝",
+          "wait_check": "审核中"
+        },
+        inlineForm: {
+          avstatus: 'wait_check',
+        },
+
         loading: false,
         total: 0,
         currentPage: 1,
@@ -95,6 +118,16 @@
     computed: {},
 
     methods: {
+      doSearch() {
+        this.getList();
+      },
+      doReset() {
+        this.inlineForm = {
+          avstatus: '',
+        };
+        this.doSearch();
+      },
+
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
@@ -103,7 +136,8 @@
             page_size: this.pageSize,
             page_num: this.currentPage,
 
-            ptid: 'toactivationcode'
+            ptid: 'toactivationcode',
+            ...this.inlineForm,
           }
         }).then(
           res => {
