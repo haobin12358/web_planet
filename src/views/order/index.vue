@@ -318,25 +318,37 @@
               params: {
                 omid: row.omid
               }
-            }).then()
+            }).then(
+              res =>{
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
 
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-
-              if (data.omstatus == 40) {
-                this.$confirm(`用户发起了退货,是否前往退货审批页?`,'提示').then(
-                  ()=>{
-
-
+                  //  售后了
+                  if (data.ominrefund) {
+                    this.$confirm(`用户发起了退货,是否前往退货审批页?`,'提示').then(
+                      ()=>{
+                        this.$router.push('/approval/returnProductAudit');
+                        this.getList();
+                        return
+                      }
+                    ).catch(e=>{this.getList()})
                   }
-                )
+                  //  取消了
+                  if (data.omstatus == -40) {
+                    this.$message.info(`用户已取消了订单`);
+                    this.getList();
+                    return
+                  }
+                  this.$router.push({
+                    path: `/order/orderDetail`,
+                    query: {
+                      omid: row.omid
+                    }
+                  })
+                }
               }
-              if (data.omstatus == -40) {
-                this.$message.info(`用户已取消了订单`);
-                this.getList();
-              }
-            }
+            )
             return
           } else {
 

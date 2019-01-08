@@ -77,7 +77,8 @@
                   </el-tag>
                 </template>
               </el-table-column>
-            </el-table-column>
+              <el-table-column label="申请时间" width="110" prop="order_refund_apply.createtime" align="center"></el-table-column>
+              </el-table-column>
             <el-table-column prop="opisinora" align="center" label="退款中" width="120">
               <template slot-scope="scope">
                 {{scope.row.opisinora ? '是':'否'}}
@@ -125,7 +126,7 @@
           <el-tag :type="tagType(scope.row.omstatus_zh)">{{scope.row.omstatus_zh}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="整订单退款" align="center">
+      <el-table-column label="整订单退款" align="center" :render-header="wholeHeaderRender">
         <el-table-column label="审核状态" width="120" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.order_refund_apply"
@@ -163,6 +164,7 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="申请时间" width="110" prop="order_refund_apply.createtime" align="center"></el-table-column>
       </el-table-column>
 
       <el-table-column label="退款中" width="120" align="center">
@@ -250,6 +252,9 @@
             label: '全部',
             value: '',
           }, {
+            label: '已同意',
+            value: 10,
+          },{
             label: '已取消',
             value: -20,
           }, {
@@ -258,9 +263,6 @@
           }, {
             label: '审核中',
             value: 0,
-          }, {
-            label: '已同意',
-            value: 10,
           },
         ],
         refundStatusOption: [
@@ -289,7 +291,7 @@
           orstatus: '', //  同意退货退款后才有
         },
 
-        expandAll: true,
+        expandAll: false,
         loading: false,
         orderData: [],
         total: 0,
@@ -436,15 +438,28 @@
           }
         )
       },
+      wholeHeaderRender(h, {column}) {
+        return (
+          <el-tooltip class="tooltip" placement="top">
+            <ul class="table-header-tip" slot="content">
+              <li>列表行底色为浅橘色时表示该行数据处在售后状态,订单行(未展开)标黄</li>
+              <li>表示该退款订单只有一件商品,订单行未标黄表示订单商品含标黄退款商品</li>
+            </ul>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
       sizeChange(pageSize) {
-        this.expandAll = true;
+        this.expandAll = false;
         this.pageSize = pageSize;
         this.currentPage = 1;
 
         this.setOrderList();
       },
       pageChange(page) {
-        this.expandAll = true;
+        this.expandAll = false;
         this.currentPage = page;
         this.setOrderList();
       },

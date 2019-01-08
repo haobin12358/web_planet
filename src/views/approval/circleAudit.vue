@@ -3,7 +3,7 @@
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+          <el-select v-model="inlineForm.avstatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -26,11 +26,14 @@
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.usname" align="center">
           <template slot-scope="scope">
-            {{nameRender(scope.row)}}
+            <span v-if="scope.row.start">
+              {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
+            </span>
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="创建时间" prop="createtime" align="center" width="110"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
@@ -83,6 +86,7 @@
     data() {
       return {
         statusOption: {
+          all: '全部',
           "agree": "已同意",
           "cancle": "已撤销",
           "reject": "已拒绝",
@@ -165,7 +169,7 @@
       nameRender(row){
         // console.log(row.start.usname || row.start.adname);
         if(row.start){
-          return row.start.usname || row.start.adname
+          return row.start.usname || row.start.adname || scope.row.start.suname
         }
       },
 

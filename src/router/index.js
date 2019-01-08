@@ -120,7 +120,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'order',
     alwaysShow: true,
-    name: 'OrderIndex',
+    name: 'Order',
     meta: {title: '订单', icon: 'dingdan', roles: level1},
     children: [
       {
@@ -150,7 +150,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/user/distributor',
     alwaysShow: true,
-    name: 'Distributor',
+    name: 'DistributorPa',
     meta: {title: '用户', icon: 'huiyuan', roles: level2},
     children: [
       {
@@ -240,7 +240,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'commission',
     alwaysShow: true,
-    name: 'CommissionIndex',
+    name: 'Commission',
     meta: {title: '佣金', icon: 'yongjin', roles: level2},
     children: [
       {

@@ -239,9 +239,10 @@
       stockHeaderRender(h, {column}) {
         return (
           <el-tooltip class="tooltip" placement="top">
-            <span slot="content">
-              同一次申请多个日期的活动商品会被分成多个单日活动去审批,同一次申请的算同一批,每批的库存是共用的,合并的单元格表示为同一批
-            </span>
+            <ul class="table-header-tip" slot="content">
+              <li>同一次申请多个日期的活动商品会被分成多个单日活动去审批,</li>
+              <li>同一次申请的算同一批,每批的库存是共用的,合并的单元格表示为同一批</li>
+            </ul>
             <div>{column.label}
               <i class="el-icon-question"></i>
             </div>

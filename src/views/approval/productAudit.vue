@@ -3,7 +3,7 @@
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+          <el-select v-model="inlineForm.avstatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -18,22 +18,28 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.prmainpic" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="scope.row.content ? scope.row.content.prmainpic : ''"
+                            :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="content.prtitle" label="商品名" width="280"></el-table-column>
-        <el-table-column align="center" prop="content.prprice"  label="价格" width="120"></el-table-column>
+        <el-table-column align="center" prop="content.prprice" label="价格" width="120"></el-table-column>
         <el-table-column align="center" prop="content.brand.pbname" label="品牌" width="180"></el-table-column>
         <el-table-column align="center" prop="content.categorys" label="分类" width="240"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center" width="120">
           <template slot-scope="scope">
-            {{scope.row.start.adname || scope.row.start.adname}}
+            <template slot-scope="scope">
+            <span v-if="scope.row.start">
+              {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
+            </span>
+            </template>
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="创建时间" prop="createtime" align="center" width="110"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center" fixed="right">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
@@ -84,6 +90,7 @@
     data() {
       return {
         statusOption: {
+          all: '全部',
           "agree": "已同意",
           "cancle": "已撤销",
           "reject": "已拒绝",
@@ -193,7 +200,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           }
@@ -207,7 +214,7 @@
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.getList();
                   this.$notify({
@@ -227,7 +234,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           },

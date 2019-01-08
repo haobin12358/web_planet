@@ -3,7 +3,7 @@
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+          <el-select v-model="inlineForm.avstatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -25,11 +25,14 @@
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
           <template slot-scope="scope">
-            {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
+            <span v-if="scope.row.start">
+              {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
+            </span>
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="创建时间" prop="createtime" align="center" width="110"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
@@ -41,14 +44,14 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid"  placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover :key="scope.row.avid" placement="left" trigger="click" @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
-              <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
-              :description="item.avadname +': '+ item.anabo"></el-step>
+                <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
+                         :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -78,6 +81,7 @@
     data() {
       return {
         statusOption: {
+          all: '全部',
           "agree": "已同意",
           "cancle": "已撤销",
           "reject": "已拒绝",
@@ -148,18 +152,18 @@
       tagsType(status) {
         switch (status) {
           case -20:
-            return {label: '已取消',type: 'info'};
+            return {label: '已取消', type: 'info'};
           case -10:
-            return {label: '已拒绝',type: 'danger'};
+            return {label: '已拒绝', type: 'danger'};
           case 0:
-            return {label: '审核中',type: 'primary'};
+            return {label: '审核中', type: 'primary'};
           case 10:
-            return {label: '已通过',type: 'success'};
+            return {label: '已通过', type: 'success'};
         }
       },
 
-      showStep(row){
-        this.$http.get(this.$api.get_approvalnotes,{
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
           params: {
             avid: row.avid
           }
@@ -167,7 +171,7 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.steps = data;
             }
@@ -182,7 +186,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           }
@@ -216,7 +220,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           },

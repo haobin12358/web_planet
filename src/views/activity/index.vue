@@ -41,7 +41,7 @@
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="activityDialog" width="800px" top="7vh"
                :title="formData.acname + ' - 编辑'" :close-on-click-modal="false">
-      <el-form :model="formData" :rules="rules" ref="formData" label-position="right" size="medium" label-width="120px" status-icon>
+      <el-form :model="formData" :rules="rules" ref="formData" label-position="left" size="medium" label-width="120px" status-icon>
         <el-form-item label="活动封面图" prop="adheader">
           <el-upload
             class="avatar-uploader"
