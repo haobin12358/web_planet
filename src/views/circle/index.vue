@@ -178,9 +178,7 @@
       // 获取不同状态的圈子资讯内容
       handleSelect(nestatus) {
         this.activeIndex = nestatus;
-        if (!nestatus == this.nestatus) {
-          this.page_num = 1;
-        }
+        this.page_num = 1;
         this.nestatus = nestatus;
         this.circleLoading = true;
         this.$http.get(this.$api.get_all_news, {
