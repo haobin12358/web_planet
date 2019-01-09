@@ -48,7 +48,7 @@
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh" :close-on-click-modal="false"
                :title="categroyForm.pcid?'分类编辑':'分类新增'">
-      <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
+      <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium"  label-position="left" label-width="120px">
         <el-form-item label="所属分类" prop="parentpcid">
           <el-cascader :options="options" :props="cascaderProps" filterable :clearable="true" :change-on-select="true"
                        v-model="selectParentPcId" @change="selectParentPcIdChange" placeholder="添加一级分类时为空"
@@ -84,7 +84,7 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="一级分类顶部图片" prop="pctoppic">
+        <el-form-item label="一级分类顶部图片" prop="pctoppic" align="left">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"

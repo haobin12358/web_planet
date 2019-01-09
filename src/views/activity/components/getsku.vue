@@ -20,6 +20,7 @@
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
         <el-table-column label="价格" align="center" prop="prprice"></el-table-column>
+        <el-table-column label="库存" align="center" prop="prstocks"></el-table-column>
         <el-table-column label="品牌" align="center" prop="brand.pbname"></el-table-column>
         <el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>
         <el-table-column label="操作" align="center" width="100" fixed="right">
@@ -111,7 +112,7 @@
         <el-table-column label="库存" align="center" prop="skustock"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="short-input" :disabled="isEdit" v-model="scope.row.stock">
+            <el-input class="short-input" v-model="scope.row.stock" :disabled="isEdit">
             </el-input>
           </template>
         </el-table-column>

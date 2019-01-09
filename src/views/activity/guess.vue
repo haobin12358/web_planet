@@ -201,7 +201,7 @@
       // 编辑我的申请
       editGuess(scope) {
         this.scope = scope;
-        this.$refs.guess.productDialog = true;
+        // this.$refs.guess.productDialog = true;
         scope.row.where = 'guess';
         this.$refs.guess.chooseProduct(scope);
       },

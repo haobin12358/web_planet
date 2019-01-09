@@ -15,7 +15,7 @@
           </el-col>
         </el-form-item>
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.avstatus" @select="doSearch">
+          <el-select v-model="inlineForm.avstatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -28,10 +28,10 @@
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品规格图片" align="center" prop="prdescription">
-          <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.skupic" :key="scope.row.avid"></table-cell-img>
-          </template>
-        </el-table-column>
+        <template slot-scope="scope">
+          <table-cell-img :src="scope.row.content.skupic" :key="scope.row.avid"></table-cell-img>
+        </template>
+      </el-table-column>
         <el-table-column label="品牌" align="center" prop="content.product.pbname" width="120"></el-table-column>
         <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="120" show-overflow-tooltip></el-table-column>
         <el-table-column label="参与日期" align="center" prop="content.gnaastarttime" width="120"></el-table-column>
@@ -41,11 +41,14 @@
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
           <template slot-scope="scope">
-            {{scope.row.start.adname || scope.row.start.suname}}
+            <span v-if="scope.row.start">
+              {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
+            </span>
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="审批创建时间" prop="createtime" align="center" width="180"></el-table-column>
       <el-table-column label="状态" prop="avlevel" align="center">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
@@ -101,6 +104,7 @@
           avstatus: 'wait_check',
         },
         statusOption: {
+          all: '全部',
           "agree": "已同意",
           "cancle": "已撤销",
           "reject": "已拒绝",

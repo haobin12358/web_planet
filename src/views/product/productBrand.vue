@@ -174,7 +174,7 @@
 
     <el-dialog :visible.sync="itemDlgVisible" width="700px" v-el-drag-dialog :title="itemForm.itid ? '标签编辑': '标签新增'"
                :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
+      <el-form :model="itemForm" :rules="itemRules"  label-position="left"  ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名" prop="itname">
           <el-input v-model.trim="itemForm.itname" maxlength="20"></el-input>
         </el-form-item>

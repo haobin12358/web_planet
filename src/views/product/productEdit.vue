@@ -97,7 +97,20 @@
           </section>
 
           <!--添加属性table行-->
-          <el-button type="primary" @click="addOneSku">添加一行商品属性</el-button>
+          <section class="action-btns">
+            <el-button style="margin-bottom: 10px;" type="primary" @click="addOneSku">添加一行商品属性</el-button>
+
+            <section>
+              <el-input v-model="commonSkuPrice" placeholder="统一设置价格" size="medium" style="width: 120px;"
+                        @keyup.enter.native="setCommonSku('price')"></el-input>
+              <el-input v-model="commonSkuDev" placeholder="统一设置让利(%)" size="medium" style="width: 160px;"
+                        @keyup.enter.native="setCommonSku('dev')">
+              </el-input>
+              <el-input v-model="commonSkuStock" placeholder="统一设置库存" size="medium" style="width: 120px;"
+                        @keyup.enter.native="setCommonSku('stock')"></el-input>
+              <span class="form-item-end-tip">回车设置</span>
+            </section>
+          </section>
         </section>
 
         <!--属性table-->
@@ -142,13 +155,13 @@
               <el-input v-model.number="scope.row.skuprice" maxlength="11"></el-input>
             </template>
           </el-table-column>
-          <!--<el-table-column label="让利" prop="price" align="center" width="120">
+          <el-table-column label="让利" prop="skudeviderate" align="center" width="160">
             <template slot-scope="scope">
-              <el-input v-model.number="scope.row.skuprice" maxlength="11">
+              <el-input v-model.number="scope.row.skudeviderate" maxlength="11" style="width: 140px;">
                 <template slot="append">%</template>
               </el-input>
             </template>
-          </el-table-column>-->
+          </el-table-column>
           <el-table-column label="库存" prop="stock" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skustock" maxlength="11"></el-input>
@@ -167,11 +180,6 @@
         <div class="form-item-end-tip">
           确认排序面板会在点击保存前弹出
         </div>
-        <!--<section class="table-bottom">-->
-        <!--<el-tooltip effect="dark" content="单击弹出输入面板" placement="right">-->
-        <!--<el-button icon="el-icon-sort" @click="showSkuSortDlg">规格排序</el-button>-->
-        <!--</el-tooltip>-->
-        <!--</section>-->
       </el-form-item>
 
 
@@ -339,9 +347,9 @@
           prlineprice: 0,
           prfreight: 0,
 
-          prattribute: [],
-          skus: [],
-          pskuvalue: [],
+          prattribute: [],  //  颜色,尺码
+          skus: [],         //
+          pskuvalue: [],    //  去重的颜色..尺码
 
           prmainpic: "",
           images: [],
@@ -409,6 +417,11 @@
         inputValue: '',
 
         uploadSkuImgIndex: 0,
+        platformComRate: 0, //  平台抽成比例
+        //  一键统一设置sku价格等
+        commonSkuPrice: '',
+        commonSkuDev: '',
+        commonSkuStock: '',
 
         dialogSkuSortVisible: false,
 
@@ -480,17 +493,33 @@
         this.$http.get(this.$api.brand_list, {
           params: {
             pbstatus: 'upper',
-              page_num: 1,
-              page_size: 200
+            page_num: 1,
+            page_size: 200
 
           }
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.brandOptions = data;
+            }
+          }
+        )
+      },
+      //  获取平台让利的比例
+      getPlatformComRate() {
+        this.$http.get(this.$api.get_commision, {
+          params: {}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.platformComRate = data.levelcommision[3];
+              // this.commonSkuDev = data.levelcommision[3];
             }
           }
         )
@@ -560,14 +589,34 @@
             skupic: "",
             skusn: '',
             skuprice: this.formData.prprice || 0,
+            skudeviderate: this.platformComRate || 0,
             skustock: 0,
-            skuattritedetail: new Array(this.formData.prattribute.length)
+            skuattritedetail: new Array(this.formData.prattribute.length),
           });
         }
 
       },
       removeOneSku(index) {
         this.formData.skus.splice(index, 1);
+      },
+      setCommonSku(type) {
+        if (this.formData.skus.length) {
+          for (let i = 0; i < this.formData.skus.length; i++) {
+            switch (type) {
+              case 'price':
+                this.formData.skus[i].skuprice = this.commonSkuPrice;
+                break;
+              case 'dev':
+                this.formData.skus[i].skudeviderate = this.commonSkuDev;
+                break;
+              case 'stock':
+                this.formData.skus[i].skustock = this.commonSkuStock;
+                break;
+            }
+          }
+        } else {
+          this.$message.warning('请先新增商品属性后再设置')
+        }
       },
 
       headerCellFunction({row, column}) {
@@ -731,6 +780,8 @@
                   type: 'success'
                 });
                 this.dialogSkuSortVisible = false;
+              }else {
+                this.getPlatformComRate();
               }
             }
           )
@@ -754,6 +805,8 @@
                 });
                 this.dialogSkuSortVisible = false;
                 this.reset();
+              }else {
+                this.getPlatformComRate();
               }
             }
           )
@@ -762,13 +815,6 @@
       //  formData.skuvalue(规格属性排序)干扰因素过多,所以需要用户最后确认
       //  该方法是确认前对其他参数的校验,最后在排序面板点确认触发doSaveProd
       checkFormData(goToIndexAfterSave) {
-        let checkSkuRst = this.checkSkuData();
-
-        if (checkSkuRst) {
-          this.$message.warning(checkSkuRst)
-          return
-        }
-        return
         this.$refs.prodForm.validate(
           valid => {
             if (valid) {
@@ -795,7 +841,7 @@
           if (this.formData.skus.length) {
             for (let i = 0; i < this.formData.skus.length; i++) {
               let detailTip = '',
-                  currentSku = this.formData.skus[i];
+                currentSku = this.formData.skus[i];
 
               // 先判断外面的
               if (!currentSku.skupic) {
@@ -806,6 +852,10 @@
               }
               if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
                 detailTip += '-价格不符'
+              }
+              if (!currentSku.skudeviderate || !moneyReg.test(currentSku.skudeviderate) ||
+                currentSku.skudeviderate < this.platformComRate || currentSku.skudeviderate >= 100) {
+                detailTip += `-让利不符(至少${this.platformComRate}%)`
               }
               if (currentSku.skustock === '' || !natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
@@ -819,7 +869,7 @@
               }
 
               if (detailTip) {
-                return `第${i + 1}行信息不全` + detailTip;
+                return `商品规格的第${i + 1}行信息不全` + detailTip;
               } else {
               }
             }
@@ -854,7 +904,7 @@
       init() {
         this.setCategory();
         this.setBrand();
-        // this.setTags();
+        this.getPlatformComRate();
 
         if (this.$route.query.prid) { //  编辑
           //  编辑更换的商品或之前是新增,数据替换
@@ -890,6 +940,7 @@
           }
         }
 
+        //  设置标签
         this.$http.get(this.$api.items_list, {
           params: {
             ittype: 0,
@@ -903,12 +954,10 @@
                 data = res.data.data;
 
               if (this.$route.query.addBig == 'true') {
-                data.push(
-                  {
-                    itid: upgradeItId,
-                    itname: '开店大礼包',
-                  }
-                );
+                data.push({
+                  itid: upgradeItId,
+                  itname: '开店大礼包',
+                });
               }
 
               this.tagsOptions = (data);
@@ -1010,6 +1059,20 @@
         font-size: 12px;
       }
 
+    }
+
+    .action-btns {
+      .fjc();
+      align-items: flex-end;
+
+      .el-input {
+        margin-right: 5px;
+        margin-bottom: 10px;
+
+        &:last-of-type {
+          margin-right: 0;
+        }
+      }
     }
 
     .kanban {

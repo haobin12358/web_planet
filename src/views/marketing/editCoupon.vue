@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="21">
         <block-title title="基本信息"></block-title>
-        <el-form :model="couponForm" :rules="rules" ref="couponForm" label-position="right" label-width="130px">
+        <el-form :model="couponForm" :rules="rules" ref="couponForm" label-position="left" label-width="130px">
           <el-form-item label="优惠券名称：" prop="coname">
             <el-input v-model="couponForm.coname" maxlength="32" style="width: 600px"></el-input>
           </el-form-item>
