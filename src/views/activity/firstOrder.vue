@@ -17,7 +17,7 @@
       <el-table-column label="申请状态" align="center" prop="fmfastatus_zh">
         <template slot-scope="scope">
           <el-popover
-            v-if="scope.row.fmarejectreason"
+            v-if="scope.row.fmfarejectreson"
             placement="top-start" title="拒绝理由" width="200" trigger="click">
             {{scope.row.fmarejectreason}}
             <el-tag slot="reference" :type="statusTagType(scope.row.fmfastatus)">{{scope.row.fmfastatus_zh}}</el-tag>
