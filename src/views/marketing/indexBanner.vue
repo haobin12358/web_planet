@@ -4,11 +4,11 @@
       <el-button type="primary" icon="el-icon-plus" @click="bannerDialog = true">新增</el-button>
     </section>
     <el-table v-loading="bannerLoading" :data="bannerList" stripe>
-      <el-table-column label="序号" align="center" prop="ibsort" width="180">
+<!--      <el-table-column label="序号" align="center" prop="ibsort" width="180">
         <template slot-scope="scope">
           <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.ibsort" @change="sortChange"></el-input>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="轮播图" align="center" prop="ibpic">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.ibpic" :key="scope.row.ibpic"></table-cell-img>
@@ -20,6 +20,12 @@
         <template slot-scope="scope">
           <el-switch v-model="scope.row.ibshow" @change="editBanner(scope, 'ibshow')" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="权重" align="center" prop="ibsort" :render-header="sortHeaderRender">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.ibsort" @change="sortChange"></el-input>
+          <el-button type="text" v-if="scope.$index == index" @click="sortChange">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="180">
@@ -80,8 +86,8 @@
             <el-input v-model="kw"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="getProduct()">查询</el-button>
-            <el-button icon="el-icon-refresh" @click="resetSearch">重置</el-button>
+            <el-button type="primary" icon="el-icon-search"  :loading="productLoading" @click="getProduct()">查询</el-button>
+            <el-button icon="el-icon-refresh"  :loading="productLoading" @click="resetSearch">重置</el-button>
           </el-form-item>
         </el-form>
       </section>
@@ -116,6 +122,7 @@
   import { getStore } from "src/utils/index";
   import product from '../../components/Product/product'
 
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'IndexBanner',
     data() {
@@ -153,7 +160,7 @@
         page_size: 10,
         total: 0,
         kw: '',
-        index: 0
+        index: -1
       }
     },
     computed: {
@@ -270,6 +277,7 @@
                   message: msg,
                   type: 'success'
                 });
+                this.getBanner();
               }
             });
           }else if(where == 'edit') {         // 编辑banner
@@ -301,7 +309,6 @@
               type: 'warning'
             }).then(() => {
               params.isdelete = true;
-              this.bannerList.splice(scope.$index, 1);
               this.$http.post(this.$api.update_banner, params).then(res => {
                 if (res.data.status == 200) {
                   this.$notify({
@@ -309,6 +316,7 @@
                     message: '此轮播图已被删除',
                     type: 'success'
                   });
+                  this.getBanner();
                 }
               });
             }).catch(() => { });
@@ -321,21 +329,42 @@
       },
       // 改变轮播图序号
       sortChange(v) {
-        let params = {
-          ibid: this.bannerList[this.index].ibid,
-          ibsort: this.bannerList[this.index].ibsort
-        };
-        this.$http.post(this.$api.update_banner, params).then(res => {
-          if (res.data.status == 200) {
-            this.$notify({
-              title: '保存成功',
-              message: '此轮播图序号已保存',
-              type: 'success'
-            });
-            this.getBanner()          // 刷新banner
-          }
-        });
+        if(positiveNumberReg.test(this.bannerList[this.index].ibsort)) {
+          let params = {
+            ibid: this.bannerList[this.index].ibid,
+            ibsort: this.bannerList[this.index].ibsort,
+            ibshow: this.bannerList[this.index].ibshow,
+          };
+
+          this.$http.post(this.$api.update_banner, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '保存成功',
+                message: '此轮播图序号已保存',
+                type: 'success'
+              });
+              this.getBanner()          // 刷新banner
+              this.index = -1;
+            }
+          });
+        }else {
+          this.$message.warning('请输入合理权重值(>0)');
+
+        }
       },
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
+
       sizeChange(val) {
         this.page_size = val;
         this.getProduct();

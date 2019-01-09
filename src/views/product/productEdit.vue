@@ -168,7 +168,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" prop="action" align="center" width="120" fixed="right">
+          <el-table-column label="操作" prop="action" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
                 移除该属性

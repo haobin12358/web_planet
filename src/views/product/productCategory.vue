@@ -8,8 +8,8 @@
                        v-model="searchForm.pcid" @change="doSearch">
           </el-cascader>
         </el-form-item>
-        <el-button type="primary" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        <el-button type="primary"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
 
       <el-button type="primary" icon="el-icon-plus" @click="doAdd">新增</el-button>
@@ -120,7 +120,7 @@
   import {beforePicUpload} from "src/utils/validate";
   import {getStore, setStore} from "src/utils/index";
 
-  const natureNumberReg = /^(\d*)$/;   //  自然数
+  const natureNumberReg = /^(\d+)$/;   //  自然数
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'ProductCategory',

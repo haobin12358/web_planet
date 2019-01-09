@@ -126,8 +126,8 @@
           <el-input v-model.trim="searchForm.mobile" clearable></el-input>
         </el-form-item>
 
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
       </el-form>
     </section>
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">

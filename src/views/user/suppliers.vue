@@ -9,8 +9,8 @@
           <el-input v-model.trim="searchForm.mobile" maxlength="100" ></el-input>
         </el-form-item>
 
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
     </section>

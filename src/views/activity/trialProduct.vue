@@ -16,8 +16,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;" @click="doReset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
 
       <section>
@@ -243,7 +243,10 @@
         }
       },
       getProductList() {
+        this.loading = true;
+
         this.$http.get(this.$api.get_commodity, {
+          noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
@@ -253,6 +256,7 @@
           }
         }).then(
           res => {
+            this.loading = false;
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;

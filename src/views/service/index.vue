@@ -20,8 +20,8 @@
     </el-table>
 
     <block-title :title="currentRowName"></block-title>
-    <el-button type="primary" class="add-item-btn" icon="el-icon-plus" @click="addClick('dialogQaVisible')">新增问题</el-button>
-    <el-table :data="orderQa">
+    <el-button type="primary" class="add-item-btn" icon="el-icon-plus" @click="addClick('dialogQaVisible')">新增该类问答</el-button>
+    <el-table :data="orderQa" empty-text="问答类型或选中问题类型下问答数量为0">
       <el-table-column align="center" prop="ququest" label="问题"></el-table-column>
       <el-table-column align="center" prop="answer" label="答案" show-overflow-tooltip></el-table-column>
       <el-table-column label="操作" align="center" fixed="right">
@@ -33,18 +33,8 @@
     </el-table>
 
     <el-dialog title="问题类型" :visible.sync="dialogQaTypeVisible" :close-on-click-modal="false">
-      <el-form :model="type_form" :rules="rules" ref="type_form" label-width="100px">
-        <el-form-item label="问题图标：" prop="qoicon">
-          <!--<el-upload
-            class="avatar-uploader-icon question-icon"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :http-request="imgUploadAbo"
-            :on-success="handleAvatarSuccess">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <img v-else-if="type_form.qoicon" :src="type_form.qoicon" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon question-icon"></i>
-          </el-upload>-->
+      <el-form :model="type_form" :rules="rules" ref="type_form" label-width="100px" label-position="left">
+        <el-form-item label="问题图标" prop="qoicon">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -57,7 +47,7 @@
             <i v-else class="el-icon-plus avatar-uploader-icon question-img"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="问题类型：" prop="qoname">
+        <el-form-item label="问题类型" prop="qoname">
           <el-input  v-model="type_form.qoname"></el-input>
         </el-form-item>
       </el-form>
@@ -68,11 +58,11 @@
     </el-dialog>
 
     <el-dialog :title="currentRowName" :visible.sync="dialogQaVisible" label-width="100px" :close-on-click-modal="false">
-      <el-form :model="question_form" :rules="q_rules" ref="question_form"  label-width="80px">
-        <el-form-item label="问题：" prop="quest">
+      <el-form :model="question_form" :rules="q_rules" ref="question_form"  label-width="100px" label-position="left">
+        <el-form-item label="问题名称" prop="quest">
           <el-input v-model="question_form.quest"></el-input>
         </el-form-item>
-        <el-form-item label="回答：" prop="answer">
+        <el-form-item label="回答内容" prop="answer">
           <el-input type="textarea" v-model="question_form.answer"
                     :autosize="{ minRows: 4, maxRows: 6}"></el-input>
         </el-form-item>
@@ -92,7 +82,7 @@
   import { getStore } from "src/utils/index";
 
   export default {
-    name: "index",
+    name: "ServiceIndex",
 
     data() {
       return {
@@ -122,18 +112,10 @@
           answer:'',
           qoid:''
         },
-        orderType: [
-          {
-            name: '订单问题',
-          }, {
-            name: '积分问题',
-          },
-        ],
+        orderType: [],
         dialogQaTypeVisible: false,
         select_type:null,
-        orderQa: [
-          {}, {}
-        ],
+        orderQa: [],
         dialogQaVisible: false,
         imageUrl:''
       }

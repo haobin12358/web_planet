@@ -207,20 +207,21 @@ export const asyncRouterMap = [
     path: '/marketing',
     component: Layout,
     redirect: '/marketing/coupon',
+    alwaysShow: true,
     name: 'Marketing',
-    meta: {title: '营销', icon: 'yingxiaoshezhi', roles: level2},
+    meta: {title: '营销', icon: 'yingxiaoshezhi', roles: level1},
     children: [
       {
         path: 'coupon',
         name: 'Coupon',
         component: () => import('src/views/marketing/coupon'),
-        meta: {title: '优惠券', icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '优惠券', icon: 'yes', noCache: true, roles: level1}
       }, {
         path: 'editCoupon',
         name: 'EditCoupon',
         hidden: true,
         component: () => import('src/views/marketing/editCoupon'),
-        meta: {title: '优惠券编辑', noCache: true, roles: level2}
+        meta: {title: '优惠券编辑', noCache: true, roles: level1}
       }, {
         path: 'attendance',
         name: 'Attendance',
@@ -336,14 +337,25 @@ export const asyncRouterMap = [
     path: '/service',
     component: Layout,
     redirect: 'service',
-    meta: {title: '客服', icon: 'kefu', roles: level2},
+    alwaysShow: true,
+    meta: {title: '客服', icon: 'kefu', roles: level1},
     children: [
       {
         path: 'service',
-        name: 'serviceIndex',
+        name: 'ServiceIndex',
         component: () => import('src/views/service/index'),
-        meta: {title: '客服', noCache: true, icon: 'kefu', roles: level2}
-      }
+        meta: {title: '前台客服问答', noCache: true, roles: level2}
+      },{
+        path: 'backQuesAnswer',
+        name: 'BackQuesAnswer',
+        component: () => import('src/views/service/backQuesAnswer'),
+        meta: {title: '后台客服问答', noCache: true,  roles: level2}
+      },{
+        path: 'platformRule',
+        name: 'PlatformRule',
+        component: () => import('src/views/service/platformRule'),
+        meta: {title: '平台规则', noCache: true,  roles: level0}
+      },
     ]
   },
 
@@ -411,7 +423,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'SettingIndex',
         component: () => import('src/views/setting/index'),
-        meta: {title: '激活码打款', icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '激活码收款', icon: 'yes', noCache: true, roles: level2}
       }, {
         path: 'manager',
         name: 'Manager',
@@ -422,7 +434,12 @@ export const asyncRouterMap = [
         name: 'ApprovalSetting',
         component: () => import('src/views/setting/approvalSetting'),
         meta: {title: '审批流', icon: 'yes', noCache: false, roles: level3}
-      }
+      },{
+        path: 'noticeMaintain',
+        name: 'NoticeMaintain',
+        component: () => import('src/views/setting/noticeMaintain'),
+        meta: {title: '通告', noCache: false, roles: level2},
+      },
     ]
   },
 

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <block-title title="提现审批层级管理"></block-title>
+    <block-title title="审批层级管理"></block-title>
     <el-table :data="levelData" v-loading="loading" stripe>
       <el-table-column prop="pe_level" label="层级" align="center" width="155"></el-table-column>
       <el-table-column label="关联标签用户组" align="center">

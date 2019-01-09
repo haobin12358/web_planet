@@ -6,6 +6,7 @@
     <div class="right-menu-wrap">
 
       <template v-if="device!=='mobile'">
+        <notice-marquee v-if="checkPermission(['supplizer'])"></notice-marquee>
         <menu-search></menu-search>
         <error-log class="errLog-container right-menu-item"/>
 
@@ -42,7 +43,7 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import {mapState, mapGetters} from 'vuex'
   import Breadcrumb from 'src/components/Breadcrumb'
   import Hamburger from 'src/components/Hamburger'
   import ErrorLog from 'src/components/ErrorLog'
@@ -50,6 +51,8 @@
   import SizeSelect from 'src/components/SizeSelect'
   import MenuSearch from 'src/components/MenuSearch'
   import ChangePwd from 'src/views/setting/changePwd'
+  import NoticeMarquee from 'src/views/profile/components/noticeMarquee'
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   export default {
     components: {
@@ -60,6 +63,7 @@
       SizeSelect,
       ChangePwd,
       MenuSearch,
+      NoticeMarquee,
     },
     computed: {
       ...mapGetters([
@@ -70,6 +74,8 @@
       ])
     },
     methods: {
+      checkPermission,
+
       toggleSideBar() {
         this.$store.dispatch('ToggleSideBar')
       },

@@ -34,8 +34,8 @@
         <el-form-item >
           <el-checkbox v-permission="[ 'admin', 'super']" v-model="searchForm.showUpgradeProd" @change="doSearch(true)">只显示开店大礼包商品</el-checkbox>
         </el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="doSearch(true)">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch(true)">查询</el-button>
+        <el-button icon="el-icon-refresh" :loading="loading" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
       </el-form>
 
       <section class="action-wrap">
@@ -89,7 +89,7 @@
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-popover placement="top-start" title="提示" width="200" trigger="hover"  :open-delay="300">
+          <el-popover v-if="scope.row.prstatus != 10" placement="top-start" title="提示" width="200" trigger="hover"  :open-delay="300">
             商品修改后会重新进行审批(5分钟自动通过)
             <el-button slot="reference" type="text" @click="doEdit(scope.row)">编辑</el-button>
           </el-popover>

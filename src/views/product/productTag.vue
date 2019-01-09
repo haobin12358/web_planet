@@ -7,8 +7,8 @@
           <el-input v-model.trim="searchForm.kw" maxlength="100"  clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+          <el-button type="primary"  :loading="sceneLoading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="sceneLoading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddScene">新增</el-button>
@@ -79,8 +79,8 @@
           <el-input v-model.trim="itemSearchForm.kw" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doItemReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="itemLoading" @click="doItemSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="itemLoading" @click="doItemReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -144,7 +144,7 @@
   import {getStore, setStore} from "src/utils/index";
   import elDragDialog from 'src/directive/el-dragDialog'
 
-  const natureNumberReg = /^(\d*)$/;   //  自然数
+  const natureNumberReg = /^(\d+)$/;   //  自然数
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   const tenZhWordReg = /^[\u4e00-\u9fa5]{1,10}$/
   export default {

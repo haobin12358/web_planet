@@ -246,7 +246,7 @@
   const canZeroMoneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
-  const natureNumberReg = /^(\d*)$/;   //  自然数
+  const natureNumberReg = /^(\d+)$/;   //  自然数
 
   export default {
     name: "TrialProductEdit",
@@ -465,7 +465,6 @@
 
         let index = this.formData.tcattribute.indexOf(tag);
 
-        // this.$set()
         this.formData.tcattribute.splice(index, 1, prompt.value);
       },
       handleClose(tag) {
@@ -726,7 +725,7 @@
               if (!currentSku.skupic) {
                 detailTip += '-图片未传'
               }
-              if (currentSku.skustock === '' || !natureNumberReg.test(currentSku.skustock)) {
+              if (!natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
 

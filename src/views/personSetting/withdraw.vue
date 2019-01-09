@@ -5,6 +5,28 @@
       <block-title title="可用余额"></block-title>
       <h1>￥10000</h1>
       <block-title title="可用余额"></block-title>
+      <el-form :model="applyForm" :rules="formRules" ref="applyForm" size="medium" label-width="120px"
+               label-position="left">
+        <el-form-item label="提现金额" prop="cncashnum">
+          <el-input v-model.number="applyForm.cncashnum" maxlength="11"></el-input>
+        </el-form-item>
+        <el-form-item label="开户行" prop="cnbankname">
+          <el-input v-model.number="applyForm.cnbankname" maxlength="11"></el-input>
+        </el-form-item>
+        <el-form-item label="开户网点" prop="cnbankdetail">
+          <el-input v-model.number="applyForm.cnbankdetail" maxlength="11"></el-input>
+        </el-form-item>
+        <el-form-item label="户名" prop="cncardname">
+          <el-input v-model.number="applyForm.cncardname" maxlength="11"></el-input>
+        </el-form-item>
+        <el-form-item label="卡号" prop="cncardno">
+          <el-input v-model.number="applyForm.cncardno" maxlength="11"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="doSaveApply">确 定</el-button>
+        </span>
     </el-dialog>
     <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;" @click="doNewApply">新增申请</el-button>
 
@@ -53,6 +75,31 @@
         currentPage: 1,
         pageSize: 10,
         tableData: [],
+
+        applyForm: {
+          "cncashnum": "0",
+          "cncardno": "",
+          "cncardname": "",
+          "cnbankname": "",
+          "cnbankdetail": ""
+        },
+        formRules: {
+          "cncashnum": [
+            {required: true, message: '提现金额必填', trigger: 'blur'}
+          ],
+          "cncardno": [
+            {required: true, message: '卡号必填', trigger: 'blur'}
+          ],
+          "cncardname": [
+            {required: true, message: '户名必填', trigger: 'blur'}
+          ],
+          "cnbankname": [
+            {required: true, message: '开户行必填', trigger: 'blur'}
+          ],
+          "cnbankdetail": [
+            {required: true, message: '开户网点必填', trigger: 'blur'}
+          ],
+        },
       }
     },
 
@@ -85,13 +132,54 @@
         this.getList();
       },
 
-      doNewApply(){
-        this.dlgVisible = true;
+      doNewApply() {
+        this.dialogVisible = true;
+      },
+      doSaveApply() {
+        this.$refs.applyForm.validate(
+          valid => {
+            if (valid) {
+              this.$confirm(`确认提交提现申请(金额:${this.applyForm.cncashnum})?`,'提示').then(
+                ()=>{
+                  this.$http.post(this.$api.apply_cash,this.applyForm).then(
+                    res => {
+                      if (res.data.status == 200) {
+                        let resData = res.data,
+                            data = res.data.data;
+
+                        this.$notify({
+                          title: '提现申请提交成功',
+                          message: `金额:${this.applyForm.cncashnum}`,
+                          type: 'success'
+                        });
+                      }
+                    }
+                  )
+                }
+              )
+            } else {
+              this.$message.warning('请根据校验信息完善表单!');
+            }
+          }
+        );
       },
     },
 
     created() {
       this.getList();
+      this.$http.get(this.$api.get_supplizer, {
+        params: {}
+      }).then(
+        res => {
+          if (res.data.status == 200) {
+            let resData = res.data,
+              data = res.data.data;
+
+            this.applyForm.cnbankname = data.subankname
+            this.applyForm.cncardno = data.subanksn
+          }
+        }
+      )
     },
   }
 </script>

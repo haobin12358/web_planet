@@ -1,50 +1,17 @@
 <template>
   <div class="container">
     <section class="profile-block profile-todos-block">
+      <section class="marquee-block">
+
+      </section>
       <block-title title="代办事项"></block-title>
       <div class="todo-line"></div>
 
       <ul class="todo-list">
-        <!--<template v-if="checkPermission(level2)">-->
           <li class="todo-item" v-for="item in todos" :key="item.ptid" @click="gotoTodoPage(item)">
             <span class="label">{{item.ptname}}</span>
             <span class="num">{{item.approval_num}}</span>
           </li>
-          <!--<router-link  tag="li" to="/approval/withdrawAudit" class="todo-item">-->
-          <!--<span class="label">提现审批</span>-->
-          <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-          <!--<router-link tag="li" to="/approval/returnProductAudit" class="todo-item return-prod">-->
-          <!--<span class="label">退货审批</span>-->
-          <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-          <!--<router-link tag="li" to="/approval/agentAudit" class="todo-item agent-audit">-->
-          <!--<span class="label">代理商审批</span>-->
-          <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-          <!--<router-link tag="li" to="/approval/productAudit" class="todo-item prod-audit">-->
-          <!--<span class="label">商品上架</span>-->
-          <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-          <!--<router-link tag="li" to="/approval/circleAudit" class="todo-item circle">-->
-          <!--<span class="label">圈子审核</span>-->
-          <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-          <!--<router-link tag="li" to="/approval/withdraw" class="todo-item activity">-->
-          <!--<span class="label">活动审核</span>-->
-          <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-        <!--</template>-->
-        <!--<template v-if="checkPermission(level0)">-->
-          <!--<router-link tag="li" to="/product/index" class="todo-item prod-audit">-->
-            <!--<span class="label">商品上架</span>-->
-            <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-          <!--<router-link tag="li" to="/activity/supplizerActi" class="todo-item activity">-->
-            <!--<span class="label">活动申请</span>-->
-            <!--<span class="num">21</span>-->
-          <!--</router-link>-->
-        <!--</template>-->
       </ul>
     </section>
 
@@ -131,6 +98,8 @@
         </li>
       </ul>
     </section>
+
+
 
     <!--<block-title title="订单趋势"></block-title>-->
     <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
@@ -373,6 +342,13 @@
   @import "../../styles/myIndex";
 
   .container {
+    .marquee-block{
+      position: fixed;
+      height: 100px;
+      width: 100%;
+
+    }
+
     .profile-block {
       margin-bottom: 20px;
     }

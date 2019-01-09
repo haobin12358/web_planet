@@ -1,11 +1,6 @@
 <template>
   <div class="activity-index">
     <el-table v-loading="activityLoading" :data="activityList" stripe>
-      <!--<el-table-column label="序号" align="center" prop="acsort" width="180">
-        <template slot-scope="scope">
-          <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @change="sortChange"></el-input>
-        </template>
-      </el-table-column>-->
       <el-table-column label="活动封面图" align="center" prop="acbackground">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
@@ -263,7 +258,7 @@
       },
       // 改变活动序号
       sortChange(v) {
-        if(positiveNumberReg.test(row.acsort)) {
+        if(positiveNumberReg.test(this.activityList[this.index].acsort)) {
           let params = {
             actype: this.activityList[this.index].actype,
             acshow: this.activityList[this.index].acshow,

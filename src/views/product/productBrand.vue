@@ -17,8 +17,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="brandLoading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="brandLoading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -105,7 +105,7 @@
             :on-success="handlePbBackSuccess"
             :before-upload="beforePicUpload"
           >
-            <img v-if="brandForm.pbbackgroud" v-lazy="brandForm.pbbackgroud" class="avatar avatar-top">
+            <img v-if="brandForm.pbbackgroud" v-lazy="brandForm.pbbackgroud":key="brandForm.pbbackgroud" class="avatar avatar-top">
             <i v-else class="el-icon-plus avatar-uploader-icon avatar-uploader-icon-top"></i>
 
             <div slot="tip" class="el-upload__tip">
@@ -153,8 +153,8 @@
           <el-input v-model.trim="itemSearchForm.kw" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doItemReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="itemLoading" @click="doItemSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="itemLoading"  @click="doItemReset">重置</el-button>
         </el-form-item>
       </el-form>
 

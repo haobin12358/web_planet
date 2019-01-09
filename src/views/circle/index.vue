@@ -21,7 +21,7 @@
             <el-button type="text" v-if="scope.$index == focusedRowIndex" @click="changeItemSort(scope.row)">保存</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" fixed="right">
+        <el-table-column label="操作" align="center" width="120px" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
             <el-button type="text" class="danger-text" @click="deleteItem(scope)">删除</el-button>
@@ -37,8 +37,8 @@
           <el-input v-model="kw"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="handleSelect(nestatus)">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="resetSearch">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="circleLoading" @click="handleSelect(nestatus)">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="circleLoading" @click="resetSearch">重置</el-button>
         </el-form-item>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="addCircle">新增资讯</el-button>
@@ -65,7 +65,7 @@
           <preview-circle :circle="scope.row"></preview-circle>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="操作" align="center" width="120px" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.nestatus == 'refuse'" @click="editCircle(scope)">编辑</el-button>
           <el-button type="text" class="warning-text" v-if="scope.row.nestatus == 'usual'" @click="downCircle(scope)">
@@ -271,7 +271,7 @@
         }).then(() => {
           this.$http.post(this.$api.news_shelves, {neid: [scope.row.neid]}).then(res => {
             if (res.data.status == 200) {
-              this.circleList.splice(scope.$index, 1);
+              this.handleSelect(this.nestatus);
               this.$notify({
                 title: '下架成功',
                 message: `${scope.row.netitle}：下架成功`,
@@ -291,7 +291,7 @@
         }).then(() => {
           this.$http.post(this.$api.del_news, {neid: [scope.row.neid]}).then(res => {
             if (res.data.status == 200) {
-              this.circleList.splice(scope.$index, 1);
+              this.handleSelect(this.nestatus);
               this.$notify({
                 title: '删除成功',
                 message: `${scope.row.netitle}：删除成功`,
@@ -401,7 +401,7 @@
                 type: 'success'
               });
               this.itemDialog = false;
-              this.itemList.splice(scope.$index, 1);
+              this.getItem();
             }
           })
         }).catch(() => {
