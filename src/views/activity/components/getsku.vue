@@ -153,6 +153,7 @@
   import elDragDialog from 'src/directive/el-dragDialog'
 
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     data() {
       return {
@@ -250,8 +251,8 @@
             this.$message.warning('请先选择参与起止时间');
             return false
           }
-          if(!this.skusForm.prprice) {
-            this.$message.warning('请先填写列表显示价格');
+          if(!positiveNumberReg.test(this.skusForm.prprice)) {
+            this.$message.warning('请先填写合理的列表显示价格');
             return false
           }
           let sku = {
@@ -267,6 +268,15 @@
               skustock: this.skus[i].stock,
               skuprice: this.skus[i].price
             };
+
+            if (positiveNumberReg.test(this.skus[i].stock)){
+              this.$message.warning('请输入合理的库存');
+              return
+            }
+            if (positiveNumberReg.test(this.skus[i].price)){
+              this.$message.warning('请输入合理的价格');
+              return
+            }
 
             if(this.skus[i].stock > this.skus[i].skustock){
               this.$message.warning('参与数量超出库存');
@@ -296,7 +306,15 @@
               return false
             }
           }
-          if(this.skus[0].stock > this.skus[0].skustock){
+          if (positiveNumberReg.test(this.skus[0].skustock)){
+            this.$message.warning('请输入合理的库存');
+            return
+          }
+          if (positiveNumberReg.test(this.skus[0].price)){
+            this.$message.warning('请输入合理的sku价格');
+            return
+          }
+          if(this.skus[0].stock > this.skus[0].skustock ){
             this.$message.warning('参与数量超出库存');
             return
           }
@@ -307,6 +325,7 @@
             skuprice: this.skus[0].price,
             skustock: this.skus[0].stock
           };
+
           this.$emit('chooseSkus', sku, this.isEdit);
         }else if(this.where == 'magic') {       // 魔盒奖品
           if(!this.skus.length) {
@@ -328,10 +347,8 @@
               return false
             }
           }
-          if(this.skus[0].stock > this.skus[0].skustock){
-            this.$message.warning('参与数量超出库存');
-            return
-          }
+
+
           for (let i = 0; i < this.numList.length; i++) {
             if(!moneyReg.test(this.numList[i])){
               this.$message.warning('档位金额设置有误');
@@ -339,6 +356,18 @@
             }
           }
 
+          if (positiveNumberReg.test(this.skus[0].stock)){
+            this.$message.warning('请输入合理的库存');
+            return
+          }
+          if (positiveNumberReg.test(this.skus[0].price)){
+            this.$message.warning('请输入合理的金额');
+            return
+          }
+          if(this.skus[0].stock > this.skus[0].skustock){
+            this.$message.warning('参与数量超出库存');
+            return
+          }
           let sku = {
             skuid: this.skus[0].skuid,
             prid: this.prid,
