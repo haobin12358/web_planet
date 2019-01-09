@@ -232,9 +232,9 @@
                if(this.product_info.prtitle.length > 27) {
                  this.product_info.prtitle = this.product_info.prtitle.slice(0, 27) + '...'
                }
-               if(this.product_info.profict) {
+               /*if(this.product_info.profict) {
                  this.product_info.profict = this.product_info.profict.toString().slice(0, 5) + '...'
-               }
+               }*/
              }
            },error => {
              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
@@ -356,7 +356,7 @@
       }
       .m-profict-title {
         white-space: nowrap;
-        margin-left: 420px;
+        margin-left: auto;
       }
       .m-red{
         color: #EF9B2D;

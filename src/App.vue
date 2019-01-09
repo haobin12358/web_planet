@@ -74,7 +74,7 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.3.3');
+    console.log('v 0.3.5');
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NjcxOTgyOSwiZXhwIjoxNTQ3MzI0NjI5fQ.eyJpZCI6ImQ1NzM5MzUyLTBiNmMtMTFlOS1hNmVmLTAwMTYzZTA4ZDMwZiIsIm1vZGVsIjoiVXNlciIsImxldmVsIjoxLCJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyJ9.xvbRIEtWTkebhe2wo5m1BWeX8iG03jvQWTIMb5wsUIg';
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Njg0OTk2OCwiZXhwIjoxNTQ3NDU0NzY4fQ.eyJ1c2VybmFtZSI6Ilx1NmQxYlx1NGU5MSIsImlkIjoiMjJjY2UzNDgtMTI0Yy0xMWU5LWE2NmMtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.050wl3pbA9KgIiqMFt11XWLGHOQ8oEV5tWPH9KCkbjk';
     // localStorage.setItem('token', token);
