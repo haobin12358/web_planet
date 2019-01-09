@@ -6,8 +6,7 @@
         <el-form-item label="活动开始时间">
           <el-col :span="11">
             <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
-                            placeholder="起始日期"
-                            style="width: 100%;"></el-date-picker>
+                            placeholder="起始日期" style="width: 100%;"></el-date-picker>
           </el-col>
           <el-col class="middle-line" :span="2">-</el-col>
           <el-col :span="11">
@@ -124,7 +123,6 @@
           endtime: '',
           mbastatus: 'all',
         };
-        this.page_num = 1;
         this.doSearch();
       },
       // 申请添加魔盒奖品-按钮
@@ -164,12 +162,13 @@
         }
       },
       sizeChange(val) {
+        this.page_num = 1;
         this.page_size = val;
-        this.getMagic()
+        this.doSearch()
       },
       pageChange(val) {
         this.page_num = val;
-        this.getMagic()
+        this.doSearch()
       },
       // 获取自己的猜数字奖品申请列表
       getMagic() {

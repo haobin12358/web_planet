@@ -117,8 +117,7 @@
         endtime: '',
         status: '',
       };
-      this.page_num = 1;
-      this.getNew();
+      this.doSearch();
     },
     // 添加新人商品-按钮
     addNew() {
@@ -126,12 +125,13 @@
       this.$refs.new.productDialog = true
     },
     sizeChange(val) {
+      this.page_num = 1;
       this.page_size = val;
-      this.getNew()
+      this.doSearch()
     },
     pageChange(val) {
       this.page_num = val;
-      this.getNew()
+      this.doSearch()
     },
     // 获取新人首单商品列表
     getNew() {
@@ -143,13 +143,6 @@
           ...this.inlineForm
       }}).then(res => {
         if (res.data.status == 200) {
-          this.getSpanArr(res.data.data);
-          for (let i = 0; i < this.spanArr.length; i++) {
-            if(this.spanArr[i]>0){
-              res.data.data[i].groupCount = this.groupCount;
-              this.groupCount ++;
-            }
-          }
           this.newList = res.data.data;
           this.total = res.data.total_count;
           this.newLoading = false;

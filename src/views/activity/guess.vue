@@ -30,7 +30,7 @@
       </section>
     </section>
     <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
-    <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
+    <el-table v-loading="guessLoading" :data="guessList" stripe size="mini" :span-method="objectSpanMethod">
       <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
@@ -124,7 +124,6 @@
           endtime: '',
           gnaastatus: 'all',
         };
-        this.page_num = 1;
         this.doSearch();
       },
       // 申请添加竞猜奖品-按钮
@@ -164,12 +163,13 @@
         }
       },
       sizeChange(val) {
+        this.page_num = 1;
         this.page_size = val;
-        this.getGuess()
+        this.doSearch()
       },
       pageChange(val) {
         this.page_num = val;
-        this.getGuess()
+        this.doSearch()
       },
       // 获取自己的猜数字奖品申请列表
       getGuess() {
@@ -182,6 +182,13 @@
             ...this.inlineForm
           }}).then(res => {
           if (res.data.status == 200) {
+            this.getSpanArr(res.data.data);
+            for (let i = 0; i < this.spanArr.length; i++) {
+              if(this.spanArr[i]>0){
+                res.data.data[i].groupCount = this.groupCount;
+                this.groupCount ++;
+              }
+            }
             this.guessList = res.data.data;
             this.total = res.data.total_count;
             this.guessLoading = false;

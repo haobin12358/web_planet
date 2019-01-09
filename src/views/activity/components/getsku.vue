@@ -152,6 +152,7 @@
   import TableCellImg from "src/components/TableCellImg"
   import elDragDialog from 'src/directive/el-dragDialog'
 
+  const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   export default {
     data() {
       return {
@@ -173,7 +174,7 @@
         prid: '',
         gnaastarttime: [],
         mbastarttime: [],
-        height: '500px',
+        height: '400px',
         numList: [1, 2, 3, 5, 5, 10, 5, 10, 20, 30],
         isEdit: false,
         placeholder: '请选择一个或多个日期',
@@ -192,7 +193,7 @@
     mounted() {
       this.getProduct();
       if(this.where == 'magic') {
-        this.height = '400px'
+        this.height = '300px'
       }
     },
     watch: {
@@ -266,6 +267,12 @@
               skustock: this.skus[i].stock,
               skuprice: this.skus[i].price
             };
+
+            if(this.skus[i].stock > this.skus[i].skustock){
+              this.$message.warning('参与数量超出库存');
+              return
+            }
+
             sku.skus.push(skus)
           }
           this.$emit('chooseSkus', sku, this.isEdit);
@@ -288,6 +295,10 @@
               this.$message.warning('请至少选择一个日期');
               return false
             }
+          }
+          if(this.skus[0].stock > this.skus[0].skustock){
+            this.$message.warning('参与数量超出库存');
+            return
           }
           let sku = {
             skuid: this.skus[0].skuid,
@@ -317,6 +328,17 @@
               return false
             }
           }
+          if(this.skus[0].stock > this.skus[0].skustock){
+            this.$message.warning('参与数量超出库存');
+            return
+          }
+          for (let i = 0; i < this.numList.length; i++) {
+            if(!moneyReg.test(this.numList[i])){
+              this.$message.warning('档位金额设置有误');
+              return
+            }
+          }
+
           let sku = {
             skuid: this.skus[0].skuid,
             prid: this.prid,
@@ -328,6 +350,7 @@
             gearstwo: [this.numList[2] + '-' + this.numList[3], this.numList[4] + '-' + this.numList[5]],
             gearsthree: [this.numList[6] + '-' + this.numList[7], this.numList[8] + '-' + this.numList[9]],
           };
+
           this.$emit('chooseSkus', sku, this.isEdit);
         }
       },
