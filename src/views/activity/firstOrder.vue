@@ -1,7 +1,34 @@
 <template>
   <div class="container">
     <block-title title="申请列表"></block-title>
-    <el-button type="primary" class="add-new-btn" icon="el-icon-plus" @click="addNew">申请</el-button>
+    <section class="tool-bar space-between">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="活动开始时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                            placeholder="起始日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="审核状态">
+          <el-select v-model="inlineForm.status" @change="doSearch">
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <section class="action-wrap">
+        <el-button type="primary" icon="el-icon-plus" @click="addNew">申请</el-button>
+      </section>
+    </section>
     <get-sku @chooseSkus="chooseSkus" ref="new" where="new"></get-sku>
     <el-table v-loading="newLoading" :data="newList" stripe size="mini">
       <el-table-column type="index" width="55"></el-table-column>
@@ -17,7 +44,7 @@
       <el-table-column label="申请状态" align="center" prop="fmfastatus_zh">
         <template slot-scope="scope">
           <el-popover
-            v-if="scope.row.fmarejectreason"
+            v-if="scope.row.fmfarejectreson"
             placement="top-start" title="拒绝理由" width="200" trigger="click">
             {{scope.row.fmarejectreason}}
             <el-tag slot="reference" :type="statusTagType(scope.row.fmfastatus)">{{scope.row.fmfastatus_zh}}</el-tag>
@@ -46,6 +73,18 @@
   name: "FirstOrder",
   data() {
     return {
+      inlineForm: {
+        starttime: '',
+        endtime: '',
+        status: '',
+      },
+      statusOption: {
+        '': '全部',
+        "10": "已同意",
+        "-20": "已撤销",
+        "-10": "已拒绝",
+        "0": "审核中"
+      },
       newList: [],
       newLoading: false,
       page_size: 10,
@@ -59,6 +98,29 @@
     this.getNew()         // 获取新人首单商品列表
   },
   methods: {
+    // 顶部查询
+    doSearch() {
+      this.page_num = 1;
+      if(this.inlineForm.starttime && this.inlineForm.endtime){
+        if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+          let term = this.inlineForm.endtime;
+
+          this.inlineForm.endtime = this.inlineForm.starttime;
+          this.inlineForm.starttime = term;
+        }
+      }
+      this.getNew();
+    },
+    // 重置
+    doReset() {
+      this.inlineForm = {
+        starttime: '',
+        endtime: '',
+        status: '',
+      };
+      this.page_num = 1;
+      this.getNew();
+    },
     // 添加新人商品-按钮
     addNew() {
       this.$refs.new.isEdit = false;
@@ -76,7 +138,11 @@
     getNew() {
       this.newLoading = true;
       this.$http.get(this.$api.fresh_man_list, { noLoading: true,
-        params: { page_num: this.page_num, page_size: this.page_size }}).then(res => {
+        params: {
+          page_num: this.page_num,
+          page_size: this.page_size,
+          ...this.inlineForm
+      }}).then(res => {
         if (res.data.status == 200) {
           this.newList = res.data.data;
           this.total = res.data.total_count;
