@@ -172,6 +172,14 @@
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
       </div>
     </div>
+    <!--提现历史-->
+    <div class="m-border-radius">
+      <div class="m-total-jump-box" @click="changeRoute('/personal/history')">
+        <div class="m-jump-title">提现历史</div>
+        <div class="m-jump-text"></div>
+        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
+      </div>
+    </div>
   </div>
 </template>
 

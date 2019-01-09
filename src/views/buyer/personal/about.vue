@@ -13,7 +13,7 @@
       <p class="m-copy-right-text-one">
         <span>Copyright</span>
         <span class="m-icon-copy-right"></span>
-        <span>2018-2032</span>
+        <span>2018-2019</span>
       </p>
       <p class="m-copy-right-text-two">
         杭州跨狐信息技术有限公司 版权所有
