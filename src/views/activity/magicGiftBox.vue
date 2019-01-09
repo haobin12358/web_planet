@@ -16,7 +16,7 @@
           </el-col>
         </el-form-item>
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.mbastatus" @select="doSearch">
+          <el-select v-model="inlineForm.mbastatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -92,7 +92,7 @@
         magicList: [],
         page_size: 10,
         page_num: 1,
-        total: 0,
+        total: 1,
         scope: {},             // 暂存scope
 
         spanArr: [],
@@ -106,6 +106,7 @@
     methods: {
       // 顶部查询
       doSearch() {
+        this.page_num = 1;
         if(this.inlineForm.starttime && this.inlineForm.endtime){
           if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
             let term = this.inlineForm.endtime;
@@ -123,6 +124,7 @@
           endtime: '',
           mbastatus: 'all',
         };
+        this.page_num = 1;
         this.doSearch();
       },
       // 申请添加魔盒奖品-按钮

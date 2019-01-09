@@ -16,7 +16,7 @@
           </el-col>
         </el-form-item>
         <el-form-item label="审核状态">
-          <el-select v-model="inlineForm.gnaastatus" @select="doSearch">
+          <el-select v-model="inlineForm.gnaastatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
@@ -92,7 +92,7 @@
         guessList: [],
         page_size: 10,
         page_num: 1,
-        total: 0,
+        total: 1,
         scope: {}             // 暂存scope
       }
     },
@@ -103,6 +103,7 @@
     methods: {
       // 顶部查询
       doSearch() {
+        this.page_num = 1;
         if(this.inlineForm.starttime && this.inlineForm.endtime){
           if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
             let term = this.inlineForm.endtime;
@@ -120,6 +121,7 @@
           endtime: '',
           gnaastatus: 'all',
         };
+        this.page_num = 1;
         this.doSearch();
       },
       // 申请添加竞猜奖品-按钮
@@ -174,6 +176,7 @@
           params: {
             page_num: this.page_num,
             page_size: this.page_size,
+            ...this.inlineForm
           }}).then(res => {
           if (res.data.status == 200) {
             this.guessList = res.data.data;

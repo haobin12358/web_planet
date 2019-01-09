@@ -39,7 +39,7 @@
       <el-form :model="skusForm" label-position="right" label-width="120px" v-if="where == 'new'">
         <el-form-item label="参与起止时间：">
           <el-date-picker
-            v-model="fmfatime" type="daterange" value-format="yyyy-MM-dd"
+            v-model="fmfatime" type="daterange" value-format="yyyy-MM-dd" :picker-options="pickerOptions"
             start-placeholder="开始日期" range-separator="至" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
@@ -52,16 +52,16 @@
       <!--竞猜奖品-->
       <el-form label-position="right" label-width="120px" v-if="where == 'guess'">
         <el-form-item label="参与时间：">
-          <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd"
-                          v-model="gnaastarttime" placeholder="选择一个或多个日期">
+          <el-date-picker class="dates-box" type="date" value-format="yyyy-MM-dd" :picker-options="pickerOptions"
+                          v-model="gnaastarttime" placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
       </el-form>
       <!--魔盒奖品-->
       <el-form label-position="right" label-width="120px" inline v-if="where == 'magic'" style="margin-top: -30px">
         <el-form-item label="参与时间：">
-          <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd"
-                          v-model="mbastarttime" placeholder="选择一个或多个日期">
+          <el-date-picker class="dates-box" type="date" value-format="yyyy-MM-dd" :picker-options="pickerOptions"
+                          v-model="mbastarttime" placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="第一档:">
@@ -98,7 +98,7 @@
           <span>元</span>
         </el-form-item>
       </el-form>
-
+      <!--表格部分-->
       <el-table v-loading="skusLoading" :data="skusList" stripe :height="height"
                 @selection-change="handleSelectionChange" row-key="skuid" ref="skuList">
         <el-table-column type="selection" :reserve-selection="false"></el-table-column>
@@ -108,10 +108,10 @@
           </template>
         </el-table-column>
         <el-table-column label="规格名称" align="center" prop="skuname" show-overflow-tooltip></el-table-column>
-        <!--<el-table-column label="库存" align="center" prop="skustock"></el-table-column>-->
+        <el-table-column label="库存" align="center" prop="skustock"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.stock">
+            <el-input class="short-input" :disabled="isEdit" v-model="scope.row.stock">
             </el-input>
           </template>
         </el-table-column>
@@ -170,11 +170,16 @@
           prprice: ''
         },
         prid: '',
-        gnaastarttime: [],
-        mbastarttime: [],
+        gnaastarttime: '',
+        mbastarttime: '',
         height: '500px',
         numList: [1, 2, 3, 5, 5, 10, 5, 10, 20, 30],
-        isEdit: false
+        isEdit: false,
+        pickerOptions: {         // 日期选择器的时间限制
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+        }
       }
     },
     props: {
@@ -262,14 +267,14 @@
             this.$message.warning('请单选商品规格');
             return false
           }
-          if(!this.gnaastarttime.length) {
-            this.$message.warning('请至少选择一个日期');
+          if(!this.gnaastarttime) {
+            this.$message.warning('请选择日期');
             return false
           }
           let sku = {
             skuid: this.skus[0].skuid,
             prid: this.prid,
-            gnaastarttime: this.gnaastarttime,
+            gnaastarttime: [this.gnaastarttime],
             skuprice: this.skus[0].price,
             skustock: this.skus[0].stock
           };
@@ -283,14 +288,14 @@
             this.$message.warning('请单选商品规格');
             return false
           }
-          if(!this.mbastarttime.length) {
-            this.$message.warning('请至少选择一个日期');
+          if(!this.mbastarttime) {
+            this.$message.warning('请选择日期');
             return false
           }
           let sku = {
             skuid: this.skus[0].skuid,
             prid: this.prid,
-            mbastarttime: this.mbastarttime,
+            mbastarttime: [this.mbastarttime],
             skuminprice: this.skus[0].price,
             skuprice: this.skus[0].maxprice,
             skustock: this.skus[0].stock,
@@ -351,8 +356,8 @@
       initDialog() {
         this.skus = [];
         this.fmfatime = [];
-        this.gnaastarttime = [];
-        this.mbastarttime = [];
+        this.gnaastarttime = '';
+        this.mbastarttime = '';
         this.skusForm.prprice = ''
       },
       // 编辑时处理数据
@@ -381,7 +386,7 @@
             }
           }, 10);
         }else if(scope.row.where == 'guess') {
-          this.gnaastarttime = [scope.row.gnaastarttime];
+          this.gnaastarttime = scope.row.gnaastarttime;
           // 倒计时
           const TIME_COUNT = 1;
           let count = TIME_COUNT;
@@ -401,7 +406,7 @@
             }
           }, 10);
         }else if(scope.row.where == 'magic') {
-          this.mbastarttime = [scope.row.mbastarttime];
+          this.mbastarttime = scope.row.mbastarttime;
           this.numList = [];
           for(let i in scope.row.gearsone[0].split('-')) {
             this.numList.push(scope.row.gearsone[0].split('-')[i])
