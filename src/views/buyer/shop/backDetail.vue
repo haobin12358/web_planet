@@ -55,6 +55,7 @@
           </div>
         </div>
         <div class="m-product-text">
+          <p v-if="refund.oracheckreason">审核回复：{{refund.oracheckreason}}</p>
           <p>退款原因：{{refund.orareason}}</p>
           <p>退款金额：￥{{refund.oramount | money}}</p>
           <p>申请时间：{{refund.createtime}}</p>
