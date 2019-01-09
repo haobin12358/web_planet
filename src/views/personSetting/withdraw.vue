@@ -28,7 +28,7 @@
           <el-button type="primary" @click="doSaveApply">确 定</el-button>
         </span>
     </el-dialog>
-    <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;" @click="doNewApply">新增申请</el-button>
+    <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;float: right;" @click="doNewApply">新增申请</el-button>
 
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="提现金额" prop="cncashnum" align="center"></el-table-column>

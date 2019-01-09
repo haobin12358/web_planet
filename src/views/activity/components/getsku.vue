@@ -7,8 +7,8 @@
             <el-input v-model="kw"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="search">查询</el-button>
-            <el-button icon="el-icon-refresh"  :loading="loading" @click="reset">重置</el-button>
+            <el-button type="primary" icon="el-icon-search"  :loading="productLoading" @click="search">查询</el-button>
+            <el-button icon="el-icon-refresh"  :loading="productLoading" @click="reset">重置</el-button>
           </el-form-item>
         </el-form>
       </section>

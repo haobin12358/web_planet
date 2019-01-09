@@ -447,7 +447,6 @@ export const asyncRouterMap = [
     path: '/personSetting',
     component: Layout,
     redirect: '/personSetting/withdraw',
-    name: 'PersonSetting',
     alwaysShow: true,
     meta: {title: '设置', icon: 'personSetting', roles: level0},
     children: [

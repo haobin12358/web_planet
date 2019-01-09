@@ -31,7 +31,7 @@
     </section>
     <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini">
-      <el-table-column type="index" width="55"></el-table-column>
+      <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.skupic" :key="scope.row.gnaaid"></table-cell-img>
@@ -41,7 +41,7 @@
       <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="gnaastarttime"></el-table-column>
       <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
-      <el-table-column label="参与数量" align="center" prop="skustock"></el-table-column>
+      <el-table-column label="参与数量" align="center" prop="skustock" :render-header="stockHeaderRender"></el-table-column>
       <el-table-column label="申请状态" align="center" prop="gnaastatus_zh">
         <template slot-scope="scope">
           <el-popover
@@ -93,7 +93,10 @@
         page_size: 10,
         page_num: 1,
         total: 1,
-        scope: {}             // 暂存scope
+        scope: {},             // 暂存scope
+
+        spanArr: [],
+        groupCount: 1,
       }
     },
     components: { getSku, TableCellImg },
@@ -196,6 +199,50 @@
           case 10:
             return 'success'
         }
+      },
+
+      getSpanArr(data) {
+        this.spanArr = [];
+        this.pos = 0;
+
+        for (let i = 0; i < data.length; i++) {
+          if (i === 0) {
+            this.spanArr.push(1);
+            this.pos = 0
+          } else {
+            // 判断当前元素与上一个元素是否相同
+            if (data[i].osid === data[i - 1].osid) {
+              this.spanArr[this.pos] += 1;
+              this.spanArr.push(0);
+            } else {
+              this.spanArr.push(1);
+              this.pos = i;
+            }
+          }
+        }
+      },
+      objectSpanMethod({row, column, rowIndex, columnIndex}) {
+        if (columnIndex === 0) {
+          const _row = this.spanArr[rowIndex];
+          const _col = _row > 0 ? 1 : 0;
+          return {
+            rowspan: _row,
+            colspan: _col
+          }
+        }
+      },
+      stockHeaderRender(h, {column}) {
+        return (
+          <el-tooltip class="tooltip" placement="top">
+            <ul class="table-header-tip" slot="content">
+              <li>同一次申请多个日期的活动商品会被分成多个单日活动去审批,</li>
+              <li>同一次申请的算同一批,每批的库存是共用的,合并的单元格表示为同一批</li>
+            </ul>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
       },
 
       // 编辑我的申请

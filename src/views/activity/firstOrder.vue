@@ -31,7 +31,6 @@
     </section>
     <get-sku @chooseSkus="chooseSkus" ref="new" where="new"></get-sku>
     <el-table v-loading="newLoading" :data="newList" stripe size="mini">
-      <el-table-column type="index" width="55"></el-table-column>
       <el-table-column label="商品图片" align="center" prop="prdescription">
         <template slot-scope="scope">
           <table-cell-img :src="scope.row.fresh_product.prmainpic" :key="scope.row.fmfaid"></table-cell-img>
@@ -90,7 +89,7 @@
       page_size: 10,
       page_num: 1,
       total: 0,
-      scope: {}             // 暂存scope
+      scope: {},             // 暂存scope
     }
   },
   components: { getSku, TableCellImg },
@@ -144,6 +143,13 @@
           ...this.inlineForm
       }}).then(res => {
         if (res.data.status == 200) {
+          this.getSpanArr(res.data.data);
+          for (let i = 0; i < this.spanArr.length; i++) {
+            if(this.spanArr[i]>0){
+              res.data.data[i].groupCount = this.groupCount;
+              this.groupCount ++;
+            }
+          }
           this.newList = res.data.data;
           this.total = res.data.total_count;
           this.newLoading = false;
