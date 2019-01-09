@@ -18,9 +18,13 @@
             <div class="m-upload-box" @click="setNo(No)">
               <div>
                 <div class="m-selectBack-img-box">
-                  <template v-for="(img, index) in item.img_box">
+                  <!--<template v-for="(img, index) in item.img_box">
                     <img :src="img" alt="">
-                  </template>
+                  </template>-->
+                  <div class="img-box" v-for="(img,index) in item.img_box">
+                    <img class="circle-img" :src="img" alt="">
+                    <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(No, index)">
+                  </div>
                   <div class="m-selectBack-camera" v-if="item.img_box.length < 5">
                     <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg" ref="commentsImg">
                   </div>
@@ -152,6 +156,11 @@
           }
         })
       },
+      // 删除图片
+      deleteImg(No, index) {
+        this.productList[No].image.splice(index, 1);
+        this.productList[No].img_box.splice(index, 1);
+      },
       // 发布评论
       createEvaluation() {
         for(let i = 0; i < this.productList.length; i ++) {
@@ -260,6 +269,26 @@
             margin-top: 20px;
             .m-selectBack-img-box{
               margin-bottom: 30px;
+              width: 100%;
+              display: flex;
+              flex-wrap: wrap;
+              .img-box {
+                position: relative;
+                .circle-img {
+                  display: inline-block;
+                  width: 186px;
+                  height: 186px;
+                  margin-bottom: 20px;
+                  margin-right: 15px;
+                }
+                .del-img {
+                  width: 40px;
+                  height: 40px;
+                  position: absolute;
+                  top: -10px;
+                  right: -5px;
+                }
+              }
               .m-selectBack-camera{
                 width: 186px;
                 height: 186px;
