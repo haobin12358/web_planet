@@ -124,7 +124,8 @@
         this.product_info = JSON.parse(this.$route.query.product).order_part;
       }else{
         this.product_info = JSON.parse(this.$route.query.product);
-        this.total_money = JSON.parse(this.$route.query.product)[0].opsubtotal;
+        // this.total_money = JSON.parse(this.$route.query.product)[0].opsubtotal;
+        this.total_money = JSON.parse(this.$route.query.product)[0].opsubtruetotal;
       }
       this.refund_money = this.total_money;
 
