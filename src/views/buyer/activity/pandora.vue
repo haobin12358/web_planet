@@ -45,6 +45,10 @@
           <div class="m-rule-no">{{index + 1}}</div>
           <div class="m-ft-30">{{item.msg}}</div>
         </div>
+
+        <div class="rule-text">1、点击分享 按钮邀请好友帮您点击魔盒</div>
+        <div class="rule-text">2、好友点击您分享的魔盒后为您减少或增加随机金额</div>
+        <div class="rule-text">3、达到您预期购买价格时您可以 点击购买</div>
         <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
       </div>
     </div>
@@ -508,7 +512,7 @@
       margin: 35px 0 0 175px;
     }
     .m-share-rule {
-      padding: 33px 40px;
+      padding: 50px 40px;
       position: absolute;
       top: 1160px;
       left: 0;
@@ -586,10 +590,15 @@
             font-weight: bold;
             line-height: 30px;
             padding: 10px;
-            margin: 0 30px 30px 30px;
+            margin: 0 30px 20px 30px;
             background-color: @mainColor;
             border-radius: 50%;
           }
+        }
+        .rule-text {
+          font-size: 24px;
+          text-align: left;
+          margin: 0 -20px 0 50px;
         }
         .m-text {
           position: absolute;
