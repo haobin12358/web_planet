@@ -2,7 +2,7 @@
     <div class="m-search">
       <div class="m-flex-between m-search-top">
         <div class="m-search-input-box">
-          <input type="text" v-model="searchContent" @input="searchInfo" @keypress="keyPress" placeholder="请输入搜索内容">
+          <input type="text" v-model="searchContent" @input="searchInfo" @keypress="keyPress" :placeholder="placeholder">
           <span class="m-icon-close" @click="clearInput"></span>
         </div>
         <span @click="returnBack">取消</span>
@@ -67,6 +67,7 @@
     export default {
         data(){
           return{
+            placeholder: '请输入搜索内容',
             searchContent: '',
             history_list: null,
             result_list: null,
@@ -79,8 +80,11 @@
           this.historySearch();
           // 在圈子的搜索时才显示推荐圈子
           if(this.$route.query.shtype == 'news') {
+            this.placeholder = '搜索圈子关键词';
             this.isCircle = true;
             this.getNav();
+          }else {
+            this.placeholder = '搜索商品关键词'
           }
       },
       methods:{
