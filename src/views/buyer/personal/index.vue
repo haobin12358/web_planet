@@ -177,6 +177,10 @@
             </div>
             <mt-picker :slots="slots" @change="bankChange"></mt-picker>
           </mt-popup>
+          <!--toast-->
+          <mt-popup class="m-toast-popup" popup-transition="popup-fade" v-model="toast">
+            {{text}}
+          </mt-popup>
         </div>
       </div>
     </div>
@@ -212,6 +216,20 @@
         bank: "",
         bankNo: "",
         store: '成为店主',
+        text: '',
+        toast: false
+      }
+    },
+    watch: {
+      outPopup(val) {
+        if(!val) {
+          this.slots = [{ values: ['请点击选择银行'] }];
+          this.realName = "";
+          this.bankName = "";
+          this.bankResult = "";
+          this.bank = "";
+          this.bankNo = ""
+        }
       }
     },
     components: {},
@@ -281,27 +299,105 @@
       outBtn(where) {
         if(where == "submit") {
           if(this.moneyNum < 0.01) {
-            Toast({ message: '提现金额应大于0', position: 'bottom' });
+            // Toast({ message: '提现金额应大于0', position: 'bottom' });
+            this.text = '提现金额应大于0';
+            this.toast = true;
+            // 倒计时
+            const TIME_COUNT = 1;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.toast = false;
+                clearInterval(time);
+              }
+            }, 1000);
             return false;
           }
           if(this.moneyNum > this.user.usbalance) {
-            Toast({ message: '提现金额应不大于可用余额', position: 'bottom' });
+            // Toast({ message: '提现金额应不大于可用余额', position: 'bottom' });
+            this.text = '提现金额应不大于可用余额';
+            this.toast = true;
+            // 倒计时
+            const TIME_COUNT = 1;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.toast = false;
+                clearInterval(time);
+              }
+            }, 1000);
             return false;
           }
           if(!this.realName) {
-            Toast({ message: '请先输入姓名', position: 'bottom' });
+            // Toast({ message: '请先输入姓名', position: 'bottom' });
+            this.text = '请先输入姓名';
+            this.toast = true;
+            // 倒计时
+            const TIME_COUNT = 1;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.toast = false;
+                clearInterval(time);
+              }
+            }, 1000);
             return false;
           }
           if(this.bankNo.length < 10) {
-            Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
+            // Toast({ message: '请先输入正确的银行卡号', position: 'bottom' });
+            this.text = '请先输入正确的银行卡号';
+            this.toast = true;
+            // 倒计时
+            const TIME_COUNT = 1;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.toast = false;
+                clearInterval(time);
+              }
+            }, 1000);
             return false;
           }
           if((this.bank == '请点击选择银行' || this.bank == '可输入银行名称' || !this.bank) && !this.bankResult) {
-            Toast({ message: '请先选择银行', position: 'bottom' });
+            // Toast({ message: '请先选择银行', position: 'bottom' });
+            this.text = '请先选择银行';
+            this.toast = true;
+            // 倒计时
+            const TIME_COUNT = 1;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.toast = false;
+                clearInterval(time);
+              }
+            }, 1000);
             return false;
           }
           if(!this.bankName) {
-            Toast({ message: '请先输入开户行', position: 'bottom' });
+            // Toast({ message: '请先输入开户行', position: 'bottom' });
+            this.text = '请先输入开户行';
+            this.toast = true;
+            // 倒计时
+            const TIME_COUNT = 1;
+            let count = TIME_COUNT;
+            let time = setInterval(() => {
+              if (count > 0 && count <= TIME_COUNT) {
+                count --;
+              } else {
+                this.toast = false;
+                clearInterval(time);
+              }
+            }, 1000);
             return false;
           }
           /*if(!this.validated) {
@@ -325,6 +421,20 @@
               this.bank = '';
               this.bankName = '';
               this.slots[0].values = ['请点击选择银行'];
+            }else {
+              this.text = res.data.message;
+              this.toast = true;
+              // 倒计时
+              const TIME_COUNT = 1;
+              let count = TIME_COUNT;
+              let time = setInterval(() => {
+                if (count > 0 && count <= TIME_COUNT) {
+                  count --;
+                } else {
+                  this.toast = false;
+                  clearInterval(time);
+                }
+              }, 1000);
             }
           });
         }else if(where == "know") {
@@ -396,4 +506,17 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
  @import "../../../common/css/personal";
+
+  .m-toast-popup {
+    width: 400px;
+    height: 80px;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 0 175px;
+    font-size: 36px;
+    line-height: 80px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #333333;
+  }
 </style>
