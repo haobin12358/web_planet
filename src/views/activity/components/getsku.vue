@@ -270,12 +270,12 @@
             return false
           }
           if(this.isEdit) {
-            if(this.mbastarttime.length != 1) {
+            if(this.gnaastarttime.length != 1) {
               this.$message.warning('请选择单个日期');
               return false
             }
           }else {
-            if(!this.mbastarttime.length) {
+            if(!this.gnaastarttime.length) {
               this.$message.warning('请至少选择一个日期');
               return false
             }
