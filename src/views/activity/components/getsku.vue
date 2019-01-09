@@ -195,6 +195,15 @@
         this.height = '400px'
       }
     },
+    watch: {
+      isEdit(val) {
+        if(val) {
+          this.placeholder = '重新编辑时只能选择单个日期'
+        }else {
+          this.placeholder = '请选择一个或多个日期'
+        }
+      }
+    },
     methods: {
       sizeChange(val) {
         this.page_size = val;
@@ -271,7 +280,7 @@
           }
           if(this.isEdit) {
             if(this.gnaastarttime.length != 1) {
-              this.$message.warning('请选择单个日期');
+              this.$message.warning('重新编辑时只能选择单个日期');
               return false
             }
           }else {
@@ -299,7 +308,7 @@
           }
           if(this.isEdit) {
             if(this.mbastarttime.length != 1) {
-              this.$message.warning('请选择单个日期');
+              this.$message.warning('重新编辑时只能选择单个日期');
               return false
             }
           }else {
@@ -363,7 +372,6 @@
             // 编辑时处理数据
             if(scope.row.where) {
               this.isEdit = true;
-              this.placeholder = '请选择单个日期';
               this.editActivity(scope);
             }
           }
