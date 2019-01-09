@@ -22,7 +22,7 @@
         <el-table-column label="价格" align="center" prop="prprice"></el-table-column>
         <el-table-column label="库存" align="center" prop="prstocks"></el-table-column>
         <el-table-column label="品牌" align="center" prop="brand.pbname"></el-table-column>
-        <el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>
+        <!--<el-table-column label="销量" align="center" prop="prsalesvalue"></el-table-column>-->
         <el-table-column label="操作" align="center" width="100" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" @click="chooseProduct(scope)">选择</el-button>
@@ -54,7 +54,7 @@
       <el-form label-position="right" label-width="120px" v-if="where == 'guess'">
         <el-form-item label="参与时间：">
           <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd" :picker-options="pickerOptions"
-                          v-model="gnaastarttime" placeholder="选择一个或多个日期" :disabled="isEdit">
+                          v-model="gnaastarttime" :placeholder="placeholder">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -62,7 +62,7 @@
       <el-form label-position="right" label-width="120px" inline v-if="where == 'magic'" style="margin-top: -30px">
         <el-form-item label="参与时间：">
           <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd" :picker-options="pickerOptions"
-                          v-model="mbastarttime" placeholder="选择一个或多个日期" :disabled="isEdit">
+                          v-model="mbastarttime" :placeholder="placeholder">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="第一档:">
@@ -176,6 +176,7 @@
         height: '500px',
         numList: [1, 2, 3, 5, 5, 10, 5, 10, 20, 30],
         isEdit: false,
+        placeholder: '请选择一个或多个日期',
         pickerOptions: {         // 日期选择器的时间限制
           disabledDate(time) {
             return time.getTime() < Date.now() - 8.64e7;
@@ -268,9 +269,16 @@
             this.$message.warning('请单选商品规格');
             return false
           }
-          if(!this.gnaastarttime.length) {
-            this.$message.warning('请至少选择一个日期');
-            return false
+          if(this.isEdit) {
+            if(this.mbastarttime.length != 1) {
+              this.$message.warning('请选择单个日期');
+              return false
+            }
+          }else {
+            if(!this.mbastarttime.length) {
+              this.$message.warning('请至少选择一个日期');
+              return false
+            }
           }
           let sku = {
             skuid: this.skus[0].skuid,
@@ -289,9 +297,16 @@
             this.$message.warning('请单选商品规格');
             return false
           }
-          if(!this.mbastarttime.length) {
-            this.$message.warning('请至少选择一个日期');
-            return false
+          if(this.isEdit) {
+            if(this.mbastarttime.length != 1) {
+              this.$message.warning('请选择单个日期');
+              return false
+            }
+          }else {
+            if(!this.mbastarttime.length) {
+              this.$message.warning('请至少选择一个日期');
+              return false
+            }
           }
           let sku = {
             skuid: this.skus[0].skuid,
@@ -348,6 +363,7 @@
             // 编辑时处理数据
             if(scope.row.where) {
               this.isEdit = true;
+              this.placeholder = '请选择单个日期';
               this.editActivity(scope);
             }
           }
