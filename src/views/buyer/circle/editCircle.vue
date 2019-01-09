@@ -23,9 +23,10 @@
         <div class="m-upload-box">
           <div>
             <div class="m-selectBack-img-box">
-              <template v-for="(item,index) in img_box">
-                <img :src="item" alt="">
-              </template>
+              <div class="img-box" v-for="(item,index) in img_box">
+                <img class="circle-img" :src="item" alt="">
+                <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(index)">
+              </div>
               <div class="m-selectBack-camera" v-if="img_box.length < 4">
                 <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg" ref="imgUpload">
               </div>
@@ -181,6 +182,11 @@
             }
           });
         }
+      },
+      // 删除图片
+      deleteImg(index) {
+        this.img_box.splice(index, 1);
+        this.upload_img.splice(index, 1);
       },
       //上传图片
       uploadImg(e) {
@@ -363,6 +369,26 @@
     }
     .m-selectBack-img-box{
       margin-bottom: 30px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      .img-box {
+        position: relative;
+        .circle-img {
+          display: inline-block;
+          width: 186px;
+          height: 186px;
+          margin-bottom: 20px;
+          margin-right: 15px;
+        }
+        .del-img {
+          width: 40px;
+          height: 40px;
+          position: absolute;
+          top: -10px;
+          right: 10px;
+        }
+      }
       .m-selectBack-camera{
         width: 186px;
         height: 186px;
@@ -388,13 +414,6 @@
         opacity: 0;
         width: 186px;
         height: 186px;
-      }
-      img{
-        display: inline-block;
-        width: 186px;
-        height: 186px;
-        margin-bottom: 20px;
-        margin-right: 15px;
       }
     }
     .m-product-coupon {
