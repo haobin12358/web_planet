@@ -28,7 +28,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="addGuess">申请</el-button>
       </section>
     </section>
-    <get-sku @chooseSkus="chooseSkus" ref="magic" where="magic"></get-sku>
+    <get-sku @chooseMagicSku="chooseMagicSku" ref="magic" where="magic"></get-sku>
     <el-table v-loading="magicLoading" :data="magicList" stripe size="mini" :span-method="objectSpanMethod">
       <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
@@ -36,7 +36,7 @@
           <table-cell-img :src="scope.row.skupic" :key="scope.row.mbaid"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="品牌" align="center" prop="pbname"></el-table-column>
+      <el-table-column label="品牌" align="center" prop="pbname" show-overflow-tooltip></el-table-column>
       <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="mbastarttime"></el-table-column>
       <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
@@ -104,8 +104,10 @@
     },
     methods: {
       // 顶部查询
-      doSearch() {
-        this.page_num = 1;
+      doSearch(v) {
+        if(v !== 1 && this.page_num !== 1) {
+          this.page_num = 1;
+        }
         if(this.inlineForm.starttime && this.inlineForm.endtime){
           if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
             let term = this.inlineForm.endtime;
@@ -123,15 +125,17 @@
           endtime: '',
           mbastatus: 'all',
         };
+        this.page_num = 1;
         this.doSearch();
       },
       // 申请添加魔盒奖品-按钮
       addGuess() {
         this.$refs.magic.isEdit = false;
-        this.$refs.magic.productDialog = true
+        this.$refs.magic.productDialog = true;
+        this.$refs.magic.numList = [1, 2, 3, 5, 5, 10, 5, 10, 20, 30]
       },
       // 申请添加魔盒奖品
-      chooseSkus(sku, isEdit) {
+      chooseMagicSku(sku, isEdit) {
         if (isEdit) {
           sku.mbaid = this.scope.row.mbaid;
           this.$http.post(this.$api.magic_box_update_apply, sku).then(res => {
@@ -168,7 +172,7 @@
       },
       pageChange(val) {
         this.page_num = val;
-        this.doSearch()
+        this.doSearch(1)
       },
       // 获取自己的猜数字奖品申请列表
       getMagic() {

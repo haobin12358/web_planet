@@ -45,7 +45,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="列表显示价格：" prop="prprice">
-          <el-input class="long-input" v-model="skusForm.prprice">
+          <el-input class="long-input" v-model="skusForm.prprice" maxlength="11">
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
@@ -67,35 +67,35 @@
         </el-form-item>
         <el-form-item label="第一档:">
           <span>随机减少</span>
-          <el-input class="item-input" v-model="numList[0]"></el-input>
+          <el-input class="item-input" v-model="numList[0]" maxlength="11"></el-input>
           <span>至</span>
-          <el-input class="item-input" v-model="numList[1]"></el-input>
+          <el-input class="item-input" v-model="numList[1]" maxlength="11"></el-input>
           <span>元</span>
         </el-form-item>
         <el-form-item label="第二档:">
           <span>随机减少</span>
-          <el-input class="item-input" v-model="numList[2]"></el-input>
+          <el-input class="item-input" v-model="numList[2]" maxlength="11"></el-input>
           <span>至</span>
-          <el-input class="item-input" v-model="numList[3]"></el-input>
+          <el-input class="item-input" v-model="numList[3]" maxlength="11"></el-input>
           <span>元</span>
           <span class="span-or">或</span>
           <span>随机增加</span>
-          <el-input class="item-input" v-model="numList[4]"></el-input>
+          <el-input class="item-input" v-model="numList[4]" maxlength="11"></el-input>
           <span>至</span>
-          <el-input class="item-input" v-model="numList[5]"></el-input>
+          <el-input class="item-input" v-model="numList[5]" maxlength="11"></el-input>
           <span>元</span>
         </el-form-item>
         <el-form-item label="第三档:">
           <span>随机减少</span>
-          <el-input class="item-input" v-model="numList[6]"></el-input>
+          <el-input class="item-input" v-model="numList[6]" maxlength="11"></el-input>
           <span>至</span>
-          <el-input class="item-input" v-model="numList[7]"></el-input>
+          <el-input class="item-input" v-model="numList[7]" maxlength="11"></el-input>
           <span>元</span>
           <span class="span-or">或</span>
           <span>随机增加</span>
-          <el-input class="item-input" v-model="numList[8]"></el-input>
+          <el-input class="item-input" v-model="numList[8]" maxlength="11"></el-input>
           <span>至</span>
-          <el-input class="item-input" v-model="numList[9]"></el-input>
+          <el-input class="item-input" v-model="numList[9]" maxlength="11"></el-input>
           <span>元</span>
         </el-form-item>
       </el-form>
@@ -112,28 +112,28 @@
         <el-table-column label="库存" align="center" prop="skustock"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.stock" :disabled="isEdit">
+            <el-input class="short-input" v-model="scope.row.stock" :disabled="isEdit" maxlength="11">
             </el-input>
           </template>
         </el-table-column>
         <el-table-column label="原价" align="center" prop="skuprice" v-if="where !== 'magic'"></el-table-column>
         <el-table-column label="最高价格" align="center" prop="skuprice" v-else>
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.maxprice">
+            <el-input class="short-input" v-model="scope.row.maxprice" maxlength="11">
               <template slot="append">元</template>
             </el-input>
           </template>
         </el-table-column>
         <el-table-column label="参与价格" align="center" prop="skuprice" v-if="where !== 'magic'">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.price">
+            <el-input class="short-input" v-model="scope.row.price" maxlength="11">
               <template slot="append">元</template>
             </el-input>
           </template>
         </el-table-column>
         <el-table-column label="最低价格" align="center" prop="skuprice" v-else>
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.price">
+            <el-input class="short-input" v-model="scope.row.price" maxlength="11">
               <template slot="append">元</template>
             </el-input>
           </template>
@@ -141,8 +141,8 @@
       </el-table>
       <span slot="footer">
         <el-button @click="skusDialog = false">取 消</el-button>
-        <el-button type="primary" @click="chooseSkus" v-if="isEdit">重新申请</el-button>
-        <el-button type="primary" @click="chooseSkus" v-else>确 定</el-button>
+        <el-button type="primary" @click="chooseSku" v-if="isEdit">重新申请</el-button>
+        <el-button type="primary" @click="chooseSku" v-else>确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -241,146 +241,154 @@
         this.productDialog = false;
         this.skusDialog = false;
       },
-      chooseSkus() {
+      // 新人首单
+      chooseNewSku() {
+        if(!this.skus.length) {
+          this.$message.warning('请先勾选商品规格');
+          return false
+        }
+        if(!this.fmfatime.length) {
+          this.$message.warning('请先选择参与起止时间');
+          return false
+        }
+        if(!moneyReg.test(this.skusForm.prprice)) {
+          this.$message.warning('请先填写合理的列表显示价格');
+          return false
+        }
+        let sku = {
+          prid: this.prid,
+          fmfastarttime: this.fmfatime[0],
+          fmfaendtime: this.fmfatime[1],
+          prprice: this.skusForm.prprice,
+          skus: []
+        };
+        for(let i in this.skus) {
+          let skus = {
+            skuid: this.skus[i].skuid,
+            skustock: this.skus[i].stock,
+            skuprice: this.skus[i].price
+          };
+
+          if (!positiveNumberReg.test(this.skus[i].stock)){
+            this.$message.warning('请输入合理的库存');
+            return
+          }
+          if (!moneyReg.test(this.skus[i].price)){
+            this.$message.warning('请输入合理的价格');
+            return
+          }
+          if(this.skus[i].stock > this.skus[i].skustock){
+            this.$message.warning('参与数量超出库存');
+            return
+          }
+
+          sku.skus.push(skus)
+        }
+        this.$emit('chooseNewSku', sku, this.isEdit)
+      },
+      // 每日竞猜
+      chooseGuessSku() {
+        if(!this.skus.length) {
+          this.$message.warning('请先单选商品规格');
+          return false
+        }
+        if(this.skus.length > 1) {
+          this.$message.warning('请单选商品规格');
+          return false
+        }
+        if(this.isEdit) {
+          if(this.gnaastarttime.length != 1) {
+            this.$message.warning('重新编辑时只能选择单个日期');
+            return false
+          }
+        }else {
+          if(!this.gnaastarttime.length) {
+            this.$message.warning('请至少选择一个日期');
+            return false
+          }
+        }
+        if (!positiveNumberReg.test(this.skus[0].stock)) {
+          this.$message.warning('请输入合理的库存');
+          return
+        }
+        if (!moneyReg.test(this.skus[0].price)){
+          this.$message.warning('请输入合理的sku价格');
+          return
+        }
+        if(this.skus[0].stock > this.skus[0].skustock ){
+          this.$message.warning('参与数量超出库存');
+          return
+        }
+        let sku = {
+          skuid: this.skus[0].skuid,
+          prid: this.prid,
+          gnaastarttime: this.gnaastarttime,
+          skuprice: this.skus[0].price,
+          skustock: this.skus[0].stock
+        };
+
+        this.$emit('chooseGuessSku', sku, this.isEdit)
+      },
+      // 魔盒
+      chooseMagicSku() {
+        if(!this.skus.length) {
+          this.$message.warning('请先单选商品规格');
+          return false
+        }
+        if(this.skus.length > 1) {
+          this.$message.warning('请单选商品规格');
+          return false
+        }
+        if(this.isEdit) {
+          if(this.mbastarttime.length != 1) {
+            this.$message.warning('重新编辑时只能选择单个日期');
+            return false
+          }
+        }else {
+          if(!this.mbastarttime.length) {
+            this.$message.warning('请至少选择一个日期');
+            return false
+          }
+        }
+        for (let i = 0; i < this.numList.length; i++) {
+          if(!moneyReg.test(this.numList[i])){
+            this.$message.warning('档位金额设置有误');
+            return
+          }
+        }
+        if (!positiveNumberReg.test(this.skus[0].stock)){
+          this.$message.warning('请输入合理的库存');
+          return
+        }
+        if (!moneyReg.test(this.skus[0].price)){
+          this.$message.warning('请输入合理的金额');
+          return
+        }
+        if(this.skus[0].stock > this.skus[0].skustock){
+          this.$message.warning('参与数量超出库存');
+          return
+        }
+        let sku = {
+          skuid: this.skus[0].skuid,
+          prid: this.prid,
+          mbastarttime: this.mbastarttime,
+          skuminprice: this.skus[0].price,
+          skuprice: this.skus[0].maxprice,
+          skustock: this.skus[0].stock,
+          gearsone: [this.numList[0] + '-' + this.numList[1]],
+          gearstwo: [this.numList[2] + '-' + this.numList[3], this.numList[4] + '-' + this.numList[5]],
+          gearsthree: [this.numList[6] + '-' + this.numList[7], this.numList[8] + '-' + this.numList[9]],
+        };
+
+        this.$emit('chooseMagicSku', sku, this.isEdit)
+      },
+      chooseSku() {
         if(this.where == 'new') {               // 新人首单
-          if(!this.skus.length) {
-            this.$message.warning('请先勾选商品规格');
-            return false
-          }
-          if(!this.fmfatime.length) {
-            this.$message.warning('请先选择参与起止时间');
-            return false
-          }
-          if(!positiveNumberReg.test(this.skusForm.prprice)) {
-            this.$message.warning('请先填写合理的列表显示价格');
-            return false
-          }
-          let sku = {
-            prid: this.prid,
-            fmfastarttime: this.fmfatime[0],
-            fmfaendtime: this.fmfatime[1],
-            prprice: this.skusForm.prprice,
-            skus: []
-          };
-          for(let i in this.skus) {
-            let skus = {
-              skuid: this.skus[i].skuid,
-              skustock: this.skus[i].stock,
-              skuprice: this.skus[i].price
-            };
-
-            if (positiveNumberReg.test(this.skus[i].stock)){
-              this.$message.warning('请输入合理的库存');
-              return
-            }
-            if (positiveNumberReg.test(this.skus[i].price)){
-              this.$message.warning('请输入合理的价格');
-              return
-            }
-
-            if(this.skus[i].stock > this.skus[i].skustock){
-              this.$message.warning('参与数量超出库存');
-              return
-            }
-
-            sku.skus.push(skus)
-          }
-          this.$emit('chooseSkus', sku, this.isEdit);
+          this.chooseNewSku()
         }else if(this.where == 'guess') {       // 竞猜奖品
-          if(!this.skus.length) {
-            this.$message.warning('请先单选商品规格');
-            return false
-          }
-          if(this.skus.length > 1) {
-            this.$message.warning('请单选商品规格');
-            return false
-          }
-          if(this.isEdit) {
-            if(this.gnaastarttime.length != 1) {
-              this.$message.warning('重新编辑时只能选择单个日期');
-              return false
-            }
-          }else {
-            if(!this.gnaastarttime.length) {
-              this.$message.warning('请至少选择一个日期');
-              return false
-            }
-          }
-          if (positiveNumberReg.test(this.skus[0].skustock)){
-            this.$message.warning('请输入合理的库存');
-            return
-          }
-          if (positiveNumberReg.test(this.skus[0].price)){
-            this.$message.warning('请输入合理的sku价格');
-            return
-          }
-          if(this.skus[0].stock > this.skus[0].skustock ){
-            this.$message.warning('参与数量超出库存');
-            return
-          }
-          let sku = {
-            skuid: this.skus[0].skuid,
-            prid: this.prid,
-            gnaastarttime: this.gnaastarttime,
-            skuprice: this.skus[0].price,
-            skustock: this.skus[0].stock
-          };
-
-          this.$emit('chooseSkus', sku, this.isEdit);
+          this.chooseGuessSku()
         }else if(this.where == 'magic') {       // 魔盒奖品
-          if(!this.skus.length) {
-            this.$message.warning('请先单选商品规格');
-            return false
-          }
-          if(this.skus.length > 1) {
-            this.$message.warning('请单选商品规格');
-            return false
-          }
-          if(this.isEdit) {
-            if(this.mbastarttime.length != 1) {
-              this.$message.warning('重新编辑时只能选择单个日期');
-              return false
-            }
-          }else {
-            if(!this.mbastarttime.length) {
-              this.$message.warning('请至少选择一个日期');
-              return false
-            }
-          }
-
-
-          for (let i = 0; i < this.numList.length; i++) {
-            if(!moneyReg.test(this.numList[i])){
-              this.$message.warning('档位金额设置有误');
-              return
-            }
-          }
-
-          if (positiveNumberReg.test(this.skus[0].stock)){
-            this.$message.warning('请输入合理的库存');
-            return
-          }
-          if (positiveNumberReg.test(this.skus[0].price)){
-            this.$message.warning('请输入合理的金额');
-            return
-          }
-          if(this.skus[0].stock > this.skus[0].skustock){
-            this.$message.warning('参与数量超出库存');
-            return
-          }
-          let sku = {
-            skuid: this.skus[0].skuid,
-            prid: this.prid,
-            mbastarttime: this.mbastarttime,
-            skuminprice: this.skus[0].price,
-            skuprice: this.skus[0].maxprice,
-            skustock: this.skus[0].stock,
-            gearsone: [this.numList[0] + '-' + this.numList[1]],
-            gearstwo: [this.numList[2] + '-' + this.numList[3], this.numList[4] + '-' + this.numList[5]],
-            gearsthree: [this.numList[6] + '-' + this.numList[7], this.numList[8] + '-' + this.numList[9]],
-          };
-
-          this.$emit('chooseSkus', sku, this.isEdit);
+          this.chooseMagicSku()
         }
       },
       getProduct() {
