@@ -196,7 +196,7 @@
             this.groupCount = 1;
             this.magicList = res.data.data;
             this.total = res.data.total_count;
-            this.magicLoading = false;
+            this.magicLoading = false
           }
         })
       },
