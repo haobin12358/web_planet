@@ -26,6 +26,7 @@ const api = {
   create_product: title + 'product/create',                               //添加商品
   update_product: title + 'product/update',                               //修改商品
   resubmit_product: title + 'product/resubmit_product',                   //重新提交审核商品
+  get_evaluation: title + 'order/evaluation',                                 //获取商品评价
 
   category_list: title + 'category/list',                                 //获取类目
   create_category: title + 'category/create',                             //新增类目
@@ -141,6 +142,12 @@ const api = {
   agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
   back_confirm_recv: title + 'refund/back_confirm_recv',                   // 后台确认收货
   back_confirm_refund: title + 'refund/back_confirm_refund',               // 后台确认执行退款(售后订单确认收货后执行退款)
+  get_all_address: title + 'user/get_all_address',                          // 获取用户所有地址
+  add_address: title + 'user/add_address',                                  // 新增地址
+  update_address: title + 'user/update_address',                            // 新增地址
+  get_provinces: title + 'address/get_provinces',                            // 获取省份
+  get_citys: title + 'address/get_citys',                            // 获取省份
+  get_areas: title + 'address/get_areas',                            // 获取省份
 
   //  审批流
   get_dealing_approval: title + 'approval/get_dealing_approval',           // 管理员查看自己待审批数据-概览
