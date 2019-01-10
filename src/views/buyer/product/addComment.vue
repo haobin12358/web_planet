@@ -22,7 +22,7 @@
                     <img :src="img" alt="">
                   </template>-->
                   <div class="img-box" v-for="(img,index) in item.img_box">
-                    <img class="circle-img" :src="img" alt="">
+                    <img class="circle-img" :src="img" alt="" @click="previewImage(index, item.image)">
                     <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(No, index)">
                   </div>
                   <div class="m-selectBack-camera" v-if="item.img_box.length < 5">
@@ -30,9 +30,10 @@
                   </div>
                 </div>
                 <div class="m-selectBack-img-box">
-                  <template v-for="(video, index) in item.video_box">
-                    <img :src="video" alt="">
-                  </template>
+                  <div class="img-box" v-for="(video,index) in item.video_box">
+                    <img class="circle-img" :src="video" alt="">
+                    <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteVideo(No, index)">
+                  </div>
                   <div class="m-selectBack-video" v-if="item.video_box.length < 1">
                     <input type="file" name="file" class="m-upload-input" value="" accept="video/*" multiple="" @change="uploadVideo">
                   </div>
@@ -55,6 +56,7 @@
   import axios from 'axios'
   import api from '../../../api/api'
   import { Toast } from 'mint-ui'
+  import wxapi from '../../../common/js/mixins'
 
   export default {
     data() {
@@ -65,10 +67,23 @@
         No: ''
       }
     },
+    mixins: [wxapi],
     beforeDestroy() {
       localStorage.removeItem('productComment');
     },
     methods: {
+      // 预览图片
+      previewImage(index, image) {
+        let images = [];
+        for(let i = 0; i < image.length; i ++) {
+          images.push(location.origin + image[i].oeimg);
+        }
+        let options = {
+          current: location.origin + image[index].oeimg,   // 当前显示图片的http链接
+          urls: images,                  // 当前预览图片的list
+        };
+        wxapi.previewImage(options);
+      },
       // 将订单中的商品展开
       getProduct() {
         this.order_info = JSON.parse(localStorage.getItem('productComment'));
@@ -160,6 +175,11 @@
       deleteImg(No, index) {
         this.productList[No].image.splice(index, 1);
         this.productList[No].img_box.splice(index, 1);
+      },
+      // 删除视频
+      deleteVideo(No, index) {
+        this.productList[No].video = {};
+        this.productList[No].video_box = [];
       },
       // 发布评论
       createEvaluation() {
@@ -285,8 +305,8 @@
                   width: 40px;
                   height: 40px;
                   position: absolute;
-                  top: -10px;
-                  right: -5px;
+                  top: -17px;
+                  right: -15px;
                 }
               }
               .m-selectBack-camera{

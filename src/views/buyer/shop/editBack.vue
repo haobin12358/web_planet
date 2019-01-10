@@ -57,7 +57,7 @@
             <img :src="item" alt="">
           </template>-->
           <div class="img-box" v-for="(item,index) in img_box">
-            <img class="circle-img" :src="item" alt="">
+            <img class="circle-img" :src="item" alt="" @click="previewImage(index, upload_img)">
             <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(index)">
           </div>
           <div class="m-selectBack-camera" v-if="img_box.length < 4">
@@ -74,10 +74,12 @@
 </template>
 
 <script>
-  import picker from '../../../components/common/picker';
-  import axios from 'axios';
-  import api from '../../../api/api';
-  import {Toast} from 'mint-ui';
+  import picker from '../../../components/common/picker'
+  import axios from 'axios'
+  import api from '../../../api/api'
+  import {Toast} from 'mint-ui'
+  import wxapi from '../../../common/js/mixins'
+
   export default {
     data(){
       return{
@@ -117,6 +119,7 @@
         showProduct: true
       }
     },
+    mixins: [wxapi],
     components: { picker},
     mounted(){
       if(localStorage.getItem('back')) {
@@ -144,6 +147,18 @@
       this.getBack();
     },
     methods:{
+      // 预览图片
+      previewImage(index, image) {
+        let images = [];
+        for(let i = 0; i < image.length; i ++) {
+          images.push(location.origin + image[i]);
+        }
+        let options = {
+          current: location.origin + image[index], // 当前显示图片的http链接
+          urls: images,                  // 当前预览图片的list
+        };
+        wxapi.previewImage(options);
+      },
       // 删除图片
       deleteImg(index) {
         this.img_box.splice(index, 1);
@@ -346,15 +361,15 @@
               display: inline-block;
               width: 186px;
               height: 186px;
-              margin-bottom: 20px;
+              margin-top: 25px;
               margin-right: 15px;
             }
             .del-img {
               width: 40px;
               height: 40px;
               position: absolute;
-              top: -10px;
-              right: -5px;
+              top: 5px;
+              right: -15px;
             }
           }
           .m-selectBack-camera{

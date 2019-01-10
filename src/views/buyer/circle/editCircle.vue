@@ -24,7 +24,7 @@
           <div>
             <div class="m-selectBack-img-box">
               <div class="img-box" v-for="(item,index) in img_box">
-                <img class="circle-img" :src="item" alt="">
+                <img class="circle-img" :src="item" alt="" @click="previewImage(index, upload_img)">
                 <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(index)">
               </div>
               <div class="m-selectBack-camera" v-if="img_box.length < 4">
@@ -32,9 +32,10 @@
               </div>
             </div>
             <div class="m-selectBack-img-box">
-              <template v-for="(item,index) in video_box">
-                <img :src="item" alt="">
-              </template>
+              <div class="img-box" v-for="(item,index) in video_box">
+                <img class="circle-img" :src="item" alt="">
+                <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteVideo(index)">
+              </div>
               <div class="m-selectBack-video" v-if="video_box.length < 1">
                 <input type="file" name="file" class="m-upload-input" value="" accept="video/*" multiple="" @change="uploadVideo">
               </div>
@@ -85,12 +86,13 @@
 </template>
 
 <script>
-  import common from '../../../common/js/common';
-  import axios from 'axios';
-  import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
-  import product from '../components/product';
-  import couponCard from '../components/couponCard';
+  import common from '../../../common/js/common'
+  import axios from 'axios'
+  import api from '../../../api/api'
+  import { Toast } from 'mint-ui'
+  import product from '../components/product'
+  import couponCard from '../components/couponCard'
+  import wxapi from '../../../common/js/mixins'
 
   export default {
     name: "edit-circle",
@@ -114,8 +116,21 @@
         getCoupon: false        // 是否请求过获取优惠券的接口
       }
     },
+    mixins: [wxapi],
     components: { product, couponCard },
     methods: {
+      // 预览图片
+      previewImage(index, image) {
+        let images = [];
+        for(let i = 0; i < image.length; i ++) {
+          images.push(location.origin + image[i].niimg);
+        }
+        let options = {
+          current: location.origin + image[index].niimg, // 当前显示图片的http链接
+          urls: images,                  // 当前预览图片的list
+        };
+        wxapi.previewImage(options);
+      },
       // 获取圈子所在的标签
       getNav() {
         axios.get(api.items_list + "?ittype=10").then(res => {
@@ -187,6 +202,11 @@
       deleteImg(index) {
         this.img_box.splice(index, 1);
         this.upload_img.splice(index, 1);
+      },
+      // 删除视频
+      deleteVideo(index) {
+        this.video_box = [];
+        this.video = {}
       },
       //上传图片
       uploadImg(e) {
@@ -385,8 +405,8 @@
           width: 40px;
           height: 40px;
           position: absolute;
-          top: -10px;
-          right: 10px;
+          top: -20px;
+          right: 0;
         }
       }
       .m-selectBack-camera{
