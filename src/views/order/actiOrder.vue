@@ -40,8 +40,6 @@
         v-model="expandAll"
         active-text="展开"
         inactive-text="不展开"
-        active-color="#13ce66"
-        inactive-color="#ff4949"
         style="margin-bottom: 20px"
         @change="changeSwitch">
       </el-switch>

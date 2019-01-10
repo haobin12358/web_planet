@@ -154,13 +154,6 @@ export const asyncRouterMap = [
     meta: {title: '用户', icon: 'huiyuan', roles: level2},
     children: [
       {
-        path: 'distributor',
-        name: 'Distributor',
-        component: () => import('src/views/user/distributor'),
-        meta: {title: '分销商', icon: 'yes', noCache: true, roles: level2}
-      },
-
-      {
         path: 'suppliers',
         name: 'Suppliers',
         component: () => import('src/views/user/suppliers'),
@@ -171,6 +164,12 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/user/supplierEdit'),
         meta: {title: '供应商编辑', noCache: true, roles: level2}
+      },
+      {
+        path: 'distributor',
+        name: 'Distributor',
+        component: () => import('src/views/user/distributor'),
+        meta: {title: '分销商', icon: 'yes', noCache: true, roles: level2}
       },
 
       {
@@ -329,6 +328,11 @@ export const asyncRouterMap = [
         name: 'ActivationCodeActi',
         component: () => import('src/views/approval/activationCodeActi'),
         meta: {title: '激活码审批', icon: 'yes', noCache: true, roles: level2}
+      },{
+        path: 'balanceObjectionAudit',
+        name: 'BalanceObjectionAudit',
+        component: () => import('src/views/approval/balanceObjectionAudit'),
+        meta: {title: '结算异议审批', icon: 'yes', noCache: true, roles: level2}
       },
     ]
   },
@@ -451,10 +455,20 @@ export const asyncRouterMap = [
     meta: {title: '设置', icon: 'personSetting', roles: level0},
     children: [
       {
+        path: 'personSetting',
+        name: 'PersonSetting',
+        component: () => import('src/views/personSetting/personSetting'),
+        meta: {title: '商户信息', noCache: true, roles: level0}
+      },{
         path: 'withdraw',
         name: 'Withdraw',
         component: () => import('src/views/personSetting/withdraw'),
         meta: {title: '提现', noCache: true, roles: level0}
+      },{
+        path: 'balance',
+        name: 'Balance',
+        component: () => import('src/views/personSetting/balance'),
+        meta: {title: '结算', noCache: true, roles: level0}
       },
     ]
   },
