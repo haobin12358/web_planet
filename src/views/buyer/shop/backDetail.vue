@@ -58,6 +58,7 @@
           <p v-if="refund.oracheckreason">审核回复：{{refund.oracheckreason}}</p>
           <p>退款原因：{{refund.orareason}}</p>
           <p>退款金额：￥{{refund.oramount | money}}</p>
+          <p v-if="refund.oraaddtion">申请留言：{{refund.oraaddtion}}</p>
           <p>申请时间：{{refund.createtime}}</p>
           <p>退款编号：{{refund.orasn}}</p>
         </div>
@@ -199,7 +200,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/index";
 .m-backDetail{
-  min-height: 100%;
+  min-height: 100vh;
   background-color: #eee;
   .m-orderDetail-status{
     .flex-row(flex-end);

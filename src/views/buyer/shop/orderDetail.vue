@@ -121,9 +121,18 @@
           <p>货物状态：{{refund.oraproductstatus_zh}}</p>
           <p v-if="refund.oraaddtion">附加留言：{{refund.oraaddtion}}</p>
           <p v-if="refund.orachecktime">处理时间：{{refund.orachecktime}}</p>
-          <p v-if="refund.oracheckreason">审核理由：{{refund.oracheckreason}}</p>
+          <!--<p v-if="refund.oracheckreason">审核回复：{{refund.oracheckreason}}</p>-->
           <p>申请时间：{{refund.createtime}}</p>
           <p>售后单号：{{refund.orasn}}</p>
+        </div>
+      </div>
+      <div class="m-order-one-part m-box-shadow" v-if="refund_notes">
+        <p>
+          <span class="m-border"></span>
+          <span>售后审核信息</span>
+        </p>
+        <div class="m-ft-22 m-time-text">
+          <p>审核回复：{{refund_notes.ornabo}}</p>
         </div>
       </div>
 
@@ -154,6 +163,7 @@
         logistic_info: null,
         from: "",
         refund: null,
+        refund_notes: null,
         part_refund: false
       }
     },
@@ -237,6 +247,9 @@
               if(res.data.data.order_part[i].order_refund_apply) {
                 this.part_refund = true;
               }
+            }
+            if(res.data.data.order_refund_notes) {
+              this.refund_notes = res.data.data.order_refund_notes;
             }
           }
         })
@@ -340,7 +353,7 @@
   @import "../../../common/css/index";
 
   .m-orderDetail{
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #eee;
     padding-bottom: 120px;
     .m-orderDetail-status{

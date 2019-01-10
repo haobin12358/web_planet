@@ -74,8 +74,8 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.3.7');
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Njk1ODY5MSwiZXhwIjoxNTQ3NTYzNDkxfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.3Q-_LR7o1tb9W_460Ll6BfvdYlcTxqgk-ykye1apdu4';
+    console.log('v 0.3.8');
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Njk2MDA1OCwiZXhwIjoxNTQ3NTY0ODU4fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.o6gSdkhdDkHe0nnKXwgtUvVMtATQTOkPE0-ouPPy-5M';
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzA4OTI5OCwiZXhwIjoxNTQ3Njk0MDk4fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiZmE0NThkYjItMTNlZi0xMWU5LWE4NDYtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.bxtbrAZTDcqviXllfuO-h_IQm-smKc1ptov4Y9o12rs';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
