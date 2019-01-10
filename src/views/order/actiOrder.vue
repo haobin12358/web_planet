@@ -83,6 +83,12 @@
         </template>
       </el-table-column>
       <el-table-column prop="omtruemount" label="实付" align="center" width="120"></el-table-column>
+      <el-table-column v-if="checkPermission(['admin', 'super'])" prop="pbname" align="center" label="订单所属" width="120">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.prcreateid" type="success">供应商</el-tag>
+          <el-tag v-else>平台</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="pbname" align="center" label="品牌" width="180"></el-table-column>
       <el-table-column prop="omrecvname" align="center" label="收件人" width="120"></el-table-column>
       <el-table-column prop="omrecvphone" align="center" label="手机号" width="160"></el-table-column>
@@ -122,6 +128,7 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   export default {
     name: 'ActiOrder',
@@ -183,6 +190,8 @@
     computed: {},
 
     methods: {
+      checkPermission,
+
       changeSwitch() {
         for (let i = 0; i < this.orderData.length; i++) {
           this.$refs.orderTable.toggleRowExpansion(this.orderData[i], this.expandAll);

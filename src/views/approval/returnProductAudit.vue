@@ -105,10 +105,10 @@
                   <el-button type="text" @click="gotoReturnOrderDetail(scope.row, props)">查看</el-button>
                   <template v-if="scope.row.order_refund_apply.orastatus == 0">
                     <el-button type="text" class="success-text" @click="doPass(scope.row, props)">
-                      审核通过
+                      同意
                     </el-button>
                     <el-button type="text" class="danger-text" @click="doNoPass(scope.row, props)">
-                      审核拒绝
+                      拒绝
                     </el-button>
                   </template>
                 </template>
@@ -119,6 +119,12 @@
       </el-table-column>
 
       <el-table-column prop="omno" align="center" label="订单号" width="280"></el-table-column>
+      <el-table-column v-if="checkPermission(['admin', 'super'])" prop="pbname" align="center" label="订单所属" width="120">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.prcreateid" type="success">供应商</el-tag>
+          <el-tag v-else>平台</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="pbname" align="center" label="品牌" width="180"></el-table-column>
       <el-table-column label="订单状态" width="120" align="center">
         <template slot-scope="scope">
@@ -244,6 +250,7 @@
   import elDragDialog from 'src/directive/el-dragDialog'
   import AddressMaintain from './components/addressMaintain'
   import permission from 'src/directive/permission/index.js' // 权限判断指令
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   //  toreturn
   export default {
@@ -334,6 +341,8 @@
     computed: {},
 
     methods: {
+      checkPermission,
+
       doSearch() {
         this.currentPage = 1;
         this.setOrderList();
@@ -501,10 +510,8 @@
           this.passRefundVisible = true;
           this.passRefundForm.oraid = row.order_refund_apply.oraid;
           this.passRefundForm.message = `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`;
-
-
         } else {
-          this.$confirm(`确认同意申请(将退回金额${row}元)?`, '提示').then(
+          this.$confirm(`确认同意申请(将退回金额${row.order_refund_apply.oramount}元)?`, '提示').then(
             () => {
               this.$http.post(this.$api.agree_refund_apply, {
                 "oraid": row.order_refund_apply.oraid,

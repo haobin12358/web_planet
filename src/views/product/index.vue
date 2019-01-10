@@ -89,10 +89,7 @@
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="240"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-popover v-if="scope.row.prstatus != 10" placement="top-start" title="提示" width="200" trigger="hover"  :open-delay="300">
-            商品修改后会重新进行审批(5分钟自动通过)
-            <el-button slot="reference" type="text" @click="doEdit(scope.row)">编辑</el-button>
-          </el-popover>
+          <el-button v-if="scope.row.prstatus != 10"  type="text" @click="doEdit(scope.row)">编辑</el-button>
           <el-button v-if="scope.row.prstatus == 0" type="text" class="warning-text"
                      @click="doUnShelveOne(scope.row)">下架
           </el-button>
@@ -102,7 +99,7 @@
           <el-button v-if="scope.row.prstatus == 30" type="text" class="success-text"
                      @click="doResubmit(scope.row)">重新提交
           </el-button>
-          <el-button type="text" class="info-text" @click="doShowComment(scope.row)">查看评论</el-button>
+          <!--<el-button type="text" class="info-text" @click="doShowComment(scope.row)">查看评论</el-button>-->
           <el-button type="text" class="danger-text" @click="doDeleteOne(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -132,6 +129,9 @@
 <script>
   import TableCellImg from "src/components/TableCellImg";
   import permission from 'src/directive/permission/index.js' // 权限判断指令
+  import ProductComment from "./components/productComment";
+
+
 
   export default {
     name: 'ProductIndex',
@@ -139,7 +139,8 @@
     directives: {permission},
 
     components: {
-      TableCellImg
+      TableCellImg,
+      ProductComment,
     },
 
     data() {
@@ -509,7 +510,9 @@
       doShowComment(row){
         this.$http.get(this.$api.get_evaluation,{
           params: {
-
+            page_size: this.pageSize,
+            page_num: this.currentPage,
+            prid: row.prid
           }
         }).then(
           res => {
@@ -517,6 +520,7 @@
               let resData = res.data,
                 data = res.data.data;
 
+              console.log(data);
             }
           }
         )

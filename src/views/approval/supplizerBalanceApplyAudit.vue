@@ -9,7 +9,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
     </section>
@@ -21,7 +21,8 @@
             {{getBalanceMonth(scope.row)}}
           </template>
         </el-table-column>
-        <el-table-column label="申请理由" prop="content.ssaabo" align="center" width="160" show-overflow-tooltip></el-table-column>
+        <el-table-column label="申请理由" prop="content.ssaabo" align="center" width="160"
+                         show-overflow-tooltip></el-table-column>
         <el-table-column label="供应商" align="center">
           <el-table-column label="待结算余额" prop="content.uwexpect" align="center" width="100"></el-table-column>
           <el-table-column label="可提现余额" prop="content.uwbalance" align="center" width="100"></el-table-column>
@@ -52,14 +53,15 @@
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
+                      @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
                 <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -160,11 +162,11 @@
         this.getList();
       },
 
-      getBalanceMonth(row){
-        if(row.content && row.content.createtime){
+      getBalanceMonth(row) {
+        if (row.content && row.content.createtime) {
           let date = new Date(row.content.createtime)
 
-          return date.getFullYear() + '年' + (date.getMonth()+1) + '月'
+          return date.getFullYear() + '年' + (date.getMonth() + 1) + '月'
         }
       },
       cellFunction({row, column}) {
@@ -185,8 +187,8 @@
         }
       },
 
-      showStep(row){
-        this.$http.get(this.$api.get_approvalnotes,{
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
           params: {
             avid: row.avid
           }
@@ -209,7 +211,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           }
@@ -243,7 +245,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           },

@@ -86,10 +86,11 @@
           </template>
 
           <el-form-item>
+            <!--TODO-->
+            <template v-if="showAction"></template>
             <el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>
-            <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货
-            </el-button>
-            <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover" >
+              <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货</el-button>
+             <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover" >
               <div style="padding: 20px">
                 <el-steps direction="vertical" :active="orderLogisticsList.length">
                   <el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"
@@ -130,7 +131,7 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
-
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   const cancelSteps = [{
     title: '待支付',
@@ -197,9 +198,21 @@
       }
     },
 
-    computed: {},
+    computed: {
+      //  是供应商显示
+      showAction(){
+        if(this.checkPermission(['supplizer'])){
+          return true
+        }else{
+          if(this.order.prcreateid){
+            return false
+          }
+        }
+      }
+    },
 
     methods: {
+      checkPermission,
       tableRowClassName({row, rowIndex}){
         if(row.opisinora || this.order.ominrefund){
           return 'warning-row';
