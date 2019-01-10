@@ -29,9 +29,9 @@
       </div>
     </div>
     <div class="m-share-rule tl">
-      <div class="m-rule-text">第一档：随机减少<span class="m-red">{{box.infos.gearsone[0]}}</span>元</div>
-      <div class="m-rule-text">第二档：随机减少<span class="m-red">{{box.infos.gearstwo[0]}}</span>元或增加<span class="m-red">{{box.infos.gearstwo[1]}}</span>元</div>
-      <div class="m-rule-text">第三档：随机减少<span class="m-red">{{box.infos.gearsthree[0]}}</span>元或增加<span class="m-red">{{box.infos.gearsthree[1]}}</span>元</div>
+      <div class="m-rule-text">1号魔盒：随机减少<span class="m-red">{{box.infos.gearsone[0]}}</span>元</div>
+      <div class="m-rule-text">2号魔盒：随机减少<span class="m-red">{{box.infos.gearstwo[0]}}</span>元或增加<span class="m-red">{{box.infos.gearstwo[1]}}</span>元</div>
+      <div class="m-rule-text">3号魔盒：随机减少<span class="m-red">{{box.infos.gearsthree[0]}}</span>元或增加<span class="m-red">{{box.infos.gearsthree[1]}}</span>元</div>
       <div class="m-box-btn m-share-btn m-ft-38 m-ft-b animated infinite pulse" @click="share">点击分享</div>
     </div>
     <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
