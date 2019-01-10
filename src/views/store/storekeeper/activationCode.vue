@@ -26,9 +26,10 @@
         <div class="m-upload-box">
           <div>
             <div class="m-selectBack-img-box">
-              <template v-for="(img, index) in img_box">
-                <img :src="img" alt="">
-              </template>
+              <div class="img-box" v-for="(item,index) in img_box">
+                <img class="circle-img" :src="item" alt="" @click="previewImage(index, image)">
+                <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(index)">
+              </div>
               <div class="m-selectBack-camera" v-if="img_box.length < 4">
                 <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg" ref="voucherImg">
               </div>
@@ -111,6 +112,7 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
+  import wxapi from '../../../common/js/mixins'
 
   export default {
     name: "IDCardApprove",
@@ -128,7 +130,25 @@
         image: [],
       }
     },
+    mixins: [wxapi],
     methods: {
+      // 预览图片
+      previewImage(index, image) {
+        let images = [];
+        for(let i = 0; i < image.length; i ++) {
+          images.push(location.origin + image[i]);
+        }
+        let options = {
+          current: location.origin + image[index], // 当前显示图片的http链接
+          urls: images,                  // 当前预览图片的list
+        };
+        wxapi.previewImage(options);
+      },
+      // 删除图片
+      deleteImg(index) {
+        this.img_box.splice(index, 1);
+        this.image.splice(index, 1);
+      },
       // 复制文本
       copyText(text) {
         // let text = document.getElementById(v).innerText;
@@ -253,8 +273,27 @@
           align-items: flex-end;
           margin-top: 20px;
           .m-selectBack-img-box{
-            text-align: left;
             margin-bottom: 30px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            .img-box {
+              position: relative;
+              .circle-img {
+                display: inline-block;
+                width: 186px;
+                height: 186px;
+                margin-bottom: 20px;
+                margin-right: 15px;
+              }
+              .del-img {
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                top: -20px;
+                right: -15px;
+              }
+            }
             .m-selectBack-camera{
               width: 180px;
               height: 180px;
