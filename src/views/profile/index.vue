@@ -66,8 +66,6 @@
             <span class="m-order-price">{{totalSaleData.day_count}}</span>
           </p>
         </li>
-
-
         <li>
           <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(3,'today')">
             <img class="static-icon" src="/static/images/order-pay.png" alt="">
@@ -76,22 +74,16 @@
               <p class="m-order-price">{{todaySaleData.wai_pay_count}}</p>
             </div>
           </div>
-          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(3,'yesterday')">
-            <span>昨日</span>
-            <section class="icon-price-box-main">
-              <span>{{yesterdaySaleData.wai_pay_count}}</span>
-            </section>
-          </p>
         </li>
-        <li>
-          <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(4,'today')">
+        <li class="click-cursor">
+          <div class="m-icon-price-box" @click="gotoOrderWithParam(4,'today')">
             <img class="static-icon" src="/static/images/order-back.png" alt="">
             <div class="icon-price-box-main">
               <p class="label">退款订单数</p>
               <p class="m-order-price">{{todaySaleData.in_refund}}</p>
             </div>
           </div>
-          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(4,'yesterday')">
+          <p class="m-order-bottom" @click="gotoOrderWithParam(4,'yesterday')">
             <span>昨日</span>
             <span>{{yesterdaySaleData.in_refund}}</span>
           </p>

@@ -18,6 +18,7 @@
         <el-form-item>
           <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
           <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+          <el-button icon="el-icon-setting" @click="showRetProdDlg">退货地址设置</el-button>
         </el-form-item>
       </el-form>
 
@@ -25,8 +26,6 @@
         v-model="expandAll"
         active-text="展开"
         inactive-text="不展开"
-        active-color="#13ce66"
-        inactive-color="#ff4949"
         style="margin-bottom: 20px"
         @change="changeSwitch">
       </el-switch>
@@ -247,6 +246,9 @@
       return {
         repeat: true,
 
+
+
+        //
         applyStatusOptions: [
           {
             label: '全部',
@@ -330,8 +332,12 @@
         this.searchForm = {
           orastatus: '',
           orstatus: '',
-        }
+        };
         this.setOrderList();
+      },
+
+      showRetProdDlg(){
+
       },
 
       changeSwitch() {
