@@ -25,7 +25,7 @@
         </el-form-item>
       </el-form>
     </section>
-    <el-table :data="tableData" v-loading="loading">
+    <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品规格图片" align="center" prop="prdescription">
           <template slot-scope="scope">
@@ -194,6 +194,11 @@
         this.getList();
       },
 
+      cellFunction({row, column}) {
+        if ([ 'avlevel'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
       tagsType(status) {
         switch (status) {
           case -20:

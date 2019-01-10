@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <el-dialog :visible="visible" @close="doClose" v-el-drag-dialog title="收货地址列表" width="800px"
+    <el-dialog :visible="visible" @close="doClose" v-el-drag-dialog title="收货地址列表(按esc或点x关闭)" fullscreen
                :close-on-click-modal="false">
-      <el-table :data="supplizerAddressList" v-loading="loading">
+      <el-table :data="supplizerAddressList" v-loading="loading" empty-text="新增地址后可选择退货地址,退款表单填充默认地址信息">
         <el-table-column prop="uaname" label="选用该地址" width="120" align="center">
           <template slot-scope="scope">
             <el-button type="text" @click="doChooseAddress(scope.row)">选用</el-button>

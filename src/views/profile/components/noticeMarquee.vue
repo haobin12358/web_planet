@@ -48,7 +48,7 @@
     .notice-marquee {
       display: inline-block;
       .notice-item{
-        width: 260px;
+        width: 200px;
         .hidden-ellipsis;
       }
     }

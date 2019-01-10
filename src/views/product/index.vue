@@ -82,11 +82,11 @@
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.supplizer === '平台' ? 'primary' : 'success'">{{scope.row.supplizer}}</el-tag>
+          <el-tag :type="scope.row.prfrom === '0' ? 'primary' : 'success'">{{scope.row.supplizer}}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
+      <el-table-column align="center" prop="createtime" sortable label="创建时间" width="240"></el-table-column>
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-popover v-if="scope.row.prstatus != 10" placement="top-start" title="提示" width="200" trigger="hover"  :open-delay="300">
@@ -102,8 +102,8 @@
           <el-button v-if="scope.row.prstatus == 30" type="text" class="success-text"
                      @click="doResubmit(scope.row)">重新提交
           </el-button>
+          <el-button type="text" class="info-text" @click="doShowComment(scope.row)">查看评论</el-button>
           <el-button type="text" class="danger-text" @click="doDeleteOne(scope.row)">删除</el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -124,6 +124,7 @@
         @current-change="pageChange">
       </el-pagination>
     </section>
+
 
   </div>
 </template>
@@ -501,6 +502,22 @@
                 }
               }
             )
+          }
+        )
+      },
+
+      doShowComment(row){
+        this.$http.get(this.$api.get_evaluation,{
+          params: {
+
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+            }
           }
         )
       },

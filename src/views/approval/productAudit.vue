@@ -161,6 +161,11 @@
         this.getList();
       },
 
+      cellFunction({row, column}) {
+        if ([ 'avlevel'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
       tagsType(status) {
         switch (status) {
           case -20:

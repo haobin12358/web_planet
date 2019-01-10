@@ -170,8 +170,15 @@ const api = {
   get_signin_default: title + 'user/get_signin_default',                    // 新增获取修改签到设置
   set_signin_default: title + 'user/set_signin_default',                    // 设置默认签到规则
 
-  get_cash_notes: title + 'user/get_cash_notes',                            // 提现申请
-  apply_cash: title + 'user/apply_cash',                                    // 提现申请
+  get_cash_notes: title + 'user/get_cash_notes',                            // 获取提现申请
+  apply_cash: title + 'user/apply_cash',                                    // 申请提现
+
+  get_settlenment: title + 'user/get_settlenment',                           // 提现申请
+  export_settlenment_xls: title + 'order/export_xls',                                    // 下载结算单
+  settlenment: title + 'user/settlenment',                                   // 提现申请
+
+  get_supplizeraccount: title + 'supplizer/get_supplizeraccount',            // 个人账户和开票信息
+  set_supplizeraccount: title + 'supplizer/set_supplizeraccount',            // 个人账户和开票信息
 };
 
 export default api
