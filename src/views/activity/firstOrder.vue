@@ -29,7 +29,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="addNew">申请</el-button>
       </section>
     </section>
-    <get-sku @chooseSkus="chooseSkus" ref="new" where="new"></get-sku>
+    <get-sku @chooseNewSku="chooseNewSku" ref="new" where="new"></get-sku>
     <el-table v-loading="newLoading" :data="newList" stripe size="mini">
       <el-table-column label="商品图片" align="center" prop="prdescription">
         <template slot-scope="scope">
@@ -98,8 +98,10 @@
   },
   methods: {
     // 顶部查询
-    doSearch() {
-      this.page_num = 1;
+    doSearch(v) {
+      if(v !== 1 && this.page_num !== 1) {
+        this.page_num = 1;
+      }
       if(this.inlineForm.starttime && this.inlineForm.endtime){
         if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
           let term = this.inlineForm.endtime;
@@ -117,6 +119,7 @@
         endtime: '',
         status: '',
       };
+      this.page_num = 1;
       this.doSearch();
     },
     // 添加新人商品-按钮
@@ -131,7 +134,7 @@
     },
     pageChange(val) {
       this.page_num = val;
-      this.doSearch()
+      this.doSearch(1)
     },
     // 获取新人首单商品列表
     getNew() {
@@ -166,7 +169,7 @@
     },
 
     // 参与新人首单
-    chooseSkus(sku, isEdit) {
+    chooseNewSku(sku, isEdit) {
       if(isEdit) {
         sku.fmfaid = this.scope.row.fmfaid;
         this.$http.post(this.$api.fresh_man_update_award, sku).then(res => {

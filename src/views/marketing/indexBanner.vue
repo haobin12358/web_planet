@@ -18,20 +18,21 @@
       <el-table-column label="对应链接" align="center" prop="contentlink" show-overflow-tooltip></el-table-column>
       <el-table-column label="不展示/展示" align="center" prop="ibshow">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.ibshow" @change="editBanner(scope, 'ibshow')" active-color="#409EFF" inactive-color="#DBDCDC">
+          <el-switch v-model="scope.row.ibshow" @change="bannerShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="权重" align="center" prop="ibsort" :render-header="sortHeaderRender">
         <template slot-scope="scope">
-          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.ibsort" @change="sortChange"></el-input>
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.ibsort"
+                    @change="sortChange" maxlength="11"></el-input>
           <el-button type="text" v-if="scope.$index == index" @click="sortChange">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="180">
         <template slot-scope="scope">
-          <el-button type="text" @click="editBanner(scope, 'edit')">编辑</el-button>
-          <el-button type="text" class="danger-text" @click="editBanner(scope, 'delete')">删除</el-button>
+          <el-button type="text" @click="editBanner(scope)">编辑</el-button>
+          <el-button type="text" class="danger-text" @click="deleteBanner(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,7 +74,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="initBannerForm">取 消</el-button>
-        <el-button type="primary" @click="editBanner('add')">确 定</el-button>
+        <el-button type="primary" @click="addBanner">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -210,118 +211,115 @@
         };
         this.bannerDialog = false;
       },
-      // 编辑banner
-      editBanner(scope, where) {
-        // dialog的确认按钮
-        if(scope == 'add') {
-          this.$refs.bannerFormRef.validate(valid => {
-            if (valid) {
-              if(this.bannerForm.ibid) {      // 编辑
-                this.$http.post(this.$api.update_banner, this.bannerForm).then(res => {
-                  if (res.data.status == 200) {
-                    this.$notify({
-                      title: '修改成功',
-                      message: '此轮播图修改成功',
-                      type: 'success'
-                    });
-                    this.bannerDialog = false;
-                    this.getBanner()
-                  }
-                });
-              }else {                         // 新增
-                this.$http.post(this.$api.set_banner, this.bannerForm).then(res => {
-                  if (res.data.status == 200) {
-                    this.initBannerForm();
-                    this.$notify({
-                      title: '新增成功',
-                      message: '轮播图新增成功',
-                      type: 'success'
-                    });
-                    this.getBanner()
-                  }
-                })
-              }
-            }else {
-              this.$message.warning('请根据校验信息完善表单!');
-            }
-          })
-        }else {
-          let msg = '';
-          let params = {
-            ibid: scope.row.ibid
-          };
-          if(where == 'ibshow') {             // 展示/不展示banner
-            // 最少保留一张轮播图
-            let num = 0;
-            for(let i in this.bannerList) {
-              if(!this.bannerList[i].ibshow) {
-                num += 1
-              }
-            }
-            if(num == this.bannerList.length) {
-              this.bannerList[scope.$index].ibshow = true;
-              this.$message.error('请最少保留一张轮播图');
-              return false
-            }
-
-            params.ibshow = scope.row.ibshow;
-            if(!scope.row.ibshow) {
-              msg = '此轮播图不再展示'
-            }else {
-              msg = '此轮播图将会展示'
-            }
-            this.$http.post(this.$api.update_banner, params).then(res => {
-              if (res.data.status == 200) {
-                this.$notify({
-                  title: '修改成功',
-                  message: msg,
-                  type: 'success'
-                });
-                this.getBanner();
-              }
-            });
-          }else if(where == 'edit') {         // 编辑banner
-            /*this.productList = [];
-            this.$http.get(this.$api.product_get, {params:
-              { prid: scope.row.prid }}).then(res => {
-              if (res.data.status == 200) {
-                this.productList.push(res.data.data)
-              }
-            });*/
-            this.bannerForm = JSON.parse(JSON.stringify(scope.row));
-            this.bannerDialog = true
-          }else if(where == 'delete') {       // 删除banner
-            // 最少保留一张轮播图
-            let num = 0;
-            for(let i in this.bannerList) {
-              if(!this.bannerList[i].ibshow) {
-                num += 1
-              }
-            }
-            if(num == this.bannerList.length - 1) {
-              this.$message.error('请最少保留一张轮播图');
-              return false
-            }
-            // 删除轮播图
-            this.$confirm('此操作将删除该轮播图, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              params.isdelete = true;
-              this.$http.post(this.$api.update_banner, params).then(res => {
+      // 添加banner
+      addBanner() {
+        this.$refs.bannerFormRef.validate(valid => {
+          if (valid) {
+            if(this.bannerForm.ibid) {      // 编辑
+              this.$http.post(this.$api.update_banner, this.bannerForm).then(res => {
                 if (res.data.status == 200) {
                   this.$notify({
-                    title: '删除成功',
-                    message: '此轮播图已被删除',
+                    title: '修改成功',
+                    message: '此轮播图修改成功',
                     type: 'success'
                   });
-                  this.getBanner();
+                  this.bannerDialog = false;
+                  this.getBanner()
                 }
               });
-            }).catch(() => { });
+            }else {                         // 新增
+              this.$http.post(this.$api.set_banner, this.bannerForm).then(res => {
+                if (res.data.status == 200) {
+                  this.initBannerForm();
+                  this.$notify({
+                    title: '新增成功',
+                    message: '轮播图新增成功',
+                    type: 'success'
+                  });
+                  this.getBanner()
+                }
+              })
+            }
+          }else {
+            this.$message.warning('请根据校验信息完善表单!');
+          }
+        })
+      },
+      // 删除banner
+      deleteBanner(scope) {
+        let params = {
+          ibid: scope.row.ibid
+        };
+        // 最少保留一张轮播图
+        let num = 0;
+        for(let i in this.bannerList) {
+          if(!this.bannerList[i].ibshow) {
+            num += 1
           }
         }
+        if(num == this.bannerList.length - 1) {
+          this.$message.error('请最少保留一张轮播图');
+          return false
+        }
+        // 删除轮播图
+        this.$confirm('此操作将删除该轮播图, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          params.isdelete = true;
+          this.$http.post(this.$api.update_banner, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '删除成功',
+                message: '此轮播图已被删除',
+                type: 'success'
+              });
+              this.getBanner();
+            }
+          });
+        }).catch(() => { });
+      },
+      // banner的展示与否
+      bannerShow(scope) {
+        let msg = '';
+        let params = {
+          ibid: scope.row.ibid
+        };
+        // 最少保留一张轮播图
+        let num = 0;
+        for(let i in this.bannerList) {
+          if(!this.bannerList[i].ibshow) {
+            num += 1
+          }
+        }
+        if(num == this.bannerList.length) {
+          this.bannerList[scope.$index].ibshow = true;
+          this.$message.error('请最少保留一张轮播图');
+          return false
+        }
+
+        params.ibshow = scope.row.ibshow;
+        if(!scope.row.ibshow) {
+          msg = '此轮播图不再展示'
+        }else {
+          msg = '此轮播图将会展示'
+        }
+        this.$http.post(this.$api.update_banner, params).then(res => {
+          if (res.data.status == 200) {
+            this.$notify({
+              title: '修改成功',
+              message: msg,
+              type: 'success'
+            });
+            this.getBanner();
+          }
+        });
+      },
+      // 编辑banner
+      editBanner(scope) {
+        this.bannerForm = JSON.parse(JSON.stringify(scope.row));
+        this.bannerDialog = true
       },
       // 记录点击的是哪一行
       indexDone(scope) {
@@ -343,7 +341,7 @@
                 message: '此轮播图序号已保存',
                 type: 'success'
               });
-              this.getBanner()          // 刷新banner
+              this.getBanner();         // 刷新banner
               this.index = -1;
             }
           });

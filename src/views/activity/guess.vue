@@ -29,7 +29,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="addGuess">申请</el-button>
       </section>
     </section>
-    <get-sku @chooseSkus="chooseSkus" ref="guess" where="guess"></get-sku>
+    <get-sku @chooseGuessSku="chooseGuessSku" ref="guess" where="guess"></get-sku>
     <el-table v-loading="guessLoading" :data="guessList" stripe size="mini" :span-method="objectSpanMethod">
       <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
@@ -105,8 +105,10 @@
     },
     methods: {
       // 顶部查询
-      doSearch() {
-        this.page_num = 1;
+      doSearch(v) {
+        if(v !== 1 && this.page_num !== 1) {
+          this.page_num = 1;
+        }
         if(this.inlineForm.starttime && this.inlineForm.endtime){
           if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
             let term = this.inlineForm.endtime;
@@ -124,6 +126,7 @@
           endtime: '',
           gnaastatus: 'all',
         };
+        this.page_num = 1;
         this.doSearch();
       },
       // 申请添加竞猜奖品-按钮
@@ -132,7 +135,7 @@
         this.$refs.guess.productDialog = true
       },
       // 申请添加竞猜奖品
-      chooseSkus(sku, isEdit) {
+      chooseGuessSku(sku, isEdit) {
         if(isEdit) {
           sku.gnaaid = this.scope.row.gnaaid;
           this.$http.post(this.$api.guess_num_update_apply, sku).then(res => {
@@ -169,7 +172,7 @@
       },
       pageChange(val) {
         this.page_num = val;
-        this.doSearch()
+        this.doSearch(1)
       },
       // 获取自己的猜数字奖品申请列表
       getGuess() {
