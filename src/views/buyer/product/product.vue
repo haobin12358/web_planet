@@ -380,8 +380,11 @@
       height: 100vh;
       background-color: #fff;
       .m-state-content{
-        padding: 76px 30px;
+        margin-top: 50px;
+        padding: 26px 30px;
         text-align: left;
+        height: 75%;
+        overflow-y: auto;
         .m-one-select{
           padding: 21px 0;
           border-bottom: 1px solid #ccc;
