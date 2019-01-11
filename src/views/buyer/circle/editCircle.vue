@@ -260,7 +260,7 @@
           this.productList = [];
         }else {
           let params = {
-            itid: 'news_bind_product',
+            // itid: 'news_bind_product',
             page_num: 1,
             page_size: 200
           }
