@@ -2,7 +2,7 @@
   <div class="m-pandora">
     <div class="m-box-product">
       <div class="m-box-tip m-ft-28 m-ft-b" v-if="history && !mbjid">您的好友为您打开了魔法礼盒！</div>
-      <div class="m-box-tip m-ft-28 m-ft-b" v-if="!history && !mbjid">分享给好友帮您打开魔法礼盒！</div>
+      <div class="m-box-tip m-ft-28 m-ft-b" v-if="!history && !mbjid" @click="share">点击该处或下方跳动的分享按钮进行分享砍价！</div>
       <!--<div class="m-box-tip m-ft-28 m-ft-b" v-if="mbjid">点击任意一个盒子，为好友助力吧！</div>-->
       <div class="m-cloud-text" v-if="mbjid"></div>
       <div class="m-gift-one-one animated bounceInLeft" @click="pandora(1)"></div>
@@ -323,7 +323,9 @@
       .m-box-tip {
         position: absolute;
         top: 10px;
-        left: 170px;
+        left: 0;
+        width: 750px;
+        text-align: center;
         color: #ffffff;
         padding-top: 23px;
         z-index: 10;
