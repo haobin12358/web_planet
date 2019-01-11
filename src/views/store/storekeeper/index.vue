@@ -4,6 +4,7 @@
     <img class="m-storekeeper-bg" src="/static/images/icon-integral-bg.png" alt="">
     <!--顶部文字-->
     <div class="m-total-earnings">累计收益 : ￥{{user.uc_count | money}}</div>
+    <div class="m-balance">可提现余额 : ￥{{Number(user.usbalance).toFixed(2)}}</div>
     <div class="m-month-earnings">本月收益<span class="m-month-earnings-text">{{user.mounth_count | money}}</span>元</div>
     <div class="m-total-jump-box m-earnings-detail">
       <div class="m-earnings-out m-text-bottom" @click="outPopup = true">提现</div>
@@ -198,7 +199,7 @@
         bankPopup: false,
         slots: [{ values: ['请点击选择银行'] }],
         bank: "",
-        user: { uc_count: '', mounth_count: '' },
+        user: { uc_count: '', mounth_count: '', usbalance: '' },
         realName: '',
         bankName: '',
         bankResult: "",
@@ -352,6 +353,13 @@
       top: 110px;
       left: 60px;
     }
+    .m-balance{
+      font-size: 24px;
+      position: absolute;
+      top: 110px;
+      right: 60px;
+    }
+
     .m-month-earnings {
       font-size: 21px;
       position: absolute;

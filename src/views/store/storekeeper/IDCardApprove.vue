@@ -57,12 +57,14 @@
         </div>
         <div class="m-IDCard-img">
           <img class="m-IDCard-img" v-if="umfrontTemp" :src="umfrontTemp" alt="">
-          <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif"
+          <input type="file" name="file" class="m-upload-input" value=""
+                 accept="image/jpeg,image/png,image/jpg,image/gif"
                  @change="uploadFrontImg" :disabled="user.uslevel == '2' || user.uslevel == '3'">
         </div>
         <div class="m-IDCard-img">
           <img class="m-IDCard-img" v-if="umbackTemp" :src="umbackTemp" alt="">
-          <input type="file" name="file" class="m-upload-input" value="" accept="image/jpeg,image/png,image/jpg,image/gif"
+          <input type="file" name="file" class="m-upload-input" value=""
+                 accept="image/jpeg,image/png,image/jpg,image/gif"
                  @change="uploadBackImg" :disabled="user.uslevel == '2' || user.uslevel == '3'">
         </div>
         <!--按钮-->
@@ -97,7 +99,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import {Toast} from 'mint-ui';
 
   export default {
     name: "IDCardApprove",
@@ -108,9 +110,9 @@
         showPassword: false,
         submitPopup: false,
         auditPopup: false,
-        user: { usGender: "请选择性别" },      // 用户信息
+        user: {usGender: "请选择性别"},      // 用户信息
         genderPopup: false,                   // 性别picker
-        slots: [{ values: ['男', '女'] }],
+        slots: [{values: ['男', '女']}],
         gender: "",                           // 暂存性别
         umfrontTemp: "",                      // 暂存正面
         umbackTemp: "",                       // 暂存反面
@@ -128,16 +130,16 @@
       },
       // 查看密码
       passWord() {
-        if(this.showPassword) {
+        if (this.showPassword) {
           this.showPassword = false;
           this.password = "******";
-        }else if(!this.showPassword) {
+        } else if (!this.showPassword) {
           this.showPassword = true;
           this.password = this.user.adpassword;
         }
       },
       //上传正面图片
-      uploadFrontImg(e){
+      uploadFrontImg(e) {
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
@@ -146,17 +148,17 @@
         let form = new FormData();
         form.append("file", files[0]);
         axios.post(api.upload_file + '?type=idcard&token=' + localStorage.getItem('token'), form).then(res => {
-          if(res.data.status == 200) {
+          if (res.data.status == 200) {
             this.user.umfront = res.data.data;
             reader.readAsDataURL(files[0]);
-            reader.onload = function(e) {
+            reader.onload = function (e) {
               that.umfrontTemp = this.result;
             }
           }
         })
       },
       //上传反面图片
-      uploadBackImg(e){
+      uploadBackImg(e) {
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
@@ -165,10 +167,10 @@
         let form = new FormData();
         form.append("file", files[0]);
         axios.post(api.upload_file + '?type=idcard&token=' + localStorage.getItem('token'), form).then(res => {
-          if(res.data.status == 200) {
+          if (res.data.status == 200) {
             this.user.umback = res.data.data;
             reader.readAsDataURL(files[0]);
-            reader.onload = function(e) {
+            reader.onload = function (e) {
               that.umbackTemp = this.result;
             }
           }
@@ -177,17 +179,19 @@
       // 获取个人身份证详情
       getIdentifyinginfo() {
         axios.get(api.get_identifyinginfo + '?token=' + localStorage.getItem('token')).then(res => {
-          if(res.data.status == 200){
+          if (res.data.status == 200) {
             // console.log(res.data.data);
             this.user = res.data.data;
             this.umfrontTemp = this.user.umfront;
             this.umbackTemp = this.user.umback;
             // 性别判断
-            if(this.user.usgender == "0") {
+            if (this.user.usgender == "0") {
               this.user.usGender = "男";
-            }else if(this.user.usgender == "1") {
+            } else if (this.user.usgender == "1") {
               this.user.usGender = "女";
             }
+
+            console.log(this.user);
           }
         });
       },
@@ -196,9 +200,9 @@
         this.genderPopup = false;
         this.user.usGender = this.gender;
         // 性别判断
-        if(this.gender == "男") {
+        if (this.gender == "男") {
           this.user.usgender = "0";
-        }else if(this.gender == "女") {
+        } else if (this.gender == "女") {
           this.user.usgender = "1";
         }
       },
@@ -208,19 +212,19 @@
       },
       // 提交认证按钮
       submitUser() {
-        if(!this.user.usrealname){
+        if (!this.user.usrealname) {
           Toast("请输入真实姓名");
           return false;
         }
-        if(!this.user.usidentification){
+        if (!this.user.usidentification) {
           Toast("请输入身份证号");
           return false;
         }
-        if(!this.user.umfront){
+        if (!this.user.umfront) {
           Toast("请上传身份证照片");
           return false;
         }
-        if(!this.user.umback){
+        if (!this.user.umback) {
           Toast("请上传身份证照片");
           return false;
         }
@@ -232,14 +236,34 @@
           umfront: this.user.umfront,
           umback: this.user.umback,
         };
-        axios.post(api.upgrade_agent + "?token=" + localStorage.getItem('token'), params).then(res => {
-          if(res.data.status == 200){
-            Toast(res.data.message);
-            // 申请提交成功则返回上一页
-            this.$router.go(-1);
-            this.submitPopup = true;
-          }
-        });
+
+        //  买家和购买大礼包 身份api 区分
+        if(this.user.uslevel == 4){
+          axios.post(api.upgrade_agent + "?token=" + localStorage.getItem('token'), params).then(res => {
+            if (res.data.status == 200) {
+              Toast(res.data.message);
+              // 申请提交成功则返回上一页
+              this.$router.go(-1);
+              this.submitPopup = true;
+            }
+          });
+        }else{
+          axios.get(api.check_idcode, {
+            params: {
+              token: localStorage.getItem('token'),
+              ...params,
+            }
+          }).then(
+            res =>{
+              if (res.data.status == 200) {
+                Toast(res.data.message);
+                // 申请提交成功则返回上一页
+                this.$router.go(-1);
+                this.submitPopup = true;
+              }
+            }
+          )
+        }
       }
     },
     mounted() {
@@ -269,7 +293,7 @@
         margin: 25px;
         border-radius: 10px;
         background-color: #ffffff;
-        box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+        box-shadow: 0 5px 6px rgba(0, 0, 0, 0.16);
         .m-IDCard-rows {
           display: flex;
           justify-content: space-between;
@@ -309,7 +333,7 @@
         margin: 0 0 260px 25px;
         border-radius: 10px;
         background-color: #ffffff;
-        box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+        box-shadow: 0 5px 6px rgba(0, 0, 0, 0.16);
         .m-IDCard-row {
           display: flex;
           justify-content: space-between;
@@ -366,11 +390,11 @@
           width: 377px;
           height: 247px;
         }
-        .m-foot-btn{
+        .m-foot-btn {
           position: absolute;
           bottom: 50px;
           left: 25px;
-          span{
+          span {
             color: #ffffff;
             display: inline-block;
             width: 700px;
@@ -380,7 +404,7 @@
             font-size: 38px;
             font-weight: bold;
             border-radius: 10px;
-            box-shadow: 0 5px 6px rgba(0,0,0,0.16);
+            box-shadow: 0 5px 6px rgba(0, 0, 0, 0.16);
           }
         }
         .m-submit-popup {

@@ -286,6 +286,10 @@
       },
       // 发布圈子资讯
       createNews() {
+        if(!this.circleList.length) {
+          Toast("请选择标签");
+          return false;
+        }
         if(this.title == "") {
           Toast("请输入标题");
           return false;
