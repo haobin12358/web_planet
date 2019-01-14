@@ -69,8 +69,8 @@
   @import "../../../common/css/index";
 
   .m-my-code {
-    min-height: 100%;
-    background-color: #ffffff;
+    min-height: 100vh;
+    background-color: #EEEEEE;
     margin-top: -20px;
     .m-cell-box {
       .m-code-item {
