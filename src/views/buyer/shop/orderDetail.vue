@@ -145,6 +145,10 @@
         <span class="active" v-if="order_info.omstatus == 20" @click="orderConfirm">确认收货</span>
         <span class="active" v-if="order_info.omstatus == 35" @click="changeRoute('/addComment')">评价</span>
       </div>
+      <!--活动订单评价-->
+      <div class="m-align-right" v-if="from == 'activityProduct'">
+        <span class="active" v-if="order_info.omstatus == 35" @click="changeRoute('/addComment')">评价</span>
+      </div>
       <bottom></bottom>
     </div>
 </template>
@@ -221,6 +225,10 @@
               break;
             case '/logisticsInformation':
               this.$router.push({ path: v, query: { omid: this.order_info.omid }});
+              break;
+            case '/addComment':
+              localStorage.setItem('productComment', JSON.stringify(this.order_info));
+              this.$router.push(v);
               break;
           }
         }

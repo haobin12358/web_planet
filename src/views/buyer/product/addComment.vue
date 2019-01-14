@@ -91,7 +91,8 @@
         this.productList = [];
         for(let i = 0; i < this.order_info.order_part.length; i ++) {
           let product = {
-            opid: this.order_info.order_part[i].opid, prmainpic: this.order_info.order_part[i].prmainpic,
+            opid: this.order_info.order_part[i].opid,
+            prmainpic: this.order_info.order_part[i].prmainpic,
             img_box: [], video_box: [], image: [], video: {},
             starList: [{ active: false }, { active: false }, { active: false }, { active: false }, { active: false }]
           };

@@ -51,7 +51,7 @@
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
                 <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
                 <li class="active" v-if="items.omstatus == 20" @click.stop="orderConfirm(items)">确认收货</li>
-                <!--<li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment', items)">评价</li>-->
+                <li class="active" v-if="items.omstatus==35 && index != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
               </ul>
             </div>
           </div>
@@ -79,7 +79,8 @@
           total_count: 0,
           bottom_show: false,
           order_list: [],
-          omfrom: 40
+          omfrom: 40,
+          index: 0
         }
       },
       inject: ['reload'],
@@ -105,15 +106,17 @@
             case '/selectBack':
               this.$router.push({ path: v, query: { product: JSON.stringify(item), allOrder: 1 }});
               break;
-            /*case '/addComment':
+            case '/addComment':
+              localStorage.setItem('productComment', JSON.stringify(item));
               this.$router.push({path:v,query:{product:JSON.stringify(item)}});
-              break;*/
+              break;
             default:
               this.$router.push(v)
           }
         },
         // 导航点击
         navClick(index) {
+          this.index = index;
           localStorage.setItem('activityOrderNo', index);
           this.page_info.page_num = 1;
           this.total_count = 0;
