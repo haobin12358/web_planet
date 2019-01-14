@@ -260,7 +260,7 @@
           this.productList = [];
         }else {
           let params = {
-            itid: 'news_bind_product',
+            // itid: 'news_bind_product',
             page_num: 1,
             page_size: 200
           }
@@ -286,6 +286,10 @@
       },
       // 发布圈子资讯
       createNews() {
+        if(!this.circleList.length) {
+          Toast("请选择标签");
+          return false;
+        }
         if(this.title == "") {
           Toast("请输入标题");
           return false;

@@ -5,7 +5,7 @@
       <div class="m-selected-search">
         <div class="m-search-input-box" @click="changeRoute('/search','shtype','news' )">
           <span class="m-icon-search"></span>
-          <span>搜索圈子关键词</span>
+          <span>圈子搜索</span>
         </div>
         <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
       </div>

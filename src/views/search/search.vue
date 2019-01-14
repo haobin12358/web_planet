@@ -67,7 +67,7 @@
     export default {
         data(){
           return{
-            placeholder: '请输入搜索内容',
+            placeholder: '',
             searchContent: '',
             history_list: null,
             result_list: null,
@@ -80,11 +80,11 @@
           this.historySearch();
           // 在圈子的搜索时才显示推荐圈子
           if(this.$route.query.shtype == 'news') {
-            this.placeholder = '搜索圈子关键词';
+            this.placeholder = '圈子搜索关键词(标题名)';
             this.isCircle = true;
             this.getNav();
           }else {
-            this.placeholder = '搜索商品关键词'
+            this.placeholder = '商品搜索关键词(商品名/品牌名)'
           }
       },
       methods:{
