@@ -128,6 +128,10 @@
       if(!localStorage.getItem('circleIndex')) {
         localStorage.setItem('circleIndex', 0)
       }
+      if(sessionStorage.getItem('shop')) {
+        this.$router.push('/shop');
+        sessionStorage.removeItem('shop')
+      }
     },
     // 引入keepAlive后代替beforeDestroy
     deactivated() {

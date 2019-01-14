@@ -243,6 +243,10 @@
         localStorage.removeItem('back');
         this.$router.push('/personal/afterSales')
       }
+      if(sessionStorage.getItem('shop')) {
+        this.$router.push('/shop');
+        sessionStorage.removeItem('shop')
+      }
     },
     methods: {
       goStore() {
