@@ -114,6 +114,7 @@
         },
         // 导航点击
         navClick(index) {
+          localStorage.setItem('activityOrderNo', index);
           this.page_info.page_num = 1;
           this.total_count = 0;
           this.bottom_show = false;
