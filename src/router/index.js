@@ -130,7 +130,7 @@ export const constantRouterMap = [
   { path: '/personal/guess', component: () => import('../views/buyer/personal/guess'), hidden: true },
   { path: '/personal/history', component: () => import('../views/buyer/personal/history'), hidden: true },
   // 售后
-  { path: '/personal/afterSales', component: () => import('../views/buyer/personal/afterSales'), meta: { keepAlive: true }, hidden: true },
+  { path: '/personal/afterSales', component: () => import('../views/buyer/personal/afterSales'), meta: { keepAlive: false }, hidden: true },
   { path: '/personal/about', component: () => import('../views/buyer/personal/about'), hidden: true },
   { path: '/personal/setUp', component: () => import('../views/buyer/personal/setUp'), hidden: true },
   { path: '/personal/personalInfo', component: () => import('../views/buyer/personal/personalInfo'), hidden: true },

@@ -138,11 +138,11 @@
               code: common.GetQueryString('code')
             };
             if(localStorage.getItem('secret_usid')) {
-              params.secret_usid = localStorage.getItem('secret_usid');
+              params.secret_usid = localStorage.getItem('secret_usid').split('&from')[0];
             }
             axios.post(api.wx_login, params).then(res => {
               if(res.data.status == 200) {
-                localStorage.removeItem('secret_usid');
+                // localStorage.removeItem('secret_usid');
                 localStorage.removeItem('toLogin');
                 window.localStorage.setItem("token",res.data.data.token);
                 window.localStorage.setItem("openid",res.data.data.user.openid);

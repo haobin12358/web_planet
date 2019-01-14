@@ -44,10 +44,13 @@
         </div>
         <!--店主版选择商品或优惠券-->
         <div class="m-product-coupon" v-if="usLevel == '2'">
-          <div class="m-input-box" @click="getProduct">
+          <!--<div class="m-input-box" @click="getProduct">
             <div class="m-input-text">选择商品</div>
             <img class="m-input-icon" v-if="productList.length == 0" src="/static/images/icon-down-active.png">
             <img class="m-input-icon" v-else src="/static/images/icon-up.png">
+          </div>-->
+          <div class="m-product-search">
+            <input type="text" v-model="search" @focus="getProduct('')" placeholder="商品搜索关键词(商品名/品牌名)">
           </div>
           <div class="m-scroll-box">
             <div class="m-scroll">
@@ -108,6 +111,7 @@
         upload_img: [],
         video_box: [],
         video: {},
+        search: "",
         usLevel: "",
         product_list: [],       // 选中的商品
         productList: [],        // 可选择的商品
@@ -217,6 +221,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 15) {
+          Toast('图片不应大于15M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();
@@ -238,6 +246,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 20) {
+          Toast('视频不应大于20M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();
@@ -255,12 +267,13 @@
         });
       },
       //获取商品列表
-      getProduct() {
+      getProduct(kw) {
         if(this.productList.length > 0) {
           this.productList = [];
         }else {
           let params = {
             // itid: 'news_bind_product',
+            kw: '' || kw,
             page_num: 1,
             page_size: 200
           }
@@ -330,6 +343,11 @@
       common.changeTitle('发布圈子');
       this.getNav();                 // 获取圈子所在的标签
       this.getUserLevel();           // 获取当前用户是否是店主
+    },
+    watch: {
+      search(val) {
+        this.getProduct(val)
+      }
     }
   }
 </script>
@@ -457,6 +475,16 @@
         .m-input-icon {
           width: 22px;
           height: 22px;
+        }
+      }
+      .m-product-search {
+        width: 400px;
+        border-radius: 30px;
+        box-sizing: border-box;
+        border: 2px solid #999;
+        padding: 10px 30px;
+        input {
+          width: 340px;
         }
       }
       .m-scroll-box {

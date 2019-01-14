@@ -253,7 +253,7 @@
         };
         axios.get(api.get_guess_num, { params: params }).then(res => {
           if(res.data.status == 200){
-            if(!date && res.data.data.gnnum) {
+            if(!date && res.data.data) {
               this.num = res.data.data.gnnum;
               this.submit = true;
             }

@@ -123,7 +123,8 @@
     components: { picker},
     mounted(){
       if(localStorage.getItem('back')) {
-        location.href = location.origin + '/#/personal'
+        location.href = location.origin + '/#/personal';
+        return false
       }
       if(this.$route.query.allOrder) {
         this.order = JSON.parse(this.$route.query.product);
@@ -202,6 +203,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 15) {
+          Toast('图片不应大于15M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();

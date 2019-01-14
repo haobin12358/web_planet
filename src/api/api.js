@@ -31,6 +31,7 @@ const api={
   order_get: title + 'order/get',                                // 订单详情
   refund_create: title +'refund/create',                         // 申请退款
   order_count: title + 'order/count',                            // 订单数量
+  get_preview_commision: title + 'order/get_preview_commision',  // 订单页获取预计佣金
   get_logistic: title + 'logistic/get',                          // 获取物流信息
   cancle_order: title + 'order/cancle',                          // 取消订单
   list_dispute_type: title + 'refund/list_dispute_type',         // 获取退款原因

@@ -248,7 +248,7 @@
         common.changeTitle('精选');
         // 将分享的usid保存
         if(this.$route.query.secret_usid) {
-          localStorage.setItem('secret_usid', this.$route.query.secret_usid);
+          localStorage.setItem('secret_usid', this.$route.query.secret_usid)
         }
       },
       activated() {

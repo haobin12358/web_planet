@@ -165,6 +165,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 15) {
+          Toast('图片不应大于15M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();

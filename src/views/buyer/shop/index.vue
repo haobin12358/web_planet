@@ -120,6 +120,8 @@
         common.changeTitle('购物车');
       },
       activated() {
+        this.allRadio = false;
+        this.total_money = 0;
         this.page_info.page_num = 1;
         this.getCart();
         if(sessionStorage.getItem('shop')) {

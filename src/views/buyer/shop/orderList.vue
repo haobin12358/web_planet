@@ -93,7 +93,7 @@
       },
       // 引入keepAlive后代替beforeDestroy
       deactivated() {
-        if(this.$route.path == '/orderDetail' || this.$route.path == '/logisticsInformation') {
+        if(this.$route.path == '/orderDetail' || this.$route.path == '/logisticsInformation' || this.$route.path == '/addComment') {
           localStorage.setItem('orderListDetail', 1);
         }else {
           localStorage.setItem('orderListDetail', 0);
