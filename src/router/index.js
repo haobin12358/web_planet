@@ -451,7 +451,7 @@ export const asyncRouterMap = [
         path: 'noticeMaintain',
         name: 'NoticeMaintain',
         component: () => import('src/views/setting/noticeMaintain'),
-        meta: {title: '通告', noCache: false, roles: level2},
+        meta: {title: '通告', icon: 'yes', noCache: false, roles: level2},
       },
     ]
   },

@@ -88,7 +88,11 @@
           <el-tag :type="scope.row.prfrom == '0' ? '' : 'success'">{{scope.row.supplizer}}</el-tag>
         </template>
       </el-table-column>
-
+      <el-table-column align="center" label="sku" width="120">
+        <template slot-scope="scope">
+          <product-sku :key="scope.row.prid" :skus="scope.row.skus" :prattribute="scope.row.prattribute"></product-sku>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="createtime" sortable label="创建时间" width="240"></el-table-column>
       <el-table-column align="center" width="220" label="操作" fixed="right">
         <template slot-scope="scope">
@@ -133,6 +137,7 @@
   import TableCellImg from "src/components/TableCellImg";
   import permission from 'src/directive/permission/index.js' // 权限判断指令
   import ProductComment from "./components/productComment";
+  import ProductSku from "src/views/product/components/productSku";
 
 
   export default {
@@ -143,6 +148,7 @@
     components: {
       TableCellImg,
       ProductComment,
+      ProductSku,
     },
 
     data() {

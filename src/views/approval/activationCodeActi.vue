@@ -23,19 +23,11 @@
         <el-table-column label="银行" prop="content.acabankname" align="center" width="120"></el-table-column>
         <el-table-column label="户名" prop="content.acaname" align="center" width="120"></el-table-column>
         <el-table-column label="卡号" prop="content.acabanksn" align="center" width="220"></el-table-column>
-        <el-table-column label="凭证" prop="content.acabanksn" align="center">
+        <el-table-column label="凭证" prop="content.acavouchers" align="center" width="160">
           <template slot-scope="scope">
-            <el-popover
-              placement="left"
-              trigger="hover"
-              :open-delay="500"
-              v-for="img in scope.row.content.acavouchers" :key="img">
-              <img style="width: 350px;max-height: 100%;" :src="img" alt="">
-              <img slot="reference"  class="acavouchers-img" :src="img" :key="img" v-lazy="img" alt="">
-            </el-popover>
+            <table-cell-img :src="scope.row.content.acavouchers" :key="scope.row.avid" out-width="120px"></table-cell-img>
           </template>
         </el-table-column>
-
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center" width="120">

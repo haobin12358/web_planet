@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-dialog :visible="visible" title="评论视频预览" width="500" :modal="false" @close="close">
+    <el-dialog :visible="visible" title="评论视频预览" width="500" :modal="false" top="5vh" @close="close">
       <video :src="videoSrc" :poster="posterSrc" controls autoplay width="375" height="667"></video>
     </el-dialog>
     <img :src="posterSrc" alt="" style="width: 50px;height: 50px;" @click="visible = true">

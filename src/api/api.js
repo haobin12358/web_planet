@@ -178,7 +178,10 @@ const api = {
   settlenment: title + 'user/settlenment',                                   // 提现申请
 
   get_supplizeraccount: title + 'supplizer/get_supplizeraccount',            // 个人账户和开票信息
-  set_supplizeraccount: title + 'supplizer/set_supplizeraccount',            // 个人账户和开票信息
+  set_supplizeraccount: title + 'supplizer/set_supplizeraccount',            // 设置个人账户和开票信息
+
+  get_system_notes: title + 'supplizer/get_system_notes',                   // 获取通告
+  add_update_notes: title + 'supplizer/add_update_notes',                    // 新增/修改通告
 };
 
 export default api
