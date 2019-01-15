@@ -30,7 +30,7 @@
         <el-table-column type="index"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.tcmainpic" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="[scope.row.content.tcmainpic]" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="content.tctitle" label="商品名" width="280"></el-table-column>

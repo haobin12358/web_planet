@@ -2,8 +2,6 @@
   <div class="container">
     <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh" :close-on-click-modal="false"
                title="提现申请">
-      <block-title title="可用余额"></block-title>
-      <h1>￥{{canUseBalance}}</h1>
       <block-title title="提现表单"></block-title>
       <el-form :model="applyForm" size="medium" label-width="120px" label-position="left">
         <el-form-item label="提现金额" prop="cncashnum">
@@ -15,8 +13,12 @@
           <el-button type="primary" @click="doSaveApply">确 定</el-button>
         </span>
     </el-dialog>
-    <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;float: right;" @click="doNewApply">新增申请
-    </el-button>
+
+
+    <section class="table-hd">
+      <span>可提余额:￥{{canUseBalance}}</span>
+      <el-button type="primary" icon="el-icon-plus" @click="doNewApply">新增申请</el-button>
+    </section>
 
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="提现金额" prop="cncashnum" align="center"></el-table-column>
@@ -158,8 +160,8 @@
       doSaveApply() {
         const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
 
-        console.log(moneyReg.test(this.applyForm.cncashnum), this.applyForm.cncashnum , this.canUseBalance);
-        if(moneyReg.test(this.applyForm.cncashnum) && this.applyForm.cncashnum <= this.canUseBalance){
+        console.log(moneyReg.test(this.applyForm.cncashnum), this.applyForm.cncashnum, this.canUseBalance);
+        if (moneyReg.test(this.applyForm.cncashnum) && this.applyForm.cncashnum <= this.canUseBalance) {
           this.$confirm(`确认提交提现申请(金额:${this.applyForm.cncashnum})?`, '提示').then(
             () => {
               this.$http.post(this.$api.apply_cash, this.applyForm).then(
@@ -180,7 +182,7 @@
               )
             }
           )
-        }else{
+        } else {
           this.$message.warning('请填写合理的金额');
         }
       },
@@ -196,6 +198,10 @@
   @import "../../styles/myIndex";
 
   .container {
-
+    .table-hd{
+      .fj();
+      align-items: center;
+      margin-bottom: 20px;
+    }
   }
 </style>

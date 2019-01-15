@@ -17,7 +17,7 @@
       <el-table-column label="审批内容" align="center">
         <!--<el-table-column align="center" width="120" label="头像">-->
           <!--<template slot-scope="scope">-->
-            <!--<table-cell-img :src="scope.row.start.usheader" :key="scope.row.start.usheader"></table-cell-img>-->
+            <!--<table-cell-img :src="[scope.row.start.usheader]" :key="scope.row.start.usheader"></table-cell-img>-->
           <!--</template>-->
         <!--</el-table-column>-->
         <el-table-column label="银行" prop="content.acabankname" align="center" width="120"></el-table-column>

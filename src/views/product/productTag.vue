@@ -17,7 +17,7 @@
     <el-table v-loading="sceneLoading" :data="sceneTableData">
       <el-table-column label="场景图片" align="center" prop="pspic" width="120">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pspic" :key="scope.row.pspic"></table-cell-img>
+          <table-cell-img :src="[scope.row.pspic]" :key="scope.row.pspic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>

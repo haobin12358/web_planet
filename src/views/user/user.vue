@@ -19,7 +19,7 @@
     <el-table v-loading="userLoading" :data="userList" stripe>
       <el-table-column label="用户头像" align="center" prop="usheader">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.usheader" :key="scope.row.usheader"></table-cell-img>
+          <table-cell-img :src="[scope.row.usheader]" :key="scope.row.usheader"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="用户名" align="center" prop="usname" show-overflow-tooltip></el-table-column>

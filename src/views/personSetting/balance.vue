@@ -80,7 +80,7 @@
       },
 
       downloadSheet(row) {
-        window.open(`${this.$api.export_settlenment_xls }?token=${getStore('token')}`);
+        location.href=`${this.$api.export_settlenment_xls }?token=${getStore('token')}`;
         this.$alert('请留意浏览器可能会进行拦截,注意保存文件,xls中日期显示异常时请设置单元格格式', '成功获取结算单',);
       },
 

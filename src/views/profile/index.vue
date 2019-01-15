@@ -219,16 +219,24 @@
 
       gotoTodoPage(item) {
         switch (item.ptid) {
+          //  激活码和新代理全交由平台
           case 'toactivationcode':
             this.$router.push('/approval/activationCodeActi')
             break;
           case 'toagent':
             this.$router.push('/approval/agentAudit')
             break;
+
+          //  圈子
           case 'topublish':
-            this.$router.push('/approval/circleAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/circleAudit')
+            }else{
+              this.$router.push('/circle/circle')
+            }
             break;
 
+          //  4个活动
           case 'tofreshmanfirstproduct':
             if (this.$store.getters.roles[0] != 'supplizer') {
               this.$router.push('/approval/firstOrderActiAudit')
@@ -259,17 +267,34 @@
             break;
 
           case 'toshelves':
-            this.$router.push('/approval/productAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/productAudit')
+            }else{
+              this.$router.push({
+                name: 'ProductIndex',
+                params: {
+                  prstatus: 'auditing'
+                }
+              })
+            }
             break;
           case 'toreturn':
             this.$router.push('/approval/returnProductAudit')
             break;
 
           case 'tocash':
-            this.$router.push('/approval/withdrawAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/withdrawAudit')
+            }else{
+              this.$router.push('/personSetting/withdraw')
+            }
             break;
           case 'tosettlenment':
-            this.$router.push('/approval/supplizerBalanceApplyAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/supplizerBalanceApplyAudit')
+            }else{
+              this.$router.push('/personSetting/balance')
+            }
             break;
 
 

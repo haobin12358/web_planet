@@ -9,6 +9,8 @@
 @dangerColor: #F56C6C;
 @infoColor: #909399;
 
+@inrefundRowBg: #fde7cb;
+
 .success-text {
   color: @successColor;
 }
@@ -148,6 +150,10 @@
   &.space-between {
     .fj();
     align-items: flex-start;
+
+    &.center{
+      align-items: center;;
+    }
   }
 
   &.end {
@@ -181,7 +187,7 @@
 }
 
 .el-table .warning-row {
-  background: #fde7cb;
+  background: @inrefundRowBg;
 }
 
 .el-table .warning-header-cell {

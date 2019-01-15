@@ -124,6 +124,13 @@ export const asyncRouterMap = [
     meta: {title: '订单', icon: 'dingdan', roles: level1},
     children: [
       {
+        path: 'allOrder',
+        name: 'AllOrder',
+        component: () => import('src/views/order/allOrder'),
+        meta: {title: '所有订单', noCache: false, icon: 'yes', roles: level1}
+      },
+
+      {
         path: 'order',
         name: 'OrderIndex',
         component: () => import('src/views/order/index'),
@@ -261,7 +268,7 @@ export const asyncRouterMap = [
     path: '/approval',
     component: Layout,
     alwaysShow: true,
-    redirect: '/approval/withdraw',
+    redirect: '/approval/withdrawAudit',
     name: 'Approval',
     meta: {title: '审批', icon: 'shenpi', roles: level1},
     children: [

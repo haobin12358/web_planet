@@ -32,7 +32,7 @@
 
     <!--订单table-->
     <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="expandAll"
-              @row-dblclick="expandRow" :cell-class-name="cellFunction" :row-class-name="tableRowClassName">
+              @row-click="expandRow" :cell-class-name="cellFunction" :row-class-name="tableRowClassName">
       <el-table-column type="expand">
         <template slot-scope="props">
           <!--展开table-->
@@ -85,11 +85,11 @@
             </el-table-column>
             <el-table-column prop="prmainpic" align="center" label="图片" width="180">
               <template slot-scope="scope">
-                <table-cell-img :src="scope.row.prmainpic" :key="scope.row.avid"></table-cell-img>
+                <table-cell-img :src="[scope.row.prmainpic]" :key="scope.row.avid"></table-cell-img>
               </template>
             </el-table-column>
             <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
-            <el-table-column label="规格" width="240">
+            <el-table-column label="规格" width="240" align="center">
               <template slot-scope="scope">
                 <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
               </template>
@@ -406,7 +406,9 @@
       },
 
       tableRowClassName({row, rowIndex}) {
-        if (row.ominrefund) {
+        let isOrderPartRefund = row.order_part.some(item => item.opisinora);
+
+        if (row.ominrefund || isOrderPartRefund) {
           return 'warning-row';
         }
 

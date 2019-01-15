@@ -3,7 +3,7 @@
     <el-table v-loading="activityLoading" :data="activityList" stripe>
       <el-table-column label="活动封面图" align="center" prop="acbackground">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
+          <table-cell-img :src="[scope.row.acbackground]" :key="scope.row.acbackground"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>

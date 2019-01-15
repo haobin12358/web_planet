@@ -29,7 +29,7 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品图片" align="center" prop="prdescription">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content ? scope.row.content.prmainpic : ''" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="content.prtitle" width="220"></el-table-column>

@@ -33,7 +33,7 @@
     <el-table v-loading="newLoading" :data="newList" stripe size="mini">
       <el-table-column label="商品图片" align="center" prop="prdescription">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.fresh_product.prmainpic" :key="scope.row.fmfaid"></table-cell-img>
+          <table-cell-img :src="[scope.row.fresh_product.prmainpic]" :key="scope.row.fmfaid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="商品名称" align="center" prop="fresh_product.prtitle" show-overflow-tooltip></el-table-column>

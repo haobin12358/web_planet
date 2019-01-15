@@ -18,7 +18,7 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column align="center" width="120" label="头像">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.start.usheader" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="[scope.row.start.usheader]" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="姓名" prop="start.usrealname" align="center" width="120"></el-table-column>
@@ -29,8 +29,16 @@
           </template>
         </el-table-column>
         <el-table-column label="身份证号" prop="start.usidentification" align="center" width="220"></el-table-column>
-        <!--<el-table-column label="金额" prop="content.cncashnum" align="center"></el-table-column>-->
-        <!--<el-table-column label="备注" prop="content.cnbankdetail" align="center"></el-table-column>-->
+        <el-table-column label="身份证正面" align="center" width="180" >
+          <template slot-scope="scope">
+            <table-cell-img width="80px" out-width="80px" :src="[scope.row.start.umfront]" :key="scope.row.start.umfront"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column label="身份证反面" align="center" width="180">
+          <template slot-scope="scope">
+            <table-cell-img width="80px"  out-width="80px" :src="[scope.row.start.umback]" :key="scope.row.start.umback"></table-cell-img>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center" width="120">

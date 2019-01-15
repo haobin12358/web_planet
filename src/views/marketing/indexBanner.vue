@@ -11,7 +11,7 @@
       </el-table-column>-->
       <el-table-column label="轮播图" align="center" prop="ibpic">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.ibpic" :key="scope.row.ibpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.ibpic]" :key="scope.row.ibpic"></table-cell-img>
         </template>
       </el-table-column>
       <!--<el-table-column label="对应商品" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>-->
@@ -95,7 +95,7 @@
       <el-table v-loading="productLoading" :data="productsList" stripe size="mini" height="600">
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
+            <table-cell-img :src="[scope.row.prmainpic]" :key="scope.row.prid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>

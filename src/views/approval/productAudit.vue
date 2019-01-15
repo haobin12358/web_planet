@@ -18,7 +18,7 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content ? scope.row.content.prmainpic : ''"
+            <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []"
                             :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>

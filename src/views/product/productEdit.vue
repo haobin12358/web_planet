@@ -286,6 +286,7 @@
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   const natureNumberReg = /^(\d*)$/;   //  自然数
+  const percentReg = /^100$|^(\d|[1-9]\d)(\.\d{0,2})*$/;   //  百分数(>=0, <=100, 至多两位小数)
 
   const upgradeItId = 'upgrade_product';
   export default {
@@ -589,7 +590,7 @@
             skupic: "",
             skusn: '',
             skuprice: this.formData.prprice || 0,
-            skudeviderate: this.platformComRate || 0,
+            skudeviderate:  0,
             skustock: 0,
             skuattritedetail: new Array(this.formData.prattribute.length),
           });
@@ -781,7 +782,7 @@
                 });
                 this.dialogSkuSortVisible = false;
               }else {
-                this.getPlatformComRate();
+                // this.getPlatformComRate();
               }
             }
           )
@@ -806,7 +807,7 @@
                 this.dialogSkuSortVisible = false;
                 this.reset();
               }else {
-                this.getPlatformComRate();
+                // this.getPlatformComRate();
               }
             }
           )
@@ -853,10 +854,10 @@
               if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
                 detailTip += '-价格不符'
               }
-              if (!currentSku.skudeviderate || !moneyReg.test(currentSku.skudeviderate) ||
-                currentSku.skudeviderate < this.platformComRate || currentSku.skudeviderate >= 100) {
-                detailTip += `-让利不符(至少${this.platformComRate}%)`
+              if (!percentReg.test(currentSku.skudeviderate) ) {
+                detailTip += `-让利不符(至多两位小数的百分数)`
               }
+
               if (currentSku.skustock === '' || !natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
@@ -904,7 +905,7 @@
       init() {
         this.setCategory();
         this.setBrand();
-        this.getPlatformComRate();
+        // this.getPlatformComRate();
 
         if (this.$route.query.prid) { //  编辑
           //  编辑更换的商品或之前是新增,数据替换
@@ -1000,6 +1001,8 @@
         this.items = [];
         this.imagesUrl = [];
         this.prDescUrl = [];
+
+        // this.getPlatformComRate();
       },
     },
 

@@ -105,7 +105,7 @@
         <el-table-column type="selection" :reserve-selection="false"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.skupic" :key="scope.row.skuid"></table-cell-img>
+            <table-cell-img :src="[scope.row.skupic]" :key="scope.row.skuid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="规格名称" align="center" prop="skuname" show-overflow-tooltip></el-table-column>

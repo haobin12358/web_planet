@@ -127,7 +127,7 @@
         <el-table-column type="selection" :reserve-selection="true"></el-table-column>
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
+            <table-cell-img :src="[scope.row.prmainpic]" :key="scope.row.prid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>

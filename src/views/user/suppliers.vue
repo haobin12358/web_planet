@@ -13,9 +13,11 @@
         <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
+
+
     </section>
 
-    <el-table :data="tableData" v-loading="loading" style="width: 100%">
+    <el-table :data="tableData" v-loading="loading" style="width: 100%" :cell-class-name="cellFunction">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -157,6 +159,12 @@
       },
       pageChange(page) {
         this.currentPage = page;
+      },
+
+      cellFunction({row, column}){
+        if (['uwtotal', 'uwbalance', 'uwcash'].includes(column.property)) {
+          return 'money-cell'
+        }
       },
 
       previewImg(url) {
