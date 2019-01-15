@@ -6,10 +6,16 @@
         <el-table-column label="评价内容"  prop="oetext"  align="center" show-overflow-tooltip></el-table-column>
         <el-table-column label="图片" width="220" align="center">
           <template slot-scope="scope">
-            <table-cell-img :src="findCommentImgs(scope.row)" out-width="180px"></table-cell-img>
+            <table-cell-img :src="findCommentImgs(scope.row)" :key="scope.row.oeid" out-width="180px"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="视频" width="120" align="center"></el-table-column>
+        <el-table-column label="视频" width="120" align="center">
+          <template slot-scope="scope">
+            <table-cell-video v-if="scope.row.video.length" :key="scope.row.oeid"
+                              :video-src="scope.row.video[0].oevideo" :poster-src="scope.row.video[0].oevthumbnail"></table-cell-video>
+            <span v-else>无</span>
+          </template>
+        </el-table-column>
       </el-table>
     </el-dialog>
   </div>
@@ -17,12 +23,12 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
-
+  import TableCellVideo from "src/components/TableCellVideo";
 
   export default {
     name: "ProductComment",
 
-    components: {TableCellImg},
+    components: {TableCellImg,TableCellVideo},
 
     // props: ['visible','product'],
     props: {
@@ -38,7 +44,6 @@
 
     watch: {
       visible(val){
-        console.log(this.product);
         if(val){
           this.$http.get(this.$api.get_evaluation,{
             params: {
