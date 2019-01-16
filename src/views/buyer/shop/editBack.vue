@@ -43,7 +43,8 @@
           </li>
         </ul>
         <p class="m-selectBack-num">退款金额：￥
-          <input class="m-price m-ft-22" type="text" v-model="refund_money" :placeholder="total_money | money">
+          <input class="m-price m-ft-22" type="text" v-model="refund_money" v-if="total_money" :placeholder="total_money | money">
+          <input class="m-price m-ft-22" type="text" v-model="refund_money" v-else :placeholder="total_money">
         </p>
         <!--<p class="m-selectBack-num">退款金额：<span class="m-price">￥{{total_money | money}}</span></p>-->
       </div>

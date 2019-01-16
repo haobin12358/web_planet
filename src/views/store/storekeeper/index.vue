@@ -176,7 +176,7 @@
     </div>
     <!--激活码购买记录-->
     <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/myActivationCodeHistory')">
+      <div class="m-total-jump-box" @click="changeRoute('/personal/codeHistory')">
         <div class="m-jump-title">激活码购买记录</div>
         <div class="m-jump-text"></div>
         <img class="m-jump-img" src="/static/images/icon-more.png" alt="">

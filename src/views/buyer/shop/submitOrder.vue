@@ -313,7 +313,6 @@
               axios.post(api.get_preview_commision + '?token=' + localStorage.getItem('token'), this.product_info[i].params).then(res => {
                 if(res.data.status == 200) {
                   this.product_info[i].preview = res.data.data;
-                  console.log(res.data.data);
                 }
               });
             }

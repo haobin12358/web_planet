@@ -112,6 +112,7 @@ const api={
   get_salesvolume_all: title + 'user/get_salesvolume_all',       // 获取团队销售额
   get_agent_commission: title + 'user/get_agent_commission_list',// 获取店主收益详情
   list_act_code: title + 'act_code/list_act_code',               // 获取个人激活码列表
+  act_code_list: title + 'act_code/get_list',                    // 获取激活码申请列表
   get_code_rule: title + 'act_code/get_rule',                    // 获取个人激活码购买规则(购买申请页)
   act_code_apply: title + 'act_code/apply',                      // 购买激活码申请 - 打款凭证
 };

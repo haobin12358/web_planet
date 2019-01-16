@@ -227,6 +227,10 @@
           Toast("请选择银行");
           return false;
         }
+        if(!this.image.length){
+          Toast("请上传凭证");
+          return false;
+        }
         let params = {
           acabankname: this.bank,
           acabanksn: this.bankNo,
@@ -288,7 +292,7 @@
                 width: 186px;
                 height: 186px;
                 margin-bottom: 20px;
-                margin-right: 15px;
+                margin-right: 25px;
               }
               .del-img {
                 width: 40px;

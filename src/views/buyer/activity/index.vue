@@ -5,7 +5,10 @@
     <div class="m-activity-box animated bounceInUp">
       <div class="m-activity-item" v-for="item in activityList">
         <img class="m-activity-img" :src="item.acbackground" alt="">
-        <div class="m-product-count animated infinite pulse" v-if="item.actype == 1 || item.actype == 2">{{item.prcount}}</div>
+        <div class="m-product-count animated infinite pulse" v-if="item.actype == 1 || item.actype == 2">
+          <div v-if="item.stock > 99" class="m-ft-44" style="line-height: 90px">余量充足</div>
+          <div v-else>{{item.stock}}</div>
+        </div>
         <!--<img class="m-activity-img" src="http://img.zcool.cn/community/01e021593541cfa8012193a3a081af.gif" alt="">-->
         <!--用户****中奖了-->
         <!--<div class="m-activity-user-demo" v-if="item.record">{{item.record}}</div>-->
@@ -53,11 +56,6 @@
         axios.get(api.activity_list + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.activityList = res.data.data;
-            // this.activityList.push(res.data.data[0])
-            // this.activityList.push(res.data.data[0])
-            // this.activityList.push(res.data.data[0])
-            // this.activityList.push(res.data.data[0])
-            // this.activityList.push(res.data.data[0])
           }
         });
       }
@@ -104,7 +102,8 @@
           border-radius: 20px;
         }
         .m-product-count {
-          width: 280px;
+          white-space: nowrap;
+          width: 180px;
           font-size: 120px;
           padding: 20px 50px;
           margin: 0 auto;
@@ -112,7 +111,7 @@
           background-color: #ffffff;
           position: absolute;
           top: 120px;
-          left: 160px;
+          left: 200px;
           opacity: 0.9;
         }
         .m-activity-user-demo {
