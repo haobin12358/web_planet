@@ -50,7 +50,7 @@
               ￥{{items.total | money}}
             </div>
           </li>
-          <li class="m-sku-num">
+          <li class="m-sku-num" v-if="from != 'try'">
             <span>预计收益</span>
             <div class="m-num m-price">
               ￥{{items.preview | money}}
@@ -297,7 +297,7 @@
         },
         // 订单页获取预计佣金
         getPreview() {
-          if(this.product_info) {
+          if(this.product_info && this.from != 'try') {
             for(let i = 0; i < this.product_info.length; i ++) {
               this.product_info[i].params = {
                 pbid: this.product_info[i].pb.pbid,
