@@ -7,6 +7,7 @@
 <script>
   import {getStore} from "src/utils";
 
+
   export default {
     name: 'App',
 
@@ -52,7 +53,7 @@
     created() {
       //  5分钟刷新一下token
       this.interval = setInterval(this.authRefresh, 1000 * 60 * 5);
-      console.log('v 周3下午10点30');
+      // console.log('v 周3下午10点30');
     }
   }
 </script>

@@ -33,7 +33,7 @@
       <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.skupic" :key="scope.row.mbaid"></table-cell-img>
+          <table-cell-img :src="[scope.row.skupic]" :key="scope.row.mbaid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌" align="center" prop="pbname" show-overflow-tooltip></el-table-column>

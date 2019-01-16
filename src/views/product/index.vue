@@ -31,11 +31,14 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item >
-          <el-checkbox v-permission="[ 'admin', 'super']" v-model="searchForm.showUpgradeProd" @change="doSearch(true)">只显示开店大礼包商品</el-checkbox>
+        <el-form-item>
+          <el-checkbox v-permission="[ 'admin', 'super']" v-model="searchForm.showUpgradeProd" @change="doSearch(true)">
+            只显示开店大礼包商品
+          </el-checkbox>
         </el-form-item>
         <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch(true)">查询</el-button>
-        <el-button icon="el-icon-refresh" :loading="loading" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
+        <el-button icon="el-icon-refresh" :loading="loading" @click="doReset" style="margin-bottom: 20px;">重置
+        </el-button>
       </el-form>
 
       <section class="action-wrap">
@@ -53,7 +56,7 @@
         type="index"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
+          <table-cell-img :src="[scope.row.prmainpic]" :key="scope.row.prid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prtitle" label="商品名" width="280" show-overflow-tooltip></el-table-column>
@@ -82,17 +85,18 @@
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.supplizer === '平台' ? 'primary' : 'success'">{{scope.row.supplizer}}</el-tag>
+          <el-tag :type="scope.row.prfrom == '0' ? '' : 'success'">{{scope.row.supplizer}}</el-tag>
         </template>
       </el-table-column>
-
-      <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
-      <el-table-column align="center" width="180" label="操作" fixed="right">
+      <el-table-column align="center" label="sku" width="120">
         <template slot-scope="scope">
-          <el-popover v-if="scope.row.prstatus != 10" placement="top-start" title="提示" width="200" trigger="hover"  :open-delay="300">
-            商品修改后会重新进行审批(5分钟自动通过)
-            <el-button slot="reference" type="text" @click="doEdit(scope.row)">编辑</el-button>
-          </el-popover>
+          <product-sku :key="scope.row.prid" :skus="scope.row.skus" :prattribute="scope.row.prattribute"></product-sku>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="createtime" sortable label="创建时间" width="240"></el-table-column>
+      <el-table-column align="center" width="220" label="操作" fixed="right">
+        <template slot-scope="scope">
+          <el-button v-if="scope.row.prstatus != 10" type="text" @click="doEdit(scope.row)">编辑</el-button>
           <el-button v-if="scope.row.prstatus == 0" type="text" class="warning-text"
                      @click="doUnShelveOne(scope.row)">下架
           </el-button>
@@ -102,8 +106,8 @@
           <el-button v-if="scope.row.prstatus == 30" type="text" class="success-text"
                      @click="doResubmit(scope.row)">重新提交
           </el-button>
+          <el-button type="text" class="info-text" @click="doShowComment(scope.row)">查看评论</el-button>
           <el-button type="text" class="danger-text" @click="doDeleteOne(scope.row)">删除</el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -125,12 +129,16 @@
       </el-pagination>
     </section>
 
+    <product-comment :visible="commentVisible" :product="commentProduct" @close="closeProdComment"></product-comment>
   </div>
 </template>
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
   import permission from 'src/directive/permission/index.js' // 权限判断指令
+  import ProductComment from "./components/productComment";
+  import ProductSku from "src/views/product/components/productSku";
+
 
   export default {
     name: 'ProductIndex',
@@ -138,11 +146,14 @@
     directives: {permission},
 
     components: {
-      TableCellImg
+      TableCellImg,
+      ProductComment,
+      ProductSku,
     },
 
     data() {
       return {
+        testUrl: 'https://planet.daaiti.cn/img/product/2019/1/14/5GLtROuEHskQzz3wxjDy3fcfc57a-fd0f-11e8-a04f-00163e08d30f.jpg_562x1000.jpg',
         repeat: true,
 
         //  查询表单用
@@ -190,8 +201,10 @@
         currentPage: 1,
         pageSize: 10,
         tableData: [],
-
         selectedRows: [],
+
+        commentVisible: false,
+        commentProduct: {},
       }
     },
 
@@ -231,7 +244,7 @@
       },
 
       doSearch(replace = false) {
-        if(replace){
+        if (replace) {
           this.currentPage = 1;
         }
 
@@ -246,7 +259,7 @@
           searchParams.pcid = ''
         }
 
-        if(searchParams.showUpgradeProd){
+        if (searchParams.showUpgradeProd) {
           searchParams.itid = 'upgrade_product'
         }
 
@@ -505,6 +518,14 @@
         )
       },
 
+      doShowComment(row) {
+        this.commentProduct = row;
+        this.commentVisible = true;
+      },
+      closeProdComment(){
+        this.commentVisible = false;
+      },
+
       handleSelectionChange(val) {
         this.selectedRows = val;
       },
@@ -529,12 +550,22 @@
           this.doSearch();
         }
       },
+
+      initProfileSearch() {
+        if (this.$route.params.prstatus) {
+          this.searchForm.prstatus = this.$route.params.prstatus
+        }
+
+        this.$route.params.prstatus = 'all'
+      }
     },
 
     activated() {
       if (this.repeat) {
         this.repeat = false;
       } else {
+        this.initProfileSearch();
+
         this.doSearch()
         this.getCategory();
         this.getBrand();
@@ -542,6 +573,8 @@
     },
 
     created() {
+      this.initProfileSearch();
+
       this.doSearch()
       this.getCategory();
       this.getBrand();

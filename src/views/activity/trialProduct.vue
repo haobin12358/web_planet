@@ -29,7 +29,7 @@
       <el-table-column type="index" width="55"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.tcmainpic" :key="scope.row.tcid"></table-cell-img>
+          <table-cell-img :src="[scope.row.tcmainpic]" :key="scope.row.tcid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="tctitle" label="商品名" width="280"></el-table-column>
@@ -71,7 +71,7 @@
             <el-button type="text"  @click="doEdit(scope.row)">编辑</el-button>
           </template>
           <template v-if="[20].includes(scope.row.tcstatus)">
-            <el-button type="text" class="warning-text"  @click="doCancel(scope.row)">撤销</el-button>
+            <el-button type="text" class="info-text"  @click="doCancel(scope.row)">撤销</el-button>
           </template>
           <template v-if="[-10,30].includes(scope.row.tcstatus)">
             <el-button  type="text" class="success-text" @click="doResubmit(scope.row)">重新提交</el-button>

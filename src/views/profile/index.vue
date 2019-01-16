@@ -1,17 +1,14 @@
 <template>
   <div class="container">
     <section class="profile-block profile-todos-block">
-      <section class="marquee-block">
-
-      </section>
       <block-title title="代办事项"></block-title>
       <div class="todo-line"></div>
 
       <ul class="todo-list">
-          <li class="todo-item" v-for="item in todos" :key="item.ptid" @click="gotoTodoPage(item)">
-            <span class="label">{{item.ptname}}</span>
-            <span class="num">{{item.approval_num}}</span>
-          </li>
+        <li class="todo-item" v-for="item in todos" :key="item.ptid" @click="gotoTodoPage(item)">
+          <span class="label">{{item.ptname}}</span>
+          <span class="num">{{item.approval_num}}</span>
+        </li>
       </ul>
     </section>
 
@@ -75,22 +72,21 @@
             </div>
           </div>
         </li>
-        <li class="click-cursor">
-          <div class="m-icon-price-box" @click="gotoOrderWithParam(4,'today')">
+        <li>
+          <div class="m-icon-price-box click-cursor" @click="gotoOrderWithParam(4,'today')">
             <img class="static-icon" src="/static/images/order-back.png" alt="">
             <div class="icon-price-box-main">
               <p class="label">退款订单数</p>
               <p class="m-order-price">{{todaySaleData.in_refund}}</p>
             </div>
           </div>
-          <p class="m-order-bottom" @click="gotoOrderWithParam(4,'yesterday')">
+          <p class="m-order-bottom click-cursor" @click="gotoOrderWithParam(4,'yesterday')">
             <span>昨日</span>
             <span>{{yesterdaySaleData.in_refund}}</span>
           </p>
         </li>
       </ul>
     </section>
-
 
 
     <!--<block-title title="订单趋势"></block-title>-->
@@ -185,6 +181,8 @@
       checkPermission,
 
       getDealingApproval() {
+        this.todos = [];
+
         this.$http.get(this.$api.get_dealing_approval, {
           params: {}
         }).then(
@@ -193,61 +191,121 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.todos = data;
+              this.todos = this.todos.concat(data);
             }
           }
-        )
+        );
+        this.$http.get(this.$api.get_all_order, {
+          params: {
+            omstatus: 10,
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.todos.push({
+                ptid: 'towaitdelivery',
+                ptname: '待发货订单',
+                approval_num: resData.total_count
+              });
+            }
+          }
+        );
+
+
       },
+
       gotoTodoPage(item) {
         switch (item.ptid) {
+          //  激活码和新代理全交由平台
           case 'toactivationcode':
             this.$router.push('/approval/activationCodeActi')
             break;
           case 'toagent':
             this.$router.push('/approval/agentAudit')
             break;
+
+          //  圈子
           case 'topublish':
-            this.$router.push('/approval/circleAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/circleAudit')
+            }else{
+              this.$router.push('/circle/circle')
+            }
             break;
 
+          //  4个活动
           case 'tofreshmanfirstproduct':
             if (this.$store.getters.roles[0] != 'supplizer') {
               this.$router.push('/approval/firstOrderActiAudit')
-            }else {
+            } else {
               this.$router.push('/activity/firstOrder')
             }
             break;
           case 'toguessnum':
             if (this.$store.getters.roles[0] != 'supplizer') {
               this.$router.push('/approval/guessActiAudit')
-            }else {
+            } else {
               this.$router.push('/activity/guess')
             }
             break;
           case 'tomagicbox':
             if (this.$store.getters.roles[0] != 'supplizer') {
               this.$router.push('/approval/magicGiftBoxAudit')
-            }else {
+            } else {
               this.$router.push('/activity/magicGiftBox')
             }
             break;
           case 'totrialcommodity':
             if (this.$store.getters.roles[0] != 'supplizer') {
               this.$router.push('/approval/trialProductAudit')
-            }else {
+            } else {
               this.$router.push('/activity/trialProduct')
             }
             break;
 
           case 'toshelves':
-            this.$router.push('/approval/productAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/productAudit')
+            }else{
+              this.$router.push({
+                name: 'ProductIndex',
+                params: {
+                  prstatus: 'auditing'
+                }
+              })
+            }
             break;
           case 'toreturn':
             this.$router.push('/approval/returnProductAudit')
             break;
 
           case 'tocash':
-            this.$router.push('/approval/withdrawAudit')
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/withdrawAudit')
+            }else{
+              this.$router.push('/personSetting/withdraw')
+            }
+            break;
+          case 'tosettlenment':
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/supplizerBalanceApplyAudit')
+            }else{
+              this.$router.push('/personSetting/balance')
+            }
+            break;
+
+
+          //    自定义:发货订单,不在审批流内,合并显示
+          case 'towaitdelivery':
+            this.$router.push({
+              name: 'OrderIndex',
+              params: {
+                omstatus:10
+              }
+            })
             break;
         }
       },
@@ -334,7 +392,7 @@
   @import "../../styles/myIndex";
 
   .container {
-    .marquee-block{
+    .marquee-block {
       position: fixed;
       height: 100px;
       width: 100%;
@@ -361,7 +419,7 @@
           .sc(20px, white);
           padding: 20px 40px;
           box-sizing: border-box;
-          margin-right: 10px;
+          margin-right: 20px;
           background: #CB7E88;
           border-radius: 10px;
           .bs(10px, 5px, 10px);

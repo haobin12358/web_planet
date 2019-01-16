@@ -16,9 +16,8 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
-          <el-button icon="el-icon-setting" @click="showRetProdDlg">退货地址设置</el-button>
+          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -33,8 +32,7 @@
 
     <!--订单table-->
     <el-table ref="orderTable" :data="orderData" v-loading="loading" size="small" :default-expand-all="expandAll"
-              style="width: 100%;" @row-dblclick="expandRow" :cell-class-name="cellFunction"
-              :row-class-name="tableRowClassName">
+              @row-click="expandRow" :cell-class-name="cellFunction" :row-class-name="tableRowClassName">
       <el-table-column type="expand">
         <template slot-scope="props">
           <!--展开table-->
@@ -49,7 +47,8 @@
                   </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="退款金额" prop="order_refund_apply.oramount" width="120" align="center"></el-table-column>
+              <el-table-column label="退款金额" prop="order_refund_apply.oramount" width="120"
+                               align="center"></el-table-column>
               <el-table-column label="买家是否收到货" width="180" align="center">
                 <template slot-scope="scope">
                   <template v-if="scope.row.order_refund_apply">
@@ -76,8 +75,9 @@
                   </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="申请时间" width="110" prop="order_refund_apply.createtime" align="center"></el-table-column>
-              </el-table-column>
+              <el-table-column label="申请时间" width="110" prop="order_refund_apply.createtime"
+                               align="center"></el-table-column>
+            </el-table-column>
             <el-table-column prop="opisinora" align="center" label="退款中" width="120">
               <template slot-scope="scope">
                 {{scope.row.opisinora ? '是':'否'}}
@@ -85,11 +85,11 @@
             </el-table-column>
             <el-table-column prop="prmainpic" align="center" label="图片" width="180">
               <template slot-scope="scope">
-                <table-cell-img :src="scope.row.prmainpic" :key="scope.row.avid"></table-cell-img>
+                <table-cell-img :src="[scope.row.prmainpic]" :key="scope.row.avid"></table-cell-img>
               </template>
             </el-table-column>
             <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
-            <el-table-column label="规格" width="240">
+            <el-table-column label="规格" width="240" align="center">
               <template slot-scope="scope">
                 <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
               </template>
@@ -105,10 +105,10 @@
                   <el-button type="text" @click="gotoReturnOrderDetail(scope.row, props)">查看</el-button>
                   <template v-if="scope.row.order_refund_apply.orastatus == 0">
                     <el-button type="text" class="success-text" @click="doPass(scope.row, props)">
-                      审核通过
+                      同意
                     </el-button>
                     <el-button type="text" class="danger-text" @click="doNoPass(scope.row, props)">
-                      审核拒绝
+                      拒绝
                     </el-button>
                   </template>
                 </template>
@@ -119,6 +119,12 @@
       </el-table-column>
 
       <el-table-column prop="omno" align="center" label="订单号" width="280"></el-table-column>
+      <el-table-column v-if="checkPermission(['admin', 'super'])" prop="pbname" align="center" label="订单所属" width="120">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.prcreateid" type="success">供应商</el-tag>
+          <el-tag v-else>平台</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="pbname" align="center" label="品牌" width="180"></el-table-column>
       <el-table-column label="订单状态" width="120" align="center">
         <template slot-scope="scope">
@@ -209,7 +215,9 @@
       </el-pagination>
     </section>
 
-    <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址" :close-on-click-modal="false">
+
+    <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址" v-el-drag-dialog width="600px"
+               :close-on-click-modal="false">
       <el-form :model="passRefundForm" :rules="rules" ref="passRefundForm" label-position="left" label-width="120px">
         <el-form-item label="收货人" prop="orrecvname">
           <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvname"
@@ -226,27 +234,35 @@
       </el-form>
 
       <span slot="footer" class="dialog-footer">
+        <el-button v-permission="['supplizer']" type="info" @click="showAdresDlgVis = true">选择地址填充</el-button>
         <el-button @click="passRefundVisible = false">取 消</el-button>
         <el-button type="primary" @click="doPassRefundOrder">确 定</el-button>
       </span>
     </el-dialog>
+
+    <address-maintain :visible="showAdresDlgVis" @close="showAdresDlgVis = false"
+                      @choose="fillReturnProdForm"></address-maintain>
   </div>
 </template>
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import elDragDialog from 'src/directive/el-dragDialog'
+  import AddressMaintain from './components/addressMaintain'
+  import permission from 'src/directive/permission/index.js' // 权限判断指令
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   //  toreturn
   export default {
     name: 'ReturnProductAudit',
 
-    components: {TableCellImg},
+    components: {TableCellImg, AddressMaintain},
+
+    directives: {elDragDialog, permission},
 
     data() {
       return {
         repeat: true,
-
-
 
         //
         applyStatusOptions: [
@@ -256,7 +272,7 @@
           }, {
             label: '已同意',
             value: 10,
-          },{
+          }, {
             label: '已取消',
             value: -20,
           }, {
@@ -316,14 +332,17 @@
           orrecvaddress: [
             {required: true, message: '收货地址必填', trigger: 'blur'}
           ],
-
         },
+
+        showAdresDlgVis: false,
       }
     },
 
     computed: {},
 
     methods: {
+      checkPermission,
+
       doSearch() {
         this.currentPage = 1;
         this.setOrderList();
@@ -334,10 +353,6 @@
           orstatus: '',
         };
         this.setOrderList();
-      },
-
-      showRetProdDlg(){
-
       },
 
       changeSwitch() {
@@ -391,7 +406,9 @@
       },
 
       tableRowClassName({row, rowIndex}) {
-        if (row.ominrefund) {
+        let isOrderPartRefund = row.order_part.some(item => item.opisinora);
+
+        if (row.ominrefund || isOrderPartRefund) {
           return 'warning-row';
         }
 
@@ -436,7 +453,7 @@
 
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.orderData = data;
               this.total = resData.total_count;
@@ -496,7 +513,7 @@
           this.passRefundForm.oraid = row.order_refund_apply.oraid;
           this.passRefundForm.message = `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`;
         } else {
-          this.$confirm(`确认同意退货申请?`, '提示').then(
+          this.$confirm(`确认同意申请(将退回金额${row.order_refund_apply.oramount}元)?`, '提示').then(
             () => {
               this.$http.post(this.$api.agree_refund_apply, {
                 "oraid": row.order_refund_apply.oraid,
@@ -509,7 +526,7 @@
 
                     this.setOrderList();
                     this.$notify({
-                      title: '退货申请已同意',
+                      title: '退款申请已同意',
                       message: `订单号:${row.omno || props.row.omno + '-' + row.prtitle}`,
                       type: 'success'
                     });
@@ -519,6 +536,41 @@
             }
           )
         }
+      },
+
+      //  供应商获取默认的地址填充表单
+      fillFormIfSupplizer(){
+        if(this.$store.roles[0] == 'supplizer'){
+          this.$http.get(this.$api.get_all_address, {
+            params: {
+              page_num: this.currentPage,
+              page_size: 300,
+            }
+          }).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+
+                let defaultAdres = data.find(item => item.uadefault == 1)
+
+                if(defaultAdres){
+                  this.passRefundForm.orrecvname = defaultAdres.uaname
+                  this.passRefundForm.orrecvphone = defaultAdres.uaphone
+                  this.passRefundForm.orrecvaddress = defaultAdres.addressinfo
+                }
+              }
+            }
+          )
+        }
+      },
+      //  选用收货地址组件的地址
+      fillReturnProdForm(row) {
+        this.showAdresDlgVis = false;
+
+        this.passRefundForm.orrecvname = row.uaname
+        this.passRefundForm.orrecvphone = row.uaphone
+        this.passRefundForm.orrecvaddress = row.addressinfo
       },
 
       doPassRefundOrder() {
@@ -560,11 +612,22 @@
       },
 
       doNoPass(row, props) {
-        this.$confirm(`确认拒绝退货申请?`, '提示').then(
-          () => {
+        this.$prompt(`确认拒绝退货申请?`, '提示', {
+          inputPlaceholder: '拒绝理由',
+          inputValidator: value => {
+            if (!value) {
+              return '拒绝理由不能为空'
+            }
+            if (value.length > 100) {
+              return '拒绝理由文本过长(100)'
+            }
+          }
+        }).then(
+          prompt => {
             this.$http.post(this.$api.agree_refund_apply, {
               "oraid": row.order_refund_apply.oraid,
               "agree": false,
+              oracheckreason: prompt.value,
             }).then(
               res => {
                 if (res.data.status == 200) {

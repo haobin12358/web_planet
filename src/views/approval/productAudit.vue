@@ -18,7 +18,7 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column align="center" width="120" label="图片">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content ? scope.row.content.prmainpic : ''"
+            <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []"
                             :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
@@ -26,6 +26,17 @@
         <el-table-column align="center" prop="content.prprice" label="价格" width="120"></el-table-column>
         <el-table-column align="center" prop="content.brand.pbname" label="品牌" width="180"></el-table-column>
         <el-table-column align="center" prop="content.categorys" label="分类" width="240"></el-table-column>
+        <el-table-column align="center" label="sku" width="120">
+          <template slot-scope="scope">
+            <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
+          </template>
+        </el-table-column>
+        <el-table-column label="底部长图" width="340" align="center">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content ? scope.row.content.prdesc : []" out-width="300px"
+                            :key="scope.row.avid"></table-cell-img>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center" width="120">
@@ -78,12 +89,13 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import ProductSku from "src/views/product/components/productSku";
 
   //  toshelves
   export default {
     name: 'ProductAudit',
 
-    components: {TableCellImg},
+    components: {TableCellImg,ProductSku},
 
     data() {
       return {
@@ -161,6 +173,11 @@
         this.getList();
       },
 
+      cellFunction({row, column}) {
+        if ([ 'avlevel'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
       tagsType(status) {
         switch (status) {
           case -20:

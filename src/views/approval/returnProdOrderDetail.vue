@@ -96,7 +96,8 @@
             <span class="label">凭证:</span>
             <span class="value">
               <template v-if="order_refund_apply.oraddtionvoucher && order_refund_apply.oraddtionvoucher.length">
-                <img class="table-pic many" v-for="item in order_refund_apply.oraddtionvoucher" :src="item" v-lazy="item"
+                <img class="table-pic many" v-for="item in order_refund_apply.oraddtionvoucher" :src="item"
+                     v-lazy="item"
                      @click="handleVoucher(item)" alt="">
               </template>
               <span v-else>无</span>
@@ -104,15 +105,15 @@
           </p>
         </div>
 
-        <template v-if="!order_refund && order_refund_apply.orastatus == 0">
+        <template v-if="order_refund_apply.orastatus == 0">
           <el-button type="success" @click="doPass">同意</el-button>
           <el-button type="warning" @click="doNoPass">不同意</el-button>
         </template>
 
         <el-button style="margin-right: 10px;" type="primary" @click="doConfirmReceipt"
-                   v-if="order_refund && order_refund.orstatus == 10">确认收货(退货订单)
+                   v-if="order_refund.orstatus == 10">确认收货(退货订单)
         </el-button>
-        <template v-if="order_refund && order_refund.orstatus == 20">
+        <template v-if="order_refund.orstatus == 20">
           <el-button style="margin-right: 10px;" type="primary" @click="doConfirmBackMoney(true)">确认退款(退货订单)</el-button>
           <el-button style="margin-right: 10px;" type="danger" @click="doConfirmBackMoney(false)">拒绝退款(退货订单)</el-button>
         </template>
@@ -120,7 +121,7 @@
         <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
         <!--</el-button>-->
         <template v-if="order_refund_apply.orastate == 0">
-          <el-popover v-if="order_refund && order_refund.orlogisticdata&& order_refund.orlogisticdata.list"
+          <el-popover v-if="order_refund.orlogisticdata && order_refund.orlogisticdata.list"
                       placement="left" trigger="hover">
             <div style="padding: 20px">
               <el-steps direction="vertical" :active="order_refund.orlogisticdata.list.length">
@@ -130,7 +131,9 @@
             </div>
             <el-button slot="reference" icon="el-icon-search">查看退货物流信息</el-button>
           </el-popover>
-          <el-button v-else type="warning">退货物流信息:{{order_refund.orlogisticdata.msg}}</el-button>
+         <!-- <el-button v-else type="warning">退货物流信息:{{ order_refund.orlogisticdata ?
+            order_refund.orlogisticdata.msg: ''}}
+          </el-button>-->
         </template>
       </section>
     </section>
@@ -139,7 +142,7 @@
     <el-table :data="order.order_part" stripe style="width: 100%" :row-class-name="tableRowClassName">
       <el-table-column prop="prmainpic" align="center" label="图片" width="180">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.prmainpic]"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
@@ -423,18 +426,18 @@
 
               if (this.$route.query.opid) { //  订单商品
                 data.order_part = data.order_part.filter(item => item.opid == this.$route.query.opid)
-                this.order_refund_apply = data.order_part[0].order_refund_apply;
-                this.order_refund = data.order_part[0].order_refund;
+                this.order_refund_apply = data.order_part[0].order_refund_apply ? data.order_part[0].order_refund_apply : {};
+                this.order_refund = data.order_part[0].order_refund ? data.order_part[0].order_refund : {};
               } else {
-                this.order_refund_apply = data.order_refund_apply;
-                this.order_refund = data.order_refund;
+                this.order_refund_apply = data.order_refund_apply ? data.order_refund_apply :{}
+                this.order_refund = data.order_refund? data.order_refund :{}
               }
 
-              if (this.order_refund && this.order_refund.orlogisticdata && this.order_refund.orlogisticdata.list) {
+              if (this.order_refund.orlogisticdata && this.order_refund.orlogisticdata.list) {
                 this.order_refund.orlogisticdata.list = this.order_refund.orlogisticdata.list.reverse();
               }
 
-              if (this.order_refund && this.order_refund.orstatus) {
+              if (this.order_refund.orstatus) {
                 switch (this.order_refund.orstatus) {
                   case 0:
                     this.orderStep = 0;
@@ -523,7 +526,7 @@
               display: inline-block;
               width: 120px;
               margin-right: 10px;
-              margin-bottom:  10px;
+              margin-bottom: 10px;
             }
             .value {
               flex: 1;

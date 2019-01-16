@@ -38,10 +38,14 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       showClose: true,
     })
   }
-  // if(data.data.status == '404' && data.data.status_code == '405004'){
-  //   location.href = location.origin;
-  //   localStorage.setItem('token', '');
-  // }
+  if(data.data.status == '405' && data.data.status_code == '405007'){
+    location.href = location.origin;
+    localStorage.setItem('token', '');
+    Notification({
+      title: '登录信息已过期,请重新登录',
+      type: 'success'
+    });
+  }
 
   return data
 }, error => {

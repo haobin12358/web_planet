@@ -13,9 +13,11 @@
         <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
+
+
     </section>
 
-    <el-table :data="tableData" v-loading="loading" style="width: 100%">
+    <el-table :data="tableData" v-loading="loading" style="width: 100%" :cell-class-name="cellFunction">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -45,8 +47,11 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
-      <el-table-column align="center" prop="sulinkphone" label="手机号" width="280"></el-table-column>
-      <el-table-column align="center" prop="suaddress" label="地址" width="280"></el-table-column>
+      <el-table-column label="可提现余额" prop="uwbalance" align="center" width="100"></el-table-column>
+      <el-table-column label="余额" prop="uwcash" align="center" width="100"></el-table-column>
+      <el-table-column label="总销售额" prop="uwtotal" align="center" width="100"></el-table-column>
+      <el-table-column align="center" prop="sulinkphone" label="手机号" width="200"></el-table-column>
+      <el-table-column align="center" prop="suaddress" label="地址" width="200"></el-table-column>
       <el-table-column align="center" prop="sustatus" label="状态" width="180">
         <template slot-scope="scope">
           <el-tag  v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>
@@ -154,6 +159,12 @@
       },
       pageChange(page) {
         this.currentPage = page;
+      },
+
+      cellFunction({row, column}){
+        if (['uwtotal', 'uwbalance', 'uwcash'].includes(column.property)) {
+          return 'money-cell'
+        }
       },
 
       previewImg(url) {

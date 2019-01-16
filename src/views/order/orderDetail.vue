@@ -86,10 +86,11 @@
           </template>
 
           <el-form-item>
+            <!--TODO-->
+            <template v-if="showAction"></template>
             <el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>
-            <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货
-            </el-button>
-            <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover" >
+              <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货</el-button>
+             <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover" >
               <div style="padding: 20px">
                 <el-steps direction="vertical" :active="orderLogisticsList.length">
                   <el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"
@@ -107,7 +108,7 @@
     <el-table :data="order.order_part" size="small" stripe style="width: 100%" :row-class-name="tableRowClassName">
       <el-table-column prop="prmainpic" align="center" label="图片" width="180">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.prmainpic]"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column prop="prtitle" align="center" label=" 商品名" width="240" show-overflow-tooltip></el-table-column>
@@ -130,7 +131,7 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
-
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   const cancelSteps = [{
     title: '待支付',
@@ -197,9 +198,21 @@
       }
     },
 
-    computed: {},
+    computed: {
+      //  是供应商显示
+      showAction(){
+        if(this.checkPermission(['supplizer'])){
+          return true
+        }else{
+          if(this.order.prcreateid){
+            return false
+          }
+        }
+      }
+    },
 
     methods: {
+      checkPermission,
       tableRowClassName({row, rowIndex}){
         if(row.opisinora || this.order.ominrefund){
           return 'warning-row';

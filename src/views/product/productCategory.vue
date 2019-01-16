@@ -17,18 +17,18 @@
     <!--三级分类树表-->
     <tree-table :data="data" :columns="columns" v-loading="loading" :eval-func="func" :expand-all="expandAll"
                 border>
-      <el-table-column label="图片" align="center" width="220">
+      <el-table-column label="图片" align="center"  width="220">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pcpic" :key="scope.row.pcpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.pcpic]" :key="scope.row.pcpic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="顶部图片" align="center" >
+      <el-table-column label="顶部图片" align="center">
         <template slot-scope="scope">
-          <table-cell-img width="141px" :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
+          <table-cell-img width="141px" out-width="141px" :src="[scope.row.pctoppic]" :key="scope.row.pctoppic"></table-cell-img>
         </template>
       </el-table-column>
 
-      <el-table-column label="权重" align="center" :render-header="sortHeaderRender">
+      <el-table-column label="权重" align="center"  width="220" :render-header="sortHeaderRender">
         <template slot-scope="scope">
           <el-input v-model="scope.row.pcsort" maxlength="11" @keyup.native.enter="changeCaSort(scope.row)"
                   @focus="focusCell(scope)"  style="width: 160px;"></el-input>

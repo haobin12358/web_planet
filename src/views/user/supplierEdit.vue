@@ -4,7 +4,7 @@
       <el-col :span="16">
         <el-form :model="supplierForm" :rules="rules" ref="supplierForm" label-position="left" label-width="120px">
           <el-form-item label="供应商名称" prop="suname">
-            <el-input v-model.trim="supplierForm.suname" maxlength="100" ></el-input>
+            <el-input v-model.trim="supplierForm.suname" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="品牌" prop="pbids">
             <el-select
@@ -25,21 +25,27 @@
             </el-select>
           </el-form-item>
           <el-form-item label="联系人" prop="sulinkman">
-            <el-input v-model.trim="supplierForm.sulinkman" maxlength="100" ></el-input>
+            <el-input v-model.trim="supplierForm.sulinkman" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="联系电话" prop="sulinkphone">
-            <el-input v-model.trim="supplierForm.sulinkphone" maxlength="11" :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
+            <el-input v-model.trim="supplierForm.sulinkphone" maxlength="11"
+                      :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="suaddress">
-            <el-input v-model.trim="supplierForm.suaddress" maxlength="100" ></el-input>
+            <el-input v-model.trim="supplierForm.suaddress" maxlength="100"></el-input>
           </el-form-item>
 
           <template v-if="!this.supplierForm.suid">
             <el-form-item label="登录密码" prop="supassword">
-              <el-input v-model="supplierForm.supassword" maxlength="100" ></el-input>
+              <el-input v-model="supplierForm.supassword" maxlength="100"></el-input>
             </el-form-item>
           </template>
 
+          <el-form-item label="让利" prop="subaserate">
+            <el-input v-model="supplierForm.subaserate" maxlength="5">
+              <template slot="append">%</template>
+            </el-input>
+          </el-form-item>
 
           <el-form-item label="头像" prop="suheader">
             <el-upload
@@ -81,7 +87,7 @@
 
 
           <el-form-item label="银行" prop="subankname">
-            <el-input v-model.trim="supplierForm.subankname" maxlength="100" ></el-input>
+            <el-input v-model.trim="supplierForm.subankname" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="银行卡号" prop="subanksn">
             <el-input v-model.trim="supplierForm.subanksn" maxlength="100"></el-input>
@@ -105,6 +111,7 @@
 <script>
   import {getStore} from "src/utils/index";
 
+  const percentReg = /^100$|^(\d|[1-9]\d)(\.\d{0,2})*$/;   //  百分数(>=0, <=100, 至多两位小数)
   export default {
     name: "SupplierEdit",
 
@@ -112,6 +119,8 @@
 
     data() {
       return {
+        platformComRate: 0,
+
         brandOptions: [],
         supplierForm: {
           "suloginphone": "",
@@ -122,6 +131,8 @@
           "sulinkphone": "",
           "suaddress": "",
           pbids: [],
+
+          subaserate: '',   //  让利
 
           "suheader": "",
           "sucontract": [],
@@ -151,6 +162,10 @@
           ],
           suaddress: [
             {required: true, message: '联系地址必填', trigger: 'blur'},
+          ],
+          subaserate: [
+            {required: true, message: '供应商让利必填', trigger: 'blur'},
+            {pattern: percentReg, message: '请输入合理的百分数值(至多两位小数)', trigger: 'blur'},
           ],
 
           suheader: [
@@ -268,7 +283,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$router.push('/user/suppliers');
                       this.$notify({
@@ -313,21 +328,39 @@
 
         if (res.data.status == 200) {
           let resData = res.data,
-              data = res.data.data;
+            data = res.data.data;
 
           return data;
         }
+      },
+
+      //  获取平台让利的比例
+      getPlatformComRate() {
+        this.$http.get(this.$api.get_commision, {
+          params: {}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.platformComRate = data.levelcommision[3] ? data.levelcommision[3] : 0;
+              // this.commonSkuDev = data.levelcommision[3];
+            }
+          }
+        )
       },
     },
 
     async created() {
       let brandList = await this.getBrandList();
 
+
       if (this.$route.query.suid) {
         this.$message.info('当前是编辑状态');
 
         let data = await this.getSuDetail(this.$route.query.suid);
-        brandList =brandList.concat(data.pbs) ;
+        brandList = brandList.concat(data.pbs);
 
         this.brandOptions = brandList;
 
@@ -340,6 +373,7 @@
           "suaddress": data.suaddress,
           pbids: data.pbs.map(item => item.pbid),
 
+          subaserate: data.subaserate || 0,
           "suheader": data.suheader,
           "sucontract": data.sucontract,
 
@@ -355,6 +389,9 @@
       } else {
         this.$message.info('当前是新增状态');
         this.brandOptions = brandList;
+
+        // 仅新增时校验
+        // this.getPlatformComRate();
       }
     },
   }

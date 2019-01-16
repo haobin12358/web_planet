@@ -27,12 +27,12 @@
     <el-table v-loading="brandLoading" :data="brandTableData" height="600">
       <el-table-column label="品牌logo" align="center" prop="pblogo" width="160">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pblogo" :key="scope.row.pblogo"></table-cell-img>
+          <table-cell-img :src="[scope.row.pblogo]" :key="scope.row.pblogo"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌店铺图" align="center" prop="pbbackgroud" width="220">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pbbackgroud" width="113px" :key="scope.row.pbbackgroud"></table-cell-img>
+          <table-cell-img :src="[scope.row.pbbackgroud]" width="113px" out-width="113px" :key="scope.row.pbbackgroud"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌名称" align="center" prop="pbname" width="160"></el-table-column>

@@ -2,6 +2,7 @@
   <section class="block-title">
     <img src="/static/images/icon-title.png" alt="">
     <span>{{title}}</span>
+    <slot></slot>
   </section>
 </template>
 

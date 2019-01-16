@@ -115,7 +115,7 @@
 
         <!--属性table-->
         <!--排序分组 todo-->
-        <el-table :data="formData.skus" :fit="true" :header-cell-class-name="headerCellFunction"
+        <el-table :data="formData.skus" :header-cell-class-name="headerCellFunction"
                   empty-text="请在左上方添加商品规格后,再点右上方按钮添加一行,最后补全该表格" style="width: 100%">
           <el-table-column label="图片" prop="img" align="center" width="120">
             <template slot-scope="scope">
@@ -132,7 +132,6 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon small"></i>
 
                 <div slot="tip" class="el-upload__tip">
-
                 </div>
               </el-upload>
             </template>
@@ -162,7 +161,7 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="库存" prop="stock" align="center" width="120">
+          <el-table-column label="库存(%)" prop="stock" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skustock" maxlength="11"></el-input>
             </template>
@@ -286,6 +285,7 @@
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   const natureNumberReg = /^(\d*)$/;   //  自然数
+  const percentReg = /^100$|^(\d|[1-9]\d)(\.\d{0,2})*$/;   //  百分数(>=0, <=100, 至多两位小数)
 
   const upgradeItId = 'upgrade_product';
   export default {
@@ -441,21 +441,15 @@
       uploadUrl() {
         return this.$api.upload_file + getStore('token') + '&type=product'
       },
+      //  新增编辑开店大礼包时,标签不可见  showTag: false
       showTags() {
-        if (this.formData.prid) {
-          for (let i = 0; i < this.formData.items.length; i++) {
-            if (this.formData.items[i].itid == upgradeItId) {
-              return false
-            }
+        for (let i = 0; i < this.formData.items.length; i++) {
+          if (this.formData.items[i].itid == upgradeItId) {
+            return false
           }
-        } else {
-
         }
 
         return true
-      },
-      isBigBag() {
-        return this.$route.query.addBig == 'true' || !this.showTags
       },
     },
 
@@ -501,7 +495,7 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.brandOptions = data;
             }
@@ -582,14 +576,14 @@
         //  限制开店大礼包只有1个sku
         if (!this.formData.prattribute.length) {
           this.$message.warning('请先添加商品规格!');
-        } else if (this.formData.skus.length == 1 && this.isBigBag) {
+        } else if (this.formData.skus.length == 1 && !this.showTags) {
           this.$message.warning('开店大礼包最多只有一个商品属性!');
         } else {
           this.formData.skus.push({
             skupic: "",
             skusn: '',
             skuprice: this.formData.prprice || 0,
-            skudeviderate: this.platformComRate || 0,
+            skudeviderate: 0,
             skustock: 0,
             skuattritedetail: new Array(this.formData.prattribute.length),
           });
@@ -780,8 +774,8 @@
                   type: 'success'
                 });
                 this.dialogSkuSortVisible = false;
-              }else {
-                this.getPlatformComRate();
+              } else {
+                // this.getPlatformComRate();
               }
             }
           )
@@ -805,8 +799,8 @@
                 });
                 this.dialogSkuSortVisible = false;
                 this.reset();
-              }else {
-                this.getPlatformComRate();
+              } else {
+                // this.getPlatformComRate();
               }
             }
           )
@@ -853,10 +847,10 @@
               if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
                 detailTip += '-价格不符'
               }
-              if (!currentSku.skudeviderate || !moneyReg.test(currentSku.skudeviderate) ||
-                currentSku.skudeviderate < this.platformComRate || currentSku.skudeviderate >= 100) {
-                detailTip += `-让利不符(至少${this.platformComRate}%)`
+              if (!percentReg.test(currentSku.skudeviderate)) {
+                detailTip += `-让利不符(至多两位小数的百分数)`
               }
+
               if (currentSku.skustock === '' || !natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
@@ -904,7 +898,7 @@
       init() {
         this.setCategory();
         this.setBrand();
-        this.getPlatformComRate();
+        // this.getPlatformComRate();
 
         if (this.$route.query.prid) { //  编辑
           //  编辑更换的商品或之前是新增,数据替换
@@ -1000,6 +994,8 @@
         this.items = [];
         this.imagesUrl = [];
         this.prDescUrl = [];
+
+        // this.getPlatformComRate();
       },
     },
 

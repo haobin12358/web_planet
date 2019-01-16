@@ -124,6 +124,13 @@ export const asyncRouterMap = [
     meta: {title: '订单', icon: 'dingdan', roles: level1},
     children: [
       {
+        path: 'allOrder',
+        name: 'AllOrder',
+        component: () => import('src/views/order/allOrder'),
+        meta: {title: '所有订单', noCache: false, icon: 'yes', roles: level1}
+      },
+
+      {
         path: 'order',
         name: 'OrderIndex',
         component: () => import('src/views/order/index'),
@@ -261,7 +268,7 @@ export const asyncRouterMap = [
     path: '/approval',
     component: Layout,
     alwaysShow: true,
-    redirect: '/approval/withdraw',
+    redirect: '/approval/withdrawAudit',
     name: 'Approval',
     meta: {title: '审批', icon: 'shenpi', roles: level1},
     children: [
@@ -328,11 +335,13 @@ export const asyncRouterMap = [
         name: 'ActivationCodeActi',
         component: () => import('src/views/approval/activationCodeActi'),
         meta: {title: '激活码审批', icon: 'yes', noCache: true, roles: level2}
-      },{
-        path: 'balanceObjectionAudit',
-        name: 'BalanceObjectionAudit',
-        component: () => import('src/views/approval/balanceObjectionAudit'),
-        meta: {title: '结算异议审批', icon: 'yes', noCache: true, roles: level2}
+      },
+
+      {
+        path: 'supplizerBalanceApplyAudit',
+        name: 'SupplizerBalanceApplyAudit',
+        component: () => import('src/views/approval/supplizerBalanceApplyAudit'),
+        meta: {title: '供应商结算异常申请审批', icon: 'yes', noCache: true, roles: level2}
       },
     ]
   },
@@ -442,7 +451,7 @@ export const asyncRouterMap = [
         path: 'noticeMaintain',
         name: 'NoticeMaintain',
         component: () => import('src/views/setting/noticeMaintain'),
-        meta: {title: '通告', noCache: false, roles: level2},
+        meta: {title: '通告', icon: 'yes', noCache: false, roles: level2},
       },
     ]
   },
@@ -452,6 +461,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/personSetting/withdraw',
     alwaysShow: true,
+    // name: 'personSettingPa',
     meta: {title: '设置', icon: 'personSetting', roles: level0},
     children: [
       {

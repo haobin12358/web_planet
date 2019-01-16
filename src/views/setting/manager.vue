@@ -7,7 +7,7 @@
       <el-table-column label="编号" align="center" prop="adnum"></el-table-column>
       <el-table-column label="头像" align="center" prop="adheader" width="60">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.adheader" :key="scope.row.adheader"></table-cell-img>
+          <table-cell-img :src="[scope.row.adheader]" :key="scope.row.adheader"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="管理员昵称" align="center" prop="adname" show-overflow-tooltip></el-table-column>

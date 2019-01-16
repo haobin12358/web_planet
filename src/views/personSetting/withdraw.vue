@@ -2,25 +2,10 @@
   <div class="container">
     <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh" :close-on-click-modal="false"
                title="提现申请">
-      <block-title title="可用余额"></block-title>
-      <h1>￥10000</h1>
-      <block-title title="可用余额"></block-title>
-      <el-form :model="applyForm" :rules="formRules" ref="applyForm" size="medium" label-width="120px"
-               label-position="left">
+      <block-title title="提现表单"></block-title>
+      <el-form :model="applyForm" size="medium" label-width="120px" label-position="left">
         <el-form-item label="提现金额" prop="cncashnum">
           <el-input v-model.number="applyForm.cncashnum" maxlength="11"></el-input>
-        </el-form-item>
-        <el-form-item label="开户行" prop="cnbankname">
-          <el-input v-model.number="applyForm.cnbankname" maxlength="11"></el-input>
-        </el-form-item>
-        <el-form-item label="开户网点" prop="cnbankdetail">
-          <el-input v-model.number="applyForm.cnbankdetail" maxlength="11"></el-input>
-        </el-form-item>
-        <el-form-item label="户名" prop="cncardname">
-          <el-input v-model.number="applyForm.cncardname" maxlength="11"></el-input>
-        </el-form-item>
-        <el-form-item label="卡号" prop="cncardno">
-          <el-input v-model.number="applyForm.cncardno" maxlength="11"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -28,7 +13,12 @@
           <el-button type="primary" @click="doSaveApply">确 定</el-button>
         </span>
     </el-dialog>
-    <el-button type="primary" icon="el-icon-plus" style="margin-bottom: 20px;float: right;" @click="doNewApply">新增申请</el-button>
+
+
+    <section class="table-hd">
+      <span>可提余额:￥{{canUseBalance}}</span>
+      <el-button type="primary" icon="el-icon-plus" @click="doNewApply">新增申请</el-button>
+    </section>
 
     <el-table :data="tableData" v-loading="loading">
       <el-table-column label="提现金额" prop="cncashnum" align="center"></el-table-column>
@@ -76,28 +66,14 @@
         pageSize: 10,
         tableData: [],
 
+        canUseBalance: 0,
         applyForm: {
-          "cncashnum": "0",
-          "cncardno": "",
-          "cncardname": "",
-          "cnbankname": "",
-          "cnbankdetail": ""
+          "cncashnum": "0"
         },
         formRules: {
           "cncashnum": [
-            {required: true, message: '提现金额必填', trigger: 'blur'}
-          ],
-          "cncardno": [
-            {required: true, message: '卡号必填', trigger: 'blur'}
-          ],
-          "cncardname": [
-            {required: true, message: '户名必填', trigger: 'blur'}
-          ],
-          "cnbankname": [
-            {required: true, message: '开户行必填', trigger: 'blur'}
-          ],
-          "cnbankdetail": [
-            {required: true, message: '开户网点必填', trigger: 'blur'}
+            {required: true, message: '提现金额必填', trigger: 'blur'},
+
           ],
         },
       }
@@ -132,54 +108,88 @@
         this.getList();
       },
 
+      //  先进行开票信息校验
       doNewApply() {
-        this.dialogVisible = true;
-      },
-      doSaveApply() {
-        this.$refs.applyForm.validate(
-          valid => {
-            if (valid) {
-              this.$confirm(`确认提交提现申请(金额:${this.applyForm.cncashnum})?`,'提示').then(
-                ()=>{
-                  this.$http.post(this.$api.apply_cash,this.applyForm).then(
-                    res => {
-                      if (res.data.status == 200) {
-                        let resData = res.data,
-                            data = res.data.data;
+        this.$http.get(this.$api.get_supplizeraccount, {
+          params: {}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
 
-                        this.$notify({
-                          title: '提现申请提交成功',
-                          message: `金额:${this.applyForm.cncashnum}`,
-                          type: 'success'
-                        });
-                      }
-                    }
-                  )
+              let hasEmpty = false,
+                checkFields = ["sabankname", "sabankdetail", "sacardname", "sacardno", "saaddress", "sabankaccount", "sacompanyname", "saicidcode"]
+
+              if (data) {
+                for (let i in checkFields) {
+                  if (!data[checkFields[i]]) {
+                    hasEmpty = true
+                    break
+                  }
                 }
-              )
-            } else {
-              this.$message.warning('请根据校验信息完善表单!');
+              } else {
+                hasEmpty = true
+              }
+
+
+              if (hasEmpty) {
+                this.$confirm(`在商户信息页完善信息后才能提现, 是否前往?`, '提示').then(
+                  () => {
+                    this.$router.push('/personSetting/personSetting')
+                  }
+                )
+              } else {
+                this.dialogVisible = true;
+                this.$http.get(this.$api.get_supplizer, {}).then(
+                  res => {
+                    if (res.data.status == 200) {
+                      let resData = res.data,
+                        data = res.data.data;
+
+                      this.canUseBalance = data.uwcash;
+                    }
+                  }
+                )
+
+              }
             }
           }
-        );
+        )
+      },
+      doSaveApply() {
+        const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
+
+        console.log(moneyReg.test(this.applyForm.cncashnum), this.applyForm.cncashnum, this.canUseBalance);
+        if (moneyReg.test(this.applyForm.cncashnum) && this.applyForm.cncashnum <= this.canUseBalance) {
+          this.$confirm(`确认提交提现申请(金额:${this.applyForm.cncashnum})?`, '提示').then(
+            () => {
+              this.$http.post(this.$api.apply_cash, this.applyForm).then(
+                res => {
+                  if (res.data.status == 200) {
+                    let resData = res.data,
+                      data = res.data.data;
+
+                    this.dialogVisible = false
+                    this.getList();
+                    this.$notify({
+                      title: '提现申请提交成功',
+                      message: `金额:${this.applyForm.cncashnum}`,
+                      type: 'success'
+                    });
+                  }
+                }
+              )
+            }
+          )
+        } else {
+          this.$message.warning('请填写合理的金额');
+        }
       },
     },
 
     created() {
       this.getList();
-      this.$http.get(this.$api.get_supplizer, {
-        params: {}
-      }).then(
-        res => {
-          if (res.data.status == 200) {
-            let resData = res.data,
-              data = res.data.data;
-
-            this.applyForm.cnbankname = data.subankname
-            this.applyForm.cncardno = data.subanksn
-          }
-        }
-      )
     },
   }
 </script>
@@ -188,6 +198,10 @@
   @import "../../styles/myIndex";
 
   .container {
-
+    .table-hd{
+      .fj();
+      align-items: center;
+      margin-bottom: 20px;
+    }
   }
 </style>

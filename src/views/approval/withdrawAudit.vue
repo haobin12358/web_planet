@@ -14,7 +14,7 @@
       </el-form>
     </section>
 
-    <el-table :data="tableData" v-loading="loading">
+    <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
       <el-table-column label="审批内容" align="center">
         <el-table-column label="银行名" prop="content.cnbankname" align="center" width="180"></el-table-column>
         <el-table-column label="开户人" prop="content.cncardname" align="center"></el-table-column>
@@ -149,6 +149,11 @@
         this.getList();
       },
 
+      cellFunction({row, column}) {
+        if ([ 'avlevel'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
       tagsType(status) {
         switch (status) {
           case -20:

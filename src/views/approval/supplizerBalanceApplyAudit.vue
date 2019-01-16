@@ -2,57 +2,37 @@
   <div class="container">
     <section class="tool-bar">
       <el-form :inline="true" size="medium">
-        <el-form-item label="活动开始时间">
-          <el-col :span="11">
-            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
-                            placeholder="起始日期"
-                            style="width: 100%;"></el-date-picker>
-          </el-col>
-          <el-col class="middle-line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
-                            style="width: 100%;"></el-date-picker>
-          </el-col>
-        </el-form-item>
         <el-form-item label="审核状态">
           <el-select v-model="inlineForm.avstatus" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
     </section>
-    <el-table :data="tableData" v-loading="loading">
-      <el-table-column label="审批内容" align="center">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column align="center" width="120" label="图片">
-          <template slot-scope="scope">
-            <table-cell-img :src="[scope.row.content.tcmainpic]" :key="scope.row.avid"></table-cell-img>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="content.tctitle" label="商品名" width="280"></el-table-column>
-        <el-table-column align="center" prop="content.brand.pbname" label="品牌" width="180"></el-table-column>
-        <el-table-column align="center" prop="content.tcdeposit" label="押金/期限(天)" width="180">
-          <template slot-scope="scope">
-            {{scope.row.content.tcdeposit + ' / ' + scope.row.content.tcdeadline}}
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="content.tcstocks" label="库存" width="120"></el-table-column>
-        <el-table-column align="center" prop="content.tcsalesvalue" label="销量" width="120"></el-table-column>
-        <el-table-column align="center" prop="content.tcdeposit" label="活动时间(执行)" width="280">
-          <template slot-scope="scope" v-if="scope.row.content.agreestarttime">
-            {{scope.row.content.agreestarttime + ' - ' + scope.row.content.agreeendtime}}
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="content.tcdescription" label="商品描述" width="180"
-                         show-overflow-tooltip></el-table-column>
-      </el-table-column>
 
+    <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
+      <el-table-column label="审批内容" align="center">
+        <el-table-column align="center" width="140" label="结算月份">
+          <template slot-scope="scope">
+            {{getBalanceMonth(scope.row)}}
+          </template>
+        </el-table-column>
+        <el-table-column label="申请理由" prop="content.ssaabo" align="center" width="160"
+                         show-overflow-tooltip></el-table-column>
+        <el-table-column label="供应商" align="center">
+          <el-table-column label="待结算余额" prop="content.uwexpect" align="center" width="100"></el-table-column>
+          <el-table-column label="可提现余额" prop="content.uwbalance" align="center" width="100"></el-table-column>
+          <el-table-column label="余额" prop="content.uwcash" align="center" width="100"></el-table-column>
+          <el-table-column label="总销售额" prop="content.uwtotal" align="center" width="100"></el-table-column>
+        </el-table-column>
+
+      </el-table-column>
       <el-table-column label="发起人" align="center">
-        <el-table-column label="姓名" prop="start.adname" align="center">
+        <el-table-column label="姓名" prop="start.adname" align="center" width="120">
           <template slot-scope="scope">
             <span v-if="scope.row.start">
               {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname  }}
@@ -62,18 +42,18 @@
       </el-table-column>
       <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
       <el-table-column label="审批创建时间" prop="createtime" align="center" width="180"></el-table-column>
-      <el-table-column label="状态" prop="avlevel" align="center">
+      <el-table-column label="状态" prop="avlevel" align="center" width="120" fixed="right">
         <template slot-scope="scope">
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" fixed="right">
+      <el-table-column label="操作" align="center" width="220" fixed="right">
         <template slot-scope="scope">
           <template v-if="scope.row.avstatus == 0">
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
+          <el-popover v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
                       @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
@@ -86,6 +66,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <section class="table-bottom">
       <el-pagination
         background
@@ -104,25 +85,23 @@
 <script>
   import TableCellImg from "src/components/TableCellImg";
 
-  //  totrialcommodity
+  //  tosettlenment
   export default {
-    name: "TrialProductAudit",
+    name: "SupplizerBalanceApplyAudit",
 
     components: {TableCellImg},
 
     data() {
       return {
-        inlineForm: {
-          starttime: '',
-          endtime: '',
-          avstatus: 'wait_check',
-        },
         statusOption: {
           all: '全部',
           "agree": "已同意",
           "cancle": "已撤销",
           "reject": "已拒绝",
           "wait_check": "审核中"
+        },
+        inlineForm: {
+          avstatus: 'wait_check',
         },
 
         loading: false,
@@ -139,22 +118,11 @@
 
     methods: {
       doSearch() {
-        if(this.inlineForm.starttime && this.inlineForm.endtime){
-          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
-            let term = this.inlineForm.endtime;
-
-            this.inlineForm.endtime = this.inlineForm.starttime;
-            this.inlineForm.starttime = term;
-          }
-        }
-
         this.getList();
       },
       doReset() {
         this.inlineForm = {
-          starttime: '',
-          endtime: '',
-          avstatus: 'wait_check',
+          avstatus: '',
         };
         this.doSearch();
       },
@@ -167,22 +135,16 @@
             page_size: this.pageSize,
             page_num: this.currentPage,
 
-            ptid: 'totrialcommodity',
+            ptid: 'tosettlenment',
             ...this.inlineForm,
-
           }
         }).then(
           res => {
             this.loading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
-              for (let i = 0; i < data.length; i++) {
-                if(!data[i].content.product){
-                  data[i].content.product = {}
-                }
-              }
               this.tableData = data;
               this.total = resData.total_count;
             }
@@ -200,8 +162,15 @@
         this.getList();
       },
 
+      getBalanceMonth(row) {
+        if (row.content && row.content.createtime) {
+          let date = new Date(row.content.createtime)
+
+          return date.getFullYear() + '年' + (date.getMonth() + 1) + '月'
+        }
+      },
       cellFunction({row, column}) {
-        if ([ 'avlevel'].includes(column.property)) {
+        if (['content.uwexpect', 'content.uwbalance', 'content.uwcash', 'content.uwtotal', 'avlevel'].includes(column.property)) {
           return 'money-cell'
         }
       },
@@ -242,7 +211,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           }
@@ -276,7 +245,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           },
@@ -302,12 +271,12 @@
             )
           }
         )
-      }
+      },
     },
 
     created() {
       this.getList();
-    },
+    }
   }
 </script>
 
