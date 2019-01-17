@@ -2,22 +2,21 @@
   <div class="m-login">
     <!--<p>登录</p>-->
     <img class="m-login-logo" src="/static/images/logo.png" alt="">
-    <div  class="m-login-input" >
-      <input type="text" v-model="ustelphone" placeholder="请输入手机号码">
-      <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
-      <span class="m-code cancel" v-else>{{count}}秒后重新发送</span>
-    </div>
+    <!--<div  class="m-login-input" >
+    <input type="text" v-model="ustelphone" placeholder="请输入手机号码">
+    <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
+    <span class="m-code cancel" v-else>{{count}}秒后重新发送</span>
+  </div>
     <div type="text" class="m-login-input">
       <input type="text" v-model="identifyingcode" maxlength="6" placeholder="请输入验证码">
     </div>
-    <!--<p class="m-login-forget" @click="forgetClick">忘记密码？</p>-->
-    <div class="m-login-btn" @click="loginClick">登  录</div>
+    <div class="m-login-btn" @click="loginClick">登  录</div>-->
 
     <div class="m-wei-box" @click="login">
       <p >
         <span class="m-icon-wei"></span>
       </p>
-      <p class="m-ft-24">微信快速登录</p>
+      <p class="m-ft-28">微信快速登录</p>
     </div>
   </div>
 </template>
@@ -235,12 +234,12 @@
       background-color: @mainColor;
     }
     .m-wei-box{
-      margin-top: 158px;
+      margin: 300px 0 200px 0;
       color: #fff;
       .m-icon-wei{
         display: inline-block;
-        width: 90px;
-        height: 90px;
+        width: 110px;
+        height: 110px;
         background: url("/static/images/icon-wei.png") no-repeat;
         background-size: 100% 100%;
       }

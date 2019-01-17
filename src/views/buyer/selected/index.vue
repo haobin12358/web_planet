@@ -390,7 +390,7 @@
   width: 100%;
   overflow-x: hidden;
   .m-swipe{
-    padding: 0 33px;
+    /*padding: 0 33px;*/
     /*margin: auto;*/
   }
   .m-selected-label{

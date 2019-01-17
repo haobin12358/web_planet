@@ -360,7 +360,7 @@
       z-index: 2;
     }
     .m-swipe{
-      padding: 0 33px;
+      /*padding: 0 33px;*/
     }
     .m-circle-content {
       padding-top: 20px;
