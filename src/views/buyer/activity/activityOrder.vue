@@ -18,7 +18,7 @@
                 <span class="m-store-name">{{items.pbname}}</span>
                 <span class="m-icon-more"></span>
               </div>
-              <span class="m-red" v-if="items.omstatus != 35">{{items.omstatus_zh}}</span>
+              <span class="m-red" v-if="items.omstatus != 25">{{items.omstatus_zh}}</span>
               <span class="m-red" v-else>已完成</span>
             </div>
             <div class="m-order-product-ul">
@@ -46,12 +46,12 @@
               <ul class="m-order-btn-ul">
                 <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
                 <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20
-                || items.omstatus == 30 || items.omstatus == 35">查看物流</li>
+                || items.omstatus == 30 || items.omstatus == 25">查看物流</li>
                 <!--<li v-if=" items.omstatus == -40">删除订单</li>-->
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
                 <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
                 <li class="active" v-if="items.omstatus == 20" @click.stop="orderConfirm(items)">确认收货</li>
-                <li class="active" v-if="items.omstatus==35 && index != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
+                <li class="active" v-if="items.omstatus==25 && index != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
               </ul>
             </div>
           </div>
