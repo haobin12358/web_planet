@@ -90,6 +90,11 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       }else {
         // 避免code影响
         // router.push('/login');
+        // alert(location.href);
+        // alert(location.href.indexOf('code') < 0)
+        if(location.href.indexOf('code') < 0) {
+          localStorage.setItem('href', location.href);
+        }
         window.location.href = window.location.origin + '/#/login';
         localStorage.setItem('toLogin', 'toLogin');
         // 倒计时60秒*5再提醒一次

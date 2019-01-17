@@ -256,9 +256,9 @@
         const TIME_COUNT = 1;
         let count = TIME_COUNT;
         let time = setInterval(() => {
-          if (count > 0 && count <= TIME_COUNT) {
+          if(count > 0 && count <= TIME_COUNT) {
             count --;
-          } else {
+          }else {
             if(localStorage.getItem('share') && localStorage.getItem('url')) {
               let url = localStorage.getItem('url');
               if(localStorage.getItem('share') == 'mbjid') {
@@ -277,6 +277,21 @@
                 let params = url.split('?prid=')[1].split('&secret_usid')[0];
                 this.$router.push({ path: '/product/detail', query: { prid: params }})
               }
+            }
+            if(localStorage.getItem('href')) {
+              // 倒计时
+              const TIME_COUNT = 1;
+              let count = TIME_COUNT;
+              let time = setInterval(() => {
+                if(count > 0 && count <= TIME_COUNT) {
+                  count --;
+                  // alert(localStorage.getItem('href'));
+                  location.href = localStorage.getItem('href');
+                }else {
+                  localStorage.removeItem('href');
+                  clearInterval(time);
+                }
+              }, 500);
             }
             clearInterval(time);
           }
