@@ -22,9 +22,9 @@
                 </p>
                 <ul class="m-evaluate-img-ul">
                   <li>
-                    <div class="m-video-box" v-if="item.video.length > 0" v-on:click="playVideo()">
+                    <div class="m-video-box" v-if="item.video.length > 0" v-on:click="playVideo(index)">
                       <img v-if="item.video[0].oevthumbnail" :src="item.video[0].oevthumbnail" class="m-video-img" alt="">
-                      <video v-if="item.video[0].oevideo" :src="item.video[0].oevideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
+                      <video v-if="item.video[0].oevideo" :src="item.video[0].oevideo" :id="index" v-show="false">您的浏览器不支持 video 视频播放</video>
                       <span class="m-video-time" v-if="item.video[0].oeduration">{{item.video[0].oeduration}}</span>
                       <span class="m-icon-video"></span>
                     </div>
@@ -121,8 +121,8 @@
           })
         },
         // 播放视频
-        playVideo() {
-          let vdo = document.getElementById("videoPlay");
+        playVideo(index) {
+          let vdo = document.getElementById(index);
           vdo.play();
         },
         //滚动加载更多
