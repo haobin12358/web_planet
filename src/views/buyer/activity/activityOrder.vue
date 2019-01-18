@@ -51,7 +51,7 @@
                 <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
                 <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
                 <li class="active" v-if="items.omstatus == 20" @click.stop="orderConfirm(items)">确认收货</li>
-                <li class="active" v-if="items.omstatus==25 && index != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
+                <li class="active" v-if="items.omstatus==25 && indexTemp != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
               </ul>
             </div>
           </div>
@@ -80,7 +80,7 @@
           bottom_show: false,
           order_list: [],
           omfrom: 40,
-          index: 0
+          indexTemp: 0
         }
       },
       inject: ['reload'],
@@ -116,7 +116,7 @@
         },
         // 导航点击
         navClick(index) {
-          this.index = index;
+          this.indexTemp = index;
           localStorage.setItem('activityOrderNo', index);
           this.page_info.page_num = 1;
           this.total_count = 0;
