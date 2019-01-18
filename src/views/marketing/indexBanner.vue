@@ -4,14 +4,9 @@
       <el-button type="primary" icon="el-icon-plus" @click="bannerDialog = true">新增</el-button>
     </section>
     <el-table v-loading="bannerLoading" :data="bannerList" stripe>
-<!--      <el-table-column label="序号" align="center" prop="ibsort" width="180">
+      <el-table-column label="轮播图" align="center" prop="ibpic" width="180">
         <template slot-scope="scope">
-          <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.ibsort" @change="sortChange"></el-input>
-        </template>
-      </el-table-column>-->
-      <el-table-column label="轮播图" align="center" prop="ibpic">
-        <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.ibpic]" :key="scope.row.ibpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.ibpic]" :key="scope.row.ibpic" width="92px" out-width="92px"></table-cell-img>
         </template>
       </el-table-column>
       <!--<el-table-column label="对应商品" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>-->

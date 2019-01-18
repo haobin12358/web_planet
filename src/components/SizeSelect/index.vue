@@ -40,8 +40,12 @@ export default {
         })
       })
     }
-  }
+  },
 
+  created(){
+    //  初始化为medium
+    this.$ELEMENT.size = this.size
+  }
 }
 </script>
 

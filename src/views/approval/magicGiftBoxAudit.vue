@@ -64,7 +64,7 @@
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" fixed="right">
+      <el-table-column label="操作" align="center" width="220" fixed="right">
         <template slot-scope="scope">
           <template v-if="scope.row.avstatus == 0">
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>

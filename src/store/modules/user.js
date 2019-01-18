@@ -67,20 +67,6 @@ const user = {
               }
               setStore('User-Info', cookieUserInfo)
               commit('SET_USER_INFO', cookieUserInfo)
-              commit('SET_INTERVAL', setInterval(() => {
-                  authRefresh().then(
-                    res => {
-                      if (res.data.status == 200) {
-                        let resData = res.data,
-                          data = res.data.data;
-
-                        commit('SET_TOKEN', data);
-                      }
-                    }
-                  )
-                }
-                , 1000 * 60 * 5)
-              );
               resolve()
             } else {
               reject();
@@ -105,20 +91,6 @@ const user = {
               }
               setStore('User-Info', cookieUserInfo)
               commit('SET_USER_INFO', cookieUserInfo)
-              // commit('SET_INTERVAL', setInterval(() => {
-              //     authRefresh().then(
-              //       res => {
-              //         if (res.data.status == 200) {
-              //           let resData = res.data,
-              //             data = res.data.data;
-              //
-              //           commit('SET_TOKEN', data);
-              //         }
-              //       }
-              //     )
-              //   }
-              //   , 1000 * 60 * 5)
-              // );
               resolve()
             } else {
               reject();

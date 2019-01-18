@@ -62,11 +62,10 @@
           </template>
           <div class="m-content">
             <p>{{news_info.netext}}</p>
-            <div class="m-video-box" v-if="news_info.video">
+            <div class="m-video-box" v-if="news_info.video" @click="videoVisible = true">
               <div class="m-img-box">
                 <img :src="news_info.video.nvthumbnail" class="m-img">
               </div>
-              <video :src="news_info.video.nvvideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
               <span class="m-video-time">{{news_info.video.nvduration}}</span>
               <span class="m-icon-video"></span>
             </div>
@@ -97,6 +96,10 @@
         </div>
       </div>
     </el-dialog>
+
+    <el-dialog v-if="news_info.video" :visible.sync="videoVisible" title="圈子视频预览" width="500"  top="5vh">
+      <video ref="video" :src="news_info.video.nvvideo" :poster="news_info.video.nvthumbnail" controls width="375" height="375">您的浏览器不支持 video 视频播放</video>
+    </el-dialog>
   </div>
 </template>
 
@@ -113,7 +116,16 @@
         detailDialog: false,
         where: '',
         news_info: { author: {}, coupon: [], product: [] },
-        neid: ''
+        neid: '',
+
+        videoVisible: false,
+      }
+    },
+    watch:{
+      videoVisible(val){
+        if(!val){
+          this.$refs.video.pause();
+        }
       }
     },
     props: {
@@ -221,7 +233,7 @@
           position: absolute;
           bottom: 2px;
           right: 20px;
-          color: #fff;
+          color: #000;
         }
       }
       .m-img-box {
@@ -430,7 +442,7 @@
            position: absolute;
            bottom: -75px;
            right: 6.5px;
-           color: #fff;
+           color: #000;
          }
        }
        h3{

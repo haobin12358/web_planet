@@ -154,14 +154,14 @@
               <el-input v-model.number="scope.row.skuprice" maxlength="11"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="让利" prop="skudeviderate" align="center" width="160">
+          <el-table-column label="让利(%)" prop="skudeviderate" align="center" width="160">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skudeviderate" maxlength="11" style="width: 140px;">
                 <template slot="append">%</template>
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="库存(%)" prop="stock" align="center" width="120">
+          <el-table-column label="库存" prop="stock" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skustock" maxlength="11"></el-input>
             </template>

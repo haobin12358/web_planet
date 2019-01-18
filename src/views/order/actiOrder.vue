@@ -171,7 +171,7 @@
             value: '20',
           }, {
             label: '待评价',
-            value: '35',
+            value: '25',
           }, {
             label: '已完成',
             value: '30',

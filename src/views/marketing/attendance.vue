@@ -8,7 +8,7 @@
             <el-input v-model.number="formData.integral"></el-input>
           </el-form-item>
           <el-form-item label="规则说明" prop="rule">
-            <el-input v-model="formData.rule" type="textarea" maxlength="1000"></el-input>
+            <el-input v-model="formData.rule" type="textarea" autosize maxlength="1000"></el-input>
             <span class="form-item-end-tip">签到阶段奖励的规则说明无需在此编辑</span>
           </el-form-item>
           <el-form-item>
