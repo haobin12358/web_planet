@@ -45,7 +45,7 @@
           <el-popover
             v-if="scope.row.fmfarejectreson"
             placement="top-start" title="拒绝理由" width="200" trigger="click">
-            {{scope.row.fmarejectreason}}
+            {{scope.row.fmfarejectreson}}
             <el-tag slot="reference" :type="statusTagType(scope.row.fmfastatus)">{{scope.row.fmfastatus_zh}}</el-tag>
           </el-popover>
           <el-tag v-else :type="statusTagType(scope.row.fmfastatus)">{{scope.row.fmfastatus_zh}}</el-tag>
