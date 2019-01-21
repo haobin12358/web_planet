@@ -8,8 +8,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
     </section>
@@ -23,12 +23,19 @@
           </template>
         </el-table-column>
         <el-table-column align="center" prop="content.prtitle" label="商品名" width="280"></el-table-column>
+        <el-table-column align="center" prop="content.prdescription" label="商品描述" width="180" show-overflow-tooltip></el-table-column>
         <el-table-column align="center" prop="content.prprice" label="价格" width="120"></el-table-column>
         <el-table-column align="center" prop="content.brand.pbname" label="品牌" width="180"></el-table-column>
         <el-table-column align="center" prop="content.categorys" label="分类" width="240"></el-table-column>
         <el-table-column align="center" label="sku" width="120">
           <template slot-scope="scope">
             <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
+          </template>
+        </el-table-column>
+        <el-table-column label="轮播图" width="340" align="center">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content ? getImagesUrl(scope.row.content.images) : []" out-width="300px"
+                            :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="底部长图" width="340" align="center">
@@ -95,7 +102,7 @@
   export default {
     name: 'ProductAudit',
 
-    components: {TableCellImg,ProductSku},
+    components: {TableCellImg, ProductSku},
 
     data() {
       return {
@@ -174,8 +181,15 @@
       },
 
       cellFunction({row, column}) {
-        if ([ 'avlevel'].includes(column.property)) {
+        if (['avlevel'].includes(column.property)) {
           return 'money-cell'
+        }
+      },
+      getImagesUrl(imgs) {
+        if (imgs) {
+          return imgs.map(item => item.pipic)
+        } else {
+          return []
         }
       },
       tagsType(status) {

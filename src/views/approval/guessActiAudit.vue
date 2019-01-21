@@ -26,17 +26,21 @@
       </el-form>
     </section>
     <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
-      <el-table-column label="审批内容" align="center">
-        <el-table-column label="商品规格图片" align="center" prop="prdescription">
+      <el-table-column label="审批内容" align="center" >
+        <el-table-column label="商品规格图片" align="center" prop="prdescription"  width="120">
         <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.content.skupic]" :key="scope.row.avid"></table-cell-img>
+          <table-cell-img :src="[scope.row.content.product.skus[0].skupic]" :key="scope.row.avid"></table-cell-img>
         </template>
       </el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.product.pbname" width="120"></el-table-column>
+        <el-table-column label="品牌" align="center" prop="content.product.pbname" width="120">
+          <template slot-scope="scope">
+            {{scope.row.content.product.brand ? scope.row.content.product.brand.pbname : ''}}
+          </template>
+        </el-table-column>
         <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="120" show-overflow-tooltip></el-table-column>
         <el-table-column label="参与日期" align="center" prop="content.gnaastarttime" width="120"></el-table-column>
         <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
-        <el-table-column label="参与数量" align="center" prop="content.skustock" width="120"></el-table-column>
+        <el-table-column label="参与数量" align="center" prop="content.product.skus[0].skustock" width="120"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
