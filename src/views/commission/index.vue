@@ -10,7 +10,7 @@
             <el-input v-model.trim="searchForm.mobile" clearable></el-input>
           </el-form-item>
 
-          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
           <el-button icon="el-icon-refresh" @click="doReset" style="margin-bottom: 20px;">重置</el-button>
         </el-form>
         <el-button type="primary" icon="el-icon-setting" @click="gotoCommissionSetting">佣金设置</el-button>
@@ -99,13 +99,15 @@
 
     methods: {
       doSearch(){
+        this.currentPage = 1;
         this.getUserCommissionList();
       },
       doReset(){
         this.searchForm = {
           name: '',
           mobile: '',
-        }
+        };
+        this.doSearch();
       },
 
       getUserCommissionList(){
@@ -146,6 +148,7 @@
       showFansList(row){
         this.fansDlgVisible = true;
 
+        this.currentFansPage = 1;
         this.usid = row.usid;
         this.getFansList();
       },

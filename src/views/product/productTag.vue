@@ -4,11 +4,11 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="场景名">
-          <el-input v-model.trim="searchForm.kw" clearable></el-input>
+          <el-input v-model.trim="searchForm.kw" maxlength="100"  clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+          <el-button type="primary"  :loading="sceneLoading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="sceneLoading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddScene">新增</el-button>
@@ -17,28 +17,32 @@
     <el-table v-loading="sceneLoading" :data="sceneTableData">
       <el-table-column label="场景图片" align="center" prop="pspic" width="120">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pspic" :key="scope.row.pspic"></table-cell-img>
+          <table-cell-img :src="[scope.row.pspic]" :key="scope.row.pspic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
-      <el-table-column label="排序" align="center" sortable prop="pssort" >
+      <el-table-column label="权重" align="center" prop="pssort" :render-header="sortHeaderRender">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.pssort" @keyup.native.enter="changeSceneSort(scope.row)" style="width: 180px"></el-input>
+          <el-input v-model.number="scope.row.pssort" maxlength="11" @keyup.native.enter="changeSceneSort(scope.row)"
+                    @focus="focusCell(scope)"  style="width: 160px"></el-input>
+          <el-button type="text" v-if="scope.$index == focusedRowIndex" @click="changeSceneSort(scope.row)">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button type="text"  @click="doEditScene(scope.row)">编辑</el-button>
+          <el-button type="text" @click="doEditScene(scope.row)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="doDeleteScene(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--场景编辑dialog-->
-    <el-dialog :visible.sync="sceneDlgVisible" v-el-drag-dialog width="700px" top="10vh" :title="sceneForm.pbid ? '场景编辑': '场景新增'"
+    <el-dialog :visible.sync="sceneDlgVisible" v-el-drag-dialog width="700px" top="10vh"
+               :title="sceneForm.pbid ? '场景编辑': '场景新增'"
                :close-on-click-modal="false">
-      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left" label-width="100px">
+      <el-form :model="sceneForm" :rules="sceneRules" ref="sceneForm" size="medium" label-position="left"
+               label-width="100px">
         <el-form-item label="场景名称" prop="psname">
-          <el-input v-model.trim="sceneForm.psname"></el-input>
+          <el-input v-model.trim="sceneForm.psname" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="pspic">
           <el-upload
@@ -57,8 +61,8 @@
             </div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="排序" prop="pssort">
-          <el-input v-model.number="sceneForm.pssort"></el-input>
+        <el-form-item label="权重" prop="pssort">
+          <el-input v-model.number="sceneForm.pssort" maxlength="11"></el-input>
         </el-form-item>
 
       </el-form>
@@ -72,11 +76,11 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="标签名">
-          <el-input v-model.trim="itemSearchForm.kw" clearable></el-input>
+          <el-input v-model.trim="itemSearchForm.kw" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doItemReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="itemLoading" @click="doItemSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="itemLoading" @click="doItemReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -88,7 +92,8 @@
       <el-table-column label="描述" align="center" prop="itdesc" show-overflow-tooltip></el-table-column>
       <el-table-column label="所属场景" align="center" width="300">
         <template slot-scope="scope">
-          <el-tag v-for="item in scope.row.prscene" :key="item.psid" style="margin: 0 10px 2px 0;">{{item.psname}}</el-tag>
+          <el-tag v-for="item in scope.row.prscene" :key="item.psid" style="margin: 0 10px 2px 0;">{{item.psname}}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
@@ -101,9 +106,10 @@
     <!--商品标签编辑dialog-->
     <el-dialog :visible.sync="itemDlgVisible" v-el-drag-dialog width="700px" :title="itemForm.itid ? '标签编辑': '标签新增'"
                :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left" label-width="100px">
+      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-position="left"
+               label-width="100px">
         <el-form-item label="标签名" prop="itname">
-          <el-input v-model.trim="itemForm.itname"></el-input>
+          <el-input v-model.trim="itemForm.itname" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="关联场景" prop="psid">
           <el-select
@@ -122,7 +128,7 @@
         </el-form-item>
 
         <el-form-item label="标签描述" prop="itdesc">
-          <el-input v-model.trim="itemForm.itdesc" type="textarea"></el-input>
+          <el-input v-model.trim="itemForm.itdesc" maxlength="1000" type="textarea"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -138,7 +144,9 @@
   import {getStore, setStore} from "src/utils/index";
   import elDragDialog from 'src/directive/el-dragDialog'
 
-  const natureNumberReg = /^(\d*)$/;   //  自然数
+  const natureNumberReg = /^(\d+)$/;   //  自然数
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
+  const tenZhWordReg = /^[\u4e00-\u9fa5]{1,10}$/
   export default {
     name: 'ProductTag',
 
@@ -150,11 +158,12 @@
 
     data() {
       return {
-        searchForm:{
+        searchForm: {
           kw: '',
         },
         sceneLoading: false,
         sceneTableData: [],
+        focusedRowIndex: -1,
 
         sceneDlgVisible: false,
         sceneForm: {
@@ -171,8 +180,8 @@
             {required: true, message: '图片必传', trigger: 'change'}
           ],
           pssort: [
-            {required: true, message: '排序必填', trigger: 'blur'},
-            {pattern: natureNumberReg, message: '请输入合理的数字(>=0)', trigger: 'blur'},
+            {required: true, message: '权重必填', trigger: 'blur'},
+            {pattern: positiveNumberReg, message: '请输入合理的数字(>0)', trigger: 'blur'},
           ],
         },
 
@@ -187,6 +196,7 @@
         itemForm: {
           itid: '',
           itname: "",
+          itsort: "",
           psid: [],
           itdesc: "",
         },
@@ -197,8 +207,7 @@
           psid: [
             {required: true, message: '所属场景必选', trigger: 'change'}
           ],
-          itdesc: [
-          ],
+          itdesc: [],
         },
         psOptions: [],
       }
@@ -206,16 +215,16 @@
 
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=brand'
+        return this.$api.upload_file + getStore('token') + '&type=brand'
       },
     },
 
     methods: {
-      doItemSearch(){
+      doItemSearch() {
         this.setItemList();
       },
-      doItemReset(){
-        this.itemSearchForm = { kw: ''};
+      doItemReset() {
+        this.itemSearchForm = {kw: ''};
         this.doItemSearch();
       },
 
@@ -241,22 +250,21 @@
         )
       },
 
-      resetItemForm(){
+      resetItemForm() {
         this.itemForm = {
-          itid:'',
+          itid: '',
           psid: [],
           itname: "",
           itdesc: "",
+          itsort: "",
         };
         this.$http.get(this.$api.scene_list, {
-          params: {
-
-          }
+          params: {}
         }).then(
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                data = res.data.data;
+                  data = res.data.data;
 
               this.psOptions = data;
             }
@@ -276,10 +284,11 @@
           itname: row.itname,
           itdesc: row.itdesc,
           psid: [],
+          itsort: row.itsort,
         };
-        this.itemForm.psid  = row.prscene.map(item => item.psid);
+        this.itemForm.psid = row.prscene.map(item => item.psid);
       },
-      doSaveItem(){
+      doSaveItem() {
         this.$refs.itemForm.validate(
           valid => {
             if (valid) {
@@ -308,7 +317,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -330,10 +339,12 @@
       },
 
       doRemoveItem(row) {
-        this.$confirm(`确认删除标签(${row.itname})?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.update_items,{
+        this.$confirm(`确认删除标签(${row.itname})?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.update_items, {
               itid: row.itid,
+              itname: row.itname,
+              itsort: row.itsort,
               ittype: 0,
               isdelete: true
             }).then(
@@ -355,10 +366,10 @@
         )
       },
 
-      doSearch(){
+      doSearch() {
         this.setSceneList();
       },
-      doReset(){
+      doReset() {
         this.searchForm = {
           kw: ''
         };
@@ -376,7 +387,7 @@
             this.sceneLoading = false;
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               this.sceneTableData = data;
             }
@@ -384,38 +395,58 @@
         )
       },
 
-      changeSceneSort(row){
-        this.$http.post(this.$api.update_scene, row).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
+      changeSceneSort(row) {
+        if(positiveNumberReg.test(row.pssort)) {
+          this.$http.post(this.$api.update_scene, row).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
 
-              this.$notify({
-                title: `排序改动成功`,
-                message: `场景名称:${row.psname}`,
-                type: 'success'
-              });
-              this.init();
+                this.$notify({
+                  title: `权重改动成功`,
+                  message: `场景名称:${row.psname}`,
+                  type: 'success'
+                });
+                this.init();
+                this.focusedRowIndex = -1;
+              }
             }
-          }
-        );
+          );
+        }else {
+          this.$message.warning('请输入合理权重值');
+        }
+      },
+      focusCell(scope){
+        this.focusedRowIndex = scope.$index;
       },
 
-      resetSceneForm(){
-          this.sceneForm = {
-            psid: '',
-            psname: '',
-            pspic: '',
-            pssort: 1,
-          };
+      resetSceneForm() {
+        this.sceneForm = {
+          psid: '',
+          psname: '',
+          pspic: '',
+          pssort: 1,
+        };
       },
-      doAddScene(){
+      doAddScene() {
         this.resetSceneForm();
 
         this.sceneDlgVisible = true;
       },
-      doEditScene(row){
+      doEditScene(row) {
         this.resetSceneForm();
 
         this.sceneDlgVisible = true;
@@ -426,7 +457,7 @@
           pssort: row.pssort,
         }
       },
-      doSaveScene(){
+      doSaveScene() {
         this.$refs.sceneForm.validate(
           valid => {
             if (valid) {
@@ -437,7 +468,7 @@
                   res => {
                     if (res.data.status == 200) {
                       let resData = res.data,
-                          data = res.data.data;
+                        data = res.data.data;
 
                       this.$notify({
                         title: `${type}成功`,
@@ -468,16 +499,16 @@
                 );
               }
 
-            }else{
+            } else {
               this.$message.warning('请根据校验信息完善表单!');
             }
           }
         )
       },
 
-      doDeleteScene(row){
+      doDeleteScene(row) {
         this.$confirm(`确认删除场景(${row.psname})?`).then(
-          ()=>{
+          () => {
             this.$http.post(this.$api.update_scene, {
               psid: row.psid,
               isdelete: true
@@ -514,7 +545,7 @@
         return isLt15M;
       },
 
-      init(){
+      init() {
         this.setItemList();
         this.setSceneList();
       }

@@ -9,16 +9,21 @@
 @dangerColor: #F56C6C;
 @infoColor: #909399;
 
-.success-text{
+@inrefundRowBg: #fde7cb;
+
+.success-text {
   color: @successColor;
 }
-.warning-text{
+
+.warning-text {
   color: @warningColor;
 }
-.danger-text{
+
+.danger-text {
   color: @dangerColor;
 }
-.info-text{
+
+.info-text {
   color: @infoColor;
 }
 
@@ -26,9 +31,11 @@
   width: @width;
   height: @height;
 }
-.fz(@size){
+
+.fz(@size) {
   font-size: @size;
 }
+
 .sc(@size, @color) {
   font-size: @size;
   color: @color;
@@ -55,23 +62,28 @@
   box-shadow: 0 @thick @dim rgba(0, 0, 0, .16);
 }
 
-.bdb(@color: @borderColor){
+.bdb(@color: @borderColor) {
   border-bottom: 1px solid @color;
 }
 
-.middle-line{
+.middle-line {
   font-size: large;
   text-align: center;
   font-weight: bold;
 }
 
-.table-pic{
+.table-pic {
   width: 50px;
   height: 50px;
   border: 1px solid black;
+  margin-right: 10px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
-.upload-tip{
+.upload-tip {
   color: #909399;
   font-size: 16px;
 }
@@ -81,6 +93,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader-icon {
   border: 1px dashed #d9d9d9;
   font-size: 28px;
@@ -91,7 +104,7 @@
   text-align: center;
   border-radius: 6px;
 
-  &.small{
+  &.small {
     .wl(78px, 78px);
     line-height: 78px;
   }
@@ -100,79 +113,101 @@
     border-color: #409EFF;
   }
 }
+
 .avatar {
   width: 178px;
   height: 178px;
   display: block;
   border: 1px solid black;
 
-  &.small{
+  &.small {
     .wl(100px, 100px);
   }
 }
 
-.money-cell{
-  color: @moneyColor!important;
+.money-cell {
+  color: @moneyColor !important;
 }
 
-.separator{
+.separator {
   display: inline-block;
-  .wl(3px,100%);
+  .wl(3px, 100%);
   margin: 0 20px;
 }
 
-.form-item-end-tip{
+.form-item-end-tip {
   margin-left: 20px;
   .sc(12px, @999);
   cursor: pointer;
 }
 
-.tool-bar{
+.tool-bar {
   padding: 20px 20px 0 20px;
   border: 1px dotted grey;
   border-radius: 10px;
   margin-bottom: 10px;
 
-  &.space-between{
+  &.space-between {
     .fj();
     align-items: flex-start;
+
+    &.center{
+      align-items: center;;
+    }
   }
 
-  &.end{
+  &.end {
     align-items: flex-end;
 
   }
 }
 
-.table-bottom{
+.table-bottom {
   margin-top: 20px;
   .fj(center);
 }
 
-.tool-tip-wrap{
+.tool-tip-wrap {
   padding: 20px;
   border: 1px dotted grey;
   border-radius: 10px;
   margin-bottom: 20px;
 }
 
-
 .tl {
   text-align: left;
 }
+
 .tc {
   text-align: center;
 }
+
 .tr {
   text-align: right;
 }
 
 .el-table .warning-row {
-  background:oldlace;
+  background: @inrefundRowBg;
 }
 
-.el-table .warning-header-cell{
-  color:@warningColor;
+.el-table .warning-header-cell {
+  color: @warningColor;
+
 }
 
+//  像可以点的样子
+.click-cursor{
+  cursor: pointer;
+}
 
+.table-header-tip{
+  li{
+    text-align: center;
+  }
+}
+
+.hidden-ellipsis{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}

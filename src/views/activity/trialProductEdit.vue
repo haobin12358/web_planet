@@ -32,20 +32,20 @@
           <!--<block-title title="基本信息"></block-title>-->
 
           <el-form-item  label="商品名称" prop="tctitle">
-            <el-input v-model.trim="formData.tctitle"></el-input>
+            <el-input v-model.trim="formData.tctitle" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="商品描述" prop="tcdescription">
-            <el-input v-model.trim="formData.tcdescription"></el-input>
+            <el-input v-model.trim="formData.tcdescription" type="textarea" maxlength="1000"></el-input>
           </el-form-item>
-          <el-form-item label="运费" prop="tcfreight">
-            <el-input v-model.number="formData.tcfreight" style="width: 200px;"></el-input>
-          </el-form-item>
+          <!--<el-form-item label="运费" prop="tcfreight">-->
+            <!--<el-input v-model.number="formData.tcfreight" maxlength="11" style="width: 200px;"></el-input>-->
+          <!--</el-form-item>-->
 
           <el-form-item id="2" label="押金" prop="tcdeposit">
-            <el-input v-model.number="formData.tcdeposit" style="width: 200px;"></el-input>
+            <el-input v-model.number="formData.tcdeposit" maxlength="11" style="width: 200px;"></el-input>
           </el-form-item>
           <el-form-item label="押金期限(天)" prop="tcdeadline">
-            <el-input v-model.number="formData.tcdeadline" style="width: 200px;"></el-input>
+            <el-input v-model.number="formData.tcdeadline" maxlength="11" style="width: 200px;"></el-input>
           </el-form-item>
           <el-form-item label="申请的活动期间" required>
             <el-col :span="11">
@@ -63,7 +63,7 @@
             </el-col>
           </el-form-item>
           <el-form-item label="备注(商品列表说明)" prop="tcremarks">
-            <el-input v-model.number="formData.tcremarks"></el-input>
+            <el-input v-model="formData.tcremarks" type="textarea" maxlength="1000"></el-input>
           </el-form-item>
 
           <el-form-item label="商品规格" required>
@@ -77,13 +77,13 @@
                 </el-tag>
 
                 <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                          @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
+                          maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false" placeholder="例如:颜色,尺码">
                 </el-input>
                 <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
                             placement="right">
                   <el-button class="button-new-tag" size="small" @click="showInput">+ 添加商品规格</el-button>
                 </el-tooltip>
-                <div class="tag-tip">双击修改,不能重名</div>
+                <div class="tag-tip">双击修改,不能重名,回车保存</div>
               </section>
 
               <!--添加属性table行-->
@@ -119,12 +119,12 @@
               <el-table-column :label="item" v-for="(item,index) in formData.tcattribute" :key="index"
                                align="center">
                 <template slot-scope="scope">
-                  <el-input v-model.trim="scope.row.skuattritedetail[index]"></el-input>
+                  <el-input maxlength="100" v-model.trim="scope.row.skuattritedetail[index]"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="库存" prop="stock" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model.number="scope.row.skustock"></el-input>
+                  <el-input v-model.number="scope.row.skustock"  maxlength="11" ></el-input>
                 </template>
               </el-table-column>
 
@@ -194,7 +194,7 @@
               :before-upload="beforeImgsUpload"
               :on-remove="handletcdescRemove"
               :http-request="uploadtcdesc"
-              :limit="5"
+              :limit="20"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">
@@ -246,7 +246,7 @@
   const canZeroMoneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
-  const natureNumberReg = /^(\d*)$/;   //  自然数
+  const natureNumberReg = /^(\d+)$/;   //  自然数
 
   export default {
     name: "TrialProductEdit",
@@ -465,7 +465,6 @@
 
         let index = this.formData.tcattribute.indexOf(tag);
 
-        // this.$set()
         this.formData.tcattribute.splice(index, 1, prompt.value);
       },
       handleClose(tag) {
@@ -561,7 +560,14 @@
           this.$message.error('上传图片大小不能超过 15MB!');
         }
 
-        return isLt15M;
+        const legalImgArr = ['jpg','jpeg','png','gif'],
+              isInLeagaArr = legalImgArr.includes(file.type.split('/')[1])
+
+        if(!isInLeagaArr){
+          this.$message.error(file.name+' 不允许格式 '+legalImgArr.join(','));
+        }
+
+        return isLt15M && isInLeagaArr;
       },
       handleImagesRemove(file, fileList) {
         this.imagesUrl = this.imagesUrl.filter(
@@ -719,7 +725,7 @@
               if (!currentSku.skupic) {
                 detailTip += '-图片未传'
               }
-              if (!currentSku.skustock || !positiveNumberReg.test(currentSku.skustock)) {
+              if (!natureNumberReg.test(currentSku.skustock)) {
                 detailTip += '-库存不符'
               }
 
@@ -731,11 +737,11 @@
               }
 
               if (detailTip) {
-                return `第${i + 1}行信息不全!` + detailTip;
+                return `商品规格的第${i + 1}行信息不全` + detailTip;
               } else {
-                return
               }
             }
+            return
           } else {
             return '至少需要有一行商品属性'
           }

@@ -1,78 +1,323 @@
 <template>
   <div class="container">
-    <el-form :model="formData" :rules="rules" ref="circleFormRef" label-position="left"
-             label-width="100px" style="width: 600px;">
-      <el-form-item label="活动封面图" prop="mainpic">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadUrl"
-          :show-file-list="false"
-          accept="image/*"
-          :on-success="handleMainPicSuccess"
-          :before-upload="beforeImgUpload">
-          <img v-if="formData.mainpic" v-lazy="formData.mainpic" class="avatar circle-avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
-          <div slot="tip" class="el-upload__tip">
-            建议为750 * 360，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
-          </div>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="活动规则" prop="prlineprice">
-        <el-input style="width: 400px; margin: 0 20px 20px 0" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
-                  v-for="i in [0, 1, 2]" :key="i" v-model="activityRule[i]">
-          <template slot="prepend">序号{{i + 1}}</template>
-          <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}</template>
-        </el-input>
-      </el-form-item>
-
-      <el-form-item label="持续时间:">
-        <el-date-picker v-model="formData.time" type="datetimerange" start-placeholder="开始日期"
-                        range-separator="至" end-placeholder="结束日期"></el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        选择商品
-        <el-button type="primary">保 存</el-button>
-      </el-form-item>
-    </el-form>
+    <block-title title="申请列表"></block-title>
+    <section class="tool-bar space-between">
+      <el-form :inline="true" size="medium">
+        <el-form-item label="活动开始时间">
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.starttime"
+                            placeholder="起始日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col class="middle-line" :span="2">-</el-col>
+          <el-col :span="11">
+            <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="inlineForm.endtime" placeholder="结束日期"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="审核状态">
+          <el-select v-model="inlineForm.gnaastatus" @change="doSearch">
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search"  :loading="guessLoading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="guessLoading" @click="doReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <section class="action-wrap">
+        <el-button type="primary" icon="el-icon-plus" @click="addGuess">申请</el-button>
+      </section>
+    </section>
+    <get-sku @chooseGuessSku="chooseGuessSku" ref="guess" where="guess"></get-sku>
+    <el-table v-loading="guessLoading" :data="guessList" stripe size="mini" :span-method="objectSpanMethod">
+      <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
+      <el-table-column label="商品规格图片" align="center" prop="prdescription">
+        <template slot-scope="scope">
+          <table-cell-img :src="[scope.row.skupic]" :key="scope.row.gnaaid"></table-cell-img>
+        </template>
+      </el-table-column>
+      <el-table-column label="品牌" align="center" prop="pbname"></el-table-column>
+      <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
+      <el-table-column label="参与日期" align="center" prop="gnaastarttime"></el-table-column>
+      <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
+      <el-table-column label="参与数量" align="center" prop="skustock" :render-header="stockHeaderRender"></el-table-column>
+      <el-table-column label="申请状态" align="center" prop="gnaastatus_zh">
+        <template slot-scope="scope">
+          <el-popover
+            v-if="scope.row.gnaarejectreason"
+            placement="top-start" title="拒绝理由" width="200" trigger="click">
+            {{scope.row.gnaarejectreason}}
+            <el-tag slot="reference" :type="statusTagType(scope.row.gnaastatus)">{{scope.row.gnaastatus_zh}}</el-tag>
+          </el-popover>
+          <el-tag v-else :type="statusTagType(scope.row.gnaastatus)">{{scope.row.gnaastatus_zh}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="100" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">编辑</el-button>
+          <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.gnaastatus == 0">撤销</el-button>
+          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">删除</el-button>
+          <el-button type="text" class="danger-text" @click="shelvesGuess(scope)" v-if="scope.row.gnaastatus == 10">下架</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
+                   :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="sizeChange" @current-change="pageChange"></el-pagination>
   </div>
 </template>
 
 <script>
-  import { getStore } from "src/utils/index";
+  import getSku from './components/getsku'
+  import TableCellImg from "src/components/TableCellImg"
 
   export default {
     name: "Guess",
     data() {
       return {
-        formData: {
-          mainpic: '',
-          time: '',
+        inlineForm: {
+          starttime: '',
+          endtime: '',
+          gnaastatus: 'all',
         },
-        rules: {
+        statusOption: {
+          'all': '全部',
+          "agree": "已同意",
+          "cancle": "已撤销",
+          "reject": "已拒绝",
+          "wait_check": "审核中"
+        },
+        guessLoading: false,
+        guessList: [],
+        page_size: 10,
+        page_num: 1,
+        total: 1,
+        scope: {},             // 暂存scope
 
-        },
-        activityRule: []
+        spanArr: [],
+        groupCount: 1,
       }
     },
-    components: {},
-    computed: {
-      // 上传图片
-      uploadUrl() {
-        return this.$api.upload_file + getStore('token') + '&type=activity'
-      }
+    components: { getSku, TableCellImg },
+    mounted() {
+      this.getGuess();        // 获取自己的猜数字奖品申请列表
     },
     methods: {
-      // 封面图上传
-      handleMainPicSuccess(res, file) {
-        this.formData.mainpic = res.data;
-      },
-      // 上传前限制要小于15M
-      beforeImgUpload(file) {
-        const isLt15M = file.size / 1024 / 1024 < 15;
-        if (!isLt15M) {
-          this.$message.error('上传图片大小不能超过 15MB!');
+      // 顶部查询
+      doSearch(v) {
+        if(v !== 1 && this.page_num !== 1) {
+          this.page_num = 1;
         }
-        return isLt15M;
+        if(this.inlineForm.starttime && this.inlineForm.endtime){
+          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+            let term = this.inlineForm.endtime;
+
+            this.inlineForm.endtime = this.inlineForm.starttime;
+            this.inlineForm.starttime = term;
+          }
+        }
+        this.getGuess();
+      },
+      // 重置
+      doReset() {
+        this.inlineForm = {
+          starttime: '',
+          endtime: '',
+          gnaastatus: 'all',
+        };
+        this.page_num = 1;
+        this.doSearch();
+      },
+      // 申请添加竞猜奖品-按钮
+      addGuess() {
+        this.$refs.guess.isEdit = false;
+        this.$refs.guess.productDialog = true
+      },
+      // 申请添加竞猜奖品
+      chooseGuessSku(sku, isEdit) {
+        if(isEdit) {
+          sku.gnaaid = this.scope.row.gnaaid;
+          this.$http.post(this.$api.guess_num_update_apply, sku).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '编辑成功',
+                message: res.data.message,
+                type: 'success'
+              });
+              this.getGuess();
+              this.$refs.guess.productDialog = false;
+              this.$refs.guess.skusDialog = false;
+            }
+          });
+        }else {
+          this.$http.post(this.$api.guess_num_apply_award, sku).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '申请成功',
+                message: res.data.message,
+                type: 'success'
+              });
+              this.getGuess();
+              this.$refs.guess.productDialog = false;
+              this.$refs.guess.skusDialog = false
+            }
+          });
+        }
+      },
+      sizeChange(val) {
+        this.page_num = 1;
+        this.page_size = val;
+        this.doSearch()
+      },
+      pageChange(val) {
+        this.page_num = val;
+        this.doSearch(1)
+      },
+      // 获取自己的猜数字奖品申请列表
+      getGuess() {
+        this.guessLoading = true;
+        this.$http.get(this.$api.guess_num_list, {
+          noLoading: true,
+          params: {
+            page_num: this.page_num,
+            page_size: this.page_size,
+            ...this.inlineForm
+          }}).then(res => {
+          if (res.data.status == 200) {
+            this.getSpanArr(res.data.data);
+            for (let i = 0; i < this.spanArr.length; i++) {
+              if(this.spanArr[i]>0){
+                res.data.data[i].groupCount = this.groupCount;
+                this.groupCount ++;
+              }
+            }
+            this.guessList = res.data.data;
+            this.total = res.data.total_count;
+            this.guessLoading = false;
+          }
+        })
+      },
+      statusTagType(status) {
+        switch (status) {
+          case 0:
+            return 'primary';
+          case -10:
+            return 'danger'
+          case -20:
+            return 'warning'
+          case 10:
+            return 'success'
+        }
+      },
+
+      getSpanArr(data) {
+        this.spanArr = [];
+        this.pos = 0;
+
+        for (let i = 0; i < data.length; i++) {
+          if (i === 0) {
+            this.spanArr.push(1);
+            this.pos = 0
+          } else {
+            // 判断当前元素与上一个元素是否相同
+            if (data[i].osid === data[i - 1].osid) {
+              this.spanArr[this.pos] += 1;
+              this.spanArr.push(0);
+            } else {
+              this.spanArr.push(1);
+              this.pos = i;
+            }
+          }
+        }
+      },
+      objectSpanMethod({row, column, rowIndex, columnIndex}) {
+        if (columnIndex === 0) {
+          const _row = this.spanArr[rowIndex];
+          const _col = _row > 0 ? 1 : 0;
+          return {
+            rowspan: _row,
+            colspan: _col
+          }
+        }
+      },
+      stockHeaderRender(h, {column}) {
+        return (
+          <el-tooltip class="tooltip" placement="top">
+            <ul class="table-header-tip" slot="content">
+              <li>同一次申请多个日期的活动商品会被分成多个单日活动去审批,</li>
+              <li>同一次申请的算同一批,每批的库存是共用的,合并的单元格表示为同一批</li>
+            </ul>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
+
+      // 编辑我的申请
+      editGuess(scope) {
+        this.scope = scope;
+        // this.$refs.guess.productDialog = true;
+        scope.row.where = 'guess';
+        this.$refs.guess.chooseProduct(scope);
+      },
+      // 撤销我的申请
+      delGuess(scope) {
+        this.$confirm('此操作将撤销该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.guess_num_shelf_award, { gnaaid: scope.row.gnaaid }).then(res => {
+            if (res.data.status == 200) {
+              this.getGuess();
+              this.$notify({
+                title: '撤销成功',
+                message: '该申请已撤销成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => { });
+      },
+      // 删除我的申请
+      deleteGuess(scope) {
+        this.$confirm('此操作将删除该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.guess_num_delete, { gnaaid: scope.row.gnaaid }).then(res => {
+            if (res.data.status == 200) {
+              this.getGuess();
+              this.$notify({
+                title: '删除成功',
+                message: '该申请已删除成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => { });
+      },
+      // 下架
+      shelvesGuess(scope) {
+        this.$confirm('此操作将下架该申请，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.guess_num_shelves, {gnaaid: scope.row.gnaaid}).then(res => {
+            if (res.data.status == 200) {
+              this.getMagic();
+              this.$notify({
+                title: '下架成功',
+                message: '该申请已下架成功',
+                type: 'success'
+              });
+            }
+          })
+        }).catch(() => {});
       },
     }
   }
@@ -82,11 +327,8 @@
   @import "../../styles/myIndex";
 
   .container {
-    .date-pick-range {
-
-    }
-    .action-button {
-      padding: .1rem .2rem;
+    .page-box {
+      padding: 20px;
     }
   }
 </style>

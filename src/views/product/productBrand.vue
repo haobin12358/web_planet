@@ -4,7 +4,7 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="品牌名">
-          <el-input v-model.trim="searchForm.kw" clearable></el-input>
+          <el-input v-model.trim="searchForm.kw" maxlength="100"  clearable></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="searchForm.pbstatus" @change="doSearch">
@@ -17,8 +17,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="brandLoading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh"  :loading="brandLoading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -27,12 +27,12 @@
     <el-table v-loading="brandLoading" :data="brandTableData" height="600">
       <el-table-column label="品牌logo" align="center" prop="pblogo" width="160">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pblogo" :key="scope.row.pblogo"></table-cell-img>
+          <table-cell-img :src="[scope.row.pblogo]" :key="scope.row.pblogo"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌店铺图" align="center" prop="pbbackgroud" width="220">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pbbackgroud" width="113px" :key="scope.row.pbbackgroud"></table-cell-img>
+          <table-cell-img :src="[scope.row.pbbackgroud]" width="113px" out-width="113px" :key="scope.row.pbbackgroud"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌名称" align="center" prop="pbname" width="160"></el-table-column>
@@ -44,8 +44,8 @@
       </el-table-column>
       <el-table-column label="状态" width="100" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.pbstatus == 0">上架中</el-tag>
-          <el-tag v-if="scope.row.pbstatus == 1" type="danger">已下架</el-tag>
+          <el-tag v-if="scope.row.pbstatus == 0">已上架</el-tag>
+          <el-tag v-if="scope.row.pbstatus == 10" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
@@ -53,7 +53,7 @@
       <el-table-column label="操作" align="center" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditBrand(scope.row)">编辑</el-button>
-          <el-button type="text" v-if="scope.row.pbstatus == 0" class="warning-text" @click="doOffShelvesBrand(scope.row)">下架</el-button>
+          <el-button type="text" v-if="scope.row.pbstatus == 0" class="warning-text" @click="doOffShelvesBrand(scope.row, false)">下架</el-button>
           <el-button type="text" v-if="scope.row.pbstatus == 10" class="success-text" @click="doOffShelvesBrand(scope.row, true)">上架</el-button>
           <el-button type="text" class="danger-text" @click="doDeleteBrand(scope.row)">
             删除
@@ -78,7 +78,7 @@
     <el-dialog :visible.sync="brandDlgVisible" width="700px" top="10vh" v-el-drag-dialog
                :title="brandForm.pbid ? '品牌编辑': '品牌新增'"
                :close-on-click-modal="false">
-      <el-form :model="brandForm" :rules="brandRules" ref="brandForm" size="medium" label-width="120px">
+      <el-form :model="brandForm" :rules="brandRules" ref="brandForm" size="medium" label-width="120px" label-position="left">
         <el-form-item label="品牌logo" prop="pblogo">
           <el-upload
             class="avatar-uploader"
@@ -105,7 +105,7 @@
             :on-success="handlePbBackSuccess"
             :before-upload="beforePicUpload"
           >
-            <img v-if="brandForm.pbbackgroud" v-lazy="brandForm.pbbackgroud" class="avatar avatar-top">
+            <img v-if="brandForm.pbbackgroud" v-lazy="brandForm.pbbackgroud":key="brandForm.pbbackgroud" class="avatar avatar-top">
             <i v-else class="el-icon-plus avatar-uploader-icon avatar-uploader-icon-top"></i>
 
             <div slot="tip" class="el-upload__tip">
@@ -115,10 +115,10 @@
         </el-form-item>
 
         <el-form-item label="品牌名" prop="pbname">
-          <el-input v-model.trim="brandForm.pbname"></el-input>
+          <el-input v-model.trim="brandForm.pbname" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item label="品牌描述" prop="pbdesc">
-          <el-input v-model.trim="brandForm.pbdesc" type="textarea"></el-input>
+          <el-input v-model.trim="brandForm.pbdesc" maxlength="1000"  type="textarea"></el-input>
         </el-form-item>
         <el-form-item label="关联标签" prop="itids">
           <el-select
@@ -136,7 +136,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="官网">
-          <el-input v-model.trim="brandForm.pblinks"></el-input>
+          <el-input v-model.trim="brandForm.pblinks" maxlength="1000" ></el-input>
         </el-form-item>
       </el-form>
 
@@ -150,11 +150,11 @@
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
         <el-form-item label="标签名">
-          <el-input v-model.trim="itemSearchForm.kw" clearable></el-input>
+          <el-input v-model.trim="itemSearchForm.kw" maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="doItemSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="doItemReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search"  :loading="itemLoading" @click="doItemSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="itemLoading"  @click="doItemReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -174,12 +174,12 @@
 
     <el-dialog :visible.sync="itemDlgVisible" width="700px" v-el-drag-dialog :title="itemForm.itid ? '标签编辑': '标签新增'"
                :close-on-click-modal="false">
-      <el-form :model="itemForm" :rules="itemRules" ref="itemForm" size="medium" label-width="120px">
+      <el-form :model="itemForm" :rules="itemRules"  label-position="left"  ref="itemForm" size="medium" label-width="120px">
         <el-form-item label="标签名" prop="itname">
-          <el-input v-model.trim="itemForm.itname"></el-input>
+          <el-input v-model.trim="itemForm.itname" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="标签描述" prop="itdesc">
-          <el-input v-model.trim="itemForm.itdesc" type="textarea"></el-input>
+          <el-input v-model.trim="itemForm.itdesc" maxlength="1000" type="textarea"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -215,8 +215,10 @@
 
         itemDlgVisible: false,
         itemForm: {
+          itid: '',
           itname: "",
           itdesc: "",
+          itsort: "",
         },
         itemRules: {
           itname: [
@@ -231,7 +233,7 @@
             label: '全部',
           }, {
             value: 'upper',
-            label: '上架中',
+            label: '已上架',
           }, {
             value: 'off_shelves',
             label: '已下架',
@@ -317,17 +319,29 @@
           }
         )
       },
+      doResetItem(){
+        this.itemForm = {
+          itid: '',
+          itname: "",
+          itdesc: "",
+          itsort: "",
+        };
+      },
       doAddItem() {
-        console.log('doAddItem');
+        this.doResetItem();
         this.itemDlgVisible = true;
       },
       doEditItem(row) {
+        this.doResetItem();
         this.itemDlgVisible = true;
         this.itemForm = {
+          itid: row.itid,
           itname: row.itname,
           itdesc: row.itdesc,
+          itsort: '',
         };
       },
+
       doSaveItem() {
         this.$refs.itemForm.validate(
           valid => {
@@ -344,10 +358,10 @@
 
                       this.$notify({
                         title: `${type}成功`,
-                        message: `品牌名:${this.itemForm.pbname}`,
+                        message: `标签名:${this.itemForm.itname}`,
                         type: 'success'
                       });
-                      this.brandDlgVisible = false;
+                      this.itemDlgVisible = false;
                       this.init();
                     }
                   }
@@ -383,6 +397,8 @@
           () => {
             this.$http.post(this.$api.update_items, {
               itid: row.itid,
+              itname: row.itname,
+              itsort: row.itsort,
               ittype: 40,
               isdelete: true
             }).then(
@@ -405,6 +421,7 @@
       },
 
       doSearch() {
+        this.currentPage = 1;
         this.setBrandList();
       },
       doReset() {
@@ -517,11 +534,11 @@
       doOffShelvesBrand(row, up) {
         let type = up ? '上架' : '下架';
 
-        this.$confirm(`确认${type}品牌(${row.pbname})?`, '提示').then(
+        this.$confirm(`确认${type}品牌(${row.pbname})${up? '该品牌下的商品会一并下架':''}?`, '提示').then(
           () => {
             this.$http.post(this.$api.off_shelves_brand, {
               pbid: row.pbid,
-              up: up ? 'up': '',
+              pbstatus: up ? 'up': 'down',
             }).then(
               res => {
                 if (res.data.status == 200) {
@@ -541,7 +558,7 @@
         )
       },
       doDeleteBrand(row) {
-        this.$confirm(`确认删除品牌(${row.pbname})?`, '提示').then(
+        this.$confirm(`确认删除品牌(${row.pbname}),该品牌下的商品会一并删除?`, '提示').then(
           () => {
             this.$http.post(this.$api.delete_brand, {
               pbid: row.pbid

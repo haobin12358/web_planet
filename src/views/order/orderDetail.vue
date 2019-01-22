@@ -57,12 +57,12 @@
                  size="medium">
           <template v-if="order.omstatus == 0">
             <el-form-item label="新订单价格" prop="price">
-              <el-input v-model.number="actionForm.price"></el-input>
+              <el-input v-model.number="actionForm.price" maxlength="11"></el-input>
             </el-form-item>
           </template>
           <template v-else>
             <el-form-item prop="olcompany" label="快递公司">
-              <el-select v-model="actionForm.olcompany" :disabled="order.omstatus != 10" placeholder="请选择,可搜索"
+              <el-select v-model="actionForm.olcompany" placeholder="请选择,可搜索"
                          filterable>
                 <el-option-group
                   v-for="group in expressOptions"
@@ -79,16 +79,22 @@
             </el-form-item>
             <el-form-item prop="olexpressno" label="快递单号">
               <el-col :span="14">
-                <el-input v-model.trim="actionForm.olexpressno" :disabled="order.omstatus != 10"></el-input>
+                <el-input v-model.trim="actionForm.olexpressno" maxlength="100"></el-input>
+                <!--<el-input v-model.trim="actionForm.olexpressno" :disabled="order.omstatus != 10"></el-input>-->
               </el-col>
             </el-form-item>
           </template>
 
           <el-form-item>
-            <el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">修改订单价格</el-button>
-            <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货
+            <!--TODO-->
+            <template v-if="showAction"></template>
+            <el-button style="margin-right: 10px;" type="primary" @click="doEditOrderPrice" v-if="order.omstatus == 0">
+              修改订单价格
             </el-button>
-            <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover" >
+            <el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success"
+                       v-if="order.omstatus == 10">确定发货
+            </el-button>
+            <el-popover v-if="orderIsSend(order.omstatus)" placement="left" trigger="hover">
               <div style="padding: 20px">
                 <el-steps direction="vertical" :active="orderLogisticsList.length">
                   <el-step v-for="item in orderLogisticsList" :title="item.time" :key="item.time"
@@ -106,10 +112,10 @@
     <el-table :data="order.order_part" size="small" stripe style="width: 100%" :row-class-name="tableRowClassName">
       <el-table-column prop="prmainpic" align="center" label="图片" width="180">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.prmainpic]"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
+      <el-table-column prop="prtitle" align="center" label=" 商品名" width="240" show-overflow-tooltip></el-table-column>
       <el-table-column align="center" label="规格">
         <template slot-scope="scope">
           <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
@@ -129,7 +135,7 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
-
+  import checkPermission from 'src/utils/permission' // 权限判断函数
 
   const cancelSteps = [{
     title: '待支付',
@@ -150,10 +156,13 @@
       description: '已填写快递信息',
     }, {
       title: '待评价',
-      description: '等待买家评价',
+      description: '物流签收后7天将会自动收货',
+    }, {
+      title: '已评价',
+      description: '买家已评价',
     }, {
       title: '已完成',
-      description: '完成评价',
+      description: '签收后7天将会自动完成',
     },
   ];
 
@@ -196,23 +205,35 @@
       }
     },
 
-    computed: {},
+    computed: {
+      //  是供应商显示
+      showAction() {
+        if (this.checkPermission(['supplizer'])) {
+          return true
+        } else {
+          if (this.order.prcreateid) {
+            return false
+          }
+        }
+      }
+    },
 
     methods: {
-      tableRowClassName({row, rowIndex}){
-        if(row.opisinora || this.order.ominrefund){
+      checkPermission,
+      tableRowClassName({row, rowIndex}) {
+        if (row.opisinora || this.order.ominrefund) {
           return 'warning-row';
         }
 
         return ''
       },
-      getSkuCellText(detail, attribute ){
+      getSkuCellText(detail, attribute) {
         let rst = '';
 
         for (let i = 0; i < detail.length; i++) {
           rst += attribute[i] + ': ' + detail[i];
 
-          if(i+1 < detail.length){
+          if (i + 1 < detail.length) {
             rst += ', '
           }
         }
@@ -285,8 +306,8 @@
         )
       },
 
-      orderIsSend(omstatus){
-          return  [20, 35, 30].includes(Number(omstatus))
+      orderIsSend(omstatus) {
+        return [20, 25, 26, 30].includes(Number(omstatus))
       },
 
       init() {
@@ -317,18 +338,21 @@
                   case 20:
                     this.orderStep = 3;
                     break;
-                  case 35:
+                  case 25:
                     this.orderStep = 4;
                     break;
-                  case 30:
+                  case 26:
                     this.orderStep = 5;
+                    break;
+                  case 30:
+                    this.orderStep = 6;
                     break;
                   default:
                     break;
                 }
 
                 //  发货中的处理下actionForm和物流信息
-                if (this.orderIsSend(data.omstatus)){
+                if (this.orderIsSend(data.omstatus)) {
                   this.$http.get(this.$api.get_logistic, {
                     params: {
                       omid: this.order.omid
@@ -337,7 +361,7 @@
                     res => {
                       if (res.data.status == 200) {
                         let resData = res.data,
-                            data = res.data.data;
+                          data = res.data.data;
 
                         this.actionForm.olcompany = data.olcompany;
                         this.actionForm.olexpressno = data.olexpressno;

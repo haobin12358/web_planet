@@ -76,7 +76,9 @@
       getFormData() {
         this.$http.get(this.$api.act_code_get_rule).then(res => {
           if (res.data.status == 200) {
-            this.formData = res.data.data;
+            if(res.data.data) {
+              this.formData = res.data.data;
+            }
           }
         })
       },

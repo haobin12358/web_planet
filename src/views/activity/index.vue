@@ -1,20 +1,15 @@
 <template>
   <div class="activity-index">
     <el-table v-loading="activityLoading" :data="activityList" stripe>
-      <el-table-column label="序号" align="center" prop="acsort" width="180">
-        <template slot-scope="scope">
-          <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @change="sortChange"></el-input>
-        </template>
-      </el-table-column>
       <el-table-column label="活动封面图" align="center" prop="acbackground">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.acbackground" :key="scope.row.acbackground"></table-cell-img>
+          <table-cell-img :src="[scope.row.acbackground]" :key="scope.row.acbackground"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="活动名称" align="center" prop="acname"></el-table-column>
-      <el-table-column label="封面按钮文字" align="center" prop="acbutton"></el-table-column>
+      <el-table-column label="封面按钮文字" align="center" prop="acbutton" show-overflow-tooltip></el-table-column>
       <el-table-column label="活动类别" align="center" prop="actype_zh"></el-table-column>
-      <el-table-column label="商品数" align="center" prop="prcount">
+      <el-table-column label="商品数" align="center" prop="prcount" width="80">
         <template slot-scope="scope">
           <el-button type="text" @click="goDetail(scope.row)">{{scope.row.prcount}}</el-button>
         </template>
@@ -23,6 +18,12 @@
         <template slot-scope="scope">
           <el-switch v-model="scope.row.acshow" @change="showActivity(scope.row)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="权重" align="center" :render-header="sortHeaderRender">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model="scope.row.acsort" @keyup.native.enter="sortChange"></el-input>
+          <el-button type="text" v-if="index == scope.$index" @click="sortChange">保存</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -75,6 +76,13 @@
         <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '3'">
           <el-input v-model="formData.acdesc"></el-input>
         </el-form-item>
+        <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
+          <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="13" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
+                    v-for="i in [0, 1, 2]" :key="i" v-model="activityRule[i]">
+            <template slot="prepend">序号{{i + 1}}</template>
+            <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/13</template>
+          </el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="initActivityForm">取 消</el-button>
@@ -89,13 +97,14 @@
   import TableCellImg from "src/components/TableCellImg"
   import { getStore } from "src/utils/index"
 
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'ActivityIndex',
     data() {
       return {
         activityLoading: false,
         activityList: [],
-        index: '',                  // 暂存点击的是哪一行
+        index: '-1',                  // 暂存点击的是哪一行
         activityDialog: false,
         formData: {
           actype: '',
@@ -111,7 +120,8 @@
           acbackground: [{ required: true, message: '活动封面图必需', trigger: 'blur' }],
           acname: [{ required: true, message: '活动名称必填', trigger: 'blur' }],
           acbutton: [{ required: true, message: '封面按钮文字必填', trigger: 'blur' }],
-        }
+        },
+        activityRule: []
       }
     },
     directives: { elDragDialog },
@@ -200,11 +210,19 @@
           this.rules.actoppic = [{ required: true, message: '详情页顶部图必需', trigger: 'blur' }];
           this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
         }
+        this.activityRule = this.formData.acdesc.split('|');
       },
       // 编辑活动dialog的保存按钮
       saveActivity() {
         this.$refs.formData.validate(valid => {
           if(valid) {
+            if(this.formData.actype == '1') {
+              this.formData.acdesc = '';
+              for(let i in this.activityRule) {
+                this.formData.acdesc = this.formData.acdesc + '|' + this.activityRule[i]
+              }
+              this.formData.acdesc = this.formData.acdesc.slice(1, this.formData.acdesc.length);
+            }
             this.$http.post(this.$api.activity_update, this.formData).then(res => {
               if (res.data.status == 200) {
                 this.initActivityForm();   // 重置
@@ -222,27 +240,44 @@
           }
         })
       },
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
       // 记录点击的是哪一行
       indexDone(scope) {
         this.index = scope.$index;
       },
       // 改变活动序号
       sortChange(v) {
-        let params = {
-          actype: this.activityList[this.index].actype,
-          acshow: this.activityList[this.index].acshow,
-          acsort: this.activityList[this.index].acsort
-        };
-        this.$http.post(this.$api.activity_update, params).then(res => {
-          if (res.data.status == 200) {
-            this.$notify({
-              title: '保存成功',
-              message: `${this.activityList[this.index].acname}的序号已保存`,
-              type: 'success'
-            });
-            this.getActivity()          // 获取所有活动
-          }
-        });
+        if(positiveNumberReg.test(this.activityList[this.index].acsort)) {
+          let params = {
+            actype: this.activityList[this.index].actype,
+            acshow: this.activityList[this.index].acshow,
+            acsort: this.activityList[this.index].acsort
+          };
+          this.$http.post(this.$api.activity_update, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '保存成功',
+                message: `${this.activityList[this.index].acname}的序号已保存`,
+                type: 'success'
+              });
+              this.getActivity()          // 获取所有活动
+              this.index = -1;
+            }
+          });
+        }else{
+          this.$message.warning('请输入合理权重值');
+        }
       },
       // 重置
       initActivityForm() {

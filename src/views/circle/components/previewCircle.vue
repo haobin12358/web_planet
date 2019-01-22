@@ -62,11 +62,10 @@
           </template>
           <div class="m-content">
             <p>{{news_info.netext}}</p>
-            <div class="m-video-box" v-if="news_info.video">
+            <div class="m-video-box" v-if="news_info.video" @click="videoVisible = true">
               <div class="m-img-box">
                 <img :src="news_info.video.nvthumbnail" class="m-img">
               </div>
-              <video :src="news_info.video.nvvideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
               <span class="m-video-time">{{news_info.video.nvduration}}</span>
               <span class="m-icon-video"></span>
             </div>
@@ -97,6 +96,10 @@
         </div>
       </div>
     </el-dialog>
+
+    <el-dialog v-if="news_info.video" :visible.sync="videoVisible" title="圈子视频预览" width="500"  top="5vh">
+      <video ref="video" :src="news_info.video.nvvideo" :poster="news_info.video.nvthumbnail" controls width="375" height="375">您的浏览器不支持 video 视频播放</video>
+    </el-dialog>
   </div>
 </template>
 
@@ -113,7 +116,16 @@
         detailDialog: false,
         where: '',
         news_info: { author: {}, coupon: [], product: [] },
-        neid: ''
+        neid: '',
+
+        videoVisible: false,
+      }
+    },
+    watch:{
+      videoVisible(val){
+        if(!val){
+          this.$refs.video.pause();
+        }
       }
     },
     props: {
@@ -146,6 +158,13 @@
         this.$http.get(this.$api.get_news_content, { params:{ neid: this.neid }}).then(res => {
           if(res.data.status == 200){
             this.news_info = res.data.data;
+            // 显示内容精简
+            for(let i in this.news_info.coupon) {
+              if(this.news_info.coupon[i].cosubtration.toString().length > 4) {
+                this.news_info.coupon[i].cosubtration = 999
+              }
+              this.news_info.coupon[i].codiscount = this.news_info.coupon[i].codiscount.toString().slice(0, 3)
+            }
             this.detailDialog = true;
           }
         })
@@ -214,7 +233,7 @@
           position: absolute;
           bottom: 2px;
           right: 20px;
-          color: #fff;
+          color: #000;
         }
       }
       .m-img-box {
@@ -234,8 +253,15 @@
         }
       }
       .m-text{
+        width: 340px;
         text-align: left;
         padding: 5px 11px;
+        /*text-indent: 2em;*/
+        overflow: hidden; // 超出的文本隐藏
+        text-overflow: ellipsis;    // 溢出用省略号显示
+        display: -webkit-box; // 将对象作为弹性伸缩盒子模型显示。
+        -webkit-box-orient: vertical; // 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+        -webkit-line-clamp: 2; // 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
       }
 
       .m-video-like{
@@ -416,7 +442,7 @@
            position: absolute;
            bottom: -75px;
            right: 6.5px;
-           color: #fff;
+           color: #000;
          }
        }
        h3{
@@ -490,7 +516,7 @@
     }
   }
   .m-box {
-    margin: -50px 0 60px 0;
+    margin: -50px 0 60px -5px;
     .m-item {
       text-align: left;
       .m-box-title {

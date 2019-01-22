@@ -8,8 +8,8 @@
                        v-model="searchForm.pcid" @change="doSearch">
           </el-cascader>
         </el-form-item>
-        <el-button type="primary" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        <el-button type="primary"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
 
       <el-button type="primary" icon="el-icon-plus" @click="doAdd">新增</el-button>
@@ -17,33 +17,38 @@
     <!--三级分类树表-->
     <tree-table :data="data" :columns="columns" v-loading="loading" :eval-func="func" :expand-all="expandAll"
                 border>
-      <el-table-column label="图片" align="center">
+      <el-table-column label="图片" align="center"  width="220">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pcpic" :key="scope.row.pcpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.pcpic]" :key="scope.row.pcpic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="顶部图片" align="center">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.pctoppic" :key="scope.row.pctoppic"></table-cell-img>
+          <table-cell-img width="141px" out-width="141px" :src="[scope.row.pctoppic]" :key="scope.row.pctoppic"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="排序" align="center" width="150" prop="pcsort">
+
+      <el-table-column label="权重" align="center"  width="220" :render-header="sortHeaderRender">
         <template slot-scope="scope">
-          <el-input v-model.number="scope.row.pcsort" @keyup.native.enter="changeCaSort(scope.row)" ></el-input>
+          <el-input v-model="scope.row.pcsort" maxlength="11" @keyup.native.enter="changeCaSort(scope.row)"
+                  @focus="focusCell(scope)"  style="width: 160px;"></el-input>
+          <el-button type="text" v-if="scope.$index == focusedRowIndex" @click="changeCaSort(scope.row)">保存</el-button>
         </template>
       </el-table-column>
+
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="doEdit(scope.row)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="doRemove(scope.row)">删除</el-button>
         </template>
       </el-table-column>
+
     </tree-table>
 
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="dialogVisible" width="700px" top="5vh" :close-on-click-modal="false"
                :title="categroyForm.pcid?'分类编辑':'分类新增'">
-      <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium" label-width="120px">
+      <el-form :model="categroyForm" :rules="rules" ref="categroyForm" size="medium"  label-position="left" label-width="120px">
         <el-form-item label="所属分类" prop="parentpcid">
           <el-cascader :options="options" :props="cascaderProps" filterable :clearable="true" :change-on-select="true"
                        v-model="selectParentPcId" @change="selectParentPcIdChange" placeholder="添加一级分类时为空"
@@ -52,13 +57,13 @@
           <span class="form-item-end-tip">例:新增第三级分类,请选第二级分类</span>
         </el-form-item>
         <el-form-item label="分类名" prop="pcname">
-          <el-input v-model="categroyForm.pcname"></el-input>
+          <el-input v-model="categroyForm.pcname" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="描述" prop="pcdesc">
-          <el-input v-model="categroyForm.pcdesc"></el-input>
+          <el-input v-model="categroyForm.pcdesc" maxlength="1000" ></el-input>
         </el-form-item>
-        <el-form-item label="排序" prop="pcsort">
-          <el-input v-model.number="categroyForm.pcsort" style="width: 200px;"></el-input>
+        <el-form-item label="权重" prop="pcsort">
+          <el-input v-model.number="categroyForm.pcsort" maxlength="11" style="width: 200px;"></el-input>
         </el-form-item>
 
         <el-form-item label="图片" prop="pcpic">
@@ -79,7 +84,7 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item label="一级分类顶部图片" prop="pctoppic">
+        <el-form-item label="一级分类顶部图片" prop="pctoppic" align="left">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -115,7 +120,8 @@
   import {beforePicUpload} from "src/utils/validate";
   import {getStore, setStore} from "src/utils/index";
 
-  const natureNumberReg = /^(\d*)$/;   //  自然数
+  const natureNumberReg = /^(\d+)$/;   //  自然数
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'ProductCategory',
 
@@ -163,7 +169,7 @@
 
         func: treeToArray,
         loading: false,
-        expandAll: true,
+        expandAll: false,
         data: {},
         columns: [
           {
@@ -172,6 +178,7 @@
             width: 200
           },
         ],
+        focusedRowIndex: -1,
         // args: [null, null, 'timeLine'],
 
         dialogVisible: false,
@@ -196,8 +203,8 @@
             {required: true, message: '描述必填', trigger: 'blur'}
           ],
           pcsort: [
-            {required: true, message: '排序必填', trigger: 'blur'},
-            {pattern: natureNumberReg, message: '请输入合理的数字(>=0)', trigger: 'blur'},
+            {required: true, message: '权重必填', trigger: 'blur'},
+            {pattern: positiveNumberReg, message: '请输入合理的数字(>0)', trigger: 'blur'},
           ],
           pcpic: [
             {required: true, message: '图片必传', trigger: 'change'}
@@ -300,32 +307,52 @@
         )
       },
 
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
+      focusCell(scope){
+        this.focusedRowIndex = scope.$index;
+      },
       changeCaSort(row){
-        let updateRow = {
-          pcid: row.pcid,
-          parentpcid: row.parentpcid,
-          pcname: row.pcname,
-          pcdesc: row.pcdesc,
-          pcsort: row.pcsort,
-          pcpic: row.pcpic,
-          pctoppic: row.pctoppic,
-        }
+        if(positiveNumberReg.test(row.pcsort)){
+          let updateRow = {
+            pcid: row.pcid,
+            parentpcid: row.parentpcid,
+            pcname: row.pcname,
+            pcdesc: row.pcdesc,
+            pcsort: row.pcsort,
+            pcpic: row.pcpic,
+            pctoppic: row.pctoppic,
+          }
 
-        this.$http.post(this.$api.update_category, updateRow).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
+          this.$http.post(this.$api.update_category, updateRow).then(
+            res => {
+              if (res.data.status == 200) {
+                let resData = res.data,
                   data = res.data.data;
 
-              this.$notify({
-                title: `排序改动成功`,
-                message: `分类名称:${row.pcname}`,
-                type: 'success'
-              });
-              this.setCategory();
+                this.$notify({
+                  title: `权重改动成功`,
+                  message: `分类名称:${row.pcname}`,
+                  type: 'success'
+                });
+                this.setCategory();
+                this.focusedRowIndex = -1;
+              }
             }
-          }
-        );
+          );
+        }else {
+          this.$message.warning('请输入合理权重值');
+        }
       },
 
       //  初始化表单

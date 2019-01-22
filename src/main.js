@@ -23,7 +23,7 @@ Vue.prototype.$http = axios;
 import api from 'src/api/api'
 Vue.prototype.$api = api;
 import VueLazyload from 'vue-lazyload'
-Vue.use(VueLazyload, {loading:"/src/icons/svg/spinner.svg" });
+Vue.use(VueLazyload, {loading:"/static/images/spinner.svg" });
 import BlockTitle from "src/components/BlockTitle";
 Vue.component('block-title',BlockTitle);
 

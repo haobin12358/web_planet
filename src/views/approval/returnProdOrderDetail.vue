@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <template v-if="order_refund_apply.oraproductstatus == 0">
+    <template v-if="order_refund_apply.orastate == 0">
       <block-title title="退货订单流程"></block-title>
       <section class="tool-tip-wrap detail-section">
         <el-steps :active="orderStep" align-center>
@@ -9,7 +9,6 @@
         </el-steps>
       </section>
     </template>
-
 
     <section class="detail-section row-two">
       <section class="order-detail">
@@ -66,8 +65,16 @@
         </h1>
         <div class="detail-item-wrap">
           <p class="detail-item">
+            <span class="label">买家申请退款时间:</span>
+            <span class="value">{{order_refund_apply.createtime}}</span>
+          </p>
+          <p class="detail-item">
             <span class="label">审核状态:</span>
             <span class="value">{{order_refund_apply.orastatus_zh}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">退款金额:</span>
+            <span class="value">￥{{order_refund_apply.oramount}}</span>
           </p>
           <p class="detail-item">
             <span class="label">买家是否收到货:</span>
@@ -79,31 +86,55 @@
           </p>
           <p class="detail-item">
             <span class="label">买家退款原因:</span>
-            <span class="value">{{order_refund_apply.orareason}}</span>
+            <span class="value">{{order_refund_apply.orareason || '无'}}</span>
           </p>
           <p class="detail-item">
             <span class="label">买家附加退款原因:</span>
-            <span class="value">{{order_refund_apply.oraaddtion}}</span>
+            <span class="value">{{order_refund_apply.oraaddtion || '无'}}</span>
+          </p>
+          <p class="detail-item">
+            <span class="label">凭证:</span>
+            <span class="value">
+              <template v-if="order_refund_apply.oraddtionvoucher && order_refund_apply.oraddtionvoucher.length">
+                <img class="table-pic many" v-for="item in order_refund_apply.oraddtionvoucher" :src="item"
+                     v-lazy="item"
+                     @click="handleVoucher(item)" alt="">
+              </template>
+              <span v-else>无</span>
+            </span>
           </p>
         </div>
 
-        <el-button style="margin-right: 10px;" type="primary" @click="doConfirmReceipt" v-if="order_refund.orstatus == 10">确认收货(退货订单)</el-button>
+        <template v-if="order_refund_apply.orastatus == 0">
+          <el-button type="success" @click="doPass">同意</el-button>
+          <el-button type="warning" @click="doNoPass">不同意</el-button>
+        </template>
+
+        <el-button style="margin-right: 10px;" type="primary" @click="doConfirmReceipt"
+                   v-if="order_refund.orstatus == 10">确认收货(退货订单)
+        </el-button>
         <template v-if="order_refund.orstatus == 20">
-          <el-button style="margin-right: 10px;" type="primary" @click="doConfirmBackMoney(true)" >确认退款(退货订单)</el-button>
-          <el-button style="margin-right: 10px;" type="danger" @click="doConfirmBackMoney(false)" >拒绝退款(退货订单)</el-button>
+          <el-button style="margin-right: 10px;" type="primary" @click="doConfirmBackMoney(true)">确认退款(退货订单)</el-button>
+          <el-button style="margin-right: 10px;" type="danger" @click="doConfirmBackMoney(false)">拒绝退款(退货订单)</el-button>
         </template>
 
         <!--<el-button style="margin-right: 10px;" type="primary" @click="doDeliver" icon="el-icon-success" v-if="order.omstatus == 10">确定发货-->
         <!--</el-button>-->
-        <el-popover v-if="order_refund && order_refund.orlogisticdata" placement="left" trigger="hover">
-          <div style="padding: 20px">
-            <el-steps direction="vertical" :active="order_refund.orlogisticdata.list.length">
-            <el-step v-for="item in order_refund.orlogisticdata.list" :title="item.time" :key="item.time"
-            :description="item.status"></el-step>
-            </el-steps>
-          </div>
-          <el-button slot="reference" icon="el-icon-search">查看物流</el-button>
-        </el-popover>
+        <template v-if="order_refund_apply.orastate == 0">
+          <el-popover v-if="order_refund.orlogisticdata && order_refund.orlogisticdata.list"
+                      placement="left" trigger="hover">
+            <div style="padding: 20px">
+              <el-steps direction="vertical" :active="order_refund.orlogisticdata.list.length">
+                <el-step v-for="item in order_refund.orlogisticdata.list" :title="item.time" :key="item.time"
+                         :description="item.status"></el-step>
+              </el-steps>
+            </div>
+            <el-button slot="reference" icon="el-icon-search">查看退货物流信息</el-button>
+          </el-popover>
+         <!-- <el-button v-else type="warning">退货物流信息:{{ order_refund.orlogisticdata ?
+            order_refund.orlogisticdata.msg: ''}}
+          </el-button>-->
+        </template>
       </section>
     </section>
 
@@ -111,7 +142,7 @@
     <el-table :data="order.order_part" stripe style="width: 100%" :row-class-name="tableRowClassName">
       <el-table-column prop="prmainpic" align="center" label="图片" width="180">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic"></table-cell-img>
+          <table-cell-img :src="[scope.row.prmainpic]"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column prop="prtitle" align="center" label=" 商品名" width="240"></el-table-column>
@@ -129,6 +160,33 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!--预览大图dialog-->
+    <el-dialog :visible.sync="dialogVisible" top="8vh">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
+
+    <el-dialog :visible.sync="passRefundVisible" title="卖家收货地址" :close-on-click-modal="false">
+      <el-form :model="passRefundForm" :rules="rules" ref="passRefundForm" label-position="left" label-width="120px">
+        <el-form-item label="收货人" prop="orrecvname">
+          <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvname"
+                    placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="orrecvphone">
+          <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvphone"
+                    placeholder=""></el-input>
+        </el-form-item>
+        <el-form-item label="收货地址" prop="orrecvaddress">
+          <el-input class="m-input-pwd" v-model.trim="passRefundForm.orrecvaddress"
+                    placeholder=""></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="passRefundVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doPassRefundOrder">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -148,10 +206,10 @@
             title: '等待买家发货',
             description: '',
           }, {
-            title: '等待卖家收货',
+            title: '等待收货',
             description: '',
           }, {
-            title: '卖家已收货',
+            title: '已收货',
             description: '',
           }, {
             title: '已退款',
@@ -162,6 +220,28 @@
         order: {},
         order_refund_apply: {},
         order_refund: {},
+
+        //  大图预览
+        dialogImageUrl: '',
+        dialogVisible: false,
+
+        passRefundVisible: false,
+        passRefundForm: {
+          "orrecvname": "",
+          "orrecvphone": "",
+          "orrecvaddress": "",
+        },
+        rules: {
+          orrecvname: [
+            {required: true, message: '收货人必填', trigger: 'blur'}
+          ],
+          orrecvphone: [
+            {required: true, message: '手机号必填', trigger: 'blur'}
+          ],
+          orrecvaddress: [
+            {required: true, message: '收货地址必填', trigger: 'blur'}
+          ],
+        },
       }
     },
 
@@ -189,17 +269,17 @@
         return rst;
       },
 
-      //  确认收退货订单的物流
-      doConfirmReceipt(){
-        this.$confirm(`确认收货?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.back_confirm_recv,{
+      //  确认收货 退货订单的物流
+      doConfirmReceipt() {
+        this.$confirm(`确认收货?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.back_confirm_recv, {
               oraid: this.order_refund.oraid
             }).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
-                      data = res.data.data;
+                    data = res.data.data;
 
                   this.init();
                   this.$notify({
@@ -214,10 +294,10 @@
         )
       },
       //  处理已收货的退货订单
-      doConfirmBackMoney(agree){
-        this.$confirm(`${agree ? '同意':'拒绝'}退款(退货订单)?`,'提示').then(
-          ()=>{
-            this.$http.post(this.$api.back_confirm_refund,{
+      doConfirmBackMoney(agree) {
+        this.$confirm(`${agree ? '同意' : '拒绝'}退款(退货订单)?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.back_confirm_refund, {
               "oraid": this.order_refund.oraid,
               "agree": agree
             }).then(
@@ -228,7 +308,7 @@
 
                   this.init();
                   this.$notify({
-                    title: `退款已${agree ? '同意':'拒绝'}`,
+                    title: `退款已${agree ? '同意' : '拒绝'}`,
                     type: 'success'
                   });
                 }
@@ -238,7 +318,102 @@
         )
       },
 
-      init(){
+      doPass() {
+        if (this.order_refund_apply.orastate == 0) {
+          this.passRefundVisible = true;
+          this.passRefundForm.oraid = this.order_refund_apply.oraid;
+          this.passRefundForm.message = `订单号:${this.order.omno || this.order.omno + '-' + this.order.prtitle}`;
+        } else {
+          this.$confirm(`确认同意退货申请?`, '提示').then(
+            () => {
+              this.$http.post(this.$api.agree_refund_apply, {
+                "oraid": this.order_refund_apply.oraid,
+                "agree": true,
+              }).then(
+                res => {
+                  if (res.data.status == 200) {
+                    let resData = res.data,
+                      data = res.data.data;
+
+                    this.init();
+                    this.$notify({
+                      title: '退货申请已同意',
+                      type: 'success'
+                    });
+                  }
+                }
+              )
+            }
+          )
+        }
+      },
+      doPassRefundOrder() {
+        this.$refs.passRefundForm.validate(
+          valid => {
+            if (valid) {
+              this.$http.post(this.$api.agree_refund_apply, {
+                "oraid": this.passRefundForm.oraid,
+                "agree": true,
+                "orrecvname": this.passRefundForm.orrecvname,
+                "orrecvphone": this.passRefundForm.orrecvphone,
+                "orrecvaddress": this.passRefundForm.orrecvaddress,
+              }).then(
+                res => {
+                  if (res.data.status == 200) {
+                    let resData = res.data,
+                      data = res.data.data;
+
+                    this.init();
+                    this.$notify({
+                      title: '申请已同意',
+                      type: 'success'
+                    });
+                    this.passRefundForm = {
+                      "orrecvname": "",
+                      "orrecvphone": "",
+                      "orrecvaddress": "",
+                    };
+                    this.passRefundVisible = false;
+                  }
+                }
+              )
+            } else {
+              this.$message.warning('请根据校验信息完善表单!');
+            }
+          }
+        );
+      },
+      doNoPass() {
+        this.$confirm(`确认拒绝退货申请?`, '提示').then(
+          () => {
+            this.$http.post(this.$api.agree_refund_apply, {
+              "oraid": this.order_refund_apply.oraid,
+              "agree": false,
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.init();
+                  this.$notify({
+                    title: '退货申请已拒绝',
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      },
+
+      //  预览图
+      handleVoucher(url) {
+        this.dialogImageUrl = url;
+        this.dialogVisible = true;
+      },
+
+      init() {
         this.$http.get(this.$api.get_order_by_LOid, {
           params: {
             omid: this.$route.query.omid
@@ -247,18 +422,18 @@
           res => {
             if (res.data.status == 200) {
               let resData = res.data,
-                  data = res.data.data;
+                data = res.data.data;
 
               if (this.$route.query.opid) { //  订单商品
                 data.order_part = data.order_part.filter(item => item.opid == this.$route.query.opid)
-                this.order_refund_apply = data.order_part[0].order_refund_apply;
-                this.order_refund = data.order_part[0].order_refund;
+                this.order_refund_apply = data.order_part[0].order_refund_apply ? data.order_part[0].order_refund_apply : {};
+                this.order_refund = data.order_part[0].order_refund ? data.order_part[0].order_refund : {};
               } else {
-                this.order_refund_apply = data.order_refund_apply;
-                this.order_refund = data.order_refund;
+                this.order_refund_apply = data.order_refund_apply ? data.order_refund_apply :{}
+                this.order_refund = data.order_refund? data.order_refund :{}
               }
 
-              if(this.order_refund.orlogisticdata){
+              if (this.order_refund.orlogisticdata && this.order_refund.orlogisticdata.list) {
                 this.order_refund.orlogisticdata.list = this.order_refund.orlogisticdata.list.reverse();
               }
 
@@ -316,21 +491,25 @@
         padding: 20px;
         margin-right: 20px;
 
-        &.refund {
+        /*&.refund {
           margin-right: 0;
 
           .detail-item-wrap {
             display: block;
 
             .detail-item {
+              .fj();
               .label {
                 display: inline-block;
-                width: 120px;
-                text-align: right;
+                width: 140px;
+                margin-right: 10px;
+              }
+              .value {
+                flex: 1;
               }
             }
           }
-        }
+        }*/
 
         .title {
           margin-bottom: 20px;
@@ -338,14 +517,20 @@
         }
 
         .detail-item-wrap {
-          .fj();
-          flex-wrap: wrap;
+          display: block;
+          font-size: 14px;
+
           .detail-item {
-            flex: 50%;
-            margin-bottom: 10px;
-            padding-right: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
+            .fj();
+            .label {
+              display: inline-block;
+              width: 120px;
+              margin-right: 10px;
+              margin-bottom: 10px;
+            }
+            .value {
+              flex: 1;
+            }
           }
         }
       }

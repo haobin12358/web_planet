@@ -2,15 +2,16 @@
   <div class="container">
     <el-row>
       <el-col :span="16">
-        <el-form :model="supplierForm" :rules="rules" ref="supplierForm" label-width="120px">
+        <el-form :model="supplierForm" :rules="rules" ref="supplierForm" label-position="left" label-width="120px">
           <el-form-item label="供应商名称" prop="suname">
-            <el-input v-model="supplierForm.suname"></el-input>
+            <el-input v-model.trim="supplierForm.suname" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="品牌" prop="pbids">
             <el-select
-              v-model="pbSelect"
+              v-model="supplierForm.pbids"
               clearable
               filterable
+              multiple
               default-first-option
               placeholder="可查询" style="width: 500px">
               <el-option
@@ -24,24 +25,27 @@
             </el-select>
           </el-form-item>
           <el-form-item label="联系人" prop="sulinkman">
-            <el-input v-model="supplierForm.sulinkman"></el-input>
+            <el-input v-model.trim="supplierForm.sulinkman" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="联系电话" prop="sulinkphone">
-            <el-input v-model="supplierForm.sulinkphone"></el-input>
+            <el-input v-model.trim="supplierForm.sulinkphone" maxlength="11"
+                      :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
           </el-form-item>
           <el-form-item label="联系地址" prop="suaddress">
-            <el-input v-model="supplierForm.suaddress"></el-input>
+            <el-input v-model.trim="supplierForm.suaddress" maxlength="100"></el-input>
           </el-form-item>
 
           <template v-if="!this.supplierForm.suid">
-            <el-form-item label="登录账号" prop="suloginphone">
-              <el-input v-model="supplierForm.suloginphone"></el-input>
-            </el-form-item>
             <el-form-item label="登录密码" prop="supassword">
-              <el-input v-model="supplierForm.supassword"></el-input>
+              <el-input v-model="supplierForm.supassword" maxlength="100"></el-input>
             </el-form-item>
           </template>
 
+          <el-form-item label="让利" prop="subaserate">
+            <el-input v-model="supplierForm.subaserate" maxlength="5">
+              <template slot="append">%</template>
+            </el-input>
+          </el-form-item>
 
           <el-form-item label="头像" prop="suheader">
             <el-upload
@@ -52,7 +56,8 @@
               :on-success="handleHeaderSuccess"
               :before-upload="beforePicUpload"
             >
-              <img v-if="supplierForm.suheader" :key="supplierForm.suheader" v-lazy="supplierForm.suheader" class="avatar">
+              <img v-if="supplierForm.suheader" :key="supplierForm.suheader" v-lazy="supplierForm.suheader"
+                   class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
 
               <div slot="tip" class="el-upload__tip">
@@ -82,10 +87,10 @@
 
 
           <el-form-item label="银行" prop="subankname">
-            <el-input v-model="supplierForm.subankname"></el-input>
+            <el-input v-model.trim="supplierForm.subankname" maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label="银行卡号" prop="subanksn">
-            <el-input v-model="supplierForm.subanksn"></el-input>
+            <el-input v-model.trim="supplierForm.subanksn" maxlength="100"></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -106,6 +111,7 @@
 <script>
   import {getStore} from "src/utils/index";
 
+  const percentReg = /^100$|^(\d|[1-9]\d)(\.\d{0,2})*$/;   //  百分数(>=0, <=100, 至多两位小数)
   export default {
     name: "SupplierEdit",
 
@@ -113,6 +119,8 @@
 
     data() {
       return {
+        platformComRate: 0,
+
         brandOptions: [],
         supplierForm: {
           "suloginphone": "",
@@ -122,7 +130,9 @@
           "sulinkman": "",
           "sulinkphone": "",
           "suaddress": "",
-          pbids: '',
+          pbids: [],
+
+          subaserate: '',   //  让利
 
           "suheader": "",
           "sucontract": [],
@@ -153,6 +163,10 @@
           suaddress: [
             {required: true, message: '联系地址必填', trigger: 'blur'},
           ],
+          subaserate: [
+            {required: true, message: '供应商让利必填', trigger: 'blur'},
+            {pattern: percentReg, message: '请输入合理的百分数值(至多两位小数)', trigger: 'blur'},
+          ],
 
           suheader: [
             {required: true, message: '供应商头像必传', trigger: 'change'},
@@ -176,20 +190,17 @@
       }
     },
     watch: {
-      pbSelect(val) {
-        this.supplierForm.pbids = [val];
-      },
       suContractUrl(val) {
         this.supplierForm.sucontract = val.map(item => item.url);
-      }
+      },
     },
     computed: {
       uploadUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=avatar'
+        return this.$api.upload_file + getStore('token') + '&type=avatar'
       },
 
       uploadVoucherUrl() {
-        return this.$api.upload_file + getStore('token')+ '&type=voucher'
+        return this.$api.upload_file + getStore('token') + '&type=voucher'
       },
     },
 
@@ -267,7 +278,7 @@
                   }
                 )
               } else {
-
+                this.supplierForm.suloginphone = this.supplierForm.sulinkphone;
                 this.$http.post(this.$api.create_supplizer, this.supplierForm).then(
                   res => {
                     if (res.data.status == 200) {
@@ -307,16 +318,49 @@
           return data;
         }
       },
+
+      async getSuDetail(suid) {
+        let res = await this.$http.get(this.$api.get_supplizer, {
+          params: {
+            suid,
+          }
+        })
+
+        if (res.data.status == 200) {
+          let resData = res.data,
+            data = res.data.data;
+
+          return data;
+        }
+      },
+
+      //  获取平台让利的比例
+      getPlatformComRate() {
+        this.$http.get(this.$api.get_commision, {
+          params: {}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.platformComRate = data.levelcommision[3] ? data.levelcommision[3] : 0;
+              // this.commonSkuDev = data.levelcommision[3];
+            }
+          }
+        )
+      },
     },
 
     async created() {
       let brandList = await this.getBrandList();
 
-      if (this.$route.params.item) {
+
+      if (this.$route.query.suid) {
         this.$message.info('当前是编辑状态');
 
-        let data = JSON.parse(this.$route.params.item);
-        brandList.push(data.brand);
+        let data = await this.getSuDetail(this.$route.query.suid);
+        brandList = brandList.concat(data.pbs);
 
         this.brandOptions = brandList;
 
@@ -327,8 +371,9 @@
           "sulinkman": data.sulinkman,
           "sulinkphone": data.sulinkphone,
           "suaddress": data.suaddress,
-          pbids: [data.brand.pbid],
+          pbids: data.pbs.map(item => item.pbid),
 
+          subaserate: data.subaserate || 0,
           "suheader": data.suheader,
           "sucontract": data.sucontract,
 
@@ -336,7 +381,6 @@
           "subanksn": data.subanksn,
         };
 
-        this.pbSelect = data.brand.pbid;
         this.suContractUrl = data.sucontract.map(item => {
           return {
             url: item
@@ -345,6 +389,9 @@
       } else {
         this.$message.info('当前是新增状态');
         this.brandOptions = brandList;
+
+        // 仅新增时校验
+        // this.getPlatformComRate();
       }
     },
   }

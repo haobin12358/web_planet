@@ -16,8 +16,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;" @click="doReset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
 
       <section>
@@ -26,11 +26,10 @@
     </section>
 
     <el-table :data="tableData" v-loading="loading" stripe style="width: 100%">
-      <el-table-column
-        type="index"></el-table-column>
+      <el-table-column type="index" width="55"></el-table-column>
       <el-table-column align="center" width="120" label="图片">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.tcmainpic" :key="scope.row.tcid"></table-cell-img>
+          <table-cell-img :src="[scope.row.tcmainpic]" :key="scope.row.tcid"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="tctitle" label="商品名" width="280"></el-table-column>
@@ -40,9 +39,15 @@
           {{scope.row.tcdeposit + ' / ' + scope.row.tcdeadline}}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="prstatus_zh" label="状态" width="120">
+      <el-table-column align="center" prop="prstatus_zh" label="状态" width="180">
         <template slot-scope="scope">
-          <el-tag :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
+          <el-popover
+            v-if="scope.row.reject_reason"
+            placement="top-start" title="拒绝理由" width="200" trigger="click">
+            {{scope.row.reject_reason}}
+            <el-tag slot="reference" :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
+          </el-popover>
+          <el-tag v-else :type="statusTagType(scope.row.tcstatus)">{{scope.row.zh_tcstatus}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="tcstocks" label="库存" width="120"></el-table-column>
@@ -57,11 +62,22 @@
           {{scope.row.applystarttime + '-' + scope.row.applyendtime}}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="zh_remarks" label="备注" width="180"></el-table-column>
+      <el-table-column align="center" prop="tcdescription" label="商品描述" width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column align="center" prop="tcremarks" label="备注" width="180" show-overflow-tooltip></el-table-column>
 
       <el-table-column align="center" width="180" label="操作" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.tcstatus == 20" @click="doEdit(scope.row)">编辑</el-button>
+          <template v-if="[-10,30].includes(scope.row.tcstatus)">
+            <el-button type="text"  @click="doEdit(scope.row)">编辑</el-button>
+          </template>
+          <template v-if="[20].includes(scope.row.tcstatus)">
+            <el-button type="text" class="info-text"  @click="doCancel(scope.row)">撤销</el-button>
+          </template>
+          <template v-if="[-10,30].includes(scope.row.tcstatus)">
+            <el-button  type="text" class="success-text" @click="doResubmit(scope.row)">重新提交</el-button>
+            <el-button  type="text" class="danger-text" @click="doDelete(scope.row)">删除</el-button>
+          </template>
+          <el-button v-if="scope.row.tcstatus == 0" type="text" class="warning-text" @click="doShelves(scope.row)">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -140,13 +156,16 @@
             value: 'all',
             label: '全部',
           }, {
+            value: 'cancel',
+            label: '已撤销',
+          },  {
             value: 'upper',
             label: '上架中',
           }, {
             value: 'auditing',
             label: '审核中',
           }, {
-            value: 'off_shelves',
+            value: 'reject',
             label: '已下架',
           },
         ],
@@ -197,6 +216,7 @@
     },
     methods: {
       doSearch() {
+        this.currentPage = 1;
         this.getProductList();
       },
       doReset() {
@@ -223,7 +243,10 @@
         }
       },
       getProductList() {
+        this.loading = true;
+
         this.$http.get(this.$api.get_commodity, {
+          noLoading: true,
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
@@ -233,6 +256,7 @@
           }
         }).then(
           res => {
+            this.loading = false;
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
@@ -268,6 +292,103 @@
         })
       },
 
+      doResubmit(row){
+        this.$confirm(`确认重新提交商品(${row.tctitle})申请?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.resubmit_commodity,{
+              tcid: row.tcid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                      data = res.data.data;
+
+                  this.$notify({
+                    title: '试用商品重新提交成功',
+                    message: `商品名:${row.tctitle}`,
+                    type: 'success'
+                  });
+                  this.getProductList();
+                }
+              }
+            )
+          }
+        )
+      },
+
+      doCancel(row){
+        this.$confirm(`确认撤销商品(${row.tctitle})申请?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.cancel_commodity,{
+              tcid: row.tcid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '试用商品撤销成功',
+                    message: `商品名:${row.tctitle}`,
+                    type: 'success'
+                  });
+                  this.getProductList();
+                }
+              }
+            )
+          }
+        )
+      },
+
+
+      doDelete(row){
+        this.$confirm(`确认下架商品(${row.tctitle})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.del_commodity,{
+              tcid: row.tcid
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '试用商品删除成功',
+                    message: `商品名:${row.tctitle}`,
+                    type: 'success'
+                  });
+                  this.getProductList();
+                }
+              }
+            )
+          }
+        )
+
+      },
+      doShelves(row){
+        this.$confirm(`确认下架试用商品(${row.tctitle})?`,'提示').then(
+          ()=>{
+            this.$http.post(this.$api.shelves_commodity,{
+              tcids: [row.tcid]
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+
+                  this.$notify({
+                    title: '试用商品下架成功',
+                    message: `商品名:${row.tctitle}`,
+                    type: 'success'
+                  });
+                  this.getProductList();
+                }
+              }
+            )
+          }
+        )
+
+      },
 
       // 封面图上传
       handleBGcSuccess(res, file) {

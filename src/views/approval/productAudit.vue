@@ -1,64 +1,85 @@
 <template>
   <div class="container">
-    <!--工具栏-->
-    <section class="tool-bar space-between">
-      <el-form :inline="true">
-        <el-form-item label="商品名">
-          <el-input v-model.trim="searchForm.kw"></el-input>
-        </el-form-item>
-        <el-form-item label="分类">
-          <el-cascader :options="categoryOptions" :props="categoryProps" change-on-select :clearable="true" filterable
-                       v-model="searchForm.pcid" @change="doSearch">
-          </el-cascader>
-        </el-form-item>
+    <section class="tool-bar">
+      <el-form :inline="true" size="medium">
         <el-form-item label="审核状态">
-          <el-select v-model="searchForm.prstatus" @change="doSearch">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
+          <el-select v-model="inlineForm.avstatus" @change="doSearch">
+            <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
-
-        <el-button type="primary" icon="el-icon-search">查询</el-button>
-        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;">重置</el-button>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
+        </el-form-item>
       </el-form>
     </section>
-
-    <el-table :data="tableData" v-loading="loading" stripe style="width: 100%" :cell-class-name="cellFunction"
-              @selection-change="handleSelectionChange" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column type="index"></el-table-column>
-      <el-table-column align="center" width="120" label="图片">
+    <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
+      <el-table-column type="index" align="center"></el-table-column>
+      <el-table-column label="审批内容" align="center">
+        <el-table-column align="center" width="120" label="图片">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []"
+                            :key="scope.row.avid"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="content.prtitle" label="商品名" width="280"></el-table-column>
+        <el-table-column align="center" prop="content.prdescription" label="商品描述" width="180" show-overflow-tooltip></el-table-column>
+        <el-table-column align="center" prop="content.prprice" label="价格" width="120"></el-table-column>
+        <el-table-column align="center" prop="content.brand.pbname" label="品牌" width="180"></el-table-column>
+        <el-table-column align="center" prop="content.categorys" label="分类" width="240"></el-table-column>
+        <el-table-column align="center" label="sku" width="120">
+          <template slot-scope="scope">
+            <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
+          </template>
+        </el-table-column>
+        <el-table-column label="轮播图" width="340" align="center">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content ? getImagesUrl(scope.row.content.images) : []" out-width="300px"
+                            :key="scope.row.avid"></table-cell-img>
+          </template>
+        </el-table-column>
+        <el-table-column label="底部长图" width="340" align="center">
+          <template slot-scope="scope">
+            <table-cell-img :src="scope.row.content ? scope.row.content.prdesc : []" out-width="300px"
+                            :key="scope.row.avid"></table-cell-img>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="发起人" align="center">
+        <el-table-column label="姓名" prop="start.adname" align="center" width="120">
+          <template slot-scope="scope">
+              <span v-if="scope.row.start">
+                {{scope.row.start.adname || scope.row.start.suname || scope.row.start.usname }}
+              </span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="当前审批层级" prop="avlevel" align="center" width="120"></el-table-column>
+      <el-table-column label="审批创建时间" prop="createtime" align="center" width="180"></el-table-column>
+      <el-table-column label="状态" prop="avlevel" align="center" fixed="right">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.prmainpic" :key="scope.row.prid"></table-cell-img>
+          <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="prtitle" label="商品名" width="280"></el-table-column>
-      <el-table-column align="center" prop="prprice" label="价格" sortable width="120"></el-table-column>
-      <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
-      <el-table-column align="center" prop="brand.pbname" label="分类" width="240">
+      <el-table-column label="操作" align="center" width="180" fixed="right">
         <template slot-scope="scope">
-          {{`${scope.row.category[0].pcname} / ${scope.row.category[1].pcname} / ${scope.row.category[2].pcname}`}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="prstocks" label="库存"></el-table-column>
-      <el-table-column align="center" prop="createtime" sortable label="创建时间" width="180"></el-table-column>
-      <el-table-column align="center" width="180" label="操作" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="text" @click="doPassOne(scope.row)">审核通过</el-button>
-          <el-button type="text" class="danger-text" @click="doNoPassOne(scope.row)">审核拒绝</el-button>
+          <template v-if="scope.row.avstatus == 0">
+            <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
+            <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
+          </template>
+          <el-popover :key="scope.row.avid" placement="left" trigger="click" @show="showStep(scope.row)">
+            <div style="padding: 20px;width: 300px;">
+              <el-steps direction="vertical" :active="steps.length">
+                <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
+                         :description="item.avadname +': '+ item.anabo"></el-step>
+              </el-steps>
+            </div>
+            <el-button slot="reference" type="text">查看记录</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
     <section class="table-bottom">
-      <section class="actions-block">
-        <el-button type="primary" :disabled="selectedRows.length == 0">批量通过</el-button>
-        <el-button type="warning" :disabled="selectedRows.length == 0">批量拒绝</el-button>
-      </section>
-
       <el-pagination
         background
         :current-page="currentPage"
@@ -70,67 +91,124 @@
         @current-change="pageChange">
       </el-pagination>
     </section>
-
   </div>
 </template>
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import ProductSku from "src/views/product/components/productSku";
 
+  //  toshelves
   export default {
     name: 'ProductAudit',
 
-    components: {
-      TableCellImg
-    },
+    components: {TableCellImg, ProductSku},
 
     data() {
       return {
-        categoryOptions: [],
-        categoryProps: {
-          value: 'pcid',
-          label: 'pcname',
-          children: 'subs',
+        statusOption: {
+          all: '全部',
+          "agree": "已同意",
+          "cancle": "已撤销",
+          "reject": "已拒绝",
+          "wait_check": "审核中"
         },
-        options: [
-          {
-            label: '待审核',
-            value: 'auditing'
-          }, {
-            label: '审核不通过',
-            value: 'reject'
-          },
-        ],
-        searchForm: {
-          kw: '',
-          pcid: [],
-          prstatus: 'auditing',
-          order_type: '',
+        inlineForm: {
+          avstatus: 'wait_check',
         },
 
         loading: false,
         total: 0,
         currentPage: 1,
         pageSize: 10,
-        prstatusFilter: [
-          {text: '上架中', value: '上架中'},
-          {text: '审核中', value: '审核中'},
-          {text: '已下架', value: '已下架'},
-        ],
         tableData: [],
 
-        selectedRows: [],
+        steps: [],
       }
     },
 
     computed: {},
 
     methods: {
-      getCategory() {
-        this.$http.get(this.$api.category_list, {
+      doSearch() {
+        this.getList();
+      },
+      doReset() {
+        this.inlineForm = {
+          avstatus: '',
+        };
+        this.doSearch();
+      },
+
+      cellFunction({row, column}) {
+        if (['content.prprice'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
+      getList() {
+        this.loading = true;
+        this.$http.get(this.$api.get_approval_list, {
+          noLoading: true,
           params: {
-            up: '',
-            deep: 2
+            page_size: this.pageSize,
+            page_num: this.currentPage,
+
+            ptid: 'toshelves',
+            ...this.inlineForm,
+          }
+        }).then(
+          res => {
+            this.loading = false;
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.tableData = data;
+              this.total = resData.total_count;
+            }
+          }
+        )
+      },
+      sizeChange(pageSize) {
+        this.pageSize = pageSize;
+        this.currentPage = 1;
+
+        this.getList();
+      },
+      pageChange(page) {
+        this.currentPage = page;
+        this.getList();
+      },
+
+      cellFunction({row, column}) {
+        if (['avlevel'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
+      getImagesUrl(imgs) {
+        if (imgs) {
+          return imgs.map(item => item.pipic)
+        } else {
+          return []
+        }
+      },
+      tagsType(status) {
+        switch (status) {
+          case -20:
+            return {label: '已取消', type: 'info'};
+          case -10:
+            return {label: '已拒绝', type: 'danger'};
+          case 0:
+            return {label: '审核中', type: 'primary'};
+          case 10:
+            return {label: '已通过', type: 'success'};
+        }
+      },
+
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
+          params: {
+            avid: row.avid
           }
         }).then(
           res => {
@@ -138,181 +216,85 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.categoryOptions = data;
+              this.steps = data;
             }
-          });
-      },
-
-      doSearch() {
-        this.getProduct();
-      },
-      doReset() {
-        this.searchForm = {
-          kw: '',
-          pcid: [],
-          prstatus: 'reject',
-          order_type: '',
-        };
-        this.doSearch();
-      },
-
-      getProduct() {
-        this.loading = true;
-        let pcid = '';
-
-        if (this.searchForm.pcid.length) {
-          pcid = this.searchForm.pcid[this.searchForm.pcid.length - 1];
-        } else {
-          pcid = ''
-        }
-
-        this.$http.get(this.$api.product_list, {
-          noLoading: true,
-          params: {
-            page_size: this.pageSize,
-            page_num: this.currentPage,
-
-            kw: this.searchForm.kw,
-            pcid,
-            prstatus: this.searchForm.prstatus,
-            order_type: this.searchForm.order_type,
           }
-        }).then(res => {
-          this.loading = false;
+        )
+      },
 
-          if (res.data.status == 200) {
-            this.tableData = res.data.data;
-            this.total = res.data.total_count;
+      pass(row) {
+        this.$prompt(`确认批准?`, '提示', {
+          inputPlaceholder: '审批意见',
+          inputValidator: value => {
+            if (!value) {
+              return '意见不能为空'
+            }
+            if (value.length > 100) {
+              return '意见文本过长(100)'
+            }
           }
-        })
-      },
-      sizeChange(pageSize) {
-        this.pageSize = pageSize;
-        this.currentPage = 1;
-
-        this.getProduct();
-      },
-      pageChange(page) {
-        this.currentPage = page;
-        this.getProduct();
-      },
-      handleSelectionChange(val) {
-        this.selectedRows = val;
-      },
-      cellFunction({row, column}) {
-        if (['ommount', 'omfreight', 'omtruemount'].includes(column.property)) {
-          return 'money-cell'
-        }
-      },
-
-      doPassOne(row) {
-        this.doPassAction([row]);
-
-      },
-      doPassMany() {
-        if (this.selectedRows.some(item => {
-          item.prstatus != 10
-        })) {
-          this.$message.warning('请确认是否勾选非待审核的商品!');
-        }
-        this.doPassAction(this.selectedRows);
-      },
-      doPassAction(rows) {
-        let tip = rows[0].prtitle + (rows.length > 1 ? `等${rows.length}件商品` : ''),
-          prids = rows.map(item => item.prid);
-
-        this.$confirm(`确认同意上架商品(${tip})?`, '提示').then(
-          () => {
-            this.$http.post(this.$api.agree_product, {
-              prids,
-              agree: true,
-            }).then(
-              res => {
-                if (res.data.status == 200) {
-                  let resData = res.data,
-                      data = res.data.data;
-
-                  this.getProduct();
-                  this.$notify({
-                    title: '商品上架成功',
-                    message: `商品名:${tip}`,
-                    type: 'success'
-                  });
-                }
-              }
-            )
-          }
-        );
-      },
-
-      doNoPassOne(row) {
-        this.doNoPassAction([row]);
-      },
-      doNoPassMany() {
-        if (this.selectedRows.some(item => {
-          item.prstatus != 10
-        })) {
-          this.$message.warning('请确认是否勾选非待审核的商品!');
-        }
-        this.doNoPassAction(this.selectedRows);
-      },
-      doNoPassAction(rows) {
-        let tip = rows[0].prtitle + (rows.length > 1 ? `等${rows.length}件商品` : ''),
-          prids = rows.map(item => item.prid);
-
-        this.$prompt(`确认不同意上架商品(${tip})?`, '提示', {
-          inputPlaceholder: '拒绝原因',
         }).then(
-          (prompt) => {
-            this.$http.post(this.$api.agree_product, {
-              prids,
-              anabo: prompt.value
+          prompt => {
+            this.$http.post(this.$api.deal_approval, {
+              "avid": row.avid,
+              "anaction": 1,
+              "anabo": prompt.value
             }).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
                     data = res.data.data;
 
-                  this.getProduct();
+                  this.getList();
                   this.$notify({
-                    title: '商品上架已拒绝',
-                    message: `商品名:${tip}`,
+                    title: '批准通过成功',
                     type: 'success'
                   });
                 }
               }
             )
           }
-        );
+        )
       },
+      nopass(row) {
+        this.$prompt(`确认不批准?`, '提示', {
+          inputPlaceholder: '审批意见',
+          inputValidator: value => {
+            if (!value) {
+              return '意见不能为空'
+            }
+            if (value.length > 100) {
+              return '意见文本过长(100)'
+            }
+          },
+        }).then(
+          prompt => {
+            this.$http.post(this.$api.deal_approval, {
+              "avid": row.avid,
+              "anaction": -1,
+              "anabo": prompt.value
+            }).then(
+              res => {
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
 
-      handleSortChange({column, prop, order}) {
-        switch (prop) {
-          case 'prprice':
-            prop = 'price';
-            break;
-          case 'prsalesvalue':
-            prop = 'sale_value';
-            break;
-          case 'createtime':
-            prop = 'time';
-            break;
-          default:
-            break;
-        }
-        order = order == 'ascending' ? 'asc' : 'desc';
-
-        if (prop){
-          this.searchForm.order_type = `${prop}|${order}`
-          this.doSearch();
-        }
-      },
+                  this.getList();
+                  this.$notify({
+                    title: '批准拒绝成功',
+                    type: 'success'
+                  });
+                }
+              }
+            )
+          }
+        )
+      }
     },
 
     created() {
-      this.getCategory();
-      this.getProduct();
-    }
+      this.getList();
+    },
   }
 </script>
 
@@ -320,9 +302,6 @@
   @import "../../styles/myIndex";
 
   .container {
-    .table-bottom {
-      margin-top: 20px;
-      .fj();
-    }
+
   }
 </style>

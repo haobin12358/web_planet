@@ -3,19 +3,21 @@
     <section class="tool-bar space-between">
       <el-form :inline="true">
         <el-form-item label="供应商姓名">
-          <el-input v-model.trim="searchForm.kw"></el-input>
+          <el-input v-model.trim="searchForm.kw" maxlength="100" ></el-input>
         </el-form-item>
         <el-form-item label="供应商手机号">
-          <el-input v-model.trim="searchForm.mobile"></el-input>
+          <el-input v-model.trim="searchForm.mobile" maxlength="100" ></el-input>
         </el-form-item>
 
-        <el-button type="primary" icon="el-icon-search" @click="doSearch">查询</el-button>
-        <el-button icon="el-icon-refresh" @click="doReset">重置</el-button>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
       <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
+
+
     </section>
 
-    <el-table :data="tableData" v-loading="loading" style="width: 100%">
+    <el-table :data="tableData" v-loading="loading" style="width: 100%" :cell-class-name="cellFunction">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -38,10 +40,18 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="suname" label="供应商名称" width="180"></el-table-column>
-      <el-table-column align="center" prop="brand.pbname" label="品牌" width="180"></el-table-column>
+      <el-table-column align="center" prop="brand" label="品牌" width="280">
+        <template slot-scope="scope">
+          <el-tag  v-for="item in scope.row.pbs" :key="item.pbid" type="primary" style="margin-right: 10px;margin-bottom: 10px;">
+            {{item.pbname}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
-      <el-table-column align="center" prop="sulinkphone" label="手机号" width="280"></el-table-column>
-      <el-table-column align="center" prop="suaddress" label="地址" width="280"></el-table-column>
+      <el-table-column label="可提现余额" prop="uwbalance" align="center" width="100"></el-table-column>
+      <el-table-column label="余额" prop="uwcash" align="center" width="100"></el-table-column>
+      <el-table-column label="总销售额" prop="uwtotal" align="center" width="100"></el-table-column>
+      <el-table-column align="center" prop="sulinkphone" label="手机号" width="200"></el-table-column>
+      <el-table-column align="center" prop="suaddress" label="地址" width="200"></el-table-column>
       <el-table-column align="center" prop="sustatus" label="状态" width="180">
         <template slot-scope="scope">
           <el-tag  v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>
@@ -151,6 +161,12 @@
         this.currentPage = page;
       },
 
+      cellFunction({row, column}){
+        if (['uwtotal', 'uwbalance', 'uwcash'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
+
       previewImg(url) {
         this.dialogImageUrl = url;
         this.dialogVisible = true;
@@ -163,16 +179,15 @@
       },
       doEditSupplier(row) {
         this.$router.push({
-          name: 'SupplierEdit',
-          params: {
-            item: JSON.stringify(row)
-
+          path: '/user/supplierEdit',
+          query: {
+            suid: row.suid
           }
         })
       },
 
       doRemoveSupplier(row) {
-        this.$confirm(`确认弃用供应商(${row.suname})?其下的品牌及品牌下面的商品也会一并下架!`, '提示',{
+        this.$confirm(`确认弃用供应商(${row.suname})?其下的品牌及品牌下面的商品也会一并删除!`, '提示',{
           type: 'warning'
         }).then(
           ()=>{
@@ -184,6 +199,7 @@
                   let resData = res.data,
                       data = res.data.data;
 
+                  this.getSupplier();
                   this.$notify({
                     title: '供应商删除成功',
                     message: `供应商名称:${row.suname}`,
@@ -214,6 +230,7 @@
                   let resData = res.data,
                       data = res.data.data;
 
+                  this.getSupplier();
                   this.$notify({
                     title: '密码修改成功',
                     message: `供应商:${row.suname}`,

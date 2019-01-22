@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-autocomplete prefix-icon="el-icon-menu" placeholder="请输入菜单名" v-model="searchTxt" size="medium"
+    <el-autocomplete prefix-icon="el-icon-menu" placeholder="菜单搜索" v-model="searchTxt" size="medium"
                      value-key="title"  :fetch-suggestions="querySearch" @select="selectMenu" clearable>
     </el-autocomplete>
   </div>

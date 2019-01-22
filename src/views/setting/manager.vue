@@ -7,7 +7,7 @@
       <el-table-column label="编号" align="center" prop="adnum"></el-table-column>
       <el-table-column label="头像" align="center" prop="adheader" width="60">
         <template slot-scope="scope">
-          <table-cell-img :src="scope.row.adheader" :key="scope.row.adheader"></table-cell-img>
+          <table-cell-img :src="[scope.row.adheader]" :key="scope.row.adheader"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="管理员昵称" align="center" prop="adname" show-overflow-tooltip></el-table-column>
@@ -51,11 +51,11 @@
         <el-form-item label="手机号" prop="adtelphone">
           <el-input class="sort-input long-input" maxlength="13" v-if="!adminForm.adid" v-model="adminForm.adtelphone"></el-input>
           <el-input class="sort-input long-input" maxlength="13" v-else v-model="adminForm.adtelphone" @change="inputChange"></el-input>
-          <el-button type="primary" size="small" v-if="!getCode" @click="getInforCode">获取验证码</el-button>
-          <el-button type="info" disabled size="small" v-else>{{time}}秒后重发</el-button>
+          <el-button type="text" size="small" v-if="!getCode" @click="getInforCode">获取验证码</el-button>
+          <el-button type="text" disabled size="small" v-else>{{time}}秒后重发</el-button>
         </el-form-item>
         <el-form-item label="验证码" prop="identifyingcode">
-          <el-input class="sort-input" v-model="adminForm.identifyingcode" maxlength="6"></el-input>
+          <el-input class="sort-input" v-model="adminForm.identifyingcode" maxlength="6" placeholder="仅在修改手机号时需要获取验证码"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="adpassword">
           <el-input class="sort-input" type="password" :placeholder="editPasswd" v-model="adminForm.adpassword"></el-input>
@@ -173,6 +173,51 @@
     components: { TableCellImg },
     mounted() {
       this.getAdmin()          // 获取admin
+    },
+    watch: {
+      adminDialog(val, oldVal) {
+        if(oldVal) {
+          this.adminForm = {
+            adid: '',
+            adheader: '',
+            adname: '',
+            adstatus: 'normal',
+            adtelphone: '',
+            identifyingcode: '',
+            adpassword: '',
+            adpasswordagain: '',
+            adlevel: 'common_admin',
+          };
+          let validatePass = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请输入密码'));
+            } else {
+              if (this.adminForm.adpasswordagain !== '') {
+                this.$refs.adminForm.validateField('adpasswordagain');
+              }
+              callback();
+            }
+          };
+          let validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请再次输入密码'));
+            } else if (value !== this.adminForm.adpassword) {
+              callback(new Error('两次输入密码不一致!'));
+            } else {
+              callback();
+            }
+          };
+          this.rules.identifyingcode = [{ required: true, message: '验证码必填', trigger: 'blur' }];
+          this.rules.adpassword = [
+            { required: true, validator: validatePass, trigger: 'blur' },
+            { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
+          ];
+          this.rules.adpasswordagain = [
+            { required: true, validator: validatePass2, trigger: 'blur' },
+            { min: 4, message: '密码长度需大于4位', trigger: 'blur' }
+          ];
+        }
+      }
     },
     methods: {
       // 主图上传

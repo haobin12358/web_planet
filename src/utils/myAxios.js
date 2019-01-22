@@ -1,4 +1,4 @@
-import { Loading, Message, MessageBox } from 'element-ui'
+import { Loading, Message, MessageBox,Notification } from 'element-ui'
 import axios from 'axios'
 import store from "../store";
 
@@ -37,6 +37,14 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       duration: 4500,
       showClose: true,
     })
+  }
+  if(data.data.status == '405' && data.data.status_code == '405007'){
+    location.href = location.origin;
+    localStorage.setItem('token', '');
+    Notification({
+      title: '登录信息已过期,请重新登录',
+      type: 'success'
+    });
   }
 
   return data

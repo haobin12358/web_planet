@@ -7,14 +7,14 @@
         <span class="svg-container">
           <svg-icon icon-class="user"/>
         </span>
-        <el-input v-model.trim="loginForm.username" name="username" type="text" placeholder="用户名"/>
+        <el-input v-model.trim="loginForm.username" maxlength="100" name="username" type="text" placeholder="用户名"/>
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"/>
         </span>
         <el-input
-          :type="pwdType" v-model="loginForm.password" name="password" placeholder="密码"
+          :type="pwdType" v-model="loginForm.password" maxlength="100" name="password" placeholder="密码"
           @keyup.enter.native="handleLogin"/>
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye"/>
@@ -110,10 +110,6 @@
                 title: '登录成功',
                 message: `身份:${roleZh}`,
                 type: 'success'
-              });
-              this.$notify({
-                title: '左侧带有打勾的菜单功能可用',
-                position: 'top-left'
               });
             }).catch(() => {
               this.loading = false

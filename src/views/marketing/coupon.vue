@@ -3,29 +3,34 @@
     <block-title title="优惠券列表"></block-title>
     <section class="tool-bar space-between">
       <el-form :inline="true" size="medium">
-        <el-form-item label="商品名称">
+        <!--<el-form-item label="商品名称">
           <el-input v-model="kw"></el-input>
         </el-form-item>
         <el-form-item label="商品编号">
           <el-input v-model="kw"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="">重置</el-button>
-        </el-form-item>
+          <el-button type="primary" icon="el-icon-search" :loading="couponLoading" @click="">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="couponLoading" @click="">重置</el-button>
+        </el-form-item>-->
       </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="addCoupon">新增</el-button>
+      <el-button type="primary" style="margin-bottom: 20px" icon="el-icon-plus" @click="addCoupon">新增</el-button>
     </section>
     <el-table v-loading="couponLoading" :data="couponList" stripe size="mini">
       <el-table-column label="名称" align="center" prop="coname" show-overflow-tooltip></el-table-column>
       <el-table-column label="生效介绍" align="center" prop="title_subtitle.title" show-overflow-tooltip></el-table-column>
-      <el-table-column label="生效对象" align="center" prop="title_subtitle.left_text" show-overflow-tooltip></el-table-column>
-      <el-table-column label="生效条件" align="center" prop="title_subtitle.subtitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="发放开始时间" align="center" prop="cosendstarttime"></el-table-column>
+      <el-table-column label="生效对象" align="center" prop="title_subtitle.left_text"
+                       show-overflow-tooltip></el-table-column>
+      <el-table-column label="生效条件" align="center" prop="title_subtitle.subtitle"
+                       show-overflow-tooltip></el-table-column>
+      <el-table-column label="发放开始时间" align="center" prop="cosendstarttime"
+                       :render-header="startTimeHeaderRender"></el-table-column>
+      <el-table-column label="剩余数量" align="center" prop="coremainnum" width="100"></el-table-column>
       <el-table-column label="发放数量" align="center" prop="colimitnum" width="100"></el-table-column>
-      <el-table-column label="操作" align="center" width="100" fixed="right">
+      <el-table-column label="操作" align="center" width="120" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editCoupon(scope)">编辑</el-button>
+          <el-button type="text" v-if="new Date()<new Date(scope.row.cosendstarttime)" @click="editCoupon(scope)">编辑
+          </el-button>
           <el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>
         </template>
       </el-table-column>
@@ -40,7 +45,7 @@
       <el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>
       <el-table-column label="标签名称" align="center" prop="itname"></el-table-column>
       <el-table-column label="标签描述" align="center" prop="itdesc"></el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="操作" align="center" width="120" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="editItem(scope)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteItem(scope)">删除</el-button>
@@ -94,22 +99,22 @@
         },
         rules: {
           itname: [
-            { required: true, message: '标签名称必填', trigger: 'blur' },
-            { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
+            {required: true, message: '标签名称必填', trigger: 'blur'},
+            {min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur'}
           ],
           itsort: [
-            { required: true, message: '标签序号必填', trigger: 'blur' },
-            { min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
+            {required: true, message: '标签序号必填', trigger: 'blur'},
+            {min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'}
           ]
         },
       }
     },
-    directives: { elDragDialog },
+    directives: {elDragDialog},
     components: {},
     watch: {
       // 标签diaolog关闭时重置itemForm
       itemDialog(newValue, oldValue) {
-        if(!newValue) {
+        if (!newValue) {
           this.itemForm = {
             itid: '',
             itname: '',
@@ -128,19 +133,32 @@
       // 获取优惠券标签
       getItem() {
         this.itemLoading = true;
-        this.$http.get(this.$api.items_list, { noLoading: true,
-          params: { ittype: '20' }}).then(res => {
+        this.$http.get(this.$api.items_list, {
+          noLoading: true,
+          params: {ittype: '20'}
+        }).then(res => {
           if (res.data.status == 200) {
             this.itemList = res.data.data;
             this.itemLoading = false;
           }
         })
       },
+
+      doSearch() {
+
+      },
       // 获取优惠券
       getCoupon() {
         this.couponLoading = true;
-        this.$http.get(this.$api.coupon_list, { noLoading: true,
-          params: { page_num: this.page_num, page_size: this.page_size }}).then(res => {
+        this.$http.get(this.$api.coupon_list, {
+          noLoading: true,
+          params: {
+            page_num: this.page_num,
+            page_size: this.page_size,
+
+
+          }
+        }).then(res => {
           if (res.data.status == 200) {
             this.couponList = res.data.data;
             this.total = res.data.total_count;
@@ -148,21 +166,35 @@
           }
         })
       },
+      startTimeHeaderRender(h, {column}) {
+        return (
+          <el-tooltip class="tooltip" placement="top">
+            <span slot="content">
+              优惠券发放后无法编辑
+            </span>
+            <div>{column.label}
+              <i class="el-icon-question"></i>
+            </div>
+          </el-tooltip>
+        )
+      },
       // 新增优惠券
       addCoupon() {
         this.$router.push('/marketing/editCoupon');
       },
       // 编辑优惠券
       editCoupon(scope) {
-        console.log(scope.row);
+        let coupon = JSON.stringify(scope.row);
+        this.$router.push({path: '/marketing/editCoupon', query: {coupon: coupon}})
       },
       // 删除优惠券
       deleteCoupon(scope) {
         this.$confirm('此操作将删除该优惠券, 是否继续?', '提示', {
-          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'}).then(() => {
-          this.$http.post(this.$api.coupon_delete, { coid: scope.row.coid }).then(res => {
+          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.coupon_delete, {coid: scope.row.coid}).then(res => {
             if (res.data.status == 200) {
-              this.couponList.splice(scope.$index, 1);
+              this.getCoupon();
               this.$notify({
                 title: '删除成功',
                 message: `优惠券${scope.row.coname}删除成功`,
@@ -170,14 +202,15 @@
               });
             }
           })
-        }).catch(() => { });
+        }).catch(() => {
+        });
       },
       // 标签dialog的保存按钮
       saveItem() {
         this.$refs.itemForm.validate(valid => {
-          if(valid) {
+          if (valid) {
             let type = this.itemForm.itid == '' ? '新增' : '编辑';
-            if(this.itemForm.itid) { //  编辑
+            if (this.itemForm.itid) { //  编辑
               this.$http.post(this.$api.update_items, this.itemForm).then(res => {
                   if (res.data.status == 200) {
                     this.$notify({
@@ -191,7 +224,7 @@
                   }
                 }
               )
-            }else{
+            } else {
               // this.itemForm.itsort = Number(this.itemList.length + 1);
               this.$http.post(this.$api.create_items, this.itemForm).then(res => {
                 if (res.data.status == 200) {
@@ -206,7 +239,7 @@
                 }
               })
             }
-          }else {
+          } else {
             this.$message.warning('请根据校验信息完善表单!');
           }
         })
@@ -219,7 +252,8 @@
       // 删除优惠券标签
       deleteItem(scope) {
         this.$confirm('此操作将删除该优惠券标签, 是否继续?', '提示', {
-          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }).then(() => {
+          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning'
+        }).then(() => {
           let params = {
             itid: scope.row.itid,
             ittype: 20,
@@ -233,10 +267,11 @@
                 type: 'success'
               });
               this.itemDialog = false;
-              this.itemList.splice(scope.$index, 1);
+              this.getItem();
             }
           })
-        }).catch(() => { });
+        }).catch(() => {
+        });
       },
       sizeChange(val) {
         this.page_size = val;
