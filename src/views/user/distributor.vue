@@ -16,7 +16,7 @@
       <!--<el-button type="primary" icon="el-icon-plus" @click="">新增</el-button>-->
     </section>
 
-    <el-table v-loading="userLoading" :data="userList" stripe>
+    <el-table v-loading="userLoading" :data="userList" stripe :cell-class-name="cellFunction">
       <el-table-column label="用户头像" align="center" prop="usheader">
         <template slot-scope="scope">
           <table-cell-img :src="[scope.row.usheader]" :key="scope.row.usheader"></table-cell-img>
@@ -77,6 +77,12 @@
           }
         })
       },
+      cellFunction({row, column}) {
+        if (['remain', 'total', 'fans_num'].includes(column.property)) {
+          return 'money-cell'
+        }
+      },
+
       sizeChange(val) {
         this.page_size = val;
         this.getUserList();         // 获取数据
