@@ -519,7 +519,7 @@
       letter-spacing: -0.4px;
       position: relative;
       width: 180px;
-      height: 180px;
+      /*height: 180px;*/
       margin-bottom: 10px;
       box-shadow: none;
       margin-right: 0;
