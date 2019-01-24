@@ -43,7 +43,8 @@
           </li>
         </ul>
         <p class="m-selectBack-num">退款金额：￥
-          <input class="m-price m-ft-22" type="text" v-model="refund_money" :placeholder="total_money | money">
+          <input class="m-price m-ft-22" type="text" v-model="refund_money" v-if="total_money" :placeholder="total_money | money">
+          <input class="m-price m-ft-22" type="text" v-model="refund_money" v-else :placeholder="total_money">
         </p>
         <!--<p class="m-selectBack-num">退款金额：<span class="m-price">￥{{total_money | money}}</span></p>-->
       </div>
@@ -123,7 +124,8 @@
     components: { picker},
     mounted(){
       if(localStorage.getItem('back')) {
-        location.href = location.origin + '/#/personal'
+        location.href = location.origin + '/#/personal';
+        return false
       }
       if(this.$route.query.allOrder) {
         this.order = JSON.parse(this.$route.query.product);
@@ -202,6 +204,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 15) {
+          Toast('图片不应大于15M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();

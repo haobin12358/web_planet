@@ -61,7 +61,7 @@
               this.$router.push("/selected");
             }else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
               Toast('请完成店主身份认证');
-              this.$router.push("/selected");
+              this.$router.push("/personal");
             }
           }
         });

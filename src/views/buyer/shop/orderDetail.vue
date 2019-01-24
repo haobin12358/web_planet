@@ -16,7 +16,7 @@
         <span >卖家已发货</span>
         <span class="m-icon-order-status m-send" ></span>
       </div>
-      <div class="m-orderDetail-status" v-if="order_info.omstatus == 30 || order_info.omstatus == 35">
+      <div class="m-orderDetail-status" v-if="order_info.omstatus == 30 || order_info.omstatus == 25 || order_info.omstatus == 26">
         <span>买家已签收</span>
         <span class="m-icon-order-status m-send"></span>
       </div>
@@ -52,7 +52,7 @@
             <span class="m-icon-more"></span>
           </div>
           <span class="m-red" v-if="from == 'activityProduct'">
-            <span v-if="order_info.omstatus == 35">已完成</span>
+            <span v-if="order_info.omstatus == 25">已完成</span>
             <span class="m-red" v-else>{{order_info.omstatus_zh}}</span>
           </span>
           <span v-else>
@@ -90,8 +90,8 @@
             <span class="m-price">￥{{item.opsubtotal | money}}</span>
           </p>-->
           <p class="m-back-btn" v-if="from !== 'afterSales' && from !== 'activityProduct' && !order_info.ominrefund">
-            <span @click="changeRoute('/selectBack', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35) && !item.order_refund_apply">退款</span>
-            <span @click="changeRoute('/backDetail', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 35) && item.order_refund_apply">查看退款</span>
+            <span @click="changeRoute('/selectBack', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 25 || order_info.omstatus == 26) && !item.order_refund_apply">退款</span>
+            <span @click="changeRoute('/backDetail', item)" v-if="(order_info.omstatus == 10 || order_info.omstatus == 20 || order_info.omstatus == 25 || order_info.omstatus == 26) && item.order_refund_apply">查看退款</span>
             <span @click="changeRoute('/storekeeper/IDCardApprove')" v-if="order_info.omlogistictype == 10 && order_info.omstatus == 30">身份认证</span>
           </p>
         </div>
@@ -143,7 +143,11 @@
         <span @click="changeRoute('/logisticsInformation')" v-if="order_info.omstatus==20">查看物流</span>
         <span class="active" v-if="order_info.omstatus == 0" @click="payBtn">立即付款</span>
         <span class="active" v-if="order_info.omstatus == 20" @click="orderConfirm">确认收货</span>
-        <span class="active" v-if="order_info.omstatus == 35" @click="changeRoute('/addComment')">评价</span>
+        <span class="active" v-if="order_info.omstatus == 25" @click="changeRoute('/addComment')">评价</span>
+      </div>
+      <!--活动订单评价-->
+      <div class="m-align-right" v-if="from == 'activityProduct'">
+        <span class="active" v-if="order_info.omstatus == 25" @click="changeRoute('/addComment')">评价</span>
       </div>
       <bottom></bottom>
     </div>
@@ -183,7 +187,7 @@
               break;
             case '/product/detail':
               if(this.order_info.omlogistictype == 10) {
-                this.$router.push({ path: '/gift', query: { prid: item.prid }});
+                // this.$router.push({ path: '/gift', query: { prid: item.prid }});
               }else {
                 this.$router.push({ path: v, query: { prid: item.prid }});
               }
@@ -217,10 +221,27 @@
               this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
             case '/product/detail':
-              this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid, which: 'try' }});
+              switch(Number(localStorage.getItem('activityOrderNo'))) {
+                case 0:
+                  this.$router.push({ path: '/activityProductDetail', query: { fmfaid: item.prid, which: 'new' }});
+                  break;
+                case 1:
+                  this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+                  break;
+                case 2:
+                  this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+                  break;
+                case 3:
+                  this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid, which: 'try' }});
+                  break;
+              }
               break;
             case '/logisticsInformation':
               this.$router.push({ path: v, query: { omid: this.order_info.omid }});
+              break;
+            case '/addComment':
+              localStorage.setItem('productComment', JSON.stringify(this.order_info));
+              this.$router.push(v);
               break;
           }
         }

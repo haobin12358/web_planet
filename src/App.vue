@@ -31,7 +31,7 @@ export default {
     // 将邀请人的usid保存，等注册的时候使用
     if(!localStorage.getItem('token')) {
       if(location.href.indexOf('secret_usid') > 0) {
-        localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1]);
+        localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1])
       }
     }
 
@@ -72,11 +72,15 @@ export default {
     }else if(location.href.indexOf('circleid') > 0) {       // 店主版圈子右上角分享
       location.href = location.origin + '/#/circle'
     }
+    // 新人不绑手机号就清除token
+    if(localStorage.getItem('is_new')) {
+      localStorage.clear()
+    }
   },
   mounted() {
-    console.log('v 0.3.8');
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0Njk2MDA1OCwiZXhwIjoxNTQ3NTY0ODU4fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.o6gSdkhdDkHe0nnKXwgtUvVMtATQTOkPE0-ouPPy-5M';
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzA4OTI5OCwiZXhwIjoxNTQ3Njk0MDk4fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiZmE0NThkYjItMTNlZi0xMWU5LWE4NDYtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.bxtbrAZTDcqviXllfuO-h_IQm-smKc1ptov4Y9o12rs';
+    console.log('v 0.4.3');
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzEzMTY3NiwiZXhwIjoxNTQ3NzM2NDc2fQ.eyJ1c2VybmFtZSI6Ilx1NTQ0MCIsImlkIjoiMDExOGI5NzAtZmEwYS0xMWU4LTlmMjAtMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.bEhZFlLs6fT7njX9zSCt_9jYYx5lACov6O_aybuYUSU';
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzQ1NzE4NiwiZXhwIjoxNTQ4MDYxOTg2fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.G8eidzX3xb-YmDJ9JWE3YUroUvUxkkfevfL6l9rcQNI';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },

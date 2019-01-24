@@ -90,12 +90,15 @@
         // this.order_info = JSON.parse(this.$route.query.product);
         this.productList = [];
         for(let i = 0; i < this.order_info.order_part.length; i ++) {
-          let product = {
-            opid: this.order_info.order_part[i].opid, prmainpic: this.order_info.order_part[i].prmainpic,
-            img_box: [], video_box: [], image: [], video: {},
-            starList: [{ active: false }, { active: false }, { active: false }, { active: false }, { active: false }]
-          };
-          this.productList.push(product);
+          if(!this.order_info.order_part[i].opisinora) {
+            let product = {
+              opid: this.order_info.order_part[i].opid,
+              prmainpic: this.order_info.order_part[i].prmainpic,
+              img_box: [], video_box: [], image: [], video: {},
+              starList: [{ active: false }, { active: false }, { active: false }, { active: false }, { active: false }]
+            };
+            this.productList.push(product);
+          }
         }
       },
       // 记录点击的是哪个商品的图片、视频
@@ -133,6 +136,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 15) {
+          Toast('图片不应大于15M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();
@@ -156,6 +163,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 20) {
+          Toast('视频不应大于20M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();

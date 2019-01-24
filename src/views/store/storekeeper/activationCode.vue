@@ -165,6 +165,10 @@
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
+        if (files[0].size/1024/1024 > 15) {
+          Toast('图片不应大于15M');
+          return false
+        }
         let reader = new FileReader();
         let that = this;
         let form = new FormData();
@@ -221,6 +225,10 @@
         }
         if(!this.bank || this.bank == '请选择银行'){
           Toast("请选择银行");
+          return false;
+        }
+        if(!this.image.length){
+          Toast("请上传凭证");
           return false;
         }
         let params = {
@@ -284,7 +292,7 @@
                 width: 186px;
                 height: 186px;
                 margin-bottom: 20px;
-                margin-right: 15px;
+                margin-right: 25px;
               }
               .del-img {
                 width: 40px;

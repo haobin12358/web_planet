@@ -1,5 +1,5 @@
-// const title = 'https://planet.daaiti.cn/api/v1/';
-const title = 'https://www.bigxingxing.com/api/v1/';
+const title = 'https://planet.daaiti.cn/api/v1/';
+// const title = 'https://www.bigxingxing.com/api/v1/';
 
 const api={
   login: title + 'user/login',                                   // 用户登录
@@ -31,6 +31,7 @@ const api={
   order_get: title + 'order/get',                                // 订单详情
   refund_create: title +'refund/create',                         // 申请退款
   order_count: title + 'order/count',                            // 订单数量
+  get_preview_commision: title + 'order/get_preview_commision',  // 订单页获取预计佣金
   get_logistic: title + 'logistic/get',                          // 获取物流信息
   cancle_order: title + 'order/cancle',                          // 取消订单
   list_dispute_type: title + 'refund/list_dispute_type',         // 获取退款原因
@@ -111,6 +112,7 @@ const api={
   get_salesvolume_all: title + 'user/get_salesvolume_all',       // 获取团队销售额
   get_agent_commission: title + 'user/get_agent_commission_list',// 获取店主收益详情
   list_act_code: title + 'act_code/list_act_code',               // 获取个人激活码列表
+  act_code_list: title + 'act_code/get_list',                    // 获取激活码申请列表
   get_code_rule: title + 'act_code/get_rule',                    // 获取个人激活码购买规则(购买申请页)
   act_code_apply: title + 'act_code/apply',                      // 购买激活码申请 - 打款凭证
 };

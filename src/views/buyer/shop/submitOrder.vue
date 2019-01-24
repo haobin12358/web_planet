@@ -50,6 +50,12 @@
               ￥{{items.total | money}}
             </div>
           </li>
+          <li class="m-sku-num" v-if="from != 'try'">
+            <span>预计收益</span>
+            <div class="m-num m-price">
+              ￥{{items.preview | money}}
+            </div>
+          </li>
           <li class="m-flex-between">
             <span>配送方式</span>
             <div @click="changeModel('show_picker',true)">
@@ -195,6 +201,7 @@
         let total = 0;
         for(let i = 0; i < this.product_info.length; i ++) {
           this.product_info[i].total = 0;
+          this.product_info[i].preview = 0;
           this.product_info[i].prfreight = 0;
           this.product_info[i].couponList = [];
           this.product_info[i].coupon_info = { caid: [] };
@@ -216,6 +223,7 @@
 
         this.from = this.$route.query.from;
         this.uaid = localStorage.getItem("uaid");
+        this.getPreview();
         if(this.from != 'new' && this.from != 'try') {
           this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
         }
@@ -282,6 +290,29 @@
                     this.product_info[i].couponList.push(res.data.data[n].coupon);
                     this.product_info = this.product_info.concat();
                   }
+                }
+              });
+            }
+          }
+        },
+        // 订单页获取预计佣金
+        getPreview() {
+          if(this.product_info && this.from != 'try') {
+            for(let i = 0; i < this.product_info.length; i ++) {
+              this.product_info[i].params = {
+                pbid: this.product_info[i].pb.pbid,
+                skus: []
+              };
+              for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+                let sku = {
+                  skuid: this.product_info[i].cart[j].sku.skuid,
+                  nums: this.product_info[i].cart[j].canums
+                };
+                this.product_info[i].params.skus.push(sku);
+              }
+              axios.post(api.get_preview_commision + '?token=' + localStorage.getItem('token'), this.product_info[i].params).then(res => {
+                if(res.data.status == 200) {
+                  this.product_info[i].preview = res.data.data;
                 }
               });
             }

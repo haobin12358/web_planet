@@ -128,6 +128,10 @@
       if(!localStorage.getItem('circleIndex')) {
         localStorage.setItem('circleIndex', 0)
       }
+      if(sessionStorage.getItem('shop')) {
+        this.$router.push('/shop');
+        sessionStorage.removeItem('shop')
+      }
     },
     // 引入keepAlive后代替beforeDestroy
     deactivated() {
@@ -356,7 +360,7 @@
       z-index: 2;
     }
     .m-swipe{
-      padding: 0 33px;
+      /*padding: 0 33px;*/
     }
     .m-circle-content {
       padding-top: 20px;

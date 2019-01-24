@@ -46,13 +46,13 @@
               </template>
               <div class="m-total-money">合计：<span class="m-price">￥{{items.omtruemount | money}}</span></div>
               <ul class="m-order-btn-ul" v-if="!items.ominrefund">
-                <li v-if="items.omstatus==10 && !items.part_refund" @click.stop="changeRoute('/selectBack',items)">退款</li>
-                <li v-if="items.omstatus==20 || items.omstatus==35" @click.stop="changeRoute('/logisticsInformation',items)">查看物流</li>
+                <li v-if="(items.omstatus==10 || items.omstatus==25 || items.omstatus==26) && !items.part_refund" @click.stop="changeRoute('/selectBack',items)">退款</li>
+                <li v-if="items.omstatus==20 || items.omstatus==25" @click.stop="changeRoute('/logisticsInformation',items)">查看物流</li>
                 <li v-if="items.omstatus==-40" @click.stop="deleteOrder(items)">删除订单</li>
                 <li v-if="items.omstatus==0" @click.stop="cancelOrder(items)">取消订单</li>
                 <li class="active" v-if="items.omstatus==20" @click.stop="orderConfirm(items)">确认收货</li>
                 <li class="active" v-if="items.omstatus==0" @click.stop="payBtn(items)">立即付款</li>
-                <li class="active" v-if="items.omstatus==35" @click.stop="changeRoute('/addComment', items)">评价</li>
+                <li class="active" v-if="items.omstatus==25" @click.stop="changeRoute('/addComment', items)">评价</li>
               </ul>
             </div>
           </div>
@@ -93,7 +93,7 @@
       },
       // 引入keepAlive后代替beforeDestroy
       deactivated() {
-        if(this.$route.path == '/orderDetail' || this.$route.path == '/logisticsInformation') {
+        if(this.$route.path == '/orderDetail' || this.$route.path == '/logisticsInformation' || this.$route.path == '/addComment') {
           localStorage.setItem('orderListDetail', 1);
         }else {
           localStorage.setItem('orderListDetail', 0);

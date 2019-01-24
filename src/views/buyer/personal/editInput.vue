@@ -175,14 +175,16 @@
               localStorage.setItem('token', res.data.data.token);
               localStorage.removeItem('is_new');
               this.$router.push('/selected');
+              // location.href = location.origin + '/#/selected'
             }else {
               // 避免code影响
-              window.location.href = window.location.origin + '/#/personal/editInput?from=new';
+              // window.location.href = window.location.origin + '/#/personal/editInput?from=new';
+              this.identifyingcode = ''
             }
           });
         }else if(this.from == 'phone' || this.from == 'passwd') {
           axios.post(api.update_user + '?token=' + localStorage.getItem('token'), params).then(res => {
-            if(res.data.status == 200){
+            if(res.data.status == 200) {
               Toast(res.data.message);
               this.$router.go(-1);
             }

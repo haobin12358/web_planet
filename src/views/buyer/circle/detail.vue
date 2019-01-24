@@ -164,16 +164,20 @@
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
-      if(sessionStorage.getItem('circleFrom') == 'buyer') {
-        if(this.$route.name == 'productDetail') {
-          sessionStorage.setItem('circleProduct', true)
-        }else {
-          this.$router.push('/circle');
+      if(this.$route.path == '/product/detail') {
+        // sessionStorage.setItem('shop', true);
+      }else {
+        if(sessionStorage.getItem('circleFrom') == 'buyer') {
+          if(this.$route.name == 'productDetail') {
+            sessionStorage.setItem('circleProduct', true)
+          }else {
+            this.$router.push('/circle');
+          }
+        }else if(sessionStorage.getItem('circleFrom') == 'store') {
+          this.$router.push('/material/circle');
         }
-      }else if(sessionStorage.getItem('circleFrom') == 'store') {
-        this.$router.push('/material/circle');
+        sessionStorage.removeItem('circleFrom');
       }
-      sessionStorage.removeItem('circleFrom');
     },
     methods: {
       // 删除圈子

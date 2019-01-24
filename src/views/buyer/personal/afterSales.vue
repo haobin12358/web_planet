@@ -123,6 +123,10 @@
     mounted() {
       common.changeTitle('售后');
       this.getOrderList();             // 获取订单列表
+    },
+    activated() {
+      common.changeTitle('售后');
+      this.getOrderList();             // 获取订单列表
     }
   }
 </script>

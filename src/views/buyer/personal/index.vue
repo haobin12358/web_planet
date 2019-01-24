@@ -243,6 +243,10 @@
         localStorage.removeItem('back');
         this.$router.push('/personal/afterSales')
       }
+      if(sessionStorage.getItem('shop')) {
+        this.$router.push('/shop');
+        sessionStorage.removeItem('shop')
+      }
     },
     methods: {
       goStore() {
@@ -492,7 +496,7 @@
                 this.send = res.data.data[i].count;
               }else if(res.data.data[i].status == "20") {
                 this.receive = res.data.data[i].count;
-              }else if(res.data.data[i].status == "35") {
+              }else if(res.data.data[i].status == "25") {
                 this.evaluate = res.data.data[i].count;
               }else if(res.data.data[i].status == "40") {
                 this.after_sales = res.data.data[i].count;
