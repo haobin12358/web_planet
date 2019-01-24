@@ -9,7 +9,7 @@
             <div class="m-one-brand-part" :ref="items.itid" :id="items.itid">
               <h3>{{items.itname}}</h3>
               <ul class="m-brand-ul">
-                <li @click="changeRoute('/brandDetail',item)" v-for="item in items.brands">
+                <li class="m-brand-li" @click="changeRoute('/brandDetail',item)" v-for="item in items.brands">
                   <img :src="item.pblogo" alt="">
                 </li>
               </ul>
@@ -154,19 +154,16 @@
           flex-wrap: wrap;
           li{
             margin-bottom: 40px;
+            margin-right: 80px;
+
             img{
-              display: block;
+              /*display: block;*/
               width: 150px;
               height: 150px;
               border-radius: 10px;
               /*background-color: #9fd0bf;*/
             }
-            margin-right: 80px;
-            &:nth-child(3n){
-              margin-right: 0;
-            }
           }
-
         }
       }
     }

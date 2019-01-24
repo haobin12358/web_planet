@@ -54,6 +54,9 @@
           <span class="m-more"></span>
         </div>
       </div>
+      <div class="m-product-description" v-if="product_info.prdescription">
+        {{product_info.prdescription}}
+      </div>
       <div class="m-product-detail-img-box" v-if="product_info.prdesc">
         <img v-for="item in product_info.prdesc" :src="item">
       </div>
@@ -393,6 +396,12 @@
       background-size: 100% 100%;
       margin-left: 20px;
     }
+  }
+  .m-product-description{
+    margin: 15px 0;
+    background: #999999;
+    text-align: center;
+    padding: 10px 20px;
   }
   .m-product-detail-img-box{
     margin: 5px 0 15px 0;

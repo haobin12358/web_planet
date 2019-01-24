@@ -80,7 +80,7 @@
           this.historySearch();
           // 在圈子的搜索时才显示推荐圈子
           if(this.$route.query.shtype == 'news') {
-            this.placeholder = '圈子搜索关键词(标题名)';
+            this.placeholder = '圈子搜索关键词(标题名/内容)';
             this.isCircle = true;
             this.getNav();
           }else {
