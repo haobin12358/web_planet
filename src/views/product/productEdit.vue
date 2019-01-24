@@ -101,6 +101,8 @@
             <el-button style="margin-bottom: 10px;" type="primary" @click="addOneSku">添加一行商品属性</el-button>
 
             <section>
+              <el-input v-model="commonSkuSn" placeholder="统一设置货号" size="medium" style="width: 120px;"
+                        @keyup.enter.native="setCommonSku('sku')"></el-input>
               <el-input v-model="commonSkuPrice" placeholder="统一设置价格" size="medium" style="width: 120px;"
                         @keyup.enter.native="setCommonSku('price')"></el-input>
               <el-input v-model="commonSkuDev" placeholder="统一设置让利(%)" size="medium" style="width: 160px;"
@@ -108,7 +110,7 @@
               </el-input>
               <el-input v-model="commonSkuStock" placeholder="统一设置库存" size="medium" style="width: 120px;"
                         @keyup.enter.native="setCommonSku('stock')"></el-input>
-              <span class="form-item-end-tip">回车设置</span>
+              <span class="form-item-end-tip">回车统一设置</span>
             </section>
           </section>
         </section>
@@ -136,11 +138,11 @@
               </el-upload>
             </template>
           </el-table-column>
-          <!--<el-table-column label="SN" prop="sn" align="center" width="120">
+          <el-table-column label="货号" prop="sn" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.trim="scope.row.skusn" maxlength="100"></el-input>
             </template>
-          </el-table-column>-->
+          </el-table-column>
 
           <!--自定商品规格-->
           <el-table-column :label="item" v-for="(item,index) in formData.prattribute" :key="index"
@@ -421,6 +423,7 @@
         uploadSkuImgIndex: 0,
         platformComRate: 0, //  平台抽成比例
         //  一键统一设置sku价格等
+        commonSkuSn: '',
         commonSkuPrice: '',
         commonSkuDev: '',
         commonSkuStock: '',
@@ -583,10 +586,10 @@
         } else {
           this.formData.skus.push({
             skupic: "",
-            // skusn: '',
-            skuprice: this.formData.prprice || 0,
-            skudeviderate: 0,
-            skustock: 0,
+            skusn: this.commonSkuSn || '',
+            skuprice: this.formData.prprice|| this.commonSkuPrice || 0,
+            skudeviderate:this.commonSkuDev || 0,
+            skustock: this.commonSkuStock || 0,
             skuattritedetail: new Array(this.formData.prattribute.length),
           });
         }
@@ -599,7 +602,10 @@
         if (this.formData.skus.length) {
           for (let i = 0; i < this.formData.skus.length; i++) {
             switch (type) {
-              case 'price':
+              case 'sku':
+                this.formData.skus[i].skusn = this.commonSkuSn;
+                break;
+                case 'price':
                 this.formData.skus[i].skuprice = this.commonSkuPrice;
                 break;
               case 'dev':

@@ -6,6 +6,9 @@
         <el-form-item label="商品名">
           <el-input v-model.trim="searchForm.kw" clearable></el-input>
         </el-form-item>
+        <el-form-item label="货号">
+          <el-input v-model.trim="searchForm.skusn" clearable></el-input>
+        </el-form-item>
         <el-form-item label="品牌">
           <el-select v-model="searchForm.pbid" @change="doSearch(true)" filterable clearable>
             <el-option
@@ -189,6 +192,7 @@
           showUpgradeProd: false,
 
           kw: '',
+          skusn: '',
           pbid: '',
           pcid: [],
           prstatus: 'all',
@@ -270,6 +274,7 @@
           showUpgradeProd: false,
 
           kw: '',
+          skusn: '',
           pcid: [],
           prstatus: 'all',
           order_type: '',
