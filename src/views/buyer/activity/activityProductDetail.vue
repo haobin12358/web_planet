@@ -106,25 +106,40 @@
       wxapi.wxRegister(location.href.split('#')[0]);
       localStorage.removeItem('share');
       localStorage.removeItem('url');
+      if(common.isWeixin()) {
+        if(localStorage.getItem('token')) {
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              this.shareProduct(1);
+              clearInterval(time);
+            }
+          }, 100);
+        }
+      }
     },
     methods: {
       // 分享商品
-      shareProduct() {
+      shareProduct(val) {
         if(common.isWeixin()) {
           if(localStorage.getItem('token')) {
             let options = {};
             let which = this.$route.query.which;
             if(which == "new") {
               options = {
-                title: '新人首单',
-                desc: '分享给好友购买, 享受优惠, 可返原价',
+                title: this.product.prtitle,
+                desc: this.product.prdescription,
                 imgUrl: this.product.prmainpic,
                 link: window.location.href.split('#')[0] + '?fmfpid=' + this.$route.query.fmfpid + '&which=new'
               };
             }else if(which == "try") {
               options = {
-                title: '试用商品',
-                desc: '试用商品的体验专区',
+                title: this.product.tctitle,
+                desc: this.product.tcdescription,
                 imgUrl: this.product.tcmainpic,
                 link: window.location.href.split('#')[0] + '?tcid=' + this.$route.query.tcid + '&which=try'
               };
@@ -132,8 +147,10 @@
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
-                // 点击分享
-                this.show_invite = true;
+                if(val !== 1) {
+                  // 点击分享
+                  this.show_invite = true;
+                }
               }
             });
 

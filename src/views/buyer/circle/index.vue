@@ -142,8 +142,8 @@
       shareCircle(items) {
         if(localStorage.getItem('token')) {
           let options = {
-            title: '圈子',
-            desc: '快来查看您的好友分享的圈子乐趣吧',
+            title: items.netitle,
+            desc: items.netext,
             imgUrl: items.usheader,       // 初步考虑用用户头像
             link: location.href.split('#')[0] + '?neid=' + items.neid
           };

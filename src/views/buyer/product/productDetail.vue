@@ -3,7 +3,7 @@
       <div class="m-product-swipe">
         <mt-swipe :auto="3000">
           <mt-swipe-item class="product-swipe" v-for="(item, index) in product_info.images" v-bind:key="item.piid">
-            <img class="product-img" :src="item.pipic" @click="previewImage(index, product_info.images)">
+            <img class="product-img" :src="item.pipic" @click="previewImage(index, product_info.images)" v-lazy="item.pipic" :key="item.pipic">
           </mt-swipe-item>
         </mt-swipe>
         <span class="m-icon-back" @click="changeBack"></span>
@@ -35,7 +35,7 @@
                <span v-for="(item,index) in select_value.skuattritedetail">{{product_info.prattribute[index]}} {{item}}</span>
             </template>
              <template  v-else>
-                 <span v-for="item in product_info.prattribute">{{item}} </span>
+               <span v-for="item in product_info.prattribute">{{item}} </span>
              </template>
           </span>
         </div>
@@ -58,7 +58,7 @@
         {{product_info.prdescription}}
       </div>
       <div class="m-product-detail-img-box" v-if="product_info.prdesc">
-        <img v-for="item in product_info.prdesc" :src="item">
+        <img v-for="item in product_info.prdesc" :src="item" v-lazy="item" :key="item">
       </div>
       <div class="m-product-detail-foot">
         <span class="m-icon-car" @click.stop="changeRoute('/shop')"></span>
@@ -121,6 +121,19 @@
         this.getUser();
         localStorage.removeItem('share');
         localStorage.removeItem('url');
+        if(localStorage.getItem('token')) {
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              this.shareProduct(1);
+              clearInterval(time);
+            }
+          }, 100);
+        }
       },
       activated() {
        /* this.getInfo();
@@ -130,19 +143,21 @@
       },
       methods:{
         // 分享商品
-        shareProduct() {
+        shareProduct(val) {
           if(localStorage.getItem('token')) {
             let options = {
-              title: '商品',
-              desc: '快来查看您的好友分享的商品吧',
+              title: this.product_info.prtitle,
+              desc: this.product_info.prdescription,
               imgUrl: this.product_info.prmainpic,
               link: location.href.split('#')[0] + '?prid=' + this.$route.query.prid
             };
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
-                // 点击分享
-                this.show_invite = true;
+                if(val !== 1) {
+                  // 点击分享
+                  this.show_invite = true;
+                }
               }
             });
 

@@ -7,7 +7,7 @@
         <span class="m-icon-search"></span>
         <span>搜索圈子关键词</span>
       </div>
-      <span class="m-icon-share" @click="shareIndex"></span>
+      <span class="m-icon-share" @click="shareCircle"></span>
     </div>
     <span class="m-add-img" @click="changeRoute('/circle/editCircle')"></span>
     <!--轮播图-->
@@ -55,7 +55,7 @@
                 <span>{{items.commentnumber}}</span>
               </li>
               <li>
-                <span class="m-icon-transmit"></span>
+                <span class="m-icon-transmit" @click.stop="shareCircle(items)"></span>
               </li>
             </ul>
             <div class="m-refuse-reason" v-if="select_nav.itid == 'mynews' && items.nestatus == 'refuse'">
@@ -144,20 +144,36 @@
     },
     methods: {
       // 分享后点击进入首页
-      shareIndex() {
-        let options = {
-          title: '大行星',
-          desc: '快来大行星查看好友分享给您的精彩内容吧',
-          imgUrl: this.swipe_list[0].mainpic || '',
-          link: location.href.split('#')[0] + '?circleid=index'
-        };
-        axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
-          if(res.data.status == 200) {
-            options.link += '&secret_usid=' + res.data.data.secret_usid;
-            // 点击分享
-            this.show_invite = true;
-          }
-        });
+      shareCircle(items) {
+        if(items) {
+          let options = {
+            title: items.netitle,
+            desc: items.netext,
+            imgUrl: items.usheader,       // 初步考虑用用户头像
+            link: location.href.split('#')[0] + '?neid=' + items.neid
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+              // 点击分享
+              this.show_invite = true;
+            }
+          });
+        }else {
+          let options = {
+            title: '大行星',
+            desc: '快来大行星查看好友分享给您的精彩内容吧',
+            imgUrl: this.swipe_list[0].mainpic || '',
+            link: location.href.split('#')[0] + '?circleid=index'
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+              // 点击分享
+              this.show_invite = true;
+            }
+          });
+        }
 
         // 倒计时
         const TIME_COUNT = 3;
