@@ -117,4 +117,5 @@ const api={
   act_code_apply: title + 'act_code/apply',                      // 购买激活码申请 - 打款凭证
 };
 
+
 export default api
