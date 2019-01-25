@@ -112,29 +112,37 @@
                 <span class="m-hot">HOT!</span>
                 <span>人气热卖</span>
             </div>
-            <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
+
+
+            <mt-swipe style="height: 100%;background: white;" :auto="3000" v-if="hot_list">
+              <mt-swipe-item v-for="item in hot_list" :key="item.prid">
+                <img :src="item.prmainpic" style="height: 100%;max-width: 100%;text-align: center;">
+              </mt-swipe-item>
+            </mt-swipe>
+
+           <!-- <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
               <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
-              <!--<div class="m-one-product-text">
+              &lt;!&ndash;<div class="m-one-product-text">
                 <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
                 <p v-if="hot_list[0].prlineprice">￥{{hot_list[0].prlineprice | money}}</p>
-              </div>-->
+              </div>&ndash;&gt;
             </div>
             <div>
               <div class="m-one-product " v-if="hot_list[1]" @click.stop="productClick(hot_list[1])">
                 <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
-                <!--<div class="m-one-product-text">
+                &lt;!&ndash;<div class="m-one-product-text">
                   <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
                   <p v-if="hot_list[1].prlineprice">￥{{hot_list[1].prlineprice | money}}</p>
-                </div>-->
+                </div>&ndash;&gt;
               </div>
               <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
                 <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
-                <!--<div class="m-one-product-text">
+                &lt;!&ndash;<div class="m-one-product-text">
                   <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
                   <p v-if="hot_list[2].prlineprice">￥{{hot_list[2].prlineprice | money}}</p>
-                </div>-->
+                </div>&ndash;&gt;
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
         <!--活动专题-->
@@ -550,6 +558,7 @@
       font-weight: bold;
       font-size: 30px;
       border-radius: 10px;
+      padding:0 10px;
       .m-hot{
         font-size: 58px;
         color: @mainColor;
