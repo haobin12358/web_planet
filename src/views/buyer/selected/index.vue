@@ -115,7 +115,7 @@
 
 
             <mt-swipe style="height: 100%;background: white;" :auto="3000" v-if="hot_list">
-              <mt-swipe-item v-for="item in hot_list" :key="item.prid">
+              <mt-swipe-item v-for="item in hot_list" :key="item.prid" @click.native.stop="productClick(item)">
                 <img :src="item.prmainpic" style="height: 100%;max-width: 100%;text-align: center;">
               </mt-swipe-item>
             </mt-swipe>
