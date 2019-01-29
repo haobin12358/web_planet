@@ -157,9 +157,22 @@
         this.changeModal('show_modal',true);
         sessionStorage.removeItem('showComments');
       }
-      // wxapi.wxRegister(location.href.split('#')[0]);
       localStorage.removeItem('share');
       localStorage.removeItem('url');
+      // wxapi.wxRegister(location.href.split('#')[0]);
+      if(localStorage.getItem('token')) {
+        // 倒计时
+        const TIME_COUNT = 1;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if(count > 0 && count <= TIME_COUNT) {
+            count --;
+          }else {
+            this.shareCircle(1);
+            clearInterval(time);
+          }
+        }, 100);
+      }
     },
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
@@ -197,19 +210,21 @@
         });
       },
       // 分享圈子 - 详情页点击
-      shareCircle() {
+      shareCircle(val) {
         if(localStorage.getItem('token')) {
           let options = {
-            title: '圈子',
-            desc: '快来查看您的好友分享的圈子乐趣吧',
+            title: this.news_info.netitle,
+            desc: this.news_info.netext,
             imgUrl: this.news_info.author.usheader,       // 初步考虑用用户头像
             link: location.href.split('#')[0] + '?neid=' + this.$route.query.neid
           };
           axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
             if(res.data.status == 200) {
               options.link += '&secret_usid=' + res.data.data.secret_usid;
-              // 点击分享
-              this.show_invite = true;
+              if(val !== 1) {
+                // 点击分享
+                this.show_invite = true;
+              }
             }
           });
 

@@ -51,36 +51,30 @@ export default {
     if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
       localStorage.setItem('share', 'mbjid');
       location.href = location.origin;
-      // location.href = url.split('?mbjid')[0] + '#/pandora?mbjid' + url.split('?mbjid')[1]
     }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
       localStorage.setItem('share', 'fmfpid');
       location.href = location.origin;
-      // this.$router.push('/selected');
-      // location.href = url.split('?fmfpid')[0] + '#/activityProductDetail?fmfpid' + url.split('?fmfpid')[1]
     }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
       localStorage.setItem('share', 'tcid');
       location.href = location.origin;
-      // location.href = url.split('?tcid')[0] + '#/activityProductDetail?tcid' + url.split('?tcid')[1]
     }else if(location.href.indexOf('neid') > 0) {           // 圈子详情 - 在圈子列表页点击的分享
       localStorage.setItem('share', 'neid');
       location.href = location.origin;
-      // location.href = url.split('?neid')[0] + '#/circle/detail?neid' + url.split('?neid')[1]
     }else if(location.href.indexOf('prid') > 0) {           // 商品详情
       localStorage.setItem('share', 'prid');
       location.href = location.origin;
-      // location.href = url.split('?prid')[0] + '#/product/detail?prid' + url.split('?prid')[1]
     }else if(location.href.indexOf('circleid') > 0) {       // 店主版圈子右上角分享
       location.href = location.origin + '/#/circle'
     }
-    // 新人不绑手机号就清除token
+    // 新人不绑手机号就清除localStorage
     if(localStorage.getItem('is_new')) {
       localStorage.clear()
     }
   },
   mounted() {
-    console.log('v 0.4.3');
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzEzMTY3NiwiZXhwIjoxNTQ3NzM2NDc2fQ.eyJ1c2VybmFtZSI6Ilx1NTQ0MCIsImlkIjoiMDExOGI5NzAtZmEwYS0xMWU4LTlmMjAtMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.bEhZFlLs6fT7njX9zSCt_9jYYx5lACov6O_aybuYUSU';
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzQ1NzE4NiwiZXhwIjoxNTQ4MDYxOTg2fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.G8eidzX3xb-YmDJ9JWE3YUroUvUxkkfevfL6l9rcQNI';
+    console.log('v 0.4.4');
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0ODM5NDcyMiwiZXhwIjoxNTQ4OTk5NTIyfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.lTh7lGanswYZldjeOBC4yuwJ4Y2pdMMcJQUYIIfBDPU';
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0ODM5Mzg4OSwiZXhwIjoxNTQ4OTk4Njg5fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiOGJjNmRjNWUtMjA1OC0xMWU5LThhZDMtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.OtUdMe8kQLKcyAHhgoEuPYv7kcwwlrzDaoc2e8chZJE';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },

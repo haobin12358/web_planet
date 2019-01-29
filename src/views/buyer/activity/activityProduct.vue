@@ -83,15 +83,15 @@
             let which = this.$route.query.which;
             if(which == "new") {
               options = {
-                title: '新人首单',
-                desc: '分享给好友购买, 享受优惠, 可返原价',
+                title: item.prtitle,
+                desc: item.prtitle,
                 imgUrl: item.tcmainpic,
                 link: window.location.href.split('#')[0] + '?fmfpid=' + item.fmfpid + '&which=new'
               };
             }else if(which == "try") {
               options = {
-                title: '试用商品',
-                desc: '试用商品的体验专区',
+                title: item.tctitle,
+                desc: item.tcdescription,
                 imgUrl: item.tcmainpic,
                 link: window.location.href.split('#')[0] + '?tcid=' + item.tcid + '&which=try'
               };

@@ -258,6 +258,19 @@
         if(this.$route.query.secret_usid) {
           localStorage.setItem('secret_usid', this.$route.query.secret_usid)
         }
+        if(localStorage.getItem('token')) {
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              this.share();
+              clearInterval(time);
+            }
+          }, 100);
+        }
       },
       activated() {
         // 倒计时
@@ -318,6 +331,37 @@
         }
       },
       methods: {
+        // 分享
+        share() {
+          let options = {
+            title: '大行星',
+            desc: '大行星严选',
+            // imgUrl: this.product_info.prmainpic,
+            link: location.origin
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+            }
+          });
+
+          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+          if(wx.updateAppMessageShareData) {
+            wx.updateAppMessageShareData(options);
+          }
+          // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+          if(wx.updateTimelineShareData) {
+            wx.updateTimelineShareData(options);
+          }
+          // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareAppMessage) {
+            wx.onMenuShareAppMessage(options);
+          }
+          // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareTimeline) {
+            wx.onMenuShareTimeline(options);
+          }
+        },
         /*获取轮播图*/
         getSwipe(){
           axios.get(api.list_banner_index).then(res => {
