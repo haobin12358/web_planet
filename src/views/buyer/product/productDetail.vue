@@ -22,7 +22,7 @@
         <div class="m-info-list">
           <span>快递：{{product_info.prfreight | money}} 元</span>
           <span>月销：{{product_info.month_sale_value}}</span>
-          <span>
+          <span @click="changeRoute('/brandDetail')">
             {{product_info.brand.pbname}}
           </span>
         </div>
@@ -214,9 +214,11 @@
          },
         //改变路由
         changeRoute(v){
-           if(v == '/evaluate'){
-             this.$router.push({path:v,query:{prid:this.product_info.prid}});
-           }else{
+          if(v == '/evaluate'){
+            this.$router.push({path:v,query:{prid:this.product_info.prid}});
+          }else if(v == '/brandDetail'){
+            this.$router.push({path:v,query:{pbid:this.product_info.pbid}});
+          }else{
              sessionStorage.setItem('shop', true);
              this.$router.push('/selected');
            }
