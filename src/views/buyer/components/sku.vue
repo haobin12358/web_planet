@@ -9,8 +9,9 @@
         </div>
         <div class="m-center">
           <p v-if="select_value">
-            <span class="m-red" v-if="select_value.skustock">￥{{select_value.skuprice}}</span>
-            <span class="m-ft-26 m-red" v-if="select_value.skustock == 0">库存不足</span>
+            <span class="m-red">￥{{select_value.skuprice}}</span>
+            <!--<span class="m-red" v-if="select_value.skustock">￥{{select_value.skuprice}}</span>-->
+            <!--<span class="m-ft-26 m-red" v-if="select_value.skustock == 0">库存不足</span>-->
           </p>
           <p v-else>
             <span class="m-red" v-if="product.price_range">￥{{product.price_range}}</span>
@@ -187,6 +188,7 @@
             list-style: none;
             padding: 0;
             .m-sku-ul{
+              color: #333333;
               display: flex;
               flex-flow: row;
               align-items: center;
