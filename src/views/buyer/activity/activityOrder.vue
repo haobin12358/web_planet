@@ -24,7 +24,7 @@
             <div class="m-order-product-ul">
               <template v-for="(item,i) in items.order_part">
                 <div class="m-product-info" >
-                  <img :src="item.prmainpic" class="m-product-img">
+                  <img :src="item.prmainpic" v-lazy="item.prmainpic" :key="item.prmainpic" class="m-product-img">
                   <div>
                     <p class="m-flex-between">
                       <span class="m-product-name">{{item.prtitle}}</span>
@@ -169,7 +169,7 @@
               for(let i = 0; i < res.data.data.length; i ++) {
                 res.data.data[i].active = false;
               }
-              res.data.data[0].active = true;
+              // res.data.data[0].active = true;
               this.nav_list = [].concat(res.data.data);
 
               if(localStorage.getItem('activityOrderNo')) {
