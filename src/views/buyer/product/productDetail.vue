@@ -416,7 +416,7 @@
   }
   .m-product-description{
     margin: 15px 0;
-    background: #999999;
+    background: #ffffff;
     text-align: center;
     padding: 10px 20px;
   }
