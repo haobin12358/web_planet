@@ -176,7 +176,7 @@
         }else {
           let params = {
             token: localStorage.getItem('token'),
-            itid: 'news_bind_coupon',
+            // itid: 'news_bind_coupon',
             page_num : 1,
             page_size : 200
           };

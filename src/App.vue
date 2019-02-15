@@ -15,6 +15,9 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  import api from '../src/api/api';
+
 export default {
   name: 'App',
   provide(){
@@ -48,23 +51,30 @@ export default {
         }
       }
     }
+    let params = {};
     if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
       localStorage.setItem('share', 'mbjid');
       location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
       localStorage.setItem('share', 'fmfpid');
       location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
       localStorage.setItem('share', 'tcid');
       location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('neid') > 0) {           // 圈子详情 - 在圈子列表页点击的分享
       localStorage.setItem('share', 'neid');
       location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('prid') > 0) {           // 商品详情
       localStorage.setItem('share', 'prid');
       location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('circleid') > 0) {       // 店主版圈子右上角分享
       location.href = location.origin + '/#/circle'
+      this.shareRecord(params);
     }
     // 新人不绑手机号就清除localStorage
     if(localStorage.getItem('is_new')) {
@@ -72,7 +82,7 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.4.4');
+    console.log('v 0.4.5');
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0ODM5NDcyMiwiZXhwIjoxNTQ4OTk5NTIyfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.lTh7lGanswYZldjeOBC4yuwJ4Y2pdMMcJQUYIIfBDPU';
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0ODM5Mzg4OSwiZXhwIjoxNTQ4OTk4Njg5fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiOGJjNmRjNWUtMjA1OC0xMWU5LThhZDMtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.OtUdMe8kQLKcyAHhgoEuPYv7kcwwlrzDaoc2e8chZJE';
     // localStorage.setItem('token', token);
@@ -87,6 +97,14 @@ export default {
       this.$nextTick(function () {
         this.isRouterAlive =true;
       })
+    },
+    shareRecord(params) {
+      console.log(params);
+      /*axios.post(api.refund_cancel + '?token='+ localStorage.getItem('token'), { oraid: this.refund.oraid }).then(res => {
+        if(res.data.status == 200) {
+
+        }
+      });*/
     }
   }
 }

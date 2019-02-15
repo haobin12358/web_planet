@@ -221,9 +221,10 @@
               this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
             case '/product/detail':
+              break;
               switch(Number(localStorage.getItem('activityOrderNo'))) {
                 case 0:
-                  this.$router.push({ path: '/activityProductDetail', query: { fmfaid: item.prid, which: 'new' }});
+                  this.$router.push({ path: '/activityProductDetail', query: { fmfpid: item.fmfpid, which: 'new' }});
                   break;
                 case 1:
                   this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
@@ -232,7 +233,7 @@
                   this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
                   break;
                 case 3:
-                  this.$router.push({ path: '/activityProductDetail', query: { tcid: item.prid, which: 'try' }});
+                  this.$router.push({ path: '/activityProductDetail', query: { tcid: item.tcid, which: 'try' }});
                   break;
               }
               break;
