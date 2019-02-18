@@ -74,7 +74,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '3'">
-          <el-input v-model="formData.acdesc"></el-input>
+          <el-input v-model="formData.acdesc" maxlength="1000"></el-input>
         </el-form-item>
         <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
           <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="13" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
