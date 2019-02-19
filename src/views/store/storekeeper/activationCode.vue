@@ -54,6 +54,14 @@
           </div>
           <div class="m-rule-text-box m-ft-28">{{rule.acrrule}}</div>
           <div class="m-rule-row">
+            <div class="m-rule-left">购买数量</div>
+            <div class="m-rule-right" @click="copyText(rule.acrnum)">{{rule.acrnum}}</div>
+          </div>
+          <div class="m-rule-row" v-if="rule.acrcash">
+            <div class="m-rule-left">所需金额</div>
+            <div class="m-rule-right">￥{{rule.acrcash | money}}</div>
+          </div>
+          <div class="m-rule-row">
             <div class="m-rule-left">卡号</div>
             <div class="m-rule-right" @click="copyText(rule.acrbanksn)">{{rule.acrbanksn}}</div>
           </div>
@@ -424,7 +432,7 @@
         }
         .m-rule-popup {
           width: 620px;
-          height: 820px;
+          height: 860px;
           margin: -480px 0 0 25px;
           border-radius: 30px;
           padding: 40px 40px 60px 40px;
@@ -440,7 +448,7 @@
           .m-rule-text-box {
             text-align: left;
             text-indent: 2em;
-            margin: 40px 0 70px 0;
+            margin: 20px 0 60px 0;
           }
           .m-rule-row {
             font-size: 28px;
