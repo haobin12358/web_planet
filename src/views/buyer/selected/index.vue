@@ -313,7 +313,6 @@
                   clearInterval(time);
                 }
               }, 500);
-              localStorage.removeItem('href');
             }
             clearInterval(time);
           }
