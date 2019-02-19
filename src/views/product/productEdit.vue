@@ -101,6 +101,8 @@
             <el-button style="margin-bottom: 10px;" type="primary" @click="addOneSku">添加一行商品属性</el-button>
 
             <section>
+              <el-input v-model="commonSkuSn" placeholder="统一设置货号" size="medium" style="width: 120px;"
+                        @keyup.enter.native="setCommonSku('sku')"></el-input>
               <el-input v-model="commonSkuPrice" placeholder="统一设置价格" size="medium" style="width: 120px;"
                         @keyup.enter.native="setCommonSku('price')"></el-input>
               <el-input v-model="commonSkuDev" placeholder="统一设置让利(%)" size="medium" style="width: 160px;"
@@ -108,7 +110,7 @@
               </el-input>
               <el-input v-model="commonSkuStock" placeholder="统一设置库存" size="medium" style="width: 120px;"
                         @keyup.enter.native="setCommonSku('stock')"></el-input>
-              <span class="form-item-end-tip">回车设置</span>
+              <span class="form-item-end-tip">回车统一设置</span>
             </section>
           </section>
         </section>
@@ -117,10 +119,10 @@
         <!--排序分组 todo-->
         <el-table :data="formData.skus" :header-cell-class-name="headerCellFunction"
                   empty-text="请在左上方添加商品规格后,再点右上方按钮添加一行,最后补全该表格" style="width: 100%">
-          <el-table-column label="图片" prop="img" align="center" width="120">
+          <el-table-column label="图片" prop="img" align="center" min-width="120">
             <template slot-scope="scope">
               <el-upload
-                class="avatar-uploader  small"
+                class="avatar-uploader small"
                 :action="uploadUrl"
                 :show-file-list="false"
                 accept="image/*"
@@ -136,7 +138,7 @@
               </el-upload>
             </template>
           </el-table-column>
-          <el-table-column label="SN" prop="sn" align="center" width="120">
+          <el-table-column label="货号" prop="sn" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.trim="scope.row.skusn" maxlength="100"></el-input>
             </template>
@@ -154,20 +156,20 @@
               <el-input v-model.number="scope.row.skuprice" maxlength="11"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="让利" prop="skudeviderate" align="center" width="160">
+          <el-table-column label="让利(%)" prop="skudeviderate" align="center" width="160">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skudeviderate" maxlength="11" style="width: 140px;">
                 <template slot="append">%</template>
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="库存(%)" prop="stock" align="center" width="120">
+          <el-table-column label="库存" prop="stock" align="center" width="120">
             <template slot-scope="scope">
               <el-input v-model.number="scope.row.skustock" maxlength="11"></el-input>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" prop="action" align="center" fixed="right">
+          <el-table-column label="操作" prop="action" align="center" fixed="right" width="120">
             <template slot-scope="scope">
               <el-button icon="el-icon-minus" type="text" class="danger-text" @click="removeOneSku(scope.$index)">
                 移除该属性
@@ -212,16 +214,17 @@
           :before-upload="beforeImgsUpload"
           :on-remove="handleImagesRemove"
           :http-request="uploadImages"
+          :on-exceed="onImagesFileExceed"
           :limit="9"
           :multiple="true">
           <i class="el-icon-plus"></i>
           <div slot="tip" class="el-upload__tip">
-            <span>可多选,建议尺寸为375x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+            <span>可多选,当前{{imagesUrl.length}}/9张,建议尺寸为375x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
             <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
           </div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="底部长图(最多20张)" prop="prdesc">
+      <el-form-item label="底部长图(最多30张)" prop="prdesc">
         <el-upload
           class="swiper-uploader"
           :action="uploadUrl"
@@ -232,11 +235,12 @@
           :before-upload="beforeImgsUpload"
           :on-remove="handlePrDescRemove"
           :http-request="uploadPrDesc"
-          :limit="20"
+          :on-exceed="onFileExceed"
+          :limit="30"
           :multiple="true">
           <i class="el-icon-plus"></i>
           <div slot="tip" class="el-upload__tip">
-            <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+            <span>可多选,当前{{prDescUrl.length}}/30张,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
             <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
           </div>
         </el-upload>
@@ -419,6 +423,7 @@
         uploadSkuImgIndex: 0,
         platformComRate: 0, //  平台抽成比例
         //  一键统一设置sku价格等
+        commonSkuSn: '',
         commonSkuPrice: '',
         commonSkuDev: '',
         commonSkuStock: '',
@@ -581,10 +586,10 @@
         } else {
           this.formData.skus.push({
             skupic: "",
-            skusn: '',
-            skuprice: this.formData.prprice || 0,
-            skudeviderate: 0,
-            skustock: 0,
+            skusn: this.commonSkuSn || '',
+            skuprice: this.formData.prprice|| this.commonSkuPrice || 0,
+            skudeviderate:this.commonSkuDev || 0,
+            skustock: this.commonSkuStock || 0,
             skuattritedetail: new Array(this.formData.prattribute.length),
           });
         }
@@ -597,7 +602,10 @@
         if (this.formData.skus.length) {
           for (let i = 0; i < this.formData.skus.length; i++) {
             switch (type) {
-              case 'price':
+              case 'sku':
+                this.formData.skus[i].skusn = this.commonSkuSn;
+                break;
+                case 'price':
                 this.formData.skus[i].skuprice = this.commonSkuPrice;
                 break;
               case 'dev':
@@ -743,6 +751,13 @@
         )
       },
 
+      onFileExceed(files, fileList){
+        this.$message.warning(`图片数量超出限制,最多30张,上传失败${files.length}张`)
+      },
+      onImagesFileExceed(files, fileList){
+        this.$message.warning(`图片数量超出限制,最多9张,上传失败${files.length}张`)
+      },
+
       //  配合的data转换成接口要求的 还是得放watch里配合校验信息
       convertToSave() {
         // this.formData.pcid = this.selectedOption[2];
@@ -841,9 +856,9 @@
               if (!currentSku.skupic) {
                 detailTip += '-图片未传'
               }
-              if (!currentSku.skusn) {
+              /*if (!currentSku.skusn) {
                 detailTip += '-sn码未传'
-              }
+              }*/
               if (!currentSku.skuprice || !moneyReg.test(currentSku.skuprice)) {
                 detailTip += '-价格不符'
               }

@@ -27,14 +27,18 @@
     </section>
     <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
       <el-table-column label="审批内容" align="center">
-        <el-table-column label="商品图片" align="center" prop="prdescription">
+        <el-table-column label="商品图片" align="center" prop="prdescription" width="100">
           <template slot-scope="scope">
             <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="content.prtitle" width="220"></el-table-column>
         <el-table-column label="活动价格" align="center" prop="content.prprice" width="120"></el-table-column>
-
+        <el-table-column align="center" label="sku" width="120">
+          <template slot-scope="scope">
+            <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
@@ -88,12 +92,13 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import ProductSku from "src/views/product/components/productSku";
 
   //  tofreshmanfirstproduct
   export default {
     name: "FirstOrderActiAudit",
 
-    components: {TableCellImg},
+    components: {TableCellImg, ProductSku},
 
     data() {
       return {

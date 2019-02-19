@@ -2,9 +2,15 @@
   <div class="container">
     <block-title title="问题类型"></block-title>
     <el-button class="add-btn" type="primary" icon="el-icon-plus">新增问题类型</el-button>
-    <el-table :data="typeData">
-      <el-table-column label="问题类型名称"></el-table-column>
-      <el-table-column label="操作"></el-table-column>
+    <el-table ref="typeTable" :data="typeData" v-loading="loading" row-key="qoid" highlight-current-row
+              :row-class-name="tableRowClassName" @current-change="handleCurrentChange">
+      <el-table-column label="问题类型名称" prop="qoname" align="center"></el-table-column>
+      <el-table-column label="操作" prop="qoname" align="center" width="280">
+        <template slot-scope="scope">
+          <el-button type="text">编辑</el-button>
+          <el-button type="text" class="danger-text">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog visible.sync="typeDlgVisible">
       <el-form label-position="left" label-width="120px">
@@ -15,12 +21,17 @@
         <el-button type="primary">确 定</el-button>
       </span>
     </el-dialog>
-
-    <block-title :title="currentSelectTypeName"></block-title>
+    <block-title :title="currentSelectType.qoname"></block-title>
     <el-button class="add-btn" type="primary" icon="el-icon-plus">新增该类问答</el-button>
-    <el-table :data="qsData" empty-text="问答类型或选中问题类型下问答数量为0">
-      <el-table-column label="问题类型名称"></el-table-column>
-      <el-table-column label="操作"></el-table-column>
+    <el-table :data="currentSelectType.question" v-loading="loading" empty-text="问答类型或选中问题类型下问答数量为0">
+      <el-table-column label="问题" prop="ququest" align="center"></el-table-column>
+      <el-table-column label="回答" prop="answer" align="center"></el-table-column>
+      <el-table-column label="操作" prop="qoname" align="center">
+        <template slot-scope="scope">
+          <el-button type="text">编辑</el-button>
+          <el-button type="text" class="danger-text">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog visible.sync="qaDlgVisible">
       <el-form label-position="left" label-width="120px">
@@ -43,21 +54,56 @@
 
     data() {
       return {
-        typeDlgVisible: false,
+        loading: false,
         typeData: [],
 
+        typeDlgVisible: false,
+
+        currentSelectType: {},
         qaDlgVisible: false,
-        currentSelectTypeName: '',
-        qsData: [],
       }
     },
 
     computed: {},
 
-    methods: {},
+    methods: {
+      //  获取所有问题类型包含问题
+      getAllTypeWithQa() {
+        this.loading = true;
+        this.$http.get(this.$api.get_all_qa, {
+          params: {
+            qotype: '222'
+          }
+        }).then(
+          res => {
+            this.loading = false;
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.typeData = data;
+              if (data.length) {
+                this.currentSelectType = data[0];
+                this.$refs.typeTable.setCurrentRow(data[0]);
+              }
+            }
+          }
+        )
+      },
+      tableRowClassName({row, rowIndex}) {
+        if (row.qoid == this.currentSelectType.qoid) {
+          return 'warning-row'
+        }
+
+        return ''
+      },
+      handleCurrentChange(val) {
+        this.currentSelectType = val;
+      },
+    },
 
     created() {
-
+      this.getAllTypeWithQa();
     },
   }
 </script>
@@ -66,6 +112,7 @@
   @import "../../styles/myIndex";
 
   .container {
+    height: 100%;
     .add-btn {
       float: right;
       margin: -50px 0 10px 0;

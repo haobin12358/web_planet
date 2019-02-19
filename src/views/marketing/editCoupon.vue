@@ -22,7 +22,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="减额：" prop="cosubtration" v-if="radioDiscount == 10">
-            <el-input class="short-input" v-model="couponForm.cosubtration">
+            <el-input class="short-input" v-model.number="couponForm.cosubtration">
               <template slot="prepend">减</template>
               <template slot="append">元</template>
             </el-input>
@@ -42,7 +42,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item prop="codownline" v-if="radioMoney !== 0">
-            <el-input class="short-input" v-model="couponForm.codownline">
+            <el-input class="short-input" v-model.number="couponForm.codownline">
               <template slot="prepend">满</template>
               <template slot="append">元</template>
             </el-input>
@@ -149,16 +149,16 @@
   import elDragDialog from 'src/directive/el-dragDialog'
 
   export default {
-    name: 'Coupon',
+    name: 'EditCoupon',
     data() {
       return {
         couponForm: {
           coid: '',
           coname: '',
           codesc: '',
-          cosubtration: '1',
+          cosubtration: 1,
           codiscount: '10',
-          codownline: '0',
+          codownline: 0,
           colimitnum: '1',
           cocollectnum: '1',
           // cousenum: '1',
@@ -395,6 +395,7 @@
             }else {
               this.couponForm.coiscancollect = false
             }
+
             if(this.couponForm.coid) {
               let title = '编辑';
               this.$http.post(this.$api.coupon_update, this.couponForm).then(res => {
