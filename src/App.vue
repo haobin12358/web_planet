@@ -52,28 +52,36 @@ export default {
       }
     }
     let params = {};
-    if(location.href.indexOf('mbjid') > 0) {                // 邀请好友帮拆魔盒
+    if(location.href.indexOf('mbjid') > 0) {                    // 邀请好友帮拆魔盒
       localStorage.setItem('share', 'mbjid');
       location.href = location.origin;
       this.shareRecord(params);
-    }else if(location.href.indexOf('fmfpid') > 0) {         // 新人首单
+    }else if(location.href.indexOf('fmfpid') > 0) {             // 新人首单
       localStorage.setItem('share', 'fmfpid');
       location.href = location.origin;
       this.shareRecord(params);
-    }else if(location.href.indexOf('tcid') > 0) {           // 试用商品
+    }else if(location.href.indexOf('tcid') > 0) {               // 试用商品
       localStorage.setItem('share', 'tcid');
       location.href = location.origin;
       this.shareRecord(params);
-    }else if(location.href.indexOf('neid') > 0) {           // 圈子详情 - 在圈子列表页点击的分享
+    }else if(location.href.indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
       localStorage.setItem('share', 'neid');
       location.href = location.origin;
       this.shareRecord(params);
-    }else if(location.href.indexOf('prid') > 0) {           // 商品详情
+    }else if(location.href.indexOf('prid') > 0) {               // 商品详情
       localStorage.setItem('share', 'prid');
       location.href = location.origin;
       this.shareRecord(params);
-    }else if(location.href.indexOf('circleid') > 0) {       // 店主版圈子右上角分享
+    }else if(location.href.indexOf('circleid') > 0) {           // 店主版圈子右上角分享
       location.href = location.origin + '/#/circle';
+      this.shareRecord(params);
+    }else if(location.href.indexOf('activityId=new') > 0) {     // 新人首单默认右上角分享
+      localStorage.setItem('share', 'activityId=new');
+      location.href = location.origin;
+      this.shareRecord(params);
+    }else if(location.href.indexOf('activityId=try') > 0) {     // 试用商品默认右上角分享
+      localStorage.setItem('share', 'activityId=try');
+      location.href = location.origin;
       this.shareRecord(params);
     }
     // 新人不绑手机号就清除localStorage

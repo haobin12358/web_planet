@@ -139,16 +139,80 @@
           Toast('请在微信公众号分享');
         }
       },
+      // 分享后点击进入首页
+      shareIndex() {
+        let which = this.$route.query.which;
+        let options = {};
+        if(which == "new") {
+          options = {
+            title: this.title,
+            desc: this.remarks,
+            imgUrl: this.productList[0].tcmainpic,
+            link: location.href.split('#')[0] + '?activityId=new'
+          }
+        }else if(which == "try") {
+          options = {
+            title: this.title,
+            desc: this.remarks,
+            imgUrl: this.productList[0].tcmainpic,
+            link: location.href.split('#')[0] + '?activityId=try'
+          }
+        }
+        if(localStorage.getItem('token')) {
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+            }
+          })
+        }
+
+        // 倒计时
+        const TIME_COUNT = 3;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if (count > 0 && count <= TIME_COUNT) {
+            count --;
+          } else {
+            this.show_invite = false;
+            clearInterval(time);
+          }
+        }, 1000);
+
+        // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+        if(wx.updateAppMessageShareData) {
+          wx.updateAppMessageShareData(options);
+        }
+        // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+        if(wx.updateTimelineShareData) {
+          wx.updateTimelineShareData(options);
+        }
+        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareAppMessage) {
+          wx.onMenuShareAppMessage(options);
+        }
+        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+        if(wx.onMenuShareTimeline) {
+          wx.onMenuShareTimeline(options);
+        }
+      },
       // 获取商品
       getProduct() {
         let which = this.$route.query.which;
         if(which == "new") {
           this.title = "新人首单";
-          let params = {
-            token: localStorage.getItem('token'),
-            page_num: this.page_num,
-            page_size: this.page_size
-          };
+          let params = {};
+          if(localStorage.getItem('token')) {
+            params = {
+              token: localStorage.getItem('token'),
+              page_num: this.page_num,
+              page_size: this.page_size
+            }
+          }else {
+            params = {
+              page_num: this.page_num,
+              page_size: this.page_size
+            };
+          }
           axios.get(api.fresh_man_list, { params: params }).then(res => {
             if(res.data.status == 200){
               this.banner = res.data.data.actopPic;
@@ -168,11 +232,19 @@
           });
         }else if(which == "try") {
           this.title = "试用商品";
-          let params = {
-            token: localStorage.getItem('token'),
-            page_num: this.page_num,
-            page_size: this.page_size
-          };
+          let params = {};
+          if(localStorage.getItem('token')) {
+            params = {
+              token: localStorage.getItem('token'),
+              page_num: this.page_num,
+              page_size: this.page_size
+            }
+          }else {
+            params = {
+              page_num: this.page_num,
+              page_size: this.page_size
+            };
+          }
           axios.get(api.get_commodity, { params: params }).then(res => {
             if(res.data.status == 200){
               this.banner = res.data.data.banner;
@@ -260,7 +332,20 @@
       common.changeTitle('活动商品');
       this.getProduct();               // 获取商品
       this.getDate();                  // 获取时间
+      // 倒计时
+      const TIME_COUNT = 1;
+      let count = TIME_COUNT;
+      let time = setInterval(() => {
+        if(count > 0 && count <= TIME_COUNT) {
+          count --;
+        }else {
+          this.shareIndex();               // 分享后点击进入首页
+          clearInterval(time);
+        }
+      }, 300);
       wxapi.wxRegister(location.href.split('#')[0]);
+      localStorage.removeItem('share');
+      localStorage.removeItem('url');
     }
   }
 </script>

@@ -432,7 +432,7 @@
         }
         .m-rule-popup {
           width: 620px;
-          height: 860px;
+          height: 880px;
           margin: -480px 0 0 25px;
           border-radius: 30px;
           padding: 40px 40px 60px 40px;

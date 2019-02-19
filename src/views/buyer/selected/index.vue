@@ -297,6 +297,10 @@
               }else if(localStorage.getItem('share') == 'prid') {
                 let params = url.split('?prid=')[1].split('&secret_usid')[0];
                 this.$router.push({ path: '/product/detail', query: { prid: params }})
+              }else if(localStorage.getItem('share') == 'activityId=new') {
+                this.$router.push({ path: '/activityProduct', query: { which: 'new' }})
+              }else if(localStorage.getItem('share') == 'activityId=try') {
+                this.$router.push({ path: '/activityProduct', query: { which: 'try' }})
               }
             }
             if(localStorage.getItem('href')) {
