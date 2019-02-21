@@ -66,6 +66,7 @@
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between">
             <span>品牌推荐</span>
+            <span class="m-scenes-text">Brand</span>
             <span class="m-selected-title-more"  @click="changeRoute('brandList')">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
