@@ -48,6 +48,7 @@
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between" @click="changeRoute('scene')">
             <span>场景推荐</span>
+            <span class="m-scenes-text">Scenes</span>
             <span class="m-selected-title-more">
               <span>查看更多</span>
               <span class="m-icon-more"></span>
@@ -513,6 +514,12 @@
     font-size: 36px;
     font-weight: bold;
     padding: 0 33px ;
+    .m-scenes-text {
+      flex: 1;
+      text-align: left;
+      margin-left: 10px;
+      color: #999999;
+    }
     .m-selected-title-more{
       font-size: 21px;
       font-weight: normal;
