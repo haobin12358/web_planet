@@ -67,7 +67,8 @@
       }else {
         this.buyer_store = false;
       }
-      this.selected = document.title;
+      this.selected = '精选';
+      // this.selected = document.title;
       let selectedUrl = window.location.href.split('#/')[1];
       // 当前在买家版
       for(let i = 0; i < this.$store.state.tabbar_buyer.length; i ++) {

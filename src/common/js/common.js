@@ -12,7 +12,8 @@
 // };//ios
 const common = {
   changeTitle:function (val){
-    document.getElementsByTagName('title')[0].innerHTML = val;
+    document.getElementsByTagName('title')[0].innerHTML = '大行星';
+    // document.getElementsByTagName('title')[0].innerHTML = val;
     window.setDocumentTitle = function(title) {
       var i = document.createElement('iframe');
       i.src = '../favicon.ico';
