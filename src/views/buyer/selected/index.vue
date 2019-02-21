@@ -585,7 +585,7 @@
       /*height: 180px;*/
       margin-bottom: 10px;
       box-shadow: none;
-      margin-right: 0;
+      margin-right: 15px;
       img{
         display: block;
         width: 120px;
