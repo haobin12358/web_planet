@@ -134,6 +134,8 @@
             }
           }, 100);
         }
+        // alert(this.$route.fullPath);
+        // alert(location.href);
       },
       activated() {
        /* this.getInfo();

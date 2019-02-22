@@ -177,7 +177,7 @@
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
-      if(this.$route.path == '/product/detail') {
+      if(this.$route.path == '/productDetail') {
         // sessionStorage.setItem('shop', true);
       }else {
         if(sessionStorage.getItem('circleFrom') == 'buyer') {

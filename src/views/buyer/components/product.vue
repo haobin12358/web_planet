@@ -37,7 +37,7 @@
             if(this.gift) {
               this.$router.push({ path: '/gift', query: { prid: item.prid, from: this.gift }});
             }else {
-              this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+              this.$router.push({ path: '/productDetail', query: { prid: item.prid }});
             }
           }
         },

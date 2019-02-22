@@ -135,7 +135,7 @@
             if(v == "brandDetail") {
               this.$router.push({ path: '/brandDetail', query: { pbid: item.pb.pbid, pbname: item.pb.pbname }});
             }else if(v == "product") {
-              this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+              this.$router.push({ path: '/productDetail', query: { prid: item.prid }});
             }
           }else {
             this.$router.push(v);

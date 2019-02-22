@@ -62,7 +62,7 @@
         </div>
         <div class="m-product-box" v-for="(item, index) in order_info.order_part">
           <div class="m-order-product-ul">
-            <div class="m-product-info" @click.stop="changeRoute('/product/detail',item)">
+            <div class="m-product-info" @click.stop="changeRoute('/productDetail',item)">
               <img :src="item.prmainpic" class="m-product-img" alt="">
               <div class="m-product-info-text">
                 <p class="m-flex-between">
@@ -185,7 +185,7 @@
             case '/brandDetail':
               this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
-            case '/product/detail':
+            case '/productDetail':
               if(this.order_info.omlogistictype == 10) {
                 // this.$router.push({ path: '/gift', query: { prid: item.prid }});
               }else {
@@ -220,17 +220,17 @@
             case '/brandDetail':
               this.$router.push({ path: v, query: { pbid: this.order_info.pbid, pbname: this.order_info.pbname }});
               break;
-            case '/product/detail':
+            case '/productDetail':
               break;
               switch(Number(localStorage.getItem('activityOrderNo'))) {
                 case 0:
                   this.$router.push({ path: '/activityProductDetail', query: { fmfpid: item.fmfpid, which: 'new' }});
                   break;
                 case 1:
-                  this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+                  this.$router.push({ path: '/productDetail', query: { prid: item.prid }});
                   break;
                 case 2:
-                  this.$router.push({ path: '/product/detail', query: { prid: item.prid }});
+                  this.$router.push({ path: '/productDetail', query: { prid: item.prid }});
                   break;
                 case 3:
                   this.$router.push({ path: '/activityProductDetail', query: { tcid: item.tcid, which: 'try' }});

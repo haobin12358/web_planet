@@ -13,7 +13,7 @@
         <div class="m-swipe">
           <mt-swipe :auto="3000" v-if="swipe_list">
             <mt-swipe-item v-for="item in swipe_list" :key="item.ibid">
-              <img :src="item.ibpic" class="img" @click="changeRoute('/product/detail', item)">
+              <img :src="item.ibpic" class="img" @click="changeRoute('/productDetail', item)">
             </mt-swipe-item>
           </mt-swipe>
         </div>
@@ -298,7 +298,7 @@
                 this.$router.push({ path: '/circle/detail', query: { neid: params }})
               }else if(localStorage.getItem('share') == 'prid') {
                 let params = url.split('?prid=')[1].split('&secret_usid')[0];
-                this.$router.push({ path: '/product/detail', query: { prid: params }})
+                this.$router.push({ path: '/productDetail', query: { prid: params }})
               }else if(localStorage.getItem('share') == 'activityId=new') {
                 this.$router.push({ path: '/activityProduct', query: { which: 'new' }})
               }else if(localStorage.getItem('share') == 'activityId=try') {
@@ -416,7 +416,7 @@
             case '/brandDetail':
               this.$router.push({ path: v, query: { pbid: item.pbid,pbname: item.pbname }});
               break;
-            case '/product/detail':
+            case '/productDetail':
               if(item.contentlink) {
                 window.location.href = item.contentlink;
               }
@@ -432,7 +432,7 @@
         },
         /*商品点击*/
         productClick(item){
-          this.$router.push({path:'/product/detail',query:{ prid:item.prid}});
+          this.$router.push({path:'/productDetail',query:{ prid:item.prid}});
         },
         /*下拉刷新*/
         loadTop(){
