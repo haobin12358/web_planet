@@ -916,8 +916,7 @@
         // this.getPlatformComRate();
 
         if (this.$route.query.prid) { //  编辑
-          //  编辑更换的商品或之前是新增,数据替换
-          if (this.$route.query.prid != this.formData.prid) {
+          if (this.$route.query.prid != this.formData.prid) {// 前后两次编辑的不是同一个商品,获取新的商品信息
             this.$http.get(this.$api.product_get, {
               params: {
                 prid: this.$route.query.prid,
@@ -934,16 +933,20 @@
                 }
               }
             )
+
+            this.clearCommonSkuTool();
           } else {
 
           }
-        } else {  //  新增
-          if (this.$route.query.addBig == 'true') {
+        } else {  // 新增
+          this.clearCommonSkuTool();
+
+          if (this.$route.query.addBig == 'true') { // 新增开店大礼包
             this.items = [upgradeItId];
           } else {
             this.items = [];
           }
-          //  编辑到新增
+          // 清空之前编辑的商品
           if (this.formData.prid) {
             this.reset();
           }
@@ -982,7 +985,7 @@
           duration: '2000'
         });
       },
-      //  重置(新增状态)
+      //  重置为新增状态
       reset() {
         this.formData = {
           prid: '',
@@ -1009,12 +1012,17 @@
         this.items = [];
         this.imagesUrl = [];
         this.prDescUrl = [];
-
-        // this.getPlatformComRate();
       },
+      // 清空统一设置sku的几个data
+      clearCommonSkuTool(){
+        this.commonSkuSn = '';
+        this.commonSkuStock = '';
+        this.commonSkuPrice = '';
+        this.commonSkuDev = '';
+      }
     },
 
-    //  新增编辑共用一个,光新增和prid不变时不会重置数据,
+    //  新增编辑共用一个页面,光新增或编辑同个商品不会重置数据,
     activated() {
       if (this.repeat) {
         this.repeat = false;
