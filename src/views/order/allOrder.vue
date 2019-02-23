@@ -223,8 +223,6 @@
         total: 0,
         currentPage: 1,
         pageSize: 10,
-
-        repeat: true,
       }
     },
 
@@ -448,17 +446,23 @@
           }
         )
       },
+
+      initProfileSearch() {
+        if (this.$route.params.searchDate) {
+          this.inlineForm.createtime_start = this.$route.params.searchDate;
+          this.inlineForm.createtime_end = this.$route.params.searchDate;
+        }
+
+        this.inlineForm.omstatus = this.$route.params.omstatus.toString();
+
+        this.$route.params.searchDate = '';
+        this.$route.params.omstatus = '';
+      },
     },
 
     activated() {
-      if (this.repeat) {
-        this.repeat = false;
-      } else {
-        this.setOrderList();
-      }
-    },
+      this.initProfileSearch();
 
-    created() {
       this.setOrderList();
     }
   }
