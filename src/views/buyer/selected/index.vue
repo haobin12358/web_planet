@@ -584,6 +584,7 @@
       position: relative;
       width: 180px;
       /*height: 180px;*/
+      margin-top: 0;
       margin-bottom: 10px;
       box-shadow: none;
       margin-right: 15px;
