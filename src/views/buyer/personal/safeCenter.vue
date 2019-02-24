@@ -71,7 +71,7 @@
   export default {
     data() {
       return {
-        user: { usheader: '/static/images/logo.png', usidname: '登录 / 注册'},               // 个人信息
+        user: { usheader: '/static/images/logo.jpg', usidname: '登录 / 注册'},               // 个人信息
       }
     },
     components: {},

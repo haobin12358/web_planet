@@ -58,7 +58,7 @@
       display: inline-block;
       width: 120px;
       height: 120px;
-      background: url("/static/images/logo.png") no-repeat;
+      background: url("/static/images/logo.jpg") no-repeat;
       background-size: 100% 100%;
       border-radius: 20px;
     }

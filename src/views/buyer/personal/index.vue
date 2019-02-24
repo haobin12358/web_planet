@@ -9,7 +9,7 @@
       </p>
       <div class="m-personal-info">
         <img class="m-personal-head-portrait" v-if="user.usheader" :src="user.usheader" alt="">
-        <img class="m-personal-head-portrait" v-else src="/static/images/logo.png" alt="">
+        <img class="m-personal-head-portrait" v-else src="/static/images/logo.jpg" alt="">
         <div class="m-personal-info-box">
           <div class="m-personal-info-text">
             <div>

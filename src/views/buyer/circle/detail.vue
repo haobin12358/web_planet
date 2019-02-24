@@ -520,7 +520,7 @@
       border-radius: 50%;
       margin-right: 18px;
       border: none;
-      background: url("/static/images/logo.png") no-repeat;
+      background: url("/static/images/logo.jpg") no-repeat;
       background-size: 100% 100%;
     }
     .m-author-name {
@@ -657,7 +657,7 @@
               height: 96px;
               border-radius: 50%;
               margin-right: 20px;
-              background: url("/static/images/logo.png") no-repeat;
+              background: url("/static/images/logo.jpg") no-repeat;
               background-size: 100% 100%;
             }
             .m-user-name{

@@ -1,7 +1,7 @@
 <template>
   <div class="m-login">
     <!--<p>登录</p>-->
-    <img class="m-login-logo" src="/static/images/logo.png" alt="">
+    <img class="m-login-logo" src="/static/images/logo.jpg" alt="">
     <!--<div  class="m-login-input" >
     <input type="text" v-model="ustelphone" placeholder="请输入手机号码">
     <span class="m-code" @click="sendCode" v-if="!isSend">发送验证码</span>
