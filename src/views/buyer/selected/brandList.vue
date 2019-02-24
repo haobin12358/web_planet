@@ -6,7 +6,8 @@
       <div class="m-bandList-content">
         <div class="m-scroll-content">
           <template v-for="(items,index) in brand_list" v-if="items.brands.length">
-            <div class="m-one-brand-part" :ref="items.itid" :id="items.itid">
+            <div class="margin" :id="items.itid"></div>
+            <div class="m-one-brand-part" :ref="items.itid">
               <h3>{{items.itname}}</h3>
               <ul class="m-brand-ul">
                 <li class="m-brand-li" @click="changeRoute('/brandDetail',item)" v-for="item in items.brands">
@@ -47,12 +48,12 @@
           let arr = [].concat(this.nav_list);
           let _i = 0;
           for(let i=0;i<arr.length;i++){
-            // if(document.getElementById(arr[i].itid)){
+            if(document.getElementById(arr[i].itid)){
               if(document.getElementById(arr[i].itid).offsetTop-20 < common.getScrollTop()){
                 _i = i;
-                // break;
+                break;
               }
-            // }
+            }
           }
           for(let i=0;i<arr.length;i++){
             arr[i].active = false;
@@ -73,9 +74,7 @@
           arr[index].active = true;
           this.nav_list = [].concat(arr);
           let id = arr[index].itid;
-          // console.log(document.getElementById(id).scrollTop)
-         document.getElementById(id).scrollIntoView();//滚动到顶部
-
+          document.getElementById(id).scrollIntoView();         // 滚动到顶部
         },
       //  获取标签
         getNav(){
@@ -136,6 +135,9 @@
         height: auto;
         overflow-y: auto;
       }
+      .margin {
+        height: 70px;
+      }
       .m-one-brand-part{
         &:first-child {
           margin-top: 50px;
@@ -147,15 +149,13 @@
           font-weight: bold;
         }
         .m-brand-ul{
-          margin: 0 40px;
+          margin: 0 40px -70px 40px;
           padding: 30px 45px 0 45px;
           background-color: #ffffff;
           .flex-row(flex-start);
           flex-wrap: wrap;
           li{
-            margin-bottom: 40px;
-            margin-right: 80px;
-
+            margin: 0 40px 40px 0;
             img{
               /*display: block;*/
               width: 150px;
