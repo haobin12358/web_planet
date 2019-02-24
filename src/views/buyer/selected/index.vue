@@ -74,8 +74,9 @@
           </h3>
           <div class="m-scroll ">
             <ul class="m-selected-brand-ul" v-if="brand_list">
-              <li v-for="(item,index) in brand_list" @click="changeRoute('/brandDetail',item)">
-                <img :src="item.pblogo" class="m-selected-brand-img" alt="" >
+              <li v-for="(item,index) in brand_list" @click="brandProduct(item, index)">
+              <!--<li v-for="(item,index) in brand_list" @click="changeRoute('/brandDetail',item)">-->
+                <img :src="item.pblogo" :class="item.active?'active':''" class="m-selected-brand-img" alt="" >
               </li>
             </ul>
           </div>
@@ -84,9 +85,12 @@
               <li v-for="(item,index) in brand_product" @click.stop="productClick(item)">
                 <img :src="item.prmainpic" class="m-selected-brand-product-img" alt="" >
                 <div class="m-selected-brand-product-text">
-                  <h3>【{{item.brand.pbname}}】{{item.prtitle}}</h3>
+                  <h3>
+                    <span class="m-brand-name">【{{item.brand.pbname}}】</span>
+                    <span>{{item.prtitle}}</span>
+                  </h3>
                   <p class="m-flex-between m-ft-18">
-                    <span class="money-text">￥{{item.prprice |money}}</span>
+                    <span class="money-text m-ft-b">￥{{item.prprice |money}}</span>
                     <s class="money-text m-grey m-ft-18" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
                   </p>
                 </div>
@@ -390,11 +394,46 @@
           axios.get(api.brand_recommend_index).then(res => {
             if(res.data.status == 200){
               this.brand_list = res.data.data.brands;
-              this.brand_product = res.data.data.product;
+              // this.brand_product = res.data.data.product;
               this.hot_list = res.data.data.hot;
               this.recommend_for_you_list = res.data.data.recommend_for_you;
+              this.getBrandProduct();
             }
           })
+        },
+        /*获取品牌下的推荐商品*/
+        getBrandProduct(pbid) {
+          if(localStorage.getItem('brandIndex') == null) {
+            localStorage.setItem('brandIndex', 0);
+          }
+          axios.get(api.product_list, { params:
+              { pbid: pbid || this.brand_list[localStorage.getItem('brandIndex')].pbid, itid: 'index_brand_product' }}).then(res => {
+            if(res.data.status == 200) {
+              this.brand_product = res.data.data;
+              if(localStorage.getItem('brandIndex')) {
+                this.brand_list[localStorage.getItem('brandIndex')].active = true;
+              }else {
+                this.brand_list[0].active = true;
+              }
+            }
+          })
+        },
+        // 品牌logo点击效果
+        brandProduct(item, index) {
+          localStorage.setItem('brandIndex', index);
+          if(item.active) {
+            // console.log('two');
+            this.$router.push({ path: 'brandDetail', query: { pbid: item.pbid, pbname: item.pbname }});
+          }else {
+            if(index > -1) {
+              for(let i in this.brand_list) {
+                this.brand_list[i].active = false
+              }
+              this.brand_list[index].active = true;
+              this.brand_list = this.brand_list.concat()
+            }
+            this.getBrandProduct(item.pbid);
+          }
         },
         //获取装备信息
         getCategory(){
@@ -671,6 +710,7 @@
   }
   .money-text {
     width: 240px;
+    padding: 5px 10px;
     overflow: hidden; // 超出的文本隐藏
     text-overflow: ellipsis;    // 溢出用省略号显示
   }
