@@ -138,6 +138,12 @@
       }
     },
     methods: {
+      // 把"我发布的"放在最后
+      changeList() {
+        let my = this.nav_list[1];
+        this.nav_list.splice(1, 1);
+        this.nav_list.push(my)
+      },
       // 分享圈子
       shareCircle(items) {
         if(localStorage.getItem('token')) {
@@ -282,6 +288,7 @@
                 this.navClick(0);
               }
             }
+            this.changeList()      // 把"我发布的"放在最后
           }
         })
       },

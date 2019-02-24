@@ -143,6 +143,12 @@
       }
     },
     methods: {
+      // 把"我发布的"放在最后
+      changeList() {
+        let my = this.nav_list[1];
+        this.nav_list.splice(1, 1);
+        this.nav_list.push(my)
+      },
       // 分享后点击进入首页
       shareCircle(items) {
         if(items) {
@@ -286,6 +292,7 @@
             }else {
               this.navClick(0);
             }
+            this.changeList()      // 把"我发布的"放在最后
           }
         })
       },
