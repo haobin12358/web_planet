@@ -110,10 +110,11 @@
             </ul>
           </div>
           <div class="m-selected-hot m-flex-start" v-if="hot_list && hot_list.length>0">
-            <div class="m-hot-box">
+            <img class="m-hot-sales" src="/static/images/hot_sales.png">
+            <!--<div class="m-hot-box">
                 <span class="m-hot">HOT!</span>
                 <span>人气热卖</span>
-            </div>
+            </div>-->
 
 
             <mt-swipe style="height: 100%;background: white;" :auto="3000" v-if="hot_list">
@@ -608,6 +609,10 @@
     height: 360px;
     border-radius: 10px;
     margin: 30px 32px;
+    .m-hot-sales {
+      width: 164px;
+      height: 360px;
+    }
     .m-hot-box{
       width: 160px;
       background-color: #e9e9e9;
