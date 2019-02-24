@@ -170,8 +170,6 @@
         total: 0,
         currentPage: 1,
         pageSize: 10,
-
-        repeat: true,
       }
     },
 
@@ -432,34 +430,12 @@
         )
       },
 
-      initProfileSearch() {
-        if (this.$route.params.searchDate) {
-          this.inlineForm.createtime_start = this.$route.params.searchDate;
-          this.inlineForm.createtime_end = this.$route.params.searchDate;
-        }
-        if (this.$route.params.omstatus) {
-          this.activeName = this.$route.params.omstatus.toString();
-        }
 
-        this.$route.params.searchDate = '';
-        this.$route.params.omstatus = '-1';
-      }
     },
 
     activated() {
-      if (this.repeat) {
-        this.repeat = false;
-      } else {
         this.doSearch();
-
-      }
     },
-
-    created() {
-      this.initProfileSearch();
-
-      this.doSearch();
-    }
   }
 </script>
 

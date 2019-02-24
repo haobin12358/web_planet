@@ -339,7 +339,7 @@
 
       gotoOrderWithParam(type, dateType) {
         let query = {
-          omstatus: '-1'
+          omstatus: ''
         }
 
         let today = new Date(),
@@ -366,7 +366,7 @@
         this.$router.push({
           // path: '/order/order',
           // query
-          name: 'OrderIndex',
+          name: 'AllOrder',
           params: query
         })
       },

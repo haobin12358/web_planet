@@ -30,8 +30,8 @@
       </section>
     </section>
     <get-sku @chooseGuessSku="chooseGuessSku" ref="guess" where="guess"></get-sku>
-    <el-table v-loading="guessLoading" :data="guessList" stripe size="mini" :span-method="objectSpanMethod">
-      <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
+    <el-table v-loading="guessLoading" :data="guessList" stripe >
+      <!--<el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>-->
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
           <table-cell-img :src="[scope.row.skupic]" :key="scope.row.gnaaid"></table-cell-img>
@@ -41,7 +41,7 @@
       <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="gnaastarttime"></el-table-column>
       <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
-      <el-table-column label="参与数量" align="center" prop="skustock" :render-header="stockHeaderRender"></el-table-column>
+      <el-table-column label="参与数量" align="center" prop="skustock"></el-table-column>
       <el-table-column label="申请状态" align="center" prop="gnaastatus_zh">
         <template slot-scope="scope">
           <el-popover
@@ -185,13 +185,13 @@
             ...this.inlineForm
           }}).then(res => {
           if (res.data.status == 200) {
-            this.getSpanArr(res.data.data);
+            /*this.getSpanArr(res.data.data);
             for (let i = 0; i < this.spanArr.length; i++) {
               if(this.spanArr[i]>0){
                 res.data.data[i].groupCount = this.groupCount;
                 this.groupCount ++;
               }
-            }
+            }*/
             this.guessList = res.data.data;
             this.total = res.data.total_count;
             this.guessLoading = false;
