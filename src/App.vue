@@ -90,9 +90,9 @@ export default {
     }
   },
   mounted() {
-    console.log('v 0.4.8');
+    console.log('v 0.5.0');
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU1MDk4Nzc4MSwiZXhwIjoxNTUxNTkyNTgxfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiNTE4NjZlZjYtMTI3NS0xMWU5LWI4YjItMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjJ9.BHLdRBzIWQRl7xuMyi2vBh6HP_fUR1kVOHBmQMTFiTg';
-    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU1MDc0NDc3MiwiZXhwIjoxNTUxMzQ5NTcyfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiOGJjNmRjNWUtMjA1OC0xMWU5LThhZDMtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.iE_5UD69Y-y1q51nlspj7hPgxKiUShCiWBumjjjDzTU';
+    // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU1MTEwNTA1MywiZXhwIjoxNTUxNzA5ODUzfQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5Y1x1ZDgzZFx1ZGUwMSIsImlkIjoiOGJjNmRjNWUtMjA1OC0xMWU5LThhZDMtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.XUAMygYIj7Vtjy8LUyWEPG120tCn0GlzA_HuAdppByk';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
   },

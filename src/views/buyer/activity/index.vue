@@ -1,6 +1,6 @@
 <template>
   <div class="m-activity">
-    <div class="m-activity-top-bg"></div>
+    <!--<div class="m-activity-top-bg"></div>-->
 
     <div class="m-activity-box animated bounceInUp">
       <div class="m-activity-item" v-for="item in activityList">
@@ -83,7 +83,7 @@
     }
     .m-activity-box {
       position: absolute;
-      top: 240px;
+      top: 20px;
       .m-activity-item {
         width: 700px;
         height: 500px;

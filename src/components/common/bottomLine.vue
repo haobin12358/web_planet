@@ -1,7 +1,8 @@
 <template>
   <div class="m-line">
     <div class="m-line-name m-bottom">
-      <span>OUTFIT</span>
+      <span>已经到底啦</span>
+      <!--<span>OUTFIT</span>-->
     </div>
   </div>
 </template>
@@ -22,14 +23,14 @@
       position: absolute;
       top: -25px;
       margin: 0 auto;
-      font-size: 38px;
+      font-size: 30px;
       font-weight: bold;
       text-align: center;
       width: 100%;
       &.m-bottom{
         span{
           color: #CCCCCC;
-          font-size:38px;
+          font-size:30px;
           font-family:Corbel;
           font-weight:bold;
           font-style:oblique

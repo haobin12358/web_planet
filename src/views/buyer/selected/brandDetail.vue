@@ -194,6 +194,7 @@
       height: 120px;
       border-radius: 50%;
       box-shadow:0 5px 20px rgba(0,0,0,0.16);
+      background-color: #ffffff;
     }
     .m-brand-name{
       position: absolute;

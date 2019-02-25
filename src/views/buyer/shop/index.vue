@@ -20,7 +20,7 @@
             <div class="m-shop-store-name">
               <span class="m-icon-radio" :class="items.active?'active':''" @click="radioClick('store',index)"></span>
               <span @click="changeRoute('brandDetail', items)">{{items.pb.pbname}}</span>
-              <span class="m-icon-more" ></span>
+              <span class="m-icon-more"></span>
             </div>
             <template v-for="(item,i) in items.cart" >
               <div class="m-shop-product">
@@ -52,7 +52,7 @@
             </template>
           </div>
         </template>
-        <bottom-line v-if="bottom_show"></bottom-line>
+        <!--<bottom-line v-if="bottom_show"></bottom-line>-->
         <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
       </div>
       <div class="m-shop-foot">
@@ -121,6 +121,7 @@
       },
       activated() {
         this.allRadio = false;
+        this.isManage = false;
         this.total_money = 0;
         this.page_info.page_num = 1;
         this.getCart();
@@ -366,6 +367,7 @@
                   this.page_info.page_num = 1;
                   this.total_count = 1;
                   this.getCart();
+                  this.allRadio = false;
                 }
               });
             }).catch(() => {

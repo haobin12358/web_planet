@@ -30,7 +30,8 @@
           <div class="m-sku-num" v-if="!activity">
             <span>购买数量</span>
             <div class="m-num">
-              <span class="m-icon-cut" @click.stop="changeNum(-1)"></span>
+              <span class="m-icon-cut" v-if="num > 1" @click.stop="changeNum(-1)"></span>
+              <span class="m-icon-cut-sku" v-else></span>
               <input type="number" min="1" v-model="num" class="m-num-input" />
               <span class="m-icon-add" @click.stop="changeNum(1)"></span>
             </div>

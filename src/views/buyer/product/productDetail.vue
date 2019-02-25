@@ -252,9 +252,9 @@
              if(res.data.status == 200){
                this.product_info = res.data.data;
                this.product_info.praveragescore = this.product_info.praveragescore / 2;
-               if(this.product_info.prtitle.length > 27) {
+               /*if(this.product_info.prtitle.length > 27) {
                  this.product_info.prtitle = this.product_info.prtitle.slice(0, 27) + '...'
-               }
+               }*/
                /*if(this.product_info.profict) {
                  this.product_info.profict = this.product_info.profict.toString().slice(0, 5) + '...'
                }*/
@@ -363,6 +363,7 @@
       color: #666666;
       margin-bottom: 40px;
       .m-product-title{
+        color: #000000;
         margin-right: 20px;
         text-align: left;
         /*!*text-indent: 2em;*!

@@ -711,7 +711,8 @@
   }
   .money-text {
     width: 240px;
-    padding: 5px 10px;
+    font-size: 20px;
+    padding: 5px;
     overflow: hidden; // 超出的文本隐藏
     text-overflow: ellipsis;    // 溢出用省略号显示
   }

@@ -4,8 +4,10 @@
       <img :src="item.prmainpic" class="m-one-product-img" alt="">
       <div class="m-one-product-text">
         <!--<h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>-->
-        <span class="m-brand-name">【{{item.brand.pbname}}】</span>
-        <span>{{item.prtitle}}</span>
+        <h3>
+          <span class="m-brand-name">【{{item.brand.pbname}}】</span>
+          <span>{{item.prtitle}}</span>
+        </h3>
         <p class="m-flex-between">
           <span class="money-text">￥{{item.prprice | money}}</span>
           <s class="money-text m-grey" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
@@ -91,12 +93,20 @@
       }
       h3{
         width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
         margin-top: 38px;
         font-size: 21px;
         text-align: left;
+        height: 60px;
+        //overflow: hidden;
+        //text-overflow: ellipsis;
+        //white-space: nowrap;
+        white-space: normal;
+        overflow: hidden; // 超出的文本隐藏
+        word-break: break-word;  // 英文换行
+        text-overflow: ellipsis;    // 溢出用省略号显示
+        display: -webkit-box; // 将对象作为弹性伸缩盒子模型显示。
+        -webkit-box-orient: vertical; // 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+        -webkit-line-clamp: 2; // 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
       }
     }
     .money-text {

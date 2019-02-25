@@ -87,7 +87,7 @@
                 </div>
               </li>
             </ul>
-            <bottom-line v-if="bottom_show"></bottom-line>
+            <!--<bottom-line v-if="bottom_show"></bottom-line>-->
           </div>
           <p v-if="show_comment" class="m-comment-input">
             <input type="text" v-model="comment_content" placeholder="请输入评论">
@@ -601,6 +601,7 @@
       width: 630px;
       text-indent: 2em;
       word-wrap: break-word;
+      font-size: 28px;
     }
 
   }

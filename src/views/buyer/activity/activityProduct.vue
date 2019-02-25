@@ -3,10 +3,10 @@
     <div class="m-img-box">
       <img class="m-member-img" :src="banner" alt="">
       <div class="m-top-bg"></div>
-      <div class="m-img-text-box">
+      <!--<div class="m-img-text-box">
         <div class="m-img-text"><span class="m-img-text-bold">{{dayNum}}</span> {{monthNum}}</div>
         <div class="m-img-text">{{month}} / {{day}}</div>
-      </div>
+      </div>-->
     </div>
     <div class="m-activity-product-text-box">
       <div class="m-ft-30 m-ft-b">{{title}}</div>

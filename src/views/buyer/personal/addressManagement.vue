@@ -133,6 +133,10 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/personal";
+  .m-personal {
+    background-color: #EEEEEE;
+    min-height: 100vh;
+  }
   .m-address{
     /*padding-bottom: 350px;*/
     .m-no-coupon{
