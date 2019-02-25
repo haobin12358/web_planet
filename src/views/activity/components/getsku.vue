@@ -35,7 +35,7 @@
     </el-dialog>
 
 
-    <el-dialog v-el-drag-dialog :visible.sync="skusDialog" title="选择商品规格" width="1000px" top="10vh" :close-on-click-modal="false">
+    <el-dialog v-el-drag-dialog :visible.sync="skusDialog" title="选择商品规格" width="1100px" top="7vh" :close-on-click-modal="false">
       <!--新人首单-->
       <el-form :model="skusForm" label-position="right" label-width="120px" v-if="where == 'new'">
         <el-form-item label="参与起止时间：">
@@ -56,6 +56,11 @@
           <el-date-picker class="dates-box" type="dates" value-format="yyyy-MM-dd" :picker-options="pickerOptions"
                           v-model="gnaastarttime" :placeholder="placeholder">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="显示价格：" prop="prprice">
+          <el-input class="long-input" v-model="skusForm.prprice" maxlength="11">
+            <template slot="append">元</template>
+          </el-input>
         </el-form-item>
       </el-form>
       <!--魔盒奖品-->
@@ -112,7 +117,7 @@
         <el-table-column label="库存" align="center" prop="skustock"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.stock" :disabled="isEdit" maxlength="11">
+            <el-input class="shorter-input" v-model="scope.row.stock" :disabled="isEdit" maxlength="11">
             </el-input>
           </template>
         </el-table-column>
@@ -138,11 +143,65 @@
             </el-input>
           </template>
         </el-table-column>
+        <el-table-column label="减免金额" align="center" width="120" v-if="where == 'guess'">
+          <template slot-scope="scope">
+            <el-button type="text" @click="setSkuSix(scope.row)">设置减免金额</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <span slot="footer">
         <el-button @click="skusDialog = false">取 消</el-button>
         <el-button type="primary" @click="chooseSku" v-if="isEdit">重新申请</el-button>
         <el-button type="primary" @click="chooseSku" v-else>确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!--每日竞猜——设置sku的六个减免金额-->
+    <el-dialog v-el-drag-dialog :visible.sync="skuSixDialog" title="设置减免金额" width="800px" top="7vh" :close-on-click-modal="false">
+      <el-form label-position="right" label-width="120px" inline style="margin-top: -30px">
+        <el-form-item label="规格名称:" style="margin: 0 300px 0 -28px">
+          <span>{{rowTemp.skuname}}</span>
+        </el-form-item>
+        <el-form-item label="猜对一个数字:">
+          <el-input class="short-long-input" v-model="rowTemp.skudiscountone" maxlength="11">
+            <template slot="prepend">减免</template>
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="猜对两个数字:">
+          <el-input class="short-long-input" v-model="rowTemp.skudiscounttwo" maxlength="11">
+            <template slot="prepend">减免</template>
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="猜对三个数字:">
+          <el-input class="short-long-input" v-model="rowTemp.skudiscountthree" maxlength="11">
+            <template slot="prepend">减免</template>
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="猜对四个数字:">
+          <el-input class="short-long-input" v-model="rowTemp.skudiscountfour" maxlength="11">
+            <template slot="prepend">减免</template>
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="猜对五个数字:">
+          <el-input class="short-long-input" v-model="rowTemp.skudiscountfive" maxlength="11">
+            <template slot="prepend">减免</template>
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="猜对六个数字:">
+          <el-input class="short-long-input" v-model="rowTemp.skudiscountsix" maxlength="11">
+            <template slot="prepend">减免</template>
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="skuSixDialog = false">取 消</el-button>
+        <el-button type="primary" @click="skuSixDone">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -166,6 +225,7 @@
         total: 0,
         skusDialog: false,
         skusLoading: false,
+        skuSixDialog: false,
         skusList: [],
         skus: [],
         fmfatime: [],
@@ -183,7 +243,8 @@
           disabledDate(time) {
             return time.getTime() < Date.now() - 8.64e7;
           }
-        }
+        },
+        rowTemp: {}
       }
     },
     props: {
@@ -226,9 +287,9 @@
       },
       // 选择的skus在变化
       handleSelectionChange(val) {
-        if(this.where == 'new') {
+        if(this.where == 'new' || this.where == 'guess') {
           this.skus = val
-        }else if(this.where == 'guess' || this.where == 'magic') {
+        }else if(this.where == 'magic') {
           if(val.length > 1) {
             this.$message.warning('请单选商品规格');
             this.skus = []
@@ -288,14 +349,6 @@
       },
       // 每日竞猜
       chooseGuessSku() {
-        if(!this.skus.length) {
-          this.$message.warning('请先单选商品规格');
-          return false
-        }
-        if(this.skus.length > 1) {
-          this.$message.warning('请单选商品规格');
-          return false
-        }
         if(this.isEdit) {
           if(this.gnaastarttime.length != 1) {
             this.$message.warning('重新编辑时只能选择单个日期');
@@ -306,6 +359,15 @@
             this.$message.warning('请至少选择一个日期');
             return false
           }
+        }
+        if(!moneyReg.test(this.skusForm.prprice)) {
+          this.$message.warning('请正确输入显示价格');
+          return
+        }
+        if(!this.skus.length) {
+          console.log(this.skus);
+          this.$message.warning('请先选择商品规格');
+          return false
         }
         if (!positiveNumberReg.test(this.skus[0].stock)) {
           this.$message.warning('请输入合理的库存');
@@ -320,13 +382,24 @@
           return
         }
         let sku = {
-          skuid: this.skus[0].skuid,
           prid: this.prid,
           gnaastarttime: this.gnaastarttime,
-          skuprice: this.skus[0].price,
-          skustock: this.skus[0].stock
+          prprice: this.skusForm.prprice,
+          skus: []
         };
-
+        for(let i in this.skus) {
+          let skus = {};
+          skus.skustock = this.skus[i].stock;
+          skus.skuid = this.skus[i].skuid;
+          skus.skuprice = this.skus[i].price;
+          skus.skudiscountone = this.skus[i].skudiscountone;
+          skus.skudiscounttwo = this.skus[i].skudiscounttwo;
+          skus.skudiscountthree = this.skus[i].skudiscountthree;
+          skus.skudiscountfour = this.skus[i].skudiscountfour;
+          skus.skudiscountfive = this.skus[i].skudiscountfive;
+          skus.skudiscountsix = this.skus[i].skudiscountsix;
+          sku.skus.push(skus)
+        }
         this.$emit('chooseGuessSku', sku, this.isEdit)
       },
       // 魔盒
@@ -391,6 +464,21 @@
           this.chooseMagicSku()
         }
       },
+      // 每日竞猜——设置sku的六个减免金额
+      setSkuSix(row) {
+        this.rowTemp = row;
+        this.skuSixDialog = true
+      },
+      // 每日竞猜——设置sku的确认按钮
+      skuSixDone() {
+        if(!moneyReg.test(this.rowTemp.skudiscountone) || !moneyReg.test(this.rowTemp.skudiscounttwo) ||
+          !moneyReg.test(this.rowTemp.skudiscountthree) || !moneyReg.test(this.rowTemp.skudiscountfour) ||
+          !moneyReg.test(this.rowTemp.skudiscountfive) || !moneyReg.test(this.rowTemp.skudiscountsix)) {
+          this.$message.warning('请正确输入减免金额');
+          return
+        }
+        this.skuSixDialog = false
+      },
       getProduct() {
         this.productLoading = true;
         this.$http.get(this.$api.product_list, {
@@ -412,11 +500,10 @@
         this.initDialog();
         // 获取选择的商品信息
         this.prid = scope.row.prid;
+        // this.skusForm.prprice = scope.row.prprice;
         this.$http.get(this.$api.product_get, {
           noLoading: true,
-          params: {
-            prid: this.prid
-          }}).then(res => {
+          params: { prid: this.prid }}).then(res => {
           if (res.data.status == 200) {
             this.skusList = res.data.data.skus;
             this.skusDialog = true;
@@ -428,6 +515,12 @@
               this.skusList[i].stock = 1;
               this.skusList[i].price = 0.01;
               this.skusList[i].maxprice = this.skusList[i].skuprice;
+              this.skusList[i].skudiscountone = 1;
+              this.skusList[i].skudiscounttwo = 2;
+              this.skusList[i].skudiscountthree = 3;
+              this.skusList[i].skudiscountfour = 4;
+              this.skusList[i].skudiscountfive = 5;
+              this.skusList[i].skudiscountsix = 6;
             }
             // 编辑时处理数据
             if(scope.row.where) {
@@ -443,7 +536,7 @@
         this.fmfatime = [];
         this.gnaastarttime = [];
         this.mbastarttime = [];
-        this.skusForm.prprice = ''
+        this.skusForm.prprice = '';
       },
       // 编辑时处理数据
       editActivity(scope) {
@@ -471,6 +564,19 @@
             }
           }, 10);
         }else if(scope.row.where == 'guess') {
+          this.skusForm.prprice = scope.row.prprice;
+          for(let i in this.skusList) {
+            for(let j in scope.row.product.sku) {
+              if(this.skusList[i].skuid == scope.row.product.sku[j].skuid) { 
+                this.skusList[i].skudiscountone = scope.row.product.sku[j].skudiscountone;
+                this.skusList[i].skudiscounttwo = scope.row.product.sku[j].skudiscounttwo;
+                this.skusList[i].skudiscountthree = scope.row.product.sku[j].skudiscountthree;
+                this.skusList[i].skudiscountfour = scope.row.product.sku[j].skudiscountfour;
+                this.skusList[i].skudiscountfive = scope.row.product.sku[j].skudiscountfive;
+                this.skusList[i].skudiscountsix = scope.row.product.sku[j].skudiscountsix;
+              }
+            }
+          }
           this.gnaastarttime = [scope.row.gnaastarttime];
           // 倒计时
           const TIME_COUNT = 1;
@@ -480,11 +586,13 @@
               count --;
             }else {
               // 选中之前勾选的商品
-              for(let i in this.skusList) {
-                if(scope.row.skuid == this.skusList[i].skuid) {
-                  this.skusList[i].stock = scope.row.skustock;
-                  this.skusList[i].price = scope.row.skuprice;
-                  this.$refs.skuList.toggleRowSelection(this.skusList[i])
+              for(let i in scope.row.product.sku) {
+                for(let j in this.skusList) {
+                  if(scope.row.product.sku[i].skuid == this.skusList[j].skuid) {
+                    this.skusList[j].stock = scope.row.product.sku[i].skustock;
+                    this.skusList[j].price = scope.row.product.sku[i].skuprice;
+                    this.$refs.skuList.toggleRowSelection(this.skusList[j])
+                  }
                 }
               }
               clearInterval(time);
@@ -542,11 +650,24 @@
   .middle-input {
     width: 183px;
   }
+  .short-long-input {
+    width: 200px;
+  }
   .short-input {
     width: 130px;
   }
+  .shorter-input {
+    width: 100px;
+  }
   .dates-box {
     width: 500px;
+  }
+  .reduce-row {
+    margin-left: -5rem;
+    .reduce-long-input {
+      .wl(13.2rem, 0.4rem);
+      margin: 0 3rem 0 0.5rem;
+    }
   }
   .item-input {
     .wl(4.5rem, 0.4rem);

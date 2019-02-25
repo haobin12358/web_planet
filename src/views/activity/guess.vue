@@ -34,14 +34,18 @@
       <!--<el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>-->
       <el-table-column label="商品规格图片" align="center" prop="prdescription">
         <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.skupic]" :key="scope.row.gnaaid"></table-cell-img>
+          <table-cell-img :src="[scope.row.product.prmainpic]" :key="scope.row.product.prmainpic"></table-cell-img>
         </template>
       </el-table-column>
       <el-table-column label="品牌" align="center" prop="pbname"></el-table-column>
       <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="gnaastarttime"></el-table-column>
-      <el-table-column label="参与价格" align="center" prop="skuprice"></el-table-column>
-      <el-table-column label="参与数量" align="center" prop="skustock"></el-table-column>
+      <el-table-column label="显示价格" align="center" prop="prprice"></el-table-column>
+      <el-table-column label="减免金额" align="center" width="100">
+        <template slot-scope="scope">
+          <el-button type="text" @click="skuSix(scope.row)">查看</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="申请状态" align="center" prop="gnaastatus_zh">
         <template slot-scope="scope">
           <el-popover
@@ -65,12 +69,29 @@
     <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
                    :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="sizeChange" @current-change="pageChange"></el-pagination>
+
+    <!--每日竞猜——sku的六个减免金额-->
+    <el-dialog v-el-drag-dialog :visible.sync="skuSixDialog" title="减免金额(单位：元)" width="1200px" top="7vh" :close-on-click-modal="false">
+      <el-table :data="skuList" stripe>
+        <el-table-column label="规格名称" align="center" prop="skuname" show-overflow-tooltip></el-table-column>
+        <el-table-column label="猜对一个数字" align="center" prop="skudiscountone"></el-table-column>
+        <el-table-column label="猜对两个数字" align="center" prop="skudiscounttwo"></el-table-column>
+        <el-table-column label="猜对三个数字" align="center" prop="skudiscountthree"></el-table-column>
+        <el-table-column label="猜对四个数字" align="center" prop="skudiscountfour"></el-table-column>
+        <el-table-column label="猜对五个数字" align="center" prop="skudiscountfive"></el-table-column>
+        <el-table-column label="猜对六个数字" align="center" prop="skudiscountsix"></el-table-column>
+      </el-table>
+      <span slot="footer">
+        <el-button type="primary" @click="skuSixDialog = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import getSku from './components/getsku'
   import TableCellImg from "src/components/TableCellImg"
+  import elDragDialog from 'src/directive/el-dragDialog'
 
   export default {
     name: "Guess",
@@ -89,16 +110,20 @@
           "wait_check": "审核中"
         },
         guessLoading: false,
+        skuSixDialog: false,
         guessList: [],
         page_size: 10,
         page_num: 1,
         total: 1,
         scope: {},             // 暂存scope
+        rowTemp: {},           // 暂存row
 
         spanArr: [],
+        skuList: [],
         groupCount: 1,
       }
     },
+    directives: { elDragDialog },
     components: { getSku, TableCellImg },
     mounted() {
       this.getGuess();        // 获取自己的猜数字奖品申请列表
@@ -195,6 +220,12 @@
             this.guessList = res.data.data;
             this.total = res.data.total_count;
             this.guessLoading = false;
+            for(let i in this.guessList) {
+              this.guessList[i].pbname = this.guessList[i].product.brand.pbname;
+              this.guessList[i].prtitle = this.guessList[i].product.prtitle;
+              this.guessList[i].prprice = this.guessList[i].product.prprice;
+            }
+            // console.log(this.guessList);
           }
         })
       },
@@ -203,9 +234,9 @@
           case 0:
             return 'primary';
           case -10:
-            return 'danger'
+            return 'danger';
           case -20:
-            return 'warning'
+            return 'warning';
           case 10:
             return 'success'
         }
@@ -254,12 +285,25 @@
           </el-tooltip>
         )
       },
-
+      // 查看当前行的减免金额
+      skuSix(row) {
+        // console.log(row.product.sku);
+        this.rowTemp = row;
+        this.skuList = row.product.sku;
+        for(let i in this.skuList) {
+          this.skuList[i].skuname = '';
+          for(let j in this.skuList[i].skuattritedetail) {
+            this.skuList[i].skuname += this.skuList[i].skuattritedetail[j] + ' '
+          }
+        }
+        this.skuSixDialog = true;
+      },
       // 编辑我的申请
       editGuess(scope) {
         this.scope = scope;
         // this.$refs.guess.productDialog = true;
         scope.row.where = 'guess';
+        scope.row.prid = scope.row.product.prid;
         this.$refs.guess.chooseProduct(scope);
       },
       // 撤销我的申请
