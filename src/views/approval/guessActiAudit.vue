@@ -35,6 +35,7 @@
           </template>
         </el-table-column>
         <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="220"></el-table-column>
+        <el-table-column label="参与时间" align="center" prop="content.gnaastarttime" width="180"></el-table-column>
         <el-table-column label="活动价格" align="center" prop="content.product.prprice" width="120"></el-table-column>
         <el-table-column align="center" label="sku" width="120">
           <template slot-scope="scope">
