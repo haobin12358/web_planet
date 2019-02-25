@@ -22,9 +22,10 @@
         <div class="m-info-list">
           <span>快递：{{product_info.prfreight | money}} 元</span>
           <span>月销：{{product_info.month_sale_value}}</span>
-          <span @click="changeRoute('/brandDetail')">
-            {{product_info.brand.pbname}}
-          </span>
+          <div @click="changeRoute('/brandDetail')">
+            <span class="m-brand-name">{{product_info.brand.pbname}}</span>
+            <span class="m-more"></span>
+          </div>
         </div>
       </div>
       <div class="m-product-detail-more" @click="changeModal('show_sku',true)">
@@ -390,6 +391,19 @@
       align-items: center;
       justify-content: space-between;
       color: #999999;
+      .m-brand-name {
+        font-size: 24px;
+        font-weight: bold;
+        color: @mainColor;
+      }
+      .m-more{
+        display: inline-block;
+        width: 13px;
+        height: 19px;
+        background: url("/static/images/icon-right.png") no-repeat;
+        background-size: 100% 100%;
+        margin-left: 10px;
+      }
     }
   }
   .m-product-detail-more{
