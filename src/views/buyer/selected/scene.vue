@@ -14,7 +14,7 @@
       </div>
       <product :list="product_list"></product>
       <bottom-line v-if="bottom_show"></bottom-line>
-      <!--<span class="m-icon-top"></span>-->
+      <span class="m-icon-top" @click="returnTop"></span>
     </div>
 </template>
 
