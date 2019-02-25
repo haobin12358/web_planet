@@ -3,7 +3,9 @@
     <li @click="changeRoute(item)" v-for="(item,index) in list">
       <img :src="item.prmainpic" class="m-one-product-img" alt="">
       <div class="m-one-product-text">
-        <h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>
+        <!--<h3>【{{item.brand.pbname}}】{{item.prtitle}} </h3>-->
+        <span class="m-brand-name">【{{item.brand.pbname}}】</span>
+        <span>{{item.prtitle}}</span>
         <p class="m-flex-between">
           <span class="money-text">￥{{item.prprice | money}}</span>
           <s class="money-text m-grey" v-if="item.prlineprice">￥{{item.prlineprice | money}}</s>
@@ -81,6 +83,10 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+        }
+        .m-brand-name {
+          color: @mainColor;
+          margin: 0 -5px;
         }
       }
       h3{
