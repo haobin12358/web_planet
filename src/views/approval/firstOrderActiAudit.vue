@@ -25,18 +25,19 @@
         </el-form-item>
       </el-form>
     </section>
+
     <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品图片" align="center" prop="prdescription" width="100">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="scope.row.content ? [scope.row.content.product.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.prtitle" width="220"></el-table-column>
-        <el-table-column label="活动价格" align="center" prop="content.prprice" width="120"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="220"></el-table-column>
+        <el-table-column label="活动价格" align="center" prop="content.product.prprice" width="120"></el-table-column>
         <el-table-column align="center" label="sku" width="120">
           <template slot-scope="scope">
-            <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
+            <product-sku :skus="scope.row.content.product.skus" :prattribute="scope.row.content.product.prattribute"></product-sku>
           </template>
         </el-table-column>
       </el-table-column>
@@ -70,7 +71,7 @@
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text">查看记录</el-button>
+            <el-button slot="reference" type="text" style="margin-left: 10px;">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -220,7 +221,7 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.steps = data.reverse();
+              this.steps = data;
             }
           }
         )
