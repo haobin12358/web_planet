@@ -554,7 +554,8 @@
   .m-selected-title{
     font-size: 36px;
     font-weight: bold;
-    padding: 0 33px ;
+    /*padding: 0 33px;*/
+    margin: 40px 33px -20px 33px;
     .m-scenes-text {
       flex: 1;
       text-align: left;
