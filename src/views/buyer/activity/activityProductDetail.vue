@@ -341,6 +341,9 @@
       .m-text-name {
         font-size: 30px;
         font-weight: bold;
+        color: #000000;
+        margin-right: 20px;
+        text-align: left;
       }
       .m-text-price {
         color: #C70000;
