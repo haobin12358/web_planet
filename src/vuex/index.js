@@ -10,12 +10,12 @@ let store= new Vuex.Store({
     now: null,
     token: '',
     tabbar_store: [
-      {
+      /*{
         name:'素材',
         icon:'/static/images/footer/icon-material.png',
         active_icon:'/static/images/footer/icon-material-active.png',
         url:'material/circle'
-      },/*{
+      },*//*{
         name:'会员',
         icon:'/static/images/footer/icon-member.png',
         active_icon:'/static/images/footer/icon-member-active.png',

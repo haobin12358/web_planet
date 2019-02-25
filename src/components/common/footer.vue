@@ -44,7 +44,8 @@
               }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去卖家版首页
                 this.tabbar = this.$store.state.tabbar_store;
                 this.selected = this.tabbar[0].name;
-                this.$router.push("material/circle");
+                this.$router.push("storekeeper");
+                // this.$router.push("material/circle");
               }else if(res.data.data.uslevel == "3") {      // 3 - 申请成为卖家中
                 this.$router.push("storekeeper/applyOwner");
               }else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
@@ -62,7 +63,8 @@
     },
     mounted() {
       // 如果是买家版的精选或者店主版的素材页，则显示身份切换的左上角按钮
-      if(window.location.hash.indexOf("material/circle") == 2 || window.location.hash.indexOf("selected") == 2) {
+      if(window.location.hash.indexOf("storekeeper") == 2 || window.location.hash.indexOf("selected") == 2) {
+      // if(window.location.hash.indexOf("material/circle") == 2 || window.location.hash.indexOf("selected") == 2) {
         this.buyer_store = true;
       }else {
         this.buyer_store = false;
@@ -93,7 +95,8 @@
     },
     watch: {
       selected: function (val, oldVal) {
-        if(val == "精选" || val == "素材") {
+        if(val == "精选" || val == "店主") {
+        // if(val == "精选" || val == "素材") {
           this.buyer_store = true;
         }else {
           this.buyer_store = false;
