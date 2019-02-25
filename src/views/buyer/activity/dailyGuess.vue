@@ -2,7 +2,8 @@
   <div class="m-dailyGuess">
     <div class="m-guess-title">
       <img class="m-guess-img" src="/static/images/activity/main-bg.png" alt="">
-      <img class="m-product-img animated bounceIn" :src="rule.prpic">
+      <img class="m-product-img animated bounceIn" :src="productList[0].product.prmainpic" @click="changeRoute()">
+      <!--<img class="m-product-img animated bounceIn" :src="rule.prpic">-->
       <div>
         <div class="m-input-img">
           <div class="m-guess-result m-ft-50 m-ft-b">{{num}}<span class="m-result">{{result}}</span></div>
@@ -103,11 +104,37 @@
         rule: { acdesc: [] },
         today: '',
         record: { price: '' },
-        uaid: ''
+        uaid: '',
+        productList: [{ product: {} }]
       }
     },
     components: {},
+    mounted() {
+      common.changeTitle('每日竞猜');
+      this.today = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString();
+      this.uaid = localStorage.getItem('uaid');
+      localStorage.removeItem('uaid');
+      this.timeOut();                    // 闪动光标 - 倒计时
+      if(localStorage.getItem('token')) {
+        this.getGuess();                   // 获取今日参与记录
+        if(localStorage.getItem('tipDate') != this.today) {
+          this.getGuess(this.today);         // 获取昨日参与记录
+        }
+      }
+      this.getTime();                    // 获取当前时间
+      // this.getRule();                    // 获取该活动的规则
+      this.getTodayProduct();            // 用户获取今天猜数字活动所有商品
+    },
     methods: {
+      // 跳转页面
+      changeRoute() {
+        let product_list = [];
+        for(let i in this.productList) {
+          product_list.push(this.productList[i].product)
+        }
+        localStorage.setItem('guessProduct', JSON.stringify(product_list));
+        this.$router.push({ path: 'guessProduct' });
+      },
       // 昨日未中奖的知道了
       failDone() {
         this.failPopup = false;
@@ -273,27 +300,20 @@
       // 获取该活动的规则
       getRule() {
         axios.get(api.get_activity + "?actype=1").then(res => {
-          if(res.data.status == 200){
+          if(res.data.status == 200) {
             // console.log(res.data.data);
             this.rule = res.data.data;
           }
         });
+      },
+      // 用户获取今天猜数字活动所有商品
+      getTodayProduct() {
+        axios.get(api.today_gnap + '?token='+ localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            this.productList = res.data.data;
+          }
+        });
       }
-    },
-    mounted() {
-      common.changeTitle('每日竞猜');
-      this.today = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString();
-      this.uaid = localStorage.getItem('uaid');
-      localStorage.removeItem('uaid');
-      this.timeOut();                    // 闪动光标 - 倒计时
-      if(localStorage.getItem('token')) {
-        this.getGuess();                   // 获取今日参与记录
-        if(localStorage.getItem('tipDate') != this.today) {
-          this.getGuess(this.today);         // 获取昨日参与记录
-        }
-      }
-      this.getTime();                    // 获取当前时间
-      this.getRule();                    // 获取该活动的规则
     }
   }
 </script>
@@ -312,7 +332,7 @@
       .m-product-img {
         width: 550px;
         height: 550px;
-        border: 20px solid rgba(255,255,255,1);
+        /*border: 20px solid rgba(255,255,255,1);*/
         box-shadow: 5px 5px 20px rgba(0,0,0,0.16);
         border-radius: 30px;
         position: absolute;

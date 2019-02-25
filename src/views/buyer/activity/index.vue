@@ -5,9 +5,13 @@
     <div class="m-activity-box animated bounceInUp">
       <div class="m-activity-item" v-for="item in activityList">
         <img class="m-activity-img" :src="item.acbackground" alt="">
-        <div class="m-product-count animated infinite pulse" v-if="item.actype == 1 || item.actype == 2">
+        <div class="m-product-count animated infinite pulse" v-if="item.actype == 2 && item.stock">
           <div v-if="item.stock > 99" class="m-ft-44" style="line-height: 90px">余量充足</div>
           <div v-else>{{item.stock}}</div>
+        </div>
+        <div class="m-product-count animated infinite pulse" v-if="item.actype == 1 && item.prcount">
+          <div v-if="item.prcount > 99" class="m-ft-44" style="line-height: 90px">余量充足</div>
+          <div v-else>{{item.prcount}}</div>
         </div>
         <!--<img class="m-activity-img" src="http://img.zcool.cn/community/01e021593541cfa8012193a3a081af.gif" alt="">-->
         <!--用户****中奖了-->
