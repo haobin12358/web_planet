@@ -156,6 +156,7 @@ export const constantRouterMap = [
   { path: '/newcomer', component: () => import('../views/buyer/activity/newcomer'), hidden: true },            // 新人尝鲜礼包
   { path: '/dailyGuess', component: () => import('../views/buyer/activity/dailyGuess'), hidden: true },        // 每日竞猜
   { path: '/guessProduct', component: () => import('../views/buyer/activity/guessProduct'), hidden: true },    // 每日竞猜的商品列表
+  { path: '/guessProductDetail', component: () => import('../views/buyer/activity/guessProductDetail'), hidden: true },    // 每日竞猜的商品详情
   { path: '/pandora', component: () => import('../views/buyer/activity/pandora'), hidden: true },              // 魔法礼盒
   { path: '/freeTrial', component: () => import('../views/buyer/activity/freeTrial'), hidden: true },          // 免费试用
   { path: '/activityProduct', component: () => import('../views/buyer/activity/activityProduct'), hidden: true },      // 免费试用 - 商品

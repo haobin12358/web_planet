@@ -36,6 +36,33 @@
               <span class="m-icon-add" @click.stop="changeNum(1)"></span>
             </div>
           </div>
+          <div class="m-guess-num-box" v-if="guess && select_value">
+            <div class="tl">减免金额:</div>
+            <div class="m-guess-num">
+              <span>猜对一个数字减免：</span>
+              <span>{{select_value.skudiscountone}}元</span>
+            </div>
+            <div class="m-guess-num">
+              <span>猜对两个数字减免：</span>
+              <span>{{select_value.skudiscounttwo}}元</span>
+            </div>
+            <div class="m-guess-num">
+              <span>猜对三个数字减免：</span>
+              <span>{{select_value.skudiscountthree}}元</span>
+            </div>
+            <div class="m-guess-num">
+              <span>猜对四个数字减免：</span>
+              <span>{{select_value.skudiscountfour}}元</span>
+            </div>
+            <div class="m-guess-num">
+              <span>猜对五个数字减免：</span>
+              <span>{{select_value.skudiscountfive}}元</span>
+            </div>
+            <div class="m-guess-num">
+              <span>猜对六个数字减免：</span>
+              <span>{{select_value.skudiscountsix}}元</span>
+            </div>
+          </div>
         </div>
         <div class="m-sku-btn">
           <span  class="active" v-if="select_value && select_value.skustock > 0" @click.stop="sureClick">确 定</span>
@@ -69,6 +96,10 @@
           default:1
         },
         activity:{
+          type:Boolean,
+          default:false
+        },
+        guess:{
           type:Boolean,
           default:false
         }

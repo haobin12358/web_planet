@@ -122,7 +122,7 @@
         }
       }
       this.getTime();                    // 获取当前时间
-      // this.getRule();                    // 获取该活动的规则
+      this.getRule();                    // 获取该活动的规则
       this.getTodayProduct();            // 用户获取今天猜数字活动所有商品
     },
     methods: {
