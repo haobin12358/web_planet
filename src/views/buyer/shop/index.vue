@@ -35,7 +35,7 @@
                           <span >{{key}}</span>
                           <span v-if="k < item.sku.skuattritedetail.length-1">；</span>
                         </template>
-                        <span class="m-sku-more"></span>
+                        <!--<span class="m-sku-more"></span>-->
                       </span>
                     </p>
                     <div class="m-sku-num">
@@ -53,7 +53,7 @@
           </div>
         </template>
         <!--<bottom-line v-if="bottom_show"></bottom-line>-->
-        <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
+        <!--<sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>-->
       </div>
       <div class="m-shop-foot">
          <span class="m-icon-radio" :class="allRadio?'active':''" @click="radioClick('all')"></span>
