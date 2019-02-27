@@ -38,7 +38,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'storekeeper',
     children: [{
-      path: '/storekeeper', component: () => import('../views/store/storekeeper/index'), hidden: true }
+      path: '/storekeeper', component: () => import('../views/store/storekeeper/index'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   // 店主版 - 申请成为店主
