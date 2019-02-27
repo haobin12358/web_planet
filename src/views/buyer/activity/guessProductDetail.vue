@@ -215,7 +215,6 @@
       },
       // 获取商品详情
       getProductDetail() {
-        console.log(JSON.parse(localStorage.getItem('guessproduct')));
         this.product = JSON.parse(localStorage.getItem('guessproduct'));
       },
       // sku确定
@@ -234,13 +233,15 @@
           let product = {};
           product.pb = this.product.brand;
           product.cart = [];
-          product.cart.push({ product: { prtitle: this.product.tctitle }, sku: this.select_value, canums: "1", prid: this.product.tcid});
+          product.cart.push({ product: { prtitle: this.product.prtitle, prfreight: this.product.prfreight, gnaaid: this.product.gnaaid },
+            sku: this.select_value, canums: "1", prid: this.product.prid});
           let arr = [];
           arr.push(product);
           if(localStorage.getItem('token')) {
             this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: this.which }});
           }else {
             Toast('请登录后再试');
+            // window.location.href = window.location.origin + '/#/login';
           }
         }else {
           this.changeModal('show_sku', true);

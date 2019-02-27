@@ -50,10 +50,16 @@
               ￥{{items.total | money}}
             </div>
           </li>
-          <li class="m-sku-num" v-if="from != 'try'">
+          <li class="m-sku-num" v-if="from != 'try' && !isGuess">
             <span>预计收益</span>
             <div class="m-num m-price">
               ￥{{items.preview | money}}
+            </div>
+          </li>
+          <li class="m-sku-num" v-if="isGuess">
+            <span>减免金额</span>
+            <div class="m-num m-price">
+              ￥{{items.discount | money}}
             </div>
           </li>
           <li class="m-flex-between">
@@ -64,12 +70,12 @@
               <!--<span class="m-icon-more"></span>-->
             </div>
           </li>
-          <li class="m-message">
+          <li class="m-message" v-if="!isGuess">
             <span>买家留言：</span>
             <textarea  v-model="items.ommessage" id=""></textarea>
             <!--<textarea name="" id=""  placeholder="选填"></textarea>-->
           </li>
-          <li class="m-flex-between" @click="changeModel('show_coupon',true, index + 1)">
+          <li class="m-flex-between" @click="changeModel('show_coupon',true, index + 1)" v-if="!isGuess">
             <span>优惠方式</span>
             <div v-if="items.couponList.length > 0">
               <span class="m-grey" v-if="items.coupon_info.coname">{{items.coupon_info.coname}}</span>
@@ -128,6 +134,7 @@
       <div class="m-order-btn">
         <!--试用商品、新人商品-->
         <span v-if="from == 'new' || from == 'try'" @click="submitOrderActivity">提交订单</span>
+        <span v-else-if="isGuess" @click="submitGuessOrder">提交订单</span>
         <!--开店大礼包、购物车或直接下单-->
         <span v-else @click="submitOrder">提交订单</span>
       </div>
@@ -174,7 +181,8 @@
           paySlots: [{ values: [{ name: "微信", opaytype: 0 }, { name: "激活码", opaytype: 20 }]}],
           pay: "",                           // 暂存支付方式
           payType: { name: '微信' },          // 支付方式
-          code: ''                            // 激活码
+          code: '',                           // 激活码
+          isGuess: false,                     // 是否从每日竞猜来的
         }
       },
       components: { coupon },
@@ -202,6 +210,7 @@
         for(let i = 0; i < this.product_info.length; i ++) {
           this.product_info[i].total = 0;
           this.product_info[i].preview = 0;
+          this.product_info[i].discount = 0;
           this.product_info[i].prfreight = 0;
           this.product_info[i].couponList = [];
           this.product_info[i].coupon_info = { caid: [] };
@@ -228,6 +237,10 @@
           this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
         }
         this.getOneAddress();
+        if(JSON.parse(localStorage.getItem('guessproduct')).gnaaid) {
+          this.getDiscount();         // 订单页获取减免金额
+          this.isGuess = true;
+        }
       },
       methods: {
         // 付款方式picker的确认按钮
@@ -318,6 +331,20 @@
             }
           }
         },
+        // 订单页获取减免金额
+        getDiscount() {
+          axios.get(api.guess_num_get_discount + '?token=' + localStorage.getItem('token') + '&gnaaid=' +
+            this.product_info[0].cart[0].product.gnaaid + '&skuid=' +
+            this.product_info[0].cart[0].sku.skuid).then(res => {
+            if(res.data.status == 200) {
+              this.product_info[0].discount = res.data.data.discount;
+              if(this.product_info[0].discount) {
+                this.total_money = this.total_money - this.product_info[0].discount
+              }
+              sessionStorage.setItem('total_money', this.total_money);
+            }
+          });
+        },
         // 选择优惠券
         couponClick(item) {
           this.product_info[this.index].coupon_info = item;
@@ -385,6 +412,53 @@
             });
           }
         },
+        // 每日竞猜的提交订单
+        submitGuessOrder() {
+          if(!this.uaid) {
+            Toast("请先选择收货地址");
+            return false
+          }
+          let gnid = '';
+          let param = {
+            token: localStorage.getItem('token'),
+            date: new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString()
+          };
+          axios.get(api.get_guess_num, { params: param }).then(res => {
+            if(res.data.status == 200) {
+              if(res.data.data.result == 'uncorrect') {
+                Toast('昨日猜错啦');
+                this.from = 'try';
+                this.submitOrder();
+                return false
+              }else if(res.data.data.result == 'correct') {
+                Toast('昨日猜对啦');
+                gnid = res.data.data.gnid;
+              }else if(res.data.data.result == 'not_open') {
+                Toast('昨日未开奖');
+                this.from = 'try';
+                this.submitOrder();
+                return false
+              }
+              let params = {
+                gnid: gnid,
+                skuid: this.product_info[0].cart[0].sku.skuid,
+                omclient: 0,
+                uaid: this.uaid,
+                opaytype: 0
+              };
+              axios.post(api.recv_award + '?token='+ localStorage.getItem('token'), params).then(res => {
+                if(res.data.status == 200) {
+                  localStorage.setItem('activityOrderNo', 1);
+                  if(common.isWeixin()) {
+                    this.wxPay(res.data.data.args);
+                  }else {
+                    Toast('请在活动订单页查看详情');
+                  }
+                }
+              });
+            }
+          });
+        },
         // 购物车或直接购买时创建订单并调起支付
         submitOrder() {
           if(!this.uaid) {
@@ -409,6 +483,8 @@
             params.opaytype = 0;
           }
           if(this.$route.query.from === undefined) {
+            params.omfrom = 10;
+          }else if(!this.$route.query.from) {
             params.omfrom = 10;
           }else {
             params.omfrom = this.$route.query.from;
@@ -467,21 +543,21 @@
                   // 是从商家大礼包来结算的则弹出popup
                   if(that.fromGift) {
                     that.giftPopup = true;
-                  }else if(that.from == 'new' || that.from == 'try') {
+                  }else if(that.from == 'new' || that.from == 'try' || that.isGuess) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待发货页
                     that.$router.push("/orderList?which=2");
                   }
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
                   Toast('支付已取消');
-                  if(that.from == 'new' || that.from == 'try') {
+                  if(that.from == 'new' || that.from == 'try' || that.isGuess) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待付款页
                     that.$router.push("/orderList?which=1");
                   }
                 }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
                   Toast('支付失败');
-                  if(that.from == 'new' || that.from == 'try') {
+                  if(that.from == 'new' || that.from == 'try' || that.isGuess) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待付款页
                     that.$router.push("/orderList?which=1");

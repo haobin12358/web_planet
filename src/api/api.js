@@ -92,6 +92,7 @@ const api={
   recv_award: title + 'guess_num/recv_award',                    // 领取猜数字奖品
   history_join: title + 'guess_num/history_join',                // 获取历史参与结果(以月为单位)
   today_gnap: title + 'guess_num/today_gnap',                    // 用户获取今天猜数字活动所有商品
+  guess_num_get_discount: title + 'guess_num/get_discount',      // 猜数字活动-获取折扣价
   get_commodity: title + 'commodity/get',                        // 获取试用商品列表
   get_commodity_detail: title + 'commodity/get_commodity',       // 获取试用商品详情
   activity_list: title + 'activity/list',                        // 获取正在进行中的活动

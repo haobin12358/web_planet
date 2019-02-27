@@ -66,7 +66,8 @@
       <div class="m-guess-success">
         <img class="m-guess-icon" src="/static/images/activity/guess-success.png" alt="">
         <div class="m-success-text m-ft-30 m-ft-b">恭喜您竞猜正确！</div>
-        <div class="m-success-text margin m-ft-24">以￥{{record.price | money}}的价格购买此商品吧！！</div>
+        <div class="m-success-text margin m-ft-24">以￥{{record.price}}的价格购买此商品吧！！</div>
+        <!--<div class="m-success-text margin m-ft-24">以￥{{record.price | money}}的价格购买此商品吧！！</div>-->
         <div class="m-btn-box">
           <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b" @click="chooseAddress">选择地址</div>
           <div class="m-guess-btn m-success-btn m-ft-30 m-ft-b" @click="successDone()">去购买</div>
@@ -130,6 +131,7 @@
       changeRoute() {
         let product_list = [];
         for(let i in this.productList) {
+          this.productList[i].product.gnaaid = this.productList[i].gnaaid;
           product_list.push(this.productList[i].product)
         }
         localStorage.setItem('guessProduct', JSON.stringify(product_list));
