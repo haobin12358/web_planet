@@ -125,6 +125,7 @@
       },
     //  导航点击
       sceneClick(index){
+        this.page_info.page_num = 1;
         if(this.scene_list[index].active){
           return false;
         }
