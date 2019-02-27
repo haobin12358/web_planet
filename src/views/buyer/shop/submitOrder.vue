@@ -484,7 +484,7 @@
           }
           if(this.$route.query.from === undefined) {
             params.omfrom = 10;
-          }else if(!this.$route.query.from) {
+          }else if(this.$route.query.from == 'guess') {
             params.omfrom = 10;
           }else {
             params.omfrom = this.$route.query.from;
