@@ -1,9 +1,10 @@
 <template>
     <div class="m-orderDetail">
-       <div class="m-orderDetail-status" v-if="order_info.omstatus == 0">
-         <span >买家待付款</span>
-         <span class="m-icon-order-status m-pay" ></span>
-       </div>
+      <div class="m-orderDetail-status" v-if="order_info.omstatus == 0">
+        <span >买家待付款</span>
+        <span class="duration-time" v-if="order_info.duration">{{order_info.min}}:{{order_info.sec}}</span>
+        <span class="m-icon-order-status m-pay" ></span>
+      </div>
       <div class="m-orderDetail-status" v-if="order_info.omstatus == -40">
         <span >买家已取消</span>
         <span class="m-icon-order-status m-pay" ></span>
@@ -164,6 +165,7 @@
     data() {
       return {
         order_info: { omtruemount: '', omfreight: '' },
+        // order_info: { omtruemount: '', omfreight: '', min: 0, sec: 0 },
         logistic_info: null,
         from: "",
         refund: null,
@@ -251,8 +253,8 @@
       getOrderInfo() {
         axios.get(api.order_get,{
           params:{
-            token:localStorage.getItem('token'),
-            omid:this.$route.query.omid
+            token: localStorage.getItem('token'),
+            omid: this.$route.query.omid
           }
         }).then(res => {
           if(res.data.status == 200) {
@@ -273,8 +275,50 @@
             if(res.data.data.order_refund_notes) {
               this.refund_notes = res.data.data.order_refund_notes;
             }
+            if(this.order_info.duration) {
+              this.timeOut();       // 倒计时
+            }
           }
         })
+      },
+      // 倒计时
+      timeOut() {
+        if(this.order_info.duration.substr(0, 1) > -1) {
+          this.order_info.min = this.order_info.duration.substr(2, 2);
+          this.order_info.sec = this.order_info.duration.substr(5, 2);
+          let TIME_OUT = Number(this.order_info.min) * 60 + Number(this.order_info.sec);
+          let count = TIME_OUT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_OUT) {
+              count --;
+              this.order_info.sec --;
+              if(this.order_info.sec < 10 && this.order_info.sec > -1) {
+                this.order_info.sec = '0' + this.order_info.sec;
+              }
+              if(this.order_info.sec == -1) {
+                this.order_info.sec = 59;
+                if(this.order_info.min > 0) {
+                  this.order_info.min -= 1;
+                }
+                if(this.order_info.min < 10) {
+                  if(this.order_info.min !== '00') {
+                    this.order_info.min = '0' + this.order_info.min;
+                  }else {
+                    this.order_info.duration = null;
+                  }
+                }
+              }
+              // 刷新视图
+              this.order_info = Object.assign({}, this.order_info, { min: this.order_info.min, sec: this.order_info.sec })
+            }else {
+              this.order_info.duration = null;
+              this.getOrderInfo();
+              clearInterval(time);
+            }
+          }, 1000);
+        }else {
+          this.order_info.duration = null
+        }
       },
       // 获取物流信息
       getLogistic() {
@@ -385,6 +429,11 @@
       background-color: @mainColor;
       span {
         color: #ffffff;
+      }
+      .duration-time {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0 -80px 0 10px;
       }
       .m-icon-order-status{
         display: block;

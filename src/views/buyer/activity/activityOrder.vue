@@ -44,14 +44,19 @@
                 <p class="m-end-time" v-if="items.deposit_expires">押金返还时间：{{items.deposit_expires}}</p>
               </template>
               <ul class="m-order-btn-ul">
-                <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
-                <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20
+                <div class="duration-box">
+                  <div v-if="items.duration">支付倒计时<span class="duration-text">{{items.min}}:{{items.sec}}</span></div>
+                </div>
+                <div>
+                  <!--<li v-if="items.omstatus==10" @click.stop="changeRoute('/selectBack',items)">退款</li>-->
+                  <li @click.stop="changeRoute('/logisticsInformation',items)" v-if="items.omstatus==20
                 || items.omstatus == 30 || items.omstatus == 25">查看物流</li>
-                <!--<li v-if=" items.omstatus == -40">删除订单</li>-->
-                <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
-                <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
-                <li class="active" v-if="items.omstatus == 20" @click.stop="orderConfirm(items)">确认收货</li>
-                <li class="active" v-if="items.omstatus==25 && indexTemp != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
+                  <!--<li v-if=" items.omstatus == -40">删除订单</li>-->
+                  <li v-if="items.omstatus == 0" @click.stop="cancelOrder(items)">取消订单</li>
+                  <li class="active" v-if="items.omstatus == 0" @click.stop="payBtn(items)">立即付款</li>
+                  <li class="active" v-if="items.omstatus == 20" @click.stop="orderConfirm(items)">确认收货</li>
+                  <li class="active" v-if="items.omstatus==25 && indexTemp != 3" @click.stop="changeRoute('/addComment', items)">评价</li>
+                </div>
               </ul>
             </div>
           </div>
@@ -159,8 +164,58 @@
                 this.total_count = 0;
                 return false;
               }
+              for(let i in this.order_list) {
+                if(this.order_list[i].duration) {
+                  this.timeOut();       // 倒计时
+                }
+              }
             }
           })
+        },
+        // 倒计时
+        timeOut() {
+          for(let i in this.order_list) {
+            if(this.order_list[i].duration) {
+              if(this.order_list[i].duration.substr(0, 1) > -1) {
+                this.order_list[i].min = 0;
+                this.order_list[i].sec = 0;
+                this.order_list[i].min = this.order_list[i].duration.substr(2, 2);
+                this.order_list[i].sec = this.order_list[i].duration.substr(5, 2);
+                let TIME_OUT = Number(this.order_list[i].min) * 60 + Number(this.order_list[i].sec);
+                let count = TIME_OUT;
+                let time = setInterval(() => {
+                  if(count > 0 && count <= TIME_OUT) {
+                    count --;
+                    this.order_list[i].sec --;
+                    if(this.order_list[i].sec < 10 && this.order_list[i].sec > -1) {
+                      this.order_list[i].sec = '0' + this.order_list[i].sec;
+                    }
+                    if(this.order_list[i].sec == -1) {
+                      this.order_list[i].sec = 59;
+                      if(this.order_list[i].min > 0) {
+                        this.order_list[i].min -= 1;
+                      }
+                      if(this.order_list[i].min < 10) {
+                        if(this.order_list[i].min !== '00') {
+                          this.order_list[i].min = '0' + this.order_list[i].min;
+                        }else {
+                          this.order_list[i].duration = null;
+                        }
+                      }
+                    }
+                    this.order_list = this.order_list.concat();
+                  }else {
+                    this.page_info.page_num = 1;
+                    this.order_list[i].duration = null;
+                    this.getOrderNum();             // 获取各状态的订单数量
+                    clearInterval(time);
+                  }
+                }, 1000);
+              }else {
+                this.order_list[i].duration = null
+              }
+            }
+          }
         },
         // 获取各状态的订单数量
         getOrderNum() {
@@ -363,9 +418,20 @@
             }
           }
           .m-order-btn-ul{
+            display: flex;
+            justify-content: space-between;
             text-align: right;
             color: #999;
             margin-top: 20px;
+            .duration-box {
+              margin-top: 10px;
+              .duration-text {
+                font-size: 24px;
+                font-weight: bold;
+                color: @mainColor;
+                margin-left: 10px;
+              }
+            }
             li{
               display: inline-block;
               width: 129px;
