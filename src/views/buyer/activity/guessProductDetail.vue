@@ -7,7 +7,7 @@
         </mt-swipe-item>
       </mt-swipe>
       <span class="m-icon-back" @click="changeBack"></span>
-      <span class="m-icon-gray-share" @click="shareProduct"></span>
+      <!--<span class="m-icon-gray-share" @click="shareProduct"></span>-->
     </div>
     <!--商品详情的文字信息-->
     <div class="m-detail-text">
@@ -91,14 +91,6 @@
     },
     mixins: [wxapi],
     components: { sku },
-    beforeDestroy() {
-      this.which = this.$route.query.which;
-      if(this.which == "new") {
-        this.$router.push('/activityProduct?which=new');
-      }else if(this.which == "try") {
-        this.$router.push('/activityProduct?which=try');
-      }
-    },
     mounted() {
       common.changeTitle('活动商品详情');
       this.getProductDetail();              // 获取商品详情
@@ -238,7 +230,7 @@
           let arr = [];
           arr.push(product);
           if(localStorage.getItem('token')) {
-            this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: this.which }});
+            this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: 'guess' }});
           }else {
             Toast('请登录后再试');
             // window.location.href = window.location.origin + '/#/login';

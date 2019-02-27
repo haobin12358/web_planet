@@ -21,8 +21,8 @@
           <div class="m-product-description">{{item.prdescription}}</div>
           <div class="m-price-share">
             <div class="m-product-price" v-if="item.prprice"><span class="m-price-time">￥{{item.prprice | money}}</span></div>
-            <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare(item)">
-            <div class="m-share-text" @click.stop="productShare(item)">分享</div>
+            <!--<img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare(item)">-->
+            <!--<div class="m-share-text" @click.stop="productShare(item)">分享</div>-->
           </div>
           <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
         </div>

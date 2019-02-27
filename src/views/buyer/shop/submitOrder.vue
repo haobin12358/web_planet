@@ -237,7 +237,7 @@
           this.getCoupon();                 // 获取提交订单时候可以使用的优惠券
         }
         this.getOneAddress();
-        if(JSON.parse(localStorage.getItem('guessproduct')).gnaaid) {
+        if(this.$route.query.from == 'guess') {
           this.getDiscount();         // 订单页获取减免金额
           this.isGuess = true;
         }
