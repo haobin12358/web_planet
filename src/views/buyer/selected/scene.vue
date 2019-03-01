@@ -182,7 +182,7 @@
   @import "../../../common/css/scroll";
   .m-scene{
     min-height: 100vh;
-    background-color: #eeeeee;
+    /*background-color: #eeeeee;*/
     .m-margin{
       margin: 0 0 10px 33px;
       .m-selected-scene-ul{
