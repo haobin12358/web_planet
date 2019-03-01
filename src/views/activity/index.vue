@@ -210,7 +210,9 @@
           this.rules.actoppic = [{ required: true, message: '详情页顶部图必需', trigger: 'blur' }];
           this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
         }
-        this.activityRule = this.formData.acdesc.split('|');
+        if(this.formData.acdesc) {
+          this.activityRule = this.formData.acdesc.split('|');
+        }
       },
       // 编辑活动dialog的保存按钮
       saveActivity() {
