@@ -123,6 +123,10 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
         }
       })
     }
+    // 每日竞猜 - 昨日未参与 不显示
+    else if(data.data.status_code == 405004 && data.data.status == 404 && data.data.message == '昨日未参与') {
+
+    }
     else {
       Toast(data.data.message);
     }

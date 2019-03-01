@@ -10,7 +10,7 @@
     </div>
     <!--内容-->
     <div class="m-product-content">
-      <div class="m-product-part" v-for="item in guessProduct" @click="changeRoute('/guessProductDetail', item)">
+      <div class="m-product-part" v-for="item in productList" @click="changeRoute('/guessProductDetail', item)">
         <div class="m-part-left">
           <img class="m-product-img" :src="item.prmainpic">
         </div>
@@ -50,7 +50,7 @@
         remarks: "猜对不同个数的数字，可减免不同金额",
         productList: [],
         show_invite: false,
-        guessProduct: {}
+        guess: {}
       }
     },
     mixins: [wxapi],
@@ -202,8 +202,17 @@
       },
       // 获取商品
       getProduct() {
-        this.guessProduct = JSON.parse(localStorage.getItem('guessProduct'));
-        // console.log(this.guessProduct);
+        this.guess = JSON.parse(localStorage.getItem('guess'));
+        this.title = this.guess.acname;
+        this.banner = this.guess.actopPic;
+        this.remarks = this.guess.acdesc;
+        this.productList = [];
+        let product = {};
+        for(let i in this.guess.fresh_man) {
+          product = this.guess.fresh_man[i].product;
+          product.gnaaid = this.guess.fresh_man[i].gnaaid;
+          this.productList.push(product);
+        }
       },
     }
   }

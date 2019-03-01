@@ -342,6 +342,9 @@
               if(this.product_info[0].discount) {
                 this.total_money = this.total_money - this.product_info[0].discount
               }
+              if(this.total_money < 0.01) {
+                this.total_money = 0.01
+              }
               sessionStorage.setItem('total_money', this.total_money);
             }
           });
@@ -420,10 +423,10 @@
             return false
           }
           let gnid = '';
-          let param = {
-            token: localStorage.getItem('token'),
-            date: new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString()
-          };
+          let date = new Date();
+          date.setTime(date.getTime());
+          date = date.getFullYear().toString() + (date.getMonth()+1).toString() + date.getDate().toString();
+          let param = { token: localStorage.getItem('token'), date: date };
           axios.get(api.get_guess_num, { params: param }).then(res => {
             if(res.data.status == 200) {
               if(res.data.data.result == 'uncorrect') {

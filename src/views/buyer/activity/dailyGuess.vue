@@ -1,8 +1,12 @@
 <template>
   <div class="m-dailyGuess">
     <div class="m-guess-title">
-      <img class="m-guess-img" src="/static/images/activity/main-bg.png" alt="">
-      <img class="m-product-img animated bounceIn" :src="productList[0].product.prmainpic" @click="changeRoute()">
+      <img class="m-guess-img" src="/static/images/activity/main-bg.png">
+      <mt-swipe class="m-product-img-box" :show-indicators="false">
+        <mt-swipe-item v-for="(item, index) in productImages" v-bind:key="item.prmainpic">
+          <img class="m-product-img" :src="item.prmainpic" v-lazy="item.prmainpic" :key="item.prmainpic" @click="changeRoute(item)">
+        </mt-swipe-item>
+      </mt-swipe>
       <!--<img class="m-product-img animated bounceIn" :src="rule.prpic">-->
       <div>
         <div class="m-input-img">
@@ -106,7 +110,8 @@
         today: '',
         record: { price: '' },
         uaid: '',
-        productList: [{ product: {} }]
+        guess: {},
+        productImages: []
       }
     },
     components: {},
@@ -136,13 +141,8 @@
     },
     methods: {
       // 跳转页面
-      changeRoute() {
-        let product_list = [];
-        for(let i in this.productList) {
-          this.productList[i].product.gnaaid = this.productList[i].gnaaid;
-          product_list.push(this.productList[i].product)
-        }
-        localStorage.setItem('guessProduct', JSON.stringify(product_list));
+      changeRoute(item) {
+        localStorage.setItem('guess', JSON.stringify(this.guess));
         this.$router.push({ path: 'guessProduct' });
       },
       // 昨日未中奖的知道了
@@ -289,7 +289,7 @@
           date: '' || date
         };
         axios.get(api.get_guess_num, { params: params }).then(res => {
-          if(res.data.status == 200){
+          if(res.data.status == 200) {
             if(!date && res.data.data) {
               this.num = res.data.data.gnnum;
               this.submit = true;
@@ -303,6 +303,19 @@
               }else if(res.data.data.result == 'not_open') {
                 Toast('昨日未开奖');
               }
+            }
+          }
+          if(res.data.status == 404) {
+            if(localStorage.getItem('yesterday')) {
+              if(localStorage.getItem('yesterday') == this.today) {
+
+              }else {
+                Toast(res.data.message);
+                localStorage.setItem('yesterday', this.today)
+              }
+            }else {
+              Toast(res.data.message);
+              localStorage.setItem('yesterday', this.today)
             }
           }
         });
@@ -320,7 +333,11 @@
       getTodayProduct() {
         axios.get(api.today_gnap + '?token='+ localStorage.getItem('token')).then(res => {
           if(res.data.status == 200) {
-            this.productList = res.data.data;
+            this.guess = res.data.data;
+            this.productImages = [];
+            for(let i in res.data.data.fresh_man) {
+              this.productImages.push(res.data.data.fresh_man[i].product)
+            }
           }
         });
       }
@@ -339,7 +356,7 @@
         height: 861px;
         margin-bottom: -130px;
       }
-      .m-product-img {
+      .m-product-img-box {
         width: 550px;
         height: 550px;
         /*border: 20px solid rgba(255,255,255,1);*/
@@ -348,6 +365,12 @@
         position: absolute;
         top: 219px;
         left: 92px;
+      }
+      .m-product-img {
+        width: 550px;
+        height: 550px;
+        box-shadow: 5px 5px 20px rgba(0,0,0,0.16);
+        border-radius: 30px;
       }
       .m-input-img {
         width: 704px;

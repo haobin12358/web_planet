@@ -16,7 +16,7 @@
         <div class="m-text-price" v-if="product.prprice">￥{{product.prprice | money}}</div>
       </div>
       <div class="m-text-row">
-        <div class="m-text-description">{{product.prdescription}}</div>
+        <div class="m-text-description" style="width:750px;text-align:justify;">{{product.prdescription}}</div>
         <div class="m-text-time" v-if="product.zh_deadline">（<span class="m-time-bold">{{product.zh_deadline}}</span>）</div>
       </div>
       <div class="m-text-row">
