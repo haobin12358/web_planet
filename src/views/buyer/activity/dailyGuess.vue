@@ -112,7 +112,15 @@
     components: {},
     mounted() {
       common.changeTitle('每日竞猜');
-      this.today = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString();
+      this.today = new Date();
+      if(new Date().getDate() == 1) {
+        this.today.setTime(this.today.getTime()-24*60*60*1000);
+        this.today = this.today.getFullYear().toString() + (this.today.getMonth()+1).toString() + this.today.getDate().toString();
+      }else {
+        this.today.setTime(this.today.getTime());
+        this.today = this.today.getFullYear().toString() + (this.today.getMonth()+1).toString() + this.today.getDate().toString();
+        // this.today = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + (new Date().getDate() - 1).toString();
+      }
       this.uaid = localStorage.getItem('uaid');
       localStorage.removeItem('uaid');
       this.timeOut();                    // 闪动光标 - 倒计时
