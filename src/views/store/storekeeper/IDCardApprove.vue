@@ -58,13 +58,13 @@
         <div class="m-IDCard-img">
           <img class="m-IDCard-img" v-if="umfrontTemp" :src="umfrontTemp" alt="">
           <input type="file" name="file" class="m-upload-input" value=""
-                 accept="image/jpeg,image/png,image/jpg,image/gif"
+                 accept="image/*" multiple=""
                  @change="uploadFrontImg" :disabled="user.uslevel == '2' || user.uslevel == '3'">
         </div>
         <div class="m-IDCard-img">
           <img class="m-IDCard-img" v-if="umbackTemp" :src="umbackTemp" alt="">
           <input type="file" name="file" class="m-upload-input" value=""
-                 accept="image/jpeg,image/png,image/jpg,image/gif"
+                 accept="image/*" multiple=""
                  @change="uploadBackImg" :disabled="user.uslevel == '2' || user.uslevel == '3'">
         </div>
         <!--按钮-->
@@ -198,8 +198,6 @@
             } else if (this.user.usgender == "1") {
               this.user.usGender = "女";
             }
-
-            console.log(this.user);
           }
         });
       },
