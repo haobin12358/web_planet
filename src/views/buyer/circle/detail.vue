@@ -596,9 +596,10 @@
       margin-bottom: 20px;
     }
     p{
+      text-align:justify;
       margin-bottom: 20px;
       color: #666666;
-      width: 630px;
+      width: 650px;
       text-indent: 2em;
       word-wrap: break-word;
       font-size: 28px;

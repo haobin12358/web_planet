@@ -1,7 +1,7 @@
 <template>
   <div class="m-line">
     <div class="m-line-name m-bottom">
-      <span>已经到底啦</span>
+      <span>The End</span>
       <!--<span>OUTFIT</span>-->
     </div>
   </div>
@@ -18,7 +18,7 @@
     height: 0;
     border: 1px dashed #999999;
     position: relative;
-    margin: 60px 0 ;
+    margin: 60px 0;
     .m-line-name{
       position: absolute;
       top: -25px;
@@ -30,8 +30,7 @@
       &.m-bottom{
         span{
           color: #CCCCCC;
-          font-size:30px;
-          font-family:Corbel;
+          font-size:24px;
           font-weight:bold;
           font-style:oblique
         }
