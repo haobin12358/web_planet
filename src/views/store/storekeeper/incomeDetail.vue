@@ -31,13 +31,17 @@
     <div class="m-income-detail-box">
       <div class="m-detail-item" v-if="detailList.length != 0" v-for="item in detailList">
         <div class="m-detail-item-left">
-          <img class="m-product-img" :src="item.skupic" alt="">
+          <img class="m-product-img" :src="item.skupic">
         </div>
         <div class="m-detail-item-middle">
-          <div class="m-product-name">{{item.prname}}</div>
+          <div class="m-product-name">{{item.prtitle}}</div>
+          <!--<div class="m-product-name">{{item.prname}}</div>-->
           <div class="m-product-time">{{item.createtime}}</div>
         </div>
-        <div class="m-detail-item-right">+{{item.uccommission | money}}</div>
+        <div class="m-detail-item-right">
+          <div class="money-text" :class="item.ucstatus=='预计到账'?'status':''">+{{item.uccommission | money}}</div>
+          <div class="status-text" v-if="item.ucstatus">（{{item.ucstatus}}）</div>
+        </div>
       </div>
       <div v-if="detailList.length == 0">
         <img class="m-detail-img" src="/static/images/icon-no-income.png" alt="">
@@ -130,12 +134,14 @@
           if(res.data.status == 200){
             this.income = res.data.data;
             this.detailList = this.income.usercommission_common_list;
-            for(let i = 0; i < this.detailList.length; i ++) {
-              this.detailList[i].prname = this.detailList[i].prtitle.substr(0, 27);
-              if(this.detailList[i].prtitle.length > 27) {
+            /*for(let i = 0; i < this.detailList.length; i ++) {
+              if(this.detailList[i].prtitle.length > 31) {
+                this.detailList[i].prname = this.detailList[i].prtitle.substr(0, 31);
                 this.detailList[i].prname = this.detailList[i].prname + '...';
+              }else {
+                this.detailList[i].prname = this.detailList[i].prtitle;
               }
-            }
+            }*/
             // this.navClick(0);
           }
         });
@@ -216,7 +222,7 @@
       }
     }
     .m-income-detail-box {
-      margin: 260px 70px 0 90px;
+      margin: 260px 50px 0 70px;
       .m-detail-item {
         display: flex;
         align-items: center;
@@ -225,6 +231,7 @@
           .m-product-img {
             width: 97px;
             height: 97px;
+            border-radius: 10px;
           }
         }
         .m-detail-item-middle {
@@ -236,8 +243,16 @@
           text-align: left;
           margin: 0 25px;
           .m-product-name {
+            height: 50px;
             font-size: 24px;
             line-height: 28px;
+            white-space: normal;
+            overflow: hidden; // 超出的文本隐藏
+            word-break: break-word;  // 英文换行
+            text-overflow: ellipsis;    // 溢出用省略号显示
+            display: -webkit-box; // 将对象作为弹性伸缩盒子模型显示。
+            -webkit-box-orient: vertical; // 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+            -webkit-line-clamp: 2; // 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
           }
           .m-product-time {
             color: #999999;
@@ -246,7 +261,19 @@
           }
         }
         .m-detail-item-right {
+          font-size: 26px;
           color: #C70000;
+          .money-text {
+            font-weight: bold;
+            &.status {
+              color: @mainColor;
+            }
+          }
+          .status-text {
+            color: @mainColor;
+            font-size: 18px;
+            margin-top: -5px;
+          }
         }
       }
       .m-detail-img {

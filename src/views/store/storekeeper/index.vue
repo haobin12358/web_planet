@@ -5,7 +5,7 @@
     <!--顶部文字-->
     <div class="m-total-earnings">累计收益 : ￥{{user.uc_count | money}}</div>
     <div class="m-balance">可提现余额 : ￥{{Number(user.usbalance).toFixed(2)}}</div>
-    <div class="m-balance-two">待结算佣金 : ￥{{Number(ustotal).toFixed(2)}}</div>
+    <div class="m-balance-two">提现中金额 : ￥{{Number(ustotal).toFixed(2)}}</div>
     <div class="m-month-earnings">本月收益<span class="m-month-earnings-text">{{user.mounth_count | money}}</span>元</div>
     <div class="m-total-jump-box m-earnings-detail">
       <div class="m-earnings-out m-text-bottom" @click="outPopup = true">提现</div>
