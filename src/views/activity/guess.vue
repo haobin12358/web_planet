@@ -61,7 +61,7 @@
         <template slot-scope="scope">
           <el-button type="text" @click="editGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">编辑</el-button>
           <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.gnaastatus == 0">撤销</el-button>
-          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10">删除</el-button>
+          <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.gnaastatus == -20 || scope.row.gnaastatus == -10 || scope.row.gnaastatus == -30">删除</el-button>
           <el-button type="text" class="danger-text" @click="shelvesGuess(scope)" v-if="scope.row.gnaastatus == 10">下架</el-button>
         </template>
       </el-table-column>
@@ -353,7 +353,7 @@
         }).then(() => {
           this.$http.post(this.$api.guess_num_shelves, {gnaaid: scope.row.gnaaid}).then(res => {
             if (res.data.status == 200) {
-              this.getMagic();
+              this.getGuess();
               this.$notify({
                 title: '下架成功',
                 message: '该申请已下架成功',
