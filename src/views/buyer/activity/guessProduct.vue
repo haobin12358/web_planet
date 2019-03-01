@@ -45,9 +45,9 @@
         name: '',
         page_num: 1,
         page_size: 10,
-        title: "每日竞猜",
-        banner: "http://dummyimage.com/750x360",
-        remarks: "猜对不同个数的数字，可减免不同金额",
+        title: "",
+        banner: "",
+        remarks: "",
         productList: [],
         show_invite: false,
         guess: {}
