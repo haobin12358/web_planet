@@ -58,7 +58,7 @@
         <el-form-item label="封面按钮文字" prop="acbutton">
           <el-input class="long-input" v-model="formData.acbutton"></el-input>
         </el-form-item>
-        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '3'">
+        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '3'">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -73,16 +73,16 @@
             </div>
           </el-upload>
         </el-form-item>
-        <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '3'">
+        <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '3'">
           <el-input v-model="formData.acdesc" maxlength="1000"></el-input>
         </el-form-item>
-        <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
+        <!--<el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
           <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="13" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
                     v-for="i in [0, 1, 2]" :key="i" v-model="activityRule[i]">
             <template slot="prepend">序号{{i + 1}}</template>
             <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/13</template>
           </el-input>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <span slot="footer">
         <el-button @click="initActivityForm">取 消</el-button>
@@ -206,7 +206,7 @@
       editActivity(scope) {
         this.activityDialog = true;
         this.formData = JSON.parse(JSON.stringify(scope.row));
-        if(this.formData.actype == '0' || this.formData.actype == '3') {
+        if(this.formData.actype == '0' || this.formData.actype == '1' || this.formData.actype == '3') {
           this.rules.actoppic = [{ required: true, message: '详情页顶部图必需', trigger: 'blur' }];
           this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
         }
@@ -218,13 +218,13 @@
       saveActivity() {
         this.$refs.formData.validate(valid => {
           if(valid) {
-            if(this.formData.actype == '1') {
+            /*if(this.formData.actype == '1') {
               this.formData.acdesc = '';
               for(let i in this.activityRule) {
                 this.formData.acdesc = this.formData.acdesc + '|' + this.activityRule[i]
               }
               this.formData.acdesc = this.formData.acdesc.slice(1, this.formData.acdesc.length);
-            }
+            }*/
             this.$http.post(this.$api.activity_update, this.formData).then(res => {
               if (res.data.status == 200) {
                 this.initActivityForm();   // 重置
