@@ -18,7 +18,8 @@
           <div class="m-right-row">
             <div class="m-product-name"><span class="m-product-tag">【{{title}}】</span>{{item.prtitle}}</div>
           </div>
-          <div class="m-product-description">{{item.prdescription}}</div>
+          <div class="m-product-description"></div>
+          <!--<div class="m-product-description">{{item.prdescription}}</div>-->
           <div class="m-price-share">
             <div class="m-product-price" v-if="item.prprice"><span class="m-price-time">￥{{item.prprice | money}}</span></div>
             <!--<img class="m-share-img" src="/static/images/icon-gray-share.png" alt="" @click="productShare(item)">-->
