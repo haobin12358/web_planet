@@ -5,8 +5,8 @@
       <div class="m-top-bg"></div>
     </div>
     <div class="m-activity-product-text-box">
-      <div class="m-ft-30 m-ft-b">{{title}}</div>
-      <div class="m-activity-product-text m-ft-24">{{remarks}}</div>
+      <div class="m-ft-36 m-ft-b">{{title}}</div>
+      <!--<div class="m-activity-product-text m-ft-24">{{remarks}}</div>-->
     </div>
     <!--内容-->
     <div class="m-product-content">
