@@ -169,6 +169,8 @@
           params.uspaycodeAgain = this.uspaycodeAgain;
         }
         if(this.from == 'new') {
+          params.openid = localStorage.getItem('openid');
+          params.app_from = window.location.origin.substr(8, window.location.origin.length);
           axios.post(api.bing_telphone + '?token=' + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200){
               Toast({ message: '绑定成功', duration: 1500 });
