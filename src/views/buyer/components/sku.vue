@@ -23,7 +23,11 @@
             <li v-for="(items,index) in product.skuvalue">
               <p>{{items.name}}</p>
               <ul class="m-sku-ul">
-                <li v-for="item in items.value" :class="item == select[index]?'active':''" @click.stop="skuSelect(index,item)">{{item}}</li>
+                <template  v-for="(item,i) in items.value">
+                  <!--v-if="new_arr[index][i]"-->
+                  <li v-if="new_arr.length>0 && !new_arr[index][i] "  class="cancel">{{item}}</li>
+                  <li v-else :class="item == select[index]?'active':''" @click.stop="skuSelect(index,item)">{{item}}</li>
+                </template>
               </ul>
             </li>
           </ul>
@@ -80,6 +84,8 @@
           select:[],
           select_value:null,
           num:1,
+          new_arr:[],
+          last_arr:[]
         }
       },
       props:{
@@ -120,6 +126,9 @@
             this.skuSelect(i, this.product.skuvalue[i].value[0]);
           }
         }
+        for(let i in this.product.skuvalue) {
+          this.last_arr[i] = this.product.skuvalue[i].value
+        }
       },
       methods:{
         //  改变模态框
@@ -133,12 +142,70 @@
           }
           this.num = this.num + v;
         },
+        //判断一个数组里面是否包含另外一个数组
+        contrastArr(aa,bb){
+            if(!(aa instanceof Array) || !(bb instanceof Array) || ((aa.length < bb.length))) {
+              return false;
+            }
+            //var aaStr = aa.toString();
+            /*for(var i = 0; i < bb.length; i++) {
+                if(aaStr.indexOf(bb[i]) < 0) return false;
+            }*/
+            for (let i = 0; i < bb.length; i++) {
+              let flag = false;
+              for(let j = 0; j < aa.length; j++){
+                if(aa[j] == bb[i]){
+                  flag = true;
+                  break;
+                }
+              }
+              if(flag == false){
+                return flag;
+              }
+            }
+            return true;
+        },
         //sku选择
         skuSelect(index,item){
           let _arr = [].concat(this.select);
           _arr[index] = item;
           this.select = [].concat(_arr);
           let change = -1;
+          let newArr = [];
+          let ad = [];
+          ad.push(this.select[index]);
+          // for(let i =0;i<this.select.length;i++){
+            for(let j=0;j<this.product.skus.length;j++){
+              // if(this.product.skus[j].skuattritedetail[i] == this.select[i] && this.product.skus[j].skustock >0){
+              //
+              // }
+              if(this.contrastArr(this.product.skus[j].skuattritedetail,ad) && this.product.skus[j].skustock >0){
+                newArr.push(this.product.skus[j].skuattritedetail);
+              }
+            }
+            let newArr_total = [];
+            for(let i=0;i<this.product.skuvalue.length;i++){
+              newArr_total[i] = [];
+            }
+            for(let i=0;i<newArr.length;i++){
+              for(let j=0;j<newArr[i].length;j++){
+                newArr_total[j].push(newArr[i][j])
+              }
+            }
+          for(let i=0;i<this.product.skuvalue.length;i++){
+            for(let j=0;j<this.product.skuvalue[i].value.length;j++){
+              if(newArr_total[i][j] != this.product.skuvalue[i].value[j]){
+                newArr_total[i][j] = '';
+              }else{
+                newArr_total[i][j] = this.product.skuvalue[i].value[j]
+              }
+            }
+          }
+          newArr_total[index] = this.last_arr[index];
+          this.new_arr = [].concat(newArr_total);
+            this.last_arr = [].concat(newArr_total)
+          // }
+
           if(this.select.length === this.product.skuvalue.length){
             for(let i = 0;i<this.product.skus.length;i++){
               if((JSON.stringify(this.product.skus[i].skuattritedetail) === JSON.stringify(this.select)) && (this.product.skus[i].skuattritedetail.length == this.select.length)){
@@ -240,6 +307,10 @@
                 &.active{
                   background-color: @mainColor;
                   color: #ffffff;
+                }
+                &.cancel{
+                  color: #fff;
+                  cursor: not-allowed;
                 }
               }
             }
