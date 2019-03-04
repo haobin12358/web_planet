@@ -111,10 +111,14 @@
         }
       },
       mounted(){
+        for(let i in this.product.skuvalue) {
+          this.last_arr[i] = this.product.skuvalue[i].value
+        }
         if(this.now_select){
           this.select_value = this.now_select;
           this.select = this.select_value.skuattritedetail;
           this.num = this.now_num;
+          this.skuSelect(0, this.select[0]);
         }
         // 单个sku时自动选中
         let a = 0;
@@ -126,9 +130,7 @@
             this.skuSelect(i, this.product.skuvalue[i].value[0]);
           }
         }
-        for(let i in this.product.skuvalue) {
-          this.last_arr[i] = this.product.skuvalue[i].value
-        }
+
       },
       methods:{
         //  改变模态框
@@ -217,6 +219,7 @@
           if(change == -1){
             this.select_value = null;
           }
+          console.log(this.new_arr)
         },
       //  确定
         sureClick(){
