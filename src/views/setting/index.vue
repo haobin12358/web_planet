@@ -4,6 +4,12 @@
       <el-col :span="14">
         <el-form :model="formData" :rules="rules" ref="formData" label-position="left"
                  label-width="100px">
+          <el-form-item label="购买数量" prop="acrnum">
+            <el-input v-model="formData.acrnum" placeholder="请输入购买数量"></el-input>
+          </el-form-item>
+          <el-form-item label="打款金额" prop="acrcash">
+            <el-input v-model="formData.acrcash" placeholder="请输入打款金额"></el-input>
+          </el-form-item>
           <el-form-item label="卡 号" prop="acrbanksn">
             <el-input v-model="formData.acrbanksn" placeholder="请输入银行卡号"></el-input>
           </el-form-item>
@@ -38,6 +44,8 @@
     data() {
       return {
         formData: {
+          acrnum: '',
+          acrcash: '',
           acrbanksn: '',
           acrbankaddress: '',
           acrname: '',
@@ -46,6 +54,12 @@
           acrrule: ''
         },
         rules: {
+          acrnum: [
+            { required: true, message: '购买数量必填', trigger: 'blur' }
+          ],
+          acrcash: [
+            { required: true, message: '打款金额必填', trigger: 'blur' }
+          ],
           acrbanksn: [
             { required: true, message: '银行卡号必填', trigger: 'blur' }
           ],

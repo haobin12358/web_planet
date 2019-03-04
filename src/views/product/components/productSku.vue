@@ -11,7 +11,7 @@
             <table-cell-img :src="[scope.row.skupic]"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="SN" prop="skusn" align="center" width="120" show-overflow-tooltip></el-table-column>
+        <el-table-column label="货号" prop="skusn" align="center" width="120" show-overflow-tooltip></el-table-column>
 
         <el-table-column v-for="(item,index) in prattribute" :label="item" :key="index"
                          align="center" width="120">

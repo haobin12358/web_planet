@@ -174,16 +174,17 @@
               :before-upload="beforeImgsUpload"
               :on-remove="handleImagesRemove"
               :http-request="uploadImages"
+              :on-exceed="onImagesFileExceed"
               :limit="9"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">
-                <span>可多选,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+                <span>可多选,当前{{imagesUrl.length}}/9张,建议为方形,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
                 <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
               </div>
             </el-upload>
           </el-form-item>
-          <el-form-item label="底部长图(最多20张)" prop="tcdesc">
+          <el-form-item label="底部长图(最多30张)" prop="tcdesc">
             <el-upload
               class="swiper-uploader"
               :action="uploadUrl"
@@ -194,11 +195,12 @@
               :before-upload="beforeImgsUpload"
               :on-remove="handletcdescRemove"
               :http-request="uploadtcdesc"
-              :limit="20"
+              :on-exceed="onFileExceed"
+              :limit="30"
               :multiple="true">
               <i class="el-icon-plus"></i>
               <div slot="tip" class="el-upload__tip">
-                <span>可多选,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+                <span>可多选,,当前{{tcdescUrl.length}}/30张,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
                 <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="tcdescUrl"></imgs-drag-sort>
               </div>
             </el-upload>
@@ -627,6 +629,13 @@
             }
           }
         )
+      },
+
+      onFileExceed(files, fileList){
+        this.$message.warning(`图片数量超出限制,最多30张,上传失败${files.length}张`)
+      },
+      onImagesFileExceed(files, fileList){
+        this.$message.warning(`图片数量超出限制,最多9张,上传失败${files.length}张`)
       },
 
       //  配合的data转换成接口要求的 还是得放watch里配合校验信息

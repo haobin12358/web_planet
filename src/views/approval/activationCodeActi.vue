@@ -56,7 +56,7 @@
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text"  style="margin-left: 10px;">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>

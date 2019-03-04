@@ -195,8 +195,6 @@
         total: 0,
         currentPage: 1,
         pageSize: 10,
-
-        repeat: true,
       }
     },
 
@@ -422,14 +420,6 @@
     },
 
     activated() {
-      if (this.repeat) {
-        this.repeat = false;
-      } else {
-        this.setOrderList();
-      }
-    },
-
-    created() {
       this.setOrderType();
     }
   }

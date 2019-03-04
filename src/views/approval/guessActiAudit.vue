@@ -20,27 +20,28 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
+          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
         </el-form-item>
       </el-form>
     </section>
+
     <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
-      <el-table-column label="审批内容" align="center" >
-        <el-table-column label="商品规格图片" align="center" prop="prdescription"  width="120">
-        <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.content.product.skus[0].skupic]" :key="scope.row.avid"></table-cell-img>
-        </template>
-      </el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.product.pbname" width="120">
+      <el-table-column label="审批内容" align="center">
+        <el-table-column label="商品图片" align="center"  width="100">
           <template slot-scope="scope">
-            {{scope.row.content.product.brand ? scope.row.content.product.brand.pbname : ''}}
+            <table-cell-img :src="scope.row.content.product ? [scope.row.content.product.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
+            <!--{{scope.row.content.product}}-->
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="120" show-overflow-tooltip></el-table-column>
-        <el-table-column label="参与日期" align="center" prop="content.gnaastarttime" width="120"></el-table-column>
-        <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
-        <el-table-column label="参与数量" align="center" prop="content.product.skus[0].skustock" width="120"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="220"></el-table-column>
+        <el-table-column label="参与时间" align="center" prop="content.gnaastarttime" width="180"></el-table-column>
+        <el-table-column label="活动价格" align="center" prop="content.product.prprice" width="120"></el-table-column>
+        <el-table-column align="center" label="sku" width="120">
+          <template slot-scope="scope">
+            <product-sku :skus="scope.row.content.product.skus" :prattribute="scope.row.content.product.prattribute"></product-sku>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
@@ -58,20 +59,21 @@
           <el-tag :type="tagsType(scope.row.avstatus).type">{{tagsType(scope.row.avstatus).label}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" fixed="right">
+      <el-table-column label="操作" align="center" width="220" fixed="right">
         <template slot-scope="scope">
           <template v-if="scope.row.avstatus == 0">
             <el-button type="text" class="success-text" @click="pass(scope.row)">通过</el-button>
             <el-button type="text" class="danger-text" @click="nopass(scope.row)">不通过</el-button>
           </template>
-          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click" @show="showStep(scope.row)">
+          <el-popover :key="scope.row.avid" v-if="[0,10].includes(scope.row.avstatus)" placement="left" trigger="click"
+                      @show="showStep(scope.row)">
             <div style="padding: 20px;width: 300px;">
               <el-steps direction="vertical" :active="steps.length">
                 <el-step v-for="item in steps" :title="item.anaction" :key="item.anid"
                          :description="item.avadname +': '+ item.anabo"></el-step>
               </el-steps>
             </div>
-            <el-button slot="reference" type="text" >查看记录</el-button>
+            <el-button slot="reference" type="text" style="margin-left: 10px;">查看记录</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -93,12 +95,13 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import ProductSku from "src/views/product/components/productSku";
 
   //  toguessnum
   export default {
     name: "GuessActiAudit",
 
-    components: {TableCellImg},
+    components: {TableCellImg, ProductSku},
 
     data() {
       return {
@@ -129,8 +132,8 @@
 
     methods: {
       doSearch() {
-        if(this.inlineForm.starttime && this.inlineForm.endtime){
-          if(new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)){
+        if (this.inlineForm.starttime && this.inlineForm.endtime) {
+          if (new Date(this.inlineForm.starttime) > new Date(this.inlineForm.endtime)) {
             let term = this.inlineForm.endtime;
 
             this.inlineForm.endtime = this.inlineForm.starttime;
@@ -185,25 +188,25 @@
       },
 
       cellFunction({row, column}) {
-        if ([ 'avlevel'].includes(column.property)) {
+        if (['avlevel'].includes(column.property)) {
           return 'money-cell'
         }
       },
       tagsType(status) {
         switch (status) {
           case -20:
-            return {label: '已取消',type: 'info'};
+            return {label: '已取消', type: 'info'};
           case -10:
-            return {label: '已拒绝',type: 'danger'};
+            return {label: '已拒绝', type: 'danger'};
           case 0:
-            return {label: '审核中',type: 'primary'};
+            return {label: '审核中', type: 'primary'};
           case 10:
-            return {label: '已通过',type: 'success'};
+            return {label: '已通过', type: 'success'};
         }
       },
 
-      showStep(row){
-        this.$http.get(this.$api.get_approvalnotes,{
+      showStep(row) {
+        this.$http.get(this.$api.get_approvalnotes, {
           noLoading: true,
           params: {
             avid: row.avid
@@ -214,7 +217,7 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.steps = data.reverse();
+              this.steps = data;
             }
           }
         )
@@ -227,7 +230,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           }
@@ -261,7 +264,7 @@
             if (!value) {
               return '意见不能为空'
             }
-            if(value.length>100){
+            if (value.length > 100) {
               return '意见文本过长(100)'
             }
           },
@@ -278,7 +281,7 @@
                     data = res.data.data;
 
                   for (let i = 0; i < data.length; i++) {
-                    if(!data[i].content.product){
+                    if (!data[i].content.product) {
                       data[i].content.product = {}
                     }
                   }

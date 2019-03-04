@@ -58,7 +58,7 @@
         <el-form-item label="封面按钮文字" prop="acbutton">
           <el-input class="long-input" v-model="formData.acbutton"></el-input>
         </el-form-item>
-        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '3'">
+        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '3'">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -74,7 +74,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="详情页描述" prop="acdesc" v-if="formData.actype == '0' || formData.actype == '3'">
-          <el-input v-model="formData.acdesc"></el-input>
+          <el-input v-model="formData.acdesc" maxlength="1000"></el-input>
         </el-form-item>
         <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
           <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="13" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
@@ -206,11 +206,15 @@
       editActivity(scope) {
         this.activityDialog = true;
         this.formData = JSON.parse(JSON.stringify(scope.row));
-        if(this.formData.actype == '0' || this.formData.actype == '3') {
+        if(this.formData.actype == '0' || this.formData.actype == '1' || this.formData.actype == '3') {
           this.rules.actoppic = [{ required: true, message: '详情页顶部图必需', trigger: 'blur' }];
+        }
+        if(this.formData.actype == '0' || this.formData.actype == '3') {
           this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
         }
-        this.activityRule = this.formData.acdesc.split('|');
+        if(this.formData.acdesc) {
+          this.activityRule = this.formData.acdesc.split('|');
+        }
       },
       // 编辑活动dialog的保存按钮
       saveActivity() {
