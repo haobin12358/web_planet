@@ -177,37 +177,50 @@
           let ad = [];
           ad.push(this.select[index]);
           // for(let i =0;i<this.select.length;i++){
-            for(let j=0;j<this.product.skus.length;j++){
-              // if(this.product.skus[j].skuattritedetail[i] == this.select[i] && this.product.skus[j].skustock >0){
-              //
-              // }
-              if(this.contrastArr(this.product.skus[j].skuattritedetail,ad) && this.product.skus[j].skustock >0){
-                newArr.push(this.product.skus[j].skuattritedetail);
-              }
+          for(let j=0;j<this.product.skus.length;j++){
+            // if(this.product.skus[j].skuattritedetail[i] == this.select[i] && this.product.skus[j].skustock >0){
+            //
+            // }
+            if(this.contrastArr(this.product.skus[j].skuattritedetail,ad) && this.product.skus[j].skustock >0){
+              newArr.push(this.product.skus[j].skuattritedetail);
             }
-            let newArr_total = [];
-            for(let i=0;i<this.product.skuvalue.length;i++){
-              newArr_total[i] = [];
+          }
+          let newArr_total = [];
+          let arr = [];
+          for(let i=0;i<this.product.skuvalue.length;i++){
+            newArr_total.push(new Array());
+           arr.push(new Array());
+          }
+          for(let i=0;i<newArr.length;i++){
+            for(let j=0;j<newArr[i].length;j++){
+              // newArr_total[j].push(newArr[i][j])
+              arr[j].push(newArr[i][j])
             }
-            for(let i=0;i<newArr.length;i++){
-              for(let j=0;j<newArr[i].length;j++){
-                newArr_total[j].push(newArr[i][j])
-              }
-            }
+          }
+
+
+          // newArr_total = [].concat(arr)
+          console.log(arr,'asasfas')
           for(let i=0;i<this.product.skuvalue.length;i++){
             for(let j=0;j<this.product.skuvalue[i].value.length;j++){
-              if(newArr_total[i][j] != this.product.skuvalue[i].value[j]){
+              if(arr[i].indexOf(this.product.skuvalue[i].value[j]) == -1){
                 newArr_total[i][j] = '';
               }else{
                 newArr_total[i][j] = this.product.skuvalue[i].value[j]
               }
             }
           }
+          console.log(newArr_total)
+         for(let a=0;a<newArr_total.length;a++){
+
+           if(newArr_total[a].indexOf(this.select[a]) == -1){
+             this.select[a] = '';
+           }
+         }
           newArr_total[index] = this.last_arr[index];
           this.new_arr = [].concat(newArr_total);
             this.last_arr = [].concat(newArr_total)
           // }
-
           if(this.select.length === this.product.skuvalue.length){
             for(let i = 0;i<this.product.skus.length;i++){
               if((JSON.stringify(this.product.skus[i].skuattritedetail) === JSON.stringify(this.select)) && (this.product.skus[i].skuattritedetail.length == this.select.length)){
@@ -219,7 +232,7 @@
           if(change == -1){
             this.select_value = null;
           }
-          console.log(this.new_arr)
+          // console.log(this.new_arr)
         },
       //  确定
         sureClick(){
