@@ -69,7 +69,7 @@
         </el-form-item>
       </el-form>
     </section>
-    <block-title title="极差减额"></block-title>
+    <block-title title="级差减额"></block-title>
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="1-2">
@@ -98,7 +98,7 @@
       </el-form>
     </section>
 
-    <block-title title="极差增额"></block-title>
+    <block-title title="级差增额"></block-title>
     <section class="tool-bar">
       <el-form inline>
         <el-form-item label="1-2">

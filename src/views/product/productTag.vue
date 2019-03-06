@@ -111,7 +111,8 @@
         <el-form-item label="标签名" prop="itname">
           <el-input v-model.trim="itemForm.itname" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="关联场景" prop="psid">
+
+        <el-form-item label="关联场景" v-if="itemForm.itname == 'HOT人气热卖' ||itemForm.itname == '品牌推荐商品'||itemForm.itname == '为您精选' ">
           <el-select
             v-model="itemForm.psid"
             multiple
@@ -126,7 +127,21 @@
             </el-option>
           </el-select>
         </el-form-item>
-
+        <el-form-item label="关联场景" v-else prop="psid">
+          <el-select
+            v-model="itemForm.psid"
+            multiple
+            filterable
+            default-first-option
+            placeholder="可多选" style="width: 500px">
+            <el-option
+              v-for="item in psOptions"
+              :key="item.psid"
+              :label="item.psname"
+              :value="item.psid">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="标签描述" prop="itdesc">
           <el-input v-model.trim="itemForm.itdesc" maxlength="1000" type="textarea"></el-input>
         </el-form-item>

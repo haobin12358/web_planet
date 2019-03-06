@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <section class="profile-block profile-todos-block">
-      <block-title title="代办事项"></block-title>
+      <block-title title="待办事项"></block-title>
       <div class="todo-line"></div>
 
       <ul class="todo-list">
