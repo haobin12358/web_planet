@@ -5,7 +5,7 @@
       <div class="todo-line"></div>
 
       <ul class="todo-list">
-        <li class="todo-item" v-for="item in todos" :key="item.ptid" @click="gotoTodoPage(item)">
+        <li class="todo-item" v-for="item in todos" v-if="item.approval_num != 0" :key="item.ptid" @click="gotoTodoPage(item)">
           <span class="label">{{item.ptname}}</span>
           <span class="num">{{item.approval_num}}</span>
         </li>
@@ -190,7 +190,6 @@
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
-
               this.todos = this.todos.concat(data);
             }
           }
