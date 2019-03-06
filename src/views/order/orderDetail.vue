@@ -362,11 +362,16 @@
                       if (res.data.status == 200) {
                         let resData = res.data,
                           data = res.data.data;
+                          if(res.data.data.olsignstatus == -1){
+                            this.$message.warning('快递单号错误，请重新填写!');
+                            this.init();
+                          }else{
+                            this.actionForm.olcompany = data.olcompany;
+                            this.actionForm.olexpressno = data.olexpressno;
 
-                        this.actionForm.olcompany = data.olcompany;
-                        this.actionForm.olexpressno = data.olexpressno;
+                            this.orderLogisticsList = data.oldata.list.reverse();
+                          }
 
-                        this.orderLogisticsList = data.oldata.list.reverse();
                       }
                     }
                   )
