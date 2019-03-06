@@ -31,6 +31,11 @@ export default {
     }
   },
   created() {
+    // this.$router.beforeEach((to, from, next) => {
+    //   setTimeout(function () {
+    //     window.location.href = window.location.href;
+    //   }, 500);
+    // });
     // 将邀请人的usid保存，等注册的时候使用
     if(!localStorage.getItem('token')) {
       if(location.href.indexOf('secret_usid') > 0) {

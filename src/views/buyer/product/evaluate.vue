@@ -73,6 +73,13 @@
       mixins: [wxapi],
       inject: ['reload'],
       components: { bottomLine },
+      beforeRouteEnter (to, from, next){
+        console.log(from)
+        next(vm => {
+          // 通过 `vm` 访问组件实例,将值传入oldUrl
+          vm.oldUrl = from.path
+        })
+      },
       mounted() {
           this.getEvaluation();        // 获取评价
       },

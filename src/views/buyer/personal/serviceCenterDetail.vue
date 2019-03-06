@@ -20,15 +20,15 @@
           <div class="m-serviceCenter-btn">
             <span class="m-icon-service"></span>
             <div>
-              <p>在线客服</p>
-              <p>（8:30-24:00)</p>
+              <p>客服QQ</p>
+              <p>3441362480</p>
             </div>
           </div>
           <div class="m-serviceCenter-btn">
             <span class="m-icon-tell"></span>
             <div>
-              <p>客服电话</p>
-              <p>（8:30-24:00)</p>
+              <p>客服邮箱</p>
+              <p>kuahu123@163.com</p>
             </div>
           </div>
         </div>
@@ -122,6 +122,7 @@
         text-align: center;
         .flex-row(center);
         line-height: 36px;
+        color: #fff;
         &:first-child{
           border-right: 1px solid #fff;
         }
@@ -129,7 +130,7 @@
           display: inline-block;
           width: 59px;
           height: 60px;
-          background: url("/static/images/m-serviceCenter-kefu.png") no-repeat;
+          background: url("/static/images/icon-qq.png") no-repeat;
           background-size: 100% 100%;
           margin-right: 20px;
         }
@@ -137,7 +138,7 @@
           display: inline-block;
           width: 61px;
           height: 60px;
-          background: url("/static/images/m-serviceCenter-tell.png") no-repeat;
+          background: url("/static/images/icon-email.png") no-repeat;
           background-size: 100% 100%;
           margin-right: 20px;
         }

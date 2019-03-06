@@ -98,7 +98,7 @@ export const constantRouterMap = [
     children: [{ path: '/equipment', component: () => import('../views/buyer/equipment/index'), hidden: true }
     ],
   },
-  { path: '/equipment/detail', component: () => import('../views/buyer/equipment/detail'), hidden: true },
+  { path: '/equipment/detail', component: () => import('../views/buyer/equipment/detail'), hidden: true , meta: { keepAlive: true }},
   { path: '/product', component: () => import('../views/buyer/product/product'), meta: { keepAlive: true }, hidden: true },
   { path: '/productDetail', name: 'productDetail', component: () => import('../views/buyer/product/productDetail'), meta: { keepAlive: false }, hidden: true },
   { path: '/evaluate', component: () => import('../views/buyer/product/evaluate'), hidden: true },

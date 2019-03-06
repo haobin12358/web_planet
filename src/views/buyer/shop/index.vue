@@ -116,8 +116,9 @@
         }
       },
       components: { sku, bottomLine },
-      mounted(){
+  mounted(){
         common.changeTitle('购物车');
+
       },
       activated() {
         this.allRadio = false;
@@ -130,6 +131,7 @@
           sessionStorage.removeItem('shop')
         }
       },
+
       methods: {
         changeRoute(v, item){
           if(item) {
