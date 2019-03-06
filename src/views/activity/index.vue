@@ -77,10 +77,10 @@
           <el-input v-model="formData.acdesc" maxlength="1000"></el-input>
         </el-form-item>
         <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '1'">
-          <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="13" :placeholder="'请输入活动规则' + (i + 1) + '，不超过13个汉字'"
+          <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="100" :placeholder="'请输入活动规则' + (i + 1) + '，不超过100个汉字'"
                     v-for="i in [0, 1, 2]" :key="i" v-model="activityRule[i]">
             <template slot="prepend">序号{{i + 1}}</template>
-            <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/13</template>
+            <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/100</template>
           </el-input>
         </el-form-item>
       </el-form>
