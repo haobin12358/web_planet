@@ -195,9 +195,14 @@
       },
       // 预览图片
       previewImage(index, image) {
+
         let images = [];
         for(let i = 0; i < image.length; i ++) {
-          images.push(image[i].pipic);
+         if(image[i].pipic){
+            images.push(image[i].pipic);
+          }else if(image[i].tcipic){
+            images.push(image[i].tcipic);
+          }
         }
         let options = {
           current: image[index].pipic, // 当前显示图片的http链接
