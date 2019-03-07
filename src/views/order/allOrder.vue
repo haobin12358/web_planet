@@ -227,7 +227,9 @@
     },
 
     computed: {},
-
+    mounted(){
+      this.setOrderList();
+    },
     methods: {
       checkPermission,
 
