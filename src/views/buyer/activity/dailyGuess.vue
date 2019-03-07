@@ -1,14 +1,14 @@
 <template>
   <div class="m-dailyGuess">
     <div class="m-guess-title">
-      <img class="m-guess-img" src="/static/images/activity/main-bg.png">
+      <!--<img class="m-guess-img" src="/static/images/activity/main-bg.png">-->
       <mt-swipe class="m-product-img-box" :show-indicators="false">
         <mt-swipe-item v-for="(item, index) in productImages" v-bind:key="item.prmainpic">
           <img class="m-product-img" :src="item.prmainpic" @click="changeRoute(item)">
         </mt-swipe-item>
       </mt-swipe>
       <!--<img class="m-product-img animated bounceIn" :src="rule.prpic">-->
-      <div>
+      <div class="m-input-sure-box">
         <div class="m-input-img">
           <div class="m-guess-result m-ft-50 m-ft-b">{{num}}<span class="m-result">{{result}}</span></div>
         </div>
@@ -19,7 +19,7 @@
     </div>
     <div class="m-guess-num-text">
       <div class="m-guess-num">
-        <div class="m-line-long"></div>
+        <!--<div class="m-line-long"></div>-->
         <div class="m-num-bg">
           <div class="m-num-box">
             <div class="m-num-item m-one animated bounceInDown bounceInLeft" @click="numClick('1')"></div>
@@ -36,29 +36,29 @@
             <div class="m-num-item m-delete animated bounceInDown" @click="numClick('delete')"></div>
           </div>
         </div>
-        <div class="m-line-short"></div>
+        <!--<div class="m-line-short"></div>-->
       </div>
       <div class="m-guess-text">
-        <div class="m-rule-icon"></div>
+        <!--<div class="m-rule-icon"></div>-->
         <div class="m-text-bg">
           <div class="m-rule-title">活动规则</div>
           <div class="m-rule-row">
-            <div>
-              <div class="m-rule-no">1</div>
-            </div>
-            <div>{{rule.acdesc[0]}}</div>
+            <!--<div>-->
+              <!--<div class="m-rule-no">1.</div>-->
+            <!--</div>-->
+            <div>1.{{rule.acdesc[0]}}</div>
           </div>
           <div class="m-rule-row">
-            <div>
-              <div class="m-rule-no">2</div>
-            </div>
-            <div>{{rule.acdesc[1]}}</div>
+            <!--<div>-->
+              <!--<div class="m-rule-no">2.</div>-->
+            <!--</div>-->
+            <div>2.{{rule.acdesc[1]}}</div>
           </div>
           <div class="m-rule-row">
-            <div>
-              <div class="m-rule-no">3</div>
-            </div>
-            <div>{{rule.acdesc[2]}}</div>
+            <!--<div>-->
+              <!--<div class="m-rule-no">3.</div>-->
+            <!--</div>-->
+            <div>3.{{rule.acdesc[2]}}</div>
           </div>
           <div class="m-text m-ft-21">活动最终解释权归本公司所有</div>
         </div>
@@ -214,6 +214,7 @@
       },
       // 数字面板的点击事件
       numClick(v) {
+        console.log(v)
         if(!this.submit) {
           if(v == "delete") {
             this.num = this.num.substring(0, this.num.length-1);
@@ -346,73 +347,85 @@
     .m-guess-title {
       position: relative;
       z-index: 1;
+      width: 750px;
+      /*height: 861px;*/
       .m-guess-img {
         width: 750px;
-        height: 861px;
+        /*height: 861px;*/
         /*height: 100%;*/
         margin-bottom: -130px;
       }
       .m-product-img-box {
-        width: 550px;
+        width: 750px;
         height: 550px;
         /*border: 20px solid rgba(255,255,255,1);*/
-        box-shadow: 5px 5px 20px rgba(0,0,0,0.16);
-        border-radius: 30px;
-        position: absolute;
-        top: 219px;
-        left: 92px;
+        /*box-shadow: 5px 5px 20px rgba(0,0,0,0.16);*/
+        /*border-radius: 30px;*/
+        /*background-color: #9fd0bf;*/
+        /*position: absolute;*/
+        /*top: 20px;*/
+        /*left: 0;*/
       }
       .m-product-img {
-        width: 550px;
+        width: 750px;
         height: 550px;
-        box-shadow: 5px 5px 20px rgba(0,0,0,0.16);
-        border-radius: 30px;
+        /*box-shadow: 5px 5px 20px rgba(0,0,0,0.16);*/
+        /*border-radius: 30px;*/
+      }
+      .m-input-sure-box{
+        height: 120px;
+        .flex-row(center);
       }
       .m-input-img {
-        width: 704px;
-        height: 155px;
-        background: url("/static/images/activity/icon-input.png") no-repeat;
+        width: 567px;
+        height: 77px;
+        line-height: 77px;
+        /*background: url("/static/images/activity/icon-input.png") no-repeat;*/
+        border-bottom: 1px solid #E9E9E9;
         background-size: 100% 100%;
-        position: absolute;
-        top: 711px;
-        left: 25px;
+        /*position: absolute;*/
+        /*top: 711px;*/
+        /*left: 25px;*/
         .m-guess-result {
           max-width: 480px;
-          color: #ffffff;
-          margin: 35px 0 0 70px;
+          /*color: #ffffff;*/
+          color: #A8D9E9;
+          /*margin: 35px 0 0 70px;*/
         }
       }
       .m-done-img {
-        width: 128px;
-        height: 128px;
-        background: url("/static/images/activity/icon-done.png") no-repeat;
+        width: 140px;
+        height: 90px;
+        background: url("/static/images/activity/icon-sure.png") no-repeat;
         background-size: 100% 100%;
-        position: absolute;
-        top: 722px;
-        right: 48px;
+        /*position: absolute;*/
+        /*top: 722px;*/
+        /*right: 48px;*/
         .m-done-btn {
           color: #ffffff;
-          margin-top: 26px;
-          line-height: 75px;
+          /*margin-top: 26px;*/
+          line-height: 90px;
+          font-size: 44px;
         }
         .m-submit-done {
-          opacity: 0.5;
+          /*opacity: 0.5;*/
         }
       }
     }
     .m-guess-num-text {
-      height: 1936px;
-      min-height: 100%;
-      background-color: #9959EA;
+      /*height: 1936px;*/
+      /*min-height: 100%;*/
+      /*background-color: #9959EA;*/
       position: relative;
+      padding: 0 15px;
       .m-guess-num {
         width: 700px;
-        height: 950px;
-        background-color: #8031E2;
-        border-radius: 20px;
-        position: absolute;
-        top: 92px;
-        left: 25px;
+        /*height: 950px;*/
+        /*background-color: #8031E2;*/
+        /*border-radius: 20px;*/
+        /*position: absolute;*/
+        /*top: 92px;*/
+        /*left: 25px;*/
         .m-line-long {
           width: 498px;
           height: 78px;
@@ -435,206 +448,211 @@
         }
         .m-num-bg {
           width: 644px;
-          height: 850px;
-          background: url("/static/images/activity/icon-bg.png") no-repeat;
+          /*height: 850px;*/
+          /*background: url("/static/images/activity/icon-bg.png") no-repeat;*/
           background-size: 100% 100%;
-          position: absolute;
-          top: 57px;
-          left: 28px;
+          /*position: absolute;*/
+          /*top: 57px;*/
+          /*left: 28px;*/
           .m-num-box {
-            width: 606px;
-            height: 796px;
+            width: 720px;
+            /*height: 796px;*/
             /*border: 1px red solid;*/
-            position: absolute;
-            top: 27px;
-            left: 25px;
+            /*position: absolute;*/
+            /*top: 27px;*/
+            /*left: 25px;*/
             display: flex;
             flex-wrap: wrap;
             .m-num-item {
-              width: 190px;
-              height: 190px;
-              margin: 0 12px 12px 0;
+              width: 240px;
+              height: 90px;
+              /*margin: 0 12px 12px 0;*/
               &.m-one {
                 background: url("/static/images/activity/one.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-one:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/one-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-one:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/one-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-two {
                 background: url("/static/images/activity/two.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-two:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/two-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-two:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/two-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-three {
                 background: url("/static/images/activity/three.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-three:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/three-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-three:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/three-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-four {
                 background: url("/static/images/activity/four.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-four:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/four-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-four:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/four-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-five {
                 background: url("/static/images/activity/five.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-five:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/five-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-five:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/five-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-six {
                 background: url("/static/images/activity/six.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-six:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/six-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-six:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/six-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-seven {
                 background: url("/static/images/activity/seven.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-seven:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/seven-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-seven:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/seven-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-eight {
                 background: url("/static/images/activity/eight.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-eight:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/eight-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-eight:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/eight-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-nine {
                 background: url("/static/images/activity/nine.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-nine:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/nine-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-nine:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/nine-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-zero {
                 background: url("/static/images/activity/zero.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-zero:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/zero-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-zero:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/zero-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-point {
                 background: url("/static/images/activity/point.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-point:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/point-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-point:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/point-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
               &.m-delete {
                 background: url("/static/images/activity/delete.png") no-repeat;
                 background-size: 100% 100%;
               }
-              &.m-delete:active {
-                width: 200px;
-                height: 200px;
-                margin: -5px 7px -5px -5px;
-                background: url("/static/images/activity/delete-active.png") no-repeat;
-                background-size: 100% 100%;
-              }
+              /*<!--&.m-delete:active {-->*/
+                /*<!--width: 200px;-->*/
+                /*<!--height: 200px;-->*/
+                /*<!--margin: -5px 7px -5px -5px;-->*/
+                /*<!--background: url("/static/images/activity/delete-active.png") no-repeat;-->*/
+                /*<!--background-size: 100% 100%;-->*/
+              /*<!--}-->*/
             }
           }
         }
       }
       .m-guess-text {
-        width: 700px;
+        /*width: 700px;*/
         /*height: 473px;*/
-        background: #924AEC;
-        border-radius: 20px 20px 0 0;
-        position: absolute;
-        top: 1062px;
-        left: 25px;
+        /*background: #924AEC;*/
+        /*border-radius: 20px 20px 0 0;*/
+        /*position: absolute;*/
+        /*top: 1062px;*/
+        /*left: 25px;*/
+        padding: 0 15px;
         .m-rule-icon {
           width: 99px;
           height: 39px;
-          background: url("/static/images/activity/icon-rule.png") no-repeat;
+          /*background: url("/static/images/activity/icon-rule.png") no-repeat;*/
           background-size: 100% 100%;
-          position: absolute;
-          top: 11px;
-          left: 59px;
+          /*position: absolute;*/
+          /*top: 11px;*/
+          /*left: 59px;*/
           z-index: 1;
         }
         .m-text-bg {
-          width: 644px;
+          /*width: 644px;*/
           /*height: 444px;*/
-          background: #731CE3;
-          border-radius: 20px 20px 0 0;
-          position: absolute;
-          top: 29px;
-          left: 28px;
-          color: #ffffff;
+          /*background: #731CE3;*/
+          /*border-radius: 20px 20px 0 0;*/
+          /*position: absolute;*/
+          /*top: 29px;*/
+          /*left: 28px;*/
+          /*color: #ffffff;*/
           font-size: 38px;
+          color: #666666;
           .m-rule-title {
-            margin: 24px 0 30px 0;
+            margin: 40px 0 10px 0;
+            text-align: left;
           }
           .m-rule-row {
             display: flex;
             text-align: left;
+            margin-bottom: 10px;
+            font-size: 28px;
             .m-rule-no {
               text-align: center;
-              width: 30px;
-              height: 30px;
-              font-size: 30px;
-              font-weight: bold;
+              /*width: 30px;*/
+              /*height: 30px;*/
+              /*font-size: 28px;*/
+              /*font-weight: bold;*/
               line-height: 35px;
-              padding: 10px;
-              margin: 0 30px 30px 30px;
-              background-color: @mainColor;
-              border-radius: 50%;
+              /*padding: 10px;*/
+              /*margin: 0 30px 30px 30px;*/
+              /*<!--background-color: @mainColor;-->*/
+              /*border-radius: 50%;*/
             }
           }
           .m-text {
