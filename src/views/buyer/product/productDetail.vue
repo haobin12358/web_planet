@@ -223,7 +223,9 @@
             this.$router.push({path:v,query:{pbid:this.product_info.pbid}});
           }else{
              sessionStorage.setItem('shop', true);
-             this.$router.push('/selected');
+            // localStorage.setItem('last', this.$route.fullPath);
+            //  this.$router.push('/selected');
+            this.$router.push('/shop');
            }
         },
         // 预览图片

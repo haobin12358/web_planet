@@ -218,43 +218,49 @@
         },
         // 倒计时
         timeOut() {
-          for(let i in this.order_list) {
-            if(this.order_list[i].duration) {
-              if(this.order_list[i].duration.substr(0, 1) > -1) {
-                this.order_list[i].min = 0;
-                this.order_list[i].sec = 0;
-                this.order_list[i].min = this.order_list[i].duration.substr(2, 2);
-                this.order_list[i].sec = this.order_list[i].duration.substr(5, 2);
-                let TIME_OUT = Number(this.order_list[i].min) * 60 + Number(this.order_list[i].sec);
+          let arr = [].concat(this.order_list);
+          let arr_int = [];
+          for(let i in arr) {
+            if(arr[i].duration) {
+              if(arr[i].duration.substr(0, 1) > -1) {
+                arr[i].min = 0;
+                arr[i].sec = 0;
+                arr[i].min = arr[i].duration.substr(2, 2);
+                arr[i].sec = arr[i].duration.substr(5, 2);
+                let TIME_OUT = Number(arr[i].min) * 60 + Number(arr[i].sec);
                 let count = TIME_OUT;
-                let time = setInterval(() => {
+                if(arr[i].time_interVal){
+                  clearInterval(arr[i].time_interVal);
+                }
+                arr[i].time_interVal  = setInterval(() => {
                   if(count > 0 && count <= TIME_OUT) {
                     count --;
-                    this.order_list[i].sec --;
+                    arr[i].sec --;
                     if(this.order_list[i].sec < 10 && this.order_list[i].sec > -1) {
-                      this.order_list[i].sec = '0' + this.order_list[i].sec;
+                      arr[i].sec = '0' + arr[i].sec;
                     }
                     if(this.order_list[i].sec == -1) {
-                      this.order_list[i].sec = 59;
+                      arr[i].sec = 59;
                       if(this.order_list[i].min > 0) {
-                        this.order_list[i].min -= 1;
+                        arr[i].min -= 1;
                       }
                       if(this.order_list[i].min < 10) {
                         if(this.order_list[i].min !== '00') {
-                          this.order_list[i].min = '0' + this.order_list[i].min;
+                          arr[i].min = '0' + arr[i].min;
                         }else {
-                          this.order_list[i].duration = null;
+                          arr[i].duration = null;
                         }
                       }
                     }
-                    this.order_list = this.order_list.concat();
+                    this.order_list = [].concat(arr);
                   }else {
                     this.page_info.page_num = 1;
                     this.order_list[i].duration = null;
                     this.getOrderNum();               // 获取各状态的订单数量
-                    clearInterval(time);
+                    clearInterval(arr[i].time_interVal);
                   }
                 }, 1000);
+                console.log(arr_int)
               }else {
                 this.order_list[i].duration = null
               }

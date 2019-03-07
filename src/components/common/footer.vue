@@ -158,6 +158,10 @@
               this.tabbar = this.$store.state.tabbar_buyer;
               break;
             case '/shop':
+              if(sessionStorage.getItem('shop')){
+                this.$router.go(0)
+                sessionStorage.removeItem('shop')
+              }
               this.selected = '购物车';
               this.tabbar = this.$store.state.tabbar_buyer;
               break;

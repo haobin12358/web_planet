@@ -1,5 +1,5 @@
 <template>
-  <div class="m-activity">
+  <div class="m-activity" ref="activity">
     <!--<div class="m-activity-top-bg"></div>-->
 
     <div class="m-activity-box animated bounceInUp">
@@ -60,6 +60,7 @@
         axios.get(api.activity_list + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.activityList = res.data.data;
+            this.$refs.activity.style.height = this.activityList.length * 520 + 'px';
           }
         });
       }
@@ -77,8 +78,9 @@
   @import "../../../common/css/index";
 
   .m-activity {
-    min-height: 100%;
-    background-color: #ffffff;
+    /*height: 100%;*/
+    overflow-y: hidden;
+    /*background-color: #ffffff;*/
     margin-bottom: -100px;
     .m-activity-top-bg {
       width: 750px;
@@ -86,8 +88,9 @@
       background: linear-gradient(180deg, @mainColor 0%, @subColor 100%);
     }
     .m-activity-box {
-      position: absolute;
-      top: 20px;
+      /*position: absolute;*/
+      /*top: 20px;*/
+      padding-top: 20px;
       .m-activity-item {
         width: 700px;
         height: 500px;

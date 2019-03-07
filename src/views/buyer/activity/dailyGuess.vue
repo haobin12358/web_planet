@@ -349,6 +349,7 @@
       .m-guess-img {
         width: 750px;
         height: 861px;
+        /*height: 100%;*/
         margin-bottom: -130px;
       }
       .m-product-img-box {
@@ -400,7 +401,7 @@
       }
     }
     .m-guess-num-text {
-      height: 1536px;
+      height: 1936px;
       min-height: 100%;
       background-color: #9959EA;
       position: relative;
@@ -591,7 +592,7 @@
       }
       .m-guess-text {
         width: 700px;
-        height: 473px;
+        /*height: 473px;*/
         background: #924AEC;
         border-radius: 20px 20px 0 0;
         position: absolute;
@@ -609,7 +610,7 @@
         }
         .m-text-bg {
           width: 644px;
-          height: 444px;
+          /*height: 444px;*/
           background: #731CE3;
           border-radius: 20px 20px 0 0;
           position: absolute;
@@ -637,9 +638,10 @@
             }
           }
           .m-text {
-            position: absolute;
-            bottom: 12px;
-            left: 188px;
+            /*position: absolute;*/
+            /*bottom: 12px;*/
+            /*left: 188px;*/
+            margin: 50px 0 30px;
           }
         }
       }

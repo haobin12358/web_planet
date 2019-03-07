@@ -278,6 +278,7 @@
             }
           }, 100);
         }
+
       },
       activated() {
         // 倒计时
@@ -335,7 +336,7 @@
         this.getCategory();
         if(sessionStorage.getItem('shop')) {
           this.$router.push('/shop');
-          sessionStorage.removeItem('shop')
+          sessionStorage.removeItem('shop');
         }
         if(sessionStorage.getItem('new')) {
           localStorage.setItem('toLogin', 'toLogin')
