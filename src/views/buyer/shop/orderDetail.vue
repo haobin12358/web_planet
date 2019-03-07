@@ -182,6 +182,7 @@
     },
     methods: {
       changeRoute(v, item) {
+        console.log(item)
         if(this.from !== 'activityProduct') {
           switch (v) {
             case '/brandDetail':
@@ -189,7 +190,7 @@
               break;
             case '/productDetail':
               if(this.order_info.omlogistictype == 10) {
-                // this.$router.push({ path: '/gift', query: { prid: item.prid }});
+                this.$router.push({ path: '/gift', query: { prid: item.prid }});
               }else {
                 this.$router.push({ path: v, query: { prid: item.prid }});
               }

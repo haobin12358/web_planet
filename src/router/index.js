@@ -150,7 +150,7 @@ export const constantRouterMap = [
     path: '/activity',
     component: Layout,
     redirect: 'activity',
-    children: [{ path: '/activity', component: () => import('../views/buyer/activity/index'), meta: { keepAlive: true }, hidden: true }
+    children: [{ path: '/activity', component: () => import('../views/buyer/activity/index'), meta: { keepAlive: false }, hidden: true }
     ],
   },
   { path: '/newcomer', component: () => import('../views/buyer/activity/newcomer'), hidden: true },            // 新人尝鲜礼包
