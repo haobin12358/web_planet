@@ -2,7 +2,7 @@
   <div class="m-activity" ref="activity">
     <!--<div class="m-activity-top-bg"></div>-->
 
-    <div class="m-activity-box animated bounceInUp">
+    <div class="m-activity-box">
       <div class="m-activity-item" v-for="item in activityList">
         <img class="m-activity-img" :src="item.acbackground" alt="">
         <div class="m-product-count animated infinite pulse" v-if="item.actype == 2 && item.stock">
@@ -60,7 +60,7 @@
         axios.get(api.activity_list + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.activityList = res.data.data;
-            this.$refs.activity.style.height = this.activityList.length * 520 + 'px';
+            // this.$refs.activity.style.height = this.activityList.length * 520 + 'px';
           }
         });
       }
@@ -79,8 +79,9 @@
 
   .m-activity {
     /*height: 100%;*/
-    overflow-y: hidden;
-    /*background-color: #ffffff;*/
+    /*overflow-y: hidden;*/
+    min-height: 100vh;
+    background-color: #ffffff;
     margin-bottom: -100px;
     .m-activity-top-bg {
       width: 750px;
