@@ -182,7 +182,6 @@
     },
     methods: {
       changeRoute(v, item) {
-        console.log(item)
         if(this.from !== 'activityProduct') {
           switch (v) {
             case '/brandDetail':
