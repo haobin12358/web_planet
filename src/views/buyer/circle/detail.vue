@@ -171,7 +171,7 @@
             this.shareCircle(1);
             clearInterval(time);
           }
-        }, 100);
+        }, 300);
       }
     },
     beforeDestroy() {
