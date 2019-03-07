@@ -1,20 +1,22 @@
 <template>
   <div class="m-code">
-    <div class="m-day-box">
-      <h3>
-        <span class="m-day">{{dayNum}}</span>
-        <span>{{monthNum}}</span>
-      </h3>
-      <h3>{{month}} / {{day}}</h3>
-    </div>
+    <!--<div class="m-day-box">-->
+      <!--<h3>-->
+        <!--<span class="m-day">{{dayNum}}</span>-->
+        <!--<span>{{monthNum}}</span>-->
+      <!--</h3>-->
+      <!--<h3>{{month}} / {{day}}</h3>-->
+    <!--</div>-->
+    <!--<img :src="user.usqrcode" class="m-code-img" alt="">-->
+    <!--<p class="m-right-info">用户二维码</p>-->
+    <!--<ul class="m-code-ul">-->
+      <!--<li>-->
+        <!--1.该二维码是您的专属推广二维码，可直接右上角分享到朋友圈邀请好友成为商城会员。</li>-->
+        <!--<li>2.使用微信扫一扫功能直接邀请您的好友成为商城会员。</li>-->
+        <!--<li>3.长按图片保存后分享到朋友圈。</li>-->
+    <!--</ul>-->
+    <img v-lazy="back_img" class="m-code-back" alt="">
     <img :src="user.usqrcode" class="m-code-img" alt="">
-    <p class="m-right-info">用户二维码</p>
-    <ul class="m-code-ul">
-      <li>
-        1.该二维码是您的专属推广二维码，可直接右上角分享到朋友圈邀请好友成为商城会员。</li>
-        <li>2.使用微信扫一扫功能直接邀请您的好友成为商城会员。</li>
-        <li>3.长按图片保存后分享到朋友圈。</li>
-    </ul>
   </div>
 </template>
 
@@ -27,6 +29,7 @@
   export default {
     data() {
       return {
+        back_img:'/static/images/icon-code-back.png',
         name: '',
         user: {},
         day: "",
@@ -121,54 +124,67 @@
     mounted() {
       common.changeTitle('用户二维码');
       this.getUser();       // 获取个人信息
-      this.getDate();       // 获取时间
+      // this.getDate();       // 获取时间
     }
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
 .m-code{
   width: 100%;
-  height: 1334px;
-  background: url("/static/images/icon-code-bg.png") no-repeat;
+  height: 6900px;
+  position: relative;
+  /*height: 1334px;*/
+  /*background: url("/static/images/icon-code-back.png") no-repeat;*/
   background-size: 100% 100%;
-  .m-day-box{
-    padding: 130px 67px 56px;
-    h3{
-      text-align: left;
-      font-size: 40px;
-      color: #fff;
-      margin: 0;
-      font-weight: 400;
-      .m-day{
-        font-size: 60px;
-        font-weight: bold;
-      }
-    }
+  .m-code-back{
+    width: 750px;
+    height: 6900px;
   }
   .m-code-img{
-    display: block;
-    width: 621px;
-    height: 621px;
-    background: #edb3b1;
-    margin-left: 67px;
-    margin-bottom: 20px;
+    position: absolute;
+    bottom: 240px;
+    right: 50px;
+    width: 150px;
+    height: 150px;
   }
-  .m-right-info{
-    text-align: right;
-    padding-right: 67px;
-    color: #fff;
-    font-size: 28px;
-  }
-  .m-code-ul{
-    padding: 0 67px;
-    margin-top: 60px;
-    li{
-      list-style: none;
-      text-align: left;
-      color: #fff;
-      width: 603px;
-      line-height: 36px;
-    }
-  }
+  /*.m-day-box{*/
+    /*padding: 130px 67px 56px;*/
+    /*h3{*/
+      /*text-align: left;*/
+      /*font-size: 40px;*/
+      /*color: #fff;*/
+      /*margin: 0;*/
+      /*font-weight: 400;*/
+      /*.m-day{*/
+        /*font-size: 60px;*/
+        /*font-weight: bold;*/
+      /*}*/
+    /*}*/
+  /*}*/
+  /*.m-code-img{*/
+    /*display: block;*/
+    /*width: 621px;*/
+    /*height: 621px;*/
+    /*background: #edb3b1;*/
+    /*margin-left: 67px;*/
+    /*margin-bottom: 20px;*/
+  /*}*/
+  /*.m-right-info{*/
+    /*text-align: right;*/
+    /*padding-right: 67px;*/
+    /*color: #fff;*/
+    /*font-size: 28px;*/
+  /*}*/
+  /*.m-code-ul{*/
+    /*padding: 0 67px;*/
+    /*margin-top: 60px;*/
+    /*li{*/
+      /*list-style: none;*/
+      /*text-align: left;*/
+      /*color: #fff;*/
+      /*width: 603px;*/
+      /*line-height: 36px;*/
+    /*}*/
+  /*}*/
 }
 </style>
