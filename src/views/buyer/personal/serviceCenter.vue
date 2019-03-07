@@ -89,7 +89,7 @@
   .m-serviceCenter{
     margin-top: 30px;
     .m-one-part{
-      height: 1000px;
+      min-height: 1000px;
       .m-icon-more{
         &.m-icon-unfold{
           background: url("/static/images/icon-unfold.png");
@@ -126,7 +126,6 @@
       background-color: @mainColor;
       .m-serviceCenter-btn{
         width: 50%;
-        color: #ffffff;
         text-align: center;
         .flex-row(center);
         line-height: 36px;
