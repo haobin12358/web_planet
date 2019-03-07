@@ -77,18 +77,19 @@
   @import "../../../common/css/index";
 
   .m-activity {
-    min-height: 100%;
+    height: 100%;
+    overflow-y: hidden;
     background-color: #ffffff;
     margin-bottom: -100px;
-    padding-top: 20px;
     .m-activity-top-bg {
       width: 750px;
       height: 350px;
       background: linear-gradient(180deg, @mainColor 0%, @subColor 100%);
     }
     .m-activity-box {
-      /*position: absolute;*/
+      position: absolute;
       /*top: 20px;*/
+      padding-top: 20px;
       .m-activity-item {
         width: 700px;
         height: 500px;

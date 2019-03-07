@@ -112,7 +112,8 @@
       },
       mounted(){
         for(let i in this.product.skuvalue) {
-          this.last_arr[i] = this.product.skuvalue[i].value
+          this.last_arr[i] = this.product.skuvalue[i].value;
+          this.skuSelect(-1, '');
         }
         if(this.now_select){
           this.select_value = this.now_select;
@@ -170,18 +171,23 @@
         //sku选择
         skuSelect(index,item){
           let _arr = [].concat(this.select);
-          _arr[index] = item;
-          this.select = [].concat(_arr);
           let change = -1;
           let newArr = [];
           let ad = [];
-          ad.push(this.select[index]);
+          if(index != -1){
+            _arr[index] = item;
+            this.select = [].concat(_arr);
+            ad.push(this.select[index]);
+          }
           // for(let i =0;i<this.select.length;i++){
           for(let j=0;j<this.product.skus.length;j++){
             // if(this.product.skus[j].skuattritedetail[i] == this.select[i] && this.product.skus[j].skustock >0){
             //
             // }
-            if(this.contrastArr(this.product.skus[j].skuattritedetail,ad) && this.product.skus[j].skustock >0){
+            if(item == '' && this.product.skus[j].skustock >0){
+              newArr.push(this.product.skus[j].skuattritedetail);
+            }
+            else if(this.contrastArr(this.product.skus[j].skuattritedetail,ad) && this.product.skus[j].skustock >0){
               newArr.push(this.product.skus[j].skuattritedetail);
             }
           }
@@ -200,7 +206,6 @@
 
 
           // newArr_total = [].concat(arr)
-          console.log(arr,'asasfas')
           for(let i=0;i<this.product.skuvalue.length;i++){
             for(let j=0;j<this.product.skuvalue[i].value.length;j++){
               if(arr[i].indexOf(this.product.skuvalue[i].value[j]) == -1){
@@ -210,14 +215,15 @@
               }
             }
           }
-          console.log(newArr_total)
          for(let a=0;a<newArr_total.length;a++){
 
            if(newArr_total[a].indexOf(this.select[a]) == -1){
              this.select[a] = '';
            }
          }
-          newArr_total[index] = this.last_arr[index];
+         if(index != -1){
+           newArr_total[index] = this.last_arr[index];
+         }
           this.new_arr = [].concat(newArr_total);
             this.last_arr = [].concat(newArr_total)
           // }
