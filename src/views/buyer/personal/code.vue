@@ -17,7 +17,7 @@
     <!--</ul>-->
     <!--<img v-lazy="back_img" class="m-code-back" alt="">-->
     <!--<img :src="user.usqrcode" class="m-code-img" alt="">-->
-    <img id="avatar" class="m-code-back"/>
+    <img id="avatar"  class="m-code-back"/>
   </div>
 </template>
 
@@ -26,7 +26,8 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
-
+  import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
   export default {
     data() {
       return {
@@ -39,6 +40,7 @@
         monthNum: "",
       }
     },
+    mixins: [wxapi],
     components: {},
     methods: {
       // 获取个人信息
@@ -155,13 +157,65 @@
             img.setAttribute('src' , base64);
           }
         }
-      }
+      },
+      // 分享code
+      shareCode(val) {
+        if(localStorage.getItem('token')) {
+          let options = {
+            title: this.user.usname,
+            desc: this.user.usidname,
+            imgUrl: this.user.usqrcode,
+            link: location.href.split('#')[0]+'?share=""'
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+            }
+          });
+
+          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+          if(wx.updateAppMessageShareData) {
+
+            wx.updateAppMessageShareData(options);
+          }
+          // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+          if(wx.updateTimelineShareData) {
+            wx.updateTimelineShareData(options);
+          }
+          // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareAppMessage) {
+            wx.onMenuShareAppMessage(options);
+          }
+          // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareTimeline) {
+            wx.onMenuShareTimeline(options);
+          }
+        }else {
+          Toast('请登录后再试');
+        }
+      },
     },
     mounted() {
       common.changeTitle('用户二维码');
+      wxapi.wxRegister(location.href.split('#')[0]);
       this.getUser();       // 获取个人信息
       // this.getDate();       // 获取时间
-
+      localStorage.removeItem('share');
+      localStorage.removeItem('url');
+      console.log(wxapi,'adsasdas')
+      if(localStorage.getItem('token')) {
+        // 倒计时
+        const TIME_COUNT = 1;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if(count > 0 && count <= TIME_COUNT) {
+            count --;
+          }else {
+            this.shareCode(1);
+            clearInterval(time);
+          }
+        }, 300);
+      }
     }
   }
 </script>

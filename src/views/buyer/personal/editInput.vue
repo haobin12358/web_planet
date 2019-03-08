@@ -176,7 +176,13 @@
               Toast({ message: '绑定成功', duration: 1500 });
               localStorage.setItem('token', res.data.data.token);
               localStorage.removeItem('is_new');
-              this.$router.push('/selected');
+              // if(localStorage.getItem('location')){
+              //   location.href = localStorage.getItem('location');
+              //   localStorage.removeItem('location');
+              // }else{
+                this.$router.push('/selected');
+              // }
+
               // location.href = location.origin + '/#/selected'
             }else {
               // 避免code影响

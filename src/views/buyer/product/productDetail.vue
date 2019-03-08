@@ -133,7 +133,7 @@
               this.shareProduct(1);
               clearInterval(time);
             }
-          }, 100);
+          }, 300);
         }
         // alert(this.$route.fullPath);
         // alert(location.href);

@@ -149,7 +149,11 @@
                   localStorage.setItem('is_new', res.data.data.is_new);
                   this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
                 }else {
-                  this.$router.push('/selected');
+                  // if(localStorage.getItem('location')){
+                  //   location.href = localStorage.getItem('location');
+                  // }else{
+                    this.$router.push('/selected');
+                  // }
                   Toast('登录成功');
                 }
               }
