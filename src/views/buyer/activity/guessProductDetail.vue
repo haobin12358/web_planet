@@ -242,7 +242,9 @@
             this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: 'guess' }});
           }else {
             Toast('请登录后再试');
+            localStorage.setItem('login_to',   window.location.href.split('#')[0] + '?uaid=guess')
             // window.location.href = window.location.origin + '/#/login';
+            this.$router.push('/login');
           }
         }else {
           this.changeModal('show_sku', true);

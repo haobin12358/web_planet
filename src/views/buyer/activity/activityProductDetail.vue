@@ -106,6 +106,7 @@
       wxapi.wxRegister(location.href.split('#')[0]);
       localStorage.removeItem('share');
       localStorage.removeItem('url');
+      localStorage.removeItem('login_to');
       if(common.isWeixin()) {
         if(localStorage.getItem('token')) {
           // 倒计时
@@ -278,7 +279,16 @@
           if(localStorage.getItem('token')) {
             this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr), from: this.which }});
           }else {
-            Toast('请登录后再试');
+            let which = this.$route.query.which;
+            let url
+            if(which == "new") {
+              url = window.location.href.split('#')[0] + '?fmfpid=' + this.$route.query.fmfpid + '&which=new'
+
+            }else if(which == "try") {
+              url =  window.location.href.split('#')[0] + '?tcid=' + this.$route.query.tcid + '&which=try'
+            }
+            localStorage.setItem('login_to',url)
+            this.$router.push('/login');
           }
         }else {
           this.changeModal('show_sku', true);

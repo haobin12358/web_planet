@@ -283,7 +283,16 @@
             }
           }, 300);
         }
-
+        if(localStorage.getItem('share') && localStorage.getItem('url') && localStorage.getItem('login_to')) {
+          let url = localStorage.getItem('url');
+           if(localStorage.getItem('share') == 'fmfpid') {
+            let params = url.split('?fmfpid=')[1].split('&secret_usid')[0].split('&which=');
+            this.$router.push({ path: '/activityProductDetail', query: { fmfpid: params[0], which: params[1] }})
+          }else if(localStorage.getItem('share') == 'tcid') {
+            let params = url.split('?tcid=')[1].split('&secret_usid')[0].split('&which=');
+            this.$router.push({ path: '/activityProductDetail', query: { tcid: params[0], which: params[1] }})
+          }
+        }
       },
       activated() {
         // 倒计时

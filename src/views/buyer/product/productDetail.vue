@@ -194,6 +194,8 @@
             }
           }else {
             Toast('请登录后再试');
+            localStorage.setItem('login_to',location.href.split('#')[0] + '?prid=' + this.$route.query.prid);
+            this.$router.push('/login');
           }
         },
         // 获取个人信息

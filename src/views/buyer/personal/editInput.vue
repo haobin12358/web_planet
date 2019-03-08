@@ -176,12 +176,15 @@
               Toast({ message: '绑定成功', duration: 1500 });
               localStorage.setItem('token', res.data.data.token);
               localStorage.removeItem('is_new');
-              // if(localStorage.getItem('location')){
-              //   location.href = localStorage.getItem('location');
-              //   localStorage.removeItem('location');
-              // }else{
-                this.$router.push('/selected');
-              // }
+              if(localStorage.getItem('login_to')){
+                localStorage.setItem('url', localStorage.getItem('login_to').split('&from')[0]);
+                if(localStorage.getItem('login_to').indexOf('fmfpid') > 0) {             // 新人首单
+                  localStorage.setItem('share', 'fmfpid');
+                }else if(localStorage.getItem('login_to').indexOf('tcid') > 0) {               // 试用商品
+                  localStorage.setItem('share', 'tcid');
+                }
+              }
+              this.$router.push('/selected');
 
               // location.href = location.origin + '/#/selected'
             }else {
