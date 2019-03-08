@@ -268,8 +268,8 @@
           localStorage.setItem('secret_usid', this.$route.query.secret_usid)
         }
         wxapi.wxRegister(location.href.split('#')[0]);
-        localStorage.removeItem('share');
-        localStorage.removeItem('url');
+        // localStorage.removeItem('share');
+        // localStorage.removeItem('url');
         if(localStorage.getItem('token')) {
           // 倒计时
           const TIME_COUNT = 1;
@@ -278,7 +278,7 @@
             if(count > 0 && count <= TIME_COUNT) {
               count --;
             }else {
-              this.share();
+              this.shareCode();
               clearInterval(time);
             }
           }, 300);
@@ -314,6 +314,12 @@
                 this.$router.push({ path: '/activityProduct', query: { which: 'new' }})
               }else if(localStorage.getItem('share') == 'activityId=try') {
                 this.$router.push({ path: '/activityProduct', query: { which: 'try' }})
+              }else if(localStorage.getItem('share') == 'activityId=guess') {
+                this.$router.push({ path: '/guessProduct', query: { which: 'guess' }})
+              }else if(localStorage.getItem('share') == 'uaid') {
+                this.$router.push({ path: '/dailyGuess'})
+              }else if(localStorage.getItem('share') == 'index') {
+                this.$router.push({ path: '/selected'})
               }
             }
             if(localStorage.getItem('href')) {
@@ -349,13 +355,13 @@
       },
       methods: {
         // 分享
-        share() {
+        shareCode() {
           if(localStorage.getItem('token')) {
             let options = {
               title: '大行星',
               desc: '大行星严选',
               imgUrl: this.swipe_list[0].ibpic,
-              link:  location.href.split('#')[0]+'?share=""'
+              link:  location.href.split('#')[0]+'?page=index'
             };
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {

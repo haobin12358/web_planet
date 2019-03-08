@@ -78,7 +78,7 @@
       // 跳转页面
       changeRoute(v, item) {
         localStorage.setItem('guessproduct', JSON.stringify(item));
-        this.$router.push({ path: v });
+        this.$router.push({ path: v ,query:{which:'guess'}});
       },
       // 商品分享按钮
       productShare(item) {
@@ -163,6 +163,13 @@
             imgUrl: this.productList[0].tcmainpic,
             link: location.href.split('#')[0] + '?activityId=try'
           }
+        }else if(which == "guess") {
+          options = {
+            title: this.title,
+            desc: this.remarks,
+            imgUrl: this.banner,
+            link: window.location.href.split('#')[0] + '?uaid=guess'
+          }
         }
         if(localStorage.getItem('token')) {
           axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
@@ -194,6 +201,7 @@
         }
         // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
         if(wx.onMenuShareAppMessage) {
+          console.log(options)
           wx.onMenuShareAppMessage(options);
         }
         // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）

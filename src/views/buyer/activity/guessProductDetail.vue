@@ -109,13 +109,14 @@
               this.shareProduct(1);
               clearInterval(time);
             }
-          }, 100);
+          }, 300);
         }
       }
     },
     methods: {
       // 分享商品
       shareProduct(val) {
+
         if(common.isWeixin()) {
           if(localStorage.getItem('token')) {
             let options = {};
@@ -132,7 +133,14 @@
                 title: this.product.tctitle,
                 desc: this.product.tcdescription,
                 imgUrl: this.product.tcmainpic,
-                link: window.location.href.split('#')[0] + '?tcid=' + this.$route.query.tcid + '&which=try'
+                link: window.location.href.split('#')[0] + '?tcid=' + this.$route.query.prid + '&which=try'
+              };
+            }else if(which == "guess") {
+              options = {
+                title: this.product.prtitle,
+                desc: this.product.prdescription,
+                imgUrl: this.product.prmainpic,
+                link: window.location.href.split('#')[0] + '?uaid=guess'
               };
             }
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
@@ -167,6 +175,7 @@
             }
             // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
             if(wx.onMenuShareAppMessage) {
+              console.log(options)
               wx.onMenuShareAppMessage(options);
             }
             // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）

@@ -94,7 +94,8 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
-
+  import wxapi from '../../../common/js/mixins';
+  import wx from 'weixin-js-sdk';
   export default {
     data() {
       return {
@@ -114,6 +115,7 @@
         productImages: []
       }
     },
+    mixins: [wxapi],
     components: {},
     mounted() {
       common.changeTitle('每日竞猜');
@@ -130,15 +132,31 @@
           this.getGuess(this.today);         // 获取昨日参与记录
         }
       }
+      wxapi.wxRegister(location.href.split('#')[0]);
       this.getTime();                    // 获取当前时间
       this.getRule();                    // 获取该活动的规则
       this.getTodayProduct();            // 用户获取今天猜数字活动所有商品
+      localStorage.removeItem('share');
+      localStorage.removeItem('url');
+      if(localStorage.getItem('token')) {
+        // 倒计时
+        const TIME_COUNT = 1;
+        let count = TIME_COUNT;
+        let time = setInterval(() => {
+          if(count > 0 && count <= TIME_COUNT) {
+            count --;
+          }else {
+            this.shareCode(0);
+            clearInterval(time);
+          }
+        }, 300);
+      }
     },
     methods: {
       // 跳转页面
       changeRoute(item) {
         localStorage.setItem('guess', JSON.stringify(this.guess));
-        this.$router.push({ path: 'guessProduct' });
+        this.$router.push({ path: 'guessProduct',query:{which:'guess'} });
       },
       // 昨日未中奖的知道了
       failDone() {
@@ -227,6 +245,10 @@
       },
       // 提交猜测的结果
       submitResult() {
+        if(!localStorage.getItem('token')){
+          Toast("请先登录");
+          return false;
+        }
         if(!this.submit) {
           this.getTime();    // 获取当前时间
           if(this.hour) {
@@ -242,7 +264,7 @@
               Toast("请先输入竞猜数字");
             }
           }else {
-            Toast("每日开放时间：0点-15点");
+            Toast("每日开放时间：00:00-14:50");
           }
         }
       },
@@ -336,7 +358,42 @@
             }
           }
         });
-      }
+      },
+      // 分享
+      shareCode(val) {
+        if(localStorage.getItem('token')) {
+          let options = {
+            title: '活动竞猜',
+            desc: this.rule.acdesc[0],
+            imgUrl: this.rule.prpic,
+            link: location.href.split('#')[0]+'?uaid=daily'
+          };
+          axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200) {
+              options.link += '&secret_usid=' + res.data.data.secret_usid;
+            }
+          });
+          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+          if(wx.updateAppMessageShareData) {
+            wx.updateAppMessageShareData(options);
+          }
+          // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
+          if(wx.updateTimelineShareData) {
+            wx.updateTimelineShareData(options);
+          }
+          // 获取“分享给朋友”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareAppMessage) {
+            console.log(options,'sdsdsdf')
+            wx.onMenuShareAppMessage(options);
+          }
+          // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口（即将废弃）
+          if(wx.onMenuShareTimeline) {
+            wx.onMenuShareTimeline(options);
+          }
+        }else {
+          Toast('请登录后再试');
+        }
+      },
     }
   }
 </script>

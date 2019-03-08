@@ -165,7 +165,7 @@
             title: this.user.usname,
             desc: this.user.usidname,
             imgUrl: this.user.usqrcode,
-            link: location.href.split('#')[0]+'?share=""'
+            link: location.href.split('#')[0]+'?page=index'
           };
           axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
             if(res.data.status == 200) {
@@ -175,7 +175,6 @@
 
           // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
           if(wx.updateAppMessageShareData) {
-
             wx.updateAppMessageShareData(options);
           }
           // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容（1.4.0）
@@ -202,7 +201,6 @@
       // this.getDate();       // 获取时间
       localStorage.removeItem('share');
       localStorage.removeItem('url');
-      console.log(wxapi,'adsasdas')
       if(localStorage.getItem('token')) {
         // 倒计时
         const TIME_COUNT = 1;
