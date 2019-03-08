@@ -15,8 +15,9 @@
         <!--<li>2.使用微信扫一扫功能直接邀请您的好友成为商城会员。</li>-->
         <!--<li>3.长按图片保存后分享到朋友圈。</li>-->
     <!--</ul>-->
-    <img v-lazy="back_img" class="m-code-back" alt="">
-    <img :src="user.usqrcode" class="m-code-img" alt="">
+    <!--<img v-lazy="back_img" class="m-code-back" alt="">-->
+    <!--<img :src="user.usqrcode" class="m-code-img" alt="">-->
+    <img id="avatar" class="m-code-back"/>
   </div>
 </template>
 
@@ -45,6 +46,7 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
+            this.drawAndShareImage()
           }
         });
       },// 获取时间
@@ -119,12 +121,47 @@
             this.month = "十二月";
             break;
         }
+      },
+      drawAndShareImage(){
+        var canvas = document.createElement("canvas");
+        canvas.width = 750;
+        canvas.height = 6900;
+        var context = canvas.getContext("2d");
+
+        context.rect(0 , 0 , canvas.width , canvas.height);
+        context.fillStyle = "#fff";
+        context.fill();
+
+        var myImage = new Image();
+        myImage.src = "/static/images/icon-code-back.png";    //背景图片  你自己本地的图片或者在线图片
+        myImage.crossOrigin = 'Anonymous';
+       let that = this;
+        myImage.onload = function(){
+          context.drawImage(myImage , 0 , 0 , 750 , 6900);
+
+          // context.font = "60px Courier New";
+          // context.fillText("我是文字",350,450);
+
+          var myImage2 = new Image();
+          myImage2.src = that.user.usqrcode;   //你自己本地的图片或者在线图片
+          myImage2.crossOrigin = 'Anonymous';
+
+          myImage2.onload = function(){
+            context.drawImage(myImage2 , 500 , 6500 , 150 , 150);
+            var base64 = canvas.toDataURL("image/png");  //"image/png" 这里注意一下
+            var img = document.getElementById('avatar');
+
+            // document.getElementById('avatar').src = base64;
+            img.setAttribute('src' , base64);
+          }
+        }
       }
     },
     mounted() {
       common.changeTitle('用户二维码');
       this.getUser();       // 获取个人信息
       // this.getDate();       // 获取时间
+
     }
   }
 </script>

@@ -83,8 +83,8 @@
             let which = this.$route.query.which;
             if(which == "new") {
               options = {
-                title: item.prtitle,
-                desc: item.prtitle,
+                title: item.tctitle,
+                desc: item.tctitle,
                 imgUrl: item.tcmainpic,
                 link: window.location.href.split('#')[0] + '?fmfpid=' + item.fmfpid + '&which=new'
               };
