@@ -281,7 +281,7 @@
               this.shareCode();
               clearInterval(time);
             }
-          }, 300);
+          }, 500);
         }
         if(localStorage.getItem('share') && localStorage.getItem('url') && localStorage.getItem('login_to')) {
           let url = localStorage.getItem('url');
@@ -364,11 +364,26 @@
         if(sessionStorage.getItem('new')) {
           localStorage.setItem('toLogin', 'toLogin')
         }
+        wxapi.wxRegister(location.href.split('#')[0]);
+        if(localStorage.getItem('token')) {
+          // 倒计时
+          const TIME_COUNT = 1;
+          let count = TIME_COUNT;
+          let time = setInterval(() => {
+            if(count > 0 && count <= TIME_COUNT) {
+              count --;
+            }else {
+              this.shareCode();
+              clearInterval(time);
+            }
+          }, 500);
+        }
       },
       methods: {
         // 分享
         shareCode() {
           if(localStorage.getItem('token')) {
+            // alert(1);
             let options = {
               title: '大行星',
               desc: '大行星严选',
