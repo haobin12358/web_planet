@@ -159,6 +159,9 @@
       }
       localStorage.removeItem('share');
       localStorage.removeItem('url');
+      localStorage.removeItem('login_to');
+      if(!localStorage.getItem('token') && localStorage.getItem('toLogin'))
+          localStorage.removeItem('toLogin');
       // wxapi.wxRegister(location.href.split('#')[0]);
       if(localStorage.getItem('token')) {
         // 倒计时
@@ -177,6 +180,7 @@
     beforeDestroy() {
       this.changeModal('show_modal',false, 1);
       sessionStorage.removeItem('neid');
+
       if(this.$route.path == '/productDetail') {
         // sessionStorage.setItem('shop', true);
       }else {
@@ -329,6 +333,13 @@
       },
       /*点赞*/
       isLickClick(v) {
+        if(!localStorage.getItem('token')){
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          Toast('请登录后再试');
+          this.$router.push('/login');
+          return false;
+        }
         axios.post(api.favorite_news + '?token=' + localStorage.getItem('token'),
           { neid: this.$route.query.neid, tftype: v }).then(res => {
           if(res.data.status == 200){
@@ -341,6 +352,13 @@
       },
       /*获取评论*/
       getComment(){
+        if(!localStorage.getItem('token')){
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          Toast('请登录后再试');
+          this.$router.push('/login');
+          return false;
+        }
         axios.get(api.get_news_comment,{
           params:{
             neid: sessionStorage.getItem('neid'),
@@ -380,7 +398,9 @@
         if(!localStorage.getItem('token')){
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
+
           this.$router.push('/login');
+          return false;
         }
         if(!this.comment_content) {
           Toast({ message: '请先输入评论', duration: 1000 });
@@ -405,6 +425,13 @@
       },
       //评论点赞
       commentLike(index){
+        if(!localStorage.getItem('token')){
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          Toast('请登录后再试');
+          this.$router.push('/login');
+          return false;
+        }
         axios.post(api.favorite_comment + '?token='+localStorage.getItem('token'),{
           ncid:this.comment_list[index].ncid,
         }).then(res => {
@@ -472,6 +499,7 @@
           let that = this;
           MessageBox.confirm('你确定要删除这条评论吗?').then(action => {
             if(action){
+
               axios.post(api.del_comment + '?token='+localStorage.getItem('token'),{
                 ncid:item.ncid
               }).then(res => {

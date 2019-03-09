@@ -15,9 +15,9 @@
         <!--<li>2.使用微信扫一扫功能直接邀请您的好友成为商城会员。</li>-->
         <!--<li>3.长按图片保存后分享到朋友圈。</li>-->
     <!--</ul>-->
-    <!--<img v-lazy="back_img" class="m-code-back" alt="">-->
-    <!--<img :src="user.usqrcode" class="m-code-img" alt="">-->
-    <img id="avatar"  class="m-code-back"/>
+    <!--<img class="m-code-back" alt="">-->
+    <img  v-lazy="back_img"  class="m-code-back" v-if="!have_done" alt="">
+    <img id="avatar" v-else  class="m-code-back"/>
   </div>
 </template>
 
@@ -25,19 +25,20 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-  import { Toast } from 'mint-ui';
+  import { Indicator,Toast } from 'mint-ui';
   import wxapi from '../../../common/js/mixins';
   import wx from 'weixin-js-sdk';
   export default {
     data() {
       return {
-        back_img:'/static/images/icon-code-back.png',
+        back_img:'/static/images/icon-code-back-now.png',
         name: '',
         user: {},
         day: "",
         month: "",
         dayNum: "",
         monthNum: "",
+        have_done:false
       }
     },
     mixins: [wxapi],
@@ -48,6 +49,7 @@
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
             this.user = res.data.data;
+            this.have_done = true;
             this.drawAndShareImage()
           }
         });
@@ -125,6 +127,7 @@
         }
       },
       drawAndShareImage(){
+        Indicator.open({ text: '加载中...', spinnerType: 'fading-circle' });
         var canvas = document.createElement("canvas");
         canvas.width = 750;
         canvas.height = 6900;
@@ -155,6 +158,7 @@
 
             // document.getElementById('avatar').src = base64;
             img.setAttribute('src' , base64);
+            Indicator.close();
           }
         }
       },
@@ -213,6 +217,7 @@
             clearInterval(time);
           }
         }, 300);
+        Indicator.open({ text: '加载中...', spinnerType: 'fading-circle' });
       }
     }
   }

@@ -122,6 +122,10 @@
       wxapi.wxRegister(location.href.split('#')[0]);
     },
     activated() {
+      if(localStorage.getItem('login_to') && !localStorage.getItem('toLogin')){
+        localStorage.setItem('toLogin', 'toLogin');
+        this.$router.push('/login');
+      }
       this.getNav();
       if(sessionStorage.getItem('circleProduct')) {
         this.$router.push('/shop');
@@ -191,6 +195,12 @@
           }
         }else {
           Toast('请登录后再试');
+          if(!localStorage.getItem('token')){
+            let url = location.href.split('#')[0] + '?neid=' + items.neid
+            localStorage.setItem('login_to',url);
+            this.$router.push('/login');
+            return false;
+          }
         }
       },
       /*跳转路由*/
@@ -324,6 +334,13 @@
       },
       /*点赞*/
       likeClick(i){
+        // if(!localStorage.getItem('token')){
+        //   Toast('请登录后再试');
+        //   let url = location.href.split('#')[0] + '?neid=' + this.news_list[i].neid
+        //   localStorage.setItem('login_to',url);
+        //   this.$router.push('/login');
+        //   return false;
+        // }
         axios.post(api.favorite_news + '?token='+localStorage.getItem('token'),{
           neid:this.news_list[i].neid,
           tftype:1
