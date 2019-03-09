@@ -44,7 +44,7 @@
     <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
 
     <div class="m-detail-btn-box">
-      <div class="m-detail-service"></div>
+      <div class="m-detail-service" @click.stop="changeRoute('/personal/serviceCenter')"></div>
       <div class="m-buy-btn m-ft-30" @click="buy">立即下单</div>
     </div>
   </div>
@@ -213,6 +213,10 @@
         }else{
           scroll.beforeClose();
         }
+      },
+      //改变路由
+      changeRoute(v){
+        this.$router.push({path:v});
       },
       // 获取商品详情
       getProductDetail() {

@@ -377,6 +377,11 @@
       },
       //点击评论确定
       sureComment() {
+        if(!localStorage.getItem('token')){
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          this.$router.push('/login');
+        }
         if(!this.comment_content) {
           Toast({ message: '请先输入评论', duration: 1000 });
           return false;

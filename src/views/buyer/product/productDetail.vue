@@ -63,7 +63,7 @@
       </div>
       <div class="m-product-detail-foot">
         <span class="m-icon-car" @click.stop="changeRoute('/shop')"></span>
-        <span class="m-icon-service"></span>
+        <span class="m-icon-service" @click.stop="changeRoute('/personal/serviceCenter')"></span>
         <div class="m-product-detail-btn">
           <span class="active" @click="addCart">加入购物车</span>
           <span @click="buyNow">立即购买</span>
@@ -223,6 +223,8 @@
             this.$router.push({path:v,query:{prid:this.product_info.prid}});
           }else if(v == '/brandDetail'){
             this.$router.push({path:v,query:{pbid:this.product_info.pbid}});
+          }else if(v == '/personal/serviceCenter'){
+            this.$router.push({path:v});
           }else{
              sessionStorage.setItem('shop', true);
             // localStorage.setItem('last', this.$route.fullPath);

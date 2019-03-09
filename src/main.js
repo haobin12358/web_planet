@@ -86,6 +86,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
     // token有问题
     if(data.data.status_code == 405007 || data.data.message == '用户不存在') {
       localStorage.removeItem('token');
+
       if(localStorage.getItem('toLogin')) {
         Toast({ message: data.data.message, duration: 1000 });  // Toast('未登录');
       }else {
@@ -96,6 +97,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
         if(location.href.indexOf('code') < 0) {
           localStorage.setItem('href', location.href);
         }
+
         window.location.href = window.location.origin + '/#/login';
         localStorage.setItem('toLogin', 'toLogin');
         // 倒计时60秒*5再提醒一次

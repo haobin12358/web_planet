@@ -291,7 +291,10 @@
           }else if(localStorage.getItem('share') == 'tcid') {
             let params = url.split('?tcid=')[1].split('&secret_usid')[0].split('&which=');
             this.$router.push({ path: '/activityProductDetail', query: { tcid: params[0], which: params[1] }})
-          }
+          }else if(localStorage.getItem('share') == 'neid') {
+             let params = url.split('?neid=')[1].split('&secret_usid')[0];
+             this.$router.push({ path: '/circle/detail', query: { neid: params }})
+           }
         }
       },
       activated() {

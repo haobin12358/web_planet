@@ -124,7 +124,6 @@
     },
     mounted() {
       common.changeTitle('登录');
-
       if(this.isWeiXin()){    //是来自微信内置浏览器
         if(common.GetQueryString('code')) {
          /* if(localStorage.getItem('is_new')) {
@@ -155,6 +154,8 @@
                       localStorage.setItem('share', 'fmfpid');
                     }else if(localStorage.getItem('login_to').indexOf('tcid') > 0) {               // 试用商品
                       localStorage.setItem('share', 'tcid');
+                    }else if(localStorage.getItem('login_to').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
+                      localStorage.setItem('share', 'neid');
                     }
                   }
                   this.$router.push('/selected');
