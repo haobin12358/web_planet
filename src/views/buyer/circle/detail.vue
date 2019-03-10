@@ -22,6 +22,9 @@
           <span class="m-video-time">{{news_info.video.nvduration}}</span>
           <span class="m-icon-video"></span>
         </div>
+        <div class="m-more-link">
+          <span @click.stop="lookMore">查看更多></span>
+        </div>
       </div>
     </div>
     <div class="m-circle-foot" v-if="news_info">
@@ -54,6 +57,7 @@
       </div>
       <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
     </div>
+
 
     <div class="m-comment-modal" v-if="show_modal">
       <div class="m-modal-state">
@@ -515,6 +519,16 @@
             }
           });
         }
+      },
+      lookMore(){
+        if(localStorage.getItem('token')){
+          this.$router.push('/circle');
+        }else{
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          Toast('请登录后再试');
+          this.$router.push('/login');
+        }
       }
     }
   }
@@ -638,6 +652,12 @@
       font-size: 28px;
     }
 
+  }
+  .m-more-link{
+    padding: 20px 0;
+    font-size: 28px;
+    color: #409EFF;
+    text-decoration: underline;
   }
 }
 .m-comment-modal{
