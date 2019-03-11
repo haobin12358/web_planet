@@ -122,6 +122,7 @@
       wxapi.wxRegister(location.href.split('#')[0]);
     },
     activated() {
+
       if(localStorage.getItem('login_to') && !localStorage.getItem('toLogin')){
         localStorage.setItem('toLogin', 'toLogin');
         this.$router.push('/login');

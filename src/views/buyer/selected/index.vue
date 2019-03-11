@@ -376,7 +376,7 @@
               this.shareCode();
               clearInterval(time);
             }
-          }, 500);
+          }, 300);
         }
       },
       methods: {

@@ -15,7 +15,7 @@ import VueClipboard from 'vue-clipboard2'
 import router from './router'
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
-
+window.router = router;
 
 /*点击事件延迟问题*/
 import fastClick from 'fastclick'

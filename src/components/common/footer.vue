@@ -150,6 +150,10 @@
               this.tabbar = this.$store.state.tabbar_buyer;
               break;
             case '/circle':
+              if(localStorage.getItem('fresh')  && localStorage.getItem('token')) {
+                this.$router.go(0);
+                localStorage.removeItem('fresh');
+              }
               this.selected = '圈子';
               this.tabbar = this.$store.state.tabbar_buyer;
               break;

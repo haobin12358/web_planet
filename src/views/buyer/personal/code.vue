@@ -112,14 +112,11 @@
           case 9:
             this.month = "九月";
             break;
-            break;
           case 10:
             this.month = "十月";
             break;
-            break;
           case 11:
             this.month = "十一月";
-            break;
             break;
           case 12:
             this.month = "十二月";
@@ -159,6 +156,7 @@
             // document.getElementById('avatar').src = base64;
             img.setAttribute('src' , base64);
             Indicator.close();
+            console.log(Indicator,'加载完成')
           }
         }
       },

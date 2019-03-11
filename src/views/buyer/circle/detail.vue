@@ -22,7 +22,7 @@
           <span class="m-video-time">{{news_info.video.nvduration}}</span>
           <span class="m-icon-video"></span>
         </div>
-        <div class="m-more-link">
+        <div class="m-more-link" >
           <span @click.stop="lookMore">查看更多></span>
         </div>
       </div>
@@ -148,7 +148,8 @@
         comment_index:null,
         show_comment:false,
         show_invite:false,
-        timeOutEvent:null
+        timeOutEvent:null,
+        show_more:false
       }
     },
     mixins: [wxapi],
@@ -160,6 +161,9 @@
       if(sessionStorage.getItem('showComments') == 'show') {
         this.changeModal('show_modal',true);
         sessionStorage.removeItem('showComments');
+      }
+      if(localStorage.getItem('secret_usid')){
+        this.show_more = true;
       }
       localStorage.removeItem('share');
       localStorage.removeItem('url');
@@ -522,12 +526,13 @@
       },
       lookMore(){
         if(localStorage.getItem('token')){
-          this.$router.push('/circle');
+          window.router.push('/circle');
         }else{
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
+          localStorage.setItem('fresh',true);
           Toast('请登录后再试');
-          this.$router.push('/login');
+          window.router.push('/login');
         }
       }
     }
