@@ -5,6 +5,7 @@
       <div class="m-sku-content">
         <div class="m-sku-img-box m-center">
           <img :src="select_value.skupic"  v-if="select_value" alt="">
+          <img :src="change_info.skupic"  v-else-if="change_info" alt="">
           <img :src="product.prmainpic"  v-else alt="">
         </div>
         <div class="m-center">
@@ -85,7 +86,8 @@
           select_value:null,
           num:1,
           new_arr:[],
-          last_arr:[]
+          last_arr:[],
+          change_info:null
         }
       },
       props:{
@@ -172,7 +174,7 @@
         skuSelect(index,item){
           let _arr = [].concat(this.select);
           let change = -1;
-          let newArr = [];
+          let newArr = [],change_arr = [];
           let ad = [];
           if(index != -1){
             _arr[index] = item;
@@ -186,11 +188,15 @@
             // }
             if(item == '' && this.product.skus[j].skustock >0){
               newArr.push(this.product.skus[j].skuattritedetail);
+              change_arr.push(this.product.skus[j]);
             }
             else if(this.contrastArr(this.product.skus[j].skuattritedetail,ad) && this.product.skus[j].skustock >0){
               newArr.push(this.product.skus[j].skuattritedetail);
+              change_arr.push(this.product.skus[j]);
             }
           }
+          this.change_info = change_arr[0];
+
           let newArr_total = [];
           let arr = [];
           for(let i=0;i<this.product.skuvalue.length;i++){
@@ -216,7 +222,6 @@
             }
           }
          for(let a=0;a<newArr_total.length;a++){
-
            if(newArr_total[a].indexOf(this.select[a]) == -1){
              this.select[a] = '';
            }

@@ -94,12 +94,19 @@
       //获取商品列表
       getProduct(itid){
         let start = this.page_info.page_num;
+        let psid  = '';
+        for(let i=0;i<this.scene_list.length;i++){
+          if(this.scene_list[i].active){
+            psid = this.scene_list[i].psid;
+          }
+        }
         axios.get(api.product_list,{
           params:{
             page_size:this.page_info.page_size,
             page_num:start,
             token:localStorage.getItem('token'),
-            itid:itid
+            itid:itid,
+            psid:psid
           }
         }).then(res => {
           if(res.data.status == 200){
