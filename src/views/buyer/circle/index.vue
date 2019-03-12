@@ -240,7 +240,8 @@
             this.getNews(this.nav_list[index].itid)
           }else {
             this.news_list = [];
-            Toast('未登录')
+            Toast('未登录');
+            this.$router.push('/login');
           }
         }else {
           this.getNews(this.nav_list[index].itid)
