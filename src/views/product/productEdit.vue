@@ -17,7 +17,7 @@
     <!--<el-row>-->
     <!--<el-col :span="16">-->
     <el-form class="prod-form" ref="prodForm" :model="formData" :rules="rules" label-position="left"
-             label-width="100px">
+             label-width="120px">
       <!--<block-title title="基础数据"></block-title>-->
 
       <el-form-item id="1" label="所属分类" prop="pcid">
@@ -44,11 +44,14 @@
 
       <el-form-item label="关联标签" prop="items" v-if="showTags">
         <el-select v-model="items" style="width: 500px;" multiple filterable placeholder="可多选,可搜索">
-          <el-option
-            v-for="item in tagsOptions"
-            :key="item.itid"
-            :label="item.itname"
-            :value="item.itid">
+
+            <el-option
+              v-for="item in tagsOptions"
+              :key="item.itid"
+              :label="item.itname"
+              :value="item.itid"
+              :disabled="item.disabled"
+            >
           </el-option>
         </el-select>
         <router-link v-permission="[ 'admin', 'super']" tag="span" to="/product/productTag"
@@ -70,6 +73,12 @@
       </el-form-item>
       <el-form-item label="价格" prop="prprice">
         <el-input v-model.number="formData.prprice" style="width: 200px;" maxlength="11"></el-input>
+      </el-form-item>
+      <el-form-item label="是否为场景精选" >
+        <el-switch
+          v-model="formData.prfeatured"
+        >
+        </el-switch>
       </el-form-item>
       <!--<el-form-item label="运费" prop="prfreight">-->
       <!--<el-input v-model.number="formData.prfreight" style="width: 200px;" maxlength="11"></el-input>-->
@@ -344,6 +353,7 @@
           pcid: "",
           pbid: "",
           items: [],
+          prfeatured:true,
 
           prtitle: "",
           prdescription: "",
@@ -359,6 +369,7 @@
           images: [],
           prdesc: [],
         },
+        tag_disabled:true,
         rules: {
           pcid: [
             {required: true, message: '分类必选', trigger: 'change'}
@@ -964,11 +975,19 @@
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
+                for(let i=0;i<data.length;i++){
+                  if(data[i].itname == '大行星精选'){
+                    data[i].disabled = true
+                  }else{
+                    data[i].disabled = false
+                  }
 
+                }
               if (this.$route.query.addBig == 'true') {
                 data.push({
                   itid: upgradeItId,
                   itname: '开店大礼包',
+                  disabled: false
                 });
               }
 
