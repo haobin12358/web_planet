@@ -115,6 +115,7 @@
         </el-input>
 
         <span class="form-item-end-tip">回车统一设置</span>
+        <el-button type="text" v-if="where == 'guess'" @click="setSkuSix('all')">设置减免金额</el-button>
       </section>
       <el-table v-loading="skusLoading" :data="skusList" stripe :height="height"
                 @selection-change="handleSelectionChange" row-key="skuid" ref="skuList">
@@ -481,7 +482,20 @@
       },
       // 每日竞猜——设置sku的六个减免金额
       setSkuSix(row) {
-        this.rowTemp = row;
+        if(row == 'all'){
+          this.rowTemp ={
+            skudiscountone:1,
+            skudiscounttwo:2,
+            skudiscountthree:3,
+            skudiscountfour:4,
+            skudiscountfive:5,
+            skudiscountsix:6,
+            skuname:'所有'
+          };
+        }else{
+          this.rowTemp = row;
+        }
+
         this.skuSixDialog = true
       },
       // 每日竞猜——设置sku的确认按钮
@@ -492,6 +506,18 @@
           this.$message.warning('请正确输入减免金额');
           return
         }
+        if(this.rowTemp.skuname == '所有'){
+          for(let i=0;i<this.skusList.length;i++){
+            this.skusList[i].skudiscountone = Number(this.rowTemp.skudiscountone);
+            this.skusList[i].skudiscounttwo = Number(this.rowTemp.skudiscounttwo);
+            this.skusList[i].skudiscountthree = Number(this.rowTemp.skudiscountthree);
+            this.skusList[i].skudiscountfour = Number(this.rowTemp.skudiscountfour);
+            this.skusList[i].skudiscountfive = Number(this.rowTemp.skudiscountfive);
+            this.skusList[i].skudiscountsix = Number(this.rowTemp.skudiscountsix);
+          }
+        }
+
+        this.skusList = this.skusList.concat([])
         this.skuSixDialog = false
       },
       //统一
