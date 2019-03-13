@@ -105,6 +105,17 @@
         </el-form-item>
       </el-form>
       <!--表格部分-->
+      <section style="margin-bottom: 20px;">
+        <el-input v-model="commonNum" placeholder="统一设置参与数量" size="medium" style="width: 160px;"
+                  @keyup.enter.native="setCommonSku('num')"></el-input>
+        <el-input v-model="commonSkuPrice" placeholder="统一设置参与价格"  size="medium" style="width: 160px;"
+                  @keyup.enter.native="setCommonSku('price')"></el-input>
+        <el-input v-model="commonMaxPrice" placeholder="统一设置最高价格" v-if="where === 'magic'" size="medium" style="width: 160px;"
+                  @keyup.enter.native="setCommonSku('maxprice')">
+        </el-input>
+
+        <span class="form-item-end-tip">回车统一设置</span>
+      </section>
       <el-table v-loading="skusLoading" :data="skusList" stripe :height="height"
                 @selection-change="handleSelectionChange" row-key="skuid" ref="skuList">
         <el-table-column type="selection" :reserve-selection="false"></el-table-column>
@@ -244,7 +255,11 @@
             return time.getTime() < Date.now() - 8.64e7;
           }
         },
-        rowTemp: {}
+        rowTemp: {},
+      //  统一
+        commonNum:'',
+        commonMaxPrice:'',
+        commonSkuPrice:''
       }
     },
     props: {
@@ -479,6 +494,29 @@
         }
         this.skuSixDialog = false
       },
+      //统一
+      setCommonSku(type) {
+
+        if (this.skusList.length) {
+          for (let i = 0; i < this.skusList.length; i++) {
+            switch (type) {
+              case 'num':
+                this.skusList[i].stock = Number(this.commonNum);
+                break;
+              case 'maxprice':
+                this.skusList[i].maxprice = this.commonMaxPrice;
+                break;
+              case 'price':
+                this.skusList[i].price = this.commonSkuPrice;
+                break;
+            }
+          }
+          console.log(type,this.skusList)
+          this.skusList = [].concat(this.skusList);
+        } else {
+          this.$message.warning('请先新增商品属性后再设置')
+        }
+      },
       getProduct() {
         this.productLoading = true;
         this.$http.get(this.$api.product_list, {
@@ -567,7 +605,7 @@
           this.skusForm.prprice = scope.row.prprice;
           for(let i in this.skusList) {
             for(let j in scope.row.product.sku) {
-              if(this.skusList[i].skuid == scope.row.product.sku[j].skuid) { 
+              if(this.skusList[i].skuid == scope.row.product.sku[j].skuid) {
                 this.skusList[i].skudiscountone = scope.row.product.sku[j].skudiscountone;
                 this.skusList[i].skudiscounttwo = scope.row.product.sku[j].skudiscounttwo;
                 this.skusList[i].skudiscountthree = scope.row.product.sku[j].skudiscountthree;
