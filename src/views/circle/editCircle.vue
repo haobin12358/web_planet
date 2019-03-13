@@ -33,7 +33,8 @@
           </el-form-item>
           <el-form-item label="资讯正文" prop="netext">
             <el-input v-model.trim="circleForm.netext" type="textarea"
-                      :autosize="{ minRows: 4, maxRows: 6}"></el-input>
+                      :autosize="{ minRows: 4, maxRows: 18}" maxlength="3000"></el-input>
+            <span>{{circleForm.netext.length}}/3000</span>
           </el-form-item>
           <el-form-item label="图片(最多4张)" prop="images">
             <el-upload
@@ -194,7 +195,7 @@
           ],
           netext: [
             { required: true, message: '资讯正文必填', trigger: 'blur' },
-            { min: 1, max: 1000, message: '长度在 1 到 1000 个字符', trigger: 'blur' }
+            { min: 1, max: 3000, message: '长度在 1 到 3000 个字符', trigger: 'blur' }
           ]
         },
         dialogVisible: false,
