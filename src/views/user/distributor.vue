@@ -24,6 +24,7 @@
       </el-table-column>
       <el-table-column label="用户名" align="center" prop="usname" show-overflow-tooltip></el-table-column>
       <el-table-column label="手机号" align="center" prop="ustelphone"></el-table-column>
+      <el-table-column label="成为时间" align="center" prop="agenttime"></el-table-column>
       <el-table-column label="粉丝数" align="center" prop="fans_num"></el-table-column>
       <el-table-column label="总佣金" align="center" prop="total"></el-table-column>
       <el-table-column label="余 额" align="center" prop="remain"></el-table-column>

@@ -74,7 +74,7 @@
       <el-form-item label="价格" prop="prprice">
         <el-input v-model.number="formData.prprice" style="width: 200px;" maxlength="11"></el-input>
       </el-form-item>
-      <el-form-item label="是否为场景精选" >
+      <el-form-item label="是否为场景精选"  v-if="isYou">
         <el-switch
           v-model="formData.prfeatured"
         >
@@ -450,6 +450,7 @@
         items: [], //  item
         imagesUrl: [],    //  详情页顶部轮播图
         prDescUrl: [],       //  详情长图
+        isYou:true,      ///是否优选
       }
     },
 
@@ -1050,7 +1051,10 @@
       }
     },
     mounted() {
-      this.init()
+      this.init();
+     if(this.$store.state.user.roles.indexOf('supplizer') != -1){
+        this.isYou = false;
+      }
     },
 
   }
