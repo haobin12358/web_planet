@@ -48,7 +48,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-
+  import { Toast } from 'mint-ui';
   export default {
     data() {
       return {
@@ -87,7 +87,13 @@
       },
       //点击竞猜记录
       oneClick(item){
-        console.log(item)
+
+        if(item.historystatus == 0){
+          localStorage.setItem('guessproduct',item.product);
+          this.$router.push({path:'/guessProductDetail',query:{which:'guess'}})
+        }else{
+          Toast({ message: item.historystatus_zh });
+        }
       },
       // 时间popup确认按钮
       dateDone() {
