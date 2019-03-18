@@ -116,11 +116,12 @@
           pcidList:[],
           product_list:[],
           page_info:{
-            page_num:1,
+            page_num:0,
             page_size:10
           },
           isScroll:true,
           total_count:0,
+          total_page:0,
           bottom_show:false,
           category_list:null,
           temp: []
@@ -147,7 +148,7 @@
          if (scrollTop + ClientHeight  >= scrollHeight -10) {
            if(this.isScroll){
              this.isScroll = false;
-             if(this.product_list.length == this.total_count){
+             if(this.page_info.page_num > this.total_page){
                this.bottom_show = true;
              }else{
                for(let i=0;i<this.nav_list.length;i++){
@@ -198,7 +199,6 @@
        },
        //获取商品列表
        getProduct(start,desc_asc){
-         this.product_list = [];
          let _pcid = this.$route.query.pcid || this.pcid;
          let _kw = this.$route.query.kw || '';
          axios.get(api.product_list,{
@@ -213,7 +213,7 @@
          }).then(res => {
            if(res.data.status == 200){
              if(res.data.data.length >0){
-               this.page_info.page_num = this.page_info.page_num +1;
+               this.page_info.page_num =   this.page_info.page_num +1;
              }else{
                return false;
              }
@@ -224,6 +224,7 @@
              }
              this.isScroll = true;
              this.total_count = res.data.total_count;
+             this.total_page = res.data.total_page;
            }
          },error => {
            Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
