@@ -176,15 +176,26 @@
               Toast({ message: '绑定成功', duration: 1500 });
               localStorage.setItem('token', res.data.data.token);
               localStorage.removeItem('is_new');
-              if(localStorage.getItem('login_to')){
+              if(localStorage.getItem('wx_url')){
                 localStorage.setItem('url', localStorage.getItem('login_to').split('&from')[0]);
-                if(localStorage.getItem('login_to').indexOf('fmfpid') > 0) {             // 新人首单
+                if(localStorage.getItem('wx_url').indexOf('fmfpid') > 0) {             // 新人首单
                   localStorage.setItem('share', 'fmfpid');
-                }else if(localStorage.getItem('login_to').indexOf('tcid') > 0) {               // 试用商品
+                }else if(localStorage.getItem('wx_url').indexOf('tcid') > 0) {               // 试用商品
                   localStorage.setItem('share', 'tcid');
+                }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
+                  localStorage.setItem('share', 'neid');
+                }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
+                  localStorage.setItem('share', 'prid');
                 }
+                this.$router.push('/selected');
+              }else{
+                this.$router.go(-1);
               }
-              this.$router.push('/selected');
+
+              if(this.$store.state.show_login){
+                this.$store.state.show_login = false;
+                // this.$router.go(-1);
+              }
 
               // location.href = location.origin + '/#/selected'
             }else {

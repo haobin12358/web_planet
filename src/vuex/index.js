@@ -9,6 +9,7 @@ let store= new Vuex.Store({
     route: null,
     now: null,
     token: '',
+    show_login:false,
     tabbar_store: [
       /*{
         name:'素材',
