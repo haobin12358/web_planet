@@ -21,6 +21,17 @@
         </template>
       </el-table-column>
       <el-table-column label="场景名称" align="center" prop="psname"></el-table-column>
+      <el-table-column label="是否限时" align="center" prop="pstimelimited">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.pstimelimited"
+            disabled
+          >
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="开始时间" align="center" prop="psstarttime"></el-table-column>
+      <el-table-column label="结束时间" align="center" prop="psendtime"></el-table-column>
       <el-table-column label="权重" align="center" prop="pssort" :render-header="sortHeaderRender">
         <template slot-scope="scope">
           <el-input v-model.number="scope.row.pssort" maxlength="11" @keyup.native.enter="changeSceneSort(scope.row)"
@@ -64,7 +75,32 @@
         <el-form-item label="权重" prop="pssort">
           <el-input v-model.number="sceneForm.pssort" maxlength="11"></el-input>
         </el-form-item>
-
+        <el-form-item label="限时场景" >
+          <el-switch
+            v-model="sceneForm.pstimelimited"
+          >
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="开始时间" v-if="sceneForm.pstimelimited" required>
+          <el-date-picker
+            v-model="sceneForm.psstarttime"
+            type="datetime"
+            placeholder="选择日期时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="pickerOptions"
+           >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间" v-if="sceneForm.pstimelimited" required>
+          <el-date-picker
+            v-model="sceneForm.psendtime"
+            type="datetime"
+            placeholder="选择日期时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="pickerOptions"
+            >
+          </el-date-picker>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="sceneDlgVisible = false">取 消</el-button>
@@ -186,6 +222,9 @@
           psname: '',
           pspic: '',
           pssort: 1,
+          pstimelimited:false,
+          psstarttime:'',
+          psendtime:''
         },
         sceneRules: {
           psname: [
@@ -199,7 +238,11 @@
             {pattern: positiveNumberReg, message: '请输入合理的数字(>0)', trigger: 'blur'},
           ],
         },
-
+        pickerOptions: {         // 日期选择器的时间限制
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+        },
         itemSearchForm: {
           kw: '',
         },
@@ -395,7 +438,8 @@
         this.$http.get(this.$api.scene_list, {
           noLoading: true,
           params: {
-            kw: this.searchForm.kw
+            kw: this.searchForm.kw,
+            token:localStorage.getItem('token')
           }
         }).then(
           res => {
@@ -454,7 +498,11 @@
           psname: '',
           pspic: '',
           pssort: 1,
-        };
+          pstimelimited:false,
+          psstarttime:'',
+          psendtime:''
+
+      };
       },
       doAddScene() {
         this.resetSceneForm();
@@ -470,6 +518,9 @@
           psname: row.psname,
           pspic: row.pspic,
           pssort: row.pssort,
+          pstimelimited:row.pstimelimited,
+          psstarttime:row.psstarttime,
+          psendtime:row.psendtime
         }
       },
       doSaveScene() {
@@ -477,7 +528,24 @@
           valid => {
             if (valid) {
               let type = this.sceneForm.psid ? '场景修改' : '场景新增';
-
+              if(this.sceneForm.pstimelimited){
+                if(!this.sceneForm.psstarttime){
+                  this.$notify({
+                    title: '提示',
+                    message: '请选择开始时间',
+                    type: 'warning'
+                  });
+                  return false;
+                }
+                if(!this.sceneForm.psendtime){
+                  this.$notify({
+                    title: '提示',
+                    message: '请选择结束时间',
+                    type: 'warning'
+                  });
+                  return false;
+                }
+              }
               if (this.sceneForm.psid) {
                 this.$http.post(this.$api.update_scene, this.sceneForm).then(
                   res => {
