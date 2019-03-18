@@ -16,8 +16,8 @@
         <!--<li>3.长按图片保存后分享到朋友圈。</li>-->
     <!--</ul>-->
     <!--<img class="m-code-back" alt="">-->
-    <img  v-lazy="back_img"  class="m-code-back" v-if="!have_done" alt="">
-    <img id="avatar" v-else  class="m-code-back"/>
+    <!--<img  v-lazy="back_img"  class="m-code-back" v-if="!have_done" alt="">-->
+    <img id="avatar"   class="m-code-back"/>
   </div>
 </template>
 
@@ -135,7 +135,7 @@
         context.fill();
 
         var myImage = new Image();
-        myImage.src = "/static/images/icon-code-back.png";    //背景图片  你自己本地的图片或者在线图片
+        myImage.src = "/static/images/icon-code-back-now.png";    //背景图片  你自己本地的图片或者在线图片
         myImage.crossOrigin = 'Anonymous';
        let that = this;
         myImage.onload = function(){
@@ -150,7 +150,7 @@
 
           myImage2.onload = function(){
             context.drawImage(myImage2 , 500 , 6500 , 150 , 150);
-            var base64 = canvas.toDataURL("image/png");  //"image/png" 这里注意一下
+            var base64 = canvas.toDataURL("image/jpeg",0.7);  //"image/png" 这里注意一下
             var img = document.getElementById('avatar');
 
             // document.getElementById('avatar').src = base64;

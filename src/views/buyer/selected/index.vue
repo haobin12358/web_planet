@@ -392,7 +392,7 @@
             // alert(1);
             let options = {
               title: '大行星',
-              desc: '大行星严选',
+              desc: '挑你所爱  走你所想  一个有野心的户外平台',
               imgUrl: this.swipe_list[0].ibpic,
               link:  location.href.split('#')[0]+'?page=index'
             };

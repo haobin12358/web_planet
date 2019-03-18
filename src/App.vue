@@ -169,6 +169,8 @@ export default {
                     localStorage.setItem('share', 'prid');
                   }
                   this.$router.push('/selected');
+                }else{
+                  this.$router.go(0);
                 }
                 Toast('登录成功');
               }

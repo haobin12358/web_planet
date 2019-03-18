@@ -17,8 +17,9 @@
       <span class="m-no-img"></span>
       <div class="m-no-text m-ft-26 m-ft-b">暂无竞猜记录</div>
     </div>
+    <!--@click="changeRoute('/activityOrder', item)"-->
     <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList"
-         :class="item.result == 'correct' ? 'active' : ''" @click="changeRoute('/activityOrder', item)">
+         :class="item.result == 'correct' ? 'active' : ''" @click="oneClick(item)">
       <div class="m-record-item">
         <img class="m-product-img" :src="item.product.prmainpic" alt="">
         <div class="m-text-box">
@@ -83,6 +84,10 @@
           localStorage.removeItem('tipDate');
         }
         this.$router.push(v);
+      },
+      //点击竞猜记录
+      oneClick(item){
+        console.log(item)
       },
       // 时间popup确认按钮
       dateDone() {

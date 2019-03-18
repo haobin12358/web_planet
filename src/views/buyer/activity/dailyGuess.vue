@@ -82,7 +82,7 @@
     <mt-popup class="m-guess-popup" v-model="failPopup" pop-transition="popup-fade">
       <div class="m-guess-fail">
         <img class="m-guess-icon" src="/static/images/activity/guess-fail.png" alt="">
-        <div class="m-ft-30 m-ft-b">很遗憾，昨日回答错误，请再接再厉吧！</div>
+        <div class="m-ft-30 m-ft-b">很遗憾， 上次竞猜失败，请再接再厉吧！</div>
         <div class="m-guess-btn m-fail-btn m-ft-30 m-ft-b" @click="failDone">知道了</div>
       </div>
     </mt-popup>
