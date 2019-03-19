@@ -28,7 +28,7 @@
           <div class="m-text-row" v-if="item.correct_num" :class="item.result == 'correct' ? 'm-red' : ''">正确答案：{{item.correct_num.cnnum}}</div>
         </div>
         <div class="m-date-text">
-          <p v-if="item.result == 'correct'" @click.stop="changeRoute('/dailyGuess')">点击去购买</p>
+          <!--<p v-if="item.result == 'correct'" @click.stop="changeRoute('/dailyGuess')">点击去购买</p>-->
           <p>{{item.gndate}}</p>
         </div>
       </div>
@@ -73,7 +73,9 @@
         date: "",                       // 本月
         dateValue: [],                  // 暂存日期
         recordList: [],
-        number: ""
+        number: "",
+        guess:null,
+        productImages:[]
       }
     },
     components: {},
@@ -85,12 +87,23 @@
         }
         this.$router.push(v);
       },
+      // 用户获取今天猜数字活动所有商品
+      getTodayProduct() {
+        axios.get(api.today_gnap + '?token='+ localStorage.getItem('token')).then(res => {
+          if(res.data.status == 200) {
+            this.guess = res.data.data;
+            this.productImages = [];
+            for(let i in res.data.data.fresh_man) {
+              this.productImages.push(res.data.data.fresh_man[i].product)
+            }
+          }
+        });
+      },
       //点击竞猜记录
       oneClick(item){
-
         if(item.historystatus == 0){
-          localStorage.setItem('guessproduct',item.product);
-          this.$router.push({path:'/guessProductDetail',query:{which:'guess'}})
+          localStorage.setItem('guess',JSON.stringify(this.guess));
+          this.$router.push({path:'/guessProduct',query:{which:'guess'}})
         }else{
           Toast({ message: item.historystatus_zh });
         }
@@ -139,6 +152,7 @@
       common.changeTitle('竞猜记录');
       this.setYear();                  // 设置可选择的年份
       this.getHistory();               // 获取竞猜记录
+      this.getTodayProduct();
     }
   }
 </script>
