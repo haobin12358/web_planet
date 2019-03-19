@@ -125,7 +125,8 @@
 
       if(localStorage.getItem('login_to') && !localStorage.getItem('toLogin')){
         localStorage.setItem('toLogin', 'toLogin');
-        this.$router.push('/login');
+        // this.$router.push('/login');
+        this.$store.state.show_login = true;
       }
       this.getNav();
       if(sessionStorage.getItem('circleProduct')) {
@@ -195,11 +196,12 @@
             wx.onMenuShareTimeline(options);
           }
         }else {
-          Toast('请登录后再试');
+          // Toast('请登录后再试');
           if(!localStorage.getItem('token')){
             let url = location.href.split('#')[0] + '?neid=' + items.neid
-            localStorage.setItem('login_to',url);
-            this.$router.push('/login');
+            // localStorage.setItem('login_to',url);
+            // this.$router.push('/login');
+            this.$store.state.show_login = true;
             return false;
           }
         }
@@ -241,7 +243,8 @@
           }else {
             this.news_list = [];
             Toast('未登录');
-            this.$router.push('/login');
+            // this.$router.push('/login');
+            this.$store.state.show_login = false;
           }
         }else {
           this.getNews(this.nav_list[index].itid)

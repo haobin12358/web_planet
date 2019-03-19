@@ -1,6 +1,6 @@
 // const title = 'https://planet.daaiti.cn/api/v1/';
-const title = 'https://www.bigxingxing.com/api/v1/'; //正式
-// const title = 'https://test.bigxingxing.com/api/v1/'; //测试
+// const title = 'https://www.bigxingxing.com/api/v1/'; //正式
+const title = 'https://test.bigxingxing.com/api/v1/'; //测试
 const api={
   login: title + 'user/login',                                   // 用户登录
   wx_login: title + 'user/wx_login',                             // 微信登录

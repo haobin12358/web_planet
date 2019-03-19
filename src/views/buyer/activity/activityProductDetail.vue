@@ -292,7 +292,8 @@
               url =  window.location.href.split('#')[0] + '?tcid=' + this.$route.query.tcid + '&which=try'
             }
             localStorage.setItem('login_to',url)
-            this.$router.push('/login');
+            // this.$router.push('/login');
+            this.$store.state.show_login = true;
           }
         }else {
           this.changeModal('show_sku', true);

@@ -82,7 +82,6 @@
       },
       // 商品分享按钮
       productShare(item) {
-        console.log(item);
         if(common.isWeixin()) {
           if(localStorage.getItem('token')) {
             let options = {};

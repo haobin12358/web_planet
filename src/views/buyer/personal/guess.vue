@@ -17,8 +17,9 @@
       <span class="m-no-img"></span>
       <div class="m-no-text m-ft-26 m-ft-b">暂无竞猜记录</div>
     </div>
+    <!--@click="changeRoute('/activityOrder', item)"-->
     <div class="m-record-box" v-if="recordList.length > 0" v-for="item in recordList"
-         :class="item.result == 'correct' ? 'active' : ''" @click="changeRoute('/activityOrder', item)">
+         :class="item.result == 'correct' ? 'active' : ''" @click="oneClick(item)">
       <div class="m-record-item">
         <img class="m-product-img" :src="item.product.prmainpic" alt="">
         <div class="m-text-box">
@@ -47,7 +48,7 @@
   import common from '../../../common/js/common';
   import axios from 'axios';
   import api from '../../../api/api';
-
+  import { Toast } from 'mint-ui';
   export default {
     data() {
       return {
@@ -83,6 +84,16 @@
           localStorage.removeItem('tipDate');
         }
         this.$router.push(v);
+      },
+      //点击竞猜记录
+      oneClick(item){
+
+        if(item.historystatus == 0){
+          localStorage.setItem('guessproduct',item.product);
+          this.$router.push({path:'/guessProductDetail',query:{which:'guess'}})
+        }else{
+          Toast({ message: item.historystatus_zh });
+        }
       },
       // 时间popup确认按钮
       dateDone() {

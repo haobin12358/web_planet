@@ -1,5 +1,5 @@
 <template>
-    <div class="m-content">
+    <div class="m-content" :class="$store.state.show_login?'m-hidden':''">
       <keep-alive>
         <router-view ></router-view>
       </keep-alive>
@@ -25,5 +25,9 @@
 .m-content{
   /*padding: 10px 0;*/
   margin-bottom: 100px;
+}
+.m-hidden{
+    height: 92vh;
+    overflow: hidden;
 }
 </style>

@@ -276,7 +276,7 @@
           let arr = [];
           arr.push(product);
           if(localStorage.getItem('token')) {
-            this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr)}});
+            this.$router.push({ path: '/submitOrder', query: { product: JSON.stringify(arr),gift:'gift'}});
           }else {
             Toast('请登录后再试');
           }

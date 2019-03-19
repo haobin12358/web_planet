@@ -96,7 +96,9 @@
       clearCache() {
         MessageBox.confirm('之后您可能需要重新登录，是否继续').then(() => {
           localStorage.clear();
-          this.$router.push('/login');
+          this.$router.push('/personal');
+          // this.$store.state.show_login = true;
+          // this.$router.go(0);
         }).catch(() => {
 
         });

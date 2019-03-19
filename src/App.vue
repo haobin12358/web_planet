@@ -6,17 +6,36 @@
 </template>-->
 
 <template>
-  <div id="app">
+  <div id="app" >
     <keep-alive>
       <router-view v-if="isRouterAlive && $route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="isRouterAlive && !$route.meta.keepAlive"></router-view>
+    <div class="m-login-modal" v-if="$store.state.show_login" >
+      <div class="m-modal-state">
+        <h3 class="m-modal-head">微信登录</h3>
+        <div class="m-logo-box">
+          <img src="/static/images/logo.jpg" alt="">
+          <span>大行星商城申请获取以下权限：</span>
+        </div>
+        <div class="m-text">
+          <span class="m-dot"></span>
+          <span class="m-t">获得你的公开信息(昵称、头像、地区及性别)</span>
+        </div>
+        <div class="m-btn-box">
+          <span @click.stop="cancelLogin">拒绝</span>
+          <span class="active" @click.stop="login">允许</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import api from '../src/api/api';
+  import api from './api/api';
+  import common from './common/js/common';
+  import {Toast} from 'mint-ui';
 
 export default {
   name: 'App',
@@ -110,6 +129,58 @@ export default {
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU1MTUwNDk0NywiZXhwIjoxNTUyMTA5NzQ3fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiMjczNDU1ODItM2MwYS0xMWU5LWE0ZjYtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.4JXjxmYNjqu95XVoLb17bzyzbS3bpswRGpBZOsEXmGA';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
+    if(localStorage.getItem('token')){
+      this.$store.state.show_login = false;
+    }else{
+      if(this.isWeiXin()){    //是来自微信内置浏览器
+        if(common.GetQueryString('code')) {
+          /* if(localStorage.getItem('is_new')) {
+
+           }else {*/
+          // 获取微信信息，如果之前没有使用微信登陆过，将进行授权登录
+          window.localStorage.setItem("code", common.GetQueryString('code'));
+          let params = {
+            app_from: window.location.origin.substr(8, window.location.origin.length),
+            code: common.GetQueryString('code')
+          };
+          if(localStorage.getItem('secret_usid')) {
+            params.secret_usid = localStorage.getItem('secret_usid').split('&from')[0];
+          }
+          axios.post(api.wx_login, params).then(res => {
+            if(res.data.status == 200) {
+              // localStorage.removeItem('secret_usid');
+              localStorage.removeItem('toLogin');
+              window.localStorage.setItem("token",res.data.data.token);
+              window.localStorage.setItem("openid",res.data.data.user.openid);
+              if(res.data.data.is_new) {
+                localStorage.setItem('is_new', res.data.data.is_new);
+                this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
+              }else {
+                this.$store.state.show_login = false;
+                if(localStorage.getItem('wx_url')){
+                  localStorage.setItem('url', localStorage.getItem('wx_url').split('&from')[0]);
+                  if(localStorage.getItem('wx_url').indexOf('fmfpid') > 0) {             // 新人首单
+                    localStorage.setItem('share', 'fmfpid');
+                  }else if(localStorage.getItem('wx_url').indexOf('tcid') > 0) {               // 试用商品
+                    localStorage.setItem('share', 'tcid');
+                  }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
+                    localStorage.setItem('share', 'neid');
+                  }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
+                    localStorage.setItem('share', 'prid');
+                  }
+                  this.$router.push('/selected');
+                }else{
+                  this.$router.go(0);
+                }
+                Toast('登录成功');
+              }
+            }
+          });
+          // }
+        }
+      }
+    }
+
   },
   methods:{
     returnClick(){
@@ -128,12 +199,50 @@ export default {
 
         }
       });*/
-    }
+    },
+    cancelLogin(){
+      this.$store.state.show_login = false;
+    },
+    // 是否是微信自带的浏览器
+    isWeiXin() {
+      // mozilla/5.0 (iphone; cpu iphone os 9_1 like mac os x) applewebkit/601.1.46 (khtml, like gecko)version/9.0 mobile/13b143 safari/601.1
+      let ua = window.navigator.userAgent.toLowerCase();
+      // console.log(ua);
+
+      if(ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+      }else {
+        return false;
+      }
+    },
+    // 获取微信参数
+    login() {
+      let params = {
+        url: window.location.href.split('#')[0],
+        // url: window.location.href,
+        app_from: window.location.origin.substr(8, window.location.origin.length)
+      };
+      axios.get(api.get_wxconfig, { params: params }).then((res) => {
+        if(res.data.status == 200){
+          const id = res.data.data.appId;
+          // const url = window.location.origin + '/#/login';
+          let url = window.location.href;
+          if(url.indexOf('?') != -1){
+            localStorage.setItem('wx_url',url);
+            url = window.location.origin + '/#/select';
+          }
+          window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+        }
+      }).catch((error) => {
+        console.log(error ,'1111');
+      });
+    },
   }
 }
 </script>
 
-<style>
+<style lang="less" rel="stylesheet/less" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -143,6 +252,7 @@ export default {
   height: 100%;
   background-color: #fff;
 }
+
 .m-return{
   position: fixed;
   left: 10px;
@@ -151,8 +261,84 @@ export default {
   height: 40px;
   line-height: 44px;
   border-radius: 15px;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(255,255,255,0.6);
   color: #f7f7f7;
   z-index: 10000;
 }
+  .m-login-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 1000;
+    .m-modal-state{
+      width: 640px;
+      height: 500px;
+      background-color: #fff;
+      box-sizing: border-box;
+      padding: 20px 40px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -200px 0 0 -320px;
+      .m-modal-head{
+        font-size: 36px;
+        text-align: left;
+        font-weight: normal;
+      }
+      .m-logo-box{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        img{
+          display: inline-block;
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          margin-right: 20px;
+        }
+      }
+      .m-text{
+        /*font-size: 12px;*/
+        color: #999;
+        margin: 30px 0;
+        text-align: left;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: flex-start;
+        .m-dot{
+          display: block;
+          width: 16px;
+          height: 16px;
+          background-color: #999;
+          border-radius: 50%;
+          margin-right: 30px;
+        }
+        .m-t{
+          display: block;
+          width: 560px;
+        }
+      }
+      .m-btn-box{
+        text-align: right;
+        span{
+          display: inline-block;
+          padding: 0 30px;
+          color: #999;
+          font-size: 34px;
+          &.active{
+            color: #333;
+          }
+        }
+      }
+    }
+  }
 </style>

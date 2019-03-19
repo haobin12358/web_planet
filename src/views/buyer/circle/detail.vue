@@ -159,7 +159,14 @@
       // 从圈子首页点击单条的评论图标
       sessionStorage.setItem('neid', this.$route.query.neid);
       if(sessionStorage.getItem('showComments') == 'show') {
-        this.changeModal('show_modal',true);
+        if(localStorage.getItem('token')){
+          this.changeModal('show_modal',true);
+        }else{
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          this.$store.state.show_login = true;
+        }
+
         sessionStorage.removeItem('showComments');
       }
       if(localStorage.getItem('secret_usid')){
@@ -298,6 +305,12 @@
         }
       },
       changeModal(v,bool,i){
+        if(v == 'show_modal' && bool && !localStorage.getItem('token')){
+          let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
+          localStorage.setItem('login_to',url);
+          this.$store.state.show_login = true;
+          return false;
+        }
         this[v] = bool;
         if(bool){
           scroll.afterOpen();
@@ -305,7 +318,7 @@
           scroll.beforeClose();
           this.comment_one = null;
         }
-        if(v == 'show_modal' && !i) {
+        if(v == 'show_modal' && !i ) {
           this.getComment();
         }
         if(v == 'show_modal' && !bool && i == 0) {
@@ -345,7 +358,8 @@
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
           Toast('请登录后再试');
-          this.$router.push('/login');
+          // this.$router.push('/login');
+          this.$store.state.show_login = true;
           return false;
         }
         axios.post(api.favorite_news + '?token=' + localStorage.getItem('token'),
@@ -363,8 +377,9 @@
         if(!localStorage.getItem('token')){
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
-          Toast('请登录后再试');
-          this.$router.push('/login');
+          // Toast('请登录后再试');
+          // this.$router.push('/login');
+          this.$store.state.show_login = true;
           return false;
         }
         axios.get(api.get_news_comment,{
@@ -407,7 +422,8 @@
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
 
-          this.$router.push('/login');
+          // this.$router.push('/login');
+          this.$store.state.show_login = true;
           return false;
         }
         if(!this.comment_content) {
@@ -436,8 +452,9 @@
         if(!localStorage.getItem('token')){
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
-          Toast('请登录后再试');
-          this.$router.push('/login');
+          // Toast('请登录后再试');
+          // this.$router.push('/login');
+          this.$store.state.show_login = true;
           return false;
         }
         axios.post(api.favorite_comment + '?token='+localStorage.getItem('token'),{
@@ -531,8 +548,9 @@
           let url = location.href.split('#')[0] + '?neid=' + this.$route.query.neid;
           localStorage.setItem('login_to',url);
           localStorage.setItem('fresh',true);
-          Toast('请登录后再试');
-          window.router.push('/login');
+          // Toast('请登录后再试');
+          // window.router.push('/login');
+          this.$store.state.show_login = true;
         }
       }
     }

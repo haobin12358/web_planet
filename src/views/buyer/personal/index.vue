@@ -268,6 +268,10 @@
       },
       // 跳转页面
       changeRoute(v, which){
+        if(v == '/login'){
+          this.$store.state.show_login = true;
+          return false;
+        }
         if(which) {
           this.$router.push({ path: v,query: { which: which}});
         }else {
@@ -483,6 +487,8 @@
             }else {
               this.store = '成为店主'
             }
+          }else{
+            this.user = { usheader: '', usidname: '登录 / 注册'}
           }
         })
       },

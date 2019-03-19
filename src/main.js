@@ -72,7 +72,7 @@ axios.interceptors.request.use(config => {
   Indicator.close();
   return Promise.reject(error)
 })
-
+import store from './vuex';
 // localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzEwNzQ4NSwiZXhwIjoxNTQ3NzEyMjg1fQ.eyJ1c2VybmFtZSI6Ilx1Njc2OFx1NTZmZFx1NjgwYiIsImlkIjoiNjFmNjdiNWUtMTQyNC0xMWU5LTg0YTgtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjR9.8ezghAQB-APPaTigMex2LmAhAeudU1ZwMAHUBdC3184');
 // localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU0NzE3OTA0NCwiZXhwIjoxNTQ3NzgzODQ0fQ.eyJ1c2VybmFtZSI6Ilx1Njc2OFx1NjdkMCIsImlkIjoiODU0YjNlYTAtMDcyNy0xMWU5LWIyMDAtMDAxNjNlMDhkMzBmIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.STGgLdOvD73gpSjKbtwy3T-kKXYxE9i94jnUyoM8hvY');
 // http响应拦截器
@@ -88,7 +88,8 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       localStorage.removeItem('token');
 
       if(localStorage.getItem('toLogin')) {
-        Toast({ message: data.data.message, duration: 1000 });  // Toast('未登录');
+        Toast({ message: data.data.message, duration: 600 });  // Toast('未登录');
+        store.state.show_login = true;
       }else {
         // 避免code影响
         // router.push('/login');
@@ -98,7 +99,8 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
           localStorage.setItem('href', location.href);
         }
 
-        window.location.href = window.location.origin + '/#/login';
+        // window.location.href = window.location.origin + '/#/login';
+        store.state.show_login = true;
         localStorage.setItem('toLogin', 'toLogin');
         // 倒计时60秒*5再提醒一次
         const TIME_COUNT = 60*5;
@@ -116,7 +118,8 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
     // 微信登录失败
     else if(data.data.status_code == 405012 || data.data.message == '微信登录失败') {
       // 避免code影响
-      window.location.href = window.location.origin + '/#/login';
+      // window.location.href = window.location.origin + '/#/login';
+      store.state.show_login = true;
     }
     // 店主版块显示无权限 - 刷新token
     else if(data.data.status_code == 405003 && data.data.message == '无权限') {
@@ -146,7 +149,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   Indicator.close();
   return Promise.reject(error)
 });
-import store from './vuex';
+
 
 //引入微信
 import 'weixin-js-sdk';
