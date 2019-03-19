@@ -90,7 +90,7 @@ export const constantRouterMap = [
   },
   { path: '/circle/detail', component: () => import('../views/buyer/circle/detail'), hidden: true },
   { path: '/circle/editCircle', component: () => import('../views/buyer/circle/editCircle'), hidden: true },
-
+  { path: '/circle/newEdit', component: () => import('../views/buyer/circle/newEdit'), hidden: true },
   {
     path: '/equipment',
     component: Layout,

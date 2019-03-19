@@ -276,6 +276,9 @@
         wxapi.wxRegister(location.href.split('#')[0]);
         // localStorage.removeItem('share');
         // localStorage.removeItem('url');
+        if(!localStorage.getItem('token')){
+          localStorage.removeItem('is_new');
+        }
         if(localStorage.getItem('token')) {
           // 倒计时
           const TIME_COUNT = 1;

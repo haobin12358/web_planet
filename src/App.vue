@@ -129,7 +129,7 @@ export default {
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU1MTUwNDk0NywiZXhwIjoxNTUyMTA5NzQ3fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiMjczNDU1ODItM2MwYS0xMWU5LWE0ZjYtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.4JXjxmYNjqu95XVoLb17bzyzbS3bpswRGpBZOsEXmGA';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
-    if(localStorage.getItem('token')){
+    if(localStorage.getItem('token') && localStorage.getItem('is_new')){
       this.$store.state.show_login = false;
     }else{
       if(this.isWeiXin()){    //是来自微信内置浏览器

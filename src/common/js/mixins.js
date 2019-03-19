@@ -56,10 +56,10 @@ const wxApi = {
     // 需在用户可能点击分享按钮前就先调用
     wx.ready(function() {
       // 获取微信分享参数
-      axios.get(api.get_share_params).then(res => {
-        if(res.data.status == 200) {
-          let params = res.data.data;
-          // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
+      // axios.get(api.get_share_params).then(res => {
+      //   if(res.data.status == 200) {
+      //     let params = res.data.data;
+      //     // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容（1.4.0）
           if(wx.updateAppMessageShareData) {
             wx.updateAppMessageShareData({
               title: params.title, // 分享标题
@@ -82,8 +82,8 @@ const wxApi = {
               }
             });
           }
-        }
-      });
+        // }
+      // });
     });
   },
 
