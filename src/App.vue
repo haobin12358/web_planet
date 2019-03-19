@@ -8,9 +8,9 @@
 <template>
   <div id="app" >
     <keep-alive>
-      <router-view v-if="isRouterAlive && $route.meta.keepAlive"></router-view>
+      <router-view :key="key" v-if="isRouterAlive && $route.meta.keepAlive"></router-view>
     </keep-alive>
-    <router-view v-if="isRouterAlive && !$route.meta.keepAlive"></router-view>
+    <router-view :key="key" v-if="isRouterAlive && !$route.meta.keepAlive"></router-view>
     <div class="m-login-modal" v-if="$store.state.show_login" >
       <div class="m-modal-state">
         <h3 class="m-modal-head">微信登录</h3>
@@ -47,6 +47,11 @@ export default {
   data(){
     return{
       isRouterAlive:true
+    }
+  },
+  computed:{
+    key(){
+      return this.$route.path + Math.random();
     }
   },
   created() {
