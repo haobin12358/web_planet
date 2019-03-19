@@ -18,8 +18,8 @@
           <input type="text" v-model="title" placeholder="请输入标题">
         </div>
         <div class="m-textarea m-one">
-          <textarea v-model="content" maxlength="3000" placeholder="请输入内容"></textarea>
-          <span>{{content.length}}/3000</span>
+          <textarea v-model="content" maxlength="10000" placeholder="请输入内容"></textarea>
+          <span>{{content.length}}/10000</span>
         </div>
         <div class="m-upload-box">
           <div>
@@ -312,8 +312,8 @@
           Toast("请输入内容");
           return false;
         }
-        if(this.content.length >3000) {
-          Toast("内容字数不可操作3000");
+        if(this.content.length >10000) {
+          Toast("内容字数不可操作10000");
           return false;
         }
         let params = {
