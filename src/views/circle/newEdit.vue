@@ -59,7 +59,7 @@
                 :http-request="uploadImages"
                 :on-success="handleSkuPicSuccess"
                 @click.native="setSkuPicIndex(index)"
-                :limit="4"
+                :limit="9"
                 :multiple="true">
                 <i class="el-icon-plus"></i>
                 <div slot="tip" class="el-upload__tip">
@@ -73,6 +73,7 @@
                 :action="uploadVideo"
                 :show-file-list="false"
                 accept="video/*"
+                :http-request="uploadVideos"
                 :on-success="handleVideoSuccess"
                 :before-upload="beforeVideoUpload">
                 <img v-if="item.content.thumbnail" v-lazy="item.content.thumbnail" class="avatar circle-main-img">
@@ -246,7 +247,7 @@
     directives: { permission, elDragDialog },
     components: { ImgsDragSort, product, TableCellImg, previewCircle },
     mounted() {
-      // this.initCircle()
+      this.initCircle()
     },
     activated() {
       this.initCircle()
@@ -400,7 +401,6 @@
       // 视频上传
       handleVideoSuccess(res, file) {
         this.video = res;
-        console.log(res)
         for(let i=0;i<this.circleForm.netext.length;i++){
           if(this.circleForm.netext[i].type == 'video'){
             this.circleForm.netext[i].content = {
@@ -416,7 +416,31 @@
         this.uploadSkuImgIndex = index;
       },
       handleSkuPicSuccess(res, file) {
-        this.circleForm.netext[this.uploadSkuImgIndex].content = res.data;
+        //
+        // this.circleForm.netext[this.uploadSkuImgIndex].content = res.data;
+        // console.log(res,this.circleForm.netext,'sdfsdfds')
+      },
+      uploadVideos(file){
+        let formData = new FormData();
+        formData.append('file', file.file);
+        this.$http({method: 'post', url: this.uploadVideo, data: formData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+          res => {
+            if (res.data.status == 200) {
+              for(let i=0;i<this.circleForm.netext.length;i++){
+                if(this.circleForm.netext[i].type == 'video'){
+                  this.circleForm.netext[i].content = {
+                    video:window.location.origin + res.data.data,
+                    duration: res.data.video_dur,
+                    thumbnail:window.location.origin + res.data.video_thum
+                  };
+                }
+              }
+              console.log(this.circleForm.netext)
+            }else{
+              this.$message.error(res.data.message);
+            }
+          })
       },
       // 多图上传
       uploadImages(file) {
@@ -426,11 +450,16 @@
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
           res => {
             if (res.data.status == 200) {
-              console.log(file)
-              this.imagesUrl.push({
+              // this.imagesUrl.push({
+              //   name: file.file.name,
+              //   url: res.data.data
+              // })
+              this.circleForm.netext[this.uploadSkuImgIndex].content .push({
                 name: file.file.name,
-                url: res.data.data
+                url: window.location.origin + res.data.data
               })
+            }else{
+              this.$message.error(res.data.message);
             }
           }
         )
@@ -494,6 +523,7 @@
             }else {
               this.circleForm.neisrecommend = 0
             }
+            console.log(this.circleForm.netext)
             if(this.circleForm.netext.length < 1 ) {
               this.$notify({
                 title: `提示`,
@@ -501,17 +531,34 @@
                 type: 'warning'
               });
               return false;
-            }else if( this.circleForm.netext.length == 1 &&(this.circleForm.netext[this.circleForm.netext.length-1].content == '' || this.circleForm.netext[this.circleForm.netext.length-1].content.length ==0 || !this.circleForm.netext[this.circleForm.netext.length-1].content.video) ){
-              this.$notify({
-                title: `提示`,
-                message: `请添加文章内容`,
-                type: 'warning'
-              });
-              return false;
+            }else if( this.circleForm.netext.length == 1 ){
+              if(this.circleForm.netext[this.circleForm.netext.length-1].content.length ==0){
+                this.$notify({
+                  title: `提示`,
+                  message: `请添加文章内容`,
+                  type: 'warning'
+                });
+                return false;
+              }else if(this.circleForm.netext[this.circleForm.netext.length-1].type == 'video' && !this.circleForm.netext[this.circleForm.netext.length-1].content.video){
+                this.$notify({
+                  title: `提示`,
+                  message: `请添加文章内容`,
+                  type: 'warning'
+                });
+                return false;
+              }
+
             }
             //处理正文
             for(let i=0;i<this.circleForm.netext.length;i++){
-              delete  this.circleForm.netext[i].content.click
+              delete  this.circleForm.netext[i].click;
+              if(this.circleForm.netext[i].type == 'image'){
+                let arr = [];
+                for(let j=0;j<this.circleForm.netext[i].content.length;j++){
+                  arr.push(this.circleForm.netext[i].content[j].url)
+                }
+                this.circleForm.netext[i].content = [].concat(arr);
+              }
             }
 
             if(this.circleForm.neid) {

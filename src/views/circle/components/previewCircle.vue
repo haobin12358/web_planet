@@ -4,7 +4,7 @@
       <el-button type="primary" @click="preview('detail')">预 览</el-button>
     </div>
     <div v-else>
-      <el-button type="text" class="preview-button" @click="preview('list')">列表预览</el-button>
+      <el-button type="text" class="preview-button" v-if="show_circle" @click="preview('list')">列表预览</el-button>
       <el-button type="text" class="preview-button" @click="preview('detail')">详情预览</el-button>
     </div>
     <!--列表预览dialog-->
@@ -121,7 +121,7 @@
         where: '',
         news_info: { author: {}, coupon: [], product: [] },
         neid: '',
-
+        show_circle:true,
         videoVisible: false,
       }
     },
@@ -444,7 +444,7 @@
          }
          .m-video-time{
            position: absolute;
-           bottom: -75px;
+           /*bottom: -75px;*/
            right: 6.5px;
            color: #000;
          }
