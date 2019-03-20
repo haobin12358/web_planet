@@ -19,23 +19,34 @@
       </div>
 
       <div class="m-edit-content" >
+        <div  class="m-add-cut" style="margin-bottom: 20px;">
+          <span style="margin-right: 20px;">请添加文章内容</span>
+          <div class="m-add">
+            <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon('show_add')">
+            <div class="m-edit-icon" v-if="show_add">
+              <div class="m-icon-one" @click.stop="addRow(-1,'text')"><img src="/static/images/icon-up-text.png" alt=""></div>
+              <div class="m-icon-one" @click.stop="addRow(-1,'picture')"><img src="/static/images/icon-up-img.png" alt=""></div>
+              <div class="m-icon-one" v-if="show_video" @click.stop="addRow(-1,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
+            </div>
+          </div>
+        </div>
         <div class="m-row" v-for="(item,index) in edit_data">
-          <textarea :id="forId(index)" class="m-textarea" placeholder="请输入内容..." :class="index == edit_data.length -1?'m-last':''" v-model="item.content" v-if="item.type == 'input'" :autofocus="index == edit_data.length -1"></textarea>
+          <textarea :id="forId(index)" class="m-textarea" placeholder="请输入内容..." :class="index == edit_data.length -1?'m-last':''" v-model="item.content" v-if="item.type == 'text'" :autofocus="index == edit_data.length -1"></textarea>
           <div class="m-selectBack-img-box" v-if="item.type == 'picture'">
             <div class="img-box" v-for="(i,j) in item.content">
               <img class="circle-img" :src="i" alt="" @click="previewImage(j,index, item.content)">
               <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(index,j)">
             </div>
             <div class="m-selectBack-camera" >
-              <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple="" @change="uploadImg($event,index,j)" :ref="forId(inex)">
+              <input type="file" name="file" class="m-upload-input" value="" accept="image/*" multiple=""  @change="uploadImg($event,index)" :ref="forId(index)">
             </div>
           </div>
           <div class="m-selectBack-img-box" v-if="item.type == 'video'">
-            <div class="img-box" >
+            <div class="img-box" v-if="item.content.nvthum">
               <img class="circle-img" :src="item.content.nvthum" alt="">
               <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteVideo(index)">
             </div>
-            <div class="m-selectBack-video" v-if="item.content.length < 1">
+            <div class="m-selectBack-video" v-else>
               <input type="file" name="file" class="m-upload-input" value="" accept="video/*" multiple="" @change="uploadVideo($event,index)">
             </div>
           </div>
@@ -43,12 +54,12 @@
             <div class="m-add">
               <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon(index)">
               <div class="m-edit-icon" v-if="item.click">
-                <div class="m-icon-one" @click.stop="addRow(index,'input')"><img src="/static/images/icon-up-text.png" alt=""></div>
+                <div class="m-icon-one" @click.stop="addRow(index,'text')"><img src="/static/images/icon-up-text.png" alt=""></div>
                 <div class="m-icon-one" @click.stop="addRow(index,'picture')"><img src="/static/images/icon-up-img.png" alt=""></div>
-                <div class="m-icon-one" @click.stop="addRow(index,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
+                <div class="m-icon-one" v-if="show_video" @click.stop="addRow(index,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
               </div>
             </div>
-            <div class="m-cut" v-if="edit_data.length >1 ">
+            <div class="m-cut" >
               <img src="/static/images/icon-cut-sku.png" class="m-icon" alt="" @click="cutType(index)">
             </div>
           </div>
@@ -133,13 +144,9 @@
         couponList: [],         // 可选择的优惠券
         circleCoupon: true,     // 是在圈子页的优惠券
         getCoupon: false,        // 是否请求过获取优惠券的接口
-        edit_data:[
-          {
-            type:'input',
-            content:'',
-            click:false
-          }
-        ],
+        edit_data:[],
+        show_add:false,
+        show_video:false
       }
     },
     mixins: [wxapi],
@@ -255,12 +262,12 @@
           if(res.data.status == 200){
             // let img = { niimg: res.data.data, nisort: this.img_box.length + 1 };
             this.upload_img.push(res.data.data);
-
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
-              that.edit_data[index].content.push(this.result);
+              that.edit_data[index].content.push(window.location.origin + res.data.data);
+              event.srcElement.value = ""
             };
-            this.$refs[this.forId(index)].value = "";
+            this.$refs[this.forId(index)][0].value = "";
           }
         })
       },
@@ -284,7 +291,6 @@
               nvthum  : window.location.origin + res.data.video_thum,
               nvdur : res.data.video_dur,
             }
-
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
               that.edit_data[index].content = video;
@@ -333,14 +339,18 @@
           Toast("请输入标题");
           return false;
         }
-        if(this.edit_data.length == 1 && this.edit_data[this.edit_data.length-1].content == '') {
-          Toast("请输入内容");
+        if(this.edit_data.length < 1 ) {
+          Toast("请添加文章内容");
+          return false;
+        }else if(this.edit_data[this.edit_data.length-1].content == ''){
+          Toast("请添加文章内容");
           return false;
         }
         // if(this.content.length >10000) {
         //   Toast("内容字数不可操作10000");
         //   return false;
         // }
+        console.log(this.edit_data)
         let params = {
           items: this.circleList,
           netitle: this.title,
@@ -370,18 +380,32 @@
       },
       //点击添加
       showIcon(index){
+        this.show_video = true;
+        for(let i=0;i<this.edit_data.length;i++){
+          if(this.edit_data[i].type == 'video' && this.edit_data[i].content != {} ){
+            this.show_video = false;
+          }
+        }
+        if(index == 'show_add'){
+          this.show_add = !this.show_add;
+          return false;
+        }
         this.edit_data[index].click = !this.edit_data[index].click
       },
       //点击icon
       addRow(index,item){
-        this.edit_data[index].click = false;
+        if(index == -1){
+          this.show_add = false;
+        }else{
+          this.edit_data[index].click = false;
+        }
         let _item = {
           type:item,
           content:null,
           click:false
         };
         switch (item){
-          case 'input':
+          case 'text':
             _item.content = '';
             break;
           case 'picture':
@@ -460,8 +484,6 @@
       common.changeTitle('发布圈子');
       this.getNav();                 // 获取圈子所在的标签
       this.getUserLevel();           // 获取当前用户是否是店主
-      let text = document.getElementById("textarea0");
-      this.autoTextarea(text);
     },
     watch: {
       search(val) {
@@ -655,6 +677,44 @@
   .m-edit-content{
     min-height: 400px;
     margin: 0 50px;
+    .m-add-cut{
+      display: flex;
+      flex-flow: row;
+      justify-content: flex-start;
+      align-items: center;
+      /*margin-left: 30px;*/
+      .m-icon{
+        display: block;
+        width: 32px;
+        height: 32px;
+      }
+      .m-add{
+        position: relative;
+        margin-right: 30px;
+        .m-edit-icon{
+          background-color: #eee;
+          position: absolute;
+          bottom: -42px;
+          left: -50%;
+          display: flex;
+          flex-flow: row;
+          align-items: center;
+          justify-content: flex-end;
+          border-radius: 10px;
+          z-index: 1000;
+          .m-icon-one{
+            position: relative;
+            margin: 0 10px;
+          }
+          img{
+            display: block;
+            width: 32px;
+            height: 32px;
+
+          }
+        }
+      }
+    }
     .m-row{
       display: flex;
       flex-flow: row;
@@ -662,43 +722,6 @@
       align-items: center;
       margin-bottom: 20px;
       padding-right: 40px;
-      .m-add-cut{
-        display: flex;
-        flex-flow: row;
-        justify-content: flex-start;
-        align-items: center;
-        /*margin-left: 30px;*/
-        .m-icon{
-          display: block;
-          width: 32px;
-          height: 32px;
-        }
-        .m-add{
-          position: relative;
-          margin-right: 30px;
-          .m-edit-icon{
-            background-color: #eee;
-            position: absolute;
-            bottom: -42px;
-            left: -50%;
-            display: flex;
-            flex-flow: row;
-            align-items: center;
-            justify-content: flex-end;
-            border-radius: 10px;
-            .m-icon-one{
-              position: relative;
-              margin: 0 10px;
-            }
-            img{
-              display: block;
-              width: 32px;
-              height: 32px;
-
-            }
-          }
-        }
-      }
     }
     .m-textarea{
       display: block;
