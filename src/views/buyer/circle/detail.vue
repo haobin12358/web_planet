@@ -675,7 +675,7 @@
       margin-bottom: 20px;
       color: #666666;
       width: 650px;
-      text-indent: 2em;
+      /*text-indent: 2em;*/
       word-wrap: break-word;
       font-size: 28px;
     }

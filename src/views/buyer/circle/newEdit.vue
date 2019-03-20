@@ -20,7 +20,7 @@
 
       <div class="m-edit-content" >
         <div  class="m-add-cut" style="margin-bottom: 20px;">
-          <span style="margin-right: 20px;">请添加文章内容</span>
+          <span style="margin-right: 20px;">编辑内容：</span>
           <div class="m-add">
             <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon('show_add')">
             <div class="m-edit-icon" v-if="show_add">
@@ -42,8 +42,8 @@
             </div>
           </div>
           <div class="m-selectBack-img-box" v-if="item.type == 'video'">
-            <div class="img-box" v-if="item.content.nvthum">
-              <img class="circle-img" :src="item.content.nvthum" alt="">
+            <div class="img-box" v-if="item.content.thumbnail">
+              <img class="circle-img" :src="item.content.thumbnail" alt="">
               <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteVideo(index)">
             </div>
             <div class="m-selectBack-video" v-else>
@@ -285,9 +285,9 @@
         axios.post(api.upload_file+'?type=video&token='+localStorage.getItem('token'),form).then(res => {
           if(res.data.status == 200){
             let video = {
-              nvurl : res.data.data,
-              nvthum  : window.location.origin + res.data.video_thum,
-              nvdur : res.data.video_dur,
+              video : res.data.data,
+              thumbnail  : window.location.origin + res.data.video_thum,
+              duration : res.data.video_dur,
             }
             reader.readAsDataURL(files[0]);
             reader.onload = function(e) {
@@ -348,11 +348,17 @@
         //   Toast("内容字数不可操作10000");
         //   return false;
         // }
-        console.log(this.edit_data)
+        let text = [];
+        for(let i=0;i<this.edit_data.length;i++){
+          text[i] ={
+            type:this.edit_data[i].type,
+            content:this.edit_data[i].content
+          }
+        }
         let params = {
           items: this.circleList,
           netitle: this.title,
-          netext: this.content,
+          netext: text,
           images: this.upload_img,
           video: this.video,
           source: "h5",
@@ -509,10 +515,11 @@
       padding: 40px 0 0 0;
     }
     .m-one{
-      border-radius: 30px;
-      border: 1px solid #999;
-      margin: 0 50px 40px 50px;
-      padding: 11px 30px 11px 30px;
+      /*border-radius: 30px;*/
+      /*border: 1px solid #999;*/
+      /*margin: 0 50px 40px 50px;*/
+      padding: 31px 50px 31px 50px;
+      border-bottom: 1px solid #eee;
     }
     .m-select{
       /*width: 284px;*/
@@ -679,8 +686,8 @@
     }
   }
   .m-edit-content{
-    min-height: 400px;
-    margin: 0 50px;
+    min-height: 700px;
+    margin: 20px 50px;
     .m-add-cut{
       display: flex;
       flex-flow: row;
@@ -689,8 +696,8 @@
       /*margin-left: 30px;*/
       .m-icon{
         display: block;
-        width: 32px;
-        height: 32px;
+        width: 50px;
+        height: 50px;
       }
       .m-add{
         position: relative;
@@ -698,7 +705,7 @@
         .m-edit-icon{
           background-color: #eee;
           position: absolute;
-          bottom: -42px;
+          bottom: -52px;
           left: -50%;
           display: flex;
           flex-flow: row;
@@ -712,8 +719,8 @@
           }
           img{
             display: block;
-            width: 32px;
-            height: 32px;
+            width: 50px;
+            height: 50px;
 
           }
         }
@@ -735,8 +742,9 @@
       height: auto;
       color: #999;
       padding-top: 20px  ;
+      min-height: 300px;
       &.m-last{
-        /*min-height: 580px;*/
+        min-height: 300px;
       }
 
     }

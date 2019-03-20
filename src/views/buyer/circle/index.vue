@@ -7,7 +7,7 @@
           <span class="m-icon-search"></span>
           <span class="m-search-text">圈子搜索</span>
         </div>
-        <span class="m-icon-upload" @click="changeRoute('/circle/editCircle')"></span>
+        <span class="m-icon-upload" @click="changeRoute('/circle/newEdit')"></span>
       </div>
       <div class="m-circle-content">
         <nav-list :navlist="nav_list" :isScroll="true" :is-get="true" @navClick="navClick"></nav-list>
