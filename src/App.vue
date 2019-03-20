@@ -51,7 +51,7 @@ export default {
   },
   computed:{
     key(){
-      return this.$route.path + Math.random()
+      return this.$route.path + Math.random();
     }
   },
   created() {
