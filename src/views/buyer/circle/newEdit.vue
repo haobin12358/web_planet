@@ -25,14 +25,14 @@
             <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon('show_add')">
             <div class="m-edit-icon" v-if="show_add">
               <div class="m-icon-one" @click.stop="addRow(-1,'text')"><img src="/static/images/icon-up-text.png" alt=""></div>
-              <div class="m-icon-one" @click.stop="addRow(-1,'picture')"><img src="/static/images/icon-up-img.png" alt=""></div>
+              <div class="m-icon-one" @click.stop="addRow(-1,'image')"><img src="/static/images/icon-up-img.png" alt=""></div>
               <div class="m-icon-one" v-if="show_video" @click.stop="addRow(-1,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
             </div>
           </div>
         </div>
         <div class="m-row" v-for="(item,index) in edit_data">
-          <textarea :id="forId(index)" class="m-textarea" placeholder="请输入内容..." :class="index == edit_data.length -1?'m-last':''" v-model="item.content" v-if="item.type == 'text'" :autofocus="index == edit_data.length -1"></textarea>
-          <div class="m-selectBack-img-box" v-if="item.type == 'picture'">
+          <textarea  :id="forId(index)" class="m-textarea" placeholder="请输入内容..." :class="index == edit_data.length -1?'m-last':''" v-model="item.content" v-if="item.type == 'text'" ></textarea >
+          <div class="m-selectBack-img-box" v-if="item.type == 'image'">
             <div class="img-box" v-for="(i,j) in item.content">
               <img class="circle-img" :src="i" alt="" @click="previewImage(j,index, item.content)">
               <img class="del-img" src="/static/images/icon-close.png" alt="" @click="deleteImg(index,j)">
@@ -55,7 +55,7 @@
               <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon(index)">
               <div class="m-edit-icon" v-if="item.click">
                 <div class="m-icon-one" @click.stop="addRow(index,'text')"><img src="/static/images/icon-up-text.png" alt=""></div>
-                <div class="m-icon-one" @click.stop="addRow(index,'picture')"><img src="/static/images/icon-up-img.png" alt=""></div>
+                <div class="m-icon-one" @click.stop="addRow(index,'image')"><img src="/static/images/icon-up-img.png" alt=""></div>
                 <div class="m-icon-one" v-if="show_video" @click.stop="addRow(index,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
               </div>
             </div>
@@ -122,7 +122,6 @@
   import product from '../components/product'
   import couponCard from '../components/couponCard'
   import wxapi from '../../../common/js/mixins'
-
   export default {
     name: "edit-circle",
     data() {
@@ -246,7 +245,6 @@
         //   Toast('最多只可上传4张图片');
         //   return false;
         // }
-        console.log(e,index,j)
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
@@ -407,8 +405,9 @@
         switch (item){
           case 'text':
             _item.content = '';
+
             break;
-          case 'picture':
+          case 'image':
             _item.content = [];
             break;
           case 'video':
@@ -416,6 +415,8 @@
             break;
         }
         this.edit_data.splice(index+1,0,_item);
+        // let text = document.getElementById("textarea"+(index+1));
+        // this.autoTextarea(text);
       },
       //删除row
       cutType(index){
@@ -424,39 +425,42 @@
       forId:function(index){
         return "textarea" +index
       },
-      //文本框自动高度
       autoTextarea(elem, extra, maxHeight) {
         extra = extra || 0;
         var isFirefox = !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
           isOpera = !!window.opera && !!window.opera.toString().indexOf('Opera'),
-          addEvent = function(type, callback) {
+          addEvent = function (type, callback) {
             elem.addEventListener ?
               elem.addEventListener(type, callback, false) :
               elem.attachEvent('on' + type, callback);
           },
-          getStyle = elem.currentStyle ? function(name) {
+          getStyle = elem.currentStyle ? function (name) {
             var val = elem.currentStyle[name];
+
             if (name === 'height' && val.search(/px/i) !== 1) {
               var rect = elem.getBoundingClientRect();
               return rect.bottom - rect.top -
                 parseFloat(getStyle('paddingTop')) -
                 parseFloat(getStyle('paddingBottom')) + 'px';
-            };
+            }
             return val;
-          } : function(name) {
+          } : function (name) {
             return getComputedStyle(elem, null)[name];
           },
           minHeight = parseFloat(getStyle('height'));
+
         elem.style.resize = 'none';
-        var change = function() {
+
+        var change = function () {
           var scrollTop, height,
             padding = 0,
             style = elem.style;
           if (elem._length === elem.value.length) return;
           elem._length = elem.value.length;
+
           if (!isFirefox && !isOpera) {
             padding = parseInt(getStyle('paddingTop')) + parseInt(getStyle('paddingBottom'));
-          };
+          }
           scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
           elem.style.height = minHeight + 'px';
           if (elem.scrollHeight > minHeight) {
@@ -466,13 +470,13 @@
             } else {
               height = elem.scrollHeight - padding;
               style.overflowY = 'hidden';
-            };
+            }
             style.height = height + extra + 'px';
             scrollTop += parseInt(style.height) - elem.currHeight;
             document.body.scrollTop = scrollTop;
             document.documentElement.scrollTop = scrollTop;
             elem.currHeight = parseInt(style.height);
-          };
+          }
         };
         addEvent('propertychange', change);
         addEvent('input', change);

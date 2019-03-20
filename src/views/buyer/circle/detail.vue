@@ -8,20 +8,24 @@
         <div class="m-author-name">{{news_info.author.usname}}</div>
         <div>{{news_info.createtime}}</div>
       </div>
-      <template v-if="news_info.image" v-for="(item,index) in news_info.image">
-        <img class="m-circle-img" :src="item.niimage" @click="previewImage(index, news_info.image)">
-      </template>
+
       <div class="m-content">
-        <p>{{news_info.netext}}</p>
-        <div class="m-video-box" v-if="news_info.video" v-on:click="playVideo()">
-          <!--<img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">-->
-          <div class="m-img-box">
-            <img :src="news_info.video.nvthumbnail" class="m-img">
+        <template v-for="(item,index) in news_info.netext">
+          <p v-if="item.type=='text'">{{item.content}}</p>
+          <template v-if="item.type == 'image'" v-for="(i,j) in item.content">
+            <img class="m-circle-img" :src="i" @click="previewImage(i, item.content)">
+          </template>
+          <div class="m-video-box" v-if="item.type == 'video'" v-on:click="playVideo()">
+            <!--<img :src="news_info.video.nvthumbnail" class="m-video-img" alt="">-->
+            <div class="m-img-box">
+              <img :src="item.content.thumbnail" class="m-img">
+            </div>
+            <video :src="item.content.video" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
+            <span class="m-video-time">{{item.content.duration}}</span>
+            <span class="m-icon-video"></span>
           </div>
-          <video :src="news_info.video.nvvideo" id="videoPlay" v-show="false">您的浏览器不支持 video 视频播放</video>
-          <span class="m-video-time">{{news_info.video.nvduration}}</span>
-          <span class="m-icon-video"></span>
-        </div>
+        </template>
+
         <div class="m-more-link" >
           <span @click.stop="lookMore">查看更多></span>
         </div>
@@ -601,23 +605,24 @@
   }
   .m-circle-img{
     display: block;
-    width: 750px;
+    width: 640px;
     max-height: 100%;
-    background-color: #9fd0bf;
-    /*margin: 14px 0 30px ;*/
+    /*background-color: #9fd0bf;*/
+    margin: 20px 0 20px ;
   }
   .m-content{
     padding: 46px 46px 150px 46px;
     text-align: left;
     .m-video-box{
       position: relative;
+      margin: 20px 0;
       .m-img-box {
-        width: 700px;
+        width: 640px;
         height: 360px;
         position: relative;
         background-color: #ffffff;
         .m-img {
-          max-width: 700px;
+          width: 640px;
           max-height: 360px;
           position: absolute;
           top: 0;
