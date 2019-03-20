@@ -8,9 +8,9 @@
 <template>
   <div id="app" >
     <keep-alive>
-      <router-view v-if="isRouterAlive && $route.meta.keepAlive"></router-view>
+      <router-view :key="key" v-if="isRouterAlive && $route.meta.keepAlive"></router-view>
     </keep-alive>
-    <router-view v-if="isRouterAlive && !$route.meta.keepAlive"></router-view>
+    <router-view :key="key" v-if="isRouterAlive && !$route.meta.keepAlive"></router-view>
     <div class="m-login-modal" v-if="$store.state.show_login" >
       <div class="m-modal-state">
         <h3 class="m-modal-head">微信登录</h3>
@@ -49,6 +49,11 @@ export default {
       isRouterAlive:true
     }
   },
+  computed:{
+    key(){
+      return this.$route.path + Math.random()
+    }
+  },
   created() {
     // this.$router.beforeEach((to, from, next) => {
     //   setTimeout(function () {
@@ -56,6 +61,9 @@ export default {
     //   }, 500);
     // });
     // 将邀请人的usid保存，等注册的时候使用
+    if((location.href.indexOf('editInput') > 0 && localStorage.getItem('is_new'))){
+      this.$store.state.show_login = false;
+    }
     if(!localStorage.getItem('token')) {
       if(location.href.indexOf('secret_usid') > 0) {
         localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1])
@@ -129,7 +137,7 @@ export default {
     // let token = 'eyJhbGciOiJIUzI1NiIsImlhdCI6MTU1MTUwNDk0NywiZXhwIjoxNTUyMTA5NzQ3fQ.eyJ1c2VybmFtZSI6Ilx1NTNlYVx1NjYyZlx1NmNhMVx1NjcwOVx1NTk4Mlx1Njc5YyIsImlkIjoiMjczNDU1ODItM2MwYS0xMWU5LWE0ZjYtMDAxNjNlMTNhM2UzIiwibW9kZWwiOiJVc2VyIiwibGV2ZWwiOjF9.4JXjxmYNjqu95XVoLb17bzyzbS3bpswRGpBZOsEXmGA';
     // localStorage.setItem('token', token);
     localStorage.setItem('toLogin', '');
-    if(localStorage.getItem('token') && localStorage.getItem('is_new')){
+    if(localStorage.getItem('token') || (location.href.indexOf('editInput') > 0 && localStorage.getItem('is_new'))){
       this.$store.state.show_login = false;
     }else{
       if(this.isWeiXin()){    //是来自微信内置浏览器

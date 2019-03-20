@@ -80,6 +80,7 @@
     mounted() {
       this.from = this.$route.query.from;
       if(this.from == 'new') {
+        this.$store.state.show_login = false;
         common.changeTitle('绑定账号');
         if(localStorage.getItem('ustelphone')) {
           this.ustelphone = localStorage.getItem('ustelphone');
