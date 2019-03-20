@@ -247,7 +247,7 @@
       },
       // 添加资讯
       addCircle() {
-        this.$router.push('/circle/editCircle');
+        this.$router.push('/circle/newEdit');
       },
       sizeChange(val) {
         this.page_num = 1;

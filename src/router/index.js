@@ -205,6 +205,12 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/circle/editCircle'),
         meta: {title: '资讯编辑', noCache: false, roles: level1}
+      },{
+        path: 'newEdit',
+        name: 'newEdit',
+        hidden: true,
+        component: () => import('src/views/circle/newEdit'),
+        meta: {title: '资讯编辑', noCache: false, roles: level1}
       }
     ]
   },

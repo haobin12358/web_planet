@@ -31,46 +31,73 @@
           <el-form-item label="资讯标题" prop="netitle">
             <el-input v-model="circleForm.netitle"></el-input>
           </el-form-item>
-          <el-form-item label="资讯正文" prop="netext">
-            <el-input v-model.trim="circleForm.netext" type="textarea"
-                      :autosize="{ minRows: 4, maxRows: 18}" maxlength="10000"></el-input>
-            <span>{{circleForm.netext.length}}/10000</span>
-          </el-form-item>
-          <el-form-item label="图片(最多4张)" prop="images">
-            <el-upload
-              class="swiper-uploader"
-              :action="uploadUrl"
-              accept="image/*"
-              list-type="picture-card"
-              :file-list="imagesUrl"
-              :on-preview="handlePictureCardPreview"
-              :before-upload="beforeImgUpload"
-              :on-remove="handleImagesRemove"
-              :http-request="uploadImages"
-              :limit="4"
-              :multiple="true">
-              <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">
-                <span>可多选，最多4张，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待</span>
-                <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
+          <el-form-item label="资讯正文" >
+            <div  class="m-add-cut" style="margin-bottom: 20px;">
+              <div class="m-add">
+                <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon('show_add')">
+                <div class="m-edit-icon" v-if="show_add">
+                  <div class="m-icon-one" @click.stop="addRow(-1,'text')"><img src="/static/images/icon-up-text.png" alt=""></div>
+                  <div class="m-icon-one" @click.stop="addRow(-1,'image')"><img src="/static/images/icon-up-img.png" alt=""></div>
+                  <div class="m-icon-one" v-if="show_video" @click.stop="addRow(-1,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
+                </div>
               </div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="视频" prop="video">
-            <el-upload
-              class="avatar-uploader"
-              :action="uploadVideo"
-              :show-file-list="false"
-              accept="video/*"
-              :on-success="handleVideoSuccess"
-              :before-upload="beforeVideoUpload">
-              <img v-if="video.video_thum" v-lazy="video.video_thum" class="avatar circle-main-img">
-              <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
-              <div slot="tip" class="el-upload__tip">
-                建议为750 * 360，大小不要超过20M，上传成功后会显示，上传文件较大时请耐心等待
+            </div>
+            <div  class="m-row" v-for="(item,index) in circleForm.netext">
+              <el-input v-model.trim="item.content"  v-if="item.type == 'text'" type="textarea"
+                        :autosize="{ minRows: 4, maxRows: 14}" maxlength="10000" style="margin: 20px 0;"></el-input>
+              <el-upload
+                v-if="item.type == 'image'"
+                data-index="1"
+                class="swiper-uploader"
+                :action="uploadUrl"
+                accept="image/*"
+                list-type="picture-card"
+                :file-list="item.content"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeImgUpload"
+                :on-remove="handleImagesRemove"
+                :http-request="uploadImages"
+                :on-success="handleSkuPicSuccess"
+                @click.native="setSkuPicIndex(index)"
+                :limit="4"
+                :multiple="true">
+                <i class="el-icon-plus"></i>
+                <div slot="tip" class="el-upload__tip">
+                  <span>上传图片,可多选，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待</span>
+                  <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="item.content"></imgs-drag-sort>
+                </div>
+              </el-upload>
+              <el-upload
+                v-if="item.type == 'video'"
+                class="avatar-uploader"
+                :action="uploadVideo"
+                :show-file-list="false"
+                accept="video/*"
+                :on-success="handleVideoSuccess"
+                :before-upload="beforeVideoUpload">
+                <img v-if="item.content.thumbnail" v-lazy="item.content.thumbnail" class="avatar circle-main-img">
+                <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
+                <div slot="tip" class="el-upload__tip">
+                  上传视频，建议为750 * 360，大小不要超过20M，上传成功后会显示，上传文件较大时请耐心等待
+                </div>
+              </el-upload>
+              <div class="m-add-cut">
+                <div class="m-add">
+                  <img src="/static/images/icon-add.png" class="m-icon" alt="" @click="showIcon(index)">
+                  <div class="m-edit-icon" v-if="item.click">
+                    <div class="m-icon-one" @click.stop="addRow(index,'text')"><img src="/static/images/icon-up-text.png" alt=""></div>
+                    <div class="m-icon-one" @click.stop="addRow(index,'image')"><img src="/static/images/icon-up-img.png" alt=""></div>
+                    <div class="m-icon-one" v-if="show_video" @click.stop="addRow(index,'video')"><img src="/static/images/icon-up-video.png" alt=""></div>
+                  </div>
+                </div>
+                <div class="m-cut" >
+                  <img src="/static/images/icon-cut-sku.png" class="m-icon" alt="" @click="cutType(index)">
+                </div>
               </div>
-            </el-upload>
+            </div>
           </el-form-item>
+
+
           <el-form-item label="推荐到轮播图">
             <el-switch v-if="circleForm.nemainpic" v-model="isrecommend" :disabled="!circleForm.nemainpic"
                        active-color="#409EFF" inactive-color="#DBDCDC"></el-switch>
@@ -176,7 +203,7 @@
           neid: "",
           items: [],
           netitle: '',
-          netext: '',
+          netext: [],
           nemainpic: '',
           video: {},
           images: [],
@@ -192,10 +219,6 @@
           netitle: [
             { required: true, message: '资讯标题必填', trigger: 'blur' },
             { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
-          ],
-          netext: [
-            { required: true, message: '资讯正文必填', trigger: 'blur' },
-            { min: 1, max: 10000, message: '长度在 1 到 10000 个字符', trigger: 'blur' }
           ]
         },
         dialogVisible: false,
@@ -204,7 +227,10 @@
         page_num: 1,
         page_size: 10,
         total: 0,
-        kw: ''
+        kw: '',
+        uploadSkuImgIndex:0,
+        show_video:true,
+        show_add :false
       }
     },
     computed: {
@@ -302,6 +328,7 @@
           noLoading: true, params: { ittype: 10 }}).then(res => {
           if (res.data.status == 200) {
             this.itemsList = res.data.data;
+            console.log(this.itemsList)
           }
         })
       },
@@ -373,6 +400,23 @@
       // 视频上传
       handleVideoSuccess(res, file) {
         this.video = res;
+        console.log(res)
+        for(let i=0;i<this.circleForm.netext.length;i++){
+          if(this.circleForm.netext[i].type == 'video'){
+            this.circleForm.netext[i].content = {
+              video:res.data,
+              duration: res.video_dur,
+              thumbnail:res.video_thum
+            };
+          }
+        }
+      },
+      //  强行配合el-upload 下策
+      setSkuPicIndex(index) {
+        this.uploadSkuImgIndex = index;
+      },
+      handleSkuPicSuccess(res, file) {
+        this.circleForm.netext[this.uploadSkuImgIndex].content = res.data;
       },
       // 多图上传
       uploadImages(file) {
@@ -382,6 +426,7 @@
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
           res => {
             if (res.data.status == 200) {
+              console.log(file)
               this.imagesUrl.push({
                 name: file.file.name,
                 url: res.data.data
@@ -449,6 +494,26 @@
             }else {
               this.circleForm.neisrecommend = 0
             }
+            if(this.circleForm.netext.length < 1 ) {
+              this.$notify({
+                title: `提示`,
+                message: `请添加文章内容`,
+                type: 'warning'
+              });
+              return false;
+            }else if( this.circleForm.netext.length == 1 &&(this.circleForm.netext[this.circleForm.netext.length-1].content == '' || this.circleForm.netext[this.circleForm.netext.length-1].content.length ==0 || !this.circleForm.netext[this.circleForm.netext.length-1].content.video) ){
+              this.$notify({
+                title: `提示`,
+                message: `请添加文章内容`,
+                type: 'warning'
+              });
+              return false;
+            }
+            //处理正文
+            for(let i=0;i<this.circleForm.netext.length;i++){
+              delete  this.circleForm.netext[i].content.click
+            }
+
             if(this.circleForm.neid) {
               let title = '编辑';
               this.$http.post(this.$api.update_news, this.circleForm).then(res => {
@@ -493,7 +558,7 @@
           neid: "",
           items: [],
           netitle: '',
-          netext: '',
+          netext: [],
           nemainpic: '',
           video: {},
           images: [],
@@ -503,7 +568,50 @@
           source: 'web'
         };
         this.$refs.circleFormRef.resetFields();
-      }
+      },
+      //点击添加
+      showIcon(index){
+        this.show_video = true;
+        for(let i=0;i<this.circleForm.netext.length;i++){
+          if(this.circleForm.netext[i].type == 'video' && this.circleForm.netext[i].content != {} ){
+            this.show_video = false;
+          }
+        }
+        if(index == 'show_add'){
+          this.show_add = !this.show_add;
+          return false;
+        }
+        this.circleForm.netext[index].click = !this.circleForm.netext[index].click
+      },
+      //点击icon
+      addRow(index,item){
+        if(index == -1){
+          this.show_add = false;
+        }else{
+          this.circleForm.netext[index].click = false;
+        }
+        let _item = {
+          type:item,
+          content:null,
+          click:false
+        };
+        switch (item){
+          case 'text':
+            _item.content = '';
+            break;
+          case 'image':
+            _item.content = [];
+            break;
+          case 'video':
+            _item.content = {};
+            break;
+        }
+        this.circleForm.netext.splice(index+1,0,_item);
+      },
+      //删除row
+      cutType(index){
+        this.circleForm.netext.splice(index,1);
+      },
     }
   }
 </script>
@@ -525,5 +633,52 @@
       right: 6rem;
       bottom: 10rem;
     }
+    .m-add-cut{
+      display: flex;
+      flex-flow: row;
+      justify-content: flex-start;
+      align-items: center;
+      margin-left: 30px;
+      .m-icon{
+        display: block;
+        width: 32px;
+        height: 32px;
+      }
+      .m-add{
+        position: relative;
+        margin-right: 30px;
+        .m-edit-icon{
+          background-color: #eee;
+          position: absolute;
+          bottom: -42px;
+          left: -50%;
+          display: flex;
+          flex-flow: row;
+          align-items: center;
+          justify-content: flex-end;
+          border-radius: 10px;
+          .m-icon-one{
+            position: relative;
+            margin: 0 10px;
+          }
+          img{
+            display: block;
+            width: 32px;
+            height: 32px;
+
+          }
+        }
+      }
+    }
+    .m-row{
+      display: flex;
+      flex-flow: row;
+      justify-content: flex-start;
+      align-items: center;
+      /*margin-bottom: 20px;*/
+      /*padding-right: 40px;*/
+
+    }
   }
+
 </style>

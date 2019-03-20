@@ -57,18 +57,22 @@
             <div class="m-author-name">{{news_info.author.usname}}</div>
             <div>{{news_info.createtime}}</div>
           </div>
-          <template v-if="news_info.image" v-for="item in news_info.image">
-            <img class="m-circle-img" :src="item.niimage">
-          </template>
+
           <div class="m-content">
-            <p>{{news_info.netext}}</p>
-            <div class="m-video-box" v-if="news_info.video" @click="videoVisible = true">
-              <div class="m-img-box">
-                <img :src="news_info.video.nvthumbnail" class="m-img">
+            <template v-for="(item,index) in news_info.netext">
+              <p v-if="item.type =='text'">{{item.content}}</p>
+              <template v-if="item.type=='image'" v-for="i in item.content">
+                <img class="m-circle-img" :src="i">
+              </template>
+              <div class="m-video-box" v-if="item.type == 'video'" @click="videoVisible = true">
+                <div class="m-img-box">
+                  <img :src="item.content.thumbnail" class="m-img">
+                </div>
+                <span class="m-video-time">{{item.content.duration}}</span>
+                <span class="m-icon-video"></span>
               </div>
-              <span class="m-video-time">{{news_info.video.nvduration}}</span>
-              <span class="m-icon-video"></span>
-            </div>
+            </template>
+
           </div>
         </div>
         <!--<div class="m-circle-foot" v-if="news_info">
