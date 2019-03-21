@@ -45,7 +45,7 @@ import animate from 'animate.css'
 Vue.prototype.$http = axios;
 //拦截器、
 // import { Loading, Message, MessageBox  } from 'element-ui'
-import { Indicator,Toast} from 'mint-ui';
+import { Indicator,Toast,MessageBox} from 'mint-ui';
 // 超时时间
 axios.defaults.timeout = 60000;
 
@@ -175,6 +175,22 @@ Vue.filter('money', function(val) {
 
   return (((sign)?'':'-') + val + '.' + cents);
 });
+
+router.beforeEach((to,from,next) => {
+  if(localStorage.getItem('version') && localStorage.getItem('version') != store.state.version){
+    MessageBox.confirm('检测到系统更新，为了更好的体验，请先清除缓存').then(() => {
+      localStorage.clear();
+
+      // this.$store.state.show_login = true;
+      // this.$router.go(0);
+    }).catch(() => {
+
+    });
+  }else{
+    localStorage.setItem('version',store.state.version)
+  }
+  next();
+})
 
 /* eslint-disable no-new */
 new Vue({
