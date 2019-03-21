@@ -300,6 +300,7 @@
       handleClick(key, keyPath) {
         this.activeName = key;
         this.expandAll = false;
+        this.currentPage = 1;
         this.setOrderList();
       },
 
