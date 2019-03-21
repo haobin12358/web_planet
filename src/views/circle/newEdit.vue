@@ -290,12 +290,18 @@
                 }
               }
               // 处理图片
-              if(res.data.data.image) {
-                this.imagesUrl = [];
-                for(let i in res.data.data.image) {
-                  this.imagesUrl.push({ url: res.data.data.image[i].niimage })
+              let arr = [].concat(res.data.data.netext);
+              for(let i=0;i<res.data.data.netext.length;i++){
+                arr[i].click = false;
+                if(arr[i].type == 'image'){
+                  let _arr = [];
+                  for(let j of arr[i].content) {
+                    _arr.push({ url: j })
+                  }
+                  arr[i].content = [].concat(_arr);
                 }
               }
+              this.circleForm.netext = [].concat(arr);
               // 处理视频
               if(res.data.data.video) {
                 this.video.video_thum = res.data.data.video.nvthumbnail;
@@ -366,13 +372,24 @@
             this.productLoading = false;
             // 将已选择的商品勾选上
             if(this.productList.length) {
-              for(let i in this.productsList) {
-                for(let j in this.productList) {
-                  if(this.productList[j].prid == this.productsList[i].prid) {
-                    this.$refs.productList.toggleRowSelection(this.productsList[j])
+              for(let j in this.productsList ){
+                let i=0;
+                for(let a in this.productList){
+                  if(this.productsList[j].prid == this.productList[a].prid){
+                    i++;
                   }
                 }
+                if(i ==1){
+                  this.$refs.productList.toggleRowSelection(this.productsList[j])
+                }
               }
+              // for(let i in this.productsList) {
+              //   for(let j in this.productList) {
+              //     if(this.productList[j].prid == this.productsList[i].prid) {
+              //       this.$refs.productList.toggleRowSelection(this.productsList[j])
+              //     }
+              //   }
+              // }
             }
           }
         })
@@ -387,12 +404,24 @@
       },
       // 确认选中的商品
       chooseProduct() {
-        this.productList = this.productTempList;
+        let arr = [];
+        for(let j in this.productTempList ){
+          let i=0;
+          for(let a in arr){
+            if(arr[a].prid != this.productTempList[j].prid){
+              i++;
+            }
+          }
+          if(i == arr.length){
+            arr.push(this.productTempList[j])
+          }
+        }
+        this.productList = arr;
         this.productDialog = false;
       },
       // 选择的商品在变化
       handleSelectionChange(val) {
-        this.productTempList = val;
+        this.productTempList = Array.from(new Set(val));
       },
       // 主图上传
       handleMainPicSuccess(res, file) {
@@ -487,7 +516,7 @@
       },
       // 移除多图中的一张
       handleImagesRemove(file, fileList) {
-        this.imagesUrl = this.imagesUrl.filter(
+        this.circleForm.netext[this.uploadSkuImgIndex].content = this.circleForm.netext[this.uploadSkuImgIndex].content.filter(
           item => item.uid != file.uid
         )
       },
@@ -516,6 +545,8 @@
               for(let product of this.productList) {
                 this.circleForm.product.push(product.prid)
               }
+            }else{
+              this.circleForm.product = [];
             }
             // 处理是否推荐
             if(this.isrecommend) {
@@ -523,7 +554,6 @@
             }else {
               this.circleForm.neisrecommend = 0
             }
-            console.log(this.circleForm.netext)
             if(this.circleForm.netext.length < 1 ) {
               this.$notify({
                 title: `提示`,
@@ -547,17 +577,28 @@
                 });
                 return false;
               }
-
             }
             //处理正文
             for(let i=0;i<this.circleForm.netext.length;i++){
               delete  this.circleForm.netext[i].click;
               if(this.circleForm.netext[i].type == 'image'){
-                let arr = [];
-                for(let j=0;j<this.circleForm.netext[i].content.length;j++){
-                  arr.push(this.circleForm.netext[i].content[j].url)
+                if(this.circleForm.netext[i].content.length >0){
+                  let arr = [];
+                  for(let j=0;j<this.circleForm.netext[i].content.length;j++){
+                    arr.push(this.circleForm.netext[i].content[j].url)
+                  }
+                  this.circleForm.netext[i].content = [].concat(arr);
+                }else{
+                  this.circleForm.netext.splice(i,1)
                 }
-                this.circleForm.netext[i].content = [].concat(arr);
+              }else if(this.circleForm.netext[i].type == 'text'){
+                if(this.circleForm.netext[i].content == ''){
+                  this.circleForm.netext.splice(i,1)
+                }
+              }else if(this.circleForm.netext[i].type == 'video'){
+                if(!this.circleForm.netext[i].content.video){
+                  this.circleForm.netext.splice(i,1)
+                }
               }
             }
 
@@ -628,7 +669,8 @@
           this.show_add = !this.show_add;
           return false;
         }
-        this.circleForm.netext[index].click = !this.circleForm.netext[index].click
+        this.circleForm.netext[index].click = !this.circleForm.netext[index].click;
+        this.circleForm.netext = [].concat(this.circleForm.netext)
       },
       //点击icon
       addRow(index,item){

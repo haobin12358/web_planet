@@ -273,6 +273,8 @@
               if(res.data.data.video) {
                 this.video.video_thum = res.data.data.video.nvthumbnail;
               }
+
+
               // 处理是否推荐到轮播图
               if(res.data.data.neisrecommend) {
                 this.isrecommend = true

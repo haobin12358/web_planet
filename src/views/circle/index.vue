@@ -260,7 +260,7 @@
       },
       // 编辑资讯
       editCircle(scope) {
-        this.$router.push({path: '/circle/editCircle', query: {neid: scope.row.neid}})
+        this.$router.push({path: '/circle/newEdit', query: {neid: scope.row.neid}})
       },
       // 下架资讯
       downCircle(scope) {
