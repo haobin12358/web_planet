@@ -88,9 +88,9 @@
     }
     .m-integral-top-img{
       display: inline-block;
-      width: 91px;
-      height: 91px;
-      background: url("/static/images/icon-integral-mark.png");
+      width: 71px;
+      height: 71px;
+      background: url("/static/images/icon-integral.png");
       background-size: 100% 100%;
       margin: 0 40px 0 63px;
       vertical-align: middle;

@@ -1,19 +1,72 @@
 <template>
   <div class="m-storekeeper">
     <!--顶部图片-->
-    <img class="m-storekeeper-bg" src="/static/images/icon-integral-bg.png" alt="">
+    <img class="m-storekeeper-bg" src="/static/images/icon-integral-bg-new.png" alt="">
     <!--顶部文字-->
-    <div class="m-total-earnings">累计收益 : ￥{{user.uc_count | money}}</div>
-    <div class="m-balance">可提现余额 : ￥{{Number(user.usbalance).toFixed(2)}}</div>
-    <div class="m-balance-two">提现中金额 : ￥{{Number(ustotal).toFixed(2)}}</div>
-    <div class="m-month-earnings">本月收益<span class="m-month-earnings-text">{{user.mounth_count | money}}</span>元</div>
-    <div class="m-total-jump-box m-earnings-detail">
-      <div class="m-earnings-out m-text-bottom" @click="outPopup = true">提现</div>
-      <div class="m-detail-box" @click="changeRoute('/storekeeper/incomeDetail')">
+    <div class="m-top-box">
+      <h3 class="m-title">本月收益</h3>
+      <p class="m-num-box"><span>￥</span><span class="m-num">{{user.mounth_count}}</span></p>
+      <div class="m-detail-more" @click="changeRoute('/storekeeper/incomeDetail')">
         <div class="m-text-bottom">收益详情</div>
-        <img class="m-jump-img" src="/static/images/icon-more-black.png">
+        <img class="m-jump-img" src="/static/images/icon-more.png">
       </div>
     </div>
+    <div class="m-detail-box">
+      <ul>
+        <li>
+          <p class="m-num">¥{{num_box.usexpect}}</p>
+          <p>预计账户收益</p>
+        </li>
+        <li>
+          <p class="m-num">¥{{num_box.ustotal}}</p>
+          <p>累计收益</p>
+        </li>
+        <li>
+          <p class="m-num">¥{{num_box.uscash}}</p>
+          <p>可提现余额</p>
+        </li>
+        <li>
+          <p class="m-num">¥{{num_box.usbalance-num_box.uscash}}</p>
+          <p>提现中余额</p>
+        </li>
+        <li @click="changeRoute('/storekeeper/group')">
+          <p class="m-num">{{user.fens_count}}</p>
+          <p class="m-flex-center"><span>粉丝总数(人)</span> <img class="m-jump-img" src="/static/images/icon-more.png"></p>
+        </li>
+        <li @click="changeRoute('/storekeeper/group')">
+          <p class="m-num">{{user.fens_mouth_count}}</p>
+          <p class="m-flex-center"><span>新增粉丝(人)</span> <img class="m-jump-img" src="/static/images/icon-more.png"></p>
+        </li>
+      </ul>
+    </div>
+    <div class="m-store-icon-box">
+      <ul>
+        <li @click="changeRoute('/storekeeper/activationCode')">
+          <img src="/static/images/icon-store-car.png" alt="">
+          <p>购买激活码</p>
+        </li>
+        <li @click="changeRoute('/storekeeper/myActivationCode')">
+          <img src="/static/images/icon-store-person.png" alt="">
+          <p>我的激活码</p>
+        </li>
+        <li @click="changeRoute('/personal/codeHistory')">
+          <img src="/static/images/icon-store-record.png" alt="">
+          <p>购买激活码记录</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="m-store-btn-box">
+      <span class="m-btn" @click="outPopup = true">提现</span>
+      <span class="m-btn-a"  @click="changeRoute('/personal/history')">提现历史</span>
+    </div>
+    <!--<div class="m-total-jump-box m-earnings-detail">-->
+      <!--<div class="m-earnings-out m-text-bottom" @click="outPopup = true">提现</div>-->
+      <!--<div class="m-detail-box" @click="changeRoute('/storekeeper/incomeDetail')">-->
+        <!--<div class="m-text-bottom">收益详情</div>-->
+        <!--<img class="m-jump-img" src="/static/images/icon-more-black.png">-->
+      <!--</div>-->
+    <!--</div>-->
 
     <!--提现-->
     <div class="m-out-popup-box">
@@ -74,122 +127,6 @@
       </mt-popup>
     </div>
 
-    <!--我的订单-->
-    <!--<div class="m-border-radius m-my-order">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/orderManagement')">
-        <div class="m-jump-title">我的订单</div>
-        <div class="m-jump-text">订单管理</div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-    </div>-->
-    <!--我的商品-->
-    <!--<div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/productManagement')">
-        <div class="m-jump-title">我的商品</div>
-        <div class="m-jump-text">商品管理</div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-      &lt;!&ndash;商品展示&ndash;&gt;
-      <div class="m-most-product">最新发布</div>
-      <div class="m-product-box">
-        <div class="m-product-part" @click="changeRoute('/member/productDetail')">
-          <div class="m-part-left">
-            <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
-          </div>
-          <div class="m-part-right">
-            <div class="m-right-row">
-              <div class="m-product-name">哑铃</div>
-            </div>
-            <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
-            <div class="m-price-share">
-              <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-              <div class="m-share-text">分享</div>
-            </div>
-          </div>
-        </div>
-        &lt;!&ndash;暂无最新发布商品&ndash;&gt;
-        &lt;!&ndash;<img class="m-no-order-img" src="/static/images/icon-no-order.png" alt="">
-        <div class="m-no-order-text">暂无最新发布商品</div>&ndash;&gt;
-      </div>
-      &lt;!&ndash;商品展示&ndash;&gt;
-      <div class="m-most-product">最热商品</div>
-      <div class="m-product-box">
-        <div class="m-product-part" @click="changeRoute('/member/productDetail')">
-          <div class="m-part-left">
-            <img class="m-product-img" src="http://dummyimage.com/200x200" alt="">
-          </div>
-          <div class="m-part-right">
-            <div class="m-right-row">
-              <div class="m-product-name">哑铃</div>
-            </div>
-            <div class="m-product-description">商品描述活动描述商品描述活动描述商品描述活动描述商品描述活动描述商品</div>
-            <div class="m-price-share">
-              <div class="m-product-price">押金：<span class="m-price-time">3个月500元</span></div>
-              <img class="m-share-img" src="/static/images/icon-gray-share.png" alt="">
-              <div class="m-share-text">分享</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>-->
-    <!--我的活动-->
-    <!--<div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/activityManagement')">
-        <div class="m-jump-title">我的活动</div>
-        <div class="m-jump-text">活动管理</div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-      &lt;!&ndash;内容文字&ndash;&gt;
-      <div class="m-content-box">
-        <div class="m-content-text">正在参与活动：2</div>
-      </div>
-    </div>-->
-    <!--我的粉丝-->
-    <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/group')">
-        <div class="m-jump-title">我的团队</div>
-        <div class="m-jump-text"></div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-      <!--内容文字-->
-      <div class="m-content-box">
-        <div class="m-content-text">粉丝总数：{{user.fens_count}}</div>
-        <div class="m-content-text">本月新增：{{user.fens_mouth_count}}</div>
-      </div>
-    </div>
-    <!--购买邀请码-->
-    <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/activationCode')">
-        <div class="m-jump-title">购买激活码</div>
-        <div class="m-jump-text"></div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-    </div>
-    <!--我的邀请码-->
-    <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/storekeeper/myActivationCode')">
-        <div class="m-jump-title">我的激活码</div>
-        <div class="m-jump-text"></div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-    </div>
-    <!--激活码购买记录-->
-    <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/personal/codeHistory')">
-        <div class="m-jump-title">激活码购买记录</div>
-        <div class="m-jump-text"></div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-    </div>
-    <!--提现历史-->
-    <div class="m-border-radius">
-      <div class="m-total-jump-box" @click="changeRoute('/personal/history')">
-        <div class="m-jump-title">提现历史</div>
-        <div class="m-jump-text"></div>
-        <img class="m-jump-img" src="/static/images/icon-more.png" alt="">
-      </div>
-    </div>
     <!--toast-->
     <mt-popup class="m-toast-popup" popup-transition="popup-fade" v-model="toast">
       {{text}}
@@ -214,6 +151,7 @@
         bank: "",
         user: { uc_count: '', mounth_count: '', usbalance: '' },
         ustotal: '',
+        num_box:null,
         realName: '',
         bankName: '',
         bankResult: "",
@@ -450,7 +388,7 @@
         })
         axios.get(api.get_home + "?token=" + localStorage.getItem('token')).then(res => {
           if(res.data.status == 200){
-            this.ustotal = res.data.data.ustotal;
+            this.num_box = res.data.data;
           }
         })
       },
@@ -479,107 +417,108 @@
   }
   .m-storekeeper {
     min-height: 100vh;
-    background-color: #EEEEEE;
+    background-color: #fff;
     /*padding-bottom: 300px;*/
+    color: #707070;
+    padding-bottom: 50px;
     .m-storekeeper-bg {
       width: 750px;
-      height: 400px;
-      margin-bottom: 40px;
+      height: 420px;
     }
-    .m-total-earnings {
-      font-size: 24px;
+    .m-top-box{
+      width: 750px;
+      height: 365px;
       position: absolute;
-      top: 110px;
-      left: 60px;
-    }
-    .m-balance{
-      font-size: 24px;
-      position: absolute;
-      top: 110px;
-      right: 60px;
-    }
-    .m-balance-two {
-      font-size: 24px;
-      position: absolute;
-      top: 140px;
-      right: 60px;
-    }
-
-    .m-month-earnings {
-      font-size: 21px;
-      position: absolute;
-      top: 190px;
-      left: 110px;
-      .m-month-earnings-text {
-        font-size: 90px;
-        padding: 0 16px;
-      }
-    }
-    .m-border-radius {
-      width: 700px;
-      margin: 0 auto 30px auto;
-      border-radius: 20px;
-      background-color: #ffffff;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.16);
-      &:last-child {
-        margin-bottom: -100px;
-      }
-      .m-most-product {
-        font-size: 24px;
-        text-align: left;
-        margin: 0 0 20px 42px;
-      }
-      .m-product-box {
-        padding: 0 24px 0 42px;
-      }
-      .m-no-order-img {
-        width: 200px;
-        height: 200px;
-      }
-      .m-no-order-text {
-        font-size: 18px;
-        padding-bottom: 40px;
-      }
-    }
-    .m-total-jump-box {
+      top: 35px;
+      left:0;
       display: flex;
+      flex-flow: column;
       align-items: center;
       justify-content: space-between;
-      padding: 25px 25px 25px 50px;
-      .m-jump-title {
-        flex: 1;
+      .m-title{
+        color: #22A7D2;
         font-size: 28px;
-        font-weight: bold;
-        text-align: left;
       }
-      .m-jump-text {
-        font-size: 24px;
+      .m-num-box{
+        color: #fff;
+        .m-num{
+          font-size: 80px;
+        }
       }
-      .m-earnings-out {
-        /*flex: 1;*/
-        text-align: left;
-      }
-      .m-detail-box {
+      .m-detail-more {
         display: flex;
         align-items: center;
-      }
-      .m-text-bottom {
-        text-decoration: underline;
-      }
-      .m-jump-img {
-        width: 22px;
-        height: 22px;
-        margin-left: 5px;
-      }
-    }
-    .m-content-box {
-      display: flex;
-      padding: 0 25px 34px 50px;
-      justify-content: space-between;
-      .m-content-text {
+        color: #fff;
         font-size: 28px;
       }
     }
+
+    .m-detail-box{
+      padding: 0 50px ;
+      ul{
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        li{
+          width: 49%;
+          padding: 56px 0;
+          border-bottom: 1px solid #E9E9E9;
+          font-size: 24px;
+          &:nth-child(odd){
+            border-right: 1px solid #E9E9E9;
+          }
+          .m-num{
+            color: #22A7D2;
+            font-size: 40px;
+            margin-bottom: 15px;
+          }
+        }
+      }
+    }
+    .m-store-icon-box{
+      margin: 60px 0;
+      ul{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: space-around;
+        li{
+          text-align: center;
+          img{
+            display: inline-block;
+            width: 90px;
+            height: 90px;
+            margin-bottom: 20px;
+          }
+        }
+      }
+    }
+    .m-store-btn-box{
+      margin: 0 50px;
+      position: relative;
+      .m-btn{
+        display: inline-block;
+        width: 250px;
+        height: 60px;
+        border: 2px solid #22A7D2;
+        color: #22A7D2;
+        font-size: 28px;
+        border-radius: 45px;
+        line-height: 60px;
+      }
+      .m-btn-a{
+        position: absolute;
+        top: 10px;
+        right: 0;
+        margin-left: 82px;
+        color: #22A7D2;
+        text-decoration: underline;
+      }
+    }
+
+
     .m-out-popup-box {
       .m-out-popup {
         width: 700px;

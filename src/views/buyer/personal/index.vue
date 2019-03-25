@@ -107,7 +107,7 @@
           </div>
           <ul class="m-part-icon-ul m-use m-double">
             <li @click="changeRoute('/activityOrder')">
-              <img src="/static/images/activity/icon-activity.png" alt="">
+              <img src="/static/images/icon-activity-new.png" alt="">
               <span>活动订单</span>
             </li>
             <li @click="changeRoute('/personal/history')">
@@ -115,7 +115,7 @@
               <span>提现历史</span>
             </li>
             <li @click="goStore">
-              <img src="/static/images/icon-home.png"  alt="">
+              <img src="/static/images/icon-store-new.png"  alt="">
               <span>{{store}}</span>
             </li>
           </ul>
