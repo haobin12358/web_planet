@@ -1,5 +1,5 @@
 <template>
-    <div class="m-selected">
+    <div class="m-selected"  @touchmove="touchMove">
       <!--<mt-loadmore :top-method="loadTop" ref="loadmore">-->
         <!--搜索-->
         <div class="m-selected-search">
@@ -120,11 +120,6 @@
           </div>
           <div class="m-selected-hot m-flex-start" v-if="hot_list && hot_list.length>0">
             <img class="m-hot-sales" src="/static/images/hot_sales.png">
-            <!--<div class="m-hot-box">
-                <span class="m-hot">HOT!</span>
-                <span>人气热卖</span>
-            </div>-->
-
 
             <mt-swipe style="height: 100%;background: white;" :auto="3000" v-if="hot_list">
               <mt-swipe-item v-for="item in hot_list" :key="item.prid" @click.native.stop="productClick(item)">
@@ -132,102 +127,8 @@
               </mt-swipe-item>
             </mt-swipe>
 
-           <!-- <div class="m-one-product m-l" v-if="hot_list[0]" @click.stop="productClick(hot_list[0])">
-              <img :src="hot_list[0].prmainpic" class="m-one-product-img" alt="">
-              &lt;!&ndash;<div class="m-one-product-text">
-                <h3>【{{hot_list[0].brand.pbname}}】THE NORTH d </h3>
-                <p v-if="hot_list[0].prlineprice">￥{{hot_list[0].prlineprice | money}}</p>
-              </div>&ndash;&gt;
-            </div>
-            <div>
-              <div class="m-one-product " v-if="hot_list[1]" @click.stop="productClick(hot_list[1])">
-                <img :src="hot_list[1].prmainpic" class="m-one-product-img" alt="">
-                &lt;!&ndash;<div class="m-one-product-text">
-                  <h3>【{{hot_list[1].brand.pbname}}】THE NORTH d </h3>
-                  <p v-if="hot_list[1].prlineprice">￥{{hot_list[1].prlineprice | money}}</p>
-                </div>&ndash;&gt;
-              </div>
-              <div class="m-one-product " v-if="hot_list[2]" @click.stop="productClick(hot_list[2])">
-                <img :src="hot_list[2].prmainpic" class="m-one-product-img" alt="">
-                &lt;!&ndash;<div class="m-one-product-text">
-                  <h3>【{{hot_list[2].brand.pbname}}】THE NORTH d </h3>
-                  <p v-if="hot_list[2].prlineprice">￥{{hot_list[2].prlineprice | money}}</p>
-                </div>&ndash;&gt;
-              </div>
-            </div>-->
           </div>
         </div>
-        <!--活动专题-->
-        <!--<div class="m-selected-one">-->
-          <!--<h3 class="m-selected-title m-flex-start">-->
-            <!--<span>活动专题</span>-->
-          <!--</h3>-->
-          <!--<div class="m-one-activity m-top">-->
-            <!--<img src="" class="m-activity-img" alt="" @click="changeRoute('/activityDetail')">-->
-            <!--<ul class="m-activity-ul">-->
-              <!--<li>-->
-                <!--<img src="" class="m-one-activity-img" alt="">-->
-                <!--<div class="m-one-activity-text">-->
-                  <!--<h3>【北面】THE NORTH d </h3>-->
-                  <!--<p class="m-flex-between">-->
-                    <!--<span >￥950.00</span>-->
-                    <!--<s class="m-grey">￥950.00</s></p>-->
-                <!--</div>-->
-              <!--</li>-->
-              <!--<li>-->
-                <!--<img src="" class="m-one-activity-img" alt="">-->
-                <!--<div class="m-one-activity-text">-->
-                  <!--<h3>【北面】THE NORTH d </h3>-->
-                  <!--<p class="m-flex-between">-->
-                    <!--<span >￥950.00</span>-->
-                    <!--<s class="m-grey">￥950.00</s></p>-->
-                <!--</div>-->
-              <!--</li>-->
-              <!--<li>-->
-                <!--<img src="" class="m-one-activity-img" alt="">-->
-                <!--<div class="m-one-activity-text">-->
-                  <!--<h3>【北面】THE NORTH d </h3>-->
-                  <!--<p class="m-flex-between">-->
-                    <!--<span >￥950.00</span>-->
-                    <!--<s class="m-grey">￥950.00</s></p>-->
-                <!--</div>-->
-              <!--</li>-->
-            <!--</ul>-->
-          <!--</div>-->
-          <!--<div class="m-one-activity ">-->
-            <!--<img src="" class="m-activity-img" alt="">-->
-            <!--<ul class="m-activity-ul">-->
-              <!--<li>-->
-                <!--<img src="" class="m-one-activity-img" alt="">-->
-                <!--<div class="m-one-activity-text">-->
-                  <!--<h3>【北面】THE NORTH d </h3>-->
-                  <!--<p class="m-flex-between">-->
-                    <!--<span >￥950.00</span>-->
-                    <!--<s class="m-grey">￥950.00</s></p>-->
-                <!--</div>-->
-              <!--</li>-->
-              <!--<li>-->
-                <!--<img src="" class="m-one-activity-img" alt="">-->
-                <!--<div class="m-one-activity-text">-->
-                  <!--<h3>【北面】THE NORTH d </h3>-->
-                  <!--<p class="m-flex-between">-->
-                    <!--<span >￥950.00</span>-->
-                    <!--<s class="m-grey">￥950.00</s></p>-->
-                <!--</div>-->
-              <!--</li>-->
-              <!--<li>-->
-                <!--<img src="" class="m-one-activity-img" alt="">-->
-                <!--<div class="m-one-activity-text">-->
-                  <!--<h3>【北面】THE NORTH d </h3>-->
-                  <!--<p class="m-flex-between">-->
-                    <!--<span >￥950.00</span>-->
-                    <!--<s class="m-grey">￥950.00</s></p>-->
-                <!--</div>-->
-              <!--</li>-->
-            <!--</ul>-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--为您精选-->
         <div class="m-selected-one">
           <h3 class="m-selected-title m-flex-between">
             <span>为您精选</span>
@@ -238,6 +139,7 @@
           </h3>
           <product :list="recommend_for_you_list"></product>
         </div>
+      <bottom-line v-if="bottom_show"></bottom-line>
       <!--</mt-loadmore>-->
     </div>
 
@@ -250,6 +152,7 @@
   import api from '../../../api/api';
   import wxapi from '../../../common/js/mixins';
   import wx from 'weixin-js-sdk';
+  import bottomLine from '../../../components/common/bottomLine';
     export default {
       name: 'SelectedIndex',
       data() {
@@ -261,10 +164,17 @@
           scene_list:null,
           recommend_for_you_list: [],
           icon_list:null,
+          page_info:{
+            page_num :1,
+            page_size:6
+          },
+          isScroll: true,
+          total_count: 0,
+          bottom_show: false,
         }
       },
       mixins: [wxapi],
-      components: { product },
+      components: { product,bottomLine },
       inject:['reload'],
       mounted() {
         common.changeTitle('精选');
@@ -450,12 +360,29 @@
         },
         /*获取品牌推荐*/
         getBrand(){
-          axios.get(api.brand_recommend_index).then(res => {
+          axios.get(api.brand_recommend_index,{
+            params:{
+              page_num:this.page_info.page_num,
+              page_size:this.page_info.page_size
+            }
+          }).then(res => {
             if(res.data.status == 200){
               this.brand_list = res.data.data.brands;
               // this.brand_product = res.data.data.product;
               this.hot_list = res.data.data.hot;
-              this.recommend_for_you_list = res.data.data.recommend_for_you;
+              this.isScroll = true;
+              if(res.data.data.recommend_for_you.length > 0){
+                if(this.page_info.page_num == 1){
+                  this.recommend_for_you_list = res.data.data.recommend_for_you;
+                }else{
+                  this.recommend_for_you_list = this.recommend_for_you_list.concat(res.data.data.recommend_for_you);
+                }
+                this.page_info.page_num = this.page_info.page_num + 1;
+              }else if(this.page_info.page_num == 1 && res.data.data.recommend_for_you.length == 0){
+                this.recommend_for_you_list = [];
+                this.page_info.page_num = 1;
+              }
+              this.total_count = res.data.total_count;
               this.getBrandProduct();
             }
           })
@@ -501,6 +428,23 @@
               this.icon_list = [].concat(res.data.data);
             }
           })
+        },
+        //滚动加载更多
+        touchMove(e) {
+          let scrollTop = common.getScrollTop();
+          let scrollHeight = common.getScrollHeight();
+          let ClientHeight = common.getClientHeight();
+          if (scrollTop + ClientHeight  >= scrollHeight -10) {
+            if(this.isScroll){
+              this.isScroll = false;
+              console.log(this.recommend_for_you_list.length,this.total_count)
+              if(this.recommend_for_you_list.length == this.total_count){
+                this.bottom_show = true;
+              }else{
+                    this.getBrand();
+              }
+            }
+          }
         },
         /*查看更多*/
         changeRoute(v, item) {

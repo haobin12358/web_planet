@@ -29,7 +29,7 @@
             </li>
             <li @click="changeRoute('/personal/integral')">
               <span class="m-icon-integral"></span>
-              <span class="m-name">可用积分</span>
+              <span class="m-name">可用星币</span>
               <span>{{user.usintegral}}</span>
             </li>
           </ul>

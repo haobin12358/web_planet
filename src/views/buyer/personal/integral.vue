@@ -1,7 +1,7 @@
 <template>
   <div class="m-integral">
     <div class="m-integral-top">
-      <p class="m-integral-top-p">可用积分</p>
+      <p class="m-integral-top-p">可用星币</p>
       <div class="m-integral-code">
         <span class="m-integral-top-img"></span>
         <span>{{usintegral}}</span>
@@ -18,7 +18,7 @@
          <p class="m-grey">{{item.createtime}}</p>
        </li>
        <li v-if="uilist.length == 0">
-         <p style="text-align: center">暂无可用积分</p>
+         <p style="text-align: center">暂无可用星币</p>
        </li>
      </ul>
     </div>
@@ -38,8 +38,8 @@
         nav_list:[
           { name:'全部', params:'all', active:true }, { name:'收入', params:'income', active:false }, { name:'支出', params:'expenditure', active:false }
         ],
-        usintegral: "",             // 可用总积分数
-        uilist: [],                 // 积分来源list
+        usintegral: "",             // 可用总星币数
+        uilist: [],                 // 星币来源list
       }
     },
     components: { navList },
@@ -51,10 +51,10 @@
           arr[i].active = false;
         }
         arr[index].active = true;
-        this.getUserIntegral(arr[index].params);               // 获取积分列表
+        this.getUserIntegral(arr[index].params);               // 获取星币列表
         this.nav_list = [].concat(arr);
       },
-      // 获取积分列表
+      // 获取星币列表
       getUserIntegral(uifilter) {
         let params = {
           token: localStorage.getItem('token'),
@@ -69,8 +69,8 @@
       },
     },
     mounted() {
-      common.changeTitle('可用积分');
-      this.getUserIntegral("all");               // 获取积分列表
+      common.changeTitle('可用星币');
+      this.getUserIntegral("all");               // 获取星币列表
     }
   }
 </script>

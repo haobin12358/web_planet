@@ -2,9 +2,9 @@
   <div class="m-couponCenter" @touchmove="touchMove">
     <mt-loadmore :top-method="loadTop">
       <div class="m-couponCenter-top">
-        <span class="m-couponCenter-rule" @click="rulePopup = true">积分规则</span>
+        <span class="m-couponCenter-rule" @click="rulePopup = true">星币规则</span>
 
-        <!--积分规则popup-->
+        <!--星币规则popup-->
         <mt-popup class="m-rule-popup" v-model="rulePopup" pop-transition="popup-fade">
           <div class="m-rule-btn">
             <div @click="rulePopup = false">取消</div>
@@ -12,7 +12,7 @@
           <div class="m-rule-text">{{integral.integralrule}}</div>
         </mt-popup>
 
-        <p class="m-couponCenter-top-p">累计积分：{{integral.usintegral}}</p>
+        <p class="m-couponCenter-top-p">累计星币：{{integral.usintegral}}</p>
         <div class="m-couponCenter-day">
           <span>已连续签到</span>
           <span class="m-couponCenter-day-bg">

@@ -42,7 +42,7 @@
         </div>
         <div class="m-editInput-alert" v-if="from == 'passwd'">
           <p class="m-ft-28">提示：</p>
-          <p class="m-ft-24">支付密码用于装币/积分等支付验证</p>
+          <p class="m-ft-24">支付密码用于装币/星币等支付验证</p>
           <p class="m-ft-24">让您的资金账户更加安全</p>
         </div>
         <div class="m-editInput-alert" v-if="from == 'new'">

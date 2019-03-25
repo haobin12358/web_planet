@@ -287,10 +287,10 @@
       previewImage(index, image) {
         let images = [];
         for(let i = 0; i < image.length; i ++) {
-          images.push(image[i].niimage);
+          images.push(image[i]);
         }
         let options = {
-          current: image[index].niimage, // 当前显示图片的http链接
+          current: image[index], // 当前显示图片的http链接
           urls: images,                  // 当前预览图片的list
         };
         wxapi.previewImage(options);
