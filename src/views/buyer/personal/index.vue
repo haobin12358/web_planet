@@ -4,9 +4,9 @@
       <span class="m-icon-bg"></span>
     </div>
     <div class="m-personal-content">
-      <p class="m-set-box">
-        <span class="m-icon-set" @click="changeRoute('/personal/setUp')"></span>
-      </p>
+      <!--<p class="m-set-box">-->
+        <!--<span class="m-icon-set" @click="changeRoute('/personal/setUp')"></span>-->
+      <!--</p>-->
       <div class="m-personal-info">
         <img class="m-personal-head-portrait" v-if="user.usheader" :src="user.usheader" alt="">
         <img class="m-personal-head-portrait" v-else src="/static/images/logo.jpg" alt="">
@@ -19,20 +19,27 @@
                 <span class="m-personal-identity active" v-else>{{user.usidname}}</span>
               </p>
             </div>
+            <p class="m-set-box">
+              <span class="m-icon-set" @click="changeRoute('/personal/setUp')"></span>
+            </p>
+            <!--<img class="m-code-img" v-if="user.usqrcode" :src="user.usqrcode" @click="changeRoute('/personal/code')">-->
+          </div>
+          <div class="m-personal-info-text">
+            <ul class="m-personal-ul">
+              <li @click="changeRoute('/personal/coupon')">
+                <span class="m-icon-gift"></span>
+                <span class="m-name">优惠券</span>
+                <span>{{user.uscoupon}}</span>
+              </li>
+              <li @click="changeRoute('/personal/integral')">
+                <span class="m-icon-integral"></span>
+                <span class="m-name">可用星币</span>
+                <span>{{user.usintegral}}</span>
+              </li>
+            </ul>
             <img class="m-code-img" v-if="user.usqrcode" :src="user.usqrcode" @click="changeRoute('/personal/code')">
           </div>
-          <ul class="m-personal-ul">
-            <li @click="changeRoute('/personal/coupon')">
-              <span class="m-icon-gift"></span>
-              <span class="m-name">优惠券</span>
-              <span>{{user.uscoupon}}</span>
-            </li>
-            <li @click="changeRoute('/personal/integral')">
-              <span class="m-icon-integral"></span>
-              <span class="m-name">可用星币</span>
-              <span>{{user.usintegral}}</span>
-            </li>
-          </ul>
+
         </div>
       </div>
       <div class="m-personal-body">
