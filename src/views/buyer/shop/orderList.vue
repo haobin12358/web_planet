@@ -390,14 +390,14 @@
   .m-orderList{
     /*background-color: #eee;*/
     min-height: 100vh;
-    padding-bottom: 30px;
+    padding: 30px 0;
     .m-icon-back{
       display: block;
       width: 24px;
       height: 41px;
       background: url("/static/images/icon-back.png") no-repeat;
       background-size: 100% 100%;
-      margin: 20px 0 0 20px;
+      margin: 0 0 0 20px;
     }
     .m-nav{
       background-color: #fff;
