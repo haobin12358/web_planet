@@ -1,6 +1,7 @@
 <template>
   <!--<div class="m-orderList">-->
   <div class="m-orderList" @touchmove="touchMove">
+    <span class="m-icon-back" @click="changeBack"></span>
     <div class="m-nav">
       <nav-list :navlist="nav_list" @navClick="navClick"></nav-list>
     </div>
@@ -106,6 +107,9 @@
         }
       },
       methods:{
+        changeBack(){
+          this.$router.go(-1);
+        },
         changeRoute(v,item) {
           switch (v){
             case '/brandDetail':
@@ -387,6 +391,14 @@
     /*background-color: #eee;*/
     min-height: 100vh;
     padding-bottom: 30px;
+    .m-icon-back{
+      display: block;
+      width: 24px;
+      height: 41px;
+      background: url("/static/images/icon-back.png") no-repeat;
+      background-size: 100% 100%;
+      margin: 20px 0 0 20px;
+    }
     .m-nav{
       background-color: #fff;
     }
