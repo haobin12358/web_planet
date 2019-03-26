@@ -101,10 +101,10 @@
         }else {
           this.buyer_store = false;
         }
-        this.$route.meta.keepAlive = !this.$route.meta.keepAlive;
-        this.$nextTick(()=>{
-          this.$route.meta.keepAlive = !this.$route.meta.keepAlive;
-        });
+        // this.$route.meta.keepAlive = !this.$route.meta.keepAlive;
+        // this.$nextTick(()=>{
+        //   this.$route.meta.keepAlive = !this.$route.meta.keepAlive;
+        // });
         this.$store.state.tabbar_select = val;
         common.changeTitle(val);
         switch(val){
