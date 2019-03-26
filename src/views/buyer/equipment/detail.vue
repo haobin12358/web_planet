@@ -69,11 +69,31 @@
       this.head_name = this.$route.query.name;
       this.getCategory();
     },
+    beforeRouteEnter (to, from, next){
+      if(from.query.last_pcid){
+        to.query.pcid  = from.query.last_pcid
+      }
+      next();
+    },
+    beforeMount (){
+      // if(fromparams.length>0){
+      //   let params = JSON.parse(fromparams);
+      //   //将url上带回的参数赋值给vue中的data对象,从而实现条件的带回
+      //   this.date  = params.date;
+      //   this.status = params.status
+      //   this.page = params.page;
+      // }
+    },
     methods:{
       // 跳转页面
       changeRoute(v,item){
         if(item){
-          this.$router.push({path: v,query:{pcid:item.pcid}})
+          let arr = [].concat(this.icon_list);
+          for(let i=0;i<arr.length;i++){
+            if(arr[i].active){
+              this.$router.push({path: v,query:{pcid:item.pcid,last_pcid:arr[i].pcid}})
+            }
+          }
         }else{
           this.$router.push({path: v})
         }

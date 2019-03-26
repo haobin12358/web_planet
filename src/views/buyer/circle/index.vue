@@ -123,11 +123,14 @@
     },
     activated() {
 
-      if(localStorage.getItem('login_to') && !localStorage.getItem('toLogin')){
-        localStorage.setItem('toLogin', 'toLogin');
-        // this.$router.push('/login');
-        this.$store.state.show_login = true;
-      }
+      // if(localStorage.getItem('login_to') && !localStorage.getItem('toLogin')){
+      //   localStorage.setItem('toLogin', 'toLogin');
+      //   // this.$router.push('/login');
+      //   if(!localStorage.getItem('token')){
+      //     this.$store.state.show_login = true;
+      //   }
+      //
+      // }
       this.getNav();
       if(sessionStorage.getItem('circleProduct')) {
         this.$router.push('/shop');
