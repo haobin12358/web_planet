@@ -31,7 +31,7 @@
         </li>
         <li @click="changeRoute('/storekeeper/group')">
           <p class="m-num">{{user.fens_count}}</p>
-          <p class="m-flex-center"><span>粉丝总数(人)</span> <img class="m-jump-img" src="/static/images/icon-more.png"></p>
+          <p class="m-flex-center"><span>团队成员总数(人)</span> <img class="m-jump-img" src="/static/images/icon-more.png"></p>
         </li>
         <li @click="changeRoute('/storekeeper/group')">
           <p class="m-num">{{user.fens_mouth_count}}</p>
