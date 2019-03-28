@@ -142,6 +142,7 @@ export default {
     }else{
       if(this.isWeiXin()){    //是来自微信内置浏览器
         if(common.GetQueryString('code')) {
+          // Toast(common.GetQueryString('code'));
           /* if(localStorage.getItem('is_new')) {
 
            }else {*/
@@ -186,7 +187,7 @@ export default {
           });
           // }
         }else{
-          // this.login();
+          this.login();
         }
       }
     }
@@ -241,8 +242,9 @@ export default {
             localStorage.setItem('wx_url',url);
             url = window.location.origin + '/#/select';
           }
+          // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect'
         }
       }).catch((error) => {
         console.log(error ,'1111');

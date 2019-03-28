@@ -147,7 +147,7 @@
           var myImage2 = new Image();
           myImage2.src = that.user.usqrcode;   //你自己本地的图片或者在线图片
           myImage2.crossOrigin = 'Anonymous';
-
+          // myImage2.setAttribute("crossOrigin",'anonymous');
           myImage2.onload = function(){
             context.drawImage(myImage2 , 500 , 6500 , 150 , 150);
             var base64 = canvas.toDataURL("image/jpeg",0.7);  //"image/png" 这里注意一下
