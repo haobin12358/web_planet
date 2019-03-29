@@ -194,6 +194,22 @@ export default {
                 localStorage.removeItem('toLogin');
                 window.localStorage.setItem("token", res.data.data.token);
                 window.localStorage.setItem("openid", res.data.data.user.openid);
+                if(localStorage.getItem('wx_url')){
+                  localStorage.setItem('url', localStorage.getItem('wx_url').split('&from')[0]);
+                  if(localStorage.getItem('wx_url').indexOf('fmfpid') > 0) {             // 新人首单
+                    localStorage.setItem('share', 'fmfpid');
+                  }else if(localStorage.getItem('wx_url').indexOf('tcid') > 0) {               // 试用商品
+                    localStorage.setItem('share', 'tcid');
+                  }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
+                    localStorage.setItem('share', 'neid');
+                  }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
+                    localStorage.setItem('share', 'prid');
+                  }
+                  this.$router.push('/selected');
+                }else{
+                  this.$router.go(0);
+                }
+                Toast('登录成功');
               }
             });
           }
@@ -254,9 +270,9 @@ export default {
           let url = window.location.href;
           if(url.indexOf('?') != -1){
             localStorage.setItem('wx_url',url);
-            url = window.location.origin + '/#/select';
+            url = window.location.origin + '/#/selected';
           }else if(url.indexOf('code') != -1){
-            url = window.location.origin + '/#/select';
+            url = window.location.origin + '/#/selected';
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
@@ -280,7 +296,7 @@ export default {
           let url = window.location.href;
           if(url.indexOf('?') != -1){
             localStorage.setItem('wx_url',url);
-            url = window.location.origin + '/#/select';
+            url = window.location.origin + '/#/selected';
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='

@@ -1,15 +1,27 @@
 <template>
   <div class="m-personal">
-    <div class="m-personal-bg">
-      <span class="m-icon-bg"></span>
+    <div class="m-personal-about">
+      <img src="/static/images/about-us.png" class="m-about-us-img" alt="">
+      <div class="m-text">
+        <span class="m-ft-28">www.bigxingxing.com</span>
+        <img src="/static/images/logo.jpg" class="m-logo" alt="">
+      </div>
     </div>
-    <div class="logo-box">
-      <span class="logo-img"></span>
-      <p>大行星</p>
-      <span class="m-ft-28">www.bigxingxing.com</span>
+    <div class="m-about-content">
+      <h3>大行星</h3>
+      <ul>
+        <li>
+          大行星是一家立足于户外生态圈的垂直社交电商平台。
+        </li>
+        <li>
+          将关注、分享、沟通、讨论、互动等社交化的元素应用于电子商务交易过程，给予用户更好的线上线下购物体验。
+        </li>
+      </ul>
     </div>
     <!--Copyright-->
     <div class="m-copy-right">
+      <img src="/static/images/logo.jpg" class="m-bottom-logo" alt="">
+      <p class="m-ft-28">www.bigxingxing.com</p>
       <p class="m-copy-right-text-one">
         <span>Copyright</span>
         <span class="m-icon-copy-right"></span>
@@ -47,35 +59,57 @@
 
   .m-personal {
     min-height: 100vh;
-    background-color: #EEEEEE;
+    background-color: #fff;
   }
-  .logo-box {
-    position: absolute;
-    top: 100px;
-    left: 240px;
-    color: #ffffff;
-    .logo-img {
-      display: inline-block;
-      width: 120px;
-      height: 120px;
-      background: url("/static/images/logo.jpg") no-repeat;
-      background-size: 100% 100%;
-      border-radius: 20px;
+  .m-personal-about{
+    position: relative;
+    .m-about-us-img{
+      display: block;
+      width: 100%;
+      height: 460px;
     }
-    p {
-      font-size: 35px;
-      margin-top: 30px;
-      letter-spacing: 5px;
+    .m-text{
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      color: #fff;
+      .m-logo{
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+  .m-about-content{
+    text-align: left;
+    padding: 40px;
+    h3{
+      font-size: 48px;
+    }
+    ul{
+      padding-left: 40px;
+      margin-top: 40px;
+      li{
+        margin-bottom: 20px;
+        list-style: disc;
+      }
     }
   }
   .m-copy-right {
     /*color: #666666;*/
-    position: absolute;
-    top: 1100px;
-    bottom: 400px;
+   margin: 100px 0 0;
     text-align: center;
     width: 750px;
     opacity: 0.6;
+    .m-bottom-logo{
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+    }
+    .m-ft-28{
+      color: #333;
+      margin-bottom: 40px;
+    }
     .m-copy-right-text-one {
       font-size: 20px;
       line-height: 30px;
