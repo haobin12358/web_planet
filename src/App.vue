@@ -211,10 +211,11 @@ export default {
                     localStorage.setItem('share', 'prid');
                   }
                   this.$router.push('/selected');
-                }else{
-                  this.$router.go(0);
                 }
-                Toast('登录成功');
+                // else{
+                //   this.$router.go(0);
+                // }
+                // Toast('登录成功');
               }
             });
           }
@@ -282,7 +283,7 @@ export default {
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect&connect_redirect=1'
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
         }
       }).catch((error) => {
         console.log(error ,'1111');
@@ -307,7 +308,7 @@ export default {
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect&connect_redirect=1'
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect'
         }
       }).catch((error) => {
         console.log(error ,'1111');
