@@ -155,39 +155,52 @@ export default {
           if(localStorage.getItem('secret_usid')) {
             params.secret_usid = localStorage.getItem('secret_usid').split('&from')[0];
           }
-          axios.post(api.wx_login, params).then(res => {
-            if(res.data.status == 200) {
-              // localStorage.removeItem('secret_usid');
-              localStorage.removeItem('toLogin');
-              window.localStorage.setItem("token",res.data.data.token);
-              window.localStorage.setItem("openid",res.data.data.user.openid);
-              if(res.data.data.is_new) {
-                localStorage.setItem('is_new', res.data.data.is_new);
-                this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
-              }else {
-                this.$store.state.show_login = false;
-                if(localStorage.getItem('wx_url')){
-                  localStorage.setItem('url', localStorage.getItem('wx_url').split('&from')[0]);
-                  if(localStorage.getItem('wx_url').indexOf('fmfpid') > 0) {             // 新人首单
-                    localStorage.setItem('share', 'fmfpid');
-                  }else if(localStorage.getItem('wx_url').indexOf('tcid') > 0) {               // 试用商品
-                    localStorage.setItem('share', 'tcid');
-                  }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
-                    localStorage.setItem('share', 'neid');
-                  }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
-                    localStorage.setItem('share', 'prid');
+          if(localStorage.getItem('login_not_silent')){
+            axios.post(api.wx_login, params).then(res => {
+              if(res.data.status == 200) {
+                // localStorage.removeItem('secret_usid');
+                localStorage.removeItem('toLogin');
+                localStorage.removeItem('login_not_silent')
+                window.localStorage.setItem("token",res.data.data.token);
+                window.localStorage.setItem("openid",res.data.data.user.openid);
+                if(res.data.data.is_new) {
+                  localStorage.setItem('is_new', res.data.data.is_new);
+                  this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
+                }else {
+                  this.$store.state.show_login = false;
+                  if(localStorage.getItem('wx_url')){
+                    localStorage.setItem('url', localStorage.getItem('wx_url').split('&from')[0]);
+                    if(localStorage.getItem('wx_url').indexOf('fmfpid') > 0) {             // 新人首单
+                      localStorage.setItem('share', 'fmfpid');
+                    }else if(localStorage.getItem('wx_url').indexOf('tcid') > 0) {               // 试用商品
+                      localStorage.setItem('share', 'tcid');
+                    }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
+                      localStorage.setItem('share', 'neid');
+                    }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
+                      localStorage.setItem('share', 'prid');
+                    }
+                    this.$router.push('/selected');
+                  }else{
+                    this.$router.go(0);
                   }
-                  this.$router.push('/selected');
-                }else{
-                  this.$router.go(0);
+                  Toast('登录成功');
                 }
-                Toast('登录成功');
               }
-            }
-          });
+            });
+          }else{
+            axios.post(api.wx_login_silent, params).then(res => {
+              if(res.data.status == 200) {
+                // localStorage.removeItem('secret_usid');
+                localStorage.removeItem('toLogin');
+                window.localStorage.setItem("token", res.data.data.token);
+                window.localStorage.setItem("openid", res.data.data.user.openid);
+              }
+            });
+          }
+
           // }
         }else{
-          this.login();
+          this.login_new();
         }
       }
     }
@@ -228,6 +241,33 @@ export default {
     },
     // 获取微信参数
     login() {
+      let params = {
+        url: window.location.href.split('#')[0],
+        // url: window.location.href,
+        app_from: window.location.origin.substr(8, window.location.origin.length)
+      };
+      axios.get(api.get_wxconfig, { params: params }).then((res) => {
+        if(res.data.status == 200){
+          localStorage.setItem('login_not_silent','not_silent');
+          const id = res.data.data.appId;
+          // const url = window.location.origin + '/#/login';
+          let url = window.location.href;
+          if(url.indexOf('?') != -1){
+            localStorage.setItem('wx_url',url);
+            url = window.location.origin + '/#/select';
+          }else if(url.indexOf('code') != -1){
+            url = window.location.origin + '/#/select';
+          }
+          // snsapi_userinfo
+          window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+        }
+      }).catch((error) => {
+        console.log(error ,'1111');
+      });
+    },
+    // 获取微信参数
+    login_new() {
       let params = {
         url: window.location.href.split('#')[0],
         // url: window.location.href,

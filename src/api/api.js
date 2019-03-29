@@ -1,10 +1,16 @@
 // const title = 'https://planet.daaiti.cn/api/v1/';
 // const title = 'https://www.bigxingxing.com/api/v1/'; //正式
-const title = `${location.origin}/api/v1/`
-// const title = 'https://test.bigxingxing.com/api/v1/'; //测试
+let title = '';
+if(location.origin.indexOf('localhost') != -1){
+   title = 'https://test.bigxingxing.com/api/v1/'; //测试
+}else{
+   title = `${location.origin}/api/v1/`
+}
+
 const api={
   login: title + 'user/login',                                   // 用户登录
   wx_login: title + 'user/wx_login',                             // 微信登录
+  wx_login_silent: title + 'user/wx_login_silent',                             // 微信登录
   get_accesstoken : title + 'user/get_accesstoken',
   get_wxconfig: title + 'user/get_wxconfig',                     // 获取微信参数
   get_inforcode: title + 'user/get_inforcode',                   // 获取验证码
