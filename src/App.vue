@@ -160,8 +160,11 @@ export default {
               if(res.data.status == 200) {
                 // localStorage.removeItem('secret_usid');
                 localStorage.removeItem('toLogin');
-                localStorage.removeItem('login_not_silent')
-                window.localStorage.setItem("token",res.data.data.token);
+                localStorage.removeItem('login_not_silent');
+                localStorage.removeItem('login_silent')
+                if(res.data.data.token){
+                  window.localStorage.setItem("token", res.data.data.token);
+                }
                 window.localStorage.setItem("openid",res.data.data.user.openid);
                 if(res.data.data.is_new) {
                   localStorage.setItem('is_new', res.data.data.is_new);
@@ -192,7 +195,9 @@ export default {
               if(res.data.status == 200) {
                 // localStorage.removeItem('secret_usid');
                 localStorage.removeItem('toLogin');
-                window.localStorage.setItem("token", res.data.data.token);
+                if(res.data.data.token){
+                  window.localStorage.setItem("token", res.data.data.token);
+                }
                 window.localStorage.setItem("openid", res.data.data.user.openid);
                 if(localStorage.getItem('wx_url')){
                   localStorage.setItem('url', localStorage.getItem('wx_url').split('&from')[0]);
@@ -213,10 +218,11 @@ export default {
               }
             });
           }
-
           // }
         }else{
-          this.login_new();
+          if(!localStorage.getItem('login_silent')){
+            this.login_new();
+          }
         }
       }
     }
@@ -276,7 +282,7 @@ export default {
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect&connect_redirect=1'
         }
       }).catch((error) => {
         console.log(error ,'1111');
@@ -293,6 +299,7 @@ export default {
         if(res.data.status == 200){
           const id = res.data.data.appId;
           // const url = window.location.origin + '/#/login';
+          localStorage.setItem('login_silent','silent');
           let url = window.location.href;
           if(url.indexOf('?') != -1){
             localStorage.setItem('wx_url',url);
@@ -300,7 +307,7 @@ export default {
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
-            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect'
+            + id + '&redirect_uri='+ encodeURIComponent(url) + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect&connect_redirect=1'
         }
       }).catch((error) => {
         console.log(error ,'1111');

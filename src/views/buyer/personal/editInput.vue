@@ -185,7 +185,7 @@
                   localStorage.setItem('share', 'tcid');
                 }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
                   localStorage.setItem('share', 'neid');
-                }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
+                }else if(localStorage.getItem('wx_ur l').indexOf('prid') > 0) {               // 商品详情
                   localStorage.setItem('share', 'prid');
                 }
                 this.$router.push('/selected');
