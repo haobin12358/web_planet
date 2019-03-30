@@ -71,7 +71,6 @@ export default {
         // location.href = location.origin +'/login';
       }
     }
-
     let url = location.href.split('&from')[0];
     if(!localStorage.getItem('url')) {
       if(url.indexOf('&secret_usid') > 0) {
@@ -168,6 +167,7 @@ export default {
                 window.localStorage.setItem("openid",res.data.data.user.openid);
                 if(res.data.data.is_new) {
                   localStorage.setItem('is_new', res.data.data.is_new);
+                  localStorage.setItem('new_url',location.href.split('&from')[0]);
                   this.$router.push({ path: '/personal/editInput', query: { from: 'new' }});
                 }else {
                   this.$store.state.show_login = false;
@@ -304,7 +304,7 @@ export default {
           let url = window.location.href;
           if(url.indexOf('?') != -1){
             localStorage.setItem('wx_url',url);
-            url = window.location.origin + '/#/selected';
+            // url = window.location.origin + '/#/selected';
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='

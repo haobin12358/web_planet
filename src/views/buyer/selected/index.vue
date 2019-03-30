@@ -239,7 +239,12 @@
                 let params = url.split('?neid=')[1].split('&secret_usid')[0];
                 this.$router.push({ path: '/circle/detail', query: { neid: params }})
               }else if(localStorage.getItem('share') == 'prid') {
-                let params = url.split('?prid=')[1].split('&secret_usid')[0];
+                let params;
+                if(url.indexOf('&secret_usid') > 0){
+                   params = url.split('?prid=')[1].split('&secret_usid')[0];
+                }else{
+                  params = url.split('?prid=')[1];
+                }
                 this.$router.push({ path: '/productDetail', query: { prid: params }})
               }else if(localStorage.getItem('share') == 'activityId=new') {
                 this.$router.push({ path: '/activityProduct', query: { which: 'new' }})

@@ -157,6 +157,7 @@
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
+                console.log(options.link)
                 if(val !== 1) {
                   // 点击分享
                   this.show_invite = true;
@@ -195,7 +196,9 @@
           }else {
             Toast('请登录后再试');
             localStorage.setItem('login_to',location.href.split('#')[0] + '?prid=' + this.$route.query.prid);
-            this.$router.push('/login');
+            // this.$router.push('/login');
+            // this.$router.push('/login');
+            this.$store.state.show_login = true;
           }
         },
         // 获取个人信息

@@ -78,6 +78,7 @@
     },
     components: {},
     mounted() {
+
       this.from = this.$route.query.from;
       if(this.from == 'new') {
         this.$store.state.show_login = false;
@@ -178,27 +179,32 @@
               localStorage.setItem('token', res.data.data.token);
               localStorage.removeItem('is_new');
               if(localStorage.getItem('wx_url')){
-                localStorage.setItem('url', localStorage.getItem('login_to').split('&from')[0]);
+                localStorage.setItem('url', localStorage.getItem('wx_url').split('&from')[0]);
+
                 if(localStorage.getItem('wx_url').indexOf('fmfpid') > 0) {             // 新人首单
                   localStorage.setItem('share', 'fmfpid');
                 }else if(localStorage.getItem('wx_url').indexOf('tcid') > 0) {               // 试用商品
                   localStorage.setItem('share', 'tcid');
                 }else if(localStorage.getItem('wx_url').indexOf('neid') > 0) {               // 圈子详情 - 在圈子列表页点击的分享
                   localStorage.setItem('share', 'neid');
-                }else if(localStorage.getItem('wx_ur l').indexOf('prid') > 0) {               // 商品详情
+                }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
                   localStorage.setItem('share', 'prid');
+                }else{
+                  localStorage.setItem('ceshi','2')
                 }
+                localStorage.setItem('ceshi','3')
                 this.$router.push('/selected');
               }else{
-                this.$router.go(-1);
-              }
 
+                this.$router.push('/personal');
+              }
+              // localStorage.setItem('ceshi','3')
               if(this.$store.state.show_login){
                 this.$store.state.show_login = false;
                 // this.$router.go(-1);
               }
 
-              // location.href = location.origin + '/#/selected'
+
             }else {
               // 避免code影响
               // window.location.href = window.location.origin + '/#/personal/editInput?from=new';
