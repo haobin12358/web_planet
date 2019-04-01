@@ -65,12 +65,19 @@
         <span class="m-icon-car" @click.stop="changeRoute('/shop')"></span>
         <span class="m-icon-service" @click.stop="changeRoute('/personal/serviceCenter')"></span>
         <div class="m-product-detail-btn">
+          <span class="m-border" @click="sendShare">推广</span>
           <span class="active" @click="addCart">加入购物车</span>
           <span @click="buyNow">立即购买</span>
+
         </div>
         <img class="m-invite-course" src="/static/images/invite.png" v-if="show_invite" @click="show_invite = false">
       </div>
-
+      <div class="m-modal-img" v-if="show_img">
+        <div class="m-modal-state">
+          <span class="m-close" @click="show_img = false"> X</span>
+          <img :src="share_img" class="m-share-img" alt="">
+        </div>
+      </div>
       <sku v-if="show_sku" :now_select="select_value" :now_num="canums" :product="product_info" @changeModal="changeModal" @sureClick="sureClick"></sku>
     </div>
 </template>
@@ -110,7 +117,10 @@
           cart_buy:null,
           star:['','','','',''],
           user: { uslevel: '1' },
-          show_invite: false
+          show_invite: false,
+          show_img:false,
+          share_img:'',
+          share_url:''
         }
       },
       mixins: [wxapi],
@@ -157,7 +167,7 @@
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
-                console.log(options.link)
+                this.share_url = options.link;
                 if(val !== 1) {
                   // 点击分享
                   this.show_invite = true;
@@ -327,6 +337,25 @@
             this.show_sku = true;
             this.cart_buy = 'buy';
           }
+        },
+        //推广
+        sendShare(){
+          this.show_img = true;
+          if(this.share_img== ''){
+            axios.get(api.get_promotion,{
+              params:{
+                prid:this.$route.query.prid,
+                token:localStorage.getItem('token'),
+                url:this.share_url
+              }
+            }).then(res => {
+              if(res.data.status == 200){
+                this.share_img = res.data.data;
+              }
+            },error => {
+              Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
+            })
+          }
         }
       }
     }
@@ -488,7 +517,7 @@
       span{
         color: #ffffff;
         display: inline-block;
-        width: 271px;
+        width: 181px;
         text-align: center;
         background-color: @mainColor;
         margin: 0;
@@ -497,6 +526,12 @@
           background-color: @mainColor;
           margin-right: -3px;
           border-radius: 10px 0 0 10px;
+        }
+        &.m-border{
+          background-color: #fff;
+          border: 3px solid  @mainColor;
+          color: @mainColor;
+          border-radius: 10px;
         }
       }
     }
@@ -509,7 +544,38 @@
       z-index: 1000;
     }
   }
-
+  .m-modal-img{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left:0;
+    right: 0;
+    background-color: rgba(0,0,0,0.4);
+    .m-modal-state{
+      position: absolute;
+      left: 50%;
+      margin-left: -250px;
+      top:50%;
+      margin-top: -350px;
+      width: 500px;
+      height: 700px;
+      background-color: #fff;
+      border-radius: 10px;
+      .m-close{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 40px;
+      }
+      .m-share-img{
+        display: block;
+        width: 500px;
+        height: 700px;
+      }
+    }
+  }
 }
 
 </style>

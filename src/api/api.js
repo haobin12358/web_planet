@@ -26,6 +26,7 @@ const api={
   guess_search: title + 'product/guess_search',                  // 推荐
   del_search_history: title + 'product/del_search_history',      // 删除搜索记录
   get_evaluation: title + 'order/evaluation',                    // 获取商品评价
+  get_promotion: title +'product/get_promotion',//推广图
   cart_create: title + 'cart/create',                            // 添加购物车
   cart_update: title +'cart/update',                             // 更新购物车
   cart_list: title + 'cart/list',                                // 购物车列表
