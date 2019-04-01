@@ -235,7 +235,7 @@
           if(v == '/evaluate'){
             this.$router.push({path:v,query:{prid:this.product_info.prid}});
           }else if(v == '/brandDetail'){
-            this.$router.push({path:v,query:{pbid:this.product_info.pbid}});
+            this.$router.push({path:v,query:{pbid:this.product_info.pbid,pbname:this.product_info.pbname}});
           }else if(v == '/personal/serviceCenter'){
             this.$router.push({path:v});
           }else{
@@ -340,7 +340,7 @@
         },
         //推广
         sendShare(){
-          this.show_img = true;
+
           if(this.share_img== ''){
             axios.get(api.get_promotion,{
               params:{
@@ -351,10 +351,13 @@
             }).then(res => {
               if(res.data.status == 200){
                 this.share_img = res.data.data;
+                this.show_img = true;
               }
             },error => {
               Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
             })
+          }else{
+            this.show_img = true;
           }
         }
       }

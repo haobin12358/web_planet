@@ -36,7 +36,10 @@
   import api from './api/api';
   import common from './common/js/common';
   import {Toast} from 'mint-ui';
-
+  String.prototype.endWith=function(endStr){
+    let d=this.length-endStr.length;
+    return (d>=0&&this.lastIndexOf(endStr)==d);
+  }
 export default {
   name: 'App',
   provide(){
@@ -65,11 +68,21 @@ export default {
       this.$store.state.show_login = false;
     }
     if(!localStorage.getItem('token')) {
-      if(location.href.indexOf('secret_usid') > 0) {
-        localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1])
+        if(localStorage.getItem('wx_url') && localStorage.getItem('wx_url').indexOf('secret_usid') > 0){
+          let _usid = localStorage.getItem('wx_url').split('secret_usid=')[1];
+          if(_usid.endsWith('#/')) {
+             _usid = _usid.substr(0, _usid.length - 2);
+          }else if(_usid.endsWith('#/selected')){
+            _usid = _usid.substr(0, _usid.length - 10);
+          }
+            localStorage.setItem('secret_usid', _usid)
+
+        }else if(location.href.indexOf('secret_usid') > 0){
+          localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1])
+        }
+
         // localStorage.setItem('location',location.href);
         // location.href = location.origin +'/login';
-      }
     }
     let url = location.href.split('&from')[0];
     if(!localStorage.getItem('url')) {
@@ -277,9 +290,9 @@ export default {
           let url = window.location.href;
           if(url.indexOf('?') != -1){
             localStorage.setItem('wx_url',url);
-            url = window.location.origin + '/#/selected';
+            // url = window.location.origin + '/#/selected';
           }else if(url.indexOf('code') != -1){
-            url = window.location.origin + '/#/selected';
+            // url = window.location.origin + '/#/selected';
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
