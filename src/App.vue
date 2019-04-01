@@ -69,13 +69,9 @@ export default {
     }
     if(!localStorage.getItem('token')) {
         if(localStorage.getItem('wx_url') && localStorage.getItem('wx_url').indexOf('secret_usid') > 0){
-          let _usid = localStorage.getItem('wx_url').split('secret_usid=')[1];
-          if(_usid.endsWith('#/')) {
-             _usid = _usid.substr(0, _usid.length - 2);
-          }else if(_usid.endsWith('#/selected')){
-            _usid = _usid.substr(0, _usid.length - 10);
-          }
-            localStorage.setItem('secret_usid', _usid)
+
+
+            localStorage.setItem('secret_usid', localStorage.getItem('wx_url').split('secret_usid=')[1])
 
         }else if(location.href.indexOf('secret_usid') > 0){
           localStorage.setItem('secret_usid', location.href.split('secret_usid=')[1])
@@ -165,7 +161,13 @@ export default {
             code: common.GetQueryString('code')
           };
           if(localStorage.getItem('secret_usid')) {
-            params.secret_usid = localStorage.getItem('secret_usid').split('&from')[0];
+            let _usid = localStorage.getItem('secret_usid').split('&from')[0];
+            if(_usid.endsWith('#/')) {
+              _usid = _usid.substr(0, _usid.length - 2);
+            }else if(_usid.endsWith('#/selected')){
+              _usid = _usid.substr(0, _usid.length - 10);
+            }
+            params.secret_usid = _usid;
           }
           if(localStorage.getItem('login_not_silent')){
             axios.post(api.wx_login, params).then(res => {
@@ -290,9 +292,9 @@ export default {
           let url = window.location.href;
           if(url.indexOf('?') != -1){
             localStorage.setItem('wx_url',url);
-            // url = window.location.origin + '/#/selected';
+            url = window.location.origin + '/#/selected';
           }else if(url.indexOf('code') != -1){
-            // url = window.location.origin + '/#/selected';
+            url = window.location.origin + '/#/selected';
           }
           // snsapi_userinfo
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='

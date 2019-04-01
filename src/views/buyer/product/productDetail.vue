@@ -130,6 +130,7 @@
         wxapi.wxRegister(location.href.split('#')[0]);
         this.getInfo();
         this.getUser();
+
         localStorage.removeItem('share');
         localStorage.removeItem('url');
         if(localStorage.getItem('token')) {
@@ -167,7 +168,7 @@
             axios.get(api.secret_usid + '?token=' + localStorage.getItem('token')).then(res => {
               if(res.data.status == 200) {
                 options.link += '&secret_usid=' + res.data.data.secret_usid;
-                this.share_url = options.link;
+                this.share_url = location.origin + '/?prid=' + this.$route.query.prid +  '&secret_usid=' + res.data.data.secret_usid;
                 if(val !== 1) {
                   // 点击分享
                   this.show_invite = true;
@@ -520,7 +521,7 @@
       span{
         color: #ffffff;
         display: inline-block;
-        width: 181px;
+        width: 166px;
         text-align: center;
         background-color: @mainColor;
         margin: 0;
