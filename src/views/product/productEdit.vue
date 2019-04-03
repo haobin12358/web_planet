@@ -234,25 +234,43 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="底部长图(最多30张)" prop="prdesc">
-        <el-upload
-          class="swiper-uploader"
-          :action="uploadUrl"
-          accept="image/*"
-          list-type="picture-card"
-          :file-list="prDescUrl"
-          :on-preview="handlePictureCardPreview"
-          :before-upload="beforeImgsUpload"
-          :on-remove="handlePrDescRemove"
-          :http-request="uploadPrDesc"
-          :on-exceed="onFileExceed"
-          :limit="30"
-          :multiple="true">
-          <i class="el-icon-plus"></i>
-          <div slot="tip" class="el-upload__tip">
-            <span>可多选,当前{{prDescUrl.length}}/30张,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
-            <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
+        <div class="m-up-img-box">
+          <div class="inputbg m-img-xl el-upload-list--picture-card" v-for="(item,index) in prDescUrl">
+            <img :src="item.url"  style="width: 148px;height:148px;"/>
+            <span class="el-upload-list__item-actions">
+                <span class="el-upload-list__item-preview" @click="previewPrdescc(item)">
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+                <span class="el-upload-list__item-delete" @click="deletePrdesc(index)">
+                  <i class="el-icon-delete"></i>
+                </span>
+              </span>
           </div>
-        </el-upload>
+          <div class="inputbg m-img-xl"><span>+</span><input type="file" multiple="multiple" id="prDesc"  accept="image/*" @change="newUploadPrDesc"></div>
+        </div>
+        <div  class="el-upload__tip">
+          <span>可多选,当前{{prDescUrl.length}}/30张,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+          <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>
+        </div>
+        <!--<el-upload-->
+          <!--class="swiper-uploader"-->
+          <!--:action="uploadUrl"-->
+          <!--accept="image/*"-->
+          <!--list-type="picture-card"-->
+          <!--:file-list="prDescUrl"-->
+          <!--:on-preview="handlePictureCardPreview"-->
+          <!--:before-upload="beforeImgsUpload"-->
+          <!--:on-remove="handlePrDescRemove"-->
+          <!--:http-request="uploadPrDesc"-->
+          <!--:on-exceed="onFileExceed"-->
+          <!--:limit="30"-->
+          <!--:multiple="true">-->
+          <!--<i class="el-icon-plus"></i>-->
+          <!--<div slot="tip" class="el-upload__tip">-->
+            <!--<span>可多选,当前{{prDescUrl.length}}/30张,大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>-->
+            <!--<imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="prDescUrl"></imgs-drag-sort>-->
+          <!--</div>-->
+        <!--</el-upload>-->
       </el-form-item>
 
       <el-form-item>
@@ -278,7 +296,7 @@
         <el-button type="primary" @click="doSaveProd">确 定</el-button>
       </span>
     </el-dialog>
-
+    <!--<input type="file" multiple="multiple" @change="fileChange">-->
     <!--预览大图dialog-->
     <el-dialog :visible.sync="dialogVisible" top="8vh">
       <img width="100%" :src="dialogImageUrl" alt="">
@@ -471,6 +489,28 @@
     },
 
     methods: {
+      fileChange(e){
+        console.log(e.target.files)
+        let files = e.target.files;
+        let formData = new FormData();
+        for(let i=0;i<files.length;i++){
+          formData.append(`file${i}`, files[i])
+        }
+
+
+        this.$http({
+          method: 'post',
+          url: 'https://test.bigxingxing.com/api/v1/file/batch_upload',
+          data: formData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+
+            }
+          }
+        )
+      },
       goLabel(tag) {
         this.$refs[tag.name].click();
       },
@@ -739,6 +779,7 @@
         );
       },
       uploadPrDesc(file) {
+
         let formData = new FormData();
 
         formData.append('file', file.file)
@@ -754,7 +795,7 @@
               let resData = res.data,
                 data = resData.data;
 
-              this.prDescUrl.push({
+              this.form.prdesc.push({
                 name: file.file.name,
                 url: data
               })
@@ -762,7 +803,38 @@
           }
         )
       },
-
+      newUploadPrDesc(e){
+        let files = e.target.files;
+        let formData = new FormData();
+        for(let i=0;i<files.length;i++){
+          formData.append(`file${i}`, files[i])
+        }
+        this.$http({
+          method: 'post',
+          url: this.$api.batch_upload,
+          data: formData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let file = document.getElementById('prDesc');
+              file.value ='';
+              let arr = [];
+              for(let i in res.data.data){
+                arr.push({url:res.data.data[i].data,name:''})
+              }
+              this.prDescUrl = this.prDescUrl.concat(arr);
+            }
+          }
+        )
+      },
+      previewPrdescc(item){
+        this.dialogImageUrl = item.url;
+        this.dialogVisible = true;
+      },
+      deletePrdesc(index){
+        this.prDescUrl.splice(index,1)
+      },
       onFileExceed(files, fileList){
         this.$message.warning(`图片数量超出限制,最多30张,上传失败${files.length}张`)
       },
@@ -1139,6 +1211,76 @@
           margin-bottom: 0;
         }
       }
+    }
+    .el-upload-list--picture-card .el-upload-list__item-actions:hover {
+      opacity: 1;
+    }
+    .m-up-img-box{
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 20px;
+      .el-upload-list__item-actions {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        cursor: default;
+        text-align: center;
+        color: #fff;
+        opacity: 0;
+        font-size: 20px;
+        background-color: rgba(0,0,0,.5);
+        -webkit-transition: opacity .3s;
+        transition: opacity .3s;
+        border-radius: 6px;
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: center;
+        span {
+          cursor: pointer;
+        }
+      }
+    }
+    .inputbg{
+      margin-left: 10px;
+      /*color: #97ADCB;*/
+      color: #999;
+      border: 1px solid #eeeeee;
+      background-color: #fbfdff;
+      border-radius: 6px;
+      font-size: 40px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      position: relative;
+      width: 148px;
+      height: 148px;
+      line-height: 148px;
+      text-align: center;
+      &.m-img-l{
+        width: 110px;
+        height: 110px;
+        line-height: 110px;
+        input{
+          width: 110px;
+          height: 110px;
+          line-height: 110px;
+        }
+      }
+    }
+    .inputbg input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity:0;
+      filter:alpha(opacity=0);
+      width: 148px;
+      height: 148px;
+      line-height: 148px;
+      cursor: pointer;
     }
   }
 </style>

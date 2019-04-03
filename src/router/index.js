@@ -221,19 +221,19 @@ export const asyncRouterMap = [
     redirect: '/marketing/coupon',
     alwaysShow: true,
     name: 'Marketing',
-    meta: {title: '营销', icon: 'yingxiaoshezhi', roles: level2},
+    meta: {title: '营销', icon: 'yingxiaoshezhi', roles: level1},
     children: [
       {
         path: 'coupon',
         name: 'Coupon',
         component: () => import('src/views/marketing/coupon'),
-        meta: {title: '优惠券', icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '优惠券', icon: 'yes', noCache: true, roles: level1}
       }, {
         path: 'editCoupon',
         name: 'EditCoupon',
         hidden: true,
         component: () => import('src/views/marketing/editCoupon'),
-        meta: {title: '优惠券编辑', noCache: true, roles: level2}
+        meta: {title: '优惠券编辑', noCache: true, roles: level1}
       }, {
         path: 'attendance',
         name: 'Attendance',

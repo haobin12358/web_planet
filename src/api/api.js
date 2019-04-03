@@ -1,8 +1,8 @@
 let title = '';
 
 // title = 'https://planet.daaiti.cn/api/v1/';
-title = 'https://www.bigxingxing.com/api/v1/';  // 正式
-// title = 'https://test.bigxingxing.com/api/v1/'; //测试
+// title = 'https://www.bigxingxing.com/api/v1/';  // 正式
+title = 'https://test.bigxingxing.com/api/v1/'; //测试
 
 const api = {
   login: title + 'user/admin_login',                                      // 用户登录
@@ -82,7 +82,7 @@ const api = {
   delete_questoutline: title + 'qa/delete_questoutline',                  // 删除问题分类
   delete_question: title + 'qa/delete_question',                          // 删除问题
   upload_file: title + 'file/upload?token=',                              // 上传图片
-
+  batch_upload: title +'file/batch_upload',                    //批量上传图片
 
   activity_list: title + 'activity/list',                                 // 获取正在进行中的活动
   activity_get: title + 'activity/get',                                   // 获取正在进行中的活动

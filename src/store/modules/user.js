@@ -48,7 +48,7 @@ const user = {
     //  登录,整合下供应商和管理员的,字段也统一下
     //  role: supplizer,admin,super(在router的beforeEach中拿缓存的,避免刷新)
     //  router中配置好role
-    Login({commit}, userInfo) {
+    Login({commit}, userInfo)      {
       return new Promise((resolve, reject) => {
         if (userInfo.userType == 1) { //  管理员
           login(userInfo.username, userInfo.password).then(response => {
