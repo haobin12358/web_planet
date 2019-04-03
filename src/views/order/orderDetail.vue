@@ -116,7 +116,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="prtitle" align="center" label=" 商品名" width="240" show-overflow-tooltip></el-table-column>
-      <el-table-column align="center" label="规格">
+      <el-table-column prop="skusn" align="center" label=" 货号" width="240" show-overflow-tooltip></el-table-column>
+      <el-table-column align="center" label="规格" >
         <template slot-scope="scope">
           <span>{{getSkuCellText(scope.row.skuattritedetail, scope.row.prattribute)}}</span>
         </template>
