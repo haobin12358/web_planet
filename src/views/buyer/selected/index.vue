@@ -488,7 +488,9 @@
         },
         /*商品点击*/
         productClick(item){
-          this.$router.push({path:'/productDetail',query:{ prid:item.prid}});
+          if(item.prid){
+            this.$router.push({path:'/productDetail',query:{ prid:item.prid}});
+          }
         },
         /*下拉刷新*/
         loadTop(){
