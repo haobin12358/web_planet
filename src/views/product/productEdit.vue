@@ -86,25 +86,56 @@
 
       <el-form-item label="商品规格" required>
         <!--工具栏-->
+        <div class="form-item-sku" style="margin-bottom: 20px;">
+          <el-button @click="addTree">添加属性</el-button>
+          <el-tree
+            v-for="(item,index) in sku_data"
+            :data="item"
+            node-key="id"
+            :default-expand-all="true"
+            :expand-on-click-node="false">
+              <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
+                <span >
+                  <el-button
+                    v-if="data.children"
+                    type="text"
+                    size="mini"
+                    @click="() => append(data)">
+                    添加
+                  </el-button>
+                  <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => remove(node, data)">
+                    删除
+                  </el-button>
+                </span>
+              </span>
+          </el-tree>
+
+          <el-button type="primary" v-if="sku_data.length >0" @click="sureAllSku">确定</el-button>
+        </div>
         <section class="form-item-sku">
           <!--商品规格tags管理, 颜色,规格...-->
-          <section>
-            <el-tag :key="tag" v-for="tag in formData.prattribute" closable :disable-transitions="false"
-                    @close="handleClose(tag)" @dblclick.native="editPrAttribute(tag)">
-              {{tag}}
-            </el-tag>
+<!--          <section>-->
+<!--            <el-tag :key="tag" v-for="tag in formData.prattribute" closable :disable-transitions="false"-->
+<!--                    @close="handleClose(tag)" @dblclick.native="editPrAttribute(tag)">-->
+<!--              {{tag}}-->
+<!--            </el-tag>-->
 
-            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                      maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false"
-                      placeholder="例如:颜色,尺码">
-            </el-input>
-            <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"
-                        placement="right">
-              <el-button class="button-new-tag" size="small" @click="showInput">+ 添加商品规格</el-button>
-            </el-tooltip>
-            <div class="tag-tip">双击修改,不能重名,回车保存</div>
-          </section>
+<!--            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"-->
+<!--                      maxlength="100" @keyup.enter.native="handleInputConfirm" @blur="inputVisible=false"-->
+<!--                      placeholder="例如:颜色,尺码">-->
+<!--            </el-input>-->
+<!--            <el-tooltip v-else effect="dark" content="单击切换为输入框,回车保存"-->
+<!--                        placement="right">-->
+<!--              <el-button class="button-new-tag" size="small" @click="showInput">+ 添加商品规格</el-button>-->
+<!--            </el-tooltip>-->
+<!--            <div class="tag-tip">双击修改,不能重名,回车保存</div>-->
+<!--          </section>-->
 
+         <section></section>
           <!--添加属性table行-->
           <section class="action-btns">
             <el-button style="margin-bottom: 10px;" type="primary" @click="addOneSku">添加一行商品属性</el-button>
@@ -213,25 +244,43 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="顶部轮播图(最多9张)" prop="images">
-        <el-upload
-          class="swiper-uploader"
-          :action="uploadUrl"
-          accept="image/*"
-          list-type="picture-card"
-          :file-list="imagesUrl"
-          :on-preview="handlePictureCardPreview"
-          :before-upload="beforeImgsUpload"
-          :on-remove="handleImagesRemove"
-          :http-request="uploadImages"
-          :on-exceed="onImagesFileExceed"
-          :limit="9"
-          :multiple="true">
-          <i class="el-icon-plus"></i>
-          <div slot="tip" class="el-upload__tip">
-            <span>可多选,当前{{imagesUrl.length}}/9张,建议尺寸为375x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
-            <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
+        <div class="m-up-img-box">
+          <div class="inputbg m-img-xl el-upload-list--picture-card" v-for="(item,index) in imagesUrl">
+            <img :src="item.url"  style="width: 148px;height:148px;"/>
+            <span class="el-upload-list__item-actions">
+                <span class="el-upload-list__item-preview" @click="previewImage(item)">
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+                <span class="el-upload-list__item-delete" @click="deleteImage(index)">
+                  <i class="el-icon-delete"></i>
+                </span>
+              </span>
           </div>
-        </el-upload>
+          <div class="inputbg m-img-xl"><span>+</span><input type="file" multiple="multiple" id="imgUrl"  accept="image/*" @change="newUploadImages"></div>
+        </div>
+        <div  class="el-upload__tip">
+          <span>可多选,当前{{imagesUrl.length}}/9张,建议尺寸为375x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+          <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>
+        </div>
+<!--        <el-upload-->
+<!--          class="swiper-uploader"-->
+<!--          :action="uploadUrl"-->
+<!--          accept="image/*"-->
+<!--          list-type="picture-card"-->
+<!--          :file-list="imagesUrl"-->
+<!--          :on-preview="handlePictureCardPreview"-->
+<!--          :before-upload="beforeImgsUpload"-->
+<!--          :on-remove="handleImagesRemove"-->
+<!--          :http-request="uploadImages"-->
+<!--          :on-exceed="onImagesFileExceed"-->
+<!--          :limit="9"-->
+<!--          :multiple="true">-->
+<!--          <i class="el-icon-plus"></i>-->
+<!--          <div slot="tip" class="el-upload__tip">-->
+<!--            <span>可多选,当前{{imagesUrl.length}}/9张,建议尺寸为375x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>-->
+<!--            <imgs-drag-sort style="display: inline-block;margin-left: 30px;" :list="imagesUrl"></imgs-drag-sort>-->
+<!--          </div>-->
+<!--        </el-upload>-->
       </el-form-item>
       <el-form-item label="底部长图(最多30张)" prop="prdesc">
         <div class="m-up-img-box">
@@ -469,6 +518,15 @@
         imagesUrl: [],    //  详情页顶部轮播图
         prDescUrl: [],       //  详情长图
         isYou:true,      ///是否优选
+        sku_data:[],
+        data5 : [{
+          id: 1,
+          label: '一级 1',
+          children: [{
+            id: 4,
+            label: '二级 1-1'
+          }]
+        }]
       }
     },
 
@@ -489,27 +547,97 @@
     },
 
     methods: {
-      fileChange(e){
-        console.log(e.target.files)
-        let files = e.target.files;
-        let formData = new FormData();
-        for(let i=0;i<files.length;i++){
-          formData.append(`file${i}`, files[i])
-        }
+      addTree(){
+        let that =this;
+        this.$prompt('请输入属性名称', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }).then(({ value }) => {
+          let child = [{id:Math.random(),label:value,children:[]}];
+          that.sku_data.push(child)
+        }).catch(() => {
 
+        });
 
-        this.$http({
-          method: 'post',
-          url: 'https://test.bigxingxing.com/api/v1/file/batch_upload',
-          data: formData,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).then(
-          res => {
-            if (res.data.status == 200) {
+      },
+      append(data){
+        this.$prompt('请输入规格名称', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }).then(({ value }) => {
+          const newChild = { id: Math.random(), label: value };
+          data.children.push(newChild);
+        }).catch(() => {
 
-            }
+        });
+
+      },
+      remove(node, data) {
+        const parent = node.parent;
+        const children = parent.data.children || parent.data;
+        const index = children.findIndex(d => d.id === data.id);
+        children.splice(index, 1);
+
+        let i = -1;
+        for(let j in this.sku_data){
+          if(this.sku_data[j] instanceof Array && this.sku_data[j].length == 0){
+            i = j
           }
-        )
+        }
+        if(i > -1){
+          this.sku_data.splice(i,1);
+        }
+          this.sku_data= JSON.parse(JSON.stringify(this.sku_data))
+
+      },
+      sureAllSku(){
+        let all_arr = [],bute = [];
+        for(let i in this.sku_data){
+         bute.push(this.sku_data[i][0].label);
+          all_arr[i] = [];
+          for(let j in this.sku_data[i][0].children){
+            all_arr[i].push(this.sku_data[i][0].children[j].label)
+          }
+        }
+        this.formData.prattribute = [].concat(bute);
+
+        let mLen = all_arr.length;
+        let index = 0;
+
+        let digui = function (arr1,arr2) {
+          // console.log("enter digui",arr1,arr2);
+          let res = [];
+          arr1.forEach(function (m) {
+            arr2.forEach(function (n) {
+              res.push(m+" !- "+n);
+            })
+          });
+          index ++;
+          if(index<= mLen-1){
+            return digui(res,all_arr[index])
+          }else{
+            return res;
+          }
+        };
+        let resultArr = [];
+        if(mLen >= 2){
+          resultArr = digui(all_arr[index],all_arr[++index]);
+        }else{
+          resultArr = all_arr[0];
+        }
+        let skus = [];
+        for(let a in resultArr){
+          skus.push({
+            skupic: "",
+            skusn: this.commonSkuSn || '',
+            skuprice: this.formData.prprice|| this.commonSkuPrice || 0,
+            skudeviderate:this.commonSkuDev || 0,
+            skustock: this.commonSkuStock || 0,
+            skuattritedetail: resultArr[a].split('!-'),
+          });
+        }
+        this.formData.skus = [].concat(skus)
+        // this.formData.prattribute
       },
       goLabel(tag) {
         this.$refs[tag.name].click();
@@ -772,46 +900,86 @@
           }
         )
       },
-      //  长图
-      handlePrDescRemove(file, fileList) {
-        this.prDescUrl = this.prDescUrl.filter(
-          item => item.uid != file.uid
-        );
-      },
-      uploadPrDesc(file) {
-
-        let formData = new FormData();
-
-        formData.append('file', file.file)
-
-        this.$http({
-          method: 'post',
-          url: this.uploadUrl,
-          data: formData,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).then(
-          res => {
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = resData.data;
-
-              this.form.prdesc.push({
-                name: file.file.name,
-                url: data
-              })
-            }
-          }
-        )
-      },
-      newUploadPrDesc(e){
+      newUploadImages(e){
         let files = e.target.files;
+        if(files.length > 9){
+          this.$message.error('最多只能上传9张图片!');
+          files = files.slice(0,10);
+        }
         let formData = new FormData();
         for(let i=0;i<files.length;i++){
           formData.append(`file${i}`, files[i])
         }
         this.$http({
           method: 'post',
-          url: this.$api.batch_upload,
+          url: this.$api.batch_upload +'?type=product',
+          data: formData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let file = document.getElementById('imgUrl');
+              file.value ='';
+              let arr = [];
+              for(let i in res.data.data){
+                arr.push({url:res.data.data[i].data,name:''})
+              }
+              this.imagesUrl = this.imagesUrl.concat(arr);
+            }
+          }
+        )
+      },
+      previewImage(item){
+        this.dialogImageUrl = item.url;
+        this.dialogVisible = true;
+      },
+      deleteImage(index){
+        this.imagesUrl.splice(index,1)
+      },
+      // //  长图
+      // handlePrDescRemove(file, fileList) {
+      //   this.prDescUrl = this.prDescUrl.filter(
+      //     item => item.uid != file.uid
+      //   );
+      // },
+      // uploadPrDesc(file) {
+      //
+      //   let formData = new FormData();
+      //
+      //   formData.append('file', file.file)
+      //
+      //   this.$http({
+      //     method: 'post',
+      //     url: this.uploadUrl,
+      //     data: formData,
+      //     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      //   }).then(
+      //     res => {
+      //       if (res.data.status == 200) {
+      //         let resData = res.data,
+      //           data = resData.data;
+      //
+      //         this.form.prdesc.push({
+      //           name: file.file.name,
+      //           url: data
+      //         })
+      //       }
+      //     }
+      //   )
+      // },
+      newUploadPrDesc(e){
+        let files = e.target.files;
+        if(files.length > 30){
+          this.$message.error('最多只能上传30张图片!');
+          files = files.slice(0,31);
+        }
+        let formData = new FormData();
+        for(let i=0;i<files.length;i++){
+          formData.append(`file${i}`, files[i])
+        }
+        this.$http({
+          method: 'post',
+          url: this.$api.batch_upload+'?type=product',
           data: formData,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
@@ -1220,6 +1388,7 @@
       flex-flow: row;
       align-items: center;
       justify-content: flex-start;
+      flex-wrap: wrap!important;
       margin-bottom: 20px;
       .el-upload-list__item-actions {
         position: absolute;
@@ -1246,7 +1415,7 @@
       }
     }
     .inputbg{
-      margin-left: 10px;
+      margin: 0  10px  10px 0;
       /*color: #97ADCB;*/
       color: #999;
       border: 1px solid #eeeeee;
