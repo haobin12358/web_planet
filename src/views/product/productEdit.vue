@@ -91,11 +91,12 @@
           <el-tree
             v-for="(item,index) in sku_data"
             :data="item"
+            :key="item.id"
             node-key="id"
             :default-expand-all="true"
             :expand-on-click-node="false">
-              <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>{{ node.label }}</span>
+              <div class="custom-tree-node" slot-scope="{ node, data }">
+                <input class="m-input-tree el-input__inner" @blur="addInput($event,node)" />
                 <span >
                   <el-button
                     v-if="data.children"
@@ -111,7 +112,7 @@
                     删除
                   </el-button>
                 </span>
-              </span>
+              </div>
           </el-tree>
 
           <el-button type="primary" v-if="sku_data.length >0" @click="sureAllSku">确定</el-button>
@@ -549,27 +550,31 @@
     methods: {
       addTree(){
         let that =this;
-        this.$prompt('请输入属性名称', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }).then(({ value }) => {
-          let child = [{id:Math.random(),label:value,children:[]}];
+        // this.$prompt('请输入属性名称', '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消'
+        // }).then(({ value }) => {
+          let child = [{id:Math.random(),label:'',children:[]}];
           that.sku_data.push(child)
-        }).catch(() => {
-
-        });
+        // }).catch(() => {
+        //
+        // });
 
       },
+      addInput(e,node){
+        // console.log(e,node)
+        node.data.label = e.target.value;
+      },
       append(data){
-        this.$prompt('请输入规格名称', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }).then(({ value }) => {
-          const newChild = { id: Math.random(), label: value };
+        // this.$prompt('请输入规格名称', '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消'
+        // }).then(({ value }) => {
+          const newChild = { id: Math.random(), label: '' };
           data.children.push(newChild);
-        }).catch(() => {
-
-        });
+        // }).catch(() => {
+        //
+        // });
 
       },
       remove(node, data) {
@@ -1380,6 +1385,12 @@
         }
       }
     }
+     .m-input-tree{
+       display: inline-block;
+       height: 36px;
+       line-height: 36px;
+       width: 50%;
+     }
     .el-upload-list--picture-card .el-upload-list__item-actions:hover {
       opacity: 1;
     }
