@@ -1387,10 +1387,11 @@
     }
      .m-input-tree{
        display: inline-block;
-       height: 36px;
-       line-height: 36px;
+       height: 26px;
+       line-height: 26px;
        width: 50%;
      }
+
     .el-upload-list--picture-card .el-upload-list__item-actions:hover {
       opacity: 1;
     }
