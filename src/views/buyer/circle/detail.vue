@@ -234,10 +234,18 @@
       },
       // 分享圈子 - 详情页点击
       shareCircle(val) {
+        let _text = '';
+        for(let i in this.news_info.netext){
+          if(this.news_info.netext[i].type=='text'){
+            _text = this.news_info.netext[i].content;
+            break;
+          }
+        }
+
         if(localStorage.getItem('token')) {
           let options = {
             title: this.news_info.netitle,
-            desc: this.news_info.netext,
+            desc: _text,
             imgUrl: this.news_info.author.usheader,       // 初步考虑用用户头像
             link: location.href.split('#')[0] + '?neid=' + this.$route.query.neid
           };
