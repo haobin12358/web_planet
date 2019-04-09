@@ -81,7 +81,7 @@
     display: flex;
     justify-content: space-between;
     width: 720px;
-    height: 186px;
+    height: 176px;
     margin: 0 0 5px 15px;
     background: url("/static/images/coupon/icon-new.png") no-repeat;
     background-size: 100% 100%;
