@@ -85,6 +85,7 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
 
   // 返回状态码不是200时统一报错
   if(data.data.status != 200) {
+
     // token有问题
     if(data.data.status_code == 405007 || data.data.message == '用户不存在') {
       localStorage.removeItem('token');
@@ -148,6 +149,9 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   //   type:'warning'
   // });
   // loadinginstace.close()
+  // if(data.data.status == 502){
+    router.push('/systemfix');
+  // }
   Indicator.close();
   return Promise.reject(error)
 });

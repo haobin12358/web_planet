@@ -53,6 +53,9 @@
           case 3:
             this.$router.push({ path: "/activityProduct", query: { which: "try" }});
             break;
+          case 4:
+            this.$router.push({ path: "/limitedTime"});   //限时活动
+            break;
         }
       },
       // 获取活动list
