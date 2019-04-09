@@ -80,9 +80,9 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    width: 700px;
-    height: 171px;
-    margin: 0 0 5px 25px;
+    width: 720px;
+    height: 186px;
+    margin: 0 0 5px 15px;
     background: url("/static/images/coupon/icon-new.png") no-repeat;
     background-size: 100% 100%;
     &.m-had {
@@ -102,6 +102,8 @@
     }
     .m-card-left {
       margin: 20px 0 0 45px;
+      width: 150px;
+      text-align: center;
       .m-store-img {
         width: 100px;
         height: 100px;
@@ -119,16 +121,21 @@
         color: #ffffff;
         font-size: 18px;
         text-align: center;
+        width: 150px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
       }
     }
     .m-card-right {
-      width: 63%;
+      width: 68%;
       color: #ffffff;
       font-size: 18px;
-      margin: 15px 20px 0 0;
+      margin: 15px 10px 0 0;
       .m-card-time {
         margin-bottom: 5px;
         text-align: right;
+
       }
       .m-card-detail {
         display: flex;
