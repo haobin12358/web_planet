@@ -79,8 +79,8 @@
           <input type="text" v-model="search" @blur="getProduct" placeholder="商品搜索关键词(商品名/品牌名)">
         </div>
         <div class="m-scroll-box">
-          <div class="m-scroll">
-            <ul class="m-selected-brand-product-ul">
+          <div class="m-scroll" style="padding-left: 40px;">
+            <ul class="m-selected-brand-product-ul" style="margin: 0;">
               <li v-for="(item, index) in productList">
                 <img class="m-cancel-icon" v-if="!item.choose" src="/static/images/icon-radio.png" @click="productCouponCancel('product', index)">
                 <img class="m-cancel-icon" v-else src="/static/images/icon-radio-active.png" @click="productCouponCancel('product', index)">
@@ -145,11 +145,23 @@
         getCoupon: false,        // 是否请求过获取优惠券的接口
         edit_data:[],
         show_add:false,
-        show_video:false
+        show_video:false,
+        select_product:[]
       }
     },
     mixins: [wxapi],
     components: { product, couponCard },
+    // directives: {
+    //   'mtblur' (el, binding, vnode) {
+    //     let mtinput = el.querySelector('input')
+    //     console.log(el)
+    //     mtinput.onblur = function () {
+    //
+    //        this.getProduct();
+    //     }
+    //   }
+    //
+    // },
     methods: {
       // 预览图片
       previewImage(j,index, image) {
@@ -299,9 +311,9 @@
       //获取商品列表
       getProduct() {
         console.log(this.search)
-        if(this.productList.length > 0) {
-          this.productList = [];
-        }else {
+        // if(this.productList.length > 0) {
+        //   this.productList = [];
+        // }else {
           let params = {
             // itid: 'news_bind_product',
             kw: this.search,
@@ -310,13 +322,27 @@
           }
           axios.get(api.product_list, { params: params }).then(res => {
             if(res.data.status == 200) {
-              this.productList = res.data.data;
-              for(let i = 0; i < this.productList.length; i ++) {
-                this.productList[i].choose = false;
+              let arr =[] ;
+              for(let i in this.productList){
+                if(this.productList[i].choose){
+                  arr.push(this.productList[i])
+                }
               }
+
+              for(let i = 0; i < res.data.data.length; i ++) {
+                res.data.data[i].choose = false;
+                let result = arr.some(item=>{
+                  if(item.prid== res.data.data[i].prid){
+                    return true
+                  }
+                })
+                if(!result)
+                  arr.push(res.data.data[i])
+              }
+              this.productList = arr.concat([]);
             }
           });
-        }
+        // }
       },
       // 取消商品或优惠券的选择
       productCouponCancel(which, index) {
