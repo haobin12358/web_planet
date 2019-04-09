@@ -87,10 +87,10 @@
 
 
           <el-form-item label="银行" prop="subankname">
-            <el-input v-model.trim="supplierForm.subankname" maxlength="100"></el-input>
+            <el-input v-model.trim="supplierForm.subankname" maxlength="60"></el-input>
           </el-form-item>
           <el-form-item label="银行卡号" prop="subanksn">
-            <el-input v-model.trim="supplierForm.subanksn" maxlength="100"></el-input>
+            <el-input v-model.trim="supplierForm.subanksn" maxlength="30"></el-input>
           </el-form-item>
           <el-form-item label="营业执照" prop="subusinesslicense">
             <el-upload
@@ -109,24 +109,27 @@
           </el-form-item>
 
           <el-form-item label="注册资金" prop="suregisteredfund">
-            <el-input v-model.trim="supplierForm.suregisteredfund" ></el-input>
+            <el-input v-model.trim="supplierForm.suregisteredfund" maxlength="200">
+              <template slot="append">万</template>
+            </el-input>
+
           </el-form-item>
           <el-form-item label="主营类目" prop="sumaincategory">
-            <el-input v-model.trim="supplierForm.sumaincategory" ></el-input>
+            <el-input v-model.trim="supplierForm.sumaincategory" maxlength="1000"></el-input>
           </el-form-item>
 
           <el-form-item label="注册时间" prop="suregisteredtime">
             <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="supplierForm.suregisteredtime" style="width: 100%;"></el-date-picker>
           </el-form-item>
           <el-form-item label="法人姓名" prop="sulegalperson">
-            <el-input v-model.trim="supplierForm.sulegalperson" ></el-input>
+            <el-input v-model.trim="supplierForm.sulegalperson" maxlength="30"></el-input>
           </el-form-item>
           <el-form-item label="供应商邮箱" prop="suemail">
-            <el-input v-model.trim="supplierForm.suemail" ></el-input>
+            <el-input v-model.trim="supplierForm.suemail" maxlength="200"></el-input>
           </el-form-item>
           <el-form-item label="法人身份证" required>
-            <el-col :span="11">
-              <el-form-item  prop="sulegalpersonidcardfront">
+<!--            <el-col :span="11">-->
+              <el-form-item  prop="sulegalpersonidcardfront" style="margin-bottom: 20px;">
                 <el-upload
                   :action="uploadUrl"
                   class="avatar-uploader"
@@ -143,8 +146,8 @@
                 </el-upload>
                 <div slot="tip" class="el-upload__tip">请上传法人身份证正面图片</div>
               </el-form-item>
-            </el-col>
-            <el-col :span="11">
+<!--            </el-col>-->
+<!--            <el-col :span="11">-->
               <el-form-item  prop="sulegalpersonidcardback">
                 <el-upload
                   :action="uploadUrl"
@@ -162,12 +165,12 @@
                 </el-upload>
                 <div slot="tip" class="el-upload__tip">请上传法人身份证反面图片</div>
               </el-form-item>
-            </el-col>
+<!--            </el-col>-->
 
 
           </el-form-item>
           <el-form-item label="押金" prop="sudeposit">
-            <el-input v-model.trim="supplierForm.sudeposit" ></el-input>
+            <el-input v-model.trim="supplierForm.sudeposit"  maxlength="17"></el-input>
           </el-form-item>
 
           <el-form-item>
