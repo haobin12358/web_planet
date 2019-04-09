@@ -221,19 +221,19 @@ export const asyncRouterMap = [
     redirect: '/marketing/coupon',
     alwaysShow: true,
     name: 'Marketing',
-    meta: {title: '营销', icon: 'yingxiaoshezhi', roles: level1},
+    meta: {title: '营销', icon: 'yingxiaoshezhi', roles: level2},
     children: [
       {
         path: 'coupon',
         name: 'Coupon',
         component: () => import('src/views/marketing/coupon'),
-        meta: {title: '优惠券', icon: 'yes', noCache: true, roles: level1}
+        meta: {title: '优惠券', icon: 'yes', noCache: true, roles: level2}
       }, {
         path: 'editCoupon',
         name: 'EditCoupon',
         hidden: true,
         component: () => import('src/views/marketing/editCoupon'),
-        meta: {title: '优惠券编辑', noCache: true, roles: level1}
+        meta: {title: '优惠券编辑', noCache: true, roles: level2}
       }, {
         path: 'attendance',
         name: 'Attendance',
@@ -374,6 +374,17 @@ export const asyncRouterMap = [
         name: 'PlatformRule',
         component: () => import('src/views/service/platformRule'),
         meta: {title: '平台规则', noCache: true,  roles: level0}
+      },{
+        path: 'notice',
+        name: 'notice',
+        component: () => import('src/views/service/notice'),
+        meta: {title: '公告发布', noCache: true,  roles: level2}
+      },
+      {
+        path: 'addNotice',
+        name: 'addNotice',
+        component: () => import('src/views/service/addNotice'),
+        meta: {title: '编辑公告', noCache: false,  roles: level2}
       },
     ]
   },

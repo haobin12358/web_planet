@@ -187,6 +187,11 @@ const api = {
 
   get_system_notes: title + 'supplizer/get_system_notes',                   // 获取通告
   add_update_notes: title + 'supplizer/add_update_notes',                    // 新增/修改通告
+
+  get_club_list: title + 'club/list',//获取公告
+  get_club_message: title + 'club/message',//获取公告详情
+  create_club: title + 'club/create_message' ,///c创建公告
+  update_club :title +'club/update_companymessage',//更新公告
 };
 
 export default api

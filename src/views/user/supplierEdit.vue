@@ -6,7 +6,7 @@
           <el-form-item label="供应商名称" prop="suname">
             <el-input v-model.trim="supplierForm.suname" maxlength="100"></el-input>
           </el-form-item>
-          <el-form-item label="品牌" prop="pbids">
+          <el-form-item label="品牌" >
             <el-select
               v-model="supplierForm.pbids"
               clearable
@@ -92,9 +92,89 @@
           <el-form-item label="银行卡号" prop="subanksn">
             <el-input v-model.trim="supplierForm.subanksn" maxlength="100"></el-input>
           </el-form-item>
+          <el-form-item label="营业执照" prop="subusinesslicense">
+            <el-upload
+              :action="uploadUrl"
+              class="avatar-uploader"
+              accept="image/*"
+              list-type="picture-card"
+              :file-list="subusinesslicenseUrl"
+              :limit="1"
+              :on-success="handleSinessSuccess"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleLicenseRemove">
+              <i  class="el-icon-plus"></i>
+              <div slot="tip" class="el-upload__tip">请上传营业执照图片</div>
+            </el-upload>
+          </el-form-item>
+
+          <el-form-item label="注册资金" prop="suregisteredfund">
+            <el-input v-model.trim="supplierForm.suregisteredfund" ></el-input>
+          </el-form-item>
+          <el-form-item label="主营类目" prop="sumaincategory">
+            <el-input v-model.trim="supplierForm.sumaincategory" ></el-input>
+          </el-form-item>
+
+          <el-form-item label="注册时间" prop="suregisteredtime">
+            <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="supplierForm.suregisteredtime" style="width: 100%;"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="法人姓名" prop="sulegalperson">
+            <el-input v-model.trim="supplierForm.sulegalperson" ></el-input>
+          </el-form-item>
+          <el-form-item label="供应商邮箱" prop="suemail">
+            <el-input v-model.trim="supplierForm.suemail" ></el-input>
+          </el-form-item>
+          <el-form-item label="法人身份证" required>
+            <el-col :span="11">
+              <el-form-item  prop="sulegalpersonidcardfront">
+                <el-upload
+                  :action="uploadUrl"
+                  class="avatar-uploader"
+                  list-type="picture-card"
+                  :file-list="sulegalpersonidcardfrontUrl"
+                  :limit="1"
+                  accept="image/*"
+                  :on-success="handleFrontSuccess"
+                  :on-preview="handlePictureCardPreview"
+                  :on-remove="handleFrontRemove">
+<!--                  <img v-if="supplierForm.sulegalpersonidcardfront" :key="supplierForm.sulegalpersonidcardfront"-->
+<!--                       class="avatar">-->
+                  <i  class="el-icon-plus "></i>
+                </el-upload>
+                <div slot="tip" class="el-upload__tip">请上传法人身份证正面图片</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item  prop="sulegalpersonidcardback">
+                <el-upload
+                  :action="uploadUrl"
+                  class="avatar-uploader"
+                  list-type="picture-card"
+                  :file-list="sulegalpersonidcardbackUrl"
+                  accept="image/*"
+                  :on-success="handleBackSuccess"
+                  :on-preview="handlePictureCardPreview"
+                  :limit="1"
+                  :on-remove="handleEndRemove">
+<!--                  <img v-if="supplierForm.sulegalpersonidcardback" :key="supplierForm.sulegalpersonidcardback"-->
+<!--                       class="avatar">-->
+                  <i  class="el-icon-plus "></i>
+                </el-upload>
+                <div slot="tip" class="el-upload__tip">请上传法人身份证反面图片</div>
+              </el-form-item>
+            </el-col>
+
+
+          </el-form-item>
+          <el-form-item label="押金" prop="sudeposit">
+            <el-input v-model.trim="supplierForm.sudeposit" ></el-input>
+          </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="doSave">保存供应商</el-button>
+
+            <el-button type="primary" @click="changeState('usual')" v-if="supplierForm.sustatus == 'auditing'">通过</el-button>
+            <el-button @click="changeState('forbidden')" v-if="supplierForm.sustatus == 'auditing'">拒绝</el-button>
+            <el-button type="primary" @click="doSave" v-else>保存供应商</el-button>
           </el-form-item>
 
         </el-form>
@@ -139,6 +219,16 @@
 
           "subankname": " ",
           "subanksn": "",
+          subusinesslicense:'',
+          suregisteredfund:'',
+          sumaincategory:'',
+          sulegalperson:'',
+          suemail:'',
+          sulegalpersonidcardfront:'',
+          sulegalpersonidcardback:'',
+          sudeposit:'',
+          suregisteredtime:'',
+          sustatus:''
 
         },
         rules: {
@@ -177,13 +267,46 @@
 
           ],
 
-          subankname: [],
-          subanksn: [],
+          subankname: [
+            {required: true, message: '开户银行必填', trigger: 'blur'},
+          ],
+          subanksn: [
+            {required: true, message: '银行卡号必填', trigger: 'blur'},
+          ],
+          subusinesslicense:[
+            {required: true, message: '营业执照必填', trigger: 'change'}
+          ],
+          suregisteredtime:[
+            {required: true, message: '注册时间必填', trigger: 'change'}
+          ],
+          suregisteredfund:[
+            {required: true, message: '注册资金必填', trigger: 'blur'},
+          ],
+          sumaincategory:[
+            {required: true, message: '主营类目必填', trigger: 'blur'},
+          ],
+          sulegalperson:[
+            {required: true, message: '法人必填', trigger: 'blur'},
+          ],
+          suemail:[
+            {required: true, message: '供应商邮箱必填', trigger: 'blur'},
+          ],
+          sudeposit:[
+            {required: true, message: '押金必填', trigger: 'blur'},
+          ],
+          sulegalpersonidcardfront:[
+            {required: true, message: '身份证正面必填', trigger: 'change'}
+          ],
+          sulegalpersonidcardback:[
+            {required: true, message: '身份证反面必填', trigger: 'change'}
+          ]
         },
 
         pbSelect: '', //  先限制单选品牌
         suContractUrl: [],
-
+        subusinesslicenseUrl:[],
+        sulegalpersonidcardfrontUrl:[],
+        sulegalpersonidcardbackUrl:[],
         //  大图预览
         dialogImageUrl: '',
         dialogVisible: false,
@@ -193,6 +316,16 @@
       suContractUrl(val) {
         this.supplierForm.sucontract = val.map(item => item.url);
       },
+      subusinesslicenseUrl(val){
+        this.supplierForm.subusinesslicense = (val.length && val[0].url) ||''
+      },
+      sulegalpersonidcardfrontUrl(val){
+
+        this.supplierForm.sulegalpersonidcardfront = (val.length && val[0].url) ||'';
+      },
+      sulegalpersonidcardbackUrl(val){
+        this.supplierForm.sulegalpersonidcardback = (val.length && val[0].url) ||'';
+      }
     },
     computed: {
       uploadUrl() {
@@ -206,9 +339,24 @@
 
     methods: {
 
-
+      //删除营业执照
+      handleLicenseRemove(file, fileList){
+        // this.supplierForm.subusinesslicense = '';
+        this.subusinesslicenseUrl = fileList
+      },
+      //删除正面
+      handleFrontRemove(file, fileList){
+        this.sulegalpersonidcardfrontUrl = fileList;
+        // this.supplierForm.sulegalpersonidcardfront = '';
+      },
+      //删除反面
+      handleEndRemove(file, fileList){
+        this.sulegalpersonidcardbackUrl = fileList;
+        // this.supplierForm.sulegalpersonidcardback = '';
+      },
       //  分类主图上传
       handleHeaderSuccess(res, file) {
+        console.log(res)
         this.supplierForm.suheader = res.data;
       },
       beforePicUpload(file) {
@@ -250,12 +398,54 @@
           }
         );
       },
+      //营业执照
+      handleSinessSuccess(file){
+        this.subusinesslicenseUrl.push({
+          name: '',
+          url: file.data,
+        })
+        this.supplierForm.subusinesslicense = file.data;
+      },
       handleContractRemove(file) {
         this.suContractUrl = this.suContractUrl.filter(
           item => item.uid != file.uid
         )
       },
+//正面
+      handleFrontSuccess(file){
+        this.sulegalpersonidcardfrontUrl.push({
+          name: '',
+          url: file.data,
+        });
+        this.supplierForm.sulegalpersonidcardfront = file.data;
+      },
+      //反面
+      handleBackSuccess(file){
+        this.sulegalpersonidcardbackUrl.push({
+          name:'',
+          url:file.data
+        })
+        this.supplierForm.sulegalpersonidcardback = file.data;
+      },
+      //审核通过/拒绝
+      changeState(state){
+        this.supplierForm.sustatus = state;
+        this.$http.post(this.$api.update_supplizer, this.supplierForm).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
 
+              this.$router.push('/user/suppliers');
+              this.$notify({
+                title: '供应商编辑成功',
+                message: `供应商名称:${this.supplierForm.suname}`,
+                type: 'success'
+              });
+            }
+          }
+        )
+      },
       doSave() {
         this.$refs.supplierForm.validate(
           valid => {
@@ -379,8 +569,21 @@
 
           "subankname": data.subankname,
           "subanksn": data.subanksn,
+          subusinesslicense:data.subusinesslicense,
+          suregisteredfund:data.suregisteredfund,
+          sumaincategory:data.sumaincategory,
+          sulegalperson:data.sulegalperson,
+          suemail:data.suemail,
+          sulegalpersonidcardfront:data.sulegalpersonidcardfront,
+          sulegalpersonidcardback:data.sulegalpersonidcardback,
+          sudeposit:data.sudeposit,
+          suregisteredtime:data.suregisteredtime,
+          sustatus:data.sustatus_en
         };
 
+        this.subusinesslicenseUrl.push({url:data.subusinesslicense,name:''});
+        this.sulegalpersonidcardfrontUrl.push({url:data.sulegalpersonidcardfront,name:''});
+        this.sulegalpersonidcardbackUrl.push({url:data.sulegalpersonidcardback,name:''});
         this.suContractUrl = data.sucontract.map(item => {
           return {
             url: item

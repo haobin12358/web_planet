@@ -548,6 +548,7 @@
     },
 
     methods: {
+      //添加属性树
       addTree(){
         let that =this;
         // this.$prompt('请输入属性名称', '提示', {
@@ -561,10 +562,12 @@
         // });
 
       },
+      //属性和规格输入框
       addInput(e,node){
         // console.log(e,node)
         node.data.label = e.target.value;
       },
+      //添加规格
       append(data){
         // this.$prompt('请输入规格名称', '提示', {
         //   confirmButtonText: '确定',
@@ -577,6 +580,7 @@
         // });
 
       },
+      //删除规格和属性
       remove(node, data) {
         const parent = node.parent;
         const children = parent.data.children || parent.data;
@@ -595,6 +599,7 @@
           this.sku_data= JSON.parse(JSON.stringify(this.sku_data))
 
       },
+      //根据属性和规格生成单一商品
       sureAllSku(){
         let all_arr = [],bute = [];
         for(let i in this.sku_data){
@@ -905,6 +910,7 @@
           }
         )
       },
+      //新的上传轮播图
       newUploadImages(e){
         let files = e.target.files;
         if(files.length > 9){

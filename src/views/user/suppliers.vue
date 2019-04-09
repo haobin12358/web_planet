@@ -8,7 +8,16 @@
         <el-form-item label="供应商手机号">
           <el-input v-model.trim="searchForm.mobile" maxlength="100" ></el-input>
         </el-form-item>
-
+        <el-form-item label="状态">
+          <el-select v-model="searchForm.sustatus" placeholder="请选择">
+            <el-option
+              v-for="item in statusoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
         <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
@@ -55,11 +64,12 @@
       <el-table-column align="center" prop="sustatus" label="状态" width="180">
         <template slot-scope="scope">
           <el-tag  v-if="scope.row.sustatus == 0" type="primary">正常</el-tag>
+          <el-tag  v-if="scope.row.sustatus == 10" type="warning">审核中</el-tag>
           <el-tag v-if="scope.row.sustatus == -10" type="danger">禁用</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" prop="prtitle" label="操作" width="180" fixed="right">
+      <el-table-column align="center" prop="prtitle" label="操作" width="240" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditSupplier(scope.row)">编辑</el-button>
           <el-button type="text" @click="doEditSupplierPwd(scope.row)">修改密码</el-button>
@@ -103,6 +113,7 @@
         searchForm: {
           kw: '',
           mobile: '',
+          sustatus:''
         },
 
         loading: false,
@@ -115,6 +126,20 @@
         //  大图预览
         dialogImageUrl: '',
         dialogVisible: false,
+        statusoptions:[
+          {
+            label:'正常',
+            value:'usual'
+          },
+          {
+            label:'禁止',
+            value:'forbidden'
+          },
+          {
+            label:'审核中',
+            value:'auditing'
+          }
+        ]
       }
     },
 
@@ -127,6 +152,7 @@
         this.searchForm = {
           kw: '',
           mobile: '',
+          sustatus:''
         };
         this.doSearch();
       },
@@ -138,6 +164,7 @@
           params: {
             kw: this.searchForm.kw,
             mobile: this.searchForm.mobile,
+            sustatus: this.searchForm.sustatus
           },
         }).then(
           res => {
