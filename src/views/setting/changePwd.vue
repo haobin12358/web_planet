@@ -75,8 +75,8 @@
                 () => {
                   if (this.$store.getters.roles[0] == 'supplizer') {
                     this.$http.post(this.$api.update_supplizer_password, {
-                      "supassword": this.password_new,
-                      "oldpassword": this.password_old,
+                      "supassword": this.pwdForm.password_new,
+                      "oldpassword": this.pwdForm.password_old,
                     }).then(
                       res => {
                         if (res.data.status == 200) {

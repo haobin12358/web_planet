@@ -18,7 +18,7 @@
           <el-form-item label="优惠内容：">
             <el-radio-group v-model="radioDiscount">
               <el-radio :label="10">减价</el-radio>
-              <el-radio :label="20">打折</el-radio>
+              <el-radio :label="20" v-if="isYou">打折</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="减额：" prop="cosubtration" v-if="radioDiscount == 10">
@@ -203,6 +203,7 @@
         itemsList: [],
         iscoisavailable: true,
         iscoiscancollect: true,
+        isYou:true
       }
     },
     mounted() {
@@ -210,6 +211,9 @@
       this.getPbList();        // 获取品牌列表
       if(this.$route.query.coupon) {
         this.editCoupon()      // 编辑优惠券时处理数据
+      }
+      if(this.$store.state.user.roles.indexOf('supplizer') != -1){
+        this.isYou = false;
       }
     },
     directives: { elDragDialog },
