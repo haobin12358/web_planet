@@ -34,8 +34,8 @@
                 <div class="m-img-box" v-else-if="items.showtype == 'picture'">
                   <img :src="items.mainpic" class="m-img">
                 </div>
-                <p class="m-text" v-else>
-                  {{items.netext}}
+                <p class="m-text" v-else v-html="items.netext">
+
                 </p>
                 <ul class="m-video-icon-ul">
                   <li @click.stop="likeClick(index)">

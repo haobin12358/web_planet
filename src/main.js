@@ -182,7 +182,7 @@ Vue.filter('money', function(val) {
 
 router.beforeEach((to,from,next) => {
   if(localStorage.getItem('version') && localStorage.getItem('version') != store.state.version){
-    MessageBox.confirm('检测到系统更新，为了更好的体验，请先清除缓存').then(() => {
+    MessageBox.confirm('检测到系统更新，为了更好的体验，请点击确定清除缓存').then(() => {
       localStorage.clear();
 
       // this.$store.state.show_login = true;

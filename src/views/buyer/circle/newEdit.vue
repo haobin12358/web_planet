@@ -76,7 +76,7 @@
           <img class="m-input-icon" v-else src="/static/images/icon-up.png">
         </div>-->
         <div class="m-product-search">
-          <input type="text" v-model="search" @focus="getProduct('')" placeholder="商品搜索关键词(商品名/品牌名)">
+          <input type="text" v-model="search" @blur="getProduct" placeholder="商品搜索关键词(商品名/品牌名)">
         </div>
         <div class="m-scroll-box">
           <div class="m-scroll">
@@ -297,13 +297,14 @@
         });
       },
       //获取商品列表
-      getProduct(kw) {
+      getProduct() {
+        console.log(this.search)
         if(this.productList.length > 0) {
           this.productList = [];
         }else {
           let params = {
             // itid: 'news_bind_product',
-            kw: '' || kw,
+            kw: this.search,
             page_num: 1,
             page_size: 200
           }
@@ -348,11 +349,12 @@
         //   Toast("内容字数不可操作10000");
         //   return false;
         // }
+        console.log(this.edit_data)
         let text = [];
         for(let i=0;i<this.edit_data.length;i++){
           text[i] ={
             type:this.edit_data[i].type,
-            content:this.edit_data[i].content
+            content:this.edit_data[i].type == 'text'?this.edit_data[i].content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'):this.edit_data[i].content
           }
         }
         let params = {
@@ -497,7 +499,7 @@
     },
     watch: {
       search(val) {
-        this.getProduct(val)
+        // this.getProduct(val)
       }
     }
   }

@@ -11,7 +11,7 @@
 
       <div class="m-content">
         <template v-for="(item,index) in news_info.netext">
-          <p v-if="item.type=='text'">{{item.content}}</p>
+          <div v-if="item.type=='text'" v-html="item.content"></div>
           <template v-if="item.type == 'image'" v-for="(i,j) in item.content">
             <img class="m-circle-img" :src="i" @click="previewImage(i, item.content)">
           </template>
