@@ -14,7 +14,7 @@
 
     </section>
 
-    <el-table :data="tableData" v-loading="loading" style="width: 100%" :cell-class-name="cellFunction">
+    <el-table :data="tableData" v-loading="loading" style="width: 100%" >
 
       <el-table-column align="center" prop="cmtitle" label="标题" width="280"></el-table-column>
       <el-table-column align="center" prop="createtime" label="发布时间" width="280"></el-table-column>
@@ -92,7 +92,7 @@
         this.$http.get(this.$api.get_club_list, {
           noLoading: true,
           params: {
-            page_size:this.page_size,
+            page_size:this.pageSize,
             page_num:this.currentPage,
             cmindex: 2,
           },
@@ -113,9 +113,11 @@
       sizeChange(pageSize) {
         this.pageSize = pageSize;
         this.currentPage = 1;
+        this.getNotice();
       },
       pageChange(page) {
         this.currentPage = page;
+        this.getNotice();
       },
 
       doAddNotice(){
@@ -125,6 +127,26 @@
         this.$router.push({path:'/service/addNotice',query:{id:item.cmid}})
       },
       doRemoveNotice(item){
+        let that = this;
+        this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          item.delete = true;
+          that.$http.post(that.$api.update_club, item).then(res => {
+            if (res.data.status == 200) {
+              that.$notify({
+                title: '删除成功',
+                message: '公告删除成功',
+                type: 'success'
+              });
+              that.getNotice();
+            }
+          });
+        }).catch(() => {
+
+        });
 
       }
 

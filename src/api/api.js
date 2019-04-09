@@ -192,6 +192,7 @@ const api = {
   get_club_message: title + 'club/message',//获取公告详情
   create_club: title + 'club/create_message' ,///c创建公告
   update_club :title +'club/update_companymessage',//更新公告
+  get_userwords: title +'club/get_userwords' ,///获取留言
 };
 
 export default api

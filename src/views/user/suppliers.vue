@@ -138,6 +138,10 @@
           {
             label:'审核中',
             value:'auditing'
+          },
+          {
+            label:'全部',
+            value:''
           }
         ]
       }
