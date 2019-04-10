@@ -1,5 +1,5 @@
 <template>
-  <div class="m-my-code">
+  <div class="m-my-code" @touchmove="touchMove">
     <div class="m-cell-box">
       <!--<mt-cell-swipe v-for="item in codeList" :key="item.uacid"
                      :right="rightButtons" :title="item.uaccode">
@@ -10,6 +10,7 @@
         <div class="m-code-copy-btn" :class="item.uacstatus == 10 ? 'un-active' : ''" @click="copyText(index)">复制</div>
       </div>
       <p class="m-no-data" v-if="codeList.length == 0">暂无数据</p>
+      <bottom-line v-if="bottom_show"></bottom-line>
     </div>
   </div>
 </template>
@@ -19,20 +20,63 @@
   import axios from 'axios';
   import api from '../../../api/api';
   import { Toast } from 'mint-ui';
-
+  import bottomLine from '../../../components/common/bottomLine';
   export default {
     data() {
       return {
-        codeList: []
+        codeList: [],
+        bottom_show: false,
+        page_info: { page_num: 1, page_size: 16 },
+        isScroll: true,
+        total_count: 0
       }
     },
+    components:{ bottomLine },
     methods: {
+      //滚动加载更多
+      touchMove(e){
+
+        let scrollTop = common.getScrollTop();
+        let scrollHeight = common.getScrollHeight();
+        let ClientHeight = common.getClientHeight();
+        if (scrollTop + ClientHeight  >= scrollHeight -10) {
+          if(this.isScroll){
+            this.isScroll = false;
+
+            if(this.codeList.length == this.total_count){
+              this.bottom_show = true;
+            }else{
+              this.getMyCode()
+            }
+          }
+        }
+      },
       // 获取个人激活码列表
       getMyCode() {
-        axios.get(api.list_act_code + '?token=' + localStorage.getItem('token')).then(res => {
+        let start = this.page_info.page_num;
+        axios.get(api.list_act_code + '?token=' + localStorage.getItem('token'),{
+          params:{
+            page_size:this.page_info.page_size,
+            page_num:start,
+          }
+        }).then(res => {
           if(res.data.status == 200){
             // console.log(res.data.data);
-            this.codeList = res.data.data;
+           if(res.data.data.length >0){
+              this.page_info.page_num = this.page_info.page_num +1;
+            }else{
+              this.page_info.page_num = 1;
+              this.total_count= 0;
+              return false;
+            }
+            if(start >1){
+              this.codeList = this.codeList.concat(res.data.data);
+            }else{
+              this.codeList = res.data.data;
+            }
+            this.isScroll = true;
+            this.total_count = res.data.total_count;
+
           }
         });
       },
@@ -70,8 +114,7 @@
 
   .m-my-code {
     min-height: 100vh;
-    background-color: #EEEEEE;
-    margin-top: -20px;
+    background-color: #fff;
     .m-cell-box {
       .m-code-item {
         display: flex;

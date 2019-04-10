@@ -15,7 +15,10 @@
         </li>
       </template>
     </ul>
-    <product :list="product_list" :limited="true"></product>
+
+    <p class="m-no-data" v-if="product_list.length == 0">暂无数据</p>
+    <product :list="product_list" :limited="true" v-else></product>
+
     <bottom-line v-if="bottom_show"></bottom-line>
   </div>
 </template>
