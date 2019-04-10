@@ -25,8 +25,7 @@
             <div class="m-img-box" v-else-if="circle.showtype == 'picture'">
               <img :src="circle.mainpic" class="m-img">
             </div>
-            <p class="m-text" v-else>
-              {{circle.netext}}
+            <p class="m-text" v-else v-html="circle.netext">
             </p>
             <ul class="m-video-icon-ul">
               <li>
@@ -60,7 +59,7 @@
 
           <div class="m-content">
             <template v-for="(item,index) in news_info.netext">
-              <p v-if="item.type =='text'">{{item.content}}</p>
+              <p v-if="item.type =='text'" v-html="item.content"></p>
               <template v-if="item.type=='image'" v-for="i in item.content">
                 <img class="m-circle-img" :src="i">
               </template>
@@ -162,6 +161,11 @@
         this.$http.get(this.$api.get_news_content, { params:{ neid: this.neid }}).then(res => {
           if(res.data.status == 200){
             this.news_info = res.data.data;
+            for(let i in this.news_info.netext){
+              if(this.news_info.netext[i].type == 'text'){
+                this.news_info.netext[i].content = this.news_info.netext[i].content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+              }
+            }
             // 显示内容精简
             for(let i in this.news_info.coupon) {
               if(this.news_info.coupon[i].cosubtration.toString().length > 4) {

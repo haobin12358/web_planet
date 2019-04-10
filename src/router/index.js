@@ -437,6 +437,19 @@ export const asyncRouterMap = [
         component: () => import('src/views/activity/trialProductEdit'),
         meta: {title: '试用商品编辑', noCache: true, roles: level1}
       },
+      {
+        path: 'limitedFix',
+        name: 'limitedFix',
+        component: () => import('src/views/activity/limitedFix'),
+        meta: {title: '限时特惠',icon: 'yes', noCache: true, roles: level1}
+      },
+      {
+        path: 'limitedFixEdit',
+        name: 'limitedFixEdit',
+        hidden: true,
+        component: () => import('src/views/activity/limitedFixEdit'),
+        meta: {title: '限时活动编辑', noCache: true, roles: level1}
+      },
 
       //  供应商
       // {

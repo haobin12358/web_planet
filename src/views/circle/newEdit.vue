@@ -306,6 +306,9 @@
               if(res.data.data.video) {
                 this.video.video_thum = res.data.data.video.nvthumbnail;
               }
+
+              //处理正文
+
               // 处理是否推荐到轮播图
               if(res.data.data.neisrecommend) {
                 this.isrecommend = true
@@ -595,6 +598,7 @@
                 if(this.circleForm.netext[i].content == ''){
                   this.circleForm.netext.splice(i,1)
                 }
+                // this.circleForm.netext[i].content = this.circleForm.netext[i].content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
               }else if(this.circleForm.netext[i].type == 'video'){
                 if(!this.circleForm.netext[i].content.video){
                   this.circleForm.netext.splice(i,1)

@@ -117,6 +117,15 @@ const api = {
   resubmit_commodity: title + 'commodity/resubmit',                       // 重新提交试用商品
   shelves_commodity: title + 'commodity/shelves',                         // 下架试用商品
 
+  timelimited_list:title +'timelimited/list_activity',                    //获取所有限时活动
+  timelimited_product:title +'timelimited/list_product',                  //获取所有限时活动商品
+  timelimited_create: title +'timelimited/create',                        //创建限时活动
+  timelimited_update:title +'timelimited/update_activity',      //修改限时活动配置
+  timelimited_apply_award:title +'timelimited/apply_award',     //限时活动添加商品
+  timelimited_shelf_award:title + 'timelimited/shelf_award',    //撤销商品
+  timelimited_del_award:title + 'timelimited/del_award',     //删除活动商品
+  timelimited_update_award:title +'timelimited/update_award',    //编辑活动商品
+
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情
   create_news: title + 'news/create_news',                                // 发布资讯

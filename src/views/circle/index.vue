@@ -193,6 +193,12 @@
         }).then(res => {
           if (res.data.status == 200) {
             this.circleList = res.data.data;
+            console.log(this.circleList)
+            for(let i in this.circleList){
+              if(this.circleList[i].netext){
+                this.circleList[i].netext = this.circleList[i].netext.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+              }
+            }
             this.total = res.data.total_count;
             this.circleLoading = false;
           }

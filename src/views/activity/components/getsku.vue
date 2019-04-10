@@ -104,6 +104,25 @@
           <span>元</span>
         </el-form-item>
       </el-form>
+
+      <!--限时商品-->
+      <el-form label-position="right" label-width="120px" v-if="where == 'limited'">
+<!--        <el-form-item label="限时活动场景：">-->
+<!--          <el-select v-model="tlaid" placeholder="请选择">-->
+<!--            <el-option-->
+<!--              v-for="item in limited_list"-->
+<!--              :key="item.tlaid"-->
+<!--              :label="item.tlaname"-->
+<!--              :value="item.tlaid">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+        <el-form-item label="显示价格：" prop="prprice">
+          <el-input class="long-input" v-model="skusForm.prprice" maxlength="11">
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+      </el-form>
       <!--表格部分-->
       <section style="margin-bottom: 20px;">
         <el-input v-model="commonNum" placeholder="统一设置参与数量" size="medium" style="width: 160px;"
@@ -264,7 +283,9 @@
       }
     },
     props: {
-      where: { type: String, default: '' }
+      where: { type: String, default: '' },
+      // limited_list:{type:Array,default: ''},
+      tlaid:{type:String,default: ''}
     },
     directives: { elDragDialog },
     components: { TableCellImg },
@@ -303,7 +324,7 @@
       },
       // 选择的skus在变化
       handleSelectionChange(val) {
-        if(this.where == 'new' || this.where == 'guess') {
+        if(this.where == 'new' || this.where == 'guess' || this.where == 'limited') {
           this.skus = val
         }else if(this.where == 'magic') {
           if(val.length > 1) {
@@ -478,7 +499,58 @@
           this.chooseGuessSku()
         }else if(this.where == 'magic') {       // 魔盒奖品
           this.chooseMagicSku()
+        }else if(this.where == 'limited'){     //限时活动
+          this.chooseLimitedSku()
         }
+      },
+      // 限时
+      chooseLimitedSku() {
+
+        if(!this.tlaid) {
+          this.$message.warning('请选择一个限时活动场景');
+          return false
+        }
+
+        if(!moneyReg.test(this.skusForm.prprice)) {
+          this.$message.warning('请正确输入显示价格');
+          return
+        }
+        if(!this.skus.length) {
+          this.$message.warning('请先选择商品规格');
+          return false
+        }
+        if (!positiveNumberReg.test(this.skus[0].stock)) {
+          this.$message.warning('请输入合理的库存');
+          return
+        }
+        if (!moneyReg.test(this.skus[0].price)){
+          this.$message.warning('请输入合理的sku价格');
+          return
+        }
+        if(this.skus[0].stock > this.skus[0].skustock ){
+          this.$message.warning('参与数量超出库存');
+          return
+        }
+        let sku = {
+          prid: this.prid,
+          tlaid: this.tlaid,
+          prprice: this.skusForm.prprice,
+          skus: []
+        };
+        for(let i in this.skus) {
+          let skus = {};
+          skus.skustock = this.skus[i].stock;
+          skus.skuid = this.skus[i].skuid;
+          skus.skuprice = this.skus[i].price;
+          skus.skudiscountone = this.skus[i].skudiscountone;
+          skus.skudiscounttwo = this.skus[i].skudiscounttwo;
+          skus.skudiscountthree = this.skus[i].skudiscountthree;
+          skus.skudiscountfour = this.skus[i].skudiscountfour;
+          skus.skudiscountfive = this.skus[i].skudiscountfive;
+          skus.skudiscountsix = this.skus[i].skudiscountsix;
+          sku.skus.push(skus)
+        }
+        this.$emit('chooseLimitedSku', sku, this.isEdit)
       },
       // 每日竞猜——设置sku的六个减免金额
       setSkuSix(row) {

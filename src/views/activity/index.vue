@@ -177,6 +177,9 @@
           case 3:
             this.$router.push('/activity/trialProduct');
             break;
+          case 4:
+            this.$router.push('/activity/limitedFix');
+            break;
         }
       },
       // 关闭或开启活动
