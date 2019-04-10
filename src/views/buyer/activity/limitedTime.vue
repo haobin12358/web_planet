@@ -1,16 +1,21 @@
 <template>
-  <div class="m-limitedTime" v-if="brand_info" @touchmove="touchMove">
+  <div class="m-limitedTime"  @touchmove="touchMove">
     <div class="m-brand-info">
-      <img :src="brand_info.pbbackgroud" class="m-brand-img" alt="">
+      <img :src="brand_info.tlatoppic" class="m-brand-img" alt="">
       <span class="m-icon-bg"></span>
     </div>
     <div class="m-limitedTime-title">
       <p>限时特惠</p>
-      <p class="m-time">活动时间：</p>
+      <p class="m-time">活动时间：{{brand_info.tlastarttime}} - {{brand_info.tlaendtime}}</p>
     </div>
-    <nav-list class="m-width" :navlist="nav_list" @navClick="navClick"></nav-list>
-
-    <product :list="product_list"></product>
+<!--    <nav-list class="m-width" :navlist="nav_list" @navClick="navClick"></nav-list>-->
+    <ul class="m-nav-list m-width" >
+      <template v-for="(item,index) in nav_list">
+        <li :class="item.active?'active':''" @click="navClick(index)">{{item.tlaname}}
+        </li>
+      </template>
+    </ul>
+    <product :list="product_list" :limited="true"></product>
     <bottom-line v-if="bottom_show"></bottom-line>
   </div>
 </template>
@@ -28,9 +33,6 @@
     data() {
       return{
         nav_list: [
-          { name: '场景1', params: '', active: true },
-          { name: '场景2', params: '', active: false },
-          { name: '场景3', params: '', active: false}
         ],
         brand_info: null,
         product_list: null,
@@ -42,9 +44,9 @@
     },
     components:{ navList, product, bottomLine },
     mounted() {
-      common.changeTitle(this.$route.query.pbname);
-      this.getBrand();
-      this.getProduct();
+      common.changeTitle('限时特惠');
+      this.getNav();
+      // this.getProduct();
     },
     methods: {
       //滚动加载更多
@@ -81,40 +83,19 @@
           arr[i].active = false;
         }
         arr[index].active = true;
-        if(index != 0){
-          arr[index].desc_asc = !arr[index].desc_asc;
-          if(arr[index].desc_asc){
-            this.getProduct(arr[index].params +'|asc')
-          }else{
-            this.getProduct(arr[index].params +'|desc')
-          }
-        }else{
-          this.getProduct()
-        }
+
+          this.getProduct(arr[index].tlaid);
+          this.brand_info = arr[index];
         this.nav_list = [].concat(arr);
 
       },
-      /*获取品牌信息*/
-      getBrand(){
-        axios.get(api.get_one_brand,{
-          params:{
-            pbid:this.$route.query.pbid
-          }
-        }).then(res => {
-          if(res.data.status == 200){
-            this.brand_info = res.data.data;
-          }
-        })
-      },
       /*获取商品*/
-      getProduct(desc_asc){
-        let pbid = this.$route.query.pbid || '';
+      getProduct(id){
         let start = this.page_info.page_num;
-        axios.get(api.product_list,{
+        axios.get(api.timelimited_list_product,{
           params:{
-            pbid:pbid,
+            tlaid:id,
             page_size:this.page_info.page_size,
-            order_type:desc_asc,
             page_num:start,
             token:localStorage.getItem('token')
           }
@@ -140,6 +121,20 @@
           Toast({ message: error.data.message,duration:1000, className: 'm-toast-fail' });
         })
       },
+      //获取所有限时活动
+      getNav(){
+        axios.get(api.timelimited_list_activity).then(res => {
+          if(res.data.status == 200){
+            this.nav_list = res.data.data;
+            for(let i in this.nav_list){
+              this.nav_list[i].active = false;
+            }
+            this.nav_list[0].active = true;
+            this.brand_info = this.nav_list[0];
+            this.getProduct(this.nav_list[0].tlaid);
+          }
+        })
+      }
 
     },
   }

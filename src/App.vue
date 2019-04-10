@@ -102,6 +102,10 @@ export default {
       localStorage.setItem('share', 'fmfpid');
       location.href = location.origin;
       this.shareRecord(params);
+    }else if(location.href.indexOf('tlpid') > 0) {             // 新人首单
+      localStorage.setItem('share', 'tlpid');
+      location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('tcid') > 0) {               // 试用商品
       localStorage.setItem('share', 'tcid');
       location.href = location.origin;

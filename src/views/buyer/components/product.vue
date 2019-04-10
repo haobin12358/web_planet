@@ -35,13 +35,20 @@
             type:Boolean,
             default:false
           },
+          limited:{
+            type:Boolean,
+            default:false
+          }
         },
         methods: {
           changeRoute(item){
             if(this.gift) {
               this.$router.push({ path: '/gift', query: { prid: item.prid, from: this.gift }});
-            }else {
-              this.$router.push({ path: '/productDetail', query: { prid: item.prid }});
+            }else if(this.limited) {
+              this.$router.push({ path: '/limitedProductDetail', query: { tlpid: item.tlpid }});
+            }else{
+                this.$router.push({ path: '/productDetail', query: { prid: item.prid }});
+
             }
           }
         },
