@@ -375,12 +375,11 @@
         //   Toast("内容字数不可操作10000");
         //   return false;
         // }
-        console.log(this.edit_data)
         let text = [];
         for(let i=0;i<this.edit_data.length;i++){
           text[i] ={
             type:this.edit_data[i].type,
-            content:this.edit_data[i].type == 'text'?this.edit_data[i].content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'):this.edit_data[i].content
+            content:this.edit_data[i].content
           }
         }
         let params = {
@@ -406,7 +405,7 @@
         axios.post(api.create_news + "?token=" + localStorage.getItem("token"), params).then(res => {
           if(res.data.status == 200){
             Toast(res.data.message);
-            this.$router.go(-1);
+            this.$router.push('/circle');
           }
         })
       },

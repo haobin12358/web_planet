@@ -325,6 +325,11 @@
           if(res.data.status == 200){
             this.isScroll =true;
             if(res.data.data.length >0){
+              console.log(res.data.data)
+              for(let i in res.data.data){
+                if(res.data.data[i].netext)
+                  res.data.data[i].netext = res.data.data[i].netext.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;')
+              }
               if(this.page_info.page_num >1){
                 this.news_list =  this.news_list.concat(res.data.data);
               }else{

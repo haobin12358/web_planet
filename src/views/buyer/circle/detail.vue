@@ -349,6 +349,11 @@
         }).then(res => {
           if(res.data.status == 200){
             this.news_info = res.data.data;
+            for(let i in this.news_info.netext){
+              if(this.news_info.netext[i].type == 'text'){
+                this.news_info.netext[i].content = this.news_info.netext[i].content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;');
+              }
+            }
             if(res.data.data.commentnumber > 99) {
               this.news_info.commentnumber = "99+";
             }
