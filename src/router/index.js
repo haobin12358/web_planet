@@ -122,7 +122,9 @@ export const constantRouterMap = [
     path: '/personal',
     component: Layout,
     redirect: 'personal',
-    children: [{ path: '/personal', component: () => import('../views/buyer/personal/index'), meta: { keepAlive: true }, hidden: true }
+    children: [
+      { path: '/personal', component: () => import('../views/buyer/personal/index'), meta: { keepAlive: true }, hidden: true },
+      { path: '/newPersonal', component: () => import('../views/buyer/personal/newIndex'), meta: { keepAlive: true }, hidden: true }
     ],
   },
   { path: '/personal/code', component: () => import('../views/buyer/personal/code'), hidden: true },

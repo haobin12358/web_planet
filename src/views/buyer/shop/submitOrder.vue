@@ -206,6 +206,7 @@
         }else {           // 从购物车来
           this.product_info = JSON.parse(localStorage.getItem('product'));
         }
+
         let total = 0;
         for(let i = 0; i < this.product_info.length; i ++) {
           this.product_info[i].total = 0;
@@ -215,6 +216,8 @@
           this.product_info[i].couponList = [];
           this.product_info[i].coupon_info = { caid: [] };
           for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+            this.product_info[i].cafrom = this.product_info[i].cart[j].cafrom;
+            this.product_info[i].contentid = this.product_info[i].cart[j].contentid;
             this.product_info[i].prfreight += this.product_info[i].cart[j].product.prfreight;
             this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
           }
@@ -475,6 +478,7 @@
         },
         // 购物车或直接购买时创建订单并调起支付
         submitOrder() {
+
           if(!this.uaid) {
             Toast("请先选择收货地址");
             return false;
@@ -507,7 +511,7 @@
             params.info[i] = {
               pbid: this.product_info[i].pb.pbid,
               ommessage: this.product_info[i].ommessage || "",
-              skus: []
+              skus: [],
             };
             params.info[i].coupons = [];
             if(this.product_info[i].coupon_info.coid) {
@@ -516,11 +520,14 @@
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
               let sku = {
                 skuid: this.product_info[i].cart[j].sku.skuid,
-                nums: this.product_info[i].cart[j].canums
+                nums: this.product_info[i].cart[j].canums,
+                cafrom:this.product_info[i].cart[j].cafrom,
+                contentid:this.product_info[i].cart[j].contentid
               };
               params.info[i].skus.push(sku);
             }
           }
+          console.log(params)
           axios.post(api.order_create + "?token=" + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
               if(this.payType.opaytype ==20) {
