@@ -401,12 +401,22 @@
               }
             });
           }else if(this.from == 'new') {
+            let _usid = '';
+            if(localStorage.getItem('secret_usid')){
+              _usid =  localStorage.getItem('secret_usid').split('&from')[0];
+              if(_usid.endsWith('#/')) {
+                _usid = _usid.substr(0, _usid.length - 2);
+              }else if(_usid.endsWith('#/selected')){
+                _usid = _usid.substr(0, _usid.length - 10);
+              }
+            }
             let params = {
               skuid: this.product_info[0].cart[0].sku.skuid,
               omclient: 0,
               uaid: this.uaid,
               opaytype: 0,
-              ommessage: this.product_info[0].ommessage || ""
+              ommessage: this.product_info[0].ommessage || "",
+              secret_usid:_usid
             };
             axios.post(api.add_order + "?token=" + localStorage.getItem('token'), params).then(res => {
               if(res.data.status == 200){
