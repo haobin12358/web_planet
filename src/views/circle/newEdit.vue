@@ -99,10 +99,10 @@
           </el-form-item>
 
 
-          <el-form-item label="推荐到轮播图">
+          <el-form-item label="展示到官网">
             <el-switch v-if="circleForm.nemainpic" v-model="isrecommend" :disabled="!circleForm.nemainpic"
                        active-color="#409EFF" inactive-color="#DBDCDC"></el-switch>
-            <el-tooltip v-else content="推荐到轮播图需要有封面图" placement="right">
+            <el-tooltip v-else content="展示到官网需要有封面图" placement="right">
               <el-switch v-model="isrecommend" :disabled="!circleForm.nemainpic" active-color="#409EFF" inactive-color="#DBDCDC">
               </el-switch>
             </el-tooltip>

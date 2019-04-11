@@ -337,6 +337,12 @@ export const asyncRouterMap = [
       },
 
       {
+        path: 'limitedProductAudit',
+        name: 'limitedProductAudit',
+        component: () => import('src/views/approval/limitedProductAudit'),
+        meta: {title: '限时活动商品审批', icon: 'yes', noCache: true, roles: level2}
+      },
+      {
         path: 'activationCodeActi',
         name: 'ActivationCodeActi',
         component: () => import('src/views/approval/activationCodeActi'),
