@@ -1,12 +1,29 @@
 <template>
   <div class="activity-index">
-<!--    <section class="tool-bar space-between">-->
+    <section class="tool-bar space-between">
+      <el-form :inline="true" :model="searchForm">
+        <el-form-item label="活动名称">
+          <el-input v-model.trim="searchForm.tlaname"></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="searchForm.tlastatus" @change="doSearch">
+            <el-option
+              v-for="item in statusOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-button type="primary" icon="el-icon-search"  :loading="activityLoading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh" style="margin-bottom: 20px;"  :loading="activityLoading" @click="doReset">重置</el-button>
+      </el-form>
       <section style="margin-bottom: 20px;" v-if="isAdmin">
         <el-button type="primary" icon="el-icon-plus" @click="editActivity('add')">新增</el-button>
       </section>
 
 
-<!--    </section>-->
+    </section>
     <el-table v-loading="activityLoading" :data="activityList" stripe>
       <el-table-column label="活动封面图" align="center" prop="tlatoppic">
         <template slot-scope="scope">
@@ -121,7 +138,26 @@
           tlastarttime:[{ required: true, message: '活动开始时间必填', trigger: 'change' }],
           tlaendtime:[{ required: true, message: '活动结束时间必填', trigger: 'change' }]
         },
-        isAdmin:false
+        isAdmin:false,
+        statusOption: [
+          {
+            value: '',
+            label: '全部',
+          }, {
+            value: '0',
+            label: '正常',
+          },  {
+            value: '-10',
+            label: '中止',
+          }, {
+            value: '10',
+            label: '结束',
+          }
+        ],
+        searchForm: {
+          tlaname: '',
+          tlastatus: '',
+        }
       }
     },
     directives: { elDragDialog },
@@ -154,12 +190,27 @@
       // 获取所有活动
       getActivity() {
         this.activityLoading = true;
-        this.$http.get(this.$api.timelimited_list, { noLoading: true }).then(res => {
+        console.log(this.searchForm.tlaname)
+        this.$http.get(this.$api.timelimited_list, { noLoading: true,params:{
+            tlaname:this.searchForm.tlaname,
+            tlastatus:this.searchForm.tlastatus
+          } }).then(res => {
           if (res.data.status == 200) {
             this.activityList = res.data.data;
             this.activityLoading = false;
           }
         })
+      },
+      doSearch() {
+        this.currentPage = 1;
+        this.getActivity();
+      },
+      doReset() {
+        this.searchForm = {
+          tlaname: '',
+          tlastatus: '',
+        };
+        this.doSearch();
       },
       // 去活动详情页
       goDetail(row) {
