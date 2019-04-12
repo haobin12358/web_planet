@@ -17,7 +17,7 @@
 
     <section class="table-hd">
       <span>可提余额:￥{{canUseBalance}}</span>
-      <el-button type="primary" icon="el-icon-plus" @click="doNewApply">新增申请</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="doNewApply(true)">新增申请</el-button>
     </section>
 
     <el-table :data="tableData" v-loading="loading">
@@ -109,7 +109,7 @@
       },
 
       //  先进行开票信息校验
-      doNewApply() {
+      doNewApply(bool) {
         this.$http.get(this.$api.get_supplizeraccount, {
           params: {}
         }).then(
@@ -140,7 +140,7 @@
                   }
                 )
               } else {
-                this.dialogVisible = true;
+                this.dialogVisible = bool;
                 this.$http.get(this.$api.get_supplizer, {}).then(
                   res => {
                     if (res.data.status == 200) {
@@ -190,6 +190,7 @@
 
     created() {
       this.getList();
+      this.doNewApply(false);
     },
   }
 </script>

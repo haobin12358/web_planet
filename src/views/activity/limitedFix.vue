@@ -41,11 +41,16 @@
           <el-button type="text"  class="danger-text" @click="deleteActivity(scope)">删除</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="操作" align="center" v-else>
+        <template slot-scope="scope">
+          <el-button type="text" @click="goDetail(scope.row)">申请</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="activityDialog" width="800px" top="7vh"
-               :title="formData.tlaname + ' - 编辑'" :close-on-click-modal="false">
+               :title="formData.tlaname + ' - 编辑'" @close="initActivityForm">
       <el-form :model="formData" :rules="rules" ref="formData" label-position="left" size="medium" label-width="120px" status-icon>
         <el-form-item label="活动名称" prop="tlaname">
           <el-input class="long-input" v-model="formData.tlaname"></el-input>
@@ -296,7 +301,14 @@
       // 重置
       initActivityForm() {
         this.activityDialog = false;
-        this.$refs.formData.resetFields();
+        // this.$refs.formData.resetFields();
+        this.formData= {
+           tlaname: '',
+            tlatoppic: '',           // 详情页顶部图(如果需要)
+            tlasort: '',
+            tlastarttime:'',
+            tlaendtime:''
+        }
       }
     }
   }
