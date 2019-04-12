@@ -69,7 +69,7 @@
     /*display: inline-block;*/
     .fj();
     .title {
-      width: 50px;
+      width: 80px;
     }
     .notice-item {
       width: 200px;

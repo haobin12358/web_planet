@@ -58,7 +58,8 @@
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
       <el-table-column label="可提现余额" prop="uwbalance" align="center" width="100"></el-table-column>
       <el-table-column label="余额" prop="uwcash" align="center" width="100"></el-table-column>
-      <el-table-column label="总销售额" prop="uwtotal" align="center" width="100"></el-table-column>
+      <el-table-column label="已结算总额" prop="uwtotal" align="center" width="100"></el-table-column>
+      <el-table-column label="预计到账" prop="uwexpect" align="center" width="100"></el-table-column>
       <el-table-column align="center" prop="sulinkphone" label="手机号" width="200"></el-table-column>
       <el-table-column align="center" prop="suaddress" label="地址" width="200"></el-table-column>
       <el-table-column align="center" prop="sustatus" label="状态" width="180">
@@ -193,7 +194,7 @@
       },
 
       cellFunction({row, column}){
-        if (['uwtotal', 'uwbalance', 'uwcash'].includes(column.property)) {
+        if (['uwtotal', 'uwbalance', 'uwcash','uwexpect'].includes(column.property)) {
           return 'money-cell'
         }
       },
