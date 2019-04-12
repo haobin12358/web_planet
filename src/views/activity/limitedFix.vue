@@ -40,9 +40,9 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="tlastatus">
         <template slot-scope="scope">
-          <el-button type="success" plain v-if="scope.row.tlastatus == 0">正常</el-button>
-          <el-button type="primary" plain v-else-if="scope.row.tlastatus == 10">结束</el-button>
-          <el-button type="danger" plain v-else>终止</el-button>
+          <el-tag type="success" plain v-if="scope.row.tlastatus == 0">正常</el-tag>
+          <el-tag type="primary" plain v-else-if="scope.row.tlastatus == 10">结束</el-tag>
+          <el-tag type="danger" plain v-else>终止</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="权重" align="center" :render-header="sortHeaderRender">
