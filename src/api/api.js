@@ -87,6 +87,8 @@ const api = {
   delete_question: title + 'qa/delete_question',                          // 删除问题
   upload_file: title + 'file/upload?token=',                              // 上传图片
   batch_upload: title +'file/batch_upload',                    //批量上传图片
+  excel_delivery:title +'excel/delivery',                     //上传批量发货
+  excel_download:title +'excel/download',                //下载批量发货模版
 
   activity_list: title + 'activity/list',                                 // 获取正在进行中的活动
   activity_get: title + 'activity/get',                                   // 获取正在进行中的活动

@@ -37,12 +37,33 @@
                             style="width: 100%;"></el-date-picker>
           </el-col>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
-          <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
-          <el-button icon="el-icon-document" type="info"  @click="doExportOrder">导出订单</el-button>
+        <el-form-item >
+          <section class="flex-start">
+            <el-button type="primary" icon="el-icon-search" :loading="loading" @click="doSearch">查询</el-button>
+            <el-button icon="el-icon-refresh" :loading="loading" @click="doReset">重置</el-button>
+            <el-button icon="el-icon-document" type="info" style="margin-right: 10px;"  @click="doExportOrder">导出订单</el-button>
+            <el-upload
+              class="upload-demo"
+              accept=".xlsx"
+              :show-file-list="false"
+              :on-success="allOrderUpload"
+              :action="uploadUrl"
+            >
+              <el-button  type="danger" plain>批量发货</el-button>
+              <!--            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+            </el-upload>
+            <span class="m-click" @click="downloadExcel">下载批量发货模版</span>
+          </section>
+
         </el-form-item>
       </el-form>
+<!--      <el-dialog title="收货地址" :visible.sync="dialogTableVisible">-->
+<!--        <span class="m-click" @click="downloadExcelLook">{{file.name}}</span>-->
+<!--        <div slot="footer" class="dialog-footer">-->
+<!--          <el-button @click="dialogTableVisible = false">取 消</el-button>-->
+<!--          <el-button type="primary" @click="dialogTableVisible = false">确 定</el-button>-->
+<!--        </div>-->
+<!--      </el-dialog>-->
 
       <section class="extra-tool-wrap">
         <el-switch
@@ -223,10 +244,19 @@
         total: 0,
         currentPage: 1,
         pageSize: 10,
+        dialogTableVisible:false,
+        file:{
+          url:'',
+          name:''
+        }
       }
     },
 
-    computed: {},
+    computed: {
+      uploadUrl() {
+        return this.$api.excel_delivery + '?token=' +getStore('token')
+      },
+    },
     mounted(){
       this.setOrderList();
     },
@@ -461,6 +491,35 @@
         this.$route.params.searchDate = '';
         this.$route.params.omstatus = '';
       },
+      allOrderUpload(file){
+        if(file.status == 200){
+          this.$confirm(file.message, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+          }).then(() => {
+
+          }).catch(() => {
+
+          });
+        }else{
+          this.$confirm(file.message, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'waining'
+          }).then(() => {
+
+          }).catch(() => {
+
+          });
+        }
+      },
+      downloadExcel(){
+          window.open( `${this.$api.excel_download}?type=delivery&token=${getStore('token')}`);
+      },
+      downloadExcelLook(){
+        window.open( this.file.url);
+      }
     },
 
     activated() {
@@ -476,6 +535,12 @@
   .container {
     .extra-tool-wrap{
       margin-bottom: 20px;
+    }
+    .m-click{
+      color: #409EFF;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 10px;
     }
   }
 </style>
