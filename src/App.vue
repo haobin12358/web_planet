@@ -133,6 +133,10 @@ export default {
       localStorage.setItem('share', 'uaid');
       location.href = location.origin;
       this.shareRecord(params);
+    }else if(location.href.indexOf('tlaid') > 0) {     // 限时活动列表
+      localStorage.setItem('share', 'tlaid');
+      location.href = location.origin;
+      this.shareRecord(params);
     }else if(location.href.indexOf('page') > 0) {     // 跳转到首页
       localStorage.setItem('share', 'index');
       location.href = location.origin;

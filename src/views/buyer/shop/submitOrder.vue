@@ -124,12 +124,12 @@
         </mt-popup>
       </div>
       <!--商家大礼包支付成功的popup-->
-      <mt-popup class="m-gift-popup" v-model="giftPopup" pop-transition="popup-fade">
-        <img class="m-gift-popup-img" src="/static/images/icon-out-know.png" alt="">
-        <div class="m-ft-30 m-ft-b">支付成功</div>
-        <div class="m-gift-popup-text m-ft-24">支付成功，提交申请并完成审批即可成为卖家。</div>
-        <div class="m-gift-popup-btn m-ft-30 m-ft-b" @click="changeRoute('/storekeeper/IDCardApprove')">填写申请</div>
-      </mt-popup>
+<!--      <mt-popup class="m-gift-popup" v-model="giftPopup" pop-transition="popup-fade">-->
+<!--        <img class="m-gift-popup-img" src="/static/images/icon-out-know.png" alt="">-->
+<!--        <div class="m-ft-30 m-ft-b">支付成功</div>-->
+<!--&lt;!&ndash;        <div class="m-gift-popup-text m-ft-24">支付成功，提交申请并完成审批即可成为卖家。</div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="m-gift-popup-btn m-ft-30 m-ft-b" @click="changeRoute('/storekeeper/IDCardApprove')">填写申请</div>&ndash;&gt;-->
+<!--      </mt-popup>-->
 
       <div class="m-order-btn">
         <!--试用商品、新人商品-->
@@ -532,7 +532,7 @@
             if(res.data.status == 200) {
               if(this.payType.opaytype ==20) {
                 Toast(res.data.message);
-                this.giftPopup = true;
+                // this.giftPopup = true;
                 // this.$router.push("/orderList?which=1");
                 // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
                 sessionStorage.setItem('use', 'used');
@@ -562,9 +562,10 @@
                 sessionStorage.setItem('use', 'used');
                 if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
                   // 是从商家大礼包来结算的则弹出popup
-                  if(that.fromGift) {
-                    that.giftPopup = true;
-                  }else if(that.from == 'new' || that.from == 'try' || that.isGuess) {
+                  // if(that.fromGift) {
+                  //   that.giftPopup = true;
+                  // }else
+                    if(that.from == 'new' || that.from == 'try' || that.isGuess) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待发货页
                     that.$router.push("/orderList?which=2");
