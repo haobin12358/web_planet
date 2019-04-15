@@ -25,14 +25,14 @@
 
         <div class="m-serviceCenter-foot">
           <div class="m-serviceCenter-btn">
-            <span class="m-icon-service"></span>
+            <span class="m-icon-tell"></span>
             <div>
               <p>客服电话</p>
               <p>15079564151</p>
             </div>
           </div>
           <div class="m-serviceCenter-btn">
-            <span class="m-icon-tell"></span>
+            <span class="m-icon-service"></span>
             <div>
               <p>客服QQ</p>
               <p>3441362480</p>
