@@ -15,7 +15,7 @@
               <span class="m-person-level">星级会员</span>
             </p>
           </div>
-          <div class="m-flex-end">
+          <div class="m-flex-end" @click="changeRoute('/personal/mainIndex')">
             <span>个人主页</span>
             <img src="/static/images/newpersonal/icon-more.png" class="m-more" alt="">
           </div>
@@ -59,8 +59,8 @@
               <img src="/static/images/newpersonal/icon-star.png" class="m-icon" alt="">
               <span>星币商城</span>
             </div>
-<!--            <span class="m-info">99星币</span>-->
-            <span class="m-btn">签  到</span>
+            <span class="m-info" v-if="signIn">99星币</span>
+            <span class="m-btn" v-else @click.stop="userSignIn">签  到</span>
           </li>
           <li class="m-flex-between" @click="changeRoute('/personal/couponCenter')">
             <div class="m-flex-start">
@@ -117,6 +117,7 @@
       data(){
           return{
             user: { usheader: '', usidname: '登录 / 注册'},               // 个人信息
+            signIn:false
           }
       },
       mounted() {
@@ -186,6 +187,17 @@
             }
           })
         },
+        // 用户签到
+        userSignIn() {
+          axios.post(api.user_sign_in + '?token=' + localStorage.getItem('token')).then(res => {
+            if(res.data.status == 200){
+              Toast(res.data.message);
+              this.signIn = true;
+
+              // this.getDiscount();         // 获取优惠券中心顶部数据
+            }
+          });
+        },
       }
     }
 </script>
@@ -231,7 +243,8 @@
           color: @mainColor;
           font-size: 16px;
           display: inline-block;
-          width: 80px;
+          /*width: 80px;*/
+          padding: 0 16px;
           height: 22px;
           border: 1px solid @mainColor;
           margin-top: 10px;
