@@ -275,7 +275,8 @@
               // this.$router.push("material/circle");
               this.$router.push({path:"/storekeeper"});
             }else if(res.data.data.uslevel == "3" || res.data.data.uslevel == "4" ) {      // 3 - 申请成为卖家中
-              this.$router.push("storekeeper/applyOwner");
+              // this.$router.push("storekeeper/applyOwner");
+              this.$router.push({path:"/storekeeper"});
             }
             // else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
             //   Toast('请完成店主身份认证');

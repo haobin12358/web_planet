@@ -531,9 +531,9 @@
           axios.post(api.order_create + "?token=" + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
               if(this.payType.opaytype ==20) {
-                Toast(res.data.message);
+                // Toast(res.data.message);
                 // this.giftPopup = true;
-                // this.$router.push("/orderList?which=1");
+                this.$router.push("/orderList?which=2");
                 // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
                 sessionStorage.setItem('use', 'used');
               }else {
@@ -562,10 +562,9 @@
                 sessionStorage.setItem('use', 'used');
                 if(res.err_msg == "get_brand_wcpay_request:ok" ){             // 支付成功
                   // 是从商家大礼包来结算的则弹出popup
-                  // if(that.fromGift) {
-                  //   that.giftPopup = true;
-                  // }else
-                    if(that.from == 'new' || that.from == 'try' || that.isGuess) {
+                  if(that.fromGift) {
+                    this.$router.push("/orderList?which=2");
+                  }else if(that.from == 'new' || that.from == 'try' || that.isGuess) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待发货页
                     that.$router.push("/orderList?which=2");
