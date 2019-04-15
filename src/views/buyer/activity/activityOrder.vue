@@ -139,6 +139,12 @@
           this.nav_list = [].concat(arr);
           this.page_info.page_num = 1;
           this.omfrom = arr[index].omfrom;
+          for(let i = 0; i < this.order_list.length; i ++) {
+            if(this.order_list[i].time_interVal){
+              clearInterval(this.order_list[i].time_interVal);
+            }
+
+          }
           this.getOrderList();
         },
         // 获取订单列表
@@ -168,6 +174,9 @@
               }
               for(let i in this.order_list) {
                 if(this.order_list[i].duration) {
+                  if(this.order_list[i].time_interVal){
+                    clearInterval(this.order_list[i].time_interVal);
+                  }
                   this.timeOut();       // 倒计时
                 }
               }
@@ -185,7 +194,10 @@
                 this.order_list[i].sec = this.order_list[i].duration.substr(5, 2);
                 let TIME_OUT = Number(this.order_list[i].min) * 60 + Number(this.order_list[i].sec);
                 let count = TIME_OUT;
-                let time = setInterval(() => {
+                if(this.order_list[i].time_interVal){
+                  clearInterval(this.order_list[i].time_interVal);
+                }
+                this.order_list[i].time_interVal  = setInterval(() => {
                   if(count > 0 && count <= TIME_OUT) {
                     count --;
                     this.order_list[i].sec --;
@@ -210,7 +222,7 @@
                     this.page_info.page_num = 1;
                     this.order_list[i].duration = null;
                     this.getOrderNum();             // 获取各状态的订单数量
-                    clearInterval(time);
+                    clearInterval(this.order_list[i].time_interVal);
                   }
                 }, 1000);
               }else {
@@ -248,6 +260,12 @@
               if(this.order_list.length == this.total_count){
                 this.bottom_show = true;
               }else{
+                for(let i = 0; i < this.order_list.length; i ++) {
+                  if(this.order_list[i].time_interVal){
+                    clearInterval(this.order_list[i].time_interVal);
+                  }
+
+                }
                 for(let i = 0; i < this.nav_list.length; i ++) {
                   if(this.nav_list[i].active) {
                     this.getOrderList();
@@ -260,6 +278,12 @@
         // 下拉刷新
         loadTop() {
           this.page_info.page_num = 1;
+          for(let i = 0; i < this.order_list.length; i ++) {
+            if(this.order_list[i].time_interVal){
+              clearInterval(this.order_list[i].time_interVal);
+            }
+
+          }
           for(let i = 0; i < this.nav_list.length; i ++) {
             if(this.nav_list[i].active) {
               this.omfrom = this.nav_list[i].omfrom;

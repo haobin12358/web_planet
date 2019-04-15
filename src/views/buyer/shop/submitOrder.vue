@@ -183,6 +183,7 @@
           payType: { name: '微信' },          // 支付方式
           code: '',                           // 激活码
           isGuess: false,                     // 是否从每日竞猜来的
+          act:false
         }
       },
       components: { coupon },
@@ -517,7 +518,11 @@
             if(this.product_info[i].coupon_info.coid) {
               params.info[i].coupons.push(this.product_info[i].coupon_info.coid);
             }
+
             for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+              if(this.product_info[i].cart[j].contentid && this.product_info[i].cart[j].contentid != ''){
+                this.act = true;
+              }
               let sku = {
                 skuid: this.product_info[i].cart[j].sku.skuid,
                 nums: this.product_info[i].cart[j].canums,
@@ -527,13 +532,19 @@
               params.info[i].skus.push(sku);
             }
           }
-          console.log(params)
+        console.log(this.act)
           axios.post(api.order_create + "?token=" + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
               if(this.payType.opaytype ==20) {
                 // Toast(res.data.message);
                 // this.giftPopup = true;
-                this.$router.push("/orderList?which=2");
+
+                if(this.act){
+                  this.$router.push("/activityOrder");
+                }else{
+                  this.$router.push("/orderList?which=2");
+                }
+
                 // 成功调起支付，该页面已使用过，从订单列表页返回时不打开
                 sessionStorage.setItem('use', 'used');
               }else {
@@ -564,23 +575,23 @@
                   // 是从商家大礼包来结算的则弹出popup
                   if(that.fromGift) {
                     this.$router.push("/orderList?which=2");
-                  }else if(that.from == 'new' || that.from == 'try' || that.isGuess) {
+                  }else if(that.from == 'new' || that.from == 'try' || that.isGuess || that.act) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待发货页
                     that.$router.push("/orderList?which=2");
                   }
                 }else if(res.err_msg == "get_brand_wcpay_request:cancel" ){   // 支付过程中用户取消
                   Toast('支付已取消');
-                  if(that.from == 'new' || that.from == 'try' || that.isGuess) {
+                  if(that.from == 'new' || that.from == 'try' || that.isGuess ||that.act) {
                     that.$router.push('/activityOrder');
                   }else {     // 去待付款页
                     that.$router.push("/orderList?which=1");
                   }
                 }else if(res.err_msg == "get_brand_wcpay_request:fail" ){     // 支付失败
                   Toast('支付失败');
-                  if(that.from == 'new' || that.from == 'try' || that.isGuess) {
+                  if(that.from == 'new' || that.from == 'try' || that.isGuess || that.act) {
                     that.$router.push('/activityOrder');
-                  }else {     // 去待付款页
+                  }else{     // 去待付款页
                     that.$router.push("/orderList?which=1");
                   }
                 }
