@@ -273,13 +273,14 @@
               this.$router.push("/giftBox");
             }else if(res.data.data.uslevel == "2") {      // 2 - 卖家 - 去卖家版首页
               // this.$router.push("material/circle");
-              this.$router.push("storekeeper");
-            }else if(res.data.data.uslevel == "3") {      // 3 - 申请成为卖家中
+              this.$router.push({path:"/storekeeper"});
+            }else if(res.data.data.uslevel == "3" || res.data.data.uslevel == "4" ) {      // 3 - 申请成为卖家中
               this.$router.push("storekeeper/applyOwner");
-            }else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
-              Toast('请完成店主身份认证');
-              this.$router.push("storekeeper/IDCardApprove");
             }
+            // else if(res.data.data.uslevel == "4") {      // 4 - 已购买大礼包，但是未认证 - 去认证
+            //   Toast('请完成店主身份认证');
+            //   this.$router.push("storekeeper/IDCardApprove");
+            // }
           }
         });
       },
