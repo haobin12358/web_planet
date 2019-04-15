@@ -222,20 +222,20 @@
             return false;
           }
           if(!this.realName) {
-            // Toast({ message: '请先输入姓名', position: 'bottom' });
-            this.text = '提现金额应不大于可用余额';
-            this.toast = true;
-            // 倒计时
-            const TIME_COUNT = 1;
-            let count = TIME_COUNT;
-            let time = setInterval(() => {
-              if (count > 0 && count <= TIME_COUNT) {
-                count --;
-              } else {
-                this.toast = false;
-                clearInterval(time);
-              }
-            }, 1000);
+            Toast({ message: '请先输入姓名', position: 'bottom' });
+            // this.text = '提现金额应不大于可用余额';
+            // this.toast = true;
+            // // 倒计时
+            // const TIME_COUNT = 1;
+            // let count = TIME_COUNT;
+            // let time = setInterval(() => {
+            //   if (count > 0 && count <= TIME_COUNT) {
+            //     count --;
+            //   } else {
+            //     this.toast = false;
+            //     clearInterval(time);
+            //   }
+            // }, 1000);
             return false;
           }
           if(this.bankNo.length < 10) {
