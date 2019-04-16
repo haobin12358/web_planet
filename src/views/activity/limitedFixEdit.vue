@@ -14,7 +14,7 @@
         </el-form-item>
       </el-form>
       <section class="action-wrap">
-        <el-button type="primary" icon="el-icon-plus" @click="addGuess">申请</el-button>
+        <el-button type="primary" icon="el-icon-plus" v-if="isCan" @click="addGuess">申请</el-button>
       </section>
     </section>
 <!--    :limited_list="limited_list"-->
@@ -96,7 +96,8 @@
         skuList: [],
         groupCount: 1,
         limited_list:[],
-        tlaid: ''
+        tlaid: '',
+        isCan:false
       }
     },
     directives: { elDragDialog },
@@ -105,6 +106,11 @@
       // this.getLimited();        // 获取
       this.getGuess();
       this.tlaid = this.$route.query.tlaid;
+      if(this.$route.query.tlastatus == 1){
+        this.isCan = true;
+      }else{
+        this.isCan = false;
+      }
     },
     methods: {
       // 顶部查询

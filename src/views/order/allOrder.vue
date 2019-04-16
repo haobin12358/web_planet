@@ -207,7 +207,7 @@
         omFormType: [
           {
             label: '全部',
-            value: '0,10,30,40,50,60',
+            value: '0,10,30,40,50,60,70',
           },{
             label: '普通订单',
             value: '0,10',
@@ -223,7 +223,10 @@
           },{
             label: '试用商品',
             value: '60',
-          },
+          },{
+            label: '限时特惠',
+            value: '70',
+          }
         ],
         inlineForm: {
           omno: '',
@@ -233,7 +236,7 @@
           createtime_start: '',
           createtime_end: '',
           omstatus: '',
-          omfrom: '0,10,30,40,50,60',
+          omfrom: '0,10,30,40,50,60,70',
         },
 
         menuList: [],

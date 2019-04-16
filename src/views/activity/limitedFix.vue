@@ -40,9 +40,10 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="tlastatus">
         <template slot-scope="scope">
-          <el-tag type="success" plain v-if="scope.row.tlastatus == 0">正常</el-tag>
+          <el-tag type="success" plain v-if="scope.row.tlastatus == 1">未开始</el-tag>
+          <el-tag type="success" plain v-else-if="scope.row.tlastatus == 2">已开始</el-tag>
           <el-tag type="primary" plain v-else-if="scope.row.tlastatus == 10">结束</el-tag>
-          <el-tag type="danger" plain v-else>终止</el-tag>
+          <el-tag type="danger" plain v-else>中止</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="权重" align="center" :render-header="sortHeaderRender">
@@ -53,8 +54,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" v-if="isAdmin">
         <template slot-scope="scope">
-          <el-button type="text" @click="editActivity(scope)">编辑</el-button>
-          <el-button type="text" class="success-text"    @click="forbidActivity(scope)">终止</el-button>
+          <el-button type="text" v-if="scope.row.tlastatus != 2" @click="editActivity(scope)">编辑</el-button>
+          <el-button type="text" class="success-text"    @click="forbidActivity(scope)">中止</el-button>
           <el-button type="text"  class="danger-text" @click="deleteActivity(scope)">删除</el-button>
         </template>
       </el-table-column>
@@ -91,14 +92,14 @@
           <el-date-picker
             v-model="formData.tlastarttime"
             type="datetime"
-            value-format="yyyy-MM-dd HH-mm-ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="活动结束时间" prop="tlaendtime">
           <el-date-picker
             v-model="formData.tlaendtime"
-            value-format="yyyy-MM-dd HH-mm-ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             type="datetime"
             placeholder="选择日期时间">
           </el-date-picker>
@@ -144,9 +145,14 @@
             value: '',
             label: '全部',
           }, {
-            value: '0',
-            label: '正常',
-          },  {
+            value: '1',
+            label: '未开始',
+          },
+          {
+            value: '2',
+            label: '已开始',
+          },
+          {
             value: '-10',
             label: '中止',
           }, {
@@ -214,7 +220,7 @@
       },
       // 去活动详情页
       goDetail(row) {
-          this.$router.push({path:'/activity/limitedFixEdit',query:{tlaid:row.tlaid}});
+          this.$router.push({path:'/activity/limitedFixEdit',query:{tlaid:row.tlaid,tlastatus:row.tlastatus}});
         },
       // 编辑活动
       editActivity(scope) {
@@ -231,6 +237,7 @@
         this.$refs.formData.validate(valid => {
           if(valid) {
             if(this.index > -1){
+              this.formData.tlastatus = '';
               this.$http.post(this.$api.timelimited_update, this.formData).then(res => {
                 if (res.data.status == 200) {
                   this.initActivityForm();   // 重置
