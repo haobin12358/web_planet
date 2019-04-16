@@ -204,6 +204,8 @@ export default {
                       localStorage.setItem('share', 'neid');
                     }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
                       localStorage.setItem('share', 'prid');
+                    }else if(localStorage.getItem('wx_url').indexOf('tlpid') > 0) {               // 商品详情
+                      localStorage.setItem('share', 'tlpid');
                     }
                     this.$router.push('/selected');
                   }else{
@@ -232,6 +234,8 @@ export default {
                     localStorage.setItem('share', 'neid');
                   }else if(localStorage.getItem('wx_url').indexOf('prid') > 0) {               // 商品详情
                     localStorage.setItem('share', 'prid');
+                  }else if(localStorage.getItem('wx_url').indexOf('tlpid') > 0) {               // 商品详情限时
+                    localStorage.setItem('share', 'tlpid');
                   }
                   this.$router.push('/selected');
                 }

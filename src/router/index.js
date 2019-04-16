@@ -148,7 +148,7 @@ export const constantRouterMap = [
   { path: '/personal/couponCenter', component: () => import('../views/buyer/personal/couponCenter'), hidden: true },
   //个人主页
   { path: '/personal/mainIndex', component: () => import('../views/buyer/personal/mainIndex'), hidden: true },
-
+  { path: '/collect', component: () => import('../views/buyer/personal/collect'), hidden: true },
   // 活动模块
   {
     path: '/activity',
@@ -168,6 +168,7 @@ export const constantRouterMap = [
   { path: '/activityProductDetail', component: () => import('../views/buyer/activity/activityProductDetail'), hidden: true },        // 免费试用 - 商品详情
   { path: '/activityOrder', component: () => import('../views/buyer/activity/activityOrder'), meta: { keepAlive: false }, hidden: true },        // 活动订单
   { path: '/limitedProductDetail', component: () => import('../views/buyer/activity/limitedProductDetail'), hidden: true },        // 免费试用 - 商品详情
+
 
   { path: '/systemfix', component: () => import('../views/systemfix'), hidden: true },
 ];

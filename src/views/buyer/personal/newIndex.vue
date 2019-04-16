@@ -23,7 +23,7 @@
       </div>
       <div class="m-personal-item">
         <ul class="m-person-ul">
-          <li class="m-flex-between">
+          <li class="m-flex-between" @click="changeRoute('/collect')">
             <div class="m-flex-start">
               <img src="/static/images/newpersonal/icon-select.png" class="m-icon" alt="">
               <span>收藏</span>

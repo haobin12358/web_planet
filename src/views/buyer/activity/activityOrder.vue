@@ -28,7 +28,8 @@
                   <div>
                     <p class="m-flex-between">
                       <span class="m-product-name">{{item.prtitle}}</span>
-                      <span class="m-price">￥{{item.skuprice | money}}</span>
+                      <span class="m-price" v-if="item.tlsprice">￥{{item.tlsprice | money}}</span>
+                      <span class="m-price" v-else>￥{{item.skuprice | money}}</span>
                     </p>
                     <p class="m-flex-between">
                       <span class="m-product-label">
@@ -105,7 +106,7 @@
               this.$router.push({ path: v, query: { pbid: item.pbid, pbname: item.pbname }});
               break;
             case '/orderDetail':
-              this.$router.push({ path: v, query: { omid: item.omid, from: "activityProduct" }});
+              this.$router.push({ path: v, query: { omid: item.omid }});
               break;
             case '/logisticsInformation':
               this.$router.push({ path: v, query: { omid: item.omid }});

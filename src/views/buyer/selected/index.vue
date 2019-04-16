@@ -221,6 +221,9 @@
                params = url.split('?prid=')[1];
              }
              this.$router.push({ path: '/productDetail', query: { prid: params }})
+           }else if(localStorage.getItem('share') == 'tlpid') {
+             let params = url.split('?tlpid=')[1].split('&secret_usid')[0];
+             this.$router.push({ path: '/limitedProductDetail', query: { tlpid: params[0]}})
            }
         }
       },

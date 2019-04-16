@@ -20,7 +20,7 @@
 
 
     <p class="m-no-data" v-if="product_list && product_list.length == 0">暂无数据</p>
-    <product :list="product_list" :limited="true" v-else></product>
+    <product :list="product_list" :isAct="true" :limited="true" v-else></product>
 
     <bottom-line v-if="bottom_show"></bottom-line>
   </div>
@@ -133,10 +133,8 @@
               wx.onMenuShareTimeline(options);
             }
           }else {
-            Toast('请登录后再试');
+            // Toast('请登录后再试');
           }
-        }else {
-          Toast('请在微信公众号分享');
         }
       },
       //滚动加载更多
@@ -179,6 +177,7 @@
 
           this.brand_info = arr[index];
         this.nav_list = [].concat(arr);
+        this.shareList(1);
 
       },
       /*获取商品*/

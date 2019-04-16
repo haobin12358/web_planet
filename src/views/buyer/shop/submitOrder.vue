@@ -38,7 +38,8 @@
               </template>
             </p>
             <p class="m-price-num">
-              <span class="m-price">￥{{item.sku.skuprice | money}}</span>
+              <span class="m-price" v-if="act && item.sku.tlsprice">￥{{item.sku.tlsprice | money}}</span>
+              <span class="m-price" v-else>￥{{item.sku.skuprice | money}}</span>
               <span>x{{item.canums}}</span>
             </p>
           </div>
@@ -217,10 +218,17 @@
           this.product_info[i].couponList = [];
           this.product_info[i].coupon_info = { caid: [] };
           for(let j = 0; j < this.product_info[i].cart.length; j ++) {
+            if(this.product_info[i].cart[j].contentid && this.product_info[i].cart[j].contentid != ''){
+              this.act = true;
+            }
             this.product_info[i].cafrom = this.product_info[i].cart[j].cafrom;
             this.product_info[i].contentid = this.product_info[i].cart[j].contentid;
             this.product_info[i].prfreight += this.product_info[i].cart[j].product.prfreight;
-            this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
+            if(this.act){
+              this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.tlsprice || this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
+            }else{
+              this.product_info[i].total = this.product_info[i].total + Number(this.product_info[i].cart[j].sku.skuprice) * this.product_info[i].cart[j].canums;
+            }
           }
           if(this.product_info[i].prfreight) {
             this.total_money = this.total_money + this.product_info[i].total + this.product_info[i].prfreight
@@ -532,7 +540,9 @@
               params.info[i].skus.push(sku);
             }
           }
-        console.log(this.act)
+         if(this.act){
+           localStorage.setItem('activityOrderNo', 4);
+         }
           axios.post(api.order_create + "?token=" + localStorage.getItem('token'), params).then(res => {
             if(res.data.status == 200) {
               if(this.payType.opaytype ==20) {
