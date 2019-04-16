@@ -147,6 +147,7 @@
     .m-nav {
       /*width: 600px;*/
       /*margin: 0 75px;*/
+      margin-bottom: 20px;
     }
     .m-nav-list{
       padding: 0 80px;
