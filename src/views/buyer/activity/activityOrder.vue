@@ -106,7 +106,7 @@
               this.$router.push({ path: v, query: { pbid: item.pbid, pbname: item.pbname }});
               break;
             case '/orderDetail':
-              this.$router.push({ path: v, query: { omid: item.omid }});
+              this.$router.push({ path: v, query: { omid: item.omid , from: "activityProduct" }});
               break;
             case '/logisticsInformation':
               this.$router.push({ path: v, query: { omid: item.omid }});

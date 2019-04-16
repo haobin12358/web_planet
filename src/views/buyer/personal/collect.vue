@@ -33,7 +33,14 @@
       },
       components:{navList,mCircle},
       methods:{
-        navClick(v){
+        navClick(index){
+          let arr = [].concat(this.nav_list);
+          for(let i=0;i<arr.length;i++){
+            arr[i].active = false;
+          }
+          arr[index].active = true;
+          arr[index].desc_asc = !arr[index].desc_asc;
+          this.nav_list = [].concat(arr);
 
         }
       }

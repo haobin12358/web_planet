@@ -108,7 +108,9 @@
         margin-top: 38px;
         font-size: 21px;
         text-align: left;
-        height: 60px;
+        /*height: auto;*/
+        height: 66px;
+        line-height: 33px;
         //overflow: hidden;
         //text-overflow: ellipsis;
         //white-space: nowrap;
