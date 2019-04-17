@@ -169,7 +169,9 @@
           params: {
             kw: this.searchForm.kw,
             mobile: this.searchForm.mobile,
-            sustatus: this.searchForm.sustatus
+            sustatus: this.searchForm.sustatus,
+            page_num: this.currentPage,
+            page_size: this.pageSize
           },
         }).then(
           res => {
@@ -188,9 +190,11 @@
       sizeChange(pageSize) {
         this.pageSize = pageSize;
         this.currentPage = 1;
+        this.getSupplier();
       },
       pageChange(page) {
         this.currentPage = page;
+        this.getSupplier();
       },
 
       cellFunction({row, column}){

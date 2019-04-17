@@ -54,8 +54,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" v-if="isAdmin">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.tlastatus != 2" @click="editActivity(scope)">编辑</el-button>
-          <el-button type="text" class="success-text"    @click="forbidActivity(scope)">中止</el-button>
+          <el-button type="text" v-if="scope.row.tlastatus != 2 && scope.row.tlastatus != 10" @click="editActivity(scope)">编辑</el-button>
+          <el-button type="text" class="success-text"  v-if="scope.row.tlastatus != 10"   @click="forbidActivity(scope)">中止</el-button>
           <el-button type="text"  class="danger-text" @click="deleteActivity(scope)">删除</el-button>
         </template>
       </el-table-column>
