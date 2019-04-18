@@ -217,6 +217,7 @@
       },
 
       gotoTodoPage(item) {
+        console.log(item.ptid)
         switch (item.ptid) {
           //  激活码和新代理全交由平台
           case 'toactivationcode':
@@ -276,6 +277,9 @@
                 }
               })
             }
+            break;
+          case 'totimelimited':
+            this.$router.push('/approval/limitedProductAudit');
             break;
           case 'toreturn':
             this.$router.push('/approval/returnProductAudit')
