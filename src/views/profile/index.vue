@@ -279,7 +279,12 @@
             }
             break;
           case 'totimelimited':
-            this.$router.push('/approval/limitedProductAudit');
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/limitedProductAudit');
+            }else{
+              this.$router.push('/activity/limitedFix');
+            }
+
             break;
           case 'toreturn':
             this.$router.push('/approval/returnProductAudit')
