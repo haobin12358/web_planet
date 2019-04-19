@@ -18,10 +18,9 @@
             <span class="m-red">￥{{product_info.profict}}</span>
           </h3>
         </div>
-
         <div class="m-flex-between m-product-title-box">
           <span class="m-product-title">{{product_info.prtitle}}</span>
-<!--          <img src="/static/images/circle/icon-collect.png" class="m-icon-collect" alt="">-->
+<!--          <img src="/static/images/icon-product-collect.png" class="m-icon-collect" alt="">-->
         </div>
         <div class="m-info-list">
           <span>快递：{{product_info.prfreight | money}} 元</span>
@@ -420,8 +419,8 @@
       }
       .m-icon-collect{
         display: inline-block;
-        width: 30px;
-        height: 30px;
+        width: 75px;
+        height: 40px;
       }
     }
     h3{

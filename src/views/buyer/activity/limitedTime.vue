@@ -150,11 +150,7 @@
             }else{
               for(let i=0;i<this.nav_list.length;i++){
                 if(this.nav_list[i].active){
-                  if(i != 0){
-                    this.getProduct(this.nav_list[i].params + (this.nav_list[i].desc_asc?'|asc':'|desc'));
-                  }else{
-                    this.getProduct()
-                  }
+                    this.getProduct(this.nav_list[i].tlaid)
                 }
               }
             }
@@ -198,7 +194,6 @@
             }else{
               this.page_info.page_num = 1;
               this.total_count= 0;
-              console.log(start)
               if(start == 1){
                 this.product_list = res.data.data;
               }

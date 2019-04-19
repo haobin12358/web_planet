@@ -8,11 +8,12 @@
           </div>
           <div >
             <p class="m-flex-start">
-              <span class="m-user-name">居剧女孩</span>
-              <img src="/static/images/newpersonal/sex-woman.png" class="m-person-sex" alt="">
+              <span class="m-user-name">{{user.usname}}</span>
+              <img src="/static/images/newpersonal/sex-woman.png" v-if="user.usgender == 1" class="m-person-sex" alt="">
+              <img src="/static/images/newpersonal/sex-man.png" v-else class="m-person-sex" alt="">
             </p>
             <p>
-              <span class="m-person-level">星级会员</span>
+              <span class="m-person-level">{{user.usidname}}</span>
             </p>
           </div>
           <div class="m-flex-end" @click="changeRoute('/personal/mainIndex')">
@@ -29,13 +30,13 @@
               <span>收藏</span>
             </div>
           </li>
-          <li class="m-flex-between">
-            <div class="m-flex-start">
-              <img src="/static/images/newpersonal/icon-message.png" class="m-icon" alt="">
-              <span>消息</span>
-            </div>
-            <span class="m-info">99</span>
-          </li>
+<!--          <li class="m-flex-between">-->
+<!--            <div class="m-flex-start">-->
+<!--              <img src="/static/images/newpersonal/icon-message.png" class="m-icon" alt="">-->
+<!--              <span>消息</span>-->
+<!--            </div>-->
+<!--            <span class="m-info">99</span>-->
+<!--          </li>-->
           <li class="m-flex-between" @click="changeRoute('/orderList')">
             <div class="m-flex-start">
               <img src="/static/images/newpersonal/icon-order.png" class="m-icon" alt="">
@@ -43,6 +44,12 @@
             </div>
             <span class="m-red">2</span>
           </li>
+<!--          <li class="m-flex-between" @click="changeRoute('/orderList')">-->
+<!--            <div class="m-flex-start">-->
+<!--              <img src="/static/images/newpersonal/icon-track.png" class="m-icon" alt="">-->
+<!--              <span>足迹</span>-->
+<!--            </div>-->
+<!--          </li>-->
         </ul>
       </div>
       <div class="m-personal-item">
@@ -52,14 +59,14 @@
               <img src="/static/images/newpersonal/icon-wallet.png" class="m-icon" alt="">
               <span>我的钱包</span>
             </div>
-            <span class="m-info">¥99</span>
+            <span class="m-info">¥{{user.usbalance}}</span>
           </li>
           <li class="m-flex-between" @click="changeRoute('/personal/integral')">
             <div class="m-flex-start">
               <img src="/static/images/newpersonal/icon-star.png" class="m-icon" alt="">
               <span>星币商城</span>
             </div>
-            <span class="m-info" v-if="signIn">99星币</span>
+            <span class="m-info" v-if="signIn">{{user.usintegral}}星币</span>
             <span class="m-btn" v-else @click.stop="userSignIn">签  到</span>
           </li>
           <li class="m-flex-between" @click="changeRoute('/personal/couponCenter')">
@@ -122,7 +129,7 @@
       },
       mounted() {
         common.changeTitle('我的');
-        // this.getUser();             // 获取个人信息
+        this.getUser();             // 获取个人信息
       },
       activated() {
         this.getUser();             // 获取个人信息
