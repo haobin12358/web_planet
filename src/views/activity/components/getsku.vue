@@ -63,6 +63,14 @@
           </el-input>
         </el-form-item>
       </el-form>
+      <!--星币-->
+      <el-form label-position="right" label-width="120px" v-if="where == 'star'">
+        <el-form-item label="显示价格：" prop="prprice">
+          <el-input class="long-input" v-model="skusForm.prprice" maxlength="11">
+            <template slot="append">星币</template>
+          </el-input>
+        </el-form-item>
+      </el-form>
       <!--魔盒奖品-->
       <el-form label-position="right" label-width="120px" inline v-if="where == 'magic'" style="margin-top: -30px">
         <el-form-item label="参与时间：">
@@ -162,8 +170,11 @@
         </el-table-column>
         <el-table-column label="参与价格" align="center" prop="skuprice" v-if="where !== 'magic'">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.price" maxlength="11">
+            <el-input class="short-input" v-if="where != 'star'" v-model="scope.row.price" maxlength="11">
               <template slot="append">元</template>
+            </el-input>
+            <el-input class="short-input" v-else v-model="scope.row.price" maxlength="11">
+              <template slot="append">星币</template>
             </el-input>
           </template>
         </el-table-column>
@@ -324,7 +335,7 @@
       },
       // 选择的skus在变化
       handleSelectionChange(val) {
-        if(this.where == 'new' || this.where == 'guess' || this.where == 'limited') {
+        if(this.where == 'new' || this.where == 'guess' || this.where == 'limited' || this.where == 'star') {
           this.skus = val
         }else if(this.where == 'magic') {
           if(val.length > 1) {
@@ -501,7 +512,52 @@
           this.chooseMagicSku()
         }else if(this.where == 'limited'){     //限时活动
           this.chooseLimitedSku()
+        }else if(this.where == 'star'){     //限时活动
+          this.chooseStarSku()
         }
+      },
+      //星币
+      chooseStarSku(){
+        if(!moneyReg.test(this.skusForm.prprice) && this.skusForm.prprice.indexOf('.') > 0) {
+          this.$message.warning('请正确输入显示价格');
+          return
+        }
+        if(!this.skus.length) {
+          this.$message.warning('请先选择商品规格');
+          return false
+        }
+        if (!positiveNumberReg.test(this.skus[0].stock)) {
+          this.$message.warning('请输入合理的库存');
+          return
+        }
+        if (!moneyReg.test(this.skus[0].price) && this.skus[0].price.indexOf('.') > 0){
+          this.$message.warning('请输入合理的sku价格');
+          return
+        }
+        if(this.skus[0].stock > this.skus[0].skustock ){
+          this.$message.warning('参与数量超出库存');
+          return
+        }
+        let sku = {
+          prid: this.prid,
+          ipid: this.ipid,
+          ipprice: this.skusForm.prprice,
+          skus: []
+        };
+        for(let i in this.skus) {
+          let skus = {};
+          skus.ipsstock = this.skus[i].stock;
+          skus.skuid = this.skus[i].skuid;
+          skus.skuprice = this.skus[i].price;
+          skus.skudiscountone = this.skus[i].skudiscountone;
+          skus.skudiscounttwo = this.skus[i].skudiscounttwo;
+          skus.skudiscountthree = this.skus[i].skudiscountthree;
+          skus.skudiscountfour = this.skus[i].skudiscountfour;
+          skus.skudiscountfive = this.skus[i].skudiscountfive;
+          skus.skudiscountsix = this.skus[i].skudiscountsix;
+          sku.skus.push(skus)
+        }
+        this.$emit('chooseStarSku', sku, this.isEdit)
       },
       // 限时
       chooseLimitedSku() {
@@ -649,7 +705,12 @@
                 this.skusList[i].skuname += this.skusList[i].skuattritedetail[j] + ' '
               }
               this.skusList[i].stock = 1;
-              this.skusList[i].price = 0.01;
+              if(this.where == 'star'){
+                this.skusList[i].price = 1;
+              }else{
+                this.skusList[i].price = 0.01;
+              }
+
               this.skusList[i].maxprice = this.skusList[i].skuprice;
               this.skusList[i].skudiscountone = 1;
               this.skusList[i].skudiscounttwo = 2;

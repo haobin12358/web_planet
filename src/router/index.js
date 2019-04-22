@@ -340,7 +340,13 @@ export const asyncRouterMap = [
         path: 'limitedProductAudit',
         name: 'limitedProductAudit',
         component: () => import('src/views/approval/limitedProductAudit'),
-        meta: {title: '限时活动商品审批', icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '限时活动商品审批', icon: 'yes', noCache: true, roles: level1}
+      },
+      {
+        path: 'starAudit',
+        name: 'starAudit',
+        component: () => import('src/views/approval/starAudit'),
+        meta: {title: '星币商城商品审批', icon: 'yes', noCache: true, roles: level2}
       },
       {
         path: 'activationCodeActi',
@@ -455,6 +461,12 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/activity/limitedFixEdit'),
         meta: {title: '限时活动编辑', noCache: true, roles: level1}
+      },
+      {
+        path: 'starProduct',
+        name: 'starProduct',
+        component: () => import('src/views/activity/starProduct'),
+        meta: {title: '星币商城', icon: 'yes', noCache: true, roles: level2}
       },
 
       //  供应商
