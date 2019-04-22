@@ -3,10 +3,9 @@ let title = '';
 // title = 'https://planet.daaiti.cn/api/v1/';
 if(location.origin.indexOf('testmanager') > 0 || location.origin.indexOf('localhost') > 0){
   title = 'https://test.bigxingxing.com/api/v1/'; //测试
-}else if(location.origin.indexOf('pre') > 0){
-  title = 'https://pre.bigxingxing.cim/api/v1'
-
-}else{
+}else if(location.origin.indexOf('premanager') > 0){
+  title = 'https://pre2.bigxingxing.cim/api/v2'
+}else if(location.origin.indexOf('//manager.') >0){
   title = 'https://www.bigxingxing.com/api/v1/';  // 正式
 }
 
@@ -16,7 +15,6 @@ const api = {
   auth_fresh: title + 'auth/fresh',                                       // 刷新token
 
   history_detail: title + 'order/history_detail',                         // 概览页历史数据
-
   get_admin_list: title + 'user/get_admin_list',                          // 获取管理员列表
   add_admin_by_superadmin: title + 'user/add_admin_by_superadmin',        // 添加管理员
   get_admin_all_status: title + 'user/get_admin_all_status',              // 获取所有管理员的状态
