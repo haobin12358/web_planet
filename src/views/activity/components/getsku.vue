@@ -156,7 +156,9 @@
         <el-table-column label="库存" align="center" prop="skustock"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="shorter-input" v-model="scope.row.stock" :disabled="isEdit" maxlength="11">
+            <el-input class="shorter-input" v-model="scope.row.stock" v-if="where == 'star'" maxlength="11">
+            </el-input>
+            <el-input class="shorter-input" v-model="scope.row.stock" v-else :disabled="isEdit" maxlength="11">
             </el-input>
           </template>
         </el-table-column>
@@ -518,7 +520,7 @@
       },
       //星币
       chooseStarSku(){
-        if(!moneyReg.test(this.skusForm.prprice) && this.skusForm.prprice.indexOf('.') > 0) {
+        if(!positiveNumberReg.test(this.skusForm.prprice)) {
           this.$message.warning('请正确输入显示价格');
           return
         }
@@ -530,7 +532,7 @@
           this.$message.warning('请输入合理的库存');
           return
         }
-        if (!moneyReg.test(this.skus[0].price) && this.skus[0].price.indexOf('.') > 0){
+        if (!positiveNumberReg.test(this.skus[0].price)){
           this.$message.warning('请输入合理的sku价格');
           return
         }
