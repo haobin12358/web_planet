@@ -143,8 +143,10 @@
         <el-form-item label="官网">
           <el-input v-model.trim="brandForm.pblinks" maxlength="1000" ></el-input>
         </el-form-item>
-        <el-form-item label="星币抵扣百分比">
-          <el-input v-model.trim="brandForm.pbintegralpayrate" maxlength="1000" ></el-input>
+        <el-form-item label="星币抵扣百分比(0-100)">
+          <el-input v-model.trim="brandForm.pbintegralpayrate" maxlength="1000" >
+            <template slot="append">%</template>
+          </el-input>
         </el-form-item>
       </el-form>
 
@@ -202,7 +204,7 @@
   import TableCellImg from "src/components/TableCellImg";
   import {getStore, setStore} from "src/utils/index";
   import elDragDialog from 'src/directive/el-dragDialog'
-
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: 'ProductBrand',
 
@@ -597,7 +599,10 @@
           valid => {
             if (valid) {
               let type = this.brandForm.pbid ? '品牌修改' : '品牌新增';
-
+              if(!positiveNumberReg.test(this.brandForm.pbintegralpayrate)){
+                this.$message.warning('请输入整数的星币折扣');
+                return
+              }
               if (this.brandForm.pbid) {
                 this.$http.post(this.$api.update_brand, this.brandForm).then(
                   res => {
