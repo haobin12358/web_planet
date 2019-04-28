@@ -166,6 +166,8 @@ const api = {
 
   get_entry: title +'index/get_entry',          //获取活动图
   set_entry: title + 'index/set_entry', ///修改活动图
+  list_hypermarket_banner: title +'index/list_hypermarket_banner',    ///商城轮播图
+  set_hypermarket_banner: title +'index/set_hypermarket_banner',     //修改商城轮播图
 
   get_inforcode: title + 'user/get_inforcode',                            // 获取验证码-管理员更改手机号
 

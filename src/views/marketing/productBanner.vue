@@ -1,33 +1,33 @@
 <template>
   <div class="container">
-<!--    <section class="add-banner tr">-->
-<!--      <el-button type="primary" icon="el-icon-plus" @click="bannerDialog = true">新增</el-button>-->
-<!--    </section>-->
+    <section class="add-banner tr">
+      <el-button type="primary" icon="el-icon-plus" @click="bannerDialog = true">新增</el-button>
+    </section>
     <el-table v-loading="bannerLoading" :data="bannerList" stripe>
-      <el-table-column label="轮播图" align="center" prop="enpic" width="180">
+      <el-table-column label="轮播图" align="center" prop="hibpic" width="180">
         <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.enpic]" :key="scope.row.enpic" width="92px" out-width="92px"></table-cell-img>
+          <table-cell-img :src="[scope.row.hibpic]" :key="scope.row.hibpic" width="92px" out-width="92px"></table-cell-img>
         </template>
       </el-table-column>
       <!--<el-table-column label="对应商品" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>-->
       <el-table-column label="对应链接" align="center" prop="contentlink" show-overflow-tooltip></el-table-column>
-      <el-table-column label="不展示/展示" align="center" prop="enshow">
+      <el-table-column label="不展示/展示" align="center" prop="hibshow">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.enshow" @change="bannerShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
+          <el-switch v-model="scope.row.hibshow" @change="bannerShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="位置" align="center" prop="entype" :render-header="sortHeaderRender">
-<!--        <template slot-scope="scope">-->
-<!--          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.entype"-->
-<!--                    @change="sortChange" maxlength="11"></el-input>-->
-<!--          <el-button type="text" v-if="scope.$index == index" @click="sortChange">保存</el-button>-->
-<!--        </template>-->
+      <el-table-column label="权重" align="center" prop="hibsort" :render-header="sortHeaderRender">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.hibsort"
+                    @change="sortChange" maxlength="11"></el-input>
+          <el-button type="text" v-if="scope.$index == index" @click="sortChange">保存</el-button>
+        </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="180">
         <template slot-scope="scope">
           <el-button type="text" @click="editBanner(scope)">编辑</el-button>
-<!--          <el-button type="text" class="danger-text" @click="deleteBanner(scope)">删除</el-button>-->
+          <el-button type="text" class="danger-text" @click="deleteBanner(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -35,7 +35,7 @@
     <el-dialog v-el-drag-dialog title="首页轮播图" :visible.sync="bannerDialog" top="5vh" :close-on-click-modal="false">
       <el-form :model="bannerForm" :rules="rules" ref="bannerFormRef" label-position="left"
                label-width="100px">
-        <el-form-item label="轮播图" prop="enpic">
+        <el-form-item label="轮播图" prop="hibpic">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -43,18 +43,18 @@
             accept="image/*"
             :on-success="handleBannerSuccess"
             :before-upload="beforeImgUpload">
-            <img v-if="bannerForm.enpic" v-lazy="bannerForm.enpic" class="avatar banner-img">
+            <img v-if="bannerForm.hibpic" v-lazy="bannerForm.hibpic" class="avatar banner-img">
             <i v-else class="el-icon-plus avatar-uploader-icon banner-img"></i>
             <div slot="tip" class="el-upload__tip">
               建议为680 * 370，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
             </div>
           </el-upload>
         </el-form-item>
-<!--        <el-form-item label="位置" prop="ensort">-->
-<!--          <el-input class="sort-input" v-model="bannerForm.entype"></el-input>-->
-<!--        </el-form-item>-->
-        <el-form-item label="不展示 / 展示" prop="enshow">
-          <el-switch v-model="bannerForm.enshow" active-color="#409EFF" inactive-color="#DBDCDC">
+        <el-form-item label="序号" prop="hibsort">
+          <el-input class="sort-input" v-model="bannerForm.hibsort"></el-input>
+        </el-form-item>
+        <el-form-item label="不展示 / 展示" prop="hibshow">
+          <el-switch v-model="bannerForm.hibshow" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </el-form-item>
         <el-form-item label="链接" prop="contentlink">
@@ -120,23 +120,23 @@
 
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
-    name: 'IndexBanner',
+    name: 'productBanner',
     data() {
       return {
         bannerDialog: false,
         bannerForm: {
-          enid: '',
+          hibid: '',
           prid: '',
-          enpic: '',
-          ensort: '',
+          hibpic: '',
+          hibsort: '',
           contentlink: '',
-          enshow: false,
+          hibshow: false,
         },
         rules: {
-          enpic: [
+          hibpic: [
             { required: true, message: '轮播图必需', trigger: 'blur' }
           ],
-          ensort: [
+          hibsort: [
             { required: true, message: '序号必填', trigger: 'blur' }
           ],
           /*contentlink: [
@@ -173,7 +173,7 @@
     methods: {
       // 主图上传
       handleBannerSuccess(res, file) {
-        this.bannerForm.enpic = res.data;
+        this.bannerForm.hibpic = res.data;
       },
       // 上传前限制小于15M
       beforeImgUpload(file) {
@@ -186,8 +186,8 @@
       // 获取banner
       getBanner() {
         this.bannerLoading = true;
-        this.$http.get(this.$api.get_entry, {
-          noLoading: true, params: { entype: '' }}).then(res => {
+        this.$http.get(this.$api.list_hypermarket_banner, {
+          noLoading: true, params: { hibshow: 'all' }}).then(res => {
           if (res.data.status == 200) {
             this.bannerList = res.data.data;
             this.bannerLoading = false;
@@ -200,9 +200,9 @@
         this.$refs.bannerFormRef.resetFields();
         this.bannerForm = {
           prid: '',
-          enpic: '',
-          ensort: '',
-          enshow: false,
+          hibpic: '',
+          hibsort: '',
+          hibshow: false,
         };
         this.bannerDialog = false;
       },
@@ -210,18 +210,30 @@
       addBanner() {
         this.$refs.bannerFormRef.validate(valid => {
           if (valid) {
-            if(this.bannerForm.enid) {      // 编辑
-              this.$http.post(this.$api.set_entry, this.bannerForm).then(res => {
+            if(this.bannerForm.hibid) {      // 编辑
+              this.$http.post(this.$api.set_hypermarket_banner, this.bannerForm).then(res => {
                 if (res.data.status == 200) {
                   this.$notify({
                     title: '修改成功',
-                    message: '此活动图修改成功',
+                    message: '此轮播图修改成功',
                     type: 'success'
                   });
                   this.bannerDialog = false;
                   this.getBanner()
                 }
               });
+            }else {                         // 新增
+              this.$http.post(this.$api.set_hypermarket_banner, this.bannerForm).then(res => {
+                if (res.data.status == 200) {
+                  this.initBannerForm();
+                  this.$notify({
+                    title: '新增成功',
+                    message: '轮播图新增成功',
+                    type: 'success'
+                  });
+                  this.getBanner()
+                }
+              })
             }
           }else {
             this.$message.warning('请根据校验信息完善表单!');
@@ -231,12 +243,12 @@
       // 删除banner
       deleteBanner(scope) {
         let params = {
-          enid: scope.row.enid
+          hibid: scope.row.hibid
         };
         // 最少保留一张轮播图
         let num = 0;
         for(let i in this.bannerList) {
-          if(!this.bannerList[i].enshow) {
+          if(!this.bannerList[i].hibshow) {
             num += 1
           }
         }
@@ -251,7 +263,7 @@
           type: 'warning'
         }).then(() => {
           params.isdelete = true;
-          this.$http.post(this.$api.update_banner, params).then(res => {
+          this.$http.post(this.$api.set_hypermarket_banner, params).then(res => {
             if (res.data.status == 200) {
               this.$notify({
                 title: '删除成功',
@@ -267,35 +279,35 @@
       bannerShow(scope) {
         let msg = '';
         let params = {
-          enid: scope.row.enid
+          hibid: scope.row.hibid
         };
         // 最少保留一张轮播图
         let num = 0;
         for(let i in this.bannerList) {
-          if(!this.bannerList[i].enshow) {
+          if(!this.bannerList[i].hibshow) {
             num += 1
           }
         }
         if(num == this.bannerList.length) {
-          this.bannerList[scope.$index].enshow = true;
+          this.bannerList[scope.$index].hibshow = true;
           this.$message.error('请最少保留一张轮播图');
           return false
         }
 
-        params.enshow = scope.row.enshow;
-        if(!scope.row.enshow) {
+        params.hibshow = scope.row.hibshow;
+        if(!scope.row.hibshow) {
           msg = '此轮播图不再展示'
         }else {
           msg = '此轮播图将会展示'
         }
-        this.$http.post(this.$api.set_entry, scope.row).then(res => {
+        this.$http.post(this.$api.set_hypermarket_banner, params).then(res => {
           if (res.data.status == 200) {
             this.$notify({
               title: '修改成功',
               message: msg,
               type: 'success'
             });
-            // this.getBanner();
+            this.getBanner();
           }
         });
       },
@@ -310,24 +322,27 @@
       },
       // 改变轮播图序号
       sortChange(v) {
-        if(positiveNumberReg.test(this.bannerList[this.index].ensort)) {
+        if(positiveNumberReg.test(this.bannerList[this.index].hibsort)) {
           let params = {
-            enid: this.bannerList[this.index].enid,
-            ensort: this.bannerList[this.index].ensort,
-            enshow: this.bannerList[this.index].enshow,
+            hibid: this.bannerList[this.index].hibid,
+            hibsort: this.bannerList[this.index].hibsort,
+            hibshow: this.bannerList[this.index].hibshow,
           };
 
-          this.$http.post(this.$api.set_entry, params).then(res => {
+          this.$http.post(this.$api.set_hypermarket_banner, params).then(res => {
             if (res.data.status == 200) {
               this.$notify({
                 title: '保存成功',
-                message: '此活动图序号已保存',
+                message: '此轮播图序号已保存',
                 type: 'success'
               });
               this.getBanner();         // 刷新banner
               this.index = -1;
             }
           });
+        }else {
+          this.$message.warning('请输入合理权重值(>0)');
+
         }
       },
       sortHeaderRender(h,{column}){
