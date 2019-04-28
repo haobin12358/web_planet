@@ -148,7 +148,9 @@ const api = {
   coupon_create: title + 'coupon/create',                                 // 后台创建优惠券
   coupon_update: title + 'coupon/update',                                 // 后台修改优惠券
   coupon_delete: title + 'coupon/delete',                                 // 后台删除优惠券
-
+  create_code: title + 'coupon/create_code',                //创建优惠吗
+  update_code: title + 'coupon/update_code',           //开启/关闭兑换码
+  get_code_list: title +'coupon/get_code_list',      //查看兑换码
   list_user_commison: title + 'user/list_user_commison',                  // 销售商列表(后台佣金)
   list_fans: title + 'user/list_fans',                                    // 销售商列表(后台佣金)
   update_user_commision: title + 'user/update_user_commision',            // 设置个人佣金

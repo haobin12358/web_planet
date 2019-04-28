@@ -48,6 +48,11 @@
           <el-tag v-if="scope.row.pbstatus == 10" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="星币抵扣" width="100" align="center">
+        <template slot-scope="scope">
+          <span v-if="scope.row.pbintegralpayrate">{{scope.row.pbintegralpayrate}}%</span>
+        </template>
+      </el-table-column>
       <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
       <el-table-column label="创建时间" align="center" prop="createtime" width="180"></el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
@@ -137,6 +142,9 @@
         </el-form-item>
         <el-form-item label="官网">
           <el-input v-model.trim="brandForm.pblinks" maxlength="1000" ></el-input>
+        </el-form-item>
+        <el-form-item label="星币抵扣百分比">
+          <el-input v-model.trim="brandForm.pbintegralpayrate" maxlength="1000" ></el-input>
         </el-form-item>
       </el-form>
 
@@ -260,6 +268,7 @@
           pbdesc: "",
           pblinks: "",
           itids: [],
+          pbintegralpayrate:0
         },
         brandRules: {
           pblogo: [
@@ -494,6 +503,7 @@
           pbdesc: "",
           pblinks: "",
           itids: [],
+          pbintegralpayrate:0
         };
         this.$http.get(this.$api.items_list, {
           params: {
@@ -528,6 +538,7 @@
           pbdesc: row.pbdesc,
           pblinks: row.pblinks,
           itids: [],
+          pbintegralpayrate:0
         };
         this.brandForm.itids = row.items.map(item => item.itid);
       },

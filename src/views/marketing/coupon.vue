@@ -27,11 +27,62 @@
                        :render-header="startTimeHeaderRender"></el-table-column>
       <el-table-column label="剩余数量" align="center" prop="coremainnum" width="100"></el-table-column>
       <el-table-column label="发放数量" align="center" prop="colimitnum" width="100"></el-table-column>
+      <el-table-column label="兑换码兑换" align="center" prop="cocode" width="100">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.cocode"
+            active-color="#3498DB"
+            inactive-color="#B8B8B8"
+            @change="codeSwitchClick($event,scope.row)"
+          >
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="120" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" v-if="new Date()<new Date(scope.row.cosendstarttime)" @click="editCoupon(scope)">编辑
           </el-button>
           <el-button type="text" class="danger-text" @click="deleteCoupon(scope)">删除</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="兑换码操作" align="center" width="120" fixed="right">
+        <template slot-scope="scope">
+          <el-popover
+            placement="right"
+            width="400"
+            trigger="click">
+             <div class="m-code-picker">
+               <h3>生成兑换码</h3>
+               <el-input v-model="scope.row.conum" placeholder="请输入生成的数量"></el-input>
+               <el-button type="primary" @click="sureCode(scope.row)">确认</el-button>
+             </div>
+<!--            <el-button slot="reference">click 激活</el-button>-->
+            <el-button slot="reference" type="text" >生成</el-button>
+          </el-popover>
+          <el-popover
+            placement="right"
+            width="600"
+            trigger="click">
+              <div class="m-code-picker">
+                <h3>查看兑换码</h3>
+                <p class="m-flex-between">
+                  <span>总共：{{code_count}}</span>
+                  <span>已兑换：{{used_count}}</span>
+                </p>
+                <ul class="m-code-ul">
+                  <li v-for="(item,index) in codeList">
+                    <span>{{item.cccode}}</span>
+                    <span class="cancel" v-if="item.ccused">已兑换</span>
+                    <span v-else>未兑换</span>
+                  </li>
+                </ul>
+                <el-pagination background class="page-box tc" :page-sizes="[10, 20, 30, 40]" :current-page="page_num_code"
+                               :page-size="page_size_code" :total="total_code" layout="total, sizes, prev, pager, next, jumper"
+                               @size-change="codeSizeChange" @current-change="codePageChange"></el-pagination>
+              </div>
+            <!--            <el-button slot="reference">click 激活</el-button>-->
+            <el-button slot="reference" type="text" @click="lookCode(scope.row)">查看</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
@@ -52,6 +103,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <!--编辑dialog-->
     <el-dialog v-el-drag-dialog :visible.sync="itemDialog" width="700px" top="20vh"
                :title="itemForm.itid?'编辑优惠券标签':'新增优惠券标签'" :close-on-click-modal="false">
@@ -90,6 +142,9 @@
         page_num: 1,
         page_size: 10,
         total: 0,
+        page_num_code: 1,
+        page_size_code: 10,
+        total_code: 0,
         itemForm: {
           itid: '',
           itname: '',
@@ -107,6 +162,10 @@
             {min: 1, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'}
           ]
         },
+        codeList:[],
+        code_count:0,
+        used_count:0,
+        select_code:null
       }
     },
     directives: {elDragDialog},
@@ -273,6 +332,55 @@
         }).catch(() => {
         });
       },
+      //开关
+      codeSwitchClick(e,item){
+        this.$http.post(this.$api.update_code, {
+          coid:item.coid,
+          cocode: item.cocode
+        }).then(res => {
+          if (res.data.status == 200) {
+            this.$notify({
+              title: '成功',
+              message: res.data.message,
+              type: 'success'
+            });
+          }
+        });
+      },
+      //生成优惠吗
+      sureCode(item){
+        console.log(item)
+        this.$http.post(this.$api.create_code, {
+          coid:item.coid,
+          conum: Number(item.conum)
+        }).then(res => {
+          if (res.data.status == 200) {
+
+          }
+        });
+      },
+      lookCode(item){
+        this.select_code = item;
+        this.getCode();
+      },
+      getCode(){
+        this.$http.get(this.$api.get_code_list, {
+          noLoading: true,
+          params: {
+            coid: this.select_code.coid,
+            page_num: this.page_num_code,
+            page_size: this.page_size_code,
+
+          }
+        }).then(res => {
+          if (res.data.status == 200) {
+            this.codeList = res.data.data.code;
+            this.code_count = res.data.data.count;
+            this.used_count = res.data.data.used_count;
+            this.total_code = res.data.total_count;
+          }
+        })
+      },
       sizeChange(val) {
         this.page_size = val;
         this.getCoupon()        // 获取优惠券
@@ -280,6 +388,14 @@
       pageChange(val) {
         this.page_num = val;
         this.getCoupon()        // 获取优惠券
+      },
+      codeSizeChange(val){
+        this.page_size_code = val;
+        this.getCode()
+      },
+      codePageChange(val) {
+        this.page_num_code = val;
+        this.getCode()        // 获取优惠券
       },
     }
   }
@@ -303,5 +419,6 @@
     .short-input {
       width: 250px;
     }
+
   }
 </style>
