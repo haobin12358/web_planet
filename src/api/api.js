@@ -164,6 +164,9 @@ const api = {
   set_banner: title + 'index/set_banner',                                 // 设置首页轮播图
   update_banner: title + 'index/update_banner',                           // 修改首页轮播图
 
+  get_entry: title +'index/get_entry',          //获取活动图
+  set_entry: title + 'index/set_entry', ///修改活动图
+
   get_inforcode: title + 'user/get_inforcode',                            // 获取验证码-管理员更改手机号
 
   agree_refund_apply: title + 'refund/agree_apply',                        // 售后订单
