@@ -19,15 +19,22 @@
             <span class="value">{{order.omno}}</span>
           </p>
 
-          <p class="detail-item">
+          <p class="detail-item" v-if="order.omfrom != 80">
             <span class="label">总价:</span>
             <span class="value">￥ {{order.ommount}}</span>
           </p>
-          <p class="detail-item">
+          <p class="detail-item" v-else>
+            <span class="label">总价:</span>
+            <span class="value"> {{order.ommount}} 星币</span>
+          </p>
+          <p class="detail-item" v-if="order.omfrom != 80">
             <span class="label">实付:</span>
             <span class="value">￥ {{order.omtruemount}}</span>
           </p>
-
+          <p class="detail-item" v-else>
+            <span class="label">实付:</span>
+            <span class="value"> {{order.omtruemount}} 星币</span>
+          </p>
           <p class="detail-item">
             <span class="label">下单时间:</span>
             <span class="value">{{order.createtime}}</span>

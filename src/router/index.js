@@ -340,13 +340,13 @@ export const asyncRouterMap = [
         path: 'limitedProductAudit',
         name: 'limitedProductAudit',
         component: () => import('src/views/approval/limitedProductAudit'),
-        meta: {title: '限时活动商品审批', icon: 'yes', noCache: true, roles: level1}
+        meta: {title: '限时活动商品审批', icon: 'yes', noCache: true, roles: level2}
       },
       {
         path: 'starAudit',
         name: 'starAudit',
         component: () => import('src/views/approval/starAudit'),
-        meta: {title: '星币商城商品审批', icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '星币商城商品审批', icon: 'yes', noCache: true, roles: level1}
       },
       {
         path: 'activationCodeActi',

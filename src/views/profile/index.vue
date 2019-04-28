@@ -286,6 +286,9 @@
             }
 
             break;
+          case 'tointegral':
+              this.$router.push('/approval/starAudit');
+            break;
           case 'toreturn':
             this.$router.push('/approval/returnProductAudit')
             break;

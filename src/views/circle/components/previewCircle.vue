@@ -25,8 +25,10 @@
             <div class="m-img-box" v-else-if="circle.showtype == 'picture'">
               <img :src="circle.mainpic" class="m-img">
             </div>
-            <p class="m-text" v-else v-html="circle.netext">
-            </p>
+            <div v-else>
+              <span class="m-toc-label" v-if="circle.toctitle">#{{circle.toctitle}}#</span>
+              <span v-html="circle.netext"></span>
+            </div>
             <ul class="m-video-icon-ul">
               <li>
                 <span class="m-icon-like " :class="circle.is_favorite?'active':''"></span>
@@ -59,7 +61,11 @@
 
           <div class="m-content">
             <template v-for="(item,index) in news_info.netext">
-              <p v-if="item.type =='text'" v-html="item.content"></p>
+              <div v-if="item.type =='text'">
+                <span class="m-toc-label" v-if="news_info.toctitle">#{{news_info.toctitle}}#</span>
+                <span v-html="item.content"></span>
+              </div>
+<!--              <p v-if="item.type =='text'" v-html="item.content"></p>-->
               <template v-if="item.type=='image'" v-for="i in item.content">
                 <img class="m-circle-img" :src="i">
               </template>
@@ -362,6 +368,9 @@
     height: 45rem;
     overflow: auto;
     overflow-x: hidden;
+  }
+  .m-toc-label{
+    color: #409EFF;
   }
   .m-circle-content{
      padding: 0 0 50px 0;

@@ -2,9 +2,9 @@ let title = '';
 
 // title = 'https://planet.daaiti.cn/api/v1/';
 if(location.origin.indexOf('testmanager') > 0 || location.origin.indexOf('localhost') > 0){
-  title = 'https://test.bigxingxing.com/api/v1/'; //测试
+  title = 'https://test.bigxingxing.com/api/v2/'; //测试
 }else if(location.origin.indexOf('premanager') > 0){
-  title = 'https://pre2.bigxingxing.cim/api/v2'
+  title = 'https://pre2.bigxingxing.com/api/v2/'
 }else if(location.origin.indexOf('//manager.') >0){
   title = 'https://www.bigxingxing.com/api/v1/';  // 正式
 }
@@ -141,6 +141,8 @@ const api = {
   update_news: title + 'news/update_news',                                // 修改资讯
   del_news: title + 'news/del_news',                                      // 删除资讯
   news_shelves: title + 'news/news_shelves',                              // 资讯下架
+  news_topic: title +'news/topic',                          //获取话题
+
 
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表
   coupon_create: title + 'coupon/create',                                 // 后台创建优惠券

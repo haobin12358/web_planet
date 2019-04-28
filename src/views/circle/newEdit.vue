@@ -28,6 +28,23 @@
                          class="form-item-end-tip">标签不全?去新增 >
             </router-link>
           </el-form-item>
+          <el-form-item label="话题" prop="tocid">
+            <el-select
+              v-model="circleForm.tocid"
+              filterable
+              allow-create
+              default-first-option
+              clearable
+              @change="createToc"
+              placeholder="自行创建或选择已有话题">
+              <el-option
+                v-for="item in toc_list"
+                :key="item.toctitle"
+                :label="item.toctitle"
+                :value="item.tocid">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="资讯标题" prop="netitle">
             <el-input v-model="circleForm.netitle"></el-input>
           </el-form-item>
@@ -211,7 +228,8 @@
           coupon: [],
           product: [],
           neisrecommend: 0,
-          source: 'web'
+          source: 'web',
+          tocid:''
         },
         rules: {
           items: [
@@ -231,7 +249,8 @@
         kw: '',
         uploadSkuImgIndex:0,
         show_video:true,
-        show_add :false
+        show_add :false,
+        toc_list:[],
       }
     },
     computed: {
@@ -331,6 +350,27 @@
         }
         this.getItem();                       // 获取标签列表
         this.getCoupon();                     // 获取优惠券列表
+        this.getToc();
+      },
+      //创建话题
+      createToc(){
+        let bool = false;
+        for(let i in this.toc_list){
+          if(this.toc_list[i].tocid == this.tocid){
+            bool = true;
+          }
+        }
+        if(!bool && this.circleForm.tocid){
+          this.$http.post(this.$api.news_topic,{
+            toctitle:this.circleForm.tocid
+          }).then(res => {
+            if (res.data.status == 200) {
+              this.circleForm.tocid = res.data.data.tocid;
+              this.getToc();
+            }
+          })
+        }
+
       },
       // 获取标签列表
       getItem() {
@@ -339,6 +379,14 @@
           if (res.data.status == 200) {
             this.itemsList = res.data.data;
             console.log(this.itemsList)
+          }
+        })
+      },
+      getToc(){
+        this.$http.get(this.$api.news_topic, {
+          noLoading: true}).then(res => {
+          if (res.data.status == 200) {
+            this.toc_list = res.data.data;
           }
         })
       },

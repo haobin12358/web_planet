@@ -18,16 +18,16 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品图片" align="center"  width="100">
           <template slot-scope="scope">
-            <table-cell-img :src="scope.row.content.product ? [scope.row.content.product.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="scope.row.content ? [scope.row.content.prmainpic] : []" :key="scope.row.avid"></table-cell-img>
             <!--{{scope.row.content.product}}-->
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="220"></el-table-column>
+        <el-table-column label="商品名称" align="center" prop="content.prtitle" width="220"></el-table-column>
 <!--        <el-table-column label="参与时间" align="center" prop="content.gnaastarttime" width="180"></el-table-column>-->
-        <el-table-column label="活动价格" align="center" prop="content.product.ipprice" width="120"></el-table-column>
+        <el-table-column label="活动价格" align="center" prop="content.ipprice" width="120"></el-table-column>
         <el-table-column align="center" label="sku" width="120">
           <template slot-scope="scope">
-            <product-sku :skus="scope.row.content.product.skus" :prattribute="scope.row.content.product.prattribute"></product-sku>
+            <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
           </template>
         </el-table-column>
       </el-table-column>
@@ -143,7 +143,6 @@
           params: {
             page_size: this.pageSize,
             page_num: this.currentPage,
-
             ptid: 'tointegral',
             ...this.inlineForm,
           }
