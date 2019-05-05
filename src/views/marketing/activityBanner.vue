@@ -45,8 +45,14 @@
             :before-upload="beforeImgUpload">
             <img v-if="bannerForm.enpic" v-lazy="bannerForm.enpic" class="avatar banner-img">
             <i v-else class="el-icon-plus avatar-uploader-icon banner-img"></i>
-            <div slot="tip" class="el-upload__tip">
-              建议为680 * 370，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+            <div slot="tip" class="el-upload__tip" v-if="bannerForm.entype == 0">
+              建议为684 * 150，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+            </div>
+            <div slot="tip" class="el-upload__tip" v-if="bannerForm.entype == 1">
+              建议为750*120，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+            </div>
+            <div slot="tip" class="el-upload__tip" v-if="bannerForm.entype == 2 || bannerForm.entype == 3">
+              建议为375*200 ，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
             </div>
           </el-upload>
         </el-form-item>

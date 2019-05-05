@@ -46,7 +46,7 @@
             <img v-if="bannerForm.hibpic" v-lazy="bannerForm.hibpic" class="avatar banner-img">
             <i v-else class="el-icon-plus avatar-uploader-icon banner-img"></i>
             <div slot="tip" class="el-upload__tip">
-              建议为680 * 370，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+              建议为750 * 250，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
             </div>
           </el-upload>
         </el-form-item>
