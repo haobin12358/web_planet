@@ -239,7 +239,7 @@
           createtime_start: '',
           createtime_end: '',
           omstatus: '',
-          omfrom: '0,10,30,40,50,60,70',
+          omfrom: '0,10,30,40,50,60,70,80',
         },
 
         menuList: [],

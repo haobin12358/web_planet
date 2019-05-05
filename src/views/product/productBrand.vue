@@ -204,7 +204,7 @@
   import TableCellImg from "src/components/TableCellImg";
   import {getStore, setStore} from "src/utils/index";
   import elDragDialog from 'src/directive/el-dragDialog'
-  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
+  const positiveNumberReg = /^([0-9]\d*)$/;   //  正整数
   export default {
     name: 'ProductBrand',
 
@@ -599,7 +599,7 @@
           valid => {
             if (valid) {
               let type = this.brandForm.pbid ? '品牌修改' : '品牌新增';
-              if(!positiveNumberReg.test(this.brandForm.pbintegralpayrate)){
+              if(!positiveNumberReg.test(this.brandForm.pbintegralpayrate ) && this.brandForm.pbintegralpayrate <101){
                 this.$message.warning('请输入整数的星币折扣');
                 return
               }
