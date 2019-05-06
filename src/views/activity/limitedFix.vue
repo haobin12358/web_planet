@@ -84,7 +84,7 @@
             <img v-if="formData.tlatoppic" :key="formData.tlatoppic" v-lazy="formData.tlatoppic" class="avatar top-img">
             <i v-else class="el-icon-plus avatar-uploader-icon top-img"></i>
             <div slot="tip" class="el-upload__tip">
-              建议尺寸为700 * 500，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
+              建议尺寸为750 * 250，大小不要超过15M，上传成功后会显示，文件较大时请耐心等待
             </div>
           </el-upload>
         </el-form-item>
