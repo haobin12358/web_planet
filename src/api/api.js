@@ -6,7 +6,7 @@ if(location.origin.indexOf('testmanager') > 0 || location.origin.indexOf('localh
 }else if(location.origin.indexOf('premanager') > 0){
   title = 'https://pre2.bigxingxing.com/api/v2/'
 }else if(location.origin.indexOf('//manager.') >0){
-  title = 'https://www.bigxingxing.com/api/v1/';  // 正式
+  title = 'https://www.bigxingxing.com/api/v2/';  // 正式
 }
 
 
