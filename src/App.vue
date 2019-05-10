@@ -51,7 +51,7 @@
     },
 
     created() {
-      console.log('v 0.5.5');
+      console.log('v 2.0.0');
       //  5分钟刷新一下token
       this.interval = setInterval(this.authRefresh, 1000 * 60 * 5);
       // console.log('v 周3下午10点30');

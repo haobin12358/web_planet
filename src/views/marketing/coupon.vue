@@ -349,13 +349,24 @@
       },
       //生成优惠吗
       sureCode(item){
-        console.log(item)
+        if(!item.conum){
+          this.$message({
+            title: '提示',
+            message: '请输入优惠码',
+            type: 'error'
+          });
+          return false;
+        }
         this.$http.post(this.$api.create_code, {
           coid:item.coid,
           conum: Number(item.conum)
         }).then(res => {
           if (res.data.status == 200) {
-
+            this.$message({
+              title: '提示',
+              message: res.data.message,
+              type: 'success'
+            });
           }
         });
       },

@@ -606,7 +606,7 @@
          bute.push(this.sku_data[i][0].label);
           all_arr[i] = [];
           for(let j in this.sku_data[i][0].children){
-            all_arr[i].push(this.sku_data[i][0].children[j].label)
+            all_arr[i].push(this.sku_data[i][0].children[j].label.replace(/(^\s*)|(\s*$)/g, ""))
           }
         }
         this.formData.prattribute = [].concat(bute);
@@ -840,8 +840,8 @@
 
         for (let i = 0; i < this.formData.skus.length; i++) {
           for (let j = 0; j < num; j++) {
-            let currentSkuAttrVal = this.formData.skus[i].skuattritedetail[j];
-
+            let currentSkuAttrVal = this.formData.skus[i].skuattritedetail[j].replace(/(^\s*)|(\s*$)/g, "");
+            console.log(currentSkuAttrVal,j,rst[j].includes(currentSkuAttrVal))
             if (currentSkuAttrVal && !rst[j].includes(currentSkuAttrVal)) {
               rst[j].push(currentSkuAttrVal);
             }
@@ -1135,6 +1135,7 @@
 
               //  再看额外的
               for (let j = 0; j < currentSku.skuattritedetail.length; j++) {
+                currentSku.skuattritedetail[j] = currentSku.skuattritedetail[j].replace(/(^\s*)|(\s*$)/g, "")
                 if (!currentSku.skuattritedetail[j]) {
                   detailTip += `-${this.formData.prattribute[j]}未填`;
                 }
