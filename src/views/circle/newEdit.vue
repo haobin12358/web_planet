@@ -354,9 +354,11 @@
       },
       //创建话题
       createToc(){
+        console.log(this.circleForm)
         let bool = false;
         for(let i in this.toc_list){
-          if(this.toc_list[i].tocid == this.tocid){
+
+          if(this.toc_list[i].tocid == this.circleForm.tocid){
             bool = true;
           }
         }
@@ -365,10 +367,18 @@
             toctitle:this.circleForm.tocid
           }).then(res => {
             if (res.data.status == 200) {
-              this.circleForm.tocid = res.data.data.tocid;
-              this.getToc();
+              // this.circleForm.tocid = '';
+              let arr = {
+                toctitle:this.circleForm.tocid,
+                tocid: res.data.data.tocid
+              }
+              this.toc_list.push(arr);
+              this.tocid =  res.data.data.tocid;
+              // this.getToc(res.data.data.tocid);
             }
           })
+        }else{
+          this.tocid = '';
         }
 
       },
@@ -382,7 +392,7 @@
           }
         })
       },
-      getToc(){
+      getToc(id){
         this.$http.get(this.$api.news_topic, {
           noLoading: true}).then(res => {
           if (res.data.status == 200) {
@@ -652,6 +662,10 @@
                   this.circleForm.netext.splice(i,1)
                 }
               }
+            }
+            //处理话题
+            if(this.tocid){
+              this.circleForm.tocid = this.tocid;
             }
 
             if(this.circleForm.neid) {
