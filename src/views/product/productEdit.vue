@@ -95,8 +95,22 @@
             node-key="id"
             :default-expand-all="true"
             :expand-on-click-node="false">
-              <div class="custom-tree-node" slot-scope="{ node, data }">
+              <div class="custom-tree-node flex-start" slot-scope="{ node, data }">
                 <input class="m-input-tree el-input__inner" @blur="addInput($event,node)" />
+                <div class="m-up-img-box" v-if="!data.children && data.show_img">
+                  <div class="inputbg m-img-xs el-upload-list--picture-card" v-if="data.img">
+                    <img :src="data.img"  style="width: 60px;height:60px;"/>
+                    <span class="el-upload-list__item-actions">
+                      <span class="el-upload-list__item-preview" @click="previewSkudescc(data)">
+                        <i class="el-icon-zoom-in"></i>
+                      </span>
+                      <span class="el-upload-list__item-delete" @click="deleteSkudesc(data)">
+                        <i class="el-icon-delete"></i>
+                      </span>
+                    </span>
+                  </div>
+                  <div class="inputbg m-img-xs" v-else><span>+</span><input type="file"  :id="data.id"  accept="image/*" @change="newUploadSku($event,data)"></div>
+                </div>
                 <span >
                   <el-button
                     v-if="data.children"
@@ -527,7 +541,8 @@
             id: 4,
             label: '二级 1-1'
           }]
-        }]
+        }],
+        sku_img:{}
       }
     },
 
@@ -573,7 +588,13 @@
         //   confirmButtonText: '确定',
         //   cancelButtonText: '取消'
         // }).then(({ value }) => {
-          const newChild = { id: Math.random(), label: '' };
+        let newChild;
+         if(data.label == '颜色'){
+            newChild = { id: Math.random(), label: '',img:'' ,show_img:true};
+         }else{
+           newChild = { id: Math.random(), label: '',show_img:false };
+         }
+
           data.children.push(newChild);
         // }).catch(() => {
         //
@@ -636,9 +657,20 @@
           resultArr = all_arr[0];
         }
         let skus = [];
+
         for(let a in resultArr){
+          let _img = '';
+
+          for(let i in this.sku_data){
+            for(let j in this.sku_data[i][0].children){
+              if(resultArr[a].indexOf(this.sku_data[i][0].children[j].label) > -1 && this.sku_data[i][0].children[j].show_img ){
+                 _img = this.sku_data[i][0].children[j].img;
+              }
+            }
+          }
+         console.log(_img)
           skus.push({
-            skupic: "",
+            skupic: _img,
             skusn: this.commonSkuSn || '',
             skuprice: this.formData.prprice|| this.commonSkuPrice || 0,
             skudeviderate:this.commonSkuDev || 0,
@@ -820,9 +852,25 @@
       handleSkuPicSuccess(res, file) {
         this.formData.skus[this.uploadSkuImgIndex].skupic = res.data;
       },
+      handleSkuMainPicSuccess(res,file){
+        for(let i in this.sku_data){
+          if(this.sku_data[i].label == '颜色'){
+            for(let j in this.sku_data[i].children){
+              if(this.sku_data[i].children[j].id == this.sku_img.id){
+                this.sku_data[i].children[j].img = res.data
+              }
+            }
+          }
+        }
+      },
       //  强行配合el-upload 下策
       setSkuPicIndex(index) {
         this.uploadSkuImgIndex = index;
+      },
+      setSkuMainIndex(data){
+        console.log(data)
+        this.sku_img = data;
+
       },
 
       //  sku排序
@@ -881,6 +929,7 @@
 
         return isLt15M;
       },
+
       handleImagesRemove(file, fileList) {
         this.imagesUrl = this.imagesUrl.filter(
           item => item.uid != file.uid
@@ -1007,12 +1056,41 @@
           }
         )
       },
+      newUploadSku(e,data){
+        let files = e.target.files;
+
+        let formData = new FormData();
+
+          formData.append(`file0`, files[0])
+
+        this.$http({
+          method: 'post',
+          url: this.$api.batch_upload+'?type=product',
+          data: formData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let file = document.getElementById(data.id);
+              file.value ='';
+              data.img = res.data.data[0].data;
+            }
+          }
+        )
+      },
       previewPrdescc(item){
         this.dialogImageUrl = item.url;
         this.dialogVisible = true;
       },
+      previewSkudescc(data){
+        this.dialogImageUrl = data.img;
+        this.dialogVisible = true;
+      },
       deletePrdesc(index){
         this.prDescUrl.splice(index,1)
+      },
+      deleteSkudesc(data){
+        data.img = '';
       },
       onFileExceed(files, fileList){
         this.$message.warning(`图片数量超出限制,最多30张,上传失败${files.length}张`)
@@ -1394,8 +1472,9 @@
     }
      .m-input-tree{
        display: inline-block;
-       height: 26px;
-       line-height: 26px;
+       height: 36px;
+       line-height: 36px;
+       margin: 10px;
        width: 50%;
      }
 
@@ -1448,14 +1527,14 @@
       height: 148px;
       line-height: 148px;
       text-align: center;
-      &.m-img-l{
-        width: 110px;
-        height: 110px;
-        line-height: 110px;
+      &.m-img-xs{
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
         input{
-          width: 110px;
-          height: 110px;
-          line-height: 110px;
+          width: 60px;
+          height: 60px;
+          line-height: 60px;
         }
       }
     }
