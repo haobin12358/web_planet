@@ -26,7 +26,7 @@
       <el-table-column label="银行网点" prop="cnbankdetail" show-overflow-tooltip align="center"></el-table-column>
       <el-table-column label="户名" prop="cncardname" align="center"></el-table-column>
       <el-table-column label="卡号" prop="cncardno" align="center" width="260"></el-table-column>
-      <el-table-column label="状态" prop="cnstatus" align="center"></el-table-column>
+      <el-table-column label="状态" prop="cnstatus_zh" align="center"></el-table-column>
       <el-table-column label="拒绝原因" prop="cnrejectreason" align="center"></el-table-column>
       <el-table-column label="申请时间" prop="createtime" align="center" width="180"></el-table-column>
     </el-table>
@@ -91,7 +91,7 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.tableData = data;
+              this.tableData = data.cash_notes;
               this.total = resData.total_count;
             }
           }
