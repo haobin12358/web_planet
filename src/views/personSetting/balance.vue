@@ -80,8 +80,17 @@
       },
 
       downloadSheet(row) {
-        location.href=`${this.$api.export_settlenment_xls }?token=${getStore('token')}`;
-        this.$alert('请留意浏览器可能会进行拦截,注意保存文件,xls中日期显示异常时请设置单元格格式', '成功获取结算单',);
+        if(row.excel_exist){
+          // console.log(`${this.$api.export_settlenment_xls }?token=${getStore('token')}&year=${row.createtime.slice(0,4)}&month=${row.createtime.slice(5,7)}`)
+          location.href=`${this.$api.export_settlenment_xls }?token=${getStore('token')}&year=${row.createtime.slice(0,4)}&month=${row.createtime.slice(5,7)}`;
+          this.$alert('请留意浏览器可能会进行拦截,注意保存文件,xls中日期显示异常时请设置单元格格式', '成功获取结算单',);
+        }else{
+          this.$notify({
+            title: '供应商当月没有结算单，若需要请联系管理员',
+            type: 'warning'
+          });
+        }
+
       },
 
       doPass(row) {
