@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-row>
-      <el-col :span="18">
+      <el-col :span="24">
         <block-title title="签到基础设置"></block-title>
 <!--        <el-form ref="form" :model="formData" :rules="formRules" label-width="140px" label-position="left">-->
 <!--          <el-form-item label="单次签到赠送积分" prop="integral">-->
