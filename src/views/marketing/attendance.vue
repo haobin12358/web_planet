@@ -3,16 +3,78 @@
     <el-row>
       <el-col :span="18">
         <block-title title="签到基础设置"></block-title>
-        <el-form ref="form" :model="formData" :rules="formRules" label-width="140px" label-position="left">
-          <el-form-item label="单次签到赠送积分" prop="integral">
-            <el-input v-model.number="formData.integral"></el-input>
+<!--        <el-form ref="form" :model="formData" :rules="formRules" label-width="140px" label-position="left">-->
+<!--          <el-form-item label="单次签到赠送积分" prop="integral">-->
+<!--            <el-input v-model.number="formData.integral"></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="规则说明" prop="rule">-->
+<!--            <el-input v-model="formData.rule" type="textarea" autosize maxlength="1000"></el-input>-->
+<!--            <span class="form-item-end-tip">签到阶段奖励的规则说明无需在此编辑</span>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item>-->
+<!--            <el-button type="primary" @click="saveBaseSetting">保存</el-button>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
+        <el-form :model="starForm" :rules="rules" ref="starForm" label-position="left" label-width="180px">
+          <el-form-item label="单次签到获取星币：" >
+            <el-input v-model="starForm.integral"  style="width: 300px;"></el-input>
           </el-form-item>
-          <el-form-item label="规则说明" prop="rule">
-            <el-input v-model="formData.rule" type="textarea" autosize maxlength="1000"></el-input>
-            <span class="form-item-end-tip">签到阶段奖励的规则说明无需在此编辑</span>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="点赞获取星币：" >
+                <el-input v-model="starForm.integral_favorite"  style="width: 300px;"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="点赞星币每日限领次数：" >
+                <el-input v-model="starForm.favorite_count"  style="width: 300px;"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="评论获取星币：" >
+                <el-input v-model="starForm.integral_commit"  style="width: 300px;"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="评论星币每日限领次数：" >
+                <el-input v-model="starForm.commit_count"  style="width: 300px;"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="发圈获取星币：" >
+                <el-input v-model="starForm.integral_news"  style="width: 300px;"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="发圈星币每日限领次数：" >
+                <el-input v-model="starForm.news_count"  style="width: 300px;"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item label="购物获取星币：" >
+            <el-input v-model="starForm.trade_percent"  style="width: 300px;">
+              <template slot="prepend">本次购物金额的</template>
+              <template slot="append">%</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="星币的折算比：" >
+
+            <el-input v-model="starForm.exchange_rate"  style="width: 300px;">
+              <template slot="prepend">1元 =</template>
+              <template slot="append">星币</template>
+            </el-input>
+
+          </el-form-item>
+          <el-form-item label="规则：" >
+            <el-input v-model="starForm.rule" type="textarea"  style="width: 300px;">
+            </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveBaseSetting">保存</el-button>
+            <el-button type="primary" @click="saveBaseSetting">保 存</el-button>
           </el-form-item>
         </el-form>
 
@@ -56,7 +118,18 @@
             {required: true, message: '规则说明必填', trigger: 'blur'},
           ],
         },
-
+        starForm:{
+          integral:null,
+          integral_favorite:null,
+          favorite_count:null,
+          integral_commit:null,
+          commit_count:null,
+          integral_news:null,
+          news_count:null,
+          trade_percent:0,
+          exchange_rate:0,
+          rule:null
+        },
         rules: [
           {siaday: 1, sianum: 5},
           {siaday: 10, sianum: 15},
@@ -74,16 +147,16 @@
               let resData = res.data,
                 data = res.data.data;
 
-              this.formData = data;
+              this.starForm = data;
             }
           }
         )
       },
       saveBaseSetting(){
-        this.$refs.form.validate(
+        this.$refs.starForm.validate(
           valid => {
             if (valid) {
-              this.$http.post(this.$api.set_signin_default,this.formData).then(
+              this.$http.post(this.$api.set_signin_default,this.starForm).then(
                 res => {
                   if (res.data.status == 200) {
                     let resData = res.data,
