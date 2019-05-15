@@ -25,6 +25,7 @@
       <el-table-column label="用户名" align="center" prop="usname" show-overflow-tooltip></el-table-column>
       <el-table-column label="手机号" align="center" prop="ustelphone"></el-table-column>
       <el-table-column label="余 额" align="center" prop="remain"></el-table-column>
+      <el-table-column label="上次登录时间" align="center" prop="userlogintime"></el-table-column>
     </el-table>
     <section class="table-bottom">
       <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
