@@ -235,7 +235,12 @@
               this.$router.push('/circle/circle')
             }
             break;
-
+          //  圈子打赏
+          case 'tonewsaward':
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/circleRewardAudit')
+            }
+            break;
           //  4个活动
           case 'tofreshmanfirstproduct':
             if (this.$store.getters.roles[0] != 'supplizer') {

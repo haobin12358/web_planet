@@ -52,7 +52,11 @@
     <el-table v-loading="circleLoading" :data="circleList" stripe size="mini">
       <!--<el-table v-loading="circleLoading" :data="circleList" stripe size="mini" height="562">-->
       <el-table-column label="资讯标题" align="center" prop="netitle" show-overflow-tooltip></el-table-column>
-      <el-table-column label="发布者" align="center" prop="authername" show-overflow-tooltip></el-table-column>
+      <el-table-column label="发布者" align="center" prop="authername" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{scope.row.author.usname}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" prop="zh_nestatus" width="100"
                        v-if="activeIndex=='all'"></el-table-column>
       <el-table-column label="审核回复" align="center" prop="refuse_info"
@@ -65,11 +69,15 @@
           <preview-circle :circle="scope.row"></preview-circle>
         </template>
       </el-table-column>
+      <el-table-column label="已打赏金额" align="center" prop="nareward" width="100"></el-table-column>
       <el-table-column label="操作" align="center" width="120px" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.nestatus == 'refuse'" @click="editCircle(scope)">编辑</el-button>
           <el-button type="text" class="warning-text" v-if="scope.row.nestatus == 'usual'" @click="downCircle(scope)">
             下架
+          </el-button>
+          <el-button type="text" class="warning-text" v-if="scope.row.nestatus == 'usual' && scope.row.author.usgrade != '平台'" @click="rewardHis(scope)">
+            打赏
           </el-button>
           <el-button type="text" class="danger-text" v-if="scope.row.nestatus == 'refuse'" @click="deleteCircle(scope)">
             删除
@@ -103,6 +111,26 @@
         <el-button @click="itemDialog = false">取 消</el-button>
         <el-button type="primary" @click="saveItem">确 定</el-button>
       </span>
+    </el-dialog>
+<!--    打赏-->
+    <el-dialog
+      title="打赏"
+      :visible.sync="show_history"
+      width="60%"
+    >
+      <el-input v-model="nareward" placeholder="请输入内容"></el-input>
+      <span   class="dialog-footer m-history-btn">
+        <el-button @click="show_history = false">取 消</el-button>
+        <el-button type="primary" @click="rewardCircle">确 定</el-button>
+      </span>
+      <h3 v-if="historyList.length >0" class="m-title">打赏记录</h3>
+      <el-table v-loading="historyLoading" :data="historyList" stripe v-if="historyList.length >0">
+        <!--<el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>-->
+        <el-table-column label="时间" align="center" prop="createtime"></el-table-column>
+        <el-table-column label="金额" align="center" prop="nareward"></el-table-column>
+        <el-table-column label="状态" align="center" prop="nastatus_zh"></el-table-column>
+        <el-table-column label="发起人" align="center" prop="narewarder"></el-table-column>
+      </el-table>
     </el-dialog>
   </div>
 </template>
@@ -150,7 +178,12 @@
         page_size: 10,
         total: 10,
         kw: '',
-        nestatus: ''
+        nestatus: '',
+        nareward:null,
+        show_history:false,
+        historyLoading:false,
+        historyList:[],
+        select_neid:''
       }
     },
     directives: {elDragDialog},
@@ -287,6 +320,35 @@
           })
         }).catch(() => {
         });
+      },
+      //打赏圈子
+      rewardCircle(scope){
+
+          this.$http.post(this.$api.news_award, {neid: this.select_neid,nareward:this.nareward}).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: '成功',
+                message: `打赏申请成功`,
+                type: 'success'
+              });
+              this.show_history = false;
+              this.select_neid = '';
+            }
+          })
+      },
+      //获取打赏记录
+      rewardHis(scope){
+        this.$http.get(this.$api.news_award, {
+          params: {
+            neid: scope.row.neid
+          }
+        }).then(res => {
+          if (res.data.status == 200) {
+            this.historyList = res.data.data;
+            this.show_history = true;
+            this.select_neid = scope.row.neid;
+          }
+        })
       },
       // 删除资讯
       deleteCircle(scope) {
@@ -433,6 +495,15 @@
     }
     .short-input {
       width: 250px;
+    }
+    .m-history-btn{
+      display: block;
+      margin: 20px 0;
+      text-align: right;
+    }
+    .m-title{
+      font-size: 18px;
+      margin-bottom: 20px;
     }
   }
 </style>

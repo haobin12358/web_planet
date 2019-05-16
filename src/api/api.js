@@ -142,6 +142,7 @@ const api = {
   del_news: title + 'news/del_news',                                      // 删除资讯
   news_shelves: title + 'news/news_shelves',                              // 资讯下架
   news_topic: title +'news/topic',                          //获取话题
+  news_award: title +'news/award',                         //打赏圈子
 
 
   coupon_list: title + 'coupon/list',                                     // 获取平台优惠券列表

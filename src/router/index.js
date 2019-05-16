@@ -322,6 +322,12 @@ export const asyncRouterMap = [
         component: () => import('src/views/approval/circleAudit'),
         meta: {title: '圈子审核', icon: 'yes', noCache: true, roles: level2}
       },
+      {
+        path: 'circleRewardAudit',
+        name: 'circleRewardAudit',
+        component: () => import('src/views/approval/circleRewardAudit'),
+        meta: {title: '圈子打赏审核', icon: 'yes', noCache: true, roles: level2}
+      },
 
       //  活动
       {
