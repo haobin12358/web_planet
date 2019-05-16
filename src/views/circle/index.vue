@@ -124,7 +124,7 @@
         <el-button type="primary" @click="rewardCircle">确 定</el-button>
       </span>
       <h3 v-if="historyList.length >0" class="m-title">打赏记录</h3>
-      <el-table v-loading="historyLoading" :data="historyList" stripe v-if="historyList.length >0">
+      <el-table v-loading="historyLoading" :data="historyList" max-height="350" stripe v-if="historyList.length >0">
         <!--<el-table-column label="标签序号" align="center" prop="itsort"></el-table-column>-->
         <el-table-column label="时间" align="center" prop="createtime"></el-table-column>
         <el-table-column label="金额" align="center" prop="nareward"></el-table-column>
