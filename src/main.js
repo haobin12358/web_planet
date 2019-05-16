@@ -22,6 +22,8 @@ import axios from 'src/utils/myAxios';
 Vue.prototype.$http = axios;
 import api from 'src/api/api'
 Vue.prototype.$api = api;
+import echarts from 'echarts';
+Vue.prototype.$echarts = echarts;
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {loading:"/static/images/spinner.svg" });
 import BlockTitle from "src/components/BlockTitle";

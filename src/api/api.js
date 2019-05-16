@@ -21,6 +21,7 @@ const api = {
   get_admin_all_type: title + 'user/get_admin_all_type',                  // 获取管理员身份
   update_admin: title + 'user/update_admin',                              // 更新管理员
   update_admin_password: title + 'user/update_admin_password',            // 修改密码
+  data_overview: title +'user/data_overview',                              //获取首页折线图
 
   supplizer_login: title + 'user/supplizer_login',                        // 供应商登录
   update_supplizer_password: title + 'supplizer/change_password',         // 供应商修改密码

@@ -88,7 +88,7 @@
       </ul>
     </section>
 
-
+    <div id="index_charts" style="width: 90%;height: 300px;"></div>
     <!--<block-title title="订单趋势"></block-title>-->
     <!--<echarts :id="id" :option="option" :width="1300"></echarts>-->
   </div>
@@ -182,7 +182,6 @@
 
       getDealingApproval() {
         this.todos = [];
-
         this.$http.get(this.$api.get_dealing_approval, {
           params: {}
         }).then(
@@ -212,7 +211,21 @@
             }
           }
         );
-
+        if(this.$store.state.user.userInfo.level != 'supplizer'){
+          this.$http.get(this.$api.data_overview).then(
+            res => {
+              if (res.data.status == 200) {
+                this.option.series = res.data.data.series;
+                for(let i in this.option.series){
+                  this.option.series[i].type = 'line';
+                }
+                this.option.xAxis.data = res.data.data.days;
+                var myChart = this.$echarts.init(document.getElementById('index_charts'));
+                myChart.setOption(this.option);
+              }
+            }
+          );
+        }
 
       },
 
@@ -394,12 +407,14 @@
         arr[2] = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
         return `${arr[0]}-${arr[1]}-${arr[2]}`
       },
+
     },
 
     async created() {
       this.getDealingApproval();
 
       await this.setSaleData();
+
     }
   }
 </script>
