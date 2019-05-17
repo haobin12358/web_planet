@@ -421,6 +421,8 @@
     },
 
     activated() {
+      console.log(this.$route.params.omstatus)
+      this.inlineForm.omstatus = String(this.$route.params.omstatus);
       this.setOrderType();
     }
   }

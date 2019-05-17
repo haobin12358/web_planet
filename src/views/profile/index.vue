@@ -211,6 +211,25 @@
             }
           }
         );
+        this.$http.get(this.$api.get_all_order, {
+          params: {
+            omstatus: 10,
+            omfrom: '30,40,50,60,70,80'
+          }
+        }).then(
+          res => {
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.todos.push({
+                ptid: 'towaitdeliveryactivity',
+                ptname: '待发货活动订单',
+                approval_num: resData.total_count
+              });
+            }
+          }
+        );
         if(this.$store.state.user.userInfo.level != 'supplizer'){
           this.$http.get(this.$api.data_overview).then(
             res => {
@@ -333,6 +352,16 @@
               name: 'OrderIndex',
               params: {
                 omstatus:10
+              }
+            })
+            break;
+
+          case 'towaitdeliveryactivity':
+            this.$router.push({
+              name: 'ActiOrder',
+              params: {
+                omstatus:10,
+                omfrom:'30,40,50,60,70,80'
               }
             })
             break;
