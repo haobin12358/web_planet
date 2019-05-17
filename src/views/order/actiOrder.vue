@@ -421,8 +421,13 @@
     },
 
     activated() {
-      console.log(this.$route.params.omstatus)
-      this.inlineForm.omstatus = String(this.$route.params.omstatus);
+      console.log( this.$route.params.omstatus)
+      if( this.$route.params.omstatus){
+        this.inlineForm.omstatus = String(this.$route.params.omstatus);
+      }else{
+        this.inlineForm.omstatus = ""
+      }
+
       this.setOrderType();
     }
   }
