@@ -192,8 +192,8 @@
             this.inlineForm.createtime_start = term;
           }
         }
-        this.setOrderList();
         this.setOrderType();
+        this.setOrderList();
       },
       doReset() {
         this.inlineForm = {
@@ -246,6 +246,7 @@
 
               data[0].status = -1;
               this.menuList = data;
+
             }
           }
         )
@@ -435,6 +436,11 @@
     },
 
     activated() {
+      if( this.$route.params.omstatus){
+        this.activeName = String(this.$route.params.omstatus);
+      }else{
+        this.activeName = -1
+      }
         this.doSearch();
     },
   }

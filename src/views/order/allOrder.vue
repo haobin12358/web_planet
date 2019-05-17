@@ -529,6 +529,7 @@
     },
 
     activated() {
+
       this.initProfileSearch();
 
       this.setOrderList();
