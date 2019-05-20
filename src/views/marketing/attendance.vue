@@ -2,7 +2,7 @@
   <div class="container">
     <el-row>
       <el-col :span="24">
-        <block-title title="签到基础设置"></block-title>
+        <block-title title="星币基础设置"></block-title>
 <!--        <el-form ref="form" :model="formData" :rules="formRules" label-width="140px" label-position="left">-->
 <!--          <el-form-item label="单次签到赠送积分" prop="integral">-->
 <!--            <el-input v-model.number="formData.integral"></el-input>-->
@@ -15,7 +15,7 @@
 <!--            <el-button type="primary" @click="saveBaseSetting">保存</el-button>-->
 <!--          </el-form-item>-->
 <!--        </el-form>-->
-        <el-form :model="starForm" :rules="rules" ref="starForm" label-position="left" label-width="180px">
+        <el-form :model="starForm" :rules="formRules" ref="starForm" label-position="left" label-width="180px">
           <el-form-item label="单次签到获取星币：" >
             <el-input v-model="starForm.integral"  style="width: 300px;"></el-input>
           </el-form-item>
@@ -70,7 +70,7 @@
 
           </el-form-item>
           <el-form-item label="规则：" >
-            <el-input v-model="starForm.rule" type="textarea"  style="width: 300px;">
+            <el-input v-model="starForm.rule" type="textarea"  style="width: 300px;" :rows="8">
             </el-input>
           </el-form-item>
           <el-form-item>

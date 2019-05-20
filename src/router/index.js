@@ -238,7 +238,7 @@ export const asyncRouterMap = [
         path: 'attendance',
         name: 'Attendance',
         component: () => import('src/views/marketing/attendance'),
-        meta: {title: '签到设置',icon: 'yes', noCache: true, roles: level2}
+        meta: {title: '星币基础设置',icon: 'yes', noCache: true, roles: level2}
       }, {
         path: 'indexBanner',
         name: 'IndexBanner',
