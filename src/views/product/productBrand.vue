@@ -110,7 +110,7 @@
             :on-success="handlePbBackSuccess"
             :before-upload="beforePicUpload"
           >
-            <img v-if="brandForm.pbbackgroud" v-lazy="brandForm.pbbackgroud":key="brandForm.pbbackgroud" class="avatar avatar-top">
+            <img v-if="brandForm.pbbackgroud" v-lazy="brandForm.pbbackgroud" :key="brandForm.pbbackgroud" class="avatar avatar-top">
             <i v-else class="el-icon-plus avatar-uploader-icon avatar-uploader-icon-top"></i>
 
             <div slot="tip" class="el-upload__tip">
@@ -144,7 +144,7 @@
           <el-input v-model.trim="brandForm.pblinks" maxlength="1000" ></el-input>
         </el-form-item>
         <el-form-item label="星币抵扣百分比(0-100)">
-          <el-input v-model.trim="brandForm.pbintegralpayrate" maxlength="1000" >
+          <el-input v-model.trim="brandForm.pbintegralpayrate"  >
             <template slot="append">%</template>
           </el-input>
         </el-form-item>
@@ -540,7 +540,7 @@
           pbdesc: row.pbdesc,
           pblinks: row.pblinks,
           itids: [],
-          pbintegralpayrate:0
+          pbintegralpayrate:row.pbintegralpayrate
         };
         this.brandForm.itids = row.items.map(item => item.itid);
       },
@@ -599,8 +599,11 @@
           valid => {
             if (valid) {
               let type = this.brandForm.pbid ? '品牌修改' : '品牌新增';
-              if(!positiveNumberReg.test(this.brandForm.pbintegralpayrate ) && this.brandForm.pbintegralpayrate <101){
-                this.$message.warning('请输入整数的星币折扣');
+              if(!positiveNumberReg.test(this.brandForm.pbintegralpayrate ) ){
+                this.$message.warning('请输入正确的整数的星币折扣');
+                return
+              }else if(this.brandForm.pbintegralpayrate > 100){
+                this.$message.warning('请输入1～100的星币折扣');
                 return
               }
               if (this.brandForm.pbid) {
