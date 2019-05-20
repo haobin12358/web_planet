@@ -5,7 +5,7 @@
     <el-table ref="typeTable" :data="typeData" v-loading="loading" row-key="qoid" highlight-current-row
               :row-class-name="tableRowClassName" @current-change="handleCurrentChange">
       <el-table-column label="问题类型名称" prop="qoname" align="center"></el-table-column>
-      <el-table-column label="操作" prop="qoname" align="center" width="280">
+      <el-table-column label="操作" prop="qoname" align="center" width="280" v-if="$store.state.user.userInfo.level != 'supplizer'">
         <template slot-scope="scope">
           <el-button type="text">编辑</el-button>
           <el-button type="text" class="danger-text">删除</el-button>
@@ -26,7 +26,7 @@
     <el-table :data="currentSelectType.question" v-loading="loading" empty-text="问答类型或选中问题类型下问答数量为0">
       <el-table-column label="问题" prop="ququest" align="center"></el-table-column>
       <el-table-column label="回答" prop="answer" align="center"></el-table-column>
-      <el-table-column label="操作" prop="qoname" align="center">
+      <el-table-column label="操作" prop="qoname" align="center" v-if="$store.state.user.userInfo.level != 'supplizer'">
         <template slot-scope="scope">
           <el-button type="text">编辑</el-button>
           <el-button type="text" class="danger-text">删除</el-button>

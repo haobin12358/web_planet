@@ -385,7 +385,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'service',
     alwaysShow: true,
-    meta: {title: '客服', icon: 'kefu', roles: level1},
+    meta: {title: '客服', icon: 'kefu', roles: level2},
     children: [
       {
         path: 'service',
@@ -396,13 +396,15 @@ export const asyncRouterMap = [
         path: 'backQuesAnswer',
         name: 'BackQuesAnswer',
         component: () => import('src/views/service/backQuesAnswer'),
-        meta: {title: '后台客服问答', noCache: true,  roles: level2}
-      },{
-        path: 'platformRule',
-        name: 'PlatformRule',
-        component: () => import('src/views/service/platformRule'),
-        meta: {title: '平台规则', noCache: true,  roles: level0}
-      },{
+        meta: {title: '后台客服问答', noCache: true,  roles: level1}
+      },
+      // {
+      //   path: 'platformRule',
+      //   name: 'PlatformRule',
+      //   component: () => import('src/views/service/platformRule'),
+      //   meta: {title: '平台规则', noCache: true,  roles: level0}
+      // },
+      {
         path: 'notice',
         name: 'notice',
         component: () => import('src/views/service/notice'),
