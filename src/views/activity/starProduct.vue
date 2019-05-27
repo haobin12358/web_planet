@@ -262,7 +262,7 @@
         this.scope = scope;
         // this.$refs.guess.productDialog = true;
         scope.row.where = 'star';
-        // scope.row.prid = scope.row.product.prid;
+        // scope.row.ipid = scope.row.ipid;
         this.$refs.guess.chooseProduct(scope);
       },
       // 撤销我的申请

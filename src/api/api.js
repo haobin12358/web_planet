@@ -129,7 +129,10 @@ const api = {
   timelimited_shelf_award:title + 'timelimited/shelf_award',    //撤销商品
   timelimited_del_award:title + 'timelimited/del_award',     //删除活动商品
   timelimited_update_award:title +'timelimited/update_award',    //编辑活动商品
+  timelimited_get: title +'timelimited/get',           //获取限时商品详情
   integral_list: title +'integral/list',    //获取星币商城
+  integral_get: title + 'integral/get', ///获取星币商城详情
+
   integral_cancel: title +'integral/cancel',//取消申请
   integral_apply: title +'integral/apply',//申请添加商品
   integral_update: title +'integral/update',//编辑商品

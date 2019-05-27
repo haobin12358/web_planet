@@ -832,6 +832,51 @@
               clearInterval(time);
             }
           }, 10);
+        }else if(scope.row.where == 'limited') {
+          this.skusForm.prprice = scope.row.tlpprice;
+
+          // 选中之前勾选的商品
+          this.$http.get(this.$api.timelimited_get, {
+            noLoading: true,
+            params: { tlpid: scope.row.tlpid }}).then(res => {
+            if (res.data.status == 200) {
+              let timelimited_product = res.data.data;
+              this.skusDialog = true;
+              for(let i in timelimited_product.skus) {
+                for(let j in this.skusList) {
+                  if(timelimited_product.skus[i].skuid == this.skusList[j].skuid) {
+                    this.skusList[j].stock = timelimited_product.skus[i].tlsstock;
+                    this.skusList[j].price = timelimited_product.skus[i].skuprice;
+                    this.$refs.skuList.toggleRowSelection(this.skusList[j])
+                  }
+                }
+              }
+
+            }
+          });
+
+        }else if(scope.row.where == 'star') {
+          this.skusForm.prprice = scope.row.ipprice;
+          // 选中之前勾选的商品
+          this.$http.get(this.$api.integral_get, {
+            noLoading: true,
+            params: { ipid: scope.row.ipid }}).then(res => {
+            if (res.data.status == 200) {
+              let integral_product = res.data.data;
+              this.skusDialog = true;
+              for(let i in integral_product.skus) {
+                for(let j in this.skusList) {
+                  if(integral_product.skus[i].skuid == this.skusList[j].skuid) {
+                    this.skusList[j].stock = integral_product.skus[i].ipsstock;
+                    this.skusList[j].price = integral_product.skus[i].skuprice;
+                    this.$refs.skuList.toggleRowSelection(this.skusList[j])
+                  }
+                }
+              }
+
+            }
+          });
+
         }
       }
     }

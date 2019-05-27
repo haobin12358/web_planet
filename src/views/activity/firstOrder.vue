@@ -204,6 +204,7 @@
       this.scope = scope;
       // this.$refs.new.productDialog = true;
       scope.row.prid = scope.row.fresh_product.prid;
+      console.log(scope)
       scope.row.where = 'new';
       this.$refs.new.chooseProduct(scope);
     },
