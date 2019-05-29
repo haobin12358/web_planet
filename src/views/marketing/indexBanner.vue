@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <section class="add-banner tr">
-      <el-button type="primary" icon="el-icon-plus" @click="bannerDialog = true">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="addClick">新增</el-button>
     </section>
     <el-table v-loading="bannerLoading" :data="bannerList" stripe>
       <el-table-column label="轮播图" align="center" prop="ibpic" width="180">
@@ -193,6 +193,19 @@
             this.bannerLoading = false;
           }
         })
+      },
+      //新增
+      addClick(){
+       this.bannerDialog = true;
+       this.bannerForm = {
+            ibid: '',
+            prid: '',
+            ibpic: '',
+            ibsort: '',
+            contentlink: '',
+            ibshow: false,
+        }
+
       },
       // 新增banner的取消按钮
       initBannerForm() {
