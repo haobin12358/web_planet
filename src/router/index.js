@@ -254,6 +254,11 @@ export const asyncRouterMap = [
         name: 'productBanner',
         component: () => import('src/views/marketing/productBanner'),
         meta: {title: '商城轮播图', icon: 'yes', noCache: true, roles: level2}
+      },{
+        path: 'keyWord',
+        name: 'keyWord',
+        component: () => import('src/views/marketing/keyWord'),
+        meta: {title: '关键词', icon: 'yes', noCache: true, roles: level2}
       }
     ]
   },

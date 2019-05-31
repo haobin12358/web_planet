@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.tlastatus == -20 || scope.row.tlastatus == -10">编辑</el-button>
+          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.tlastatus != 0 &&  scope.row.tlastatus != -40 &&  scope.row.tlastatus != 20">编辑</el-button>
           <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.tlastatus == 0">撤销</el-button>
           <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.tlastatus == -20 || scope.row.tlastatus == -10 || scope.row.tlastatus == -30">删除</el-button>
 <!--          <el-button type="text" class="danger-text" @click="shelvesGuess(scope)" v-if="scope.row.tlastatus == 10">下架</el-button>-->
@@ -74,14 +74,16 @@
         inlineForm: {
           starttime: '',
           endtime: '',
-          tlastatus: 'all',
+          tlastatus: '',
         },
         statusOption: {
-          'all': '全部',
-          "agree": "已同意",
-          "cancle": "已撤销",
-          "reject": "已拒绝",
-          "wait_check": "审核中"
+          '': '全部',
+          "10": "已同意",
+          "-20": "已撤销",
+          "-10": "已拒绝",
+          "0": "审核中",
+          "20": "再次审核中",
+          "-40": "已失效"
         },
         guessLoading: false,
         skuSixDialog: false,
@@ -133,7 +135,7 @@
         this.inlineForm = {
           starttime: '',
           endtime: '',
-          tlastatus: 'all',
+          tlastatus: '',
         };
         this.page_num = 1;
         this.doSearch();
@@ -191,7 +193,8 @@
           params: {
             page_num: this.page_num,
             page_size: this.page_size,
-            tlaid:this.$route.query.tlaid
+            tlaid:this.$route.query.tlaid,
+            tlastatus:this.inlineForm.tlastatus
           }}).then(res => {
           if (res.data.status == 200) {
             /*this.getSpanArr(res.data.data);

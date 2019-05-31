@@ -51,9 +51,9 @@
           <el-tag v-else :type="statusTagType(scope.row.fmfastatus)">{{scope.row.fmfastatus_zh}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="100" fixed="right">
+      <el-table-column label="操作" align="center" width="180" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editNew(scope)" v-if="scope.row.fmfastatus == -20">编辑</el-button>
+          <el-button type="text" @click="editNew(scope)" v-if="scope.row.fmfastatus != 0 && scope.row.fmfastatus != -40 && scope.row.fmfastatus != 20">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteNew(scope)" v-if="scope.row.fmfastatus == 0">撤销</el-button>
         </template>
       </el-table-column>
@@ -82,7 +82,9 @@
         "10": "已同意",
         "-20": "已撤销",
         "-10": "已拒绝",
-        "0": "审核中"
+        "0": "审核中",
+        "20": "再次审核中",
+        "-40": "已失效"
       },
       newList: [],
       newLoading: false,

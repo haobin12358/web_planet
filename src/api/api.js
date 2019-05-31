@@ -26,6 +26,7 @@ const api = {
   supplizer_login: title + 'user/supplizer_login',                        // 供应商登录
   update_supplizer_password: title + 'supplizer/change_password',         // 供应商修改密码
 
+  get_kw_list: title + 'product/get_kw_list',                            //获取关键词
   product_list: title + 'product/list',                                   // 获取商品列表
   product_get: title + 'product/get',                                     // 获取商品详情
   off_shelves_product: title + 'product/off_shelves_list',                // 批量下架商品
@@ -97,6 +98,7 @@ const api = {
   activity_update: title + 'activity/update',                             // 修改活动基础信息
   fresh_man_list: title + 'fresh_man/list_apply',                         // 获取新人首单商品列表
   fresh_man_apply_award: title + 'fresh_man/apply_award',                 // 申请参与新人首单
+  fresh_man_reapply_award: title + 'fresh_man/reapply_award',                 // 重新申请参与新人首单
   fresh_man_update_award: title + 'fresh_man/update_award',               // 新人首单申请单修改
   fresh_man_shelf_award: title + 'fresh_man/shelf_award',                 // 撤销新人首单申请单申请
   guess_num_list: title + 'guess_num/list',                               // 获取自己的猜数字奖品申请列表

@@ -54,7 +54,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
-          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus == -20 || scope.row.mbastatus == -10">编辑</el-button>
+          <el-button type="text" @click="editGuess(scope)" v-if="scope.row.mbastatus != 20 && scope.row.mbastatus != -40 && scope.row.mbastatus != 0">编辑</el-button>
           <el-button type="text" class="warning-text" @click="delGuess(scope)" v-if="scope.row.mbastatus == 0">撤销</el-button>
           <el-button type="text" class="danger-text" @click="deleteGuess(scope)" v-if="scope.row.mbastatus == -20 || scope.row.mbastatus == -10">删除</el-button>
           <el-button type="text" class="danger-text" @click="shelvesGuess(scope)" v-if="scope.row.mbastatus == 10">下架</el-button>
@@ -85,7 +85,9 @@
           "agree": "已同意",
           "cancle": "已撤销",
           "reject": "已拒绝",
-          "wait_check": "审核中"
+          "wait_check": "审核中",
+          "lose_effect": "已失效",
+          "lose_agree": "重新审核中"
         },
         magicLoading: false,
         magicList: [],

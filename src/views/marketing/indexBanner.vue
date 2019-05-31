@@ -205,7 +205,6 @@
             contentlink: '',
             ibshow: false,
         }
-
       },
       // 新增banner的取消按钮
       initBannerForm() {

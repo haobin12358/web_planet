@@ -86,6 +86,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
+      <el-table-column align="center" prop="prquery" sortable label="浏览量" width="120"></el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">
         <template slot-scope="scope">
           <el-tag :type="scope.row.prfrom == '0' ? '' : 'success'">{{scope.row.supplizer}}</el-tag>

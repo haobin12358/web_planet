@@ -73,7 +73,7 @@
           <template v-if="[20].includes(scope.row.tcstatus)">
             <el-button type="text" class="info-text"  @click="doCancel(scope.row)">撤销</el-button>
           </template>
-          <template v-if="[-10,30].includes(scope.row.tcstatus)">
+          <template v-if="[0,-10,30].includes(scope.row.tcstatus)">
             <el-button  type="text" class="success-text" @click="doResubmit(scope.row)">重新提交</el-button>
             <el-button  type="text" class="danger-text" @click="doDelete(scope.row)">删除</el-button>
           </template>
@@ -167,7 +167,14 @@
           }, {
             value: 'reject',
             label: '已下架',
+          }, {
+            value: 'lose_effect',
+            label: '已失效',
+          }, {
+            value: 'lose_upper',
+            label: '重新审核中',
           },
+
         ],
         searchForm: {
           kw: '',
