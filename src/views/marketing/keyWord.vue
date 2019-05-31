@@ -6,12 +6,12 @@
           <el-input v-model.trim="inlineForm.ushname" maxlength="100"></el-input>
         </el-form-item>
         <el-form-item label="关键词种类">
-          <el-select v-model="inlineForm.ushtype" @change="getKeyList">
+          <el-select v-model="inlineForm.ushtype" @change="doSearch">
             <el-option v-for="(value, key) in statusOption" :label="value" :value="key" :key="key"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" :loading="keyLoading"  @click="getKeyList">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" :loading="keyLoading"  @click="doSearch">查询</el-button>
           <el-button icon="el-icon-refresh" :loading="keyLoading"  @click="resetKey">重置</el-button>
         </el-form-item>
       </el-form>
@@ -19,9 +19,9 @@
     </section>
 
     <el-table v-loading="keyLoading" :data="keyList" stripe>
-      <el-table-column label="关键词" align="center" prop="USHname" show-overflow-tooltip></el-table-column>
+      <el-table-column label="关键词" align="center" prop="ushname" show-overflow-tooltip></el-table-column>
       <el-table-column label="浏览量" align="center" prop="kwquery"></el-table-column>
-      <el-table-column label="种类" align="center" prop="USHtype"></el-table-column>
+      <el-table-column label="种类" align="center" prop="ushtype"></el-table-column>
     </el-table>
     <section class="table-bottom">
       <el-pagination background class="page-box" :page-sizes="[10, 20, 30, 40]" :current-page="page_num"
@@ -43,6 +43,7 @@
           ushtype:''
         },
         statusOption:{
+          '':'全部',
           '0':'商品',
           '10': '圈子',
           '20': '话题',
@@ -85,6 +86,10 @@
       },
       pageChange(val) {
         this.page_num = val;
+        this.getKeyList();         // 获取数据
+      },
+      doSearch(){
+        this.page_num = 1;
         this.getKeyList();         // 获取数据
       },
       // 重置搜索框
