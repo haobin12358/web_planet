@@ -44,7 +44,7 @@
       <el-table-column label="申请状态" align="center" prop="mbastatus_zh">
         <template slot-scope="scope">
           <el-popover
-            v-if="scope.row.mbarejectreason"
+            v-if="scope.row.mbastatus == -10 && scope.row.mbarejectreason"
             placement="top-start" title="拒绝理由" width="200" trigger="click">
             {{scope.row.mbarejectreason}}
             <el-tag slot="reference" :type="statusTagType(scope.row.mbastatus)">{{scope.row.mbastatus_zh}}</el-tag>

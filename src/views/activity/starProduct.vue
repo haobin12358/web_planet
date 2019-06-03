@@ -35,7 +35,8 @@
       <el-table-column label="申请状态" align="center" prop="ipstatus_zh">
         <template slot-scope="scope">
           <el-popover
-            v-if="scope.row.iprejectreason"
+            v-if="scope.row.ipstatus == -10 && scope.row.iprejectreason"
+
             placement="top-start" title="拒绝理由" width="200" trigger="click">
             {{scope.row.iprejectreason}}
             <el-tag slot="reference" :type="statusTagType(scope.row.ipstatus)">{{scope.row.ipstatus_zh}}</el-tag>
