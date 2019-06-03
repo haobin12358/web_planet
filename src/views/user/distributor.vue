@@ -28,6 +28,7 @@
       <el-table-column label="粉丝数" align="center" prop="fans_num"></el-table-column>
       <el-table-column label="总佣金" align="center" prop="total"></el-table-column>
       <el-table-column label="余 额" align="center" prop="remain"></el-table-column>
+      <el-table-column label="浏览量" align="center" prop="usquery"></el-table-column>
       <el-table-column label="上次登录时间" align="center" width="200" prop="userlogintime"></el-table-column>
       <!--todo 分销商等级 下级团队-->
     </el-table>
