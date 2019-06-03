@@ -74,7 +74,7 @@
             <el-button type="text" class="info-text"  @click="doCancel(scope.row)">撤销</el-button>
           </template>
           <template v-if="[0,-10,30].includes(scope.row.tcstatus)">
-            <el-button  type="text" class="success-text" @click="doResubmit(scope.row)">重新提交</el-button>
+<!--            <el-button  type="text" class="success-text" @click="doResubmit(scope.row)">重新提交</el-button>-->
             <el-button  type="text" class="danger-text" @click="doDelete(scope.row)">删除</el-button>
           </template>
           <el-button v-if="scope.row.tcstatus == 0" type="text" class="warning-text" @click="doShelves(scope.row)">下架</el-button>

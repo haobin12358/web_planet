@@ -418,6 +418,7 @@
         this.$http.get(this.$api.brand_list, {
           params: {
             pbstatus: 'upper',
+            page_size: 500
           }
         }).then(
           res => {
