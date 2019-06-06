@@ -227,6 +227,8 @@ const api = {
   create_club: title + 'club/create_message' ,///c创建公告
   update_club :title +'club/update_companymessage',//更新公告
   get_userwords: title +'club/get_userwords' ,///获取留言
+  message_set: title +'message/set',             //编辑站内信
+  message_get: title +'message/get',            //获取站内信
 };
 
 export default api
