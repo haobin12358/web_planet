@@ -29,9 +29,9 @@
       </section>
     </section>
     <get-sku @chooseGroupSku="chooseGroupSku" ref="groupGuess" where="groupGuess"></get-sku>
-    <el-table v-loading="magicLoading" :data="magicList" stripe size="mini" :span-method="objectSpanMethod">
-      <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>
-      <el-table-column label="商品规格图片" align="center" prop="prdescription">
+    <el-table v-loading="magicLoading" :data="magicList" stripe size="mini" >
+<!--      <el-table-column prop="groupCount" label="批次" width="55" align="center"></el-table-column>-->
+      <el-table-column label="商品规格图片" align="center" >
         <template slot-scope="scope">
           <table-cell-img :src="[scope.row.prmainpic]" ></table-cell-img>
         </template>
@@ -72,6 +72,7 @@
       <el-table :data="skuList" stripe>
         <el-table-column label="规格名称" align="center" prop="skuname" show-overflow-tooltip></el-table-column>
         <el-table-column label="库存" align="center" prop="gsstock" show-overflow-tooltip></el-table-column>
+        <el-table-column label="参与金额" align="center" prop="skuprice"></el-table-column>
         <el-table-column label="猜对一个数字" align="center" prop="skufirstlevelprice"></el-table-column>
         <el-table-column label="猜对两个数字" align="center" prop="skusecondlevelprice"></el-table-column>
         <el-table-column label="猜对三个数字" align="center" prop="skuthirdlevelprice"></el-table-column>
