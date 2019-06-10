@@ -180,6 +180,9 @@
           case 4:
             this.$router.push('/activity/limitedFix');
             break;
+          case 5:
+            this.$router.push('/activity/groupGuess');
+            break;
         }
       },
       // 关闭或开启活动

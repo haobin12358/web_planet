@@ -288,6 +288,13 @@
               this.$router.push('/activity/guess')
             }
             break;
+          case 'togroupgoods':
+            if (this.$store.getters.roles[0] != 'supplizer') {
+              this.$router.push('/approval/groupActiAudit')
+            } else {
+              this.$router.push('/activity/groupGuess')
+            }
+            break;
           case 'tomagicbox':
             if (this.$store.getters.roles[0] != 'supplizer') {
               this.$router.push('/approval/magicGiftBoxAudit')

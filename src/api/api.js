@@ -2,6 +2,7 @@ let title = '';
 
 // title = 'https://planet.daaiti.cn/api/v1/';
 if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localhost') > 0){
+  // title = 'http://10.0.8.110:7443/api/v2/';
   title = 'https://play.bigxingxing.com/api/v2/'; //测试
 }else if(location.origin.indexOf('premanager') > 0){
   title = 'https://pre2.bigxingxing.com/api/v2/'
@@ -140,6 +141,14 @@ const api = {
   integral_update: title +'integral/update',//编辑商品
   integral_delete: title +'integral/delete',//删除申请
   integral_shelf: title +'integral/shelf',//下架
+
+  guessgroup_list: title +'guessgroup/list',//  拼团竞猜列表
+  guessgroup_apply: title +'guessgroup/apply',//申请拼团
+  guessgroup_update: title +'guessgroup/update', //编辑拼图
+  guessgroup_cancel: title +'guessgroup/cancel',//撤销拼团
+  guessgroup_delete: title +'guessgroup/delete', //删除拼团
+  guessgroup_shelf: title +'guessgroup/shelf',//下架商品
+
 
   get_all_news: title + 'news/get_all_news',                              // 获取资讯列表
   get_news_content: title + 'news/get_news_content',                      // 获取资讯详情

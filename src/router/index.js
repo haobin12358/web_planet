@@ -364,6 +364,12 @@ export const asyncRouterMap = [
         meta: {title: '限时活动商品审批', icon: 'yes', noCache: true, roles: level2}
       },
       {
+        path: 'groupActiAudit',
+        name: 'groupActiAudit',
+        component: () => import('src/views/approval/groupActiAudit'),
+        meta: {title: '拼团竞猜商品审批', icon: 'yes', noCache: true, roles: level2}
+      },
+      {
         path: 'starAudit',
         name: 'starAudit',
         component: () => import('src/views/approval/starAudit'),
@@ -497,6 +503,12 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/activity/limitedFixEdit'),
         meta: {title: '限时活动编辑', noCache: true, roles: level1}
+      },
+      {
+        path: 'groupGuess',
+        name: 'groupGuess',
+        component: () => import('src/views/activity/groupGuess'),
+        meta: {title: '拼团竞猜', icon: 'yes',noCache: true, roles: level1}
       },
       {
         path: 'starProduct',
