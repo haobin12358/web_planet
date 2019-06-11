@@ -83,6 +83,13 @@
             <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/100</template>
           </el-input>
         </el-form-item>
+        <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '5'">
+          <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="500" type="textarea" :placeholder="'请输入活动规则' + (i + 1) + '，不超过500个汉字'"
+                   v-model="activityRule[0]">
+<!--            <template slot="append" v-if="activityRule[0]">{{activityRule[0].length}}/500</template>-->
+          </el-input>
+          <span v-if="activityRule[0]">{{activityRule[0].length}}/500</span>
+        </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="initActivityForm">取 消</el-button>
@@ -218,8 +225,10 @@
         if(this.formData.actype == '0' || this.formData.actype == '3') {
           this.rules.acdesc = [{ required: true, message: '详情页描述必填', trigger: 'blur' }];
         }
-        if(this.formData.acdesc) {
+        if(this.formData.acdesc && this.formData.actype == '1') {
           this.activityRule = this.formData.acdesc.split('|');
+        }else if(this.formData.acdesc && this.formData.actype == '5') {
+          this.activityRule[0] = this.formData.acdesc;
         }
       },
       // 编辑活动dialog的保存按钮
@@ -230,6 +239,13 @@
               this.formData.acdesc = '';
               for(let i in this.activityRule) {
                 this.formData.acdesc = this.formData.acdesc + '|' + this.activityRule[i]
+              }
+              this.formData.acdesc = this.formData.acdesc.slice(1, this.formData.acdesc.length);
+            }
+            if(this.formData.actype == '5') {
+              this.formData.acdesc = '';
+              for(let i in this.activityRule) {
+                this.formData.acdesc = this.formData.acdesc  + '|' + this.activityRule[i]
               }
               this.formData.acdesc = this.formData.acdesc.slice(1, this.formData.acdesc.length);
             }
