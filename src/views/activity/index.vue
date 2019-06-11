@@ -58,7 +58,7 @@
         <el-form-item label="封面按钮文字" prop="acbutton">
           <el-input class="long-input" v-model="formData.acbutton"></el-input>
         </el-form-item>
-        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '3' || formData.actype == '4'">
+        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '3' || formData.actype == '4' ||formData.actype == '5'">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
