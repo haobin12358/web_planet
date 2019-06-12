@@ -302,14 +302,14 @@
               for(let i in row){
                 params.push({
                   "avid": row[i].avid,
-                  "anaction": 1,
+                  "anaction": -1,
                   "anabo": prompt.value
                 })
               }
             }else{
               params ={
                 "avid": row.avid,
-                "anaction": 1,
+                "anaction": -1,
                 "anabo": prompt.value
               }
             }

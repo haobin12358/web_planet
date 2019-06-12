@@ -214,7 +214,7 @@
         this.$http.get(this.$api.get_all_order, {
           params: {
             omstatus: 10,
-            omfrom: '30,40,50,60,70,80'
+            omfrom: '30,40,50,60,70,80,90'
           }
         }).then(
           res => {

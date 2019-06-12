@@ -207,7 +207,7 @@
         omFormType: [
           {
             label: '全部',
-            value: '0,10,30,40,50,60,70,80',
+            value: '0,10,30,40,50,60,70,80,90',
           },{
             label: '普通订单',
             value: '0,10',
@@ -229,6 +229,9 @@
           },{
             label: '星币商城',
             value: '80',
+          },{
+            label: '拼团竞猜',
+            value: '90',
           }
         ],
         inlineForm: {
@@ -239,7 +242,7 @@
           createtime_start: '',
           createtime_end: '',
           omstatus: '',
-          omfrom: '0,10,30,40,50,60,70,80',
+          omfrom: '0,10,30,40,50,60,70,80,90',
         },
 
         menuList: [],
