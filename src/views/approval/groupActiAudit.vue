@@ -283,7 +283,7 @@
           }
         )
       },
-      nopass(row) {
+      nopass(row,type) {
         this.$prompt(`确认不批准?`, '提示', {
           inputPlaceholder: '审批意见',
           inputValidator: value => {
@@ -296,11 +296,24 @@
           },
         }).then(
           prompt => {
-            this.$http.post(this.$api.deal_approval, {
-              "avid": row.avid,
-              "anaction": -1,
-              "anabo": prompt.value
-            }).then(
+            let params ;
+            if(type == 'all'){
+              params = [];
+              for(let i in row){
+                params.push({
+                  "avid": row[i].avid,
+                  "anaction": 1,
+                  "anabo": prompt.value
+                })
+              }
+            }else{
+              params ={
+                "avid": row.avid,
+                "anaction": 1,
+                "anabo": prompt.value
+              }
+            }
+            this.$http.post(this.$api.deal_approval, params).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
