@@ -526,7 +526,7 @@
           this.$message.warning('请输入合理的库存');
           return
         }
-        if (!moneyReg.test(this.skus[0].price)){
+        if (this.skus[0].price != 0 && !moneyReg.test(this.skus[0].price)){
           this.$message.warning('请输入合理的sku价格');
           return
         }
@@ -768,8 +768,8 @@
       },
       // 拼团竞猜——设置sku的确认按钮
       skuThreeDone() {
-        if(!moneyReg.test(this.rowTemp.skufirstlevelprice) || !moneyReg.test(this.rowTemp.skusecondlevelprice) ||
-          !moneyReg.test(this.rowTemp.skuthirdlevelprice) ) {
+        if(( this.rowTemp.skufirstlevelprice != 0 && !moneyReg.test(this.rowTemp.skufirstlevelprice))||(this.rowTemp.skusecondlevelprice != 0 && !moneyReg.test(this.rowTemp.skusecondlevelprice ) ) ||
+          (this.rowTemp.skuthirdlevelprice != 0 && !moneyReg.test(this.rowTemp.skuthirdlevelprice)) ) {
           this.$message.warning('请正确输入金额');
           return
         }

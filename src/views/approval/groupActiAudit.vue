@@ -26,7 +26,11 @@
       </el-form>
     </section>
 
-    <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction">
+    <el-table :data="tableData" v-loading="loading" :cell-class-name="cellFunction" @selection-change="handleSelectionChange">>
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品图片" align="center"  width="100">
           <template slot-scope="scope">
@@ -78,7 +82,12 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="m-alert-btn">
+      <span class="m-alert success-text" @click="pass(multipleSelection,'all')">批量通过</span>
+      <span class="m-alert" @click="nopass(multipleSelection,'all')">批量拒绝</span>
+    </div>
     <section class="table-bottom">
+
       <el-pagination
         background
         :current-page="currentPage"
@@ -125,6 +134,7 @@
         tableData: [],
 
         steps: [],
+        multipleSelection: []
       }
     },
 
@@ -151,7 +161,10 @@
         };
         this.doSearch();
       },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
 
+      },
       getList() {
         this.loading = true;
         this.$http.get(this.$api.get_approval_list, {
@@ -223,7 +236,7 @@
         )
       },
 
-      pass(row) {
+      pass(row,type) {
         this.$prompt(`确认批准?`, '提示', {
           inputPlaceholder: '审批意见',
           inputValidator: value => {
@@ -236,11 +249,24 @@
           }
         }).then(
           prompt => {
-            this.$http.post(this.$api.deal_approval, {
-              "avid": row.avid,
-              "anaction": 1,
-              "anabo": prompt.value
-            }).then(
+            let params ;
+            if(type == 'all'){
+              params = [];
+              for(let i in row){
+                params.push({
+                  "avid": row[i].avid,
+                  "anaction": 1,
+                  "anabo": prompt.value
+                })
+              }
+            }else{
+              params ={
+                "avid": row.avid,
+                "anaction": 1,
+                "anabo": prompt.value
+              }
+            }
+            this.$http.post(this.$api.deal_approval, params).then(
               res => {
                 if (res.data.status == 200) {
                   let resData = res.data,
@@ -302,6 +328,13 @@
   @import "../../styles/myIndex";
 
   .container {
-
+   .m-alert-btn{
+    padding: 20px;
+     color: #F56C6C;
+     span{
+       margin-right: 20px;
+       cursor: pointer;
+     }
+   }
   }
 </style>
