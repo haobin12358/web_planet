@@ -303,6 +303,7 @@
   import elDragDialog from 'src/directive/el-dragDialog'
 
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
+  const moneyReg1 = /(^[0-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     data() {
@@ -734,9 +735,9 @@
       setThreeSix(row){
         if(row == 'all'){
           this.rowTemp ={
-            skufirstlevelprice:1,
+            skufirstlevelprice:3,
             skusecondlevelprice:2,
-            skuthirdlevelprice:3,
+            skuthirdlevelprice:1,
             skuname:'所有'
           };
         }else{
@@ -768,9 +769,21 @@
       },
       // 拼团竞猜——设置sku的确认按钮
       skuThreeDone() {
-        if(( this.rowTemp.skufirstlevelprice != 0 && !moneyReg.test(this.rowTemp.skufirstlevelprice))||(this.rowTemp.skusecondlevelprice != 0 && !moneyReg.test(this.rowTemp.skusecondlevelprice ) ) ||
-          (this.rowTemp.skuthirdlevelprice != 0 && !moneyReg.test(this.rowTemp.skuthirdlevelprice)) ) {
-          this.$message.warning('请正确输入金额');
+        // if(( this.rowTemp.skufirstlevelprice != 0 && !moneyReg.test(this.rowTemp.skufirstlevelprice))||(this.rowTemp.skusecondlevelprice != 0 && !moneyReg.test(this.rowTemp.skusecondlevelprice ) ) ||
+        //   (this.rowTemp.skuthirdlevelprice != 0 && !moneyReg.test(this.rowTemp.skuthirdlevelprice)) ) {
+        //   this.$message.warning('请正确输入金额');
+        //   return
+        // }
+        if (!moneyReg1.test(this.skus[0].skufirstlevelprice) || (this.skus[0].skufirstlevelprice< this.skus[0].skusecondlevelprice )){
+          this.$message.warning('请输入合理的猜对一位数字价格');
+          return
+        }
+        if ( !moneyReg1.test(this.skus[0].skusecondlevelprice) || (this.skus[0].skusecondlevelprice < this.skus[0].skuthirdlevelprice)){
+          this.$message.warning('请输入合理的猜对二位数字价格');
+          return
+        }
+        if (!moneyReg1.test(this.skus[0].skuthirdlevelprice)){
+          this.$message.warning('请输入合理的猜对三位数字价格');
           return
         }
         if(this.rowTemp.skuname == '所有'){
