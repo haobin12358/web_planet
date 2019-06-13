@@ -546,6 +546,10 @@
           skus.gsstock = this.skus[i].stock;
           skus.skuid = this.skus[i].skuid;
           skus.skuprice = this.skus[i].price;
+          if(!this.skus[i].skufirstlevelprice){
+            this.$message.warning('请输入减免金额');
+            return
+          }
           skus.skufirstlevelprice = this.skus[i].skufirstlevelprice;
           skus.skusecondlevelprice = this.skus[i].skusecondlevelprice;
           skus.skuthirdlevelprice = this.skus[i].skuthirdlevelprice;
@@ -639,6 +643,7 @@
           this.$message.warning('请输入合理的sku价格');
           return
         }
+
         if(this.skus[0].stock > this.skus[0].skustock ){
           this.$message.warning('参与数量超出库存');
           return
@@ -742,6 +747,10 @@
           };
         }else{
           this.rowTemp = row;
+          // this.rowTemp.skufirstlevelprice = this.rowTemp.skufirstlevelprice?this.rowTemp.skufirstlevelprice:3;
+          // this.rowTemp.skusecondlevelprice = this.rowTemp.skusecondlevelprice ?this.rowTemp.skusecondlevelprice :2;
+          // this.rowTemp.skuthirdlevelprice = this.rowTemp.skuthirdlevelprice? this.rowTemp.skuthirdlevelprice:1;
+
         }
         this.skuSixDialog = true
       },
@@ -774,15 +783,15 @@
         //   this.$message.warning('请正确输入金额');
         //   return
         // }
-        if (!moneyReg1.test(this.skus[0].skufirstlevelprice) || (this.skus[0].skufirstlevelprice< this.skus[0].skusecondlevelprice )){
+        if (!moneyReg1.test(this.rowTemp.skufirstlevelprice) || (this.rowTemp.skufirstlevelprice< this.rowTemp.skusecondlevelprice || (this.rowTemp.skufirstlevelprice > this.rowTemp.price))){
           this.$message.warning('请输入合理的猜对一位数字价格');
           return
         }
-        if ( !moneyReg1.test(this.skus[0].skusecondlevelprice) || (this.skus[0].skusecondlevelprice < this.skus[0].skuthirdlevelprice)){
+        if ( !moneyReg1.test(this.rowTemp.skusecondlevelprice) || (this.rowTemp.skusecondlevelprice < this.rowTemp.skuthirdlevelprice)){
           this.$message.warning('请输入合理的猜对二位数字价格');
           return
         }
-        if (!moneyReg1.test(this.skus[0].skuthirdlevelprice)){
+        if (!moneyReg1.test(this.rowTemp.skuthirdlevelprice)){
           this.$message.warning('请输入合理的猜对三位数字价格');
           return
         }
