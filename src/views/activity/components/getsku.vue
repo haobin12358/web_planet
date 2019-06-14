@@ -150,8 +150,11 @@
                   @keyup.enter.native="setCommonSku('num')"></el-input>
         <el-input v-model="commonSkuPrice" placeholder="统一设置参与价格"  size="medium" style="width: 160px;"
                   @keyup.enter.native="setCommonSku('price')"></el-input>
-        <el-input v-model="commonMaxPrice" placeholder="统一设置最高价格" v-if="where === 'magic'" size="medium" style="width: 160px;"
-                  @keyup.enter.native="setCommonSku('maxprice')">
+        <el-input v-model="commonMaxPrice" placeholder="统一设置可购价格" v-if="where === 'magic'" size="medium" style="width: 160px;"
+                  @keyup.enter.native="setCommonSku('highestprice')">
+        </el-input>
+        <el-input v-model="commonLowPrice" placeholder="统一设置最低价格" v-if="where === 'magic'" size="medium" style="width: 160px;"
+                  @keyup.enter.native="setCommonSku('lowestprice')">
         </el-input>
 
         <span class="form-item-end-tip">回车统一设置</span>
@@ -170,21 +173,14 @@
         <el-table-column label="库存" align="center" width="80"  prop="skustock"></el-table-column>
         <el-table-column label="参与数量" align="center" prop="skuprice">
           <template slot-scope="scope">
-            <el-input class="shorter-input" v-model="scope.row.stock" v-if="where == 'star' || where == 'groupGuess'" maxlength="11">
+            <el-input class="shorter-input" v-model="scope.row.stock" v-if="where == 'star' || where == 'groupGuess' || where == 'magic'" maxlength="11">
             </el-input>
             <el-input class="shorter-input" v-model="scope.row.stock" v-else :disabled="isEdit" maxlength="11">
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column label="原价" align="center" prop="skuprice" v-if="where !== 'magic'"></el-table-column>
-        <el-table-column label="最高价格" align="center" prop="skuprice" v-else>
-          <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.maxprice" maxlength="11">
-              <template slot="append">元</template>
-            </el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="参与价格" align="center" prop="skuprice" v-if="where !== 'magic' ">
+        <el-table-column label="原价" align="center" prop="skuprice" ></el-table-column>
+        <el-table-column label="参与价格" align="center" prop="skuprice" >
           <template slot-scope="scope">
             <el-input class="short-input" v-if="where != 'star'" v-model="scope.row.price" maxlength="11">
               <template slot="append">元</template>
@@ -194,9 +190,16 @@
             </el-input>
           </template>
         </el-table-column>
-        <el-table-column label="最低价格" align="center" prop="skuprice" v-else>
+        <el-table-column label="可购价格" align="center" prop="skuprice" v-if="where == 'magic'">
           <template slot-scope="scope">
-            <el-input class="short-input" v-model="scope.row.price" maxlength="11">
+            <el-input class="short-input" v-model="scope.row.highestprice" maxlength="11">
+              <template slot="append">元</template>
+            </el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="最低价格" align="center" prop="skuprice" v-if="where == 'magic'">
+          <template slot-scope="scope">
+            <el-input class="short-input" v-model="scope.row.lowestprice" maxlength="11">
               <template slot="append">元</template>
             </el-input>
           </template>
@@ -341,7 +344,8 @@
       //  统一
         commonNum:'',
         commonMaxPrice:'',
-        commonSkuPrice:''
+        commonSkuPrice:'',
+        commonLowPrice:''
       }
     },
     props: {
@@ -386,16 +390,17 @@
       },
       // 选择的skus在变化
       handleSelectionChange(val) {
-        if(this.where == 'new' || this.where == 'guess' || this.where == 'limited' || this.where == 'star' || this.where == 'groupGuess') {
+        if(this.where == 'new' || this.where == 'guess' || this.where == 'limited' || this.where == 'star' || this.where == 'groupGuess' || this.where == 'magic') {
           this.skus = val
-        }else if(this.where == 'magic') {
-          if(val.length > 1) {
-            this.$message.warning('请单选商品规格');
-            this.skus = []
-          }else {
-            this.skus = val
-          }
         }
+        // else if(this.where == 'magic') {
+        //   if(val.length > 1) {
+        //     this.$message.warning('请单选商品规格');
+        //     this.skus = []
+        //   }else {
+        //     this.skus = val
+        //   }
+        // }
       },
       chooseDone() {
         this.productDialog = false;
@@ -560,13 +565,13 @@
       // 魔盒
       chooseMagicSku() {
         if(!this.skus.length) {
-          this.$message.warning('请先单选商品规格');
+          this.$message.warning('请先选商品规格');
           return false
         }
-        if(this.skus.length > 1) {
-          this.$message.warning('请单选商品规格');
-          return false
-        }
+        // if(this.skus.length > 1) {
+        //   this.$message.warning('请单选商品规格');
+        //   return false
+        // }
         if(this.isEdit) {
           if(this.mbastarttime.length != 1) {
             this.$message.warning('重新编辑时只能选择单个日期');
@@ -588,7 +593,15 @@
           this.$message.warning('请输入合理的库存');
           return
         }
-        if (!moneyReg.test(this.skus[0].price)){
+        if (!moneyReg.test(this.skus[0].price) || this.skus[0].price < this.skus[0].highestprice){
+          this.$message.warning('请输入合理的金额');
+          return
+        }
+        if (!moneyReg.test(this.skus[0].highestprice) || this.skus[0].highestprice < this.skus[0].lowestprice){
+          this.$message.warning('请输入合理的金额');
+          return
+        }
+        if (!moneyReg.test(this.skus[0].lowestprice)){
           this.$message.warning('请输入合理的金额');
           return
         }
@@ -596,13 +609,21 @@
           this.$message.warning('参与数量超出库存');
           return
         }
+        console.log(this.skus)
+        let _skus = [];
+        for(let i in this.skus){
+          _skus.push({
+            highestprice: this.skus[i].highestprice,
+            lowestprice: this.skus[i].lowestprice,
+            skuprice: this.skus[i].price,
+            mbsstock: this.skus[i].stock,
+            skuid: this.skus[i].skuid,
+          })
+        }
         let sku = {
-          skuid: this.skus[0].skuid,
           prid: this.prid,
-          mbastarttime: this.mbastarttime,
-          skuminprice: this.skus[0].price,
-          skuprice: this.skus[0].maxprice,
-          skustock: this.skus[0].stock,
+          mbaday: this.mbastarttime,
+          skus:_skus,
           gearsone: [this.numList[0] + '-' + this.numList[1]],
           gearstwo: [this.numList[2] + '-' + this.numList[3], this.numList[4] + '-' + this.numList[5]],
           gearsthree: [this.numList[6] + '-' + this.numList[7], this.numList[8] + '-' + this.numList[9]],
@@ -818,6 +839,12 @@
               case 'maxprice':
                 this.skusList[i].maxprice = this.commonMaxPrice;
                 break;
+              case 'highestprice':
+                this.skusList[i].highestprice = this.commonMaxPrice;
+                break;
+              case 'lowestprice':
+                this.skusList[i].lowestprice = this.commonLowPrice;
+                break;
               case 'price':
                 this.skusList[i].price = this.commonSkuPrice;
                 break;
@@ -876,6 +903,10 @@
               this.skusList[i].skudiscountfour = 4;
               this.skusList[i].skudiscountfive = 5;
               this.skusList[i].skudiscountsix = 6;
+
+              if(this.where == 'magic'){
+                this.skusList[i].price = this.skusList[i].skuprice;
+              }
             }
             // 编辑时处理数据
             if(scope.row.where) {
@@ -986,7 +1017,7 @@
             }
           }, 10);
         }else if(scope.row.where == 'magic') {
-          this.mbastarttime = [scope.row.mbastarttime];
+          this.mbastarttime = [scope.row.mbaday];
           this.numList = [];
           for(let i in scope.row.gearsone[0].split('-')) {
             this.numList.push(scope.row.gearsone[0].split('-')[i])
@@ -1009,12 +1040,25 @@
               count --;
             }else {
               // 选中之前勾选的商品
-              for(let i in this.skusList) {
-                if(scope.row.skuid == this.skusList[i].skuid) {
-                  this.skusList[i].stock = scope.row.skustock;
-                  this.skusList[i].price = scope.row.skuminprice;
-                  this.skusList[i].maxprice = scope.row.skuprice;
-                  this.$refs.skuList.toggleRowSelection(this.skusList[i])
+              // for(let i in this.skusList) {
+              //   if(scope.row.skus.skuid == this.skusList[i].skuid) {
+              //     this.skusList[i].stock = scope.row.skustock;
+              //     // this.skusList[i].price = scope.row.skuminprice;
+              //     this.skusList[i].price = scope.row.skuprice;
+              //     this.skusList[i].highestprice = scope.row.highestprice;
+              //     this.skusList[i].lowestprice = scope.row.lowestprice;
+              //     this.$refs.skuList.toggleRowSelection(this.skusList[i])
+              //   }
+              // }
+              for(let i in scope.row.skus) {
+                for(let j in this.skusList) {
+                  if(scope.row.skus[i].skuid == this.skusList[j].skuid) {
+                    this.skusList[j].stock = scope.row.skus[i].mbsstock;
+                    this.skusList[j].price = scope.row.skus[i].skuprice;
+                    this.skusList[j].highestprice = scope.row.skus[i].highestprice;
+                    this.skusList[j].lowestprice = scope.row.skus[i].lowestprice;
+                    this.$refs.skuList.toggleRowSelection(this.skusList[j])
+                  }
                 }
               }
               clearInterval(time);
