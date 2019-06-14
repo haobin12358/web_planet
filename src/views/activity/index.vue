@@ -58,7 +58,7 @@
         <el-form-item label="封面按钮文字" prop="acbutton">
           <el-input class="long-input" v-model="formData.acbutton"></el-input>
         </el-form-item>
-        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '3' || formData.actype == '4' ||formData.actype == '5'">
+        <el-form-item label="详情页顶部图" prop="actoppic" v-if="formData.actype == '0' || formData.actype == '1' || formData.actype == '2' || formData.actype == '3' || formData.actype == '4' ||formData.actype == '5'">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -83,7 +83,7 @@
             <template slot="append" v-if="activityRule[i]">{{activityRule[i].length}}/100</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '5'">
+        <el-form-item label="活动规则" prop="prlineprice" v-if="formData.actype == '5' || formData.actype == '2'">
           <el-input style="width: 400px; margin: 0 20px 20px 0" maxlength="500" type="textarea" :placeholder="'请输入活动规则' + (i + 1) + '，不超过500个汉字'"
                    v-model="activityRule[0]">
 <!--            <template slot="append" v-if="activityRule[0]">{{activityRule[0].length}}/500</template>-->
@@ -242,7 +242,7 @@
               }
               this.formData.acdesc = this.formData.acdesc.slice(1, this.formData.acdesc.length);
             }
-            if(this.formData.actype == '5') {
+            if(this.formData.actype == '5' || this.formData.actype == '2') {
               this.formData.acdesc = '';
               for(let i in this.activityRule) {
                 this.formData.acdesc = this.formData.acdesc  + '|' + this.activityRule[i]
