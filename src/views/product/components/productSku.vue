@@ -22,7 +22,13 @@
 
         <el-table-column label="价格" prop="skuprice" align="center" width="120"></el-table-column>
         <el-table-column label="让利(%)" prop="skudeviderate" align="center" width="160"></el-table-column>
-        <el-table-column label="库存" prop="skustock" align="center" width="120"></el-table-column>
+        <el-table-column label="库存" prop="skustock"  align="center" width="120">
+          <template slot-scope="scope">
+            <span v-if="scope.row.skustock">{{scope.row.skustock}}</span>
+            <span v-if="scope.row.mbsstock">{{scope.row.mbsstock}}</span>
+            <span v-if="scope.row.gsstock">{{scope.row.gsstock}}</span>
+          </template>
+        </el-table-column>
       </el-table>
 
       <el-button slot="reference" type="text">预览sku</el-button>

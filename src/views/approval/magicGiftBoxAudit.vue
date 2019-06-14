@@ -29,24 +29,27 @@
       <el-table-column label="审批内容" align="center">
         <el-table-column label="商品规格图片" align="center" prop="prdescription" width="120">
           <template slot-scope="scope">
-            <table-cell-img :src="[scope.row.content.product.skus[0].skupic]" :key="scope.row.avid"></table-cell-img>
+            <table-cell-img :src="[scope.row.content.skus[0].skupic]" :key="scope.row.avid"></table-cell-img>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" align="center" prop="content.product.prtitle" width="180"
+        <el-table-column label="商品名称" align="center" prop="content.prtitle" width="180"
                          show-overflow-tooltip></el-table-column>
-        <el-table-column label="品牌" align="center" prop="content.product.brand" width="180">
+        <el-table-column label="品牌" align="center" prop="content.brand" width="180">
           <template slot-scope="scope">
-            {{scope.row.content.product.brand ? scope.row.content.product.brand.pbname : ''}}
+            {{scope.row.content.brand ? scope.row.content.brand.pbname : ''}}
           </template>
         </el-table-column>
-        <el-table-column label="分类" align="center" prop="content.product.categorys" width="280">
+<!--        <el-table-column label="分类" align="center" prop="content.categorys" width="280">-->
+<!--          <template slot-scope="scope">-->
+<!--            {{scope.row.content.categorys || ''}}-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+        <el-table-column label="参与日期" align="center" prop="content.mbaday" width="220"></el-table-column>
+        <el-table-column align="center" label="sku" width="120">
           <template slot-scope="scope">
-            {{scope.row.content.product.categorys || ''}}
+            <product-sku :skus="scope.row.content.skus" :prattribute="scope.row.content.prattribute"></product-sku>
           </template>
         </el-table-column>
-        <el-table-column label="参与日期" align="center" prop="content.mbastarttime" width="220"></el-table-column>
-        <el-table-column label="参与价格" align="center" prop="content.skuprice" width="120"></el-table-column>
-        <el-table-column label="参与数量" align="center" prop="content.product.skus[0].skustock" width="120"></el-table-column>
       </el-table-column>
       <el-table-column label="发起人" align="center">
         <el-table-column label="姓名" prop="start.adname" align="center">
@@ -100,12 +103,12 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
-
+  import ProductSku from "src/views/product/components/productSku";
   //  tomagicbox
   export default {
     name: "MagicGiftBoxAudit",
 
-    components: {TableCellImg},
+    components: {TableCellImg,ProductSku},
 
     data() {
       return {
