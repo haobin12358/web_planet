@@ -39,7 +39,7 @@
       <el-table-column label="品牌" align="center" prop="pbname" show-overflow-tooltip></el-table-column>
       <el-table-column label="商品名称" align="center" prop="prtitle" show-overflow-tooltip></el-table-column>
       <el-table-column label="参与日期" align="center" prop="gpday"></el-table-column>
-      <el-table-column label="减免金额" align="center" width="100">
+      <el-table-column label="减免后金额" align="center" width="100">
         <template slot-scope="scope">
           <el-button type="text" @click="skuSix(scope.row)">查看</el-button>
         </template>

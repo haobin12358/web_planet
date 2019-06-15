@@ -272,7 +272,7 @@
     </el-dialog>
 
     <!--拼团竞猜——设置sku的三个减免金额-->
-    <el-dialog v-el-drag-dialog :visible.sync="skuSixDialog" v-if="where == 'groupGuess'" title="设置减免金额" width="800px" top="7vh" :close-on-click-modal="false">
+    <el-dialog v-el-drag-dialog :visible.sync="skuSixDialog" v-if="where == 'groupGuess'" title="设置减免后金额" width="800px" top="7vh" :close-on-click-modal="false">
       <el-form label-position="right" label-width="120px" inline style="margin-top: -30px">
         <el-form-item label="规格名称:" style="margin: 0 300px 0 -28px">
           <span>{{rowTemp.skuname}}</span>
@@ -593,11 +593,11 @@
           this.$message.warning('请输入合理的库存');
           return
         }
-        if (!moneyReg.test(this.skus[0].price) || this.skus[0].price < this.skus[0].highestprice){
+        if (!moneyReg.test(this.skus[0].price) || Number(this.skus[0].price) < Number(this.skus[0].highestprice)){
           this.$message.warning('请输入合理的金额');
           return
         }
-        if (!moneyReg.test(this.skus[0].highestprice) || this.skus[0].highestprice < this.skus[0].lowestprice){
+        if (!moneyReg.test(this.skus[0].highestprice) || Number(this.skus[0].highestprice) < Number(this.skus[0].lowestprice)){
           this.$message.warning('请输入合理的金额');
           return
         }
@@ -804,11 +804,12 @@
         //   this.$message.warning('请正确输入金额');
         //   return
         // }
-        if (!moneyReg1.test(this.rowTemp.skufirstlevelprice) || (this.rowTemp.skufirstlevelprice< this.rowTemp.skusecondlevelprice || (this.rowTemp.skufirstlevelprice > this.rowTemp.price))){
+
+        if (!moneyReg1.test(this.rowTemp.skufirstlevelprice) || (Number(this.rowTemp.skufirstlevelprice) < Number(this.rowTemp.skusecondlevelprice) ) || (Number(this.rowTemp.skufirstlevelprice) > Number(this.rowTemp.price))){
           this.$message.warning('请输入合理的猜对一位数字价格');
           return
         }
-        if ( !moneyReg1.test(this.rowTemp.skusecondlevelprice) || (this.rowTemp.skusecondlevelprice < this.rowTemp.skuthirdlevelprice)){
+        if ( !moneyReg1.test(this.rowTemp.skusecondlevelprice) || (Number(this.rowTemp.skusecondlevelprice) < Number(this.rowTemp.skuthirdlevelprice))){
           this.$message.warning('请输入合理的猜对二位数字价格');
           return
         }
