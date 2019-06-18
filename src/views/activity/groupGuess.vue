@@ -169,6 +169,9 @@
                 type: 'success'
               });
               this.getMagic();
+              localStorage.removeItem('skufirstlevelprice');
+              localStorage.removeItem('skusecondlevelprice');
+              localStorage.removeItem('skuthirdlevelprice');
               this.$refs.groupGuess.productDialog = false;
               this.$refs.groupGuess.skusDialog = false;
             }
@@ -182,6 +185,9 @@
                 type: 'success'
               });
               this.getMagic();
+              localStorage.removeItem('skufirstlevelprice');
+              localStorage.removeItem('skusecondlevelprice');
+              localStorage.removeItem('skuthirdlevelprice');
               this.$refs.groupGuess.productDialog = false;
               this.$refs.groupGuess.skusDialog = false
             }

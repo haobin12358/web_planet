@@ -761,9 +761,9 @@
       setThreeSix(row){
         if(row == 'all'){
           this.rowTemp ={
-            skufirstlevelprice:3,
-            skusecondlevelprice:2,
-            skuthirdlevelprice:1,
+            skufirstlevelprice:localStorage.getItem('skufirstlevelprice') || 3,
+            skusecondlevelprice:localStorage.getItem('skusecondlevelprice') || 2,
+            skuthirdlevelprice:localStorage.getItem('skuthirdlevelprice') || 1,
             skuname:'所有'
           };
         }else{
@@ -817,12 +817,17 @@
           this.$message.warning('请输入合理的猜对三位数字价格');
           return
         }
+
+
         if(this.rowTemp.skuname == '所有'){
           for(let i=0;i<this.skusList.length;i++){
             this.skusList[i].skufirstlevelprice = Number(this.rowTemp.skufirstlevelprice);
             this.skusList[i].skusecondlevelprice = Number(this.rowTemp.skusecondlevelprice);
             this.skusList[i].skuthirdlevelprice = Number(this.rowTemp.skuthirdlevelprice);
           }
+          localStorage.setItem('skufirstlevelprice',this.rowTemp.skufirstlevelprice);
+          localStorage.setItem('skusecondlevelprice',this.rowTemp.skusecondlevelprice);
+          localStorage.setItem('skuthirdlevelprice',this.rowTemp.skuthirdlevelprice);
         }
 
         this.skusList = this.skusList.concat([])
