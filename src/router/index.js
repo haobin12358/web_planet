@@ -434,19 +434,19 @@ export const asyncRouterMap = [
         component: () => import('src/views/service/message'),
         meta: {title: '留言', noCache: true,  roles: level2}
       },
-      {
-        path: 'appMessage',
-        name: 'appMessage',
-        component: () => import('src/views/service/appMessage'),
-        meta: {title: '站内信', noCache: true,  roles: level2}
-      },
-      {
-        path: 'addMessage',
-        name: 'addMessage',
-        hidden: true,
-        component: () => import('src/views/service/addMessage'),
-        meta: {title: '站内信', noCache: true,  roles: level2}
-      },
+      // {
+      //   path: 'appMessage',
+      //   name: 'appMessage',
+      //   component: () => import('src/views/service/appMessage'),
+      //   meta: {title: '站内信', noCache: true,  roles: level2}
+      // },
+      // {
+      //   path: 'addMessage',
+      //   name: 'addMessage',
+      //   hidden: true,
+      //   component: () => import('src/views/service/addMessage'),
+      //   meta: {title: '站内信', noCache: true,  roles: level2}
+      // },
     ]
   },
 
