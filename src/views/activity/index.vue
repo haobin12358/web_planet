@@ -227,7 +227,9 @@
         }
         if(this.formData.acdesc && this.formData.actype == '1') {
           this.activityRule = this.formData.acdesc.split('|');
-        }else if(this.formData.acdesc && this.formData.actype == '5') {
+        }else if(this.formData.acdesc && this.formData.actype == '5' ) {
+          this.activityRule[0] = this.formData.acdesc;
+        }else if(this.formData.acdesc && this.formData.actype == '2' ) {
           this.activityRule[0] = this.formData.acdesc;
         }
       },
