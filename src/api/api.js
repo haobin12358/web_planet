@@ -3,7 +3,7 @@ let title = '';
 // title = 'https://planet.daaiti.cn/api/v1/';
 if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localhost') > 0){
   // title = 'http://10.0.8.110:7443/api/v2/';
-  title = 'https://play.bigxingxing.com/api/v2/'; //测试
+  title = 'https://pre2.bigxingxing.com/api/v2/'; //测试
 }else if(location.origin.indexOf('premanager') > 0){
   title = 'https://pre2.bigxingxing.com/api/v2/'
 }else if(location.origin.indexOf('//manager.') >0){

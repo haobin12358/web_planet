@@ -558,7 +558,61 @@ export const asyncRouterMap = [
       },
     ]
   },
-
+  {
+    path: '/personSetting',
+    component: Layout,
+    redirect: '/personSetting/withdraw',
+    alwaysShow: true,
+    // name: 'personSettingPa',
+    meta: {title: '导游素材', icon: 'iconGuide', roles: level2},
+    children: [
+      {
+        path: 'personSetting',
+        name: 'PersonSetting',
+        component: () => import('src/views/personSetting/personSetting'),
+        meta: {title: '商户信息', noCache: true, roles: level2}
+      }
+    ]
+  },
+  {
+    path: '/scenic',
+    component: Layout,
+    redirect: '/scenic/index',
+    alwaysShow: true,
+    // name: 'personSettingPa',
+    meta: {title: '景区', icon: 'scenicArea', roles: level2},
+    children: [
+      {
+        path: 'index',
+        name: 'scenic',
+        component: () => import('src/views/scenic/index'),
+        meta: {title: '景区管理', noCache: true, roles: level2}
+      },
+      {
+        path: 'editScenic',
+        name: 'editScenic',
+        hidden: true,
+        component: () => import('src/views/scenic/editScenic'),
+        meta: {title: '景区编辑',noCache: true, roles: level2}
+      }
+    ]
+  },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/withdraw',
+  //   alwaysShow: true,
+  //   // name: 'personSettingPa',
+  //   meta: {title: '导游素材', icon: 'iconGuide', roles: level2},
+  //   children: [
+  //     {
+  //       path: 'personSetting',
+  //       name: 'PersonSetting',
+  //       component: () => import('src/views/personSetting/personSetting'),
+  //       meta: {title: '商户信息', noCache: true, roles: level2}
+  //     }
+  //   ]
+  // },
   {
     path: '/personSetting',
     component: Layout,
