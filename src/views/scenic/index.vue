@@ -6,7 +6,7 @@
                 <el-input v-model="formData.sspname" placeholder="景区"></el-input>
               </el-form-item>
               <el-form-item label="地区">
-                <el-input v-model="formData.ssparea" placeholder="省-市-区"></el-input>
+                <el-input v-model="formData.ssparea" placeholder="杭州"></el-input>
               </el-form-item>
               <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
               <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>

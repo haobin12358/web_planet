@@ -9,7 +9,7 @@
               <el-input v-model="formData.sspname" placeholder="请输入景区名称"></el-input>
             </el-form-item>
             <el-form-item label="所在地区" required>
-              <el-select v-model="apid"  clearable @blur="apBlur" placeholder="请选择省">
+              <el-select v-model="apid"  clearable  placeholder="请选择省">
                 <el-option
                   v-for="item in ap_list"
                   :key="item.apid"
@@ -17,7 +17,7 @@
                   :value="item.apid">
                 </el-option>
               </el-select>
-              <el-select v-model="acid" @blur="acBlur"  clearable placeholder="请选择市">
+              <el-select v-model="acid"  @focus="apBlur"  clearable placeholder="请选择市">
                 <el-option
                   v-for="item in ac_list"
                   :key="item.acid"
@@ -25,7 +25,7 @@
                   :value="item.acid">
                 </el-option>
               </el-select>
-              <el-select v-model="formData.aaid"  clearable placeholder="请选择区">
+              <el-select v-model="formData.aaid" @focus="acBlur" clearable placeholder="请选择区">
                 <el-option
                   v-for="item in aa_list"
                   :key="item.aaid"
@@ -107,7 +107,7 @@
               sspmainimg:'',
               parentid:'',
               sspcontent:'',
-              associated:'',
+              associated:false,
               sspid:''
             },
 
@@ -200,6 +200,10 @@
         },
         //获取市
         apBlur(){
+          if(!this.apid){
+            this.$message.error('请先选择省份!');
+            return;
+          }
           this.$http.get(this.$api.get_citys, {
             noLoading: true,
             params: {
@@ -219,6 +223,10 @@
         },
         //获取地区
         acBlur(){
+          if(!this.acid){
+            this.$message.error('请先选择市!');
+            return;
+          }
           this.$http.get(this.$api.get_areas, {
             noLoading: true,
             params: {
@@ -275,7 +283,7 @@
                     ssplevel:data.ssplevel,
                     aaid:data.aaid,
                     sspmainimg:data.sspmainimg,
-                    parentid:data.parent_scenicspot.sspid,
+                    parentid:data.parent_scenicspot && data.parent_scenicspot.sspid,
                     sspcontent:data.sspcontent,
                     associated:data.associated,
                     sspid:data.sspid
@@ -289,6 +297,10 @@
         checkFormData() {
           this.$refs.formData.validate(valid => {
             if (valid) {
+              if(!this.formData.aaid){
+                this.$message.error('请先选择省市区!');
+                return;
+              }
               if(this.$route.query.id){
                 this.$http.post(this.$api.scenicspot_update, this.formData).then(res => {
                   if (res.data.status == 200) {
