@@ -107,7 +107,8 @@
               sspmainimg:'',
               parentid:'',
               sspcontent:'',
-              associated:''
+              associated:'',
+              sspid:''
             },
 
             rules: {
@@ -170,11 +171,13 @@
       },
       components: {quillEditor},
       mounted() {
+        this.getScenic();
+        this.dealProps();
+
         if(this.$route.query.id){
           this.getFormData(this.$route.query.id);           //
         }
-        this.getScenic();
-        this.dealProps();
+
       },
       methods: {
         //  获取省
@@ -224,7 +227,6 @@
           }).then(
             res => {
               this.loading = false;
-
               if (res.data.status == 200) {
                 let resData = res.data,
                   data = res.data.data;
@@ -258,7 +260,28 @@
               if (res.data.status == 200) {
                 let resData = res.data,
                   data = res.data.data;
-                  this.formData = data;
+                for(let i in data.address_info){
+                  if(data.address_info[i].apid){
+                    this.apid = data.address_info[i].apid;
+                    this.apBlur();
+                  }else if(data.address_info[i].acid){
+                    this.acid = data.address_info[i].acid;
+                    this.acBlur();
+                  }
+                }
+
+                  this.formData =  {
+                    sspname:data.sspname,
+                    ssplevel:data.ssplevel,
+                    aaid:data.aaid,
+                    sspmainimg:data.sspmainimg,
+                    parentid:data.parent_scenicspot.sspid,
+                    sspcontent:data.sspcontent,
+                    associated:data.associated,
+                    sspid:data.sspid
+                }
+
+
 
               }
             }
