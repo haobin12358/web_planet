@@ -3,40 +3,10 @@
     <section class="tool-bar space-between">
             <el-form :inline="true">
               <el-form-item label="景区名称">
-                <el-select v-model="formData.sspname" multiple clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in options1"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+                <el-input v-model="formData.sspname" placeholder="景区"></el-input>
               </el-form-item>
-              <el-form-item label="省市区">
-                <el-select v-model="apid"  clearable @blur="apBlur" placeholder="请选择省">
-                  <el-option
-                    v-for="item in ap_list"
-                    :key="item.apid"
-                    :label="item.apname"
-                    :value="item.apid">
-                  </el-option>
-                </el-select>
-                <el-select v-model="acid" @blur="acBlur"  clearable placeholder="请选择市">
-                  <el-option
-                    v-for="item in ac_list"
-                    :key="item.acid"
-                    :label="item.acname"
-                    :value="item.acid">
-                  </el-option>
-                </el-select>
-                <el-select v-model="formData.aaid"  clearable placeholder="请选择区">
-                  <el-option
-                    v-for="item in aa_list"
-                    :key="item.aaid"
-                    :label="item.aaname"
-                    :value="item.aaid">
-                  </el-option>
-                </el-select>
+              <el-form-item label="地区">
+                <el-input v-model="formData.ssparea" placeholder="省-市-区"></el-input>
               </el-form-item>
               <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
               <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
@@ -104,31 +74,9 @@
     data() {
       return {
         formData: {
-          aaid: '',
+          ssparea: '',
           sspname:''
         },
-        apid:'',
-        acid:'',
-        ap_list:[],
-        ac_list:[],
-        aa_list:[],
-        options1: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
         loading: false,
         total: 0,
         currentPage: 1,
@@ -142,6 +90,7 @@
 
     methods: {
       doSearch(){
+        this.currentPage = 1;
         this.getScenic();
       },
       doReset(){
@@ -151,69 +100,15 @@
         };
         this.doSearch();
       },
-//  获取省
-      dealProps(){
-        this.$http.get(this.$api.get_provinces, {
-          noLoading: true,
-          params: {
-          },
-        }).then(
-          res => {
-            this.loading = false;
-
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-              this.ap_list = data;
-            }
-          }
-        )
-      },
-      //获取市
-      apBlur(){
-        this.$http.get(this.$api.get_citys, {
-          noLoading: true,
-          params: {
-            apid:this.apid
-          },
-        }).then(
-          res => {
-            this.loading = false;
-
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-              this.ac_list = data;
-            }
-          }
-        )
-      },
-      //获取地区
-      acBlur(){
-        this.$http.get(this.$api.get_areas, {
-          noLoading: true,
-          params: {
-            acid:this.acid
-          },
-        }).then(
-          res => {
-            this.loading = false;
-
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-              this.aa_list = data;
-            }
-          }
-        )
-      },
       getScenic() {
         this.loading = true;
         this.$http.get(this.$api.scenicspot_list, {
           noLoading: true,
           params: {
             page_size:this.pageSize,
-            page_num:this.currentPage
+            page_num:this.currentPage,
+            ssparea:this.formData.ssparea,
+            sspname:this.formData.sspname
           },
         }).then(
           res => {
@@ -229,6 +124,7 @@
           }
         )
       },
+
       sizeChange(pageSize) {
         this.pageSize = pageSize;
         this.currentPage = 1;
@@ -278,6 +174,7 @@
 
     created() {
       this.getScenic();
+
     }
   }
 </script>

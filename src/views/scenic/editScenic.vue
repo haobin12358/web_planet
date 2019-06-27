@@ -281,8 +281,6 @@
                     sspid:data.sspid
                 }
 
-
-
               }
             }
           )
