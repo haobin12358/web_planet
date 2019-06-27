@@ -48,7 +48,7 @@
                 <img v-if="formData.sspmainimg" v-lazy="formData.sspmainimg" class="avatar circle-main-img" />
                 <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
                 <div slot="tip" class="el-upload__tip">
-                  建议尺寸：X*X像素
+                  建议尺寸：288*161像素，大小最好在10M以内
                 </div>
               </el-upload>
             </el-form-item>

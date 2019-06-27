@@ -559,18 +559,24 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/personSetting',
+    path: '/guide',
     component: Layout,
-    redirect: '/personSetting/withdraw',
+    redirect: '/guide/draft',
     alwaysShow: true,
     // name: 'personSettingPa',
     meta: {title: '导游素材', icon: 'iconGuide', roles: level2},
     children: [
       {
-        path: 'personSetting',
-        name: 'PersonSetting',
-        component: () => import('src/views/personSetting/personSetting'),
-        meta: {title: '商户信息', noCache: true, roles: level2}
+        path: 'draft',
+        name: 'draft',
+        component: () => import('src/views/guide/draft'),
+        meta: {title: '我的草稿', noCache: true, roles: level2}
+      },
+      {
+        path: 'editDraft',
+        name: 'editDraft',
+        component: () => import('src/views/guide/editDraft'),
+        meta: {title: '我的草稿', noCache: true, roles: level2}
       }
     ]
   },

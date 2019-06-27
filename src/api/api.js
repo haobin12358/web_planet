@@ -247,6 +247,14 @@ const api = {
   scenicspot_get: title +'scenicspot/get',//获取景区详情
   scenicspot_update: title +'scenicspot/update',//编辑景区
   scenicspot_delete: title +'scenicspot/delete',//删除景区
+
+  set_play: title +'play/set_play',//创建活动
+  get_play: title + 'play/get_play',//获取活动详情
+  get_cost: title +'play/get_cost',//获取费用
+  set_cost: title +'play/set_cost',//创建费用
+  set_insurance: title +'play/set_insurance',//创建保险
+  get_insurance: title +'play/get_insurance',//获取保险
+
 };
 
 export default api
