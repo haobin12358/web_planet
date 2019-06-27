@@ -5,19 +5,39 @@
         <el-col :span="14">
           <el-form :model="formData" :rules="rules" ref="formData" label-position="left"
                    label-width="140px">
-            <el-form-item label="景区名称" prop="cmtitle">
-              <el-input v-model="formData.name" placeholder="请输入景区名称"></el-input>
+            <el-form-item label="景区名称" prop="sspname">
+              <el-input v-model="formData.sspname" placeholder="请输入景区名称"></el-input>
             </el-form-item>
-            <el-form-item label="所在地区" prop="cmtitle">
-              <el-cascader
-                v-model="formData.value"
-                :options="options"
-                @change="handleChange"></el-cascader>
+            <el-form-item label="所在地区" required>
+              <el-select v-model="apid"  clearable @blur="apBlur" placeholder="请选择省">
+                <el-option
+                  v-for="item in ap_list"
+                  :key="item.apid"
+                  :label="item.apname"
+                  :value="item.apid">
+                </el-option>
+              </el-select>
+              <el-select v-model="acid" @blur="acBlur"  clearable placeholder="请选择市">
+                <el-option
+                  v-for="item in ac_list"
+                  :key="item.acid"
+                  :label="item.acname"
+                  :value="item.acid">
+                </el-option>
+              </el-select>
+              <el-select v-model="formData.aaid"  clearable placeholder="请选择区">
+                <el-option
+                  v-for="item in aa_list"
+                  :key="item.aaid"
+                  :label="item.aaname"
+                  :value="item.aaid">
+                </el-option>
+              </el-select>
             </el-form-item>
-            <el-form-item label="具体定位" prop="cmtitle">
-              <el-input v-model="formData.name" placeholder="请输入景区名称"></el-input>
-            </el-form-item>
-            <el-form-item label="景区主图" prop="nemainpic">
+<!--            <el-form-item label="具体定位" prop="cmtitle">-->
+<!--              <el-input v-model="formData.name" placeholder="请输入景区名称"></el-input>-->
+<!--            </el-form-item>-->
+            <el-form-item label="景区主图" prop="sspmainimg">
               <el-upload
                 class="avatar-uploader"
                 :action="uploadUrl"
@@ -25,36 +45,43 @@
                 accept="image/*"
                 :on-success="handleMainPicSuccess"
                 :before-upload="beforeImgUpload">
-                <img v-if="formData.mainpic" v-lazy="formData.mainpic" class="avatar circle-main-img" />
+                <img v-if="formData.sspmainimg" v-lazy="formData.sspmainimg" class="avatar circle-main-img" />
                 <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
                 <div slot="tip" class="el-upload__tip">
                   建议尺寸：X*X像素
                 </div>
               </el-upload>
             </el-form-item>
-            <el-form-item label="景区等级" prop="cmtitle">
-              <el-select v-model="formData.value" multiple clearable placeholder="请选择">
+            <el-form-item label="景区等级" prop="ssplevel">
+              <el-select v-model="formData.ssplevel"  clearable placeholder="请选择">
                 <el-option
-                  v-for="item in options1"
+                  v-for="item in level"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="内容" prop="cmmessage">
+            <el-form-item label="内容" prop="sspcontent">
               <div class="editor">
-                <quill-editor ref="myTextEditor" :options="editorOption" v-model="formData.message" :config="editorOption"></quill-editor>
+                <quill-editor ref="myTextEditor" :options="editorOption" v-model="formData.sspcontent" :config="editorOption"></quill-editor>
               </div>
 
             </el-form-item>
-            <el-form-item label="是否有关联性：" prop="cmtitle">
-              <el-switch v-model="formData.message"  active-color="#409EFF"
+            <el-form-item label="是否有关联性：" prop="sspcontent">
+              <el-switch v-model="formData.associated" @change="switchChange" active-color="#409EFF"
                          inactive-color="#DBDCDC">
               </el-switch>
             </el-form-item>
-            <el-form-item label="关联景区" prop="cmtitle">
-              <el-input v-model="formData.name" placeholder="请输入景区名称"></el-input>
+            <el-form-item label="关联景区" prop="parentid" v-if="formData.associated">
+              <el-select v-model="formData.parentid"  clearable placeholder="请选择">
+                <el-option
+                  v-for="item in all_scenic"
+                  :key="item.sspid"
+                  :label="item.sspname"
+                  :value="item.sspid">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="checkFormData">保 存</el-button>
@@ -74,244 +101,141 @@
       data(){
           return{
             formData:{
-              name:'',
-              mainpic:'',
-              message:''
+              sspname:'',
+              ssplevel:'',
+              aaid:'',
+              sspmainimg:'',
+              parentid:'',
+              sspcontent:'',
+              associated:''
             },
+
             rules: {
-              cmtitle: [
-                { required: true, message: '公告标题必填', trigger: 'blur' }
+              sspname: [
+                { required: true, message: '景区名称必填', trigger: 'blur' }
               ],
-              cmmessage: [
-                { required: true, message: '公告内容必填', trigger: 'blur' }
+              ssplevel: [
+                { required: true, message: '景区等级必填', trigger: 'blur' }
+              ],
+              aaid: [
+                { required: true, message: '所在地区必选', trigger: 'change' }
+              ],
+              sspmainimg: [
+                { required: true, message: '景区主图必填', trigger: 'change' }
+              ],
+              sspcontent:[
+                { required: true, message: '景区详情必填', trigger: 'blur' }
+              ],
+              parentid:[
+
               ]
             },
+            apid:'',
+            acid:'',
+            ap_list:[],
+            ac_list:[],
+            aa_list:[],
+            all_scenic:[],
             editorOption: {
               // placeholder: "placeholder",
               // 编辑器的配置
               // something config
               // theme: "bubble"
             },
-            options: [
+            level:[
               {
-                value: 'zhinan',
-                label: '指南',
-                children: [{
-                  value: 'shejiyuanze',
-                  label: '设计原则',
-                  children: [{
-                    value: 'yizhi',
-                    label: '一致'
-                  }, {
-                    value: 'fankui',
-                    label: '反馈'
-                  }, {
-                    value: 'xiaolv',
-                    label: '效率'
-                  }, {
-                    value: 'kekong',
-                    label: '可控'
-                  }]
-                }, {
-                  value: 'daohang',
-                  label: '导航',
-                  children: [{
-                    value: 'cexiangdaohang',
-                    label: '侧向导航'
-                  }, {
-                    value: 'dingbudaohang',
-                    label: '顶部导航'
-                  }]
-                }]
-              },
-              {
-                value: 'zujian',
-                label: '组件',
-                children: [{
-                  value: 'basic',
-                  label: 'Basic',
-                  children: [{
-                    value: 'layout',
-                    label: 'Layout 布局'
-                  }, {
-                    value: 'color',
-                    label: 'Color 色彩'
-                  }, {
-                    value: 'typography',
-                    label: 'Typography 字体'
-                  }, {
-                    value: 'icon',
-                    label: 'Icon 图标'
-                  }, {
-                    value: 'button',
-                    label: 'Button 按钮'
-                  }]
-                }, {
-                  value: 'form',
-                  label: 'Form',
-                  children: [{
-                    value: 'radio',
-                    label: 'Radio 单选框'
-                  }, {
-                    value: 'checkbox',
-                    label: 'Checkbox 多选框'
-                  }, {
-                    value: 'input',
-                    label: 'Input 输入框'
-                  }, {
-                    value: 'input-number',
-                    label: 'InputNumber 计数器'
-                  }, {
-                    value: 'select',
-                    label: 'Select 选择器'
-                  }, {
-                    value: 'cascader',
-                    label: 'Cascader 级联选择器'
-                  }, {
-                    value: 'switch',
-                    label: 'Switch 开关'
-                  }, {
-                    value: 'slider',
-                    label: 'Slider 滑块'
-                  }, {
-                    value: 'time-picker',
-                    label: 'TimePicker 时间选择器'
-                  }, {
-                    value: 'date-picker',
-                    label: 'DatePicker 日期选择器'
-                  }, {
-                    value: 'datetime-picker',
-                    label: 'DateTimePicker 日期时间选择器'
-                  }, {
-                    value: 'upload',
-                    label: 'Upload 上传'
-                  }, {
-                    value: 'rate',
-                    label: 'Rate 评分'
-                  }, {
-                    value: 'form',
-                    label: 'Form 表单'
-                  }]
-                }, {
-                  value: 'data',
-                  label: 'Data',
-                  children: [{
-                    value: 'table',
-                    label: 'Table 表格'
-                  }, {
-                    value: 'tag',
-                    label: 'Tag 标签'
-                  }, {
-                    value: 'progress',
-                    label: 'Progress 进度条'
-                  }, {
-                    value: 'tree',
-                    label: 'Tree 树形控件'
-                  }, {
-                    value: 'pagination',
-                    label: 'Pagination 分页'
-                  }, {
-                    value: 'badge',
-                    label: 'Badge 标记'
-                  }]
-                }, {
-                  value: 'notice',
-                  label: 'Notice',
-                  children: [{
-                    value: 'alert',
-                    label: 'Alert 警告'
-                  }, {
-                    value: 'loading',
-                    label: 'Loading 加载'
-                  }, {
-                    value: 'message',
-                    label: 'Message 消息提示'
-                  }, {
-                    value: 'message-box',
-                    label: 'MessageBox 弹框'
-                  }, {
-                    value: 'notification',
-                    label: 'Notification 通知'
-                  }]
-                }, {
-                  value: 'navigation',
-                  label: 'Navigation',
-                  children: [{
-                    value: 'menu',
-                    label: 'NavMenu 导航菜单'
-                  }, {
-                    value: 'tabs',
-                    label: 'Tabs 标签页'
-                  }, {
-                    value: 'breadcrumb',
-                    label: 'Breadcrumb 面包屑'
-                  }, {
-                    value: 'dropdown',
-                    label: 'Dropdown 下拉菜单'
-                  }, {
-                    value: 'steps',
-                    label: 'Steps 步骤条'
-                  }]
-                }, {
-                  value: 'others',
-                  label: 'Others',
-                  children: [{
-                    value: 'dialog',
-                    label: 'Dialog 对话框'
-                  }, {
-                    value: 'tooltip',
-                    label: 'Tooltip 文字提示'
-                  }, {
-                    value: 'popover',
-                    label: 'Popover 弹出框'
-                  }, {
-                    value: 'card',
-                    label: 'Card 卡片'
-                  }, {
-                    value: 'carousel',
-                    label: 'Carousel 走马灯'
-                  }, {
-                    value: 'collapse',
-                    label: 'Collapse 折叠面板'
-                  }]
-                }]
-              },
+                value: '1',
+                label: '1A'
+              }, {
+                value: '2',
+                label: '2A'
+              }, {
+                value: '3',
+                label: '3A'
+              }, {
+                value: '4',
+                label: '4A'
+              }, {
+                value: '5',
+                label: '5A'
+              }
             ],
-            options1: [{
-              value: '选项1',
-              label: '黄金糕'
-            }, {
-              value: '选项2',
-              label: '双皮奶'
-            }, {
-              value: '选项3',
-              label: '蚵仔煎'
-            }, {
-              value: '选项4',
-              label: '龙须面'
-            }, {
-              value: '选项5',
-              label: '北京烤鸭'
-            }],
           }
       },
-      // computed: {
-      //   // 上传图片
-      //   uploadUrl() {
-      //     return this.$api.upload_file + getStore('token') + '&type=news'
-      //   },
-      // },
+      computed: {
+        // 上传图片
+        uploadUrl() {
+          return this.$api.upload_file + getStore('token') + '&type=news'
+        },
+      },
       components: {quillEditor},
       mounted() {
         if(this.$route.query.id){
           this.getFormData(this.$route.query.id);           //
         }
-
+        this.getScenic();
+        this.dealProps();
       },
       methods: {
+        //  获取省
+        dealProps(){
+          this.$http.get(this.$api.get_provinces, {
+            noLoading: true,
+            params: {
+            },
+          }).then(
+            res => {
+              this.loading = false;
+
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+                 this.ap_list = data;
+              }
+            }
+          )
+        },
+        //获取市
+        apBlur(){
+          this.$http.get(this.$api.get_citys, {
+            noLoading: true,
+            params: {
+              apid:this.apid
+            },
+          }).then(
+            res => {
+              this.loading = false;
+
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+                this.ac_list = data;
+              }
+            }
+          )
+        },
+        //获取地区
+        acBlur(){
+          this.$http.get(this.$api.get_areas, {
+            noLoading: true,
+            params: {
+              acid:this.acid
+            },
+          }).then(
+            res => {
+              this.loading = false;
+
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+                this.aa_list = data;
+              }
+            }
+          )
+        },
         // 主图上传
         handleMainPicSuccess(res, file) {
-          // this.circleForm.nemainpic = res.data;
+          this.formData.sspmainimg = res.data;
         },
         // 上传前限制小于15M
         beforeImgUpload(file) {
@@ -322,18 +246,19 @@
           return isLt15M;
         },
         getFormData(id){
-          this.$http.get(this.$api.get_club_message, {
+          this.$http.get(this.$api.scenicspot_get, {
             noLoading: true,
             params: {
-              cmid: id,
+              sspid: id,
             },
           }).then(
             res => {
               this.loading = false;
-
+                console.log(res,'获取数据')
               if (res.data.status == 200) {
                 let resData = res.data,
                   data = res.data.data;
+                  this.formData = data;
 
               }
             }
@@ -344,25 +269,25 @@
           this.$refs.formData.validate(valid => {
             if (valid) {
               if(this.$route.query.id){
-                this.$http.post(this.$api.update_club, this.formData).then(res => {
+                this.$http.post(this.$api.scenicspot_update, this.formData).then(res => {
                   if (res.data.status == 200) {
                     this.$notify({
                       title: '保存成功',
-                      message: '公告发布成功',
+                      message: '景区发布成功',
                       type: 'success'
                     });
-                    this.$router.push('/service/notice')
+                    this.$router.push('/scenic/index')
                   }
                 });
               }else{
-                this.$http.post(this.$api.create_club, this.formData).then(res => {
+                this.$http.post(this.$api.scenicspot_add, this.formData).then(res => {
                   if (res.data.status == 200) {
                     this.$notify({
                       title: '保存成功',
-                      message: '公告发布成功',
+                      message: '景区发布成功',
                       type: 'success'
                     });
-                    this.$router.push('/service/notice')
+                    this.$router.push('/scenic/index')
                   }
                 });
               }
@@ -372,8 +297,30 @@
             }
           })
         },
-        handleChange(){
+        switchChange(){
+          if(!this.formData.associated){
+            this.formData.parentid = '';
+          }
+        },
+        getScenic(){
+          this.$http.get(this.$api.scenicspot_list, {
+            noLoading: true,
+            params: {
+              option:'root',
+              page_size:1000,
+              page_num:1
+            },
+          }).then(
+            res => {
+              this.loading = false;
 
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+                  this.all_scenic = data;
+              }
+            }
+          )
         }
       }
     }

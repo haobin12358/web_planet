@@ -3,7 +3,7 @@ let title = '';
 // title = 'https://planet.daaiti.cn/api/v1/';
 if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localhost') > 0){
   // title = 'http://10.0.8.110:7443/api/v2/';
-  title = 'https://pre2.bigxingxing.com/api/v2/'; //测试
+  title = 'https://play.bigxingxing.com/api/v2/'; //测试
 }else if(location.origin.indexOf('premanager') > 0){
   title = 'https://pre2.bigxingxing.com/api/v2/'
 }else if(location.origin.indexOf('//manager.') >0){
@@ -238,6 +238,15 @@ const api = {
   get_userwords: title +'club/get_userwords' ,///获取留言
   message_set: title +'message/set',             //编辑站内信
   message_get: title +'message/get',            //获取站内信
+
+
+
+//  小程序部分
+  scenicspot_list: title +'scenicspot/list',//获取景区列表
+  scenicspot_add: title +'scenicspot/add',//添加景区
+  scenicspot_get: title +'scenicspot/get',//获取景区详情
+  scenicspot_update: title +'scenicspot/update',//编辑景区
+  scenicspot_delete: title +'scenicspot/delete',//删除景区
 };
 
 export default api
