@@ -27,10 +27,10 @@
         </el-button>
       </el-form-item>
 
-      <el-radio-group v-model="loginForm.userType">
-        <el-radio label="1" name="userType" border>管理员</el-radio>
-        <el-radio label="2" name="userType" border>供应商</el-radio>
-      </el-radio-group>
+<!--      <el-radio-group v-model="loginForm.userType">-->
+<!--        <el-radio label="1" name="userType" border>管理员</el-radio>-->
+<!--        <el-radio label="2" name="userType" border>供应商</el-radio>-->
+<!--      </el-radio-group>-->
 
       <div class="tips">
       </div>
@@ -50,7 +50,7 @@
         loginForm: {
           username: getStore('username'),
           password: '',
-          userType: getStore('userType') || '1',
+          userType: '10',
         },
         loginRules: {
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],

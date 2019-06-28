@@ -74,6 +74,8 @@ const user = {
           }).catch(error => {
             reject(error)
           })
+        } else if(userInfo.userType == 10){     //普通用户
+
         } else {  //  供应商
           supplizerLogin(userInfo.username, userInfo.password).then(response => {
             if (response.data.status == 200) {

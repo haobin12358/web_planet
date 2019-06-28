@@ -9,6 +9,7 @@
             <el-date-picker
               v-model="time"
               type="datetimerange"
+              value-format="yyyy-MM-dd HH:mm"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
@@ -62,7 +63,7 @@
                       <el-input v-model="item.cossubtotal"></el-input>
                     </el-form-item>
                     <el-form-item label="费用详情" >
-                      <el-input type="textarea" :rows="4" :cols="200" v-model="item.cossubtotal"></el-input>
+                      <el-input type="textarea" :rows="4" :cols="200" v-model="item.cosdetail"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -130,7 +131,7 @@
                 v-model="recommendVisible">
                 <h3 class="el-upload__tip">新增携带物品</h3>
                 <el-input v-model="recommendLabel" class="m-input-label"></el-input>
-                <el-button type="primary" @click="enterSave">保 存</el-button>
+                <el-button type="primary" @click="recommendSave">保 存</el-button>
                 <el-button @click="recommendVisible = false">取消</el-button>
                 <span class="m-label" slot="reference" @click="recommendVisible =!recommendVisible">+</span>
               </el-popover>
@@ -147,10 +148,13 @@
             </div>
 
           </el-form-item>
+          <el-form-item label="" >
+            <el-checkbox v-model="agree">我同意<span class="m-blue">大行星平台服务协议</span></el-checkbox>
 
+          </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="checkFormData">保 存</el-button>
-            <el-button type="primary" @click="checkFormData">立即发布</el-button>
+            <el-button  @click="saveDraft">保 存</el-button>
+            <el-button type="primary" @click="submitDraft">立即发布</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -163,7 +167,7 @@
   import 'quill/dist/quill.js';
   import { getStore } from "src/utils/index";
   export default {
-    name: "editScenic",
+    name: "editDraft",
     data(){
       return{
         formData:{
@@ -197,7 +201,7 @@
             { required: true, message: '活动封面必填', trigger: 'change' }
           ]
         },
-        time:'',
+        time:[],
         label:'',
         enterVisible:false,
         enter_list:[],
@@ -213,6 +217,7 @@
           // something config
           // theme: "bubble"
         },
+        agree:false
       }
     },
     computed: {
@@ -223,10 +228,10 @@
     },
     components: {quillEditor},
     mounted() {
-      this.getScenic();
-
       if(this.$route.query.id){
-        this.getFormData(this.$route.query.id);           //
+        this.getFormData(this.$route.query.id);
+        this.getCost(this.$route.query.id);
+        this.getInsurance(this.$route.query.id)//
       }
 
     },
@@ -243,11 +248,11 @@
         }
         return isLt15M;
       },
-      getFormData(id){
-        this.$http.get(this.$api.scenicspot_get, {
+      getCost(id){
+        this.$http.get(this.$api.get_cost, {
           noLoading: true,
           params: {
-            sspid: id,
+            plid: id,
           },
         }).then(
           res => {
@@ -256,84 +261,61 @@
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
-              for(let i in data.address_info){
-                if(data.address_info[i].apid){
-                  this.apid = data.address_info[i].apid;
-                  this.apBlur();
-                }else if(data.address_info[i].acid){
-                  this.acid = data.address_info[i].acid;
-                  this.acBlur();
-                }
-              }
-
-              this.formData =  {
-                sspname:data.sspname,
-                ssplevel:data.ssplevel,
-                aaid:data.aaid,
-                sspmainimg:data.sspmainimg,
-                parentid:data.parent_scenicspot && data.parent_scenicspot.sspid,
-                sspcontent:data.sspcontent,
-                associated:data.associated,
-                sspid:data.sspid
-              }
-
+             this.cost_list = data;
             }
           }
         )
       },
-      // 保存按钮
-      checkFormData() {
-        this.$refs.formData.validate(valid => {
-          if (valid) {
-            if(!this.formData.aaid){
-              this.$message.error('请先选择省市区!');
-              return;
-            }
-            if(this.$route.query.id){
-              this.$http.post(this.$api.scenicspot_update, this.formData).then(res => {
-                if (res.data.status == 200) {
-                  this.$notify({
-                    title: '保存成功',
-                    message: '景区发布成功',
-                    type: 'success'
-                  });
-                  this.$router.push('/scenic/index')
-                }
-              });
-            }else{
-              this.$http.post(this.$api.scenicspot_add, this.formData).then(res => {
-                if (res.data.status == 200) {
-                  this.$notify({
-                    title: '保存成功',
-                    message: '景区发布成功',
-                    type: 'success'
-                  });
-                  this.$router.push('/scenic/index')
-                }
-              });
-            }
-
-          }else {
-            this.$message.warning('请根据校验信息完善表单!');
-          }
-        })
-      },
-      getScenic(){
-        this.$http.get(this.$api.scenicspot_list, {
+      getInsurance(id){
+        this.$http.get(this.$api.get_insurance, {
           noLoading: true,
           params: {
-            option:'root',
-            page_size:1000,
-            page_num:1
+            plid: id,
           },
         }).then(
           res => {
             this.loading = false;
-
+            console.log(res,'获取数据')
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
-              this.all_scenic = data;
+              this.insurance_list = data;
+            }
+          }
+        )
+      },
+      getFormData(id){
+        this.$http.get(this.$api.get_play, {
+          noLoading: true,
+          params: {
+            plid: id,
+          },
+        }).then(
+          res => {
+            this.loading = false;
+            console.log(res,'获取数据')
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+              //
+              this.formData = res.data.data;
+              this.time[0] = this.formData.plstarttime;
+              this.time[1] = this.formData.plendtime;
+              let enter =[],location=[],recommend=[];
+              for(let i in this.formData.pllocation){
+                  location.push({name:this.formData.pllocation[i],active:true});
+              }
+              for(let i in this.formData.playrequires){
+                  enter.push({name:this.formData.playrequires[i],active:true});
+
+              }
+              for(let i in this.formData.plproducts){
+                  recommend.push({name:this.formData.plproducts[i],active:true});
+              }
+
+              this.enter_list = enter;
+              this.recommend_list = recommend;
+              this.location_list = location;
             }
           }
         )
@@ -417,9 +399,94 @@
         this.locationLabel = '';
         this.locationVisible = false;
       },
-    //
+      recommendSave(){
+        this.recommend_list.push({
+          name:this.recommendLabel,
+          active:true
+        });
+        this.recommendLabel = '';
+        this.recommendVisible = false;
+      },
+    //标签保存
       labelClick(index,name){
         this[name][index].active = !this[name][index].active;
+      },
+      //创建费用
+      postCost(status){
+        this.$http.post(this.$api.set_cost, this.formData).then(res => {
+          if (res.data.status == 200) {
+            this.formData.costs = res.data.data;
+            this.postInsurance(status);
+          }
+        });
+      },
+      //创建保险
+      postInsurance(status){
+        this.$http.post(this.$api.set_insurance, this.formData).then(res => {
+          if (res.data.status == 200) {
+            this.formData.insurances = res.data.data;
+            this.postDraft(status);
+          }
+        });
+      },
+      postDraft(status){
+        let enter =[],location=[],recommend=[];
+        for(let i in this.formData.pllocation){
+          if(this.formData.pllocation[i].active){
+            location.push(this.formData.pllocation[i].name);
+          }
+        }
+        for(let i in this.formData.playrequires){
+          if(this.formData.playrequires[i].active){
+            enter.push(this.formData.playrequires[i].name);
+          }
+        }
+        for(let i in this.formData.plproducts){
+          if(this.formData.plproducts[i].active){
+            recommend.push(this.formData.plproducts[i].name);
+          }
+        }
+
+        this.formData.plproducts = [].concat(recommend);
+        this.formData.playrequires = [].concat(enter);
+        this.formData.pllocation = [].concat(location);
+        this.formData.plstatus = status;
+        this.formData.plstarttime = this.time[0];
+        this.formData.plendtime = this.time[1];
+
+        this.$http.post(this.$api.set_play, this.formData).then(res => {
+          if (res.data.status == 200) {
+            if(status == 0){
+              this.$notify({
+                title: '保存成功',
+                message: '活动保存成功成功',
+                type: 'success'
+              });
+              this.$router.push('/guide/draft')
+            }else if(status == 1){
+              this.$notify({
+                title: '发布成功',
+                message: '您可在小程序-管理活动-我创建的-查看推广页查看',
+                type: 'success'
+              });
+              this.$router.push('/guide/draft')
+            }
+
+          }
+        });
+      },
+      //立即发布
+      submitDraft(){
+        if(this.agree){
+          this.postCost(1);
+        }else{
+          this.$message.warning('请先阅读大行星平台服务协议!');
+        }
+      },
+      //保存
+      saveDraft(){
+
+        this.postCost(0);
       }
 
     }
@@ -491,6 +558,9 @@
           color: #fff;
         }
       }
+    }
+    .m-blue{
+      color:#3498DB;
     }
     .contract-img {
       .wl(300px, auto);

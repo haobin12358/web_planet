@@ -1,20 +1,20 @@
 <template>
   <div class="container">
-<!--    <section class="tool-bar space-between">-->
-<!--      <el-form :inline="true">-->
-<!--        <el-form-item label="活动">-->
-<!--          <el-input v-model="formData.sspname" placeholder="请选择"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="活动标题">-->
-<!--          <el-input v-model="formData.ssparea" placeholder="标题"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>-->
-<!--        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>-->
-<!--      </el-form>-->
-<!--      <el-button type="primary" style="margin-bottom: 20px;" icon="el-icon-plus" @click="doAddScenic">新增</el-button>-->
+    <section class="tool-bar space-between">
+      <el-form :inline="true">
+        <el-form-item label="活动">
+          <el-input v-model="formData.sspname" placeholder="请选择"></el-input>
+        </el-form-item>
+        <el-form-item label="活动标题">
+          <el-input v-model="formData.ssparea" placeholder="标题"></el-input>
+        </el-form-item>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+      </el-form>
+      <el-button type="primary" style="margin-bottom: 20px;" icon="el-icon-plus" @click="doAddScenic">新增</el-button>
 
 
-<!--    </section>-->
+    </section>
 
     <el-table :data="tableData" v-loading="loading" style="width: 100%" >
 
@@ -49,12 +49,12 @@
               <el-table-column
                 prop="cosname"
                 label="费用名称"
-               >
+              >
               </el-table-column>
               <el-table-column
                 prop="cossubtotal"
                 label="金额"
-                >
+              >
               </el-table-column>
               <el-table-column
                 prop="cosdetail"
@@ -113,17 +113,17 @@
             width="400"
             trigger="hover"
           >
-           <div v-html="scope.row.plcontent || '无'"></div>
+            <div v-html="scope.row.plcontent || '无'"></div>
             <el-button slot="reference" type="text">预览</el-button>
           </el-popover>
         </template>
       </el-table-column>
-<!--      <el-table-column align="center" label="操作" width="240" fixed="right">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button type="text" @click="doEditScenic(scope.row)">编辑</el-button>-->
-<!--          <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+        <el-table-column align="center" label="操作" width="240" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" @click="doEditScenic(scope.row)">编辑</el-button>
+            <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
     </el-table>
     <section class="table-bottom">
       <el-pagination
@@ -216,7 +216,7 @@
         this.$router.push('/guide/editDraft');
       },
       doEditScenic(item){
-        this.$router.push({path:'/guide/editDraft',query:{id:item.sspid}})
+        this.$router.push({path:'/guide/editDraft',query:{id:item.plid}})
       },
       doRemoveScenic(item){
         let that = this;
@@ -226,9 +226,7 @@
           type: 'warning'
         }).then(() => {
           item.delete = true;
-          that.$http.post(that.$api.scenicspot_delete, {
-            sspid:item.sspid
-          }).then(res => {
+          that.$http.post(that.$api.set_play, item).then(res => {
             if (res.data.status == 200) {
               that.$notify({
                 title: '删除成功',

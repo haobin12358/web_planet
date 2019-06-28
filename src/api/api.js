@@ -254,6 +254,8 @@ const api = {
   set_cost: title +'play/set_cost',//创建费用
   set_insurance: title +'play/set_insurance',//创建保险
   get_insurance: title +'play/get_insurance',//获取保险
+  get_all_play: title +'play/get_all_play',//管理员获取活动列表
+  get_play_list: title +'play/get_play_list',//个人获取活动列表
 
 };
 

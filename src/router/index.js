@@ -38,6 +38,11 @@ export const constantRouterMap = [
     component: () => import('src/views/login/index'),
     hidden: true
   },
+  {
+    path: '/personalLogin',
+    component: () => import('src/views/login/personalLogin'),
+    hidden: true
+  },
   {path: '/404', component: () => import('src/views/errorPage/404'), hidden: true},
   {path: '/401', component: () => import('src/views/errorPage/401'), hidden: true},
 
@@ -570,11 +575,12 @@ export const asyncRouterMap = [
         path: 'draft',
         name: 'draft',
         component: () => import('src/views/guide/draft'),
-        meta: {title: '我的草稿', noCache: true, roles: level2}
+        meta: {title: '所有活动', noCache: true, roles: level2}
       },
       {
         path: 'editDraft',
         name: 'editDraft',
+        hidden:true,
         component: () => import('src/views/guide/editDraft'),
         meta: {title: '我的草稿', noCache: true, roles: level2}
       }
