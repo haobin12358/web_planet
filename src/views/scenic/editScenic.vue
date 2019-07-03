@@ -186,7 +186,7 @@
       computed: {
         // 上传图片
         uploadUrl() {
-          return this.$api.upload_file + getStore('token') + '&type=news'
+          return this.$api.upload_file + getStore('token') + '&type=scenicspot'
         },
       },
       components: {quillEditor},
