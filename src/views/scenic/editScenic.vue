@@ -64,7 +64,7 @@
             </el-form-item>
             <el-form-item label="内容" prop="sspcontent">
               <div class="editor">
-                <quill-editor ref="myTextEditor" :options="editorOption" v-model="formData.sspcontent" :config="editorOption"></quill-editor>
+                <quill-editor ref="myTextEditor" :options="editorOption" v-model="formData.sspcontent" :config="editorOption" @change="quillEditorChange($event)"></quill-editor>
               </div>
 
             </el-form-item>
@@ -89,6 +89,7 @@
           </el-form>
         </el-col>
       </el-row>
+      <input type="file" id="quill-img" class="quill-img" accept="image/*" @change="fileChange">
     </div>
 </template>
 
@@ -96,8 +97,17 @@
   import { quillEditor } from "vue-quill-editor";
   import 'quill/dist/quill.js';
   import { getStore } from "src/utils/index";
+  const toolbarOptions = [
+    ['bold','italic','underline','strike'],
+    [{size:['small',false,'large','huge']}],
+    [{font:[]}],
+    [{color:[]}],
+    [{align:[]}],
+    ['link','image']
+  ];
     export default {
         name: "editScenic",
+
       data(){
           return{
             formData:{
@@ -138,10 +148,20 @@
             aa_list:[],
             all_scenic:[],
             editorOption: {
-              // placeholder: "placeholder",
-              // 编辑器的配置
-              // something config
-              // theme: "bubble"
+              modules:{
+                toolbar:{
+                  container:toolbarOptions,
+                  handlers:{
+                    image:function (value) {
+                      if(value){
+                        document.getElementById('quill-img').click();
+                      }else{
+                        this.quill.format('image',false)
+                      }
+                    }
+                  }
+                }
+              }
             },
             level:[
               {
@@ -354,6 +374,35 @@
               }
             }
           )
+        },
+        quillEditorChange(e){
+          console.log(e)
+        },
+        fileChange(file){
+          let formData = new FormData();
+          formData.append('file', file.target.files[0]);
+          this.$http({method: 'post', url: this.uploadUrl, data: formData,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+            res => {
+              if (res.data.status == 200) {
+                // this.imagesUrl.push({
+                //   name: file.file.name,
+                //   url: res.data.data
+                // })
+                document.getElementById('quill-img').value = '';
+                this.quillImgSuccess(res)
+              }else{
+                this.$message.error(res.data.message);
+              }
+            }
+          )
+        },
+        quillImgSuccess(res){
+          let quill = this.$refs.myTextEditor.quill;
+          let length = quill.getSelection().index;
+          quill.insertEmbed(length,'image',res.data.data);
+          quill.setSelection(length+1);
+
         }
       }
     }
@@ -386,6 +435,11 @@
       max-height: 100%;
       margin-right: 30px;
       border: 1px solid black;
+    }
+    .quill-img{
+      opacity: 0;
+      position: fixed;
+      bottom: -100px;
     }
 
   }
