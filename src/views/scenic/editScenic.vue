@@ -74,7 +74,7 @@
               </el-switch>
             </el-form-item>
             <el-form-item label="关联景区" prop="parentid" v-if="formData.associated">
-              <el-select v-model="formData.parentid"  clearable placeholder="请选择">
+              <el-select v-model="formData.parentid"  filterable clearable placeholder="请选择">
                 <el-option
                   v-for="item in all_scenic"
                   :key="item.sspid"
