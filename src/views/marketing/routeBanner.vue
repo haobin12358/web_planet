@@ -65,7 +65,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-el-drag-dialog title="轮播图" :visible.sync="bannerDialog" top="5vh" :close-on-click-modal="false">
+    <el-dialog v-el-drag-dialog title="轮播图" :visible.sync="bannerDialog" top="5vh" @close="initBannerForm" :close-on-click-modal="false">
       <el-form :model="bannerForm" :rules="rules" ref="bannerFormRef" label-position="left"
                label-width="100px">
         <el-form-item label="轮播图" prop="mpbpicture">
@@ -210,13 +210,14 @@
       },
       // 新增banner的取消按钮
       initBannerForm() {
-        this.productList = [];
         this.$refs.bannerFormRef.resetFields();
         this.bannerForm = {
+          mpbid: '',
+          mpbposition:this.status,
           mpbpicture: '',
           mpbsort: '',
+          contentlink: '',
           mpbshow: false,
-          mpbposition:0
         };
         this.bannerDialog = false;
       },
@@ -324,6 +325,7 @@
       // 编辑banner
       editBanner(scope) {
         this.bannerForm = JSON.parse(JSON.stringify(scope.row));
+
         this.bannerDialog = true
       },
       // 记录点击的是哪一行
