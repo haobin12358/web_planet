@@ -257,6 +257,10 @@ const api = {
   get_all_play: title +'play/get_all_play',//管理员获取活动列表
   get_play_list: title +'play/get_play_list',//个人获取活动列表
 
+  list_mp_banner: title +'index/list_mp_banner',//获取小程序轮播图
+  set_mp_banner: title +'index/set_mp_banner',//设置小程序轮播图
+
+
 };
 
 export default api
