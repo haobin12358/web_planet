@@ -2,7 +2,7 @@
   <div class="login-container " >
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form"
              label-position="left">
-      <h3 class="title">大行星后台管理系统</h3>
+      <h3 class="title">旗行</h3>
       <div id="wx_qrcode">
 
       </div>

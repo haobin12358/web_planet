@@ -9,6 +9,9 @@ const whiteList = ['/login','/personalLogin'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getStore('token')) {
+    if(to.path == '/' && location.origin.indexOf('blog') > 0){
+      next({path: '/guide/personalDraft'})
+    }
     if (to.path === '/login' || to.path === '/personalLogin') {
 
       if(location.origin.indexOf('blog') > 0){
