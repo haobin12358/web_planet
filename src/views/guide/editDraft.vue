@@ -226,7 +226,23 @@
         time:[],
         label:'',
         enterVisible:false,
-        enter_list:[],
+        enter_list:[
+          {
+            name:'手机号',
+            active:true
+          },
+          {
+            name:'性别',
+            active:true
+          },
+          {
+            name:'真实姓名',
+            active:true
+          },{
+            name:'身份证号',
+            active:true
+          }
+        ],
         locationVisible:false,
         locationLabel:'',
         location_list:[],
@@ -541,6 +557,10 @@
       },
       //创建费用
       postCost(status){
+        if(this.cost_list.length == 0){
+          this.postInsurance(status);
+          return false;
+        }
         this.$http.post(this.$api.set_cost, {
           costs:this.cost_list
         }).then(res => {
@@ -552,6 +572,10 @@
       },
       //创建保险
       postInsurance(status){
+        if(this.insurance_list.length == 0){
+          this.postWithdraw(status);
+          return false;
+        }
         this.$http.post(this.$api.set_insurance, {
           insurance:this.insurance_list
         }).then(res => {
@@ -563,7 +587,10 @@
       },
       //创建保险
       postWithdraw(status){
-        console.log(this.withdraw_list);
+        if(this.insurance_list.length == 0){
+          this.postDraft(status);
+          return false;
+        }
         for(let i=0;i<this.withdraw_list.length;i++){
           this.withdraw_list[i].pddeltaday = this.withdraw_list[i].time[0];
           if(this.withdraw_list[i].time.length == 2){
@@ -581,19 +608,19 @@
       },
       postDraft(status){
         let enter =[],location=[],recommend=[];
-        for(let i in this.formData.pllocation){
-          if(this.formData.pllocation[i].active){
-            location.push(this.formData.pllocation[i].name);
+        for(let i in this.location_list){
+          if(this.location_list[i].active){
+            location.push(this.location_list[i].name);
           }
         }
-        for(let i in this.formData.playrequires){
-          if(this.formData.playrequires[i].active){
-            enter.push(this.formData.playrequires[i].name);
+        for(let i in this.enter_list){
+          if(this.enter_list[i].active){
+            enter.push(this.enter_list[i].name);
           }
         }
-        for(let i in this.formData.plproducts){
-          if(this.formData.plproducts[i].active){
-            recommend.push(this.formData.plproducts[i].name);
+        for(let i in this.recommend_list){
+          if(this.recommend_list[i].active){
+            recommend.push(this.recommend_list[i].name);
           }
         }
 
@@ -612,14 +639,14 @@
                 message: '活动保存成功成功',
                 type: 'success'
               });
-              this.$router.push('/guide/draft')
+              this.$router.push('/guide/personalDraft')
             }else if(status == 1){
               this.$notify({
                 title: '发布成功',
                 message: '您可在小程序-管理活动-我创建的-查看推广页查看',
                 type: 'success'
               });
-              this.$router.push('/guide/draft')
+              this.$router.push('/guide/personalDraft')
             }
 
           }
