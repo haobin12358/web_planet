@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column align="center" prop="sspname" label="起止时间" width="180">
         <template slot-scope="scope">
-          {{scope.row.plstarttime}} - {{scope.row.plstarttime}}
+          {{scope.row.plstarttime}} - {{scope.row.plendtime}}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="ssparea" label="地点" width="280">
