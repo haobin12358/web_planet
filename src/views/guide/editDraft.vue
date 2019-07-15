@@ -138,6 +138,26 @@
             </div>
 
           </el-form-item>
+          <el-form-item label="退团信息" prop="sspcontent">
+            <p  class="el-upload__tip">扣款金额</p>
+            <div class="m-cost-box " v-for="(item,index) in withdraw_list" v-if="!item.delete">
+              <img src="/static/images/icon-cut.png" class="m-icon" alt="" @click="withdrawCut(index)">
+              <el-row>
+                <el-col :span="10">
+                  <el-form-item label="距离活动开始时间" >
+                    <el-cascader :options="options" style="width: 200px;" v-model="item.time" clearable></el-cascader>
+                  </el-form-item>
+                  <el-form-item label="金额" >
+                    <el-input v-model="item.pdprice"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+            <div  class="m-cost-box ">
+              <img src="/static/images/icon-add-new.png" class="m-icon" @click="withdrawAdd" alt="">
+              <span>添加时间及金额</span>
+            </div>
+          </el-form-item>
           <el-form-item label="活动名称">
             <el-input v-model="formData.pltitle"></el-input>
 
@@ -187,6 +207,8 @@
         },
         cost_list:[],
         insurance_list:[],
+        withdraw_list:[],
+        options:[{value:0,label:0}],
         rules: {
           plnum: [
             { required: true, message: '最大承载人数必填', trigger: 'blur' }
@@ -226,12 +248,19 @@
         return this.$api.upload_file + getStore('token') + '&type=news'
       },
     },
+    watch :{
+      time(oldvalue,newvalue){
+        console.log(oldvalue);
+        this.initArray();
+      }
+    },
     components: {quillEditor},
     mounted() {
       if(this.$route.query.id){
         this.getFormData(this.$route.query.id);
         this.getCost(this.$route.query.id);
-        this.getInsurance(this.$route.query.id)//
+        this.getInsurance(this.$route.query.id);
+        this.getWithdraw(this.$route.query.id);
       }
 
     },
@@ -284,6 +313,24 @@
           }
         )
       },
+      getWithdraw(id){
+        this.$http.get(this.$api.get_discount, {
+          noLoading: true,
+          params: {
+            plid: id,
+          },
+        }).then(
+          res => {
+            this.loading = false;
+            console.log(res,'获取数据')
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+              this.withdraw_list_list = data;
+            }
+          }
+        )
+      },
       getFormData(id){
         this.$http.get(this.$api.get_play, {
           noLoading: true,
@@ -299,8 +346,10 @@
                 data = res.data.data;
               //
               this.formData = res.data.data;
-              this.time[0] = this.formData.plstarttime;
-              this.time[1] = this.formData.plendtime;
+              // this.time[0] = new Date(this.formData.plstarttime);
+              // this.time[1] = new Date(this.formData.plendtime);
+              this.time = [this.formData.plstarttime, this.formData.plendtime];
+              this.initArray();
               let enter =[],location=[],recommend=[];
               for(let i in this.formData.pllocation){
                   location.push({name:this.formData.pllocation[i],active:true});
@@ -381,6 +430,85 @@
 
         });
       },
+      //新增保险
+      withdrawAdd(){
+        this.withdraw_list.push({
+          pdid:'',
+          pddeltaday:'',
+          pddeltahour:'',
+          delete:false,
+          pdprice:''
+        })
+      },
+      //删除保险
+      withdrawCut(index){
+        let that = this;
+        this.$confirm('此操作将永久删除该扣款信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          that.withdraw_list[index].delete = true;
+          that.withdraw_list = [].concat(that.withdraw_list);
+          that.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+
+        });
+      },
+      //生成时间选择
+      initArray(){
+        // multiArray
+        let start = new Date(this.time[0]);
+        let end = new Date();
+        let arr1 =[];
+        let arr = [];
+        for(let i=1;i<24;i++){
+          arr.push({
+            label:i+'小时',
+            value:i
+          })
+        }
+        if((start.getMonth() > end.getMonth()) || (end.getFullYear() > start.getFullYear()) ){
+          for(let i=0;i<31;i++){
+            arr1.push({
+              label:i+'天',
+              value:i
+            })
+          }
+          arr1[0].children = arr;
+        }else if(start.getDate() > end.getDate()){
+          for(let i=0;i<= (start.getDate() - end.getDate());i++){
+            arr1.push({
+              label:i+'天',
+              value:i
+            })
+          }
+          arr1[0].children = arr;
+        }else if(start.getHours() > end.getHours()){
+          arr = [];
+          arr1.push({
+            label:'0天',
+            value:0
+          });
+          for(let i=0;i< (start.getHours() - end.getHours());i++){
+            arr.push({
+              label:i+'小时',
+              value:i
+            })
+          }
+          arr1[0].children = arr;
+        }else{
+          arr1.push({
+            label:'0天',
+            value:0
+          });
+        }
+        console.log(arr)
+        this.options = arr1;
+      },
     //  保存报名项
       enterSave(){
         this.enter_list.push({
@@ -413,7 +541,9 @@
       },
       //创建费用
       postCost(status){
-        this.$http.post(this.$api.set_cost, this.formData).then(res => {
+        this.$http.post(this.$api.set_cost, {
+          costs:this.cost_list
+        }).then(res => {
           if (res.data.status == 200) {
             this.formData.costs = res.data.data;
             this.postInsurance(status);
@@ -422,9 +552,29 @@
       },
       //创建保险
       postInsurance(status){
-        this.$http.post(this.$api.set_insurance, this.formData).then(res => {
+        this.$http.post(this.$api.set_insurance, {
+          insurance:this.insurance_list
+        }).then(res => {
           if (res.data.status == 200) {
             this.formData.insurances = res.data.data;
+            this.postWithdraw(status);
+          }
+        });
+      },
+      //创建保险
+      postWithdraw(status){
+        console.log(this.withdraw_list);
+        for(let i=0;i<this.withdraw_list.length;i++){
+          this.withdraw_list[i].pddeltaday = this.withdraw_list[i].time[0];
+          if(this.withdraw_list[i].time.length == 2){
+            this.withdraw_list[i].pddeltahour = this.withdraw_list[i].time[1];
+          }
+        }
+        this.$http.post(this.$api.set_discount, {
+          discounts:this.withdraw_list
+        }).then(res => {
+          if (res.data.status == 200) {
+            this.formData.discounts = res.data.data;
             this.postDraft(status);
           }
         });
@@ -485,7 +635,6 @@
       },
       //保存
       saveDraft(){
-
         this.postCost(0);
       }
 
@@ -552,6 +701,7 @@
         border:1px solid #3498DB;
         color: #3498DB;
         margin-right: 30px;
+        margin-bottom: 20px;
         text-align: center;
         &.active{
           background-color: #3498DB;

@@ -1,5 +1,5 @@
 import {logout, getInfo} from 'src/api/login'
-import {login, supplizerLogin, authRefresh} from 'src/service/index'
+import {login, supplizerLogin, authRefresh,personalLogin} from 'src/service/index'
 import {getStore, setStore, removeStore} from "src/utils/index";
 
 
@@ -50,6 +50,7 @@ const user = {
     //  router中配置好role
     Login({commit}, userInfo)      {
       return new Promise((resolve, reject) => {
+        console.log(userInfo.userType == 10,'user')
         if (userInfo.userType == 1) { //  管理员
           login(userInfo.username, userInfo.password).then(response => {
             if (response.data.status == 200) {
@@ -75,6 +76,31 @@ const user = {
             reject(error)
           })
         } else if(userInfo.userType == 10){     //普通用户
+          if(!getStore('token')){
+            personalLogin(userInfo.code).then(response => {
+              if (response.data.status == 200) {
+                let resData = response.data,
+                  data = resData.data;
+
+                setStore('token', data.token);
+                commit('SET_TOKEN', data.token)
+
+                let cookieUserInfo = {
+                  username: data.user.usname,
+                  personName: data.user.usname,
+                  avatar: data.user.usheader,
+                  level: 'personal'
+                }
+                setStore('User-Info', cookieUserInfo)
+                commit('SET_USER_INFO', cookieUserInfo)
+                resolve()
+              } else {
+                reject();
+              }
+            }).catch(error => {
+              reject(error)
+            })
+          }
 
         } else {  //  供应商
           supplizerLogin(userInfo.username, userInfo.password).then(response => {
@@ -83,7 +109,7 @@ const user = {
                 data = resData.data;
 
               setStore('token', data.token);
-              commit('SET_TOKEN', data.token)
+              commit('SET_TOKEN', data.token);
 
               let cookieUserInfo = {
                 username: data.supplizer.sulinkphone,

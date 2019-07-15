@@ -1,31 +1,34 @@
 <template>
-  <div class="login-container">
+  <div class="login-container " >
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form"
              label-position="left">
       <h3 class="title">大行星后台管理系统</h3>
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user"/>
-        </span>
-        <el-input v-model.trim="loginForm.username" maxlength="100" name="username" type="text" placeholder="用户名"/>
-      </el-form-item>
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password"/>
-        </span>
-        <el-input
-          :type="pwdType" v-model="loginForm.password" maxlength="100" name="password" placeholder="密码"
-          @keyup.enter.native="handleLogin"/>
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon icon-class="eye"/>
-        </span>
-      </el-form-item>
+      <div id="wx_qrcode">
 
-      <el-form-item>
-        <el-button :loading="loading" type="primary" style="width: 100%;" @click.native.prevent="handleLogin">
-          登录
-        </el-button>
-      </el-form-item>
+      </div>
+<!--      <el-form-item prop="username">-->
+<!--        <span class="svg-container">-->
+<!--          <svg-icon icon-class="user"/>-->
+<!--        </span>-->
+<!--        <el-input v-model.trim="loginForm.username" maxlength="100" name="username" type="text" placeholder="用户名"/>-->
+<!--      </el-form-item>-->
+<!--      <el-form-item prop="password">-->
+<!--        <span class="svg-container">-->
+<!--          <svg-icon icon-class="password"/>-->
+<!--        </span>-->
+<!--        <el-input-->
+<!--          :type="pwdType" v-model="loginForm.password" maxlength="100" name="password" placeholder="密码"-->
+<!--          @keyup.enter.native="handleLogin"/>-->
+<!--        <span class="show-pwd" @click="showPwd">-->
+<!--          <svg-icon icon-class="eye"/>-->
+<!--        </span>-->
+<!--      </el-form-item>-->
+
+<!--      <el-form-item>-->
+<!--        <el-button :loading="loading" type="primary" style="width: 100%;" @click.native.prevent="handleLogin">-->
+<!--          登录-->
+<!--        </el-button>-->
+<!--      </el-form-item>-->
 
 <!--      <el-radio-group v-model="loginForm.userType">-->
 <!--        <el-radio label="1" name="userType" border>管理员</el-radio>-->
@@ -124,6 +127,19 @@
 
     created() {
       // console.log(this.$http, this.$api);
+    },
+    mounted(){
+      var obj = new WxLogin({   
+        id : "wx_qrcode",
+        appid : "wx5b965f3dc955f51c",   
+        agentid : "", 
+        redirect_uri :"https://blog.bigxingxing.com/api/v2/user/blog_callback?url=" + location.origin ,
+        state : "",
+        href : "",
+        style:'white',
+        scope: 'snsapi_login',
+        self_redirect: false
+      });
     }
   }
 </script>
@@ -179,6 +195,11 @@
       max-width: 100%;
       padding: 35px 35px 15px 35px;
       margin: 120px auto;
+      #wx_qrcode{
+        width: 300px;
+        height: 400px;
+        margin-left:80px;
+      }
     }
     .tips {
       font-size: 14px;

@@ -2,11 +2,18 @@
   <div class="container">
     <section class="tool-bar space-between">
       <el-form :inline="true">
-        <el-form-item label="活动">
-          <el-input v-model="formData.sspname" placeholder="请选择"></el-input>
-        </el-form-item>
         <el-form-item label="活动标题">
-          <el-input v-model="formData.ssparea" placeholder="标题"></el-input>
+          <el-input v-model="formData.pltitle" placeholder="标题"></el-input>
+        </el-form-item>
+        <el-form-item label="活动状态">
+          <el-select v-model="formData.plstatus" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
         <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
@@ -35,13 +42,15 @@
       </el-table-column>
       <el-table-column align="center" prop="plnum" label="最大承载人数" width="120">
       </el-table-column>
+      <el-table-column align="center" prop="plstatus_zh" label="活动状态" width="120">
+      </el-table-column>
       <el-table-column align="center" label="活动费用" >
         <template slot-scope="scope">
           <el-popover
             placement="bottom"
             title="费用明细"
             width="400"
-            trigger="hover"
+            trigger="click"
           >
             <el-table
               :data="scope.row.costs"
@@ -61,7 +70,7 @@
                 label="费用详情">
               </el-table-column>
             </el-table>
-            <el-button slot="reference" type="text">预览</el-button>
+            <el-button slot="reference" type="text" @click="lookData(scope.$index,'costs')">预览</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -71,7 +80,7 @@
             placement="bottom"
             title="费用明细"
             width="400"
-            trigger="hover"
+            trigger="click"
           >
             <el-table
               :data="scope.row.insurances"
@@ -91,7 +100,36 @@
                 label="费用详情">
               </el-table-column>
             </el-table>
-            <el-button slot="reference" type="text">预览</el-button>
+            <el-button slot="reference" type="text" @click="lookData(scope.$index,'insurances')">预览</el-button>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="parent_scenicspot.sspname" label="退团信息" width="280">
+        <template slot-scope="scope">
+          <el-popover
+            placement="bottom"
+            title="费用明细"
+            width="400"
+            trigger="click"
+          >
+            <el-table
+              :data="scope.row.discounts"
+              style="width: 100%">
+              <el-table-column
+                prop="inname"
+                label="时间"
+              >
+                <template slot-scope="scope">
+                  <span>{{scope.row.pddeltaday}}天{{scope.row.pddeltahour}}小时</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="pdprice"
+                label="金额"
+              >
+              </el-table-column>
+            </el-table>
+            <el-button slot="reference" type="text" @click="lookData(scope.$index,'discounts')">预览</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -114,14 +152,14 @@
             trigger="hover"
           >
             <div v-html="scope.row.plcontent || '无'"></div>
-            <el-button slot="reference" type="text">预览</el-button>
+            <el-button slot="reference" type="text" >预览</el-button>
           </el-popover>
         </template>
       </el-table-column>
         <el-table-column align="center" label="操作" width="240" fixed="right">
           <template slot-scope="scope">
-            <el-button type="text" @click="doEditScenic(scope.row)">编辑</el-button>
-            <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>
+            <el-button type="text" v-if="scope.row.editstatus" @click="doEditScenic(scope.row)">编辑</el-button>
+            <el-button type="text" v-if="scope.row.plstatus == 0 ||  scope.row.plstatus == 3" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>
           </template>
         </el-table-column>
     </el-table>
@@ -154,15 +192,37 @@
     data() {
       return {
         formData: {
-          ssparea: '',
-          sspname:''
+          pltitle:'',
+          plstatus:''
         },
         loading: false,
         total: 0,
         currentPage: 1,
         pageSize: 10,
         tableData: [],
-
+        options: [{
+          value: '',
+          label: '全部'
+        }, {
+          value: '0',
+          label: '草稿'
+        }, {
+          value: '1',
+          label: '组队中'
+        }, {
+          value: '2',
+          label: '活动中'
+        }, {
+          value: '3',
+          label: '已关闭'
+        }, {
+          value: '4',
+          label: '转让中'
+        }, {
+          value: '5',
+          label: '待支付'
+        }
+        ],
       }
 
     },
@@ -175,18 +235,20 @@
       },
       doReset(){
         this.formData = {
-          aaid: '',
-          sspname:''
+          pltitle:'',
+          plstatus:''
         };
         this.doSearch();
       },
       getTable() {
         this.loading = true;
-        this.$http.get(this.$api.get_all_play, {
+        this.$http.get(this.$api.get_play_list, {
           noLoading: true,
           params: {
             page_size:this.pageSize,
-            page_num:this.currentPage
+            page_num:this.currentPage,
+            pltitle:this.formData.pltitle,
+            plstatus: this.formData.plstatus
           },
         }).then(
           res => {
@@ -202,7 +264,66 @@
           }
         )
       },
-
+      lookData(index,name){
+        switch (name) {
+          case 'costs':
+            this.$http.get(this.$api.get_cost, {
+              noLoading: true,
+              params: {
+                plid: this.tableData[index].plid,
+              },
+            }).then(
+              res => {
+                this.loading = false;
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+                  this.tableData[index].costs = data;
+                  this.tableData = [].concat(this.tableData);
+                }
+              }
+            )
+                break;
+          case 'insurances':
+            this.$http.get(this.$api.get_insurance, {
+              noLoading: true,
+              params: {
+                plid: this.tableData[index].plid,
+              },
+            }).then(
+              res => {
+                this.loading = false;
+                console.log(res,'获取数据')
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+                  this.tableData[index].insurance = data;
+                  this.tableData = [].concat(this.tableData);
+                }
+              }
+            );
+            break;
+          case 'discounts':
+            this.$http.get(this.$api.get_discount, {
+              noLoading: true,
+              params: {
+                plid: this.tableData[index].plid,
+              },
+            }).then(
+              res => {
+                this.loading = false;
+                console.log(res,'获取数据')
+                if (res.data.status == 200) {
+                  let resData = res.data,
+                    data = res.data.data;
+                  this.tableData[index].discounts = data.discounts;
+                  this.tableData = [].concat(this.tableData);
+                }
+              }
+            );
+            break;
+        }
+      },
       sizeChange(pageSize) {
         this.pageSize = pageSize;
         this.currentPage = 1;

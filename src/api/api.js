@@ -1,7 +1,7 @@
 let title = '';
 
 // title = 'https://planet.daaiti.cn/api/v1/';
-if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localhost') > 0){
+if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localhost') > 0 || location.origin.indexOf('playblog') > 0){
   // title = 'http://10.0.8.110:7443/api/v2/';
   title = 'https://play.bigxingxing.com/api/v2/'; //测试
 }else if(location.origin.indexOf('premanager') > 0){
@@ -13,6 +13,7 @@ if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localh
 
 const api = {
   login: title + 'user/admin_login',                                      // 用户登录
+  personal_login: title +'user/blog_login',                             //微信登录
   auth_fresh: title + 'auth/fresh',                                       // 刷新token
 
   history_detail: title + 'order/history_detail',                         // 概览页历史数据
@@ -254,6 +255,8 @@ const api = {
   set_cost: title +'play/set_cost',//创建费用
   set_insurance: title +'play/set_insurance',//创建保险
   get_insurance: title +'play/get_insurance',//获取保险
+  get_discount: title +'play/get_discount',//获取扣款
+  set_discount: title +'play/set_discount',//设置扣款
   get_all_play: title +'play/get_all_play',//管理员获取活动列表
   get_play_list: title +'play/get_play_list',//个人获取活动列表
 

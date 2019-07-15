@@ -10,6 +10,16 @@ export function login(username, password) {
     }
   })
 }
+export function personal_login(code) {
+  return request({
+    url: '/user/personal_login',
+    method: 'post',
+    data: {
+      code
+    }
+  })
+}
+
 
 export function getInfo(token) {
   return request({

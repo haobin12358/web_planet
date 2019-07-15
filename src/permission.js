@@ -5,12 +5,17 @@ import 'nprogress/nprogress.css'// Progress 进度条样式
 import {Message} from 'element-ui'
 import {getStore, setStore} from "src/utils/index";
 
-const whiteList = ['/login'] // 不重定向白名单
+const whiteList = ['/login','/personalLogin'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getStore('token')) {
-    if (to.path === '/login') {
-      next({path: '/'})
+    if (to.path === '/login' || to.path === '/personalLogin') {
+
+      if(location.origin.indexOf('blog') > 0){
+        next({path: '/guide/personalDraft'}) // 否则全部重定向到登录页
+      }else{
+        next({path: '/'}) // 否则全部重定向到登录页
+      }
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.roles.length === 0) {
@@ -45,8 +50,13 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      // next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
-      next(`/login`) // 否则全部重定向到登录页
+      // next(`/login?redirect=${to.path}`) //
+      //否则全部重定向到登录页
+      if(location.origin.indexOf('blog') > 0){
+        next(`/personalLogin`) // 否则全部重定向到登录页
+      }else{
+         next(`/login`) // 否则全部重定向到登录页
+      }
       NProgress.done()
     }
   }

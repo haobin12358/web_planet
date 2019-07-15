@@ -46,19 +46,7 @@ export const constantRouterMap = [
   {path: '/404', component: () => import('src/views/errorPage/404'), hidden: true},
   {path: '/401', component: () => import('src/views/errorPage/401'), hidden: true},
 
-  {
-    path: '',
-    component: Layout,
-    redirect: 'profile',
-    children: [
-      {
-        path: 'profile',
-        name: 'ProfileIndex',
-        component: () => import('src/views/profile/index'),
-        meta: {title: '概览', icon: 'gailan', noCache: true}
-      }
-    ]
-  },
+
 ]
 
 export default new Router({
@@ -75,8 +63,24 @@ export const level0 = ['supplizer']; //  供应商可见
 export const level1 = ['supplizer', 'admin', 'super']; //  三角色都可见
 export const level2 = ['admin', 'super'];  //  管理员可见
 export const level3 = ['super']; //  超管可见
+export const level4 = ['admin', 'super','personal']; //  普通用户
+export const level5 = ['personal']; //  普通用户
 
 export const asyncRouterMap = [
+  {
+    path: '',
+    component: Layout,
+    redirect: 'profile',
+    meta: { roles: level1},
+    children: [
+      {
+        path: 'profile',
+        name: 'ProfileIndex',
+        component: () => import('src/views/profile/index'),
+        meta: {title: '概览', icon: 'gailan', noCache: true, roles: level1}
+      }
+    ]
+  },
   {
     path: '/product',
     component: Layout,
@@ -466,7 +470,7 @@ export const asyncRouterMap = [
     alwaysShow: true,
     redirect: '/activity/index',
     name: 'Activity',
-    meta: {title: '活动', icon: 'huodong'},
+    meta: {title: '活动', icon: 'huodong',roles: level2},
     children: [
       {
         path: 'index',
@@ -574,7 +578,7 @@ export const asyncRouterMap = [
     redirect: '/guide/draft',
     alwaysShow: true,
     // name: 'personSettingPa',
-    meta: {title: '导游素材', icon: 'iconGuide', roles: level2},
+    meta: {title: '导游素材', icon: 'iconGuide', roles: level4},
     children: [
       {
         path: 'draft',
@@ -583,11 +587,17 @@ export const asyncRouterMap = [
         meta: {title: '所有活动', noCache: true, roles: level2}
       },
       {
+        path: 'personalDraft',
+        name: 'personalDraft',
+        component: () => import('src/views/guide/personalDraft'),
+        meta: {title: '所有活动', noCache: true, roles: level5}
+      },
+      {
         path: 'editDraft',
         name: 'editDraft',
         hidden:true,
         component: () => import('src/views/guide/editDraft'),
-        meta: {title: '我的草稿', noCache: true, roles: level2}
+        meta: {title: '我的草稿', noCache: true, roles: level4}
       }
     ]
   },

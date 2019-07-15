@@ -19,8 +19,15 @@ export const supplizerLogin = (mobile, password) => axios(api.supplizer_login, {
   },
 });
 
+export const personalLogin = (code) => axios(api.personal_login, {
+  noLoading: true,
+  method: 'post',
+  data:{
+    code
+  }
+});
+
 export const authRefresh = (mobile, password) => axios(api.auth_fresh, {
   noLoading: true,
   method: 'get',
 });
-
