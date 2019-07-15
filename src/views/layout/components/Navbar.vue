@@ -25,8 +25,8 @@
 
           <i class="el-icon-caret-bottom"/>
         </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <el-dropdown-item command="pwd">
+        <el-dropdown-menu slot="dropdown"  class="user-dropdown">
+          <el-dropdown-item command="pwd" v-if="userInfo.level != 'personal'">
             修改密码
           </el-dropdown-item>
           <el-dropdown-item command="logout" divided>
@@ -71,6 +71,9 @@
         'device',
         'userInfo'
       ])
+    },
+    created(){
+      console.log(this)
     },
     methods: {
       checkPermission,
