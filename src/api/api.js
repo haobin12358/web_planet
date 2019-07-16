@@ -263,6 +263,10 @@ const api = {
   list_mp_banner: title +'index/list_mp_banner',//获取小程序轮播图
   set_mp_banner: title +'index/set_mp_banner',//设置小程序轮播图
 
+  toilet_list: title +'scenicspot/toilet_list',//厕所列表
+  get_toilet : title +'scenicspot/get_toilet',//获取厕所详情
+  update_toilet: title +'scenicspot/update_toilet',//编辑厕所
+  add_toilet: title +'scenicspot/add_toilet',//新增厕所
 
 };
 

@@ -402,6 +402,12 @@ export const asyncRouterMap = [
         component: () => import('src/views/approval/supplizerBalanceApplyAudit'),
         meta: {title: '供应商结算异常申请审批', icon: 'yes', noCache: true, roles: level2}
       },
+      {
+        path: 'toiletAudit',
+        name: 'toiletAudit',
+        component: () => import('src/views/approval/toiletAudit'),
+        meta: {title: '厕所审批', icon: 'yes', noCache: true, roles: level2}
+      },
     ]
   },
 
@@ -621,7 +627,18 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/scenic/editScenic'),
         meta: {title: '景区编辑',noCache: true, roles: level2}
-      }
+      },{
+        path: 'toilet',
+        name: 'toilet',
+        component: () => import('src/views/scenic/toilet'),
+        meta: {title: '厕所管理', noCache: true, roles: level2}
+      }, {
+        path: 'editToilet',
+        name: 'editToilet',
+        hidden: true,
+        component: () => import('src/views/scenic/editToilet'),
+        meta: {title: '厕所编辑',noCache: true, roles: level2}
+      },
     ]
   },
   // {

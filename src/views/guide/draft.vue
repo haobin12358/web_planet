@@ -243,7 +243,7 @@
                 if (res.data.status == 200) {
                   let resData = res.data,
                     data = res.data.data;
-                  this.tableData[index].insurance = data;
+                  this.tableData[index].insurances = data;
                   this.tableData = [].concat(this.tableData);
                 }
               }
