@@ -527,28 +527,34 @@
       },
     //  保存报名项
       enterSave(){
-        this.enter_list.push({
-          name:this.label,
-          active:true
-        });
-        this.label = '';
+        if(this.label.replace(/^\s*|\s*$/g,"")){
+          this.enter_list.push({
+            name:this.label,
+            active:true
+          });
+          this.label = '';
+        }
         this.enterVisible = false;
       },
       //  保存报名项
       locationSave(){
-        this.location_list.push({
-          name:this.locationLabel,
-          active:true
-        });
-        this.locationLabel = '';
+        if(this.locationLabel.replace(/^\s*|\s*$/g,"")){
+          this.location_list.push({
+            name:this.locationLabel,
+            active:true
+          });
+          this.locationLabel = '';
+        }
         this.locationVisible = false;
       },
       recommendSave(){
-        this.recommend_list.push({
-          name:this.recommendLabel,
-          active:true
-        });
-        this.recommendLabel = '';
+        if(this.recommendLabel.replace(/^\s*|\s*$/g,"")){
+          this.recommend_list.push({
+            name:this.recommendLabel,
+            active:true
+          });
+          this.recommendLabel = '';
+        }
         this.recommendVisible = false;
       },
     //标签保存
