@@ -4,9 +4,9 @@ let title = '';
 if(location.origin.indexOf('playmanager') > 0 || location.origin.indexOf('localhost') > 0 || location.origin.indexOf('playblog') > 0){
   // title = 'http://10.0.8.110:7443/api/v2/';
   title = 'https://play.bigxingxing.com/api/v2/'; //测试
-}else if(location.origin.indexOf('premanager') > 0){
+}else if(location.origin.indexOf('premanager') > 0 || location.origin.indexOf('preblog') > 0){
   title = 'https://pre2.bigxingxing.com/api/v2/'
-}else if(location.origin.indexOf('//manager.') >0){
+}else if(location.origin.indexOf('//manager.') >0 || location.origin.indexOf('//blog.') > 0){
   title = 'https://www.bigxingxing.com/api/v2/';  // 正式
 }
 
