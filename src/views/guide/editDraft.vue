@@ -118,7 +118,7 @@
             </div>
             <div  class="m-cost-box ">
               <img src="/static/images/icon-add-new.png" class="m-icon" @click="insuranceAdd" alt="">
-              <span>添加费用</span>
+              <span>添加保险</span>
             </div>
           </el-form-item>
           <el-form-item label="推荐携带物品" >
@@ -164,7 +164,7 @@
           </el-form-item>
           <el-form-item label="推文" >
             <div class="editor">
-              <quill-editor ref="myTextEditor" :options="editorOption" v-model="formData.plcontent" :config="editorOption"></quill-editor>
+              <quill-editor ref="myTextEditor" @change="quillEditorChange($event)" :options="editorOption" v-model="formData.plcontent" :config="editorOption"></quill-editor>
             </div>
 
           </el-form-item>
@@ -179,6 +179,7 @@
         </el-form>
       </el-col>
     </el-row>
+    <input type="file" multiple="true" id="quill-img" class="quill-img" accept="image/*" @change="fileChange">
   </div>
 </template>
 
@@ -186,6 +187,14 @@
   import { quillEditor } from "vue-quill-editor";
   import 'quill/dist/quill.js';
   import { getStore } from "src/utils/index";
+  const toolbarOptions = [
+    ['bold','italic','underline','strike'],
+    [{size:['small',false,'large','huge']}],
+    [{font:[]}],
+    [{color:[]}],
+    [{align:[]}],
+    ['link','image','video']
+  ];
   export default {
     name: "editDraft",
     data(){
@@ -250,10 +259,20 @@
         recommendVisible:false,
         recommendLabel:'',
         editorOption: {
-          // placeholder: "placeholder",
-          // 编辑器的配置
-          // something config
-          // theme: "bubble"
+          modules:{
+            toolbar:{
+              container:toolbarOptions,
+              handlers:{
+                image:function (value) {
+                  if(value){
+                    document.getElementById('quill-img').click();
+                  }else{
+                    this.quill.format('image',false)
+                  }
+                }
+              }
+            }
+          }
         },
         agree:false
       }
@@ -669,6 +688,38 @@
       //保存
       saveDraft(){
         this.postCost(0);
+      },
+      quillEditorChange(e){
+        console.log(e)
+      },
+      fileChange(file){
+        for(let i =0;i<file.target.files.length;i++){
+          let formData = new FormData();
+          formData.append('file', file.target.files[i]);
+          this.$http({method: 'post', url: this.uploadUrl, data: formData,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(
+            res => {
+              if (res.data.status == 200) {
+                // this.imagesUrl.push({
+                //   name: file.file.name,
+                //   url: res.data.data
+                // })
+                document.getElementById('quill-img').value = '';
+                this.quillImgSuccess(res)
+              }else{
+                this.$message.error(res.data.message);
+              }
+            }
+          )
+        }
+
+      },
+      quillImgSuccess(res){
+        let quill = this.$refs.myTextEditor.quill;
+        let length = quill.getSelection().index;
+        quill.insertEmbed(length,'image',res.data.data);
+        quill.setSelection(length+1);
+
       }
 
     }
@@ -728,9 +779,11 @@
       flex-wrap: wrap;
       .m-label{
         display: block;
-        width: 120px;
+        min-width: 120px;
         height: 40px;
         line-height: 40px;
+        box-sizing: border-box;
+        padding: 0 20px;
         border:1px solid #3498DB;
         color: #3498DB;
         margin-right: 30px;
@@ -751,6 +804,10 @@
       margin-right: 30px;
       border: 1px solid black;
     }
-
+    .quill-img{
+      opacity: 0;
+      position: fixed;
+      bottom: -100px;
+    }
   }
 </style>
