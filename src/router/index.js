@@ -408,6 +408,12 @@ export const asyncRouterMap = [
         component: () => import('src/views/approval/toiletAudit'),
         meta: {title: '厕所审批', icon: 'yes', noCache: true, roles: level2}
       },
+      {
+        path: 'guideAudit',
+        name: 'guideAudit',
+        component: () => import('src/views/approval/guideAudit'),
+        meta: {title: '导游审批', icon: 'yes', noCache: true, roles: level2}
+      },
     ]
   },
 

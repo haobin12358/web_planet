@@ -357,11 +357,15 @@
         }).then(
           res => {
             this.loading = false;
-            console.log(res,'获取数据')
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
-              this.withdraw_list_list = data;
+              this.withdraw_list = data.discounts;
+              for(let i=0;i<this.withdraw_list.length;i++){
+                this.withdraw_list[i].time = [this.withdraw_list[i].pddeltaday,this.withdraw_list[i].pddeltahour]
+              }
+              console.log(this.withdraw_list,'afafa')
+              this.initArray();
             }
           }
         )
@@ -375,7 +379,6 @@
         }).then(
           res => {
             this.loading = false;
-            console.log(res,'获取数据')
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
@@ -384,7 +387,8 @@
               // this.time[0] = new Date(this.formData.plstarttime);
               // this.time[1] = new Date(this.formData.plendtime);
               this.time = [this.formData.plstarttime, this.formData.plendtime];
-              this.initArray();
+
+
               let enter =[],location=[],recommend=[];
               for(let i in this.formData.pllocation){
                   location.push({name:this.formData.pllocation[i],active:true});
@@ -495,6 +499,7 @@
       },
       //生成时间选择
       initArray(){
+        console.log('初始化时间')
         // multiArray
         let start = new Date(this.time[0]);
         let end = new Date();
@@ -541,7 +546,6 @@
             value:0
           });
         }
-        console.log(arr)
         this.options = arr1;
       },
     //  保存报名项

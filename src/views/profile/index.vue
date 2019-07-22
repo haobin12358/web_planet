@@ -354,6 +354,9 @@
           case 'totoilet':
             this.$router.push('/approval/toiletAudit');
             break;
+          case 'toguide':
+            this.$router.push('/approval/guideAudit');
+            break;
 
           //    自定义:发货订单,不在审批流内,合并显示
           case 'towaitdelivery':
