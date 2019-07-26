@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <section class="tool-bar space-between">
+  <div class="container " >
+    <section class="tool-bar space-between" v-if="$store.state.user.userInfo.level == 'personal'">
       <el-form :inline="true">
         <el-form-item label="活动标题">
           <el-input v-model="formData.pltitle" placeholder="标题"></el-input>
@@ -156,7 +156,7 @@
           </el-popover>
         </template>
       </el-table-column>
-        <el-table-column align="center" label="操作" width="240" fixed="right">
+        <el-table-column align="center" label="操作" v-if="$store.state.user.userInfo.level == 'personal'" width="240" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" v-if="scope.row.editstatus" @click="doEditScenic(scope.row)">编辑</el-button>
             <el-button type="text" v-if="scope.row.plstatus == 0 ||  scope.row.plstatus == 3" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>
@@ -242,27 +242,50 @@
       },
       getTable() {
         this.loading = true;
-        this.$http.get(this.$api.get_play_list, {
-          noLoading: true,
-          params: {
-            page_size:this.pageSize,
-            page_num:this.currentPage,
-            pltitle:this.formData.pltitle,
-            plstatus: this.formData.plstatus
-          },
-        }).then(
-          res => {
-            this.loading = false;
+        if(this.$store.state.user.userInfo.level != 'personal'){
+          this.$http.get(this.$api.get_all_play, {
+            noLoading: true,
+            params: {
+              page_size:this.pageSize,
+              page_num:this.currentPage
+            },
+          }).then(
+            res => {
+              this.loading = false;
 
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
 
-              this.tableData = data;
-              this.total = resData.total_count;
+                this.tableData = data;
+                this.total = resData.total_count;
+              }
             }
-          }
-        )
+          )
+        }else{
+          this.$http.get(this.$api.get_play_list, {
+            noLoading: true,
+            params: {
+              page_size:this.pageSize,
+              page_num:this.currentPage,
+              pltitle:this.formData.pltitle,
+              plstatus: this.formData.plstatus
+            },
+          }).then(
+            res => {
+              this.loading = false;
+
+              if (res.data.status == 200) {
+                let resData = res.data,
+                  data = res.data.data;
+
+                this.tableData = data;
+                this.total = resData.total_count;
+              }
+            }
+          )
+        }
+
       },
       lookData(index,name){
         switch (name) {

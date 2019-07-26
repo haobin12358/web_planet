@@ -592,25 +592,51 @@ export const asyncRouterMap = [
     // name: 'personSettingPa',
     meta: {title: '导游素材', icon: 'iconGuide', roles: level4},
     children: [
-      {
-        path: 'draft',
-        name: 'draft',
-        component: () => import('src/views/guide/draft'),
-        meta: {title: '所有活动', noCache: true, roles: level2}
-      },
+      // {
+      //   path: 'draft',
+      //   name: 'draft',
+      //   component: () => import('src/views/guide/draft'),
+      //   meta: {title: '所有活动', noCache: true, roles: level4}
+      // },
       {
         path: 'personalDraft',
         name: 'personalDraft',
         component: () => import('src/views/guide/personalDraft'),
-        meta: {title: '所有活动', noCache: true, roles: level5}
+        meta: {title: '所有活动', noCache: true, roles: level4}
       },
       {
         path: 'editDraft',
         name: 'editDraft',
         hidden:true,
         component: () => import('src/views/guide/editDraft'),
-        meta: {title: '我的草稿', noCache: true, roles: level4}
-      }
+        meta: {title: '我的草稿', noCache: true, roles: level5}
+      },
+      {
+        path: 'travelNotes',
+        name: 'travelNotes',
+        component: () => import('src/views/guide/travelNotes'),
+        meta: {title: '所有游记', noCache: true, roles: level4}
+      },
+      {
+        path: 'editTravelNote',
+        name: 'editTravelNote',
+        hidden:true,
+        component: () => import('src/views/guide/editTravelNote'),
+        meta: {title: '游记编辑', noCache: true, roles: level5}
+      },
+      {
+        path: 'strategy',
+        name: 'strategy',
+        component: () => import('src/views/guide/strategy'),
+        meta: {title: '所有攻略', noCache: true, roles: level4}
+      },
+      {
+        path: 'editStrategy',
+        name: 'editStrategy',
+        hidden:true,
+        component: () => import('src/views/guide/editStrategy'),
+        meta: {title: '攻略编辑', noCache: true, roles: level5}
+      },
     ]
   },
   {

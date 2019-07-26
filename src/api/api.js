@@ -268,6 +268,10 @@ const api = {
   update_toilet: title +'scenicspot/update_toilet',//编辑厕所
   add_toilet: title +'scenicspot/add_toilet',//新增厕所
 
+  travelrecord_list: title +'scenicspot/travelrecord_list',//获取游记或攻略
+  get_travelrecord: title +'scenicspot/get_travelrecord',//获取游记或攻略的详情
+  add_travelrecord: title +'scenicspot/add_travelrecord',//发布游记或攻略
+  del_travelrecord : title +'scenicspot/del_travelrecord',//删除时光记录
 };
 
 export default api
