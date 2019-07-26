@@ -117,6 +117,9 @@
             <el-switch v-model="couponForm.cocode"
                        active-color="#409EFF" inactive-color="#DBDCDC"></el-switch>
           </el-form-item>
+          <el-form-item label="权重：" >
+            <el-input v-model="couponForm.cosort" style="width: 200px"></el-input>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="checkFormData">保存优惠券</el-button>
           </el-form-item>
@@ -174,7 +177,8 @@
           itids: [],
           prids: [],
           pbids: [],
-          cocode:0
+          cocode:0,
+          cosort:''
         },
         rules: {
           coname: [
@@ -256,6 +260,7 @@
         this.couponForm.coname = coupon.coname;
         this.couponForm.codesc = coupon.codesc;
         this.couponForm.cocode = coupon.cocode;
+        this.couponForm.cosort = coupon.cosort;
         // 处理标签
         for(let i in coupon.items) {
           this.itemList.push(coupon.items[i].itid)

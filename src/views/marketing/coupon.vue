@@ -27,6 +27,7 @@
                        :render-header="startTimeHeaderRender"></el-table-column>
       <el-table-column label="剩余数量" align="center" prop="coremainnum" width="100"></el-table-column>
       <el-table-column label="发放数量" align="center" prop="colimitnum" width="100"></el-table-column>
+      <el-table-column label="权重" align="center" prop="cosort" width="100"></el-table-column>
       <el-table-column label="兑换码兑换" align="center" prop="cocode" width="100">
         <template slot-scope="scope">
           <el-switch
