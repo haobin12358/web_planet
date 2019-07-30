@@ -336,7 +336,9 @@
           <!--</div>-->
         <!--</el-upload>-->
       </el-form-item>
-
+      <el-form-item label="权重：" >
+        <el-input v-model="formData.prsort" style="width: 200px"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="checkFormData">保存商品</el-button>
       </el-form-item>
@@ -431,7 +433,7 @@
 
         formData: {
           prid: '',
-
+          prsort:'',
           pcid: "",
           pbid: "",
           items: [],
@@ -1339,7 +1341,7 @@
       reset() {
         this.formData = {
           prid: '',
-
+          prsort:'',
           pcid: "",
           pbid: "",
           items: [],

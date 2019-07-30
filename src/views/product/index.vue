@@ -86,6 +86,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
+      <el-table-column align="center" prop="prsort" sortable label="权重" width="120"></el-table-column>
       <el-table-column align="center" prop="prquery"  label="浏览量" width="120" v-if="$store.state.user.userInfo.level != 'supplizer'"></el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">
         <template slot-scope="scope">

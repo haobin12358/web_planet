@@ -53,6 +53,7 @@
           <span v-if="scope.row.pbintegralpayrate">{{scope.row.pbintegralpayrate}}%</span>
         </template>
       </el-table-column>
+        <el-table-column label="权重" align="center" prop="pbsort" width="180"></el-table-column>
       <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
       <el-table-column label="创建时间" align="center" prop="createtime" width="180"></el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
@@ -147,6 +148,9 @@
           <el-input v-model.trim="brandForm.pbintegralpayrate"  >
             <template slot="append">%</template>
           </el-input>
+        </el-form-item>
+        <el-form-item label="权重：" >
+          <el-input v-model="brandForm.pbsort" style="width: 200px"></el-input>
         </el-form-item>
       </el-form>
 
@@ -270,6 +274,7 @@
           pbdesc: "",
           pblinks: "",
           itids: [],
+          pbsort:0,
           pbintegralpayrate:0
         },
         brandRules: {
@@ -505,7 +510,8 @@
           pbdesc: "",
           pblinks: "",
           itids: [],
-          pbintegralpayrate:0
+          pbintegralpayrate:0,
+          pbsort:0
         };
         this.$http.get(this.$api.items_list, {
           params: {
@@ -540,6 +546,7 @@
           pbdesc: row.pbdesc,
           pblinks: row.pblinks,
           itids: [],
+          pbsort:row.pbsort,
           pbintegralpayrate:row.pbintegralpayrate
         };
         this.brandForm.itids = row.items.map(item => item.itid);
