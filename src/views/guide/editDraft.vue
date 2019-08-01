@@ -33,13 +33,13 @@
           </el-form-item>
           <el-form-item label="活动封面" >
             <el-upload
-              class="avatar-uploader"
+              class="avatar-uploader m-draft"
               :action="uploadUrl"
               :show-file-list="false"
               accept="image/*"
               :on-success="handleMainPicSuccess"
               :before-upload="beforeImgUpload">
-              <img v-if="formData.plimg" v-lazy="formData.plimg" class="avatar circle-main-img" />
+              <img v-if="formData.plimg" v-lazy="formData.plimg"  class="avatar circle-main-img" />
               <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
               <div slot="tip" class="el-upload__tip">
                 建议尺寸：288*161像素，大小最好在10M以内
