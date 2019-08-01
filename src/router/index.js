@@ -121,6 +121,13 @@ export const asyncRouterMap = [
         component: () => import('src/views/product/productBrand'),
         meta: {title: '品牌和标签', icon: 'yes', noCache: true, roles: level2}
       },
+      {
+        path: 'editBrand',
+        name: 'editBrand',
+        hidden: true,
+        component: () => import('src/views/product/editBrand'),
+        meta: {title: '编辑品牌', icon: 'yes', noCache: true, roles: level2}
+      },
     ]
   },
 

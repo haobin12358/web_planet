@@ -86,7 +86,14 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="prsalesvalue" sortable label="总销量" width="120"></el-table-column>
-      <el-table-column align="center" prop="prsort" sortable label="权重" width="120"></el-table-column>
+<!--      <el-table-column align="center" prop="prsort" sortable label="权重" width="120"></el-table-column>-->
+      <el-table-column label="权重" align="center" prop="prsort" width="240" :render-header="sortHeaderRender">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.prsort"
+                    @change="sortChange" maxlength="11"></el-input>
+          <el-button type="text" v-if="scope.$index == index" @click="sortChange">保存</el-button>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="prquery"  label="浏览量" width="120" v-if="$store.state.user.userInfo.level != 'supplizer'"></el-table-column>
       <el-table-column align="center" prop="supplizer" label="供应源" width="120">
         <template slot-scope="scope">
@@ -143,7 +150,7 @@
   import permission from 'src/directive/permission/index.js' // 权限判断指令
   import ProductComment from "./components/productComment";
   import ProductSku from "src/views/product/components/productSku";
-
+  const positiveNumberReg = /^([0-9]\d*)$/;   //  正整数
 
   export default {
     name: 'ProductIndex',
@@ -211,6 +218,7 @@
 
         commentVisible: false,
         commentProduct: {},
+        index:-1
       }
     },
 
@@ -557,6 +565,42 @@
         if (prop) {
           this.searchForm.order_type = `${prop}|${order}`
           this.doSearch();
+        }
+      },
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+          <span slot="content">
+          权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+        </span>
+        <div>{column.label}
+        <i class="el-icon-question"></i>
+          </div>
+          </el-tooltip>
+      )
+      },
+// 记录点击的是哪一行
+      indexDone(scope) {
+        this.index = scope.$index;
+      },
+      // 改变轮播图序号
+      sortChange(v) {
+        if(positiveNumberReg.test(this.tableData[this.index].prsort)) {
+          let params = this.tableData[this.index];
+          this.$http.post(this.$api.update_product, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: `修改成功`,
+                message: `商品:${params.prtitle}`,
+                type: 'success'
+              });
+              this.doSearch();         // 刷新banner
+              this.index = -1;
+            }
+          });
+        }else {
+          this.$message.warning('请输入合理权重值(>0)');
+
         }
       },
 

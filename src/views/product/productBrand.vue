@@ -53,7 +53,13 @@
           <span v-if="scope.row.pbintegralpayrate">{{scope.row.pbintegralpayrate}}%</span>
         </template>
       </el-table-column>
-        <el-table-column label="权重" align="center" prop="pbsort" width="180"></el-table-column>
+      <el-table-column label="权重" align="center" prop="pbsort" width="240" :render-header="sortHeaderRender">
+        <template slot-scope="scope">
+          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.pbsort"
+                    @change="sortChange" maxlength="11"></el-input>
+          <el-button type="text" v-if="scope.$index == index" @click="sortChange">保存</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="品牌描述" align="center" prop="pbdesc" width="180" show-overflow-tooltip></el-table-column>
       <el-table-column label="创建时间" align="center" prop="createtime" width="180"></el-table-column>
       <el-table-column label="操作" align="center" width="200" fixed="right">
@@ -223,7 +229,7 @@
         itemSearchForm: {
           kw: '',
         },
-
+        index:-1,
         itemLoading: false,
         itemTableData: [],
 
@@ -531,12 +537,12 @@
       doAddBrand() {
         this.brandDlgVisible = true;
         this.resetBrandForm();
-
+        // this.$router.push({path:'/product/editBrand',query:{}})
 
       },
       doEditBrand(row) {
         this.resetBrandForm();
-
+        // this.$router.push({path:'/product/editBrand',query:{pbid:row.pbid}})
         this.brandDlgVisible = true;
         this.brandForm = {
           pbid: row.pbid,
@@ -655,6 +661,44 @@
           }
         )
       },
+      sortHeaderRender(h,{column}){
+        return(
+          <el-tooltip class="tooltip" placement="top">
+          <span slot="content">
+          权重是一个顺序展示的概念,数字小的放在前面,同权重按创建时间从早到晚排序
+        </span>
+        <div>{column.label}
+        <i class="el-icon-question"></i>
+          </div>
+          </el-tooltip>
+      )
+      },
+// 记录点击的是哪一行
+      indexDone(scope) {
+        this.index = scope.$index;
+      },
+      // 改变轮播图序号
+      sortChange(v) {
+        if(positiveNumberReg.test(this.brandTableData[this.index].pbsort)) {
+
+          let params = this.brandTableData[this.index];
+          params.itids = params.items.map(item => item.itid);
+          this.$http.post(this.$api.update_brand, params).then(res => {
+            if (res.data.status == 200) {
+              this.$notify({
+                title: `修改成功`,
+                message: `品牌名:${params.pbname}`,
+                type: 'success'
+              });
+              this.setBrandList();         // 刷新banner
+              this.index = -1;
+            }
+          });
+        }else {
+          this.$message.warning('请输入合理权重值(>0)');
+
+        }
+      },
 
       init() {
         this.setItemList();
@@ -678,6 +722,9 @@
     }
     .avatar-uploader-icon-top {
       width: 316px;
+    }
+    .sort-input {
+      width: 5rem;
     }
   }
 </style>

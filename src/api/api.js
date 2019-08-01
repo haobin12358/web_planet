@@ -53,6 +53,8 @@ const api = {
   update_brand: title + 'brand/update',                                   // 修改品牌
   off_shelves_brand: title + 'brand/off_shelves',                         // 下架品牌
   delete_brand: title + 'brand/delete',                                   // 删除品牌
+  brand_get: title +'brand/get',                                         //获取单个品牌
+  brand_get_banner: title +'brand/get_banner',                          //获取品牌banner
 
 
   items_list: title + 'items/list',                                       // 获取标签  0: 商品, 10:资讯, 20:优惠券, 40 品牌标签
