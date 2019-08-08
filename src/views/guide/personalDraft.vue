@@ -156,7 +156,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" v-if="$store.state.user.userInfo.level == 'personal'" width="240" fixed="right">
+      <el-table-column align="center" label="下载" v-if="$store.state.user.userInfo.level == 'personal'" width="240" fixed="right">
         <template slot-scope="scope">
          <el-button type="text"  @click="downLoadScenic(scope.row)">下载报名信息</el-button>
         </template>
