@@ -156,6 +156,11 @@
           </el-popover>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="操作" v-if="$store.state.user.userInfo.level == 'personal'" width="240" fixed="right">
+        <template slot-scope="scope">
+         <el-button type="text"  @click="downLoadScenic(scope.row)">下载报名信息</el-button>
+        </template>
+      </el-table-column>
         <el-table-column align="center" label="操作" v-if="$store.state.user.userInfo.level == 'personal'" width="240" fixed="right">
           <template slot-scope="scope">
             <el-button type="text" v-if="scope.row.editstatus" @click="doEditScenic(scope.row)">编辑</el-button>
@@ -382,6 +387,12 @@
         }).catch(() => {
 
         });
+
+      },
+      downLoadScenic(row){
+          // console.log(`${this.$api.export_settlenment_xls }?token=${getStore('token')}&year=${row.createtime.slice(0,4)}&month=${row.createtime.slice(5,7)}`)
+          location.href=`${this.$api.download_team }?token=${getStore('token')}&plid=${row.plid}`;
+          this.$alert('请留意浏览器可能会进行拦截,注意保存文件,xls中日期显示异常时请设置单元格格式', '成功获取结算单',);
 
       }
 
