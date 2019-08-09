@@ -665,7 +665,7 @@ export const asyncRouterMap = [
         name: 'editScenic',
         hidden: true,
         component: () => import('src/views/scenic/editScenic'),
-        meta: {title: '景区编辑',noCache: true, roles: level2}
+        meta: {title: '景区编辑',noCache: true, roles: level4}
       },{
         path: 'toilet',
         name: 'toilet',

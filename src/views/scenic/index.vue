@@ -44,6 +44,11 @@
           <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="操作" width="240" v-if="$store.state.user.userInfo.level == 'personal'" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" @click="doEditScenic(scope.row)">预览</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <section class="table-bottom">
       <el-pagination

@@ -3,7 +3,7 @@
       <el-row>
         <block-title title="景区介绍"></block-title>
         <el-col :span="14">
-          <el-form :model="formData" :rules="rules" ref="formData" label-position="left"
+          <el-form :model="formData" :rules="rules" ref="formData" :disabled="$store.state.user.userInfo.level == 'personal'" label-position="left"
                    label-width="140px">
             <el-form-item label="景区名称" prop="sspname">
               <el-input v-model="formData.sspname" placeholder="请输入景区名称"></el-input>
@@ -83,7 +83,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="$store.state.user.userInfo.level != 'personal'">
               <el-button type="primary" @click="checkFormData">保 存</el-button>
             </el-form-item>
           </el-form>
