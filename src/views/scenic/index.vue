@@ -11,7 +11,7 @@
               <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
               <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
             </el-form>
-      <el-button type="primary" style="margin-bottom: 20px;" icon="el-icon-plus" @click="doAddScenic">新增</el-button>
+      <el-button type="primary" style="margin-bottom: 20px;" icon="el-icon-plus" v-if="$store.state.user.userInfo.level != 'personal'" @click="doAddScenic">新增</el-button>
 
 
     </section>
@@ -38,7 +38,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="parent_scenicspot.sspname" label="归属景区" width="280"></el-table-column>
-      <el-table-column align="center" label="操作" width="240" fixed="right">
+      <el-table-column align="center" label="操作" width="240" v-if="$store.state.user.userInfo.level != 'personal'" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" @click="doEditScenic(scope.row)">编辑</el-button>
           <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)">删除</el-button>

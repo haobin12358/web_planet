@@ -652,13 +652,13 @@ export const asyncRouterMap = [
     redirect: '/scenic/index',
     alwaysShow: true,
     // name: 'personSettingPa',
-    meta: {title: '景区', icon: 'scenicArea', roles: level2},
+    meta: {title: '景区', icon: 'scenicArea', roles: level4},
     children: [
       {
         path: 'index',
         name: 'scenic',
         component: () => import('src/views/scenic/index'),
-        meta: {title: '景区管理', noCache: true, roles: level2}
+        meta: {title: '景区管理', noCache: true, roles: level4}
       },
       {
         path: 'editScenic',
