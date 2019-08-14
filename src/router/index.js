@@ -280,6 +280,17 @@ export const asyncRouterMap = [
         name: 'routeBanner',
         component: () => import('src/views/marketing/routeBanner'),
         meta: {title: '旗行轮播图', icon: 'yes', noCache: true, roles: level2}
+      }, {
+        path: 'richList',
+        name: 'richList',
+        component: () => import('src/views/marketing/richList'),
+        meta: {title: '旗行富文本', icon: 'yes', noCache: true, roles: level2}
+      }, {
+        path: 'editRich',
+        name: 'editRich',
+        hidden: true,
+        component: () => import('src/views/marketing/editRich'),
+        meta: {title: '富文本编辑', noCache: true, roles: level2}
       }
     ]
   },

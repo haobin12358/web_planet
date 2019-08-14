@@ -275,6 +275,10 @@ const api = {
   get_travelrecord: title +'scenicspot/get_travelrecord',//获取游记或攻略的详情
   add_travelrecord: title +'scenicspot/add_travelrecord',//发布游记或攻略
   del_travelrecord : title +'scenicspot/del_travelrecord',//删除时光记录
+
+  list_linkcontent: title +'index/list_linkcontent', //获取富文本详情
+  set_linkcontent: title +'index/set_linkcontent',//设置富文本
+  get_linkcontent: title +'index/get_linkcontent',//获取富文本详情
 };
 
 export default api
