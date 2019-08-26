@@ -705,6 +705,29 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/ticket',
+    component: Layout,
+    redirect: '/ticket/index',
+    alwaysShow: true,
+    // name: 'personSettingPa',
+    meta: {title: '票务', icon: 'ticket', roles: level1},
+    children: [
+      {
+        path: 'index',
+        name: 'ticket',
+        component: () => import('src/views/ticket/index'),
+        meta: {title: '票务管理', noCache: true, roles: level1}
+      },
+      {
+        path: 'editTicket',
+        name: 'editTicket',
+        hidden: true,
+        component: () => import('src/views/ticket/editTicket'),
+        meta: {title: '票务编辑',noCache: true, roles: level1}
+      }
+    ]
+  },
   // {
   //   path: '/guide',
   //   component: Layout,
