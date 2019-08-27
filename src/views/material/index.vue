@@ -1,20 +1,34 @@
 <template>
   <div class="container">
-    <section class="add-banner tr">
-
+    <section class="add-banner ">
+      <el-form :inline="true">
+        <el-form-item label="门票">
+          <el-select v-model="value" multiple placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
+        <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
+      </el-form>
 <!--      <el-button type="primary" icon="el-icon-plus" @click="addClick">新增</el-button>-->
     </section>
     <el-table v-loading="dataLoading" :data="dataList" stripe>
-      <el-table-column label="用户" align="center" prop="contentlink" show-overflow-tooltip></el-table-column>
-      <el-table-column label="联系方式" align="center" prop="contentlink" show-overflow-tooltip></el-table-column>
-      <el-table-column label="图片视频" align="center" prop="ibpic" width="280">
+      <el-table-column label="用户" align="center" prop="usname" show-overflow-tooltip></el-table-column>
+      <el-table-column label="联系方式" align="center" prop="ustelphone" show-overflow-tooltip></el-table-column>
+      <el-table-column label="图片视频" align="center" prop="mfls" width="280">
         <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.ibpic]" :key="scope.row.ibpic" width="92px" out-width="92px"></table-cell-img>
+          <table-cell-img :src="scope.row.image" v-if="scope.row.showtype == 'image'" :key="scope.$index" width="92px" out-width="92px"></table-cell-img>
+          <table-cell-video :videoSrc="scope.row.video.url" :posterSrc="scope.row.video.thumbnail" v-if="scope.row.showtype == 'video'" :key="scope.$index" width="92px" out-width="92px"></table-cell-video>
         </template>
       </el-table-column>
-      <el-table-column label="定位" align="center" prop="ibsort" ></el-table-column>
+      <el-table-column label="定位" align="center" prop="umflocation" ></el-table-column>
 
-      <el-table-column label="时间" align="center" prop="ibshow">
+      <el-table-column label="时间" align="center" prop="createtime">
       </el-table-column>
       <!--      <el-table-column label="权重" align="center" prop="ibsort" :render-header="sortHeaderRender">-->
       <!--        <template slot-scope="scope">-->
@@ -26,7 +40,7 @@
       <el-table-column label="操作" align="center" fixed="right" width="180">
         <template slot-scope="scope">
           <el-button type="text" @click="editData(scope)">查看</el-button>
-          <el-button type="text" class="danger-text" @click="deleteData(scope)">返还押金</el-button>
+          <el-button type="text" class="danger-text" v-if="!scope.row.umfstatus" @click="submitMoney(scope)">返还押金</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,6 +54,7 @@
 
 <script>
   import TableCellImg from "src/components/TableCellImg";
+  import TableCellVideo from "src/components/TableCellVideo";
   import elDragDialog from 'src/directive/el-dragDialog'
   import { getStore } from "src/utils/index";
 
@@ -81,7 +96,24 @@
         page_size: 10,
         total: 0,
         kw: '',
-        index: -1
+        index: -1,
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: ''
       }
     },
     computed: {
@@ -91,23 +123,12 @@
       }
     },
     directives: { elDragDialog },
-    components: { TableCellImg },
+    components: { TableCellImg,TableCellVideo },
     mounted() {
       this.getData()          // 获取data
     },
     methods: {
-      // 主图上传
-      handledataSuccess(res, file) {
-        this.dataForm.ibpic = res.data;
-      },
-      // 上传前限制小于15M
-      beforeImgUpload(file) {
-        const isLt15M = file.size / 1024 / 1024 < 15;
-        if (!isLt15M) {
-          this.$message.error('上传图片大小不能超过 15MB!');
-        }
-        return isLt15M;
-      },
+
       // 获取data
       getData() {
         this.dataLoading = true;
@@ -119,118 +140,9 @@
           }
         })
       },
-      //新增
-      addClick(){
-        this.$router.push({path:'/ticket/editTicket'})
-      },
-      // 添加data
-      adddata() {
-        this.$refs.dataFormRef.validate(valid => {
-          if (valid) {
-            if(this.dataForm.ibid) {      // 编辑
-              this.$http.post(this.$api.update_banner, this.dataForm).then(res => {
-                if (res.data.status == 200) {
-                  this.$notify({
-                    title: '修改成功',
-                    message: '此轮播图修改成功',
-                    type: 'success'
-                  });
-                  this.dataDialog = false;
-                  this.getData()
-                }
-              });
-            }else {                         // 新增
-              this.$http.post(this.$api.set_banner, this.dataForm).then(res => {
-                if (res.data.status == 200) {
-                  this.$notify({
-                    title: '新增成功',
-                    message: '轮播图新增成功',
-                    type: 'success'
-                  });
-                  this.getData()
-                }
-              })
-            }
-          }else {
-            this.$message.warning('请根据校验信息完善表单!');
-          }
-        })
-      },
-      // 删除data
-      deleteData(scope) {
-        let params = {
-          ibid: scope.row.ibid
-        };
-        // 最少保留一张轮播图
-        let num = 0;
-        for(let i in this.dataList) {
-          if(!this.dataList[i].ibshow) {
-            num += 1
-          }
-        }
-        if(num == this.dataList.length - 1) {
-          this.$message.error('请最少保留一张轮播图');
-          return false
-        }
-        // 删除轮播图
-        this.$confirm('此操作将删除该轮播图, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          params.isdelete = true;
-          this.$http.post(this.$api.update_banner, params).then(res => {
-            if (res.data.status == 200) {
-              this.$notify({
-                title: '删除成功',
-                message: '此轮播图已被删除',
-                type: 'success'
-              });
-              this.getData();
-            }
-          });
-        }).catch(() => { });
-      },
-      // data的展示与否
-      dataShow(scope) {
-        let msg = '';
-        let params = {
-          ibid: scope.row.ibid
-        };
-        // 最少保留一张轮播图
-        let num = 0;
-        for(let i in this.dataList) {
-          if(!this.dataList[i].ibshow) {
-            num += 1
-          }
-        }
-        if(num == this.dataList.length) {
-          this.dataList[scope.$index].ibshow = true;
-          this.$message.error('请最少保留一张轮播图');
-          return false
-        }
-
-        params.ibshow = scope.row.ibshow;
-        if(!scope.row.ibshow) {
-          msg = '此轮播图不再展示'
-        }else {
-          msg = '此轮播图将会展示'
-        }
-        this.$http.post(this.$api.update_banner, params).then(res => {
-          if (res.data.status == 200) {
-            this.$notify({
-              title: '修改成功',
-              message: msg,
-              type: 'success'
-            });
-            this.getData();
-          }
-        });
-      },
       // 编辑banner
       editData(scope) {
-        this.dataForm = JSON.parse(JSON.stringify(scope.row));
-        this.dataDialog = true
+        this.$router.push({path:'/material/lookMaterial',query:{umfid:scope.row.umfid}})
       },
       // 记录点击的是哪一行
       indexDone(scope) {
@@ -281,6 +193,25 @@
       pageChange(val) {
         this.page_num = val;
         this.getData();
+      },
+      submitMoney(scope){
+        this.$confirm('确定要返还押金吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.feedback_refund,  { umfid:scope.row.umfid}).then(res => {
+            if (res.data.status == 200) {
+              this.getData();
+              this.$message({
+                type: 'success',
+                message: '返还成功!'
+              });
+            }
+          })
+        }).catch(() => {
+
+        });
       },
       // 重置按钮
       resetSearch() {

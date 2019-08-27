@@ -281,6 +281,8 @@ const api = {
   get_linkcontent: title +'index/get_linkcontent',//获取富文本详情
 
   feedback_list: title +'feedback/list',   //获取素材反馈
+  feedback_details: title +'feedback/details',    // 获取反馈详情
+  feedback_refund: title +'feedback/refund',     //返还押金
 };
 
 export default api
