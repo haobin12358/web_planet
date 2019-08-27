@@ -728,6 +728,29 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/material',
+    component: Layout,
+    redirect: '/material/index',
+    alwaysShow: true,
+    // name: 'personSettingPa',
+    meta: {title: '素材反馈', icon: 'material', roles: level1},
+    children: [
+      {
+        path: 'index',
+        name: 'material',
+        component: () => import('src/views/material/index'),
+        meta: {title: '素材反馈', noCache: true, roles: level1}
+      },
+      {
+        path: 'lookMaterial',
+        name: 'lookMaterial',
+        hidden: true,
+        component: () => import('src/views/material/lookMaterial'),
+        meta: {title: '素材预览',noCache: true, roles: level1}
+      }
+    ]
+  },
   // {
   //   path: '/guide',
   //   component: Layout,

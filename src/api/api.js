@@ -279,6 +279,8 @@ const api = {
   list_linkcontent: title +'index/list_linkcontent', //获取富文本详情
   set_linkcontent: title +'index/set_linkcontent',//设置富文本
   get_linkcontent: title +'index/get_linkcontent',//获取富文本详情
+
+  feedback_list: title +'feedback/list',   //获取素材反馈
 };
 
 export default api
