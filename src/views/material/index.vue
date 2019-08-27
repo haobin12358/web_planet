@@ -113,7 +113,8 @@
           value: '选项5',
           label: '北京烤鸭'
         }],
-        value: ''
+        value: '',
+        loading:false
       }
     },
     computed: {
@@ -129,6 +130,12 @@
     },
     methods: {
 
+      doReset(){
+
+      },
+      doSearch(){
+
+      },
       // 获取data
       getData() {
         this.dataLoading = true;
