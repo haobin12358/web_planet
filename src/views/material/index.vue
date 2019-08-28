@@ -3,12 +3,12 @@
     <section class="add-banner ">
       <el-form :inline="true">
         <el-form-item label="门票">
-          <el-select v-model="value" multiple placeholder="请选择">
+          <el-select v-model="tiid"  placeholder="请选择">
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.tiid"
+              :label="item.tiname"
+              :value="item.tiid">
             </el-option>
           </el-select>
         </el-form-item>
@@ -97,23 +97,8 @@
         total: 0,
         kw: '',
         index: -1,
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
+        options: [],
+        tiid: '',
         loading:false
       }
     },
@@ -126,21 +111,37 @@
     directives: { elDragDialog },
     components: { TableCellImg,TableCellVideo },
     mounted() {
-      this.getData()          // 获取data
+
+      this.getOption();
     },
     methods: {
 
       doReset(){
-
+        this.tiid = this.options[0].tiid;
+        this.getData();
       },
       doSearch(){
-
+        this.getData();
+      },
+      // 获取data
+      getOption() {
+        this.$http.get(this.$api.ticket_list, {
+          noLoading: true, params: {
+            page_num:1,
+            page_size:100,
+          }}).then(res => {
+          if (res.data.status == 200) {
+            this.options = res.data.data;
+            this.tiid = this.options[0].tiid;
+            this.getData()          // 获取data
+          }
+        })
       },
       // 获取data
       getData() {
         this.dataLoading = true;
         this.$http.get(this.$api.feedback_list, {
-          noLoading: true, params: { tiid:'tiid1'}}).then(res => {
+          noLoading: true, params: { tiid:this.tiid}}).then(res => {
           if (res.data.status == 200) {
             this.dataList = res.data.data;
             this.dataLoading = false;

@@ -691,20 +691,20 @@ export const asyncRouterMap = [
       },
     ]
   },
-  {
-    path: '/dataStatistic',
-    component: Layout,
-    redirect: '/dataStatistic/index',
-    meta: { roles: level1},
-    children: [
-      {
-        path: 'index',
-        name: 'dataStatisticIndex',
-        component: () => import('src/views/dataStatistic/index'),
-        meta: {title: '数据统计', icon: 'dataStatistic', noCache: true, roles: level1}
-      }
-    ]
-  },
+  // {
+  //   path: '/dataStatistic',
+  //   component: Layout,
+  //   redirect: '/dataStatistic/index',
+  //   meta: { roles: level1},
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'dataStatisticIndex',
+  //       component: () => import('src/views/dataStatistic/index'),
+  //       meta: {title: '数据统计', icon: 'dataStatistic', noCache: true, roles: level1}
+  //     }
+  //   ]
+  // },
   {
     path: '/ticket',
     component: Layout,
