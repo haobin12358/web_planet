@@ -5,17 +5,21 @@
       <el-button type="primary" icon="el-icon-plus" @click="addClick">新增</el-button>
     </section>
     <el-table v-loading="dataLoading" :data="dataList" stripe>
-      <el-table-column label="票务名称" align="center" prop="contentlink" show-overflow-tooltip></el-table-column>
-      <el-table-column label="封面图" align="center" prop="ibpic" width="280">
+      <el-table-column label="票务名称" align="center" prop="tiname" show-overflow-tooltip></el-table-column>
+      <el-table-column label="封面图" align="center" prop="tiimg" width="280">
         <template slot-scope="scope">
-          <table-cell-img :src="[scope.row.ibpic]" :key="scope.row.ibpic" width="92px" out-width="92px"></table-cell-img>
+          <table-cell-img :src="[scope.row.tiimg]" :key="scope.row.tiimg" width="92px" out-width="92px"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="发放时间" align="center" prop="ibsort" ></el-table-column>
-
-      <el-table-column label="不展示/展示" align="center" prop="ibshow">
+      <el-table-column label="发放时间" align="center" prop="ibsort" width="180">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.ibshow" @change="dataShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
+          <span>{{scope.row.tistarttime}}</span> - <span>{{scope.row.tiendtime}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="开启/中止" align="center" prop="ibshow">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.interrupt" @change="dataShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </template>
       </el-table-column>
@@ -28,7 +32,7 @@
 <!--      </el-table-column>-->
       <el-table-column label="操作" align="center" fixed="right" width="180">
         <template slot-scope="scope">
-          <el-button type="text" @click="editData(scope)">编辑</el-button>
+          <el-button type="text" @click="editData(scope)" v-if="scope.row.interrupt">编辑</el-button>
           <el-button type="text" class="danger-text" @click="deleteData(scope)">删除</el-button>
         </template>
       </el-table-column>
@@ -96,7 +100,7 @@
     directives: { elDragDialog },
     components: { TableCellImg },
     mounted() {
-      // this.getData()          // 获取data
+      this.getData()          // 获取data
     },
     methods: {
       // 主图上传
@@ -114,8 +118,11 @@
       // 获取data
       getData() {
         this.dataLoading = true;
-        this.$http.get(this.$api.list_banner, {
-          noLoading: true, params: { ibshow: 'all' }}).then(res => {
+        this.$http.get(this.$api.ticket_list, {
+          noLoading: true, params: {
+            page_num:this.page_num,
+            page_size:this.page_size,
+          }}).then(res => {
           if (res.data.status == 200) {
             this.dataList = res.data.data;
             this.dataLoading = false;
@@ -174,32 +181,19 @@
       },
       // 删除data
       deleteData(scope) {
-        let params = {
-          ibid: scope.row.ibid
-        };
-        // 最少保留一张轮播图
-        let num = 0;
-        for(let i in this.dataList) {
-          if(!this.dataList[i].ibshow) {
-            num += 1
-          }
-        }
-        if(num == this.dataList.length - 1) {
-          this.$message.error('请最少保留一张轮播图');
-          return false
-        }
+        let params = scope.row;
         // 删除轮播图
-        this.$confirm('此操作将删除该轮播图, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该票务, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          params.isdelete = true;
-          this.$http.post(this.$api.update_banner, params).then(res => {
+          params.delete = true;
+          this.$http.post(this.$api.ticket_update, params).then(res => {
             if (res.data.status == 200) {
               this.$notify({
                 title: '删除成功',
-                message: '此轮播图已被删除',
+                message: '此票务已被删除',
                 type: 'success'
               });
               this.getData();
@@ -210,29 +204,14 @@
       // data的展示与否
       dataShow(scope) {
         let msg = '';
-        let params = {
-          ibid: scope.row.ibid
-        };
-        // 最少保留一张轮播图
-        let num = 0;
-        for(let i in this.dataList) {
-          if(!this.dataList[i].ibshow) {
-            num += 1
-          }
-        }
-        if(num == this.dataList.length) {
-          this.dataList[scope.$index].ibshow = true;
-          this.$message.error('请最少保留一张轮播图');
-          return false
-        }
+        let params = scope.row;
 
-        params.ibshow = scope.row.ibshow;
-        if(!scope.row.ibshow) {
-          msg = '此轮播图不再展示'
+        if(!scope.row.interrupt) {
+          msg = '此票务不再展示'
         }else {
-          msg = '此轮播图将会展示'
+          msg = '此票务将会展示'
         }
-        this.$http.post(this.$api.update_banner, params).then(res => {
+        this.$http.post(this.$api.ticket_update, params).then(res => {
           if (res.data.status == 200) {
             this.$notify({
               title: '修改成功',
@@ -245,8 +224,7 @@
       },
       // 编辑banner
       editData(scope) {
-        this.dataForm = JSON.parse(JSON.stringify(scope.row));
-        this.dataDialog = true
+        this.$router.push({path:'/ticket/editTicket',query:{id:scope.row.tiid}})
       },
       // 记录点击的是哪一行
       indexDone(scope) {

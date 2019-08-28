@@ -5,11 +5,11 @@
         <el-form :model="formData" :rules="rules" ref="formData" label-position="left"
                  label-width="140px">
 <!--          <block-title title="基本信息"></block-title>-->
-          <el-form-item label="票务名称">
-            <el-input v-model="formData.pltitle"></el-input>
+          <el-form-item label="票务名称" prop="tiname">
+            <el-input v-model="formData.tiname"></el-input>
 
           </el-form-item>
-        <el-form-item label="封面图" >
+        <el-form-item label="封面图" prop="tiimg">
           <el-upload
             class="avatar-uploader m-draft"
             :action="uploadUrl"
@@ -17,18 +17,18 @@
             accept="image/*"
             :on-success="handleMainPicSuccess"
             :before-upload="beforeImgUpload">
-            <img v-if="formData.plimg" v-lazy="formData.plimg"  class="avatar circle-main-img" />
+            <img v-if="formData.tiimg" v-lazy="formData.tiimg"  class="avatar circle-main-img" />
             <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
             <div slot="tip" class="el-upload__tip">
               建议尺寸：750*350像素，大小最好在10M以内
             </div>
           </el-upload>
         </el-form-item>
-          <el-form-item label="发放时间" prop="sspname">
+          <el-form-item label="发放时间" required>
             <el-date-picker
               v-model="time"
               type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm"
+              value-format="yyyy-MM-dd HH:mm:ss"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
@@ -36,18 +36,23 @@
           </el-form-item>
 
 
-          <el-form-item label="原票价" prop="plnum">
-            <el-input v-model="formData.plnum">
+          <el-form-item label="原票价" prop="tiprice">
+            <el-input v-model="formData.tiprice">
               <template slot="prepend">¥</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="最低押金" prop="plnum">
-            <el-input v-model="formData.plnum">
+          <el-form-item label="最低押金" prop="tideposit">
+            <el-input v-model="formData.tideposit">
               <template slot="prepend">¥</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="规则" prop="plnum">
-            <el-input v-model="formData.plnum" type="textarea">
+          <el-form-item label="票数" prop="tinum">
+            <el-input v-model="formData.tinum" >
+              <template slot="append">张</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="规则" prop="tirules">
+            <el-input v-model="formData.tirules" type="textarea">
             </el-input>
           </el-form-item>
           <el-form-item label="授权资质" >
@@ -56,36 +61,56 @@
               :action="uploadUrl"
               :show-file-list="false"
               accept="image/*"
-              :on-success="handleMainPicSuccess"
+              :on-success="handleCertPicSuccess"
               :before-upload="beforeImgUpload">
-              <img v-if="formData.plimg" v-lazy="formData.plimg"  class="avatar circle-main-img" />
+              <img v-if="formData.ticertificate" v-lazy="formData.ticertificate"  class="avatar circle-main-img" />
               <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
             </el-upload>
           </el-form-item>
-          <el-form-item label="详情" >
+          <el-form-item label="详情" prop="tidetails">
             <div class="editor">
-              <quill-editor ref="myTextEditor" @change="quillEditorChange($event)" :options="editorOption" v-model="formData.plcontent" :config="editorOption"></quill-editor>
+              <quill-editor ref="myTextEditor" @change="quillEditorChange($event)" :options="editorOption" v-model="formData.tidetails" :config="editorOption"></quill-editor>
             </div>
 
           </el-form-item>
-          <el-form-item label="与其他平台联动" prop="plnum">
-            <el-select v-model="value" multiple placeholder="请选择">
+          <el-form-item label="与其他平台联动" prop="liids">
+            <el-select v-model="formData.liids" multiple placeholder="请选择">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.liid"
+                :label="item.liname"
+                :value="item.liid"
+                :disabled="item.lisharetype">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="中止/开启" >
+          <el-form-item label="短语简介" prop="tiabbreviation">
+            <el-input v-model="formData.tiabbreviation" placeholder="最好在10字以内"></el-input>
+          </el-form-item>
+          <el-form-item label="标签" prop="sspcontent">
+            <div class="m-label-box">
+              <span class=" m-label" :class="item.active ? 'active':''" v-for="(item,index) in enter_list" @click="labelClick(index,'enter_list')">{{item.name}}</span>
+              <el-popover
+                placement="right"
+                width="400"
+                trigger="manual"
+                v-model="enterVisible">
+                <h3 class="el-upload__tip">新增报名填写项</h3>
+                <el-input v-model="label" maxlength="4" placeholder="5字以内" class="m-input-label"></el-input>
+                <el-button type="primary" @click="enterSave">保 存</el-button>
+                <el-button @click="enterVisible = false">取消</el-button>
+                <span class="m-label" slot="reference" @click="enterVisible =!enterVisible">+</span>
+              </el-popover>
+            </div>
+          </el-form-item>
+          <el-form-item label="开启/中止" >
             <el-switch
-              v-model="value1"
+              v-model="formData.interrupt"
               active-color="#409EFF" inactive-color="#DBDCDC">
             </el-switch>
           </el-form-item>
+
           <el-form-item>
-            <el-button  @click="saveDraft">保 存</el-button>
             <el-button type="primary" @click="submitDraft">立即发布</el-button>
           </el-form-item>
         </el-form>
@@ -107,59 +132,66 @@
     [{align:[]}],
     ['link','image','video']
   ];
+  const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
+  const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
   export default {
     name: "editTicket",
     data(){
       return{
         formData:{
-          plimg:'',
-          plnum:0,
-          plstarttime:'',
-          plendtime:'',
-          pllocation:[],
-          pltitle:'',
-          plcontent:'',
-          plstatus:0,
-          plproducts:[],
-          costs:[],
-          insurances:[],
-          playrequires:[],
+          tiimg:'',
+          tirules:'',
+          tinum:0,
+          tistarttime:'',
+          tiendtime:'',
+          tiprice:0,
+          tiname:'',
+          interrupt:false,
+          tidetails:'',
+          ticertificate:'',
+          tideposit:0,
+          tiabbreviation:'',
+          ticategory:[],
+          liids:[],
           delete:false
         },
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-        value1:true,
+        options: [],
         rules: {
-          plnum: [
-            { required: true, message: '最大承载人数必填', trigger: 'blur' }
+          tirules: [
+            { required: true, message: '规则必填', trigger: 'blur' }
           ],
-          pltitle: [
-            { required: true, message: '活动名称必填', trigger: 'blur' }
+          tiname: [
+            { required: true, message: '票务名称必填', trigger: 'blur' }
           ],
-          plcontent: [
-            { required: true, message: '活动内容必填', trigger: 'blur' }
+          tiprice: [
+            { required: true, message: '原票价必填', trigger: 'blur' },
+            {pattern: moneyReg, message: '请输入合理的价格(至多2位小数)', trigger: 'blur'},
           ],
-          plimg: [
-            { required: true, message: '活动封面必填', trigger: 'change' }
-          ]
+          tiimg: [
+            { required: true, message: '票务封面必填', trigger: 'blur' }
+          ],
+          tideposit: [
+            { required: true, message: '最低押金必填', trigger: 'blur' },
+            {pattern: moneyReg, message: '请输入合理的价格(至多2位小数)', trigger: 'blur'},
+          ],
+          liids: [
+            { required: true, message: '其它平台必选', trigger: 'change' }
+          ],
+          tidetails: [
+            { required: true, message: '详情必填', trigger: 'blur' }
+          ],
+          tinum: [
+            { required: true, message: '票数必填', trigger: 'blur' },
+              {pattern: positiveNumberReg, message: '请输入合理的张数', trigger: 'blur'}
+          ],
+          tiabbreviation: [
+            { required: true, message: '短语简介必填', trigger: 'blur' }
+          ],
         },
         time:[],
+        label:'',
         enterVisible:false,
+        enter_list:[],
         editorOption: {
           modules:{
             toolbar:{
@@ -182,29 +214,31 @@
     computed: {
       // 上传图片
       uploadUrl() {
-        return this.$api.upload_file + getStore('token') + '&type=news'
+        return this.$api.upload_file + getStore('token') + '&type=ticket'
       },
     },
     watch :{
       time(oldvalue,newvalue){
         console.log(oldvalue);
-        this.initArray();
+        // this.initArray();
       }
     },
     components: {quillEditor},
     mounted() {
+      this.getLink();
       if(this.$route.query.id){
         this.getFormData(this.$route.query.id);
-        this.getCost(this.$route.query.id);
-        this.getInsurance(this.$route.query.id);
-        this.getWithdraw(this.$route.query.id);
+
       }
 
     },
     methods: {
       // 主图上传
       handleMainPicSuccess(res, file) {
-        this.formData.plimg = res.data;
+        this.formData.tiimg = res.data;
+      },
+      handleCertPicSuccess(res,file){
+        this.formData.ticertificate = res.data;
       },
       // 上传前限制小于15M
       beforeImgUpload(file) {
@@ -214,47 +248,10 @@
         }
         return isLt15M;
       },
-      getCost(id){
-        this.$http.get(this.$api.get_cost, {
+      getLink(){
+        this.$http.get(this.$api.list_linkage, {
           noLoading: true,
           params: {
-            plid: id,
-          },
-        }).then(
-          res => {
-            this.loading = false;
-            console.log(res,'获取数据')
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-              this.cost_list = data;
-            }
-          }
-        )
-      },
-      getInsurance(id){
-        this.$http.get(this.$api.get_insurance, {
-          noLoading: true,
-          params: {
-            plid: id,
-          },
-        }).then(
-          res => {
-            this.loading = false;
-            console.log(res,'获取数据')
-            if (res.data.status == 200) {
-              let resData = res.data,
-                data = res.data.data;
-              this.insurance_list = data;
-            }
-          }
-        )
-      },
-      getWithdraw(id){
-        this.$http.get(this.$api.get_discount, {
-          noLoading: true,
-          params: {
-            plid: id,
           },
         }).then(
           res => {
@@ -262,21 +259,19 @@
             if (res.data.status == 200) {
               let resData = res.data,
                 data = res.data.data;
-              this.withdraw_list = data.discounts;
-              for(let i=0;i<this.withdraw_list.length;i++){
-                this.withdraw_list[i].time = [this.withdraw_list[i].pddeltaday,this.withdraw_list[i].pddeltahour]
-              }
-              console.log(this.withdraw_list,'afafa')
-              this.initArray();
+              this.options = data;
+              this.options.forEach(function (item,index,arr) {
+                item.lisharetype = Boolean(item.lisharetype)
+              })
             }
           }
         )
       },
       getFormData(id){
-        this.$http.get(this.$api.get_play, {
+        this.$http.get(this.$api.ticket_get, {
           noLoading: true,
           params: {
-            plid: id,
+            tiid: id,
           },
         }).then(
           res => {
@@ -288,167 +283,28 @@
               this.formData = res.data.data;
               // this.time[0] = new Date(this.formData.plstarttime);
               // this.time[1] = new Date(this.formData.plendtime);
-              this.time = [this.formData.plstarttime, this.formData.plendtime];
+              let arr = [];
 
-
-              let enter =[],location=[],recommend=[];
-              for(let i in this.formData.pllocation){
-                location.push({name:this.formData.pllocation[i],active:true});
+              let _arr = [].concat(data.linkage);
+              for(let i=0;i<_arr.length;i++){
+                arr.push(_arr[i].liid);
               }
-              for(let i in this.formData.playrequires){
-                enter.push({name:this.formData.playrequires[i],active:true});
+              delete this.formData.linkage;
+              this.formData.liids = [].concat(arr);
+              this.time = [this.formData.tistarttime, this.formData.tiendtime];
 
-              }
-              for(let i in this.formData.plproducts){
-                recommend.push({name:this.formData.plproducts[i],active:true});
+
+              let enter =[];
+              for(let i in this.formData.ticategory){
+                enter.push({name:this.formData.ticategory[i],active:true});
+
               }
 
               this.enter_list = enter;
-              this.recommend_list = recommend;
-              this.location_list = location;
+
             }
           }
         )
-      },
-      //新增费用
-      costAdd(){
-        this.cost_list.push({
-          cosid:'',
-          cosname:'',
-          cosdetail:'',
-          cossubtotal:'',
-          delete:false
-        })
-      },
-      //删除费用
-      costCut(index){
-        let that = this;
-        console.log(index)
-        this.$confirm('此操作将永久删除该景区, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          console.log(index)
-          that.cost_list[index].delete = true;
-          that.cost_list = [].concat(that.cost_list);
-          that.$notify({
-            title: '删除成功',
-            message: '景区删除成功',
-            type: 'success'
-          });
-
-        }).catch(() => {
-
-        });
-
-      },
-      //新增保险
-      insuranceAdd(){
-        this.insurance_list.push({
-          inid:'',
-          inname:'',
-          incontent:'',
-          intype:false,
-          incost:''
-        })
-      },
-      //删除保险
-      insuranceCut(index){
-        let that = this;
-        this.$confirm('此操作将永久删除该保险, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          that.insurance_list[index].delete = true;
-          that.insurance_list = [].concat(that.insurance_list);
-          that.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-
-        });
-      },
-      //新增保险
-      withdrawAdd(){
-        this.withdraw_list.push({
-          pdid:'',
-          pddeltaday:'',
-          pddeltahour:'',
-          delete:false,
-          pdprice:''
-        })
-      },
-      //删除保险
-      withdrawCut(index){
-        let that = this;
-        this.$confirm('此操作将永久删除该扣款信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          that.withdraw_list[index].delete = true;
-          that.withdraw_list = [].concat(that.withdraw_list);
-          that.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-
-        });
-      },
-      //生成时间选择
-      initArray(){
-        console.log('初始化时间')
-        // multiArray
-        let start = new Date(this.time[0]);
-        let end = new Date();
-        let arr1 =[];
-        let arr = [];
-        for(let i=1;i<24;i++){
-          arr.push({
-            label:i+'小时',
-            value:i
-          })
-        }
-        if((start.getMonth() > end.getMonth()) || (end.getFullYear() > start.getFullYear()) ){
-          for(let i=0;i<31;i++){
-            arr1.push({
-              label:i+'天',
-              value:i
-            })
-          }
-          arr1[0].children = arr;
-        }else if(start.getDate() > end.getDate()){
-          for(let i=0;i<= (start.getDate() - end.getDate());i++){
-            arr1.push({
-              label:i+'天',
-              value:i
-            })
-          }
-          arr1[0].children = arr;
-        }else if(start.getHours() > end.getHours()){
-          arr = [];
-          arr1.push({
-            label:'0天',
-            value:0
-          });
-          for(let i=0;i< (start.getHours() - end.getHours());i++){
-            arr.push({
-              label:i+'小时',
-              value:i
-            })
-          }
-          arr1[0].children = arr;
-        }else{
-          arr1.push({
-            label:'0天',
-            value:0
-          });
-        }
-        this.options = arr1;
       },
       //  保存报名项
       enterSave(){
@@ -461,139 +317,61 @@
         }
         this.enterVisible = false;
       },
-      //  保存报名项
-      locationSave(){
-        if(this.locationLabel.replace(/^\s*|\s*$/g,"")){
-          this.location_list.push({
-            name:this.locationLabel,
-            active:true
-          });
-          this.locationLabel = '';
-        }
-        this.locationVisible = false;
-      },
-      recommendSave(){
-        if(this.recommendLabel.replace(/^\s*|\s*$/g,"")){
-          this.recommend_list.push({
-            name:this.recommendLabel,
-            active:true
-          });
-          this.recommendLabel = '';
-        }
-        this.recommendVisible = false;
-      },
       //标签保存
       labelClick(index,name){
         this[name][index].active = !this[name][index].active;
       },
-      //创建费用
-      postCost(status){
-        if(this.cost_list.length == 0){
-          this.postInsurance(status);
-          return false;
-        }
-        this.$http.post(this.$api.set_cost, {
-          costs:this.cost_list
-        }).then(res => {
-          if (res.data.status == 200) {
-            this.formData.costs = res.data.data;
-            this.postInsurance(status);
-          }
-        });
-      },
-      //创建保险
-      postInsurance(status){
-        if(this.insurance_list.length == 0){
-          this.postWithdraw(status);
-          return false;
-        }
-        this.$http.post(this.$api.set_insurance, {
-          insurance:this.insurance_list
-        }).then(res => {
-          if (res.data.status == 200) {
-            this.formData.insurances = res.data.data;
-            this.postWithdraw(status);
-          }
-        });
-      },
-      //创建保险
-      postWithdraw(status){
-        if(this.insurance_list.length == 0){
-          this.postDraft(status);
-          return false;
-        }
-        for(let i=0;i<this.withdraw_list.length;i++){
-          this.withdraw_list[i].pddeltaday = this.withdraw_list[i].time[0];
-          if(this.withdraw_list[i].time.length == 2){
-            this.withdraw_list[i].pddeltahour = this.withdraw_list[i].time[1];
-          }
-        }
-        this.$http.post(this.$api.set_discount, {
-          discounts:this.withdraw_list
-        }).then(res => {
-          if (res.data.status == 200) {
-            this.formData.discounts = res.data.data;
-            this.postDraft(status);
-          }
-        });
-      },
-      postDraft(status){
-        let enter =[],location=[],recommend=[];
-        for(let i in this.location_list){
-          if(this.location_list[i].active){
-            location.push(this.location_list[i].name);
-          }
-        }
-        for(let i in this.enter_list){
-          if(this.enter_list[i].active){
-            enter.push(this.enter_list[i].name);
-          }
-        }
-        for(let i in this.recommend_list){
-          if(this.recommend_list[i].active){
-            recommend.push(this.recommend_list[i].name);
-          }
-        }
+      postData(status){
 
-        this.formData.plproducts = [].concat(recommend);
-        this.formData.playrequires = [].concat(enter);
-        this.formData.pllocation = [].concat(location);
-        this.formData.plstatus = status;
-        this.formData.plstarttime = this.time[0];
-        this.formData.plendtime = this.time[1];
+        this.$refs.formData.validate(valid => {
+          if (valid) {
+            let enter =[];
 
-        this.$http.post(this.$api.set_play, this.formData).then(res => {
-          if (res.data.status == 200) {
-            if(status == 0){
-              this.$notify({
-                title: '保存成功',
-                message: '活动保存成功成功',
-                type: 'success'
-              });
-              this.$router.push('/guide/personalDraft')
-            }else if(status == 1){
-              this.$notify({
-                title: '发布成功',
-                message: '您可在小程序-管理活动-我创建的-查看推广页查看',
-                type: 'success'
-              });
-              this.$router.push('/guide/personalDraft')
+            for(let i in this.enter_list){
+              if(this.enter_list[i].active){
+                enter.push(this.enter_list[i].name);
+              }
             }
 
+            this.formData.ticategory = [].concat(enter);
+            this.formData.tistarttime = this.time[0];
+            this.formData.tiendtime = this.time[1];
+            this.formData.tiprice = Number(this.formData.tiprice);
+            this.formData.tideposit = Number(this.formData.tideposit);
+            this.formData.tinum = Number(this.formData.tinum);
+            if(this.formData.tiid) {      // 编辑
+              this.$http.post(this.$api.ticket_update, this.formData).then(res => {
+                if (res.data.status == 200) {
+                  this.$notify({
+                    title: '编辑成功',
+                    message: '票务编辑成功',
+                    type: 'success'
+                  });
+                  this.$router.push('/ticket/index')
+                }
+              });
+            }else {                         // 新增
+              this.$http.post(this.$api.ticket_create, this.formData).then(res => {
+                if (res.data.status == 200) {
+                  this.$notify({
+                    title: '新增成功',
+                    message: '票务新增成功',
+                    type: 'success'
+                  });
+                  this.$router.push('/ticket/index')
+                }
+              });
+            }
+          }else {
+            this.$message.warning('请根据校验信息完善表单!');
           }
-        });
+        })
+
       },
       //立即发布
       submitDraft(){
-        if(this.agree){
-          this.postCost(1);
-        }else{
-          this.$message.warning('请先阅读大行星平台服务协议!');
-        }
-      },
-      //保存
-      saveDraft(){
-        this.postCost(0);
+
+        this.postData();
       },
       quillEditorChange(e){
         console.log(e)
