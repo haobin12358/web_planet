@@ -19,7 +19,7 @@
 
       <el-table-column label="开启/中止" align="center" prop="ibshow">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.interrupt" @change="dataShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
+          <el-switch v-model="scope.row.interrupt" :disabled="scope.row.interrupt" @change="dataShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
           </el-switch>
         </template>
       </el-table-column>

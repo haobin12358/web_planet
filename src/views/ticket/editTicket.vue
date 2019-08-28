@@ -73,8 +73,8 @@
             </div>
 
           </el-form-item>
-          <el-form-item label="与其他平台联动" prop="liids">
-            <el-select v-model="formData.liids" multiple placeholder="请选择">
+          <el-form-item label="与其他平台联动" >
+            <el-select v-model="formData.liids" multiple  placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.liid"
@@ -103,12 +103,12 @@
               </el-popover>
             </div>
           </el-form-item>
-          <el-form-item label="开启/中止" >
-            <el-switch
-              v-model="formData.interrupt"
-              active-color="#409EFF" inactive-color="#DBDCDC">
-            </el-switch>
-          </el-form-item>
+<!--          <el-form-item label="开启/中止" >-->
+<!--            <el-switch-->
+<!--              v-model="formData.interrupt"-->
+<!--              active-color="#409EFF" inactive-color="#DBDCDC">-->
+<!--            </el-switch>-->
+<!--          </el-form-item>-->
 
           <el-form-item>
             <el-button type="primary" @click="submitDraft">立即发布</el-button>
@@ -173,9 +173,6 @@
           tideposit: [
             { required: true, message: '最低押金必填', trigger: 'blur' },
             {pattern: moneyReg, message: '请输入合理的价格(至多2位小数)', trigger: 'blur'},
-          ],
-          liids: [
-            { required: true, message: '其它平台必选', trigger: 'change' }
           ],
           tidetails: [
             { required: true, message: '详情必填', trigger: 'blur' }
@@ -263,6 +260,7 @@
               this.options.forEach(function (item,index,arr) {
                 item.lisharetype = Boolean(item.lisharetype)
               })
+              this.$forceUpdate()
             }
           }
         )
@@ -280,17 +278,35 @@
               let resData = res.data,
                 data = res.data.data;
               //
-              this.formData = res.data.data;
+              this.formData = {
+                  tiimg:data.tiimg,
+                  tirules:data.tirules,
+                  tinum:data.tinum,
+                  tistarttime:data.tistarttime,
+                  tiendtime:data.tiendtime,
+                  tiprice:data.tiprice,
+                  tiname:data.tiname,
+                  interrupt:false,
+                  tidetails:data.tidetails,
+                  ticertificate:data.ticertificate,
+                  tideposit:data.tideposit,
+                  tiabbreviation:data.tiabbreviation,
+                  ticategory:data.ticategory,
+                  liids:[],
+                  delete:false,
+                  tiid:data.tiid
+              }
               // this.time[0] = new Date(this.formData.plstarttime);
               // this.time[1] = new Date(this.formData.plendtime);
               let arr = [];
-
               let _arr = [].concat(data.linkage);
-              for(let i=0;i<_arr.length;i++){
-                arr.push(_arr[i].liid);
+              if(_arr.length > 0){
+                for(let i=0;i<_arr.length;i++){
+                  arr.push(_arr[i].liid);
+                }
+                delete this.formData.linkage;
+                this.formData.liids = [].concat(arr);
               }
-              delete this.formData.linkage;
-              this.formData.liids = [].concat(arr);
               this.time = [this.formData.tistarttime, this.formData.tiendtime];
 
 
