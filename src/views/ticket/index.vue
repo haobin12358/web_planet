@@ -145,40 +145,6 @@
         };
         this.dataDialog = false;
       },
-      // 添加data
-      adddata() {
-        this.$refs.dataFormRef.validate(valid => {
-          if (valid) {
-            if(this.dataForm.ibid) {      // 编辑
-              this.$http.post(this.$api.update_banner, this.dataForm).then(res => {
-                if (res.data.status == 200) {
-                  this.$notify({
-                    title: '修改成功',
-                    message: '此轮播图修改成功',
-                    type: 'success'
-                  });
-                  this.dataDialog = false;
-                  this.getData()
-                }
-              });
-            }else {                         // 新增
-              this.$http.post(this.$api.set_banner, this.dataForm).then(res => {
-                if (res.data.status == 200) {
-                  this.initdataForm();
-                  this.$notify({
-                    title: '新增成功',
-                    message: '轮播图新增成功',
-                    type: 'success'
-                  });
-                  this.getData()
-                }
-              })
-            }
-          }else {
-            this.$message.warning('请根据校验信息完善表单!');
-          }
-        })
-      },
       // 删除data
       deleteData(scope) {
         let params = scope.row;
@@ -206,7 +172,7 @@
         let msg = '';
         let params = scope.row;
 
-        if(!scope.row.interrupt) {
+        if(scope.row.interrupt) {
           msg = '此票务不再展示'
         }else {
           msg = '此票务将会展示'
