@@ -616,7 +616,7 @@
       },
       //创建保险
       postWithdraw(status){
-        if(this.insurance_list.length == 0){
+        if(this.withdraw_list.length == 0){
           this.postDraft(status);
           return false;
         }
