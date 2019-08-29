@@ -11,12 +11,19 @@
           <table-cell-img :src="[scope.row.tiimg]" :key="scope.row.tiimg" width="92px" out-width="92px"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column label="发放时间" align="center" prop="ibsort" width="180">
+      <el-table-column label="抢票时间" align="center" prop="ibsort" width="180">
         <template slot-scope="scope">
           <span>{{scope.row.tistarttime}}</span> - <span>{{scope.row.tiendtime}}</span>
         </template>
       </el-table-column>
-
+      <el-table-column label="状态" align="center" prop="tistatus_zh" >
+        <template slot-scope="scope">
+          <el-tag type="success" plain v-if="scope.row.tistatus == 0">{{scope.row.tistatus_zh}}</el-tag>
+          <el-tag type="warning" plain v-else-if="scope.row.tistatus == 1">{{scope.row.tistatus_zh}}</el-tag>
+          <el-tag type="primary" plain v-else-if="scope.row.tistatus == 3">{{scope.row.tistatus_zh}}</el-tag>
+          <el-tag type="danger" plain v-else>{{scope.row.tistatus_zh}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="开启/中止" align="center" prop="ibshow">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.interrupt" :disabled="scope.row.interrupt" @change="dataShow(scope)" active-color="#409EFF" inactive-color="#DBDCDC">
