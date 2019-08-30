@@ -17,7 +17,7 @@
             accept="image/*"
             :on-success="handleMainPicSuccess"
             :before-upload="beforeImgUpload">
-            <img v-if="formData.tiimg" v-lazy="formData.tiimg"  class="avatar circle-main-img" />
+            <img v-if="formData.tiimg" v-lazy="formData.tiimg" :key="formData.tiimg" class="avatar circle-main-img" />
             <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
             <div slot="tip" class="el-upload__tip">
               建议尺寸：750*350像素，大小最好在10M以内
@@ -63,7 +63,7 @@
               accept="image/*"
               :on-success="handleCertPicSuccess"
               :before-upload="beforeImgUpload">
-              <img v-if="formData.ticertificate" v-lazy="formData.ticertificate"  class="avatar circle-main-img" />
+              <img v-if="formData.ticertificate" :key="formData.ticertificate" v-lazy="formData.ticertificate"  class="avatar circle-main-img" />
               <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
             </el-upload>
           </el-form-item>
@@ -232,7 +232,9 @@
     methods: {
       // 主图上传
       handleMainPicSuccess(res, file) {
+
         this.formData.tiimg = res.data;
+        console.log(this.formData.tiimg)
       },
       handleCertPicSuccess(res,file){
         this.formData.ticertificate = res.data;
