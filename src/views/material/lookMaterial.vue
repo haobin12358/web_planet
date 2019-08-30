@@ -66,6 +66,7 @@
       </div>
      <div class="m-bottom-btn" v-if="!detail.umfstatus">
        <el-button type="primary" @click="submitMoney">返还押金</el-button>
+       <el-button type="danger" @click="submitRefuse">拒绝</el-button>
      </div>
     </div>
 </template>
@@ -113,7 +114,26 @@
           }).catch(() => {
 
           });
-        }
+        },
+        submitRefuse(scope){
+          this.$confirm('确定要拒绝吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.post(this.$api.feedback_refuse,  { umfid:this.$route.query.umfid}).then(res => {
+              if (res.data.status == 200) {
+                this.getData();
+                this.$message({
+                  type: 'success',
+                  message: '拒绝成功!'
+                });
+              }
+            })
+          }).catch(() => {
+
+          });
+        },
       }
     }
 </script>

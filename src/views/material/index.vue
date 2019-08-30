@@ -41,6 +41,7 @@
         <template slot-scope="scope">
           <el-button type="text" @click="editData(scope)">查看</el-button>
           <el-button type="text" class="danger-text" v-if="!scope.row.umfstatus" @click="submitMoney(scope)">返还押金</el-button>
+          <el-button type="text" class="danger-text" v-if="!scope.row.umfstatus" @click="submitRefuse(scope)">拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,7 +129,7 @@
         this.$http.get(this.$api.ticket_list, {
           noLoading: true, params: {
             page_num:1,
-            page_size:100,
+            page_size:100
           }}).then(res => {
           if (res.data.status == 200) {
             this.options = res.data.data;
@@ -214,6 +215,25 @@
               this.$message({
                 type: 'success',
                 message: '返还成功!'
+              });
+            }
+          })
+        }).catch(() => {
+
+        });
+      },
+      submitRefuse(scope){
+        this.$confirm('确定要拒绝吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.$api.feedback_refuse,  { umfid:scope.row.umfid}).then(res => {
+            if (res.data.status == 200) {
+              this.getData();
+              this.$message({
+                type: 'success',
+                message: '拒绝成功!'
               });
             }
           })

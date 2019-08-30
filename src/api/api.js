@@ -283,6 +283,7 @@ const api = {
   feedback_list: title +'feedback/list',   //获取素材反馈
   feedback_details: title +'feedback/details',    // 获取反馈详情
   feedback_refund: title +'feedback/refund',     //返还押金
+  feedback_refuse: title +'feedback/refuse', //拒绝
   ticket_list: title +'ticket/list',       //获取门票列表
   list_linkage: title +'ticket/list_linkage', //获取联动品台
   ticket_create: title +'ticket/create', //创建门票
