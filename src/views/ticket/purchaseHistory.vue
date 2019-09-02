@@ -48,8 +48,8 @@
         <!--      </el-table-column>-->
         <el-table-column label="操作" align="center" fixed="right" width="180">
           <template slot-scope="scope">
-            <el-button type="text" @click="editData(scope)" v-if="scope.row.tsostatus == 0">设置中奖</el-button>
-            <el-button type="text" class="danger-text" v-if="scope.row.tsostatus == 1 || scope.row.tsostatus == 2">设置成功</el-button>
+            <el-button type="text" @click="editData(scope)" v-if="scope.row.tsostatus == 0">设置为中奖</el-button>
+<!--            <el-button type="text" class="danger-text" v-if="scope.row.tsostatus == 1 || scope.row.tsostatus == 2">设置成功</el-button>-->
           </template>
         </el-table-column>
       </el-table>
