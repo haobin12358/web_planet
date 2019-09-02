@@ -289,6 +289,9 @@ const api = {
   ticket_create: title +'ticket/create', //创建门票
   ticket_update: title +'ticket/update',//编辑门票
   ticket_get: title +'ticket/get', ///门票详情
+  list_trade: title +'ticket/list_trade',//门票购买记录
+  ticket_award: title +'ticket/award', //设置中奖
+
 
 };
 

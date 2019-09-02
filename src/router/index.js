@@ -725,6 +725,13 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('src/views/ticket/editTicket'),
         meta: {title: '票务编辑',noCache: true, roles: level1}
+      },
+      {
+        path: 'purchaseHistory',
+        name: 'purchaseHistory',
+        hidden: true,
+        component: () => import('src/views/ticket/purchaseHistory'),
+        meta: {title: '购买记录',noCache: true, roles: level1}
       }
     ]
   },

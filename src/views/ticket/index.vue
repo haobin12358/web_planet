@@ -30,6 +30,11 @@
           </el-switch>
         </template>
       </el-table-column>
+      <el-table-column label="购买记录" align="center" prop="ibshow">
+        <template slot-scope="scope">
+          <el-button type="text" @click="lookBuy(scope)" >购买记录</el-button>
+        </template>
+      </el-table-column>
 <!--      <el-table-column label="权重" align="center" prop="ibsort" :render-header="sortHeaderRender">-->
 <!--        <template slot-scope="scope">-->
 <!--          <el-input class="sort-input" @focus="indexDone(scope)" v-model.number="scope.row.ibsort"-->
@@ -253,6 +258,9 @@
       resetSearch() {
         this.kw = '';
         this.getData()
+      },
+      lookBuy(scope){
+        this.$router.push({path:'/ticket/purchaseHistory',query:{tiid:scope.row.tiid}})
       }
     }
   }
