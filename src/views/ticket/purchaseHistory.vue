@@ -94,6 +94,7 @@
               this.dataList = res.data.data.ticketorder;
               this.ticket = res.data.data.ticket;
               this.dataLoading = false;
+              this.total = res.data.total_count;
             }
           })
         },

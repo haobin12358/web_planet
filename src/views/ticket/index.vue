@@ -16,6 +16,11 @@
           <span>{{scope.row.tistarttime}}</span> - <span>{{scope.row.tiendtime}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="游玩时间" align="center" prop="ibsort" width="180">
+        <template slot-scope="scope">
+          <span>{{scope.row.titripstarttime}}</span> - <span>{{scope.row.titripendtime}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" prop="tistatus_zh" >
         <template slot-scope="scope">
           <el-tag type="success" plain v-if="scope.row.tistatus == 0">{{scope.row.tistatus_zh}}</el-tag>
@@ -138,6 +143,7 @@
           if (res.data.status == 200) {
             this.dataList = res.data.data;
             this.dataLoading = false;
+            this.total = res.data.total_count;
           }
         })
       },

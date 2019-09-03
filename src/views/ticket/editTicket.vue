@@ -34,7 +34,16 @@
               end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-
+          <el-form-item label="游玩时间" required>
+            <el-date-picker
+              v-model="time1"
+              type="datetimerange"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
 
           <el-form-item label="原票价" prop="tiprice">
             <el-input v-model="formData.tiprice">
@@ -153,7 +162,9 @@
           tiabbreviation:'',
           ticategory:[],
           liids:[],
-          delete:false
+          delete:false,
+          titripstarttime:'',
+          titripendtime:''
         },
         options: [],
         rules: {
@@ -186,6 +197,7 @@
           ],
         },
         time:[],
+        time1:[],
         label:'',
         enterVisible:false,
         enter_list:[],
@@ -218,7 +230,10 @@
       time(oldvalue,newvalue){
         console.log(oldvalue);
         // this.initArray();
-      }
+      },
+      time1(oldvalue,newvalue){
+
+      },
     },
     components: {quillEditor},
     mounted() {
@@ -296,7 +311,9 @@
                   ticategory:data.ticategory,
                   liids:[],
                   delete:false,
-                  tiid:data.tiid
+                  tiid:data.tiid,
+                titripendtime:data.titripendtime,
+                titripstarttime:data.titripstarttime
               }
               // this.time[0] = new Date(this.formData.plstarttime);
               // this.time[1] = new Date(this.formData.plendtime);
@@ -310,7 +327,7 @@
                 this.formData.liids = [].concat(arr);
               }
               this.time = [this.formData.tistarttime, this.formData.tiendtime];
-
+              this.time1 = [this.formData.titripstarttime,this.formData.titripendtime];
 
               let enter =[];
               for(let i in this.formData.ticategory){
@@ -354,6 +371,8 @@
             this.formData.ticategory = [].concat(enter);
             this.formData.tistarttime = this.time[0];
             this.formData.tiendtime = this.time[1];
+            this.formData.titripstarttime = this.time1[0];
+            this.formData.titripendtime = this.time1[1];
             this.formData.tiprice = Number(this.formData.tiprice);
             this.formData.tideposit = Number(this.formData.tideposit);
             this.formData.tinum = Number(this.formData.tinum);
