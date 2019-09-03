@@ -89,7 +89,7 @@
                 :key="item.liid"
                 :label="item.liname"
                 :value="item.liid"
-                :disabled="item.lisharetype">
+                :disabled="item.listatus">
               </el-option>
             </el-select>
           </el-form-item>
