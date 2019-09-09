@@ -292,6 +292,8 @@ const api = {
   list_trade: title +'ticket/list_trade',//门票购买记录
   ticket_award: title +'ticket/award', //设置中奖
 
+  list_activationtype: title +'activation/list_activationtype',//活跃分列表
+  update_activationtype: title + 'activation/update_activationtype',//更新活跃分
 
 };
 

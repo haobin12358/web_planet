@@ -599,6 +599,11 @@ export const asyncRouterMap = [
         name: 'NoticeMaintain',
         component: () => import('src/views/setting/noticeMaintain'),
         meta: {title: '通告', icon: 'yes', noCache: false, roles: level2},
+      },{
+        path: 'activationType',
+        name: 'activationType',
+        component: () => import('src/views/setting/activationType'),
+        meta: {title: '活跃分', icon: 'yes', noCache: false, roles: level2},
       },
     ]
   },
