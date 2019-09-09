@@ -17,7 +17,7 @@
                      :page-size="page_size" :total="total" layout="total, sizes, prev, pager, next, jumper"
                      @size-change="sizeChange" @current-change="pageChange"></el-pagination>
     </section>
-    <el-dialog :visible.sync="dlgVisible" :title="formData.mnid ? '编辑活跃分' : '新增活跃分'">
+    <el-dialog :visible.sync="dlgVisible" :title="formData.attid ? '编辑活跃分' : '新增活跃分'">
       <el-form ref="form" :model="formData" :rules="formRules" label-width="160px" label-position="left">
         <el-form-item prop="attname" label="活跃分获取类型">
           <el-input v-model="formData.attname" type="text"  maxlength="1000"></el-input>
@@ -31,6 +31,21 @@
         <el-form-item prop="attdayupperlimit" label="每日获取上限">
           <el-input v-model="formData.attdayupperlimit" type="number"  ></el-input>
         </el-form-item>
+        <el-form-item label="图标"  v-if="formData.atttype == 1">
+          <el-upload
+            class="avatar-uploader m-draft"
+            :action="uploadUrl"
+            :show-file-list="false"
+            accept="image/*"
+            :on-success="handleMainPicSuccess"
+            :before-upload="beforeImgUpload">
+            <img v-if="formData.atticon" v-lazy="formData.atticon" :key="formData.atticon" class="avatar circle-main-img" />
+            <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
+<!--            <div slot="tip" class="el-upload__tip">-->
+<!--              建议尺寸：750*350像素，大小最好在10M以内-->
+<!--            </div>-->
+          </el-upload>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dlgVisible = false">取 消</el-button>
@@ -42,7 +57,7 @@
 
 <script>
   import checkPermission from 'src/utils/permission' // 权限判断函数
-
+  import { getStore } from "src/utils/index";
   export default {
     name: "activationType",
 
@@ -68,10 +83,12 @@
         ],
         formData:{
           "attnum": "",
-
+          attid:'',
           "attname": "",
           attupperlimit: '',
-          attdayupperlimit:''
+          attdayupperlimit:'',
+          atttype:0,
+          atticon:''
         },
         formRules: {
           "attname": [
@@ -90,11 +107,28 @@
       }
     },
 
-    computed: {},
-
+    computed: {
+      // 上传图片
+      uploadUrl() {
+        return this.$api.upload_file + getStore('token') + '&type=feedback'
+      },
+    },
     methods: {
       checkPermission,
+      // 图标上传
+      handleMainPicSuccess(res, file) {
 
+        this.formData.atticon = res.data;
+        console.log(this.formData.atticon)
+      },
+      // 上传前限制小于15M
+      beforeImgUpload(file) {
+        const isLt15M = file.size / 1024 / 1024 < 15;
+        if (!isLt15M) {
+          this.$message.error('上传图片大小不能超过 15MB!');
+        }
+        return isLt15M;
+      },
       getList() {
         this.$http.get(this.$api.list_activationtype, {
           params: {
@@ -151,7 +185,9 @@
           attid:row.attid,
           attname: row.attname,
           attupperlimit: row.attupperlimit,
-          attdayupperlimit:row.attdayupperlimit
+          attdayupperlimit:row.attdayupperlimit,
+          atticon:row.atticon,
+          atttype:row.atttype
         }
 
         this.dlgVisible = true;
