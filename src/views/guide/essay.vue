@@ -18,6 +18,11 @@
     </section>
 
     <el-table :data="tableData" v-loading="loading" style="width: 100%" >
+      <el-table-column label="用户头像" align="center" prop="usheader">
+        <template slot-scope="scope">
+          <table-cell-img :src="[scope.row.author.usheader]" :key="scope.row.author.usheader"></table-cell-img>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="trlocation" label="定位" width="300"></el-table-column>
 
       <el-table-column align="center" prop="text" label="随笔内容" width="280"></el-table-column>
@@ -31,7 +36,7 @@
       <el-table-column align="center" label="操作"  width="240" >
         <template slot-scope="scope">
           <el-button type="text"  @click="doReward(scope.row)" v-if="$store.state.user.userInfo.level != 'personal'">打赏</el-button>
-          <el-button type="text" class="success-text"  @click="doSelect(scope.row)" v-if="$store.state.user.userInfo.level != 'personal'">加精</el-button>
+          <el-button type="text" class="success-text"  @click="doSelect(scope.row)" v-if="$store.state.user.userInfo.level != 'personal && !scope.row.selected'">加精</el-button>
           <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)" v-if="$store.state.user.userInfo.level == 'personal'">删除</el-button>
         </template>
       </el-table-column>
