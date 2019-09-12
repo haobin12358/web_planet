@@ -296,6 +296,9 @@ const api = {
   update_activationtype: title + 'activation/update_activationtype',//更新活跃分
   activation_select: title + 'activation/select',//加精
   activation_reward: title +'activation/reward',//打赏
+
+  list_role: title +'play/list_role',//规则列表
+  update_role: title +'play/update_role',//修改规则
 };
 
 export default api

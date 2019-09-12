@@ -604,6 +604,11 @@ export const asyncRouterMap = [
         name: 'activationType',
         component: () => import('src/views/setting/activationType'),
         meta: {title: '活跃分', icon: 'yes', noCache: false, roles: level2},
+      }, {
+        path: 'rule',
+        name: 'rule',
+        component: () => import('src/views/setting/rule'),
+        meta: {title: '规则', icon: 'yes', noCache: true, roles: level2}
       },
     ]
   },
