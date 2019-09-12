@@ -18,12 +18,13 @@
     </section>
 
     <el-table :data="tableData" v-loading="loading" style="width: 100%" >
-      <el-table-column label="用户头像" align="center" prop="usheader">
-        <template slot-scope="scope">
+      <el-table-column label="用户头像" align="center" prop="usheader" width="180">
+        <template slot-scope="scope" >
           <table-cell-img :src="[scope.row.author.usheader]" :key="scope.row.author.usheader"></table-cell-img>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="trlocation" label="定位" width="300"></el-table-column>
+      <el-table-column label="用户昵称" align="center" prop="author.usname" width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column align="center" prop="trlocation" label="定位" width="180" show-overflow-tooltip></el-table-column>
 
       <el-table-column align="center" prop="text" label="随笔内容" width="280"></el-table-column>
       <el-table-column label="图片视频" align="center" prop="mfls" width="280">
@@ -33,7 +34,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="trstatus_zh" label="状态" width="220"></el-table-column>
-      <el-table-column align="center" label="操作"  width="240" >
+      <el-table-column align="center" label="操作"  width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text"  @click="doReward(scope.row)" v-if="$store.state.user.userInfo.level != 'personal'">打赏</el-button>
           <el-button type="text" class="success-text"  @click="doSelect(scope.row)" v-if="$store.state.user.userInfo.level != 'personal && !scope.row.selected'">加精</el-button>
