@@ -294,7 +294,8 @@ const api = {
 
   list_activationtype: title +'activation/list_activationtype',//活跃分列表
   update_activationtype: title + 'activation/update_activationtype',//更新活跃分
-
+  activation_select: title + 'activation/select',//加精
+  activation_reward: title +'activation/reward',//打赏
 };
 
 export default api

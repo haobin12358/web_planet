@@ -660,6 +660,12 @@ export const asyncRouterMap = [
         component: () => import('src/views/guide/editStrategy'),
         meta: {title: '攻略编辑', noCache: true, roles: level5}
       },
+      {
+        path: 'essay',
+        name: 'essay',
+        component: () => import('src/views/guide/essay'),
+        meta: {title: '所有随笔', noCache: true, roles: level4}
+      },
     ]
   },
   {

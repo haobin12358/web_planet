@@ -72,7 +72,7 @@
               <template slot="prepend">¥</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="最低押金" prop="tideposit">
+          <el-form-item label="试用押金" prop="tideposit">
             <el-input v-model="formData.tideposit">
               <template slot="prepend">¥</template>
             </el-input>

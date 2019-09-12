@@ -142,10 +142,13 @@
       getData() {
         this.dataLoading = true;
         this.$http.get(this.$api.feedback_list, {
-          noLoading: true, params: { tiid:this.tiid}}).then(res => {
+          noLoading: true, params: { tiid:this.tiid,
+            page_num:this.page_num,
+            page_size:this.page_size}}).then(res => {
           if (res.data.status == 200) {
             this.dataList = res.data.data;
             this.dataLoading = false;
+            this.total = res.data.total_count;
           }
         })
       },
