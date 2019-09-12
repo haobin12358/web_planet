@@ -37,7 +37,7 @@
       <el-table-column align="center" label="操作"  width="200" fixed="right">
         <template slot-scope="scope">
           <el-button type="text"  @click="doReward(scope.row)" v-if="$store.state.user.userInfo.level != 'personal'">打赏</el-button>
-          <el-button type="text" class="success-text"  @click="doSelect(scope.row)" v-if="$store.state.user.userInfo.level != 'personal && !scope.row.selected'">加精</el-button>
+          <el-button type="text" class="success-text"  @click="doSelect(scope.row)" v-if="$store.state.user.userInfo.level != 'personal' && !scope.row.selected">加精</el-button>
           <el-button type="text" class="danger-text" @click="doRemoveScenic(scope.row)" v-if="$store.state.user.userInfo.level == 'personal'">删除</el-button>
         </template>
       </el-table-column>
