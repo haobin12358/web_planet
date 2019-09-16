@@ -11,7 +11,7 @@
           </el-form-item>
         <el-form-item label="封面图" prop="tiimg">
           <el-upload
-            class="avatar-uploader m-draft"
+            class="avatar-uploader m-ticket"
             :action="uploadUrl"
             :show-file-list="false"
             accept="image/*"
@@ -20,14 +20,14 @@
             <img v-if="formData.tiimg" v-lazy="formData.tiimg" :key="formData.tiimg" class="avatar circle-main-img" />
             <i v-else class="el-icon-plus avatar-uploader-icon circle-main-img"></i>
             <div slot="tip" class="el-upload__tip">
-              建议尺寸：750*350像素，大小最好在10M以内
+              建议尺寸：750*750像素，大小最好在10M以内
             </div>
           </el-upload>
         </el-form-item>
           <el-form-item label="顶部轮播图" prop="tibanner">
             <div class="m-up-img-box">
               <div class="inputbg m-img-xl el-upload-list--picture-card" v-for="(item,index) in formData.tibanner">
-                <img :src="item"  style="width: 288px;height:161px;"/>
+                <img :src="item"  style="width: 160px;height:160px;"/>
                 <span class="el-upload-list__item-actions">
                 <span class="el-upload-list__item-preview" @click="previewImage(item)">
                   <i class="el-icon-zoom-in"></i>
@@ -39,8 +39,8 @@
               </div>
               <div class="inputbg m-img-xl"><span>+</span><input type="file" multiple="multiple" id="prDesc"  accept="image/*" @change="newUploadImages"></div>
             </div>
-              <div slot="tip" class="el-upload__tip">
-                <span>可多选,建议尺寸为750x375(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
+              <div  class="el-upload__tip">
+                <span>可多选,建议尺寸为750x750(px),大小不要超过15M,上传成功后会显示,上传大图请耐心等待.</span>
               </div>
 
 
@@ -644,9 +644,9 @@
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
       position: relative;
-      width: 288px;
-      height: 161px;
-      line-height: 161px;
+      width: 160px;
+      height: 160px;
+      line-height: 160px;
       text-align: center;
     }
     .inputbg input{
@@ -655,9 +655,9 @@
       left: 0;
       opacity:0;
       filter:alpha(opacity=0);
-      width: 288px;
-      height: 161px;
-      line-height: 161px;
+      width: 160px;
+      height: 160px;
+      line-height: 160px;
       cursor: pointer;
     }
   }
