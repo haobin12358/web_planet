@@ -11,6 +11,7 @@
           <table-cell-img :src="[scope.row.tiimg]" :key="scope.row.tiimg" width="92px" out-width="92px"></table-cell-img>
         </template>
       </el-table-column>
+<!--      <el-table-column label="所属供应商" align="center" prop="suid" show-overflow-tooltip></el-table-column>-->
       <el-table-column label="抢票时间" align="center" prop="ibsort" width="180">
         <template slot-scope="scope">
           <span>{{scope.row.tistarttime}}</span> - <span>{{scope.row.tiendtime}}</span>

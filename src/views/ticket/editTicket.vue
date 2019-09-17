@@ -27,7 +27,7 @@
           <el-form-item label="顶部轮播图" prop="tibanner">
             <div class="m-up-img-box">
               <div class="inputbg m-img-xl el-upload-list--picture-card" v-for="(item,index) in formData.tibanner">
-                <img :src="item"  style="width: 160px;height:160px;"/>
+                <img :src="item"  style="width: 178px;height:178px;"/>
                 <span class="el-upload-list__item-actions">
                 <span class="el-upload-list__item-preview" @click="previewImage(item)">
                   <i class="el-icon-zoom-in"></i>
@@ -115,6 +115,16 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="所属供应商" prop="suid">
+            <el-select v-model="formData.suid" placeholder="请选择">
+              <el-option
+                v-for="item in supplizer_list"
+                :key="item.suid"
+                :label="item.suname"
+                :value="item.suid">
+              </el-option>
+            </el-select>
+          </el-form-item>
 <!--          <el-form-item label="短语简介" prop="tiabbreviation">-->
 <!--            <el-input v-model="formData.tiabbreviation" placeholder="最好在10字以内"></el-input>-->
 <!--          </el-form-item>-->
@@ -192,7 +202,8 @@
           delete:false,
           titripstarttime:'',
           titripendtime:'',
-          tibanner:[]
+          tibanner:[],
+          suid:''
         },
         options: [],
         rules: {
@@ -225,6 +236,9 @@
           ],
           tibanner:[
             { required: true, message: '票务轮播图必填', trigger: 'change' }
+          ],
+          suid:[
+            {required:true,message:'所属供应商必选',trigger:'change'}
           ]
         },
         time:[],
@@ -250,7 +264,8 @@
         },
         agree:false,
         dialogImageUrl:'',
-        dialogVisible:false
+        dialogVisible:false,
+        supplizer_list:[]
       }
     },
     computed: {
@@ -271,6 +286,7 @@
     components: {quillEditor,ImgsDragSort},
     mounted() {
       this.getLink();
+      this.getSupplier();
       if(this.$route.query.id){
         this.getFormData(this.$route.query.id);
 
@@ -348,6 +364,28 @@
           }
         )
       },
+      getSupplier() {
+        this.loading = true;
+        this.$http.get(this.$api.supplizer_list, {
+          noLoading: true,
+          params: {
+            page_num: 1,
+            page_size: 100
+          },
+        }).then(
+          res => {
+            this.loading = false;
+
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.supplizer_list = data;
+
+            }
+          }
+        )
+      },
       getFormData(id){
         this.$http.get(this.$api.ticket_get, {
           noLoading: true,
@@ -380,7 +418,8 @@
                   tiid:data.tiid,
                 titripendtime:data.titripendtime,
                 titripstarttime:data.titripstarttime,
-                tibanner:data.tibanner
+                tibanner:data.tibanner,
+                suid:data.suid
               }
               // this.time[0] = new Date(this.formData.plstarttime);
               // this.time[1] = new Date(this.formData.plendtime);
@@ -644,9 +683,9 @@
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
       position: relative;
-      width: 160px;
-      height: 160px;
-      line-height: 160px;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
       text-align: center;
     }
     .inputbg input{
@@ -655,9 +694,9 @@
       left: 0;
       opacity:0;
       filter:alpha(opacity=0);
-      width: 160px;
-      height: 160px;
-      line-height: 160px;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
       cursor: pointer;
     }
   }
