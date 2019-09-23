@@ -6,7 +6,7 @@
           <el-form-item label="供应商名称" prop="suname">
             <el-input v-model.trim="supplierForm.suname" maxlength="100"></el-input>
           </el-form-item>
-          <el-form-item label="品牌" >
+          <el-form-item label="品牌" v-if="name == 'shi'">
             <el-select
               v-model="supplierForm.pbids"
               clearable
@@ -27,7 +27,7 @@
           <el-form-item label="联系人" prop="sulinkman">
             <el-input v-model.trim="supplierForm.sulinkman" maxlength="100"></el-input>
           </el-form-item>
-          <el-form-item label="联系电话" prop="sulinkphone">
+          <el-form-item label="联系电话" prop="sulinkphone" >
             <el-input v-model.trim="supplierForm.sulinkphone" maxlength="11"
                       :placeholder="`${!this.supplierForm.suid? '同时作为登录账号' :''}`"></el-input>
           </el-form-item>
@@ -41,7 +41,7 @@
             </el-form-item>
           </template>
 
-          <el-form-item label="让利" prop="subaserate">
+          <el-form-item label="让利" prop="subaserate" v-if="name == 'shi'">
             <el-input v-model="supplierForm.subaserate" maxlength="5">
               <template slot="append">%</template>
             </el-input>
@@ -65,7 +65,7 @@
               </div>
             </el-upload>
           </el-form-item>
-          <el-form-item label="合同图" prop="sucontract">
+          <el-form-item label="合同图" prop="sucontract" v-if="name == 'shi'">
             <el-upload
               class="swiper-uploader"
               :action="uploadVoucherUrl"
@@ -86,13 +86,13 @@
           </el-form-item>
 
 
-          <el-form-item label="银行" prop="subankname">
+          <el-form-item label="银行" prop="subankname" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.subankname" maxlength="60"></el-input>
           </el-form-item>
-          <el-form-item label="银行卡号" prop="subanksn">
+          <el-form-item label="银行卡号" prop="subanksn" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.subanksn" maxlength="30"></el-input>
           </el-form-item>
-          <el-form-item label="营业执照" prop="subusinesslicense">
+          <el-form-item label="营业执照" prop="subusinesslicense" v-if="name == 'shi'">
             <el-upload
               :action="uploadUrl"
               class="avatar-uploader"
@@ -108,26 +108,26 @@
             </el-upload>
           </el-form-item>
 
-          <el-form-item label="注册资金" prop="suregisteredfund">
+          <el-form-item label="注册资金" prop="suregisteredfund" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.suregisteredfund" maxlength="200">
               <template slot="append">万</template>
             </el-input>
 
           </el-form-item>
-          <el-form-item label="主营类目" prop="sumaincategory">
+          <el-form-item label="主营类目" prop="sumaincategory" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.sumaincategory" maxlength="1000"></el-input>
           </el-form-item>
 
-          <el-form-item label="注册时间" prop="suregisteredtime">
+          <el-form-item label="注册时间" prop="suregisteredtime" v-if="name == 'shi'">
             <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="supplierForm.suregisteredtime" style="width: 100%;"></el-date-picker>
           </el-form-item>
-          <el-form-item label="法人姓名" prop="sulegalperson">
+          <el-form-item label="法人姓名" prop="sulegalperson" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.sulegalperson" maxlength="30"></el-input>
           </el-form-item>
-          <el-form-item label="供应商邮箱" prop="suemail">
+          <el-form-item label="供应商邮箱" prop="suemail" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.suemail" maxlength="200"></el-input>
           </el-form-item>
-          <el-form-item label="法人身份证" required>
+          <el-form-item label="法人身份证" required v-if="name == 'shi'">
 <!--            <el-col :span="11">-->
               <el-form-item  prop="sulegalpersonidcardfront" style="margin-bottom: 20px;">
                 <el-upload
@@ -148,7 +148,7 @@
               </el-form-item>
 <!--            </el-col>-->
 <!--            <el-col :span="11">-->
-              <el-form-item  prop="sulegalpersonidcardback">
+              <el-form-item  prop="sulegalpersonidcardback" v-if="name == 'shi'">
                 <el-upload
                   :action="uploadUrl"
                   class="avatar-uploader"
@@ -169,7 +169,7 @@
 
 
           </el-form-item>
-          <el-form-item label="押金" prop="sudeposit">
+          <el-form-item label="押金" prop="sudeposit" v-if="name == 'shi'">
             <el-input v-model.trim="supplierForm.sudeposit"  maxlength="17"></el-input>
           </el-form-item>
 
@@ -313,6 +313,10 @@
         //  大图预览
         dialogImageUrl: '',
         dialogVisible: false,
+        name:'xu',
+        recommend_list:[],
+        recommendVisible:false,
+        recommendLabel:'',
       }
     },
     watch: {
@@ -339,7 +343,9 @@
         return this.$api.upload_file + getStore('token') + '&type=voucher'
       },
     },
-
+    mounted(){
+      this.name = this.$route.query.name
+    },
     methods: {
 
       //删除营业执照
@@ -453,6 +459,7 @@
         this.$refs.supplierForm.validate(
           valid => {
             if (valid) {
+              this.supplierForm.sugrade = this.name == 'xu'?1:0;
               if (this.supplierForm.suid) {
                 // this.supplierForm.pbids = [this.supplierForm.pbids];
                 this.$http.post(this.$api.update_supplizer, this.supplierForm).then(
@@ -542,6 +549,20 @@
             }
           }
         )
+      },
+      //标签保存
+      labelClick(index,name){
+        this[name][index].active = !this[name][index].active;
+      },
+      recommendSave(){
+        if(this.recommendLabel.replace(/^\s*|\s*$/g,"")){
+          this.recommend_list.push({
+            name:this.recommendLabel,
+            active:true
+          });
+          this.recommendLabel = '';
+        }
+        this.recommendVisible = false;
       },
     },
 

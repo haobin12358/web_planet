@@ -125,6 +125,24 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="定位" prop="suid">
+
+            <div>{{formData.tiaddress ||  '请点击地图选择详细定位'}}</div>
+
+            <el-row style="margin-bottom: 20px;">
+              <el-col :span="6">
+                <el-input id="localcity" type="textbox" v-model="search" />
+              </el-col>
+              <el-col :span="6">
+                <el-button type="primary" @click="geolocation_localcity">查询</el-button>
+              </el-col>
+            </el-row>
+
+
+            <span style="height:30px;display:none;" id="city"></span>
+<!--            <input type="button" value="search" onclick="geolocation_localcity()">-->
+            <div id="container" style="width:600px;height:300px;"></div>
+          </el-form-item>
 <!--          <el-form-item label="短语简介" prop="tiabbreviation">-->
 <!--            <el-input v-model="formData.tiabbreviation" placeholder="最好在10字以内"></el-input>-->
 <!--          </el-form-item>-->
@@ -170,6 +188,8 @@
   import ImgsDragSort from 'src/components/ImgsDragSort/index'
   import 'quill/dist/quill.js';
   import { getStore } from "src/utils/index";
+
+
   const toolbarOptions = [
     ['bold','italic','underline','strike'],
     [{size:['small',false,'large','huge']}],
@@ -180,6 +200,7 @@
   ];
   const moneyReg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/;
   const positiveNumberReg = /^([1-9]\d*)$/;   //  正整数
+  let citylocation,map,marker,geocoder = null;
   export default {
     name: "editTicket",
     data(){
@@ -203,7 +224,10 @@
           titripstarttime:'',
           titripendtime:'',
           tibanner:[],
-          suid:''
+          suid:'',
+          tiaddress:'',
+          longitude:'',
+          latitude:''
         },
         options: [],
         rules: {
@@ -239,7 +263,9 @@
           ],
           suid:[
             {required:true,message:'所属供应商必选',trigger:'change'}
-          ]
+          ],
+          tiaddress:[
+            {required:true,message:'定位必选',trigger:'change'}          ]
         },
         time:[],
         time1:[],
@@ -265,7 +291,9 @@
         agree:false,
         dialogImageUrl:'',
         dialogVisible:false,
-        supplizer_list:[]
+        supplizer_list:[],
+        geocoder:'',
+        search:''
       }
     },
     computed: {
@@ -291,9 +319,104 @@
         this.getFormData(this.$route.query.id);
 
       }
+      this.init();
 
     },
     methods: {
+      geolocation_localcity() {
+        let that = this;
+        console.log(citylocation,'asdasd')
+        // citylocation.searchCityByName(that.search);
+        geocoder.getLocation(that.search);
+      },
+      init() {
+        //步骤：定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
+        //设置地图中心点
+        let that = this;
+        var center = new qq.maps.LatLng(39.916527,116.397128);
+        map = new qq.maps.Map(document.getElementById('container'),{
+          center: center,
+          zoom: 13
+        });
+        var city = document.getElementById("city");
+        citylocation = new qq.maps.CityService({
+          complete : function(results){
+            map.setCenter(results.detail.latLng);
+            // if (marker != null) {
+            //   marker.setMap(null);
+            // }
+            // marker = new qq.maps.Marker({
+            //   map: map,
+            //   position: results.detail.latLng
+            // });
+          }
+        });
+        geocoder = new qq.maps.Geocoder({
+          complete : function(result){
+            map.setCenter(result.detail.location);
+            // var marker = new qq.maps.Marker({
+            //   map:map,
+            //   position: result.detail.location
+            // });
+          }
+        });
+
+        var info = new qq.maps.InfoWindow({map: map});
+        //获取城市列表接口设置中心点
+        // var citylocation = new qq.maps.CityService({
+        //   complete : function(result){
+        //     map.setCenter(result.detail.latLng);
+        //   }
+        // });
+        // 调用searchLocalCity();方法    根据用户IP查询城市信息。
+        citylocation.searchLocalCity();
+        qq.maps.event.addListener(
+          map,
+          'click',
+          function(event) {
+            console.log(event);
+            // var latLng = new qq.maps.LatLng(event.latLng.getLng(), event.latLng.getLat());
+            that.$http({method: 'get', url: that.$api.news_location,  params: {
+                longitude: event.latLng.getLng(),
+                latitude: event.latLng.getLat()
+              }
+              }).then(
+              res => {
+                if (res.data.status == 200) {
+                  // console.log(res.data.data.nelocation)
+                  // that.$confirm( `确定定位在${res.data.data.nelocation}吗`, '提示', {
+                  //   confirmButtonText: '确定',
+                  //   cancelButtonText: '取消',
+                  //   type: 'warning'
+                  // }).then(() => {
+                    that.formData.tiaddress = res.data.data.nelocation;
+                    that.formData.longitude = event.latLng.getLng();
+                    that.formData.latitude = event.latLng.getLat();
+                    // var latLng2 = new qq.maps.LatLng(event.latLng.getLng(), event.latLng.getLat());
+                    // var marker = new qq.maps.Marker({
+                    //   position: latLng2 ,
+                    //   map: map
+                    // });
+                    // var anchor = new qq.maps.Point(0, 39),
+                    //   size = new qq.maps.Size(42, 68),
+                    //   origin = new qq.maps.Point(0, 0),
+                    //   markerIcon = new qq.maps.MarkerImage(
+                    //     "/static/images/icon-loc.png",
+                    //     size,
+                    //     origin,
+                    //     anchor
+                    //   );
+                    // console.log(markerIcon)
+                    // marker.setIcon(markerIcon);
+                  // }).catch(() => {
+                  //
+                  // });
+                }
+              }
+            )
+          }
+        );
+      },
       // 主图上传
       handleMainPicSuccess(res, file) {
 
@@ -370,7 +493,8 @@
           noLoading: true,
           params: {
             page_num: 1,
-            page_size: 100
+            page_size: 100,
+            option:'ticket'
           },
         }).then(
           res => {
@@ -419,7 +543,10 @@
                 titripendtime:data.titripendtime,
                 titripstarttime:data.titripstarttime,
                 tibanner:data.tibanner,
-                suid:data.suid
+                suid:data.supplizer.suid,
+                tiaddress:data.tiaddress,
+                longitude:data.longitude,
+                latitude:data.latitude
               }
               // this.time[0] = new Date(this.formData.plstarttime);
               // this.time[1] = new Date(this.formData.plendtime);

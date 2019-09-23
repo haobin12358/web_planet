@@ -110,13 +110,23 @@ const user = {
 
               setStore('token', data.token);
               commit('SET_TOKEN', data.token);
-
-              let cookieUserInfo = {
-                username: data.supplizer.sulinkphone,
-                personName: data.supplizer.suname,
-                avatar: data.supplizer.suheader,
-                level: 'supplizer'
+              let cookieUserInfo;
+              if(data.supplizer.sugrade == 0){
+                cookieUserInfo = {
+                  username: data.supplizer.sulinkphone,
+                  personName: data.supplizer.suname,
+                  avatar: data.supplizer.suheader,
+                  level: 'supplizer'
+                }
+              }else if(data.supplizer.sugrade == 1){
+                cookieUserInfo = {
+                  username: data.supplizer.sulinkphone,
+                  personName: data.supplizer.suname,
+                  avatar: data.supplizer.suheader,
+                  level: 'sugrade'
+                }
               }
+
               setStore('User-Info', cookieUserInfo)
               commit('SET_USER_INFO', cookieUserInfo)
               resolve()

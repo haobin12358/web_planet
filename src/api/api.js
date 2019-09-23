@@ -241,7 +241,7 @@ const api = {
   get_userwords: title +'club/get_userwords' ,///获取留言
   message_set: title +'message/set',             //编辑站内信
   message_get: title +'message/get',            //获取站内信
-
+  news_location: title +'news/location',   //获取定位
 
 
 //  小程序部分
@@ -299,6 +299,8 @@ const api = {
 
   list_role: title +'play/list_role',//规则列表
   update_role: title +'play/update_role',//修改规则
+  get_verifier: title +'supplizer/get_verifier',//获取核销员联系方式
+  set_verifier: title +'supplizer/set_verifier',//设置核销员联系方式
 };
 
 export default api

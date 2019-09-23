@@ -29,12 +29,17 @@ router.beforeEach((to, from, next) => {
             next({path: '/'})
           })
         }else{
-          const roles = store.getters.roles // note: roles must be a array! such as: ['editor','develop']
+          //虚拟商品供应商
+          if(to.path == '/' && store.getters.roles[0] == "sugrade"){
+            next({path: '/ticket/index'})
+          }else{
+            const roles = store.getters.roles // note: roles must be a array! such as: ['editor','develop']
 
-          store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          })
+            store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
+              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+            })
+          }
         }
         //  todo  更安全-放,先从缓存取
         // store.dispatch('GetInfo').then(res => { // 拉取用户信息

@@ -65,6 +65,7 @@ export const level2 = ['admin', 'super'];  //  管理员可见
 export const level3 = ['super']; //  超管可见
 export const level4 = ['admin', 'super','personal']; //  普通用户
 export const level5 = ['personal']; //  普通用户
+export const level6 = ['sugrade', 'admin', 'super'];//虚拟供应商
 
 export const asyncRouterMap = [
   {
@@ -727,27 +728,27 @@ export const asyncRouterMap = [
     redirect: '/ticket/index',
     alwaysShow: true,
     // name: 'personSettingPa',
-    meta: {title: '票务', icon: 'ticket', roles: level1},
+    meta: {title: '票务', icon: 'ticket', roles: level6},
     children: [
       {
         path: 'index',
         name: 'ticket',
         component: () => import('src/views/ticket/index'),
-        meta: {title: '票务管理', noCache: true, roles: level1}
+        meta: {title: '票务管理', noCache: true, roles: level6}
       },
       {
         path: 'editTicket',
         name: 'editTicket',
         hidden: true,
         component: () => import('src/views/ticket/editTicket'),
-        meta: {title: '票务编辑',noCache: true, roles: level1}
+        meta: {title: '票务编辑',noCache: true, roles: level6}
       },
       {
         path: 'purchaseHistory',
         name: 'purchaseHistory',
         hidden: true,
         component: () => import('src/views/ticket/purchaseHistory'),
-        meta: {title: '购买记录',noCache: true, roles: level1}
+        meta: {title: '购买记录',noCache: true, roles: level6}
       }
     ]
   },
@@ -757,20 +758,20 @@ export const asyncRouterMap = [
     redirect: '/material/index',
     alwaysShow: true,
     // name: 'personSettingPa',
-    meta: {title: '素材反馈', icon: 'material', roles: level1},
+    meta: {title: '素材反馈', icon: 'material', roles: level2},
     children: [
       {
         path: 'index',
         name: 'material',
         component: () => import('src/views/material/index'),
-        meta: {title: '素材反馈', noCache: true, roles: level1}
+        meta: {title: '素材反馈', noCache: true, roles: level2}
       },
       {
         path: 'lookMaterial',
         name: 'lookMaterial',
         hidden: true,
         component: () => import('src/views/material/lookMaterial'),
-        meta: {title: '素材预览',noCache: true, roles: level1}
+        meta: {title: '素材预览',noCache: true, roles: level2}
       }
     ]
   },

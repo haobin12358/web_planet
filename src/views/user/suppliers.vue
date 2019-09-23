@@ -18,12 +18,28 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="分类">
+          <el-select v-model="searchForm.sugrade" placeholder="请选择">
+            <el-option
+              v-for="item in gradeoptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-button type="primary" icon="el-icon-search"  :loading="loading" @click="doSearch">查询</el-button>
         <el-button icon="el-icon-refresh"  :loading="loading" @click="doReset">重置</el-button>
       </el-form>
-      <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>
+<!--      <el-button type="primary" icon="el-icon-plus" @click="doAddSupplier">新增</el-button>-->
 
-
+      <el-dropdown @command="doAddSupplier">
+        <el-button type="primary" icon="el-icon-plus" >新增</el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="xu">虚拟商品供应商</el-dropdown-item>
+          <el-dropdown-item command="shi">实体商品供应商</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </section>
 
     <el-table :data="tableData" v-loading="loading" style="width: 100%" :cell-class-name="cellFunction">
@@ -49,10 +65,43 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="suname" label="供应商名称" width="180"></el-table-column>
+      <el-table-column align="center" prop="brand" label="分类" width="200">
+        <template slot-scope="scope">
+          <el-tag type="primary" v-if="scope.row.sugrade == 1">虚拟商品供应商</el-tag>
+          <el-tag type="success" v-else>实体商品供应商</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="brand" label="品牌" width="280">
         <template slot-scope="scope">
           <el-tag  v-for="item in scope.row.pbs" :key="item.pbid" type="primary" style="margin-right: 10px;margin-bottom: 10px;">
             {{item.pbname}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"  label="核销员" width="280">
+        <template slot-scope="scope">
+          <el-popover
+            placement="bottom"
+            title="核销员详情"
+            width="400"
+            trigger="click"
+          >
+            <div style="margin: 10px 0;display: flex;flex-flow: row;align-items: center;justify-content: flex-end;">
+              <el-button type="primary"  @click="addVerifier(scope.row)">新增</el-button>
+            </div>
+
+            <ul>
+              <li  style="display: flex;flex-flow: row;align-items: center;justify-content: space-between;padding: 10px ;border-bottom: 1px solid #ebeef5;background-color: #f5f7fa;">
+                <span>联系方式</span>
+                <span>操作</span>
+              </li>
+              <li v-for="(item,index) in phoneData"  style="display: flex;flex-flow: row;align-items: center;justify-content: space-between;padding: 10px;border-bottom: 1px solid #ebeef5;">
+                <span>{{item}}</span>
+                <el-button type="text" class="danger-text" @click="deletePhone(index,scope.row)">删除</el-button>
+              </li>
+              <p v-if="phoneData.length == 0" style="text-align: center;padding: 10px;">暂无数据</p>
+            </ul>
+            <el-button slot="reference" type="text" @click="lookData(scope.row)">预览</el-button>
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="sulinkman" label="联系人" width="180"></el-table-column>
@@ -114,7 +163,8 @@
         searchForm: {
           kw: '',
           mobile: '',
-          sustatus:''
+          sustatus:'',
+          sugrade:''
         },
 
         loading: false,
@@ -144,7 +194,22 @@
             label:'全部',
             value:''
           }
-        ]
+        ],
+        gradeoptions:[
+          {
+            label:'虚拟商品供应商',
+            value:1
+          },
+          {
+            label:'实体商品供应商',
+            value:0
+          },
+          {
+            label:'全部',
+            value:''
+          },
+        ],
+        phoneData:[]
       }
     },
 
@@ -157,7 +222,8 @@
         this.searchForm = {
           kw: '',
           mobile: '',
-          sustatus:''
+          sustatus:'',
+          sugrade:''
         };
         this.doSearch();
       },
@@ -170,6 +236,7 @@
             kw: this.searchForm.kw,
             mobile: this.searchForm.mobile,
             sustatus: this.searchForm.sustatus,
+            sugrade:this.searchForm.sugrade,
             page_num: this.currentPage,
             page_size: this.pageSize
           },
@@ -208,16 +275,20 @@
         this.dialogVisible = true;
       },
 
-      doAddSupplier() {
+      doAddSupplier(command) {
         this.$router.push({
-          path: '/user/supplierEdit'
+          path: '/user/supplierEdit',
+          query:{
+            name:command
+          }
         })
       },
       doEditSupplier(row) {
         this.$router.push({
           path: '/user/supplierEdit',
           query: {
-            suid: row.suid
+            suid: row.suid,
+            name:row.sugrade == 1?'xu':'shi'
           }
         })
       },
@@ -278,6 +349,80 @@
           }
         )
       },
+      //获取核销员方式
+      lookData(item){
+        this.$http.get(this.$api.get_verifier, {
+          noLoading: true,
+          params: {
+            suid: item.suid
+          },
+        }).then(
+          res => {
+
+            if (res.data.status == 200) {
+              let resData = res.data,
+                data = res.data.data;
+
+              this.phoneData = data;
+            }
+          }
+        )
+      },
+      addVerifier(item){
+        let that = this;
+        this.$prompt('请输入联系方式', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^1(3|4|5|7|8)\d{9}$/,
+          inputErrorMessage: '联系方式格式不正确'
+        }).then(({ value }) => {
+          that.phoneData.push(value);
+          that.$http.post(that.$api.set_verifier,{
+            suid: item.suid,
+            phone_list: that.phoneData,
+          }).then(
+            res => {
+              if (res.data.status == 200) {
+
+                this.$notify({
+                  title: '添加成功',
+                  message: '联系方式添加成功',
+                  type: 'success'
+                });
+              }
+            }
+          )
+        }).catch(() => {
+
+        });
+      },
+      deletePhone(index,item){
+        let that = this;
+        this.$confirm('确认删除这个核销员的联系方式吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          that.phoneData.splice(index,1);
+          that.$http.post(that.$api.set_verifier,{
+            suid: item.suid,
+            phone_list: that.phoneData,
+          }).then(
+            res => {
+              if (res.data.status == 200) {
+
+                this.$notify({
+                  title: '添加成功',
+                  message: '联系方式添加成功',
+                  type: 'success'
+                });
+              }
+            }
+          )
+        }).catch(() => {
+
+        });
+      }
     },
 
     created() {
